@@ -53,6 +53,7 @@ add_action('wp_loaded', function () {
     if (!is_file($f) || filemtime($f) + $hours * HOUR_IN_SECONDS < time()) return;
     header('Content-Type: text/html; charset=' . get_option('blog_charset', 'UTF-8'));
     header('X-Mem-Cache: HIT');
+    header('Cache-Control: no-cache, must-revalidate, max-age=0');
     header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($f)) . ' GMT');
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'HEAD') readfile($f);
     exit;

@@ -1,0 +1,27 @@
+# Автотесты — только на компьютере, на хостинг не нужны
+memorial-tests/
+__pycache__/
+.pytest_cache/
+test-results/
+playwright-report/
+
+# Временные файлы автосжатия (.min.css/.min.js САМИ по себе нужны — их не исключаем)
+*.lock
+*.tmp
+
+# Архивы, логи, скриншоты проверок
+*.zip
+*.log
+/memorial_speshu/*.png
+/memorial_speshu/*.jpg
+!/memorial_speshu/screenshot.png
+
+# Системные файлы и редакторы
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+node_modules/
+.env

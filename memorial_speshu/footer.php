@@ -25,8 +25,12 @@
   <div class="wrap footer__copy">
     <span>© <?php echo esc_html(date('Y') . ' ' . get_bloginfo('name')); ?></span>
     <?php if ($legal = mem_legal_parts()) : ?><span><?php echo esc_html(implode(' · ', $legal)); ?></span><?php endif; ?>
-    <?php if ($pp = get_privacy_policy_url()) : ?><a href="<?php echo esc_url($pp); ?>">Политика конфиденциальности</a><?php endif; ?>
-    <?php if (function_exists('mem_banner_on') && mem_banner_on()) : ?><a href="#" data-consent-reset>Настройки cookie</a><?php endif; ?>
+    <?php // документы — страницы выбираются в «Мемориал → Документы»; без плагина — политика из настроек WordPress
+    $pd = function_exists('mem_legal_url') ? mem_legal_url('policy') : get_privacy_policy_url();
+    $ck = function_exists('mem_legal_url') ? mem_legal_url('cookies') : '';
+    if ($pd) : ?><a href="<?php echo esc_url($pd); ?>">Политика обработки персональных данных</a><?php endif; ?>
+    <?php if ($ck) : ?><a href="<?php echo esc_url($ck); ?>">Политика использования cookie</a><?php endif; ?>
+    <?php if (function_exists('mem_consent_mode') && mem_banner_on() && mem_consent_mode() === 'ask') : ?><a href="#" data-consent-reset>Настройки cookie</a><?php endif; ?>
   </div>
 </footer>
 

@@ -211,3 +211,12 @@ add_action('admin_bar_menu', function ($bar) {
     $bar->add_node(['id' => 'mem-cache', 'title' => 'Очистить кэш', 'href' => wp_nonce_url(admin_url('admin-post.php?action=mem_cache_clear'), 'mem_cache_clear'),
         'meta' => ['title' => 'Обычно не нужно: кэш очищается сам при любой правке']]);
 }, 95);
+
+/* Страницы сайта браузер и прокси хостинга не хранят у себя без проверки: после обновления сайта посетитель сразу
+   получает новую страницу, а не старую копию со ссылками на старые стили и скрипты.
+   (Фото, стили, скрипты, шрифты по-прежнему хранятся долго — у них в адресе версия.) */
+add_action('template_redirect', function () {
+    if (is_admin() || headers_sent()) return;
+    foreach (headers_list() as $h) if (stripos($h, 'cache-control:') === 0) return; // уже задано (WordPress для вошедших и т. п.)
+    header('Cache-Control: no-cache, must-revalidate, max-age=0');
+}, 0);

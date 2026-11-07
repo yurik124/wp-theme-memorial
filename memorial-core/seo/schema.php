@@ -38,8 +38,25 @@ add_action('wp_head', function () {
             ]);
         }, $addrs),
         'taxID'        => preg_replace('/\D/', '', mem_contacts()['legal']['inn'] ?? ''),
+        'areaServed'   => 'Белгород',
         'openingHours' => array_values(array_unique(array_filter(array_map(fn($a) => mem_schema_hours($a['hours']), $addrs)))),
     ];
+    $data = ['@context' => $data['@context'], '@type' => $data['@type'], '@id' => home_url('/#organization')] + $data;
+    // логотип / фото
+    $logo = get_theme_mod('custom_logo') ? wp_get_attachment_image_url(get_theme_mod('custom_logo'), 'full') : get_site_icon_url(512);
+    if ($logo) { $data['logo'] = $logo; $data['image'] = $logo; }
+    // юридическое название
+    if ($ln = trim(mem_contacts()['legal']['name'] ?? '')) $data['legalName'] = $ln;
+    // профили на картах и площадках отзывов (Яндекс Карты, 2ГИС, Zoon…) — поисковик связывает сайт с карточкой компании
+    $same = [];
+    foreach ((array) (get_option('mem_reviews')['sources'] ?? []) as $src) {
+        $u = trim((string) ($src['link'] ?? ''));
+        if (preg_match('~^https?://~', $u)) $same[] = $u;
+    }
+    if (($org = mem_yandex_org()) && !array_filter($same, fn($u) => strpos($u, $org) !== false)) $same[] = 'https://yandex.ru/maps/org/' . $org . '/';
+    foreach (mem_messengers() as $k => $u) if ($k === 'telegram') $same[] = $u;
+    $same = array_values(array_unique(array_map('esc_url_raw', $same)));
+    if ($same) $data['sameAs'] = $same;
     // одно значение — без массива
     if (empty($data['taxID'])) unset($data['taxID']);
     foreach (['telephone', 'email', 'address', 'openingHours'] as $k) {

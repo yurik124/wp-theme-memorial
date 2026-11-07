@@ -88,7 +88,6 @@ function mem_callback_receive(WP_REST_Request $r) {
 add_action('wp_footer', function () {
     $c = mem_contacts()['call'] ?? [];
     $msg = mem_messengers();
-    $privacy = get_privacy_policy_url();
     $cfg = [
         'max'    => $msg['max'] ?? '',
         'maxApp' => trim($c['max_app'] ?? ''),
@@ -109,7 +108,8 @@ add_action('wp_footer', function () {
         <input type="text" name="name" autocomplete="name" maxlength="80"></label>
       <label class="cb__hp" aria-hidden="true">Не заполняйте<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
       <label class="cb__consent"><input type="checkbox" name="consent" value="1" required>
-        <span>Согласен на обработку персональных данных<?php if ($privacy) echo ' — <a href="' . esc_url($privacy) . '" target="_blank">политика конфиденциальности</a>'; ?></span></label>
+        <span>Даю <?php echo mem_legal_link('consent', 'согласие на обработку персональных данных', ' target="_blank"'); ?>
+          в соответствии с <?php echo mem_legal_link('policy', 'Политикой обработки персональных данных', ' target="_blank"'); ?></span></label>
       <p class="cb__err" role="alert" hidden></p>
       <button class="btn btn--gold btn--lg cb__submit" type="submit">Жду звонка</button>
     </form>
