@@ -1,9 +1,9 @@
-name: Деплой на сайт (FTP)
+name: Деплой на сайт
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:   # кнопка ручного запуска
+  workflow_dispatch:
 
 jobs:
   deploy-theme:
@@ -11,27 +11,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Загрузить тему
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          port: 21
-          protocol: ftps
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./memorial_speshu/
-          server-dir: /wp-content/themes/memorial_speshu/
+          server: 109.95.211.14
+          port: 34716
+          username: u63286
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './memorial_speshu/*'
+          remote_path: '/var/www/u63286/data/www/memorialbel.test-handyhost.ru/wp-content/themes/memorial_speshu/'
+          sftp_only: true
 
   deploy-plugin:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Загрузить плагин
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          port: 21
-          protocol: ftps
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./memorial-core/
-          server-dir: /wp-content/plugins/memorial-core/
+          server: 109.95.211.14
+          port: 34716
+          username: u63286
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './memorial-core/*'
+          remote_path: '/var/www/u63286/data/www/memorialbel.test-handyhost.ru/wp-content/plugins/memorial-core/'
+          sftp_only: true
