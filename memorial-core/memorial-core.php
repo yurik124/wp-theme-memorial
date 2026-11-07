@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Memorial Core
  * Description: Функционал сайта «Мемориал»: каталог, цены, отзывы (Rewio, книга отзывов), «Наши работы», заявки, настройки «Мемориал», шорткоды, SEO, Метрика, кэш. Дизайн — в теме Memorial Modern.
- * Version: 1.2.1
+ * Version: 1.3.0
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Author: Мемориал
@@ -24,7 +24,7 @@ if (is_file(get_template_directory() . '/inc/settings.php')) {
     return;
 }
 
-define('MEM_CORE_VER', '1.2.1');
+define('MEM_CORE_VER', '1.3.0');
 define('MEM_CORE_FILE', __FILE__);
 define('MEM_CORE_DIR', __DIR__);                          // без «/» в конце: MEM_CORE_DIR . '/assets/…'
 define('MEM_CORE_URL', untrailingslashit(plugins_url('', __FILE__)));
@@ -105,6 +105,7 @@ $mem_core_modules = [
     'speed/page-cache.php',
     'speed/shortcode-cache.php',
     'speed/minify.php',
+    'speed/relative-urls.php',
     'speed/auto-minify.php',
     // стили и скрипты блоков на сайте
     'core/assets.php',
@@ -130,4 +131,12 @@ register_deactivation_hook(__FILE__, function () {
     foreach (['mem_rewio_cron', 'mem_rewio_cron_once', 'mem_logos_cron'] as $h) wp_clear_scheduled_hook($h);
     if (function_exists('mem_htaccess_sync')) mem_htaccess_sync(false);
     if (function_exists('mem_cache_purge')) mem_cache_purge();
+});
+
+/* После обновления плагина: один раз обновить отзывы Rewio (фото к отзывам скачаются на свой сайт) и очистить кэш */
+add_action('admin_init', function () {
+    if (get_option('mem_core_ver') === MEM_CORE_VER) return;
+    update_option('mem_core_ver', MEM_CORE_VER, false);
+    if (has_action('mem_rewio_cron_once') && !wp_next_scheduled('mem_rewio_cron_once')) wp_schedule_single_event(time() + 30, 'mem_rewio_cron_once');
+    if (function_exists('mem_cache_purge')) mem_cache_purge(true);
 });

@@ -248,10 +248,36 @@ function mem_rewio_refresh() {
     }
 }
 
+/** Копия фото к отзыву на своём сайте (uploads/mem-rewio/). '' — не скачалось (фото тогда не показываем). */
+function mem_rewio_local_img($url) {
+    $url = (string) $url;
+    if (!preg_match('~^https?://~', $url)) return '';
+    $u = wp_upload_dir();
+    $dir = trailingslashit($u['basedir']) . 'mem-rewio/';
+    $ext = strtolower(pathinfo((string) parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
+    $ext = in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'], true) ? $ext : 'jpg';
+    $file = md5($url) . '.' . $ext;
+    $local = trailingslashit($u['baseurl']) . 'mem-rewio/' . $file;
+    if (is_file($dir . $file)) return $local;
+    static $budget = 30;                         // не больше 30 новых фото за одно обновление (остальные — в следующий раз)
+    if ($budget-- <= 0 || !wp_mkdir_p($dir)) return '';
+    $r = wp_remote_get($url, ['timeout' => 6, 'redirection' => 3, 'limit_response_size' => 4 * MB_IN_BYTES]);
+    if (is_wp_error($r) || wp_remote_retrieve_response_code($r) !== 200) return '';
+    $type = (string) wp_remote_retrieve_header($r, 'content-type');
+    $body = wp_remote_retrieve_body($r);
+    if (strpos($type, 'image/') !== 0 || strlen($body) < 200) return '';
+    return file_put_contents($dir . $file, $body) !== false ? $local : '';
+}
+
 function mem_rewio_norm($r) {
     $imgs = [];
     foreach (array_slice($r['images'] ?? [], 0, 8) as $im) {
-        if (!empty($im['image']) || !empty($im['preview'])) $imgs[] = ['s' => $im['preview'] ?? $im['image'], 'b' => $im['image'] ?? $im['preview']];
+        if (!empty($im['image']) || !empty($im['preview'])) {
+            // фото к отзывам скачиваются на свой сайт — посетитель не грузит картинки со сторонних серверов
+            $sm = mem_rewio_local_img($im['preview'] ?? $im['image']);
+            $bg = mem_rewio_local_img($im['image'] ?? $im['preview']);
+            if ($sm && $bg) $imgs[] = ['s' => $sm, 'b' => $bg];
+        }
     }
     return [
         'id'     => (int) ($r['id'] ?? 0),
