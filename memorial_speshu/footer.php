@@ -6,17 +6,17 @@
     </div>
     <div>
       <?php foreach (mem_addrs() as $a) : ?>
-        <p class="footer__addr"><?php echo esc_html($a['addr']); ?><?php if (!empty($a['hours'])) echo '<br><small>' . esc_html($a['hours']) . '</small>'; ?></p>
+        <p class="footer__addr"><?php echo esc_html(memorial_addr($a['addr'])); ?><?php if (!empty($a['hours'])) echo '<br><small>' . esc_html($a['hours']) . '</small>'; ?></p>
       <?php endforeach; ?>
     </div>
     <div>
       <p>
         <?php foreach (mem_phones() as $p) : ?>
-          <a href="tel:<?php echo esc_attr(mem_tel_of($p['num'])); ?>"><?php echo esc_html($p['num']); ?></a><?php if (!empty($p['note'])) echo ' <small>' . esc_html($p['note']) . '</small>'; ?><br>
+          <a class="footer__tel" href="tel:<?php echo esc_attr(mem_tel_of($p['num'])); ?>"><?php echo esc_html($p['num']); ?></a><?php if (!empty($p['note'])) echo ' <small>' . esc_html($p['note']) . '</small>'; ?><br>
         <?php endforeach; ?>
         <?php if (mem_night()) : ?><small class="footer__night"><?php echo esc_html(mem_night()); ?></small><br><?php endif; ?>
         <?php foreach (mem_emails() as $m) : ?>
-          <a href="mailto:<?php echo esc_attr($m); ?>"><?php echo esc_html($m); ?></a><br>
+          <a class="footer__mail" href="mailto:<?php echo esc_attr($m); ?>"><?php echo esc_html($m); ?></a><br>
         <?php endforeach; ?>
       </p>
     </div>

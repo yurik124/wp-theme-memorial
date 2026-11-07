@@ -498,3 +498,25 @@ a.svc__item:hover{box-shadow:var(--sh);transform:translateY(-3px);border-color:v
 /* Фото другой формы в карточке товара: поля — размытая копия того же фото (класс has-bg ставит шаблон карточки) */
 .card__img.has-bg{position:relative;overflow:hidden;isolation:isolate}
 .card__img.has-bg::before{content:"";position:absolute;inset:-16px;z-index:-1;background:var(--mbg) center/cover no-repeat;filter:blur(14px) brightness(.95);opacity:.9}
+
+/* Плитки разделов (каталог на главной и на страницах): фото без затемнения, название и «Смотреть» — под фото */
+.cat{display:flex;flex-direction:column;justify-content:flex-start;min-height:0;padding:0;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;color:var(--ink)}
+.cat:hover{transform:translateY(-4px);box-shadow:0 14px 30px -18px rgba(0,0,0,.35)}
+.cat__ph{display:block;aspect-ratio:4/3;background-color:var(--tbg,var(--bg2));background-image:var(--img,linear-gradient(135deg,#2a2d33,var(--dark)));background-position:var(--pos,center);background-size:var(--fit,cover);background-repeat:no-repeat}
+.cat__cap{display:block;padding:1rem 1.2rem 1.15rem}
+.cat h3{margin:0 0 .2rem;color:var(--ink)}
+.cat .cat__more{color:var(--gold3,#8a6f35);font-size:.95rem;font-weight:500}
+
+/* Подвал: телефоны и адреса крупнее и контрастнее — их ищут глазами */
+.footer__addr{font-size:1.08rem;color:#ddd8cf;line-height:1.5}
+.footer__addr small{font-size:.95rem;opacity:.85}
+.footer .footer__tel{display:inline-block;font-size:1.2rem;color:#f2eee7;margin:.1rem 0}
+.footer .footer__mail{font-size:1.05rem;color:#ddd8cf}
+.footer__night{font-size:.98rem}
+
+/* Первый экран на телефоне: «сначала фото, под ним текст» (настройка в «Мемориал → Главная страница») */
+@media (max-width:700px){
+  .hero--mtop{background:var(--dark);padding-top:0}
+  .hero--mtop::before{content:"";display:block;aspect-ratio:4/3;background:var(--hero) center/cover no-repeat;margin-bottom:2rem}
+  .hero--mtop .hero__in{text-shadow:none}
+}

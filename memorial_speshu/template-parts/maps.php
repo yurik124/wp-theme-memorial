@@ -19,7 +19,7 @@ $one = count($places) === 1;
   <?php foreach ($places as $n => $p) : ?>
     <div class="map" id="mp-<?php echo $n; ?>"<?php if (!$one) echo ' role="tabpanel" aria-labelledby="mt-' . $n . '"'; ?>
          data-src="<?php echo esc_url(mem_map_src($p['map'] ?? '', $p['addr'])); ?>"<?php echo $n === 0 ? '' : ' hidden'; ?>>
-      <p class="map__addr"><?php echo esc_html($p['addr']); ?></p>
+      <p class="map__addr"><?php echo esc_html(memorial_addr($p['addr'])); ?></p>
       <?php if (!empty($p['hours'])) : ?><p class="map__hours"><?php echo esc_html($p['hours']); ?></p><?php endif; ?>
       <button class="btn btn--gold map__load" type="button">Показать карту</button>
     </div>

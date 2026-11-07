@@ -6,7 +6,7 @@
  */
 defined('ABSPATH') || exit;
 
-define('MEM_VER', '3.2.1');
+define('MEM_VER', '3.3.0');
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -104,6 +104,12 @@ function mem_footer_nav() {
 add_action('init', function () {
     remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
 });
+
+/** Адрес для посетителей — без почтового индекса в начале («308000, г. Белгород…» → «г. Белгород…»).
+    Индекс остаётся в разметке для поисковиков. */
+function memorial_addr($a) {
+    return trim(preg_replace('/^\s*\d{6}\s*,?\s*/u', '', (string) $a));
+}
 
 /* Оформление текста страниц: таблицы-прайсы, шаги, галочки, карточки, галереи */
 add_action('wp_enqueue_scripts', function () {

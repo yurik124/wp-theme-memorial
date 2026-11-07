@@ -317,7 +317,8 @@
   if (!els.length) return;
   function calc(el, nw, nh) {
     var f = el.getAttribute('data-focus').split(' '), fx = f[0] / 100, fy = f[1] / 100;
-    var w = el.clientWidth, h = el.clientHeight;
+    var box = el.querySelector('.cat__ph') || el;          // у плитки фото — в отдельном блоке над подписью
+    var w = box.clientWidth, h = box.clientHeight;
     if (!w || !h || !nw || !nh) return null;
     var k = Math.max(w / nw, h / nh), W = nw * k, H = nh * k;
     var px = W - w > 1 ? Math.min(100, Math.max(0, (fx * W - w / 2) / (W - w) * 100)) : 50;

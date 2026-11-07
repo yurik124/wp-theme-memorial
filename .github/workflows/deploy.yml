@@ -1,37 +1,47 @@
 name: Деплой на сайт
 
+# Выгрузка темы и плагина на хостинг по SFTP через lftp mirror:
+#  — загружаются файлы темы и плагина (после клонирования у всех файлов новая дата, поэтому заливаются все — это быстро);
+#  — файлы, которых больше нет в репозитории, удаляются и на хостинге (--delete),
+#    поэтому старые файлы не остаются и не мешают;
+#  — папки целиком не удаляются, значит плагин не пропадает с сайта посреди выгрузки.
+
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-jobs:
-  deploy-theme:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Загрузить тему
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          server: 109.95.211.14
-          port: 34716
-          username: u63286
-          password: ${{ secrets.SFTP_PASSWORD }}
-          local_path: './memorial_speshu/*'
-          remote_path: '/var/www/u63286/data/www/memorialbel.test-handyhost.ru/wp-content/themes/memorial_speshu/'
-          sftp_only: true
+concurrency:            # две выгрузки одновременно не пойдут
+  group: deploy
+  cancel-in-progress: false
 
-  deploy-plugin:
+env:
+  SFTP_HOST: 109.95.211.14
+  SFTP_PORT: 34716
+  SFTP_USER: u63286
+  SITE_DIR: /var/www/u63286/data/www/memorialbel.test-handyhost.ru/wp-content
+
+jobs:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Загрузить плагин
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          server: 109.95.211.14
-          port: 34716
-          username: u63286
-          password: ${{ secrets.SFTP_PASSWORD }}
-          local_path: './memorial-core/*'
-          remote_path: '/var/www/u63286/data/www/memorialbel.test-handyhost.ru/wp-content/plugins/memorial-core/'
-          sftp_only: true
+
+      - name: Установить lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Выгрузить тему и плагин
+        env:
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          lftp -c "
+            set sftp:auto-confirm yes;
+            set net:max-retries 3; set net:timeout 30;
+            open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
+            mirror --reverse --delete --parallel=4 --verbose \
+              --exclude-glob '*.lock' --exclude-glob '*.tmp' \
+              ./memorial_speshu/ $SITE_DIR/themes/memorial_speshu/;
+            mirror --reverse --delete --parallel=4 --verbose \
+              --exclude-glob '*.lock' --exclude-glob '*.tmp' \
+              ./memorial-core/ $SITE_DIR/plugins/memorial-core/;
+          "

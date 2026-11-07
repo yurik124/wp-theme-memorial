@@ -28,7 +28,7 @@ $hs = ['--hero-a1:' . $a1 . '%', '--hero-a2:' . $a2 . '%'];
 if (!empty($hero['tint_color'])) $hs[] = '--hero-tint:' . $hero['tint_color'];
 if ($img) $hs[] = '--hero:url(' . esc_url($img) . ')';
 ?>
-<section class="hero<?php echo $a2 < 45 ? ' hero--light' : ''; ?>" style="<?php echo esc_attr(implode(';', $hs)); ?>">
+<section class="hero<?php echo $a2 < 45 ? ' hero--light' : ''; echo $img && ($hero['mobile'] ?? 'bg') === 'top' ? ' hero--mtop' : ''; ?>" style="<?php echo esc_attr(implode(';', $hs)); ?>">
   <div class="wrap hero__in">
     <?php if (!empty($hero['eyebrow'])) : ?><p class="eyebrow"><?php echo $e($hero['eyebrow']); ?></p><?php endif; ?>
     <h1><?php echo $e($hero['title']);

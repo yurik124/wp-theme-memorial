@@ -18,7 +18,7 @@
   <?php endif; ?>
   <?php foreach (mem_addrs() as $a) : ?>
     <li><?php echo mem_icon('pin'); ?><span>
-      <?php echo esc_html($a['addr']); ?>
+      <?php echo esc_html(memorial_addr($a['addr'])); ?>
       <?php if (!empty($a['hours'])) : ?><small class="clist__note"><?php echo mem_icon('clock') . esc_html($a['hours']); ?></small><?php endif; ?>
     </span></li>
   <?php endforeach; ?>

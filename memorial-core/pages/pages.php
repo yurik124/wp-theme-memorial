@@ -177,6 +177,13 @@ add_action('enqueue_block_editor_assets', function () {
         ['wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data', 'wp-core-data', 'wp-hooks'], filemtime(MEM_CORE_DIR . $f), true);
 });
 
+/** Плитка раздела: фото сверху (точка фокуса, «целиком», цвет фона — из панели «Плитка и карточка раздела»), под ним название и «Смотреть →» */
+function mem_cat_tile_html($url, $name, $img, $st) {
+    return '<a class="cat reveal" href="' . esc_url($url) . '"' . ($img ? ' style="--img:url(' . esc_url($img) . ')' . $st . '"' : '') . '>'
+         . '<span class="cat__ph" aria-hidden="true"></span>'
+         . '<span class="cat__cap"><h3>' . esc_html($name) . '</h3><span class="cat__more">Смотреть →</span></span></a>';
+}
+
 function mem_cat_tiles($cats) {
     echo '<div class="cats">';
     foreach ($cats as $c) {
@@ -192,8 +199,7 @@ function mem_cat_tiles($cats) {
             $img = $p ? get_the_post_thumbnail_url($p[0], 'medium_large') : '';
         }
         $name = $page ? get_the_title($page) : $c->name;
-        echo '<a class="cat reveal" href="' . esc_url(get_term_link($c)) . '"' . ($img ? ' style="--img:url(' . esc_url($img) . ')' . ($st ?? '') . '"' : '') . '>'
-           . '<h3>' . esc_html($name) . '</h3><span>Смотреть →</span></a>';
+        echo mem_cat_tile_html(get_term_link($c), $name, $img, $st ?? '');
     }
     echo '</div>';
 }
@@ -312,8 +318,7 @@ function mem_page_tiles($children) {
                             'tax_query' => [['taxonomy' => 'mem_cat', 'terms' => (int) $mode]]]);
             $img = $p ? get_the_post_thumbnail_url($p[0], 'medium_large') : '';
         }
-        echo '<a class="cat reveal" href="' . esc_url($c->url) . '"' . ($img ? ' style="--img:url(' . esc_url($img) . ')' . $st . '"' : '') . '>'
-           . '<h3>' . esc_html($c->title) . '</h3><span>Смотреть →</span></a>';
+        echo mem_cat_tile_html($c->url, $c->title, $img, $st);
     }
     echo '</div>';
 }
