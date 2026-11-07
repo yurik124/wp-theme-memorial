@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Memorial Core
  * Description: Функционал сайта «Мемориал»: каталог, цены, отзывы (Rewio, книга отзывов), «Наши работы», заявки, настройки «Мемориал», шорткоды, SEO, Метрика, кэш. Дизайн — в теме Memorial Modern.
- * Version: 1.4.0
+ * Version: 1.5.0
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Author: Мемориал
@@ -27,7 +27,7 @@ if (get_template() === 'memorial_speshu' && $mem_theme_ver !== '' && version_com
 }
 unset($mem_theme_ver);
 
-define('MEM_CORE_VER', '1.4.0');
+define('MEM_CORE_VER', '1.5.0');
 define('MEM_CORE_FILE', __FILE__);
 define('MEM_CORE_DIR', __DIR__);                          // без «/» в конце: MEM_CORE_DIR . '/assets/…'
 define('MEM_CORE_URL', untrailingslashit(plugins_url('', __FILE__)));
@@ -102,6 +102,7 @@ $mem_core_modules = [
     'content/patterns.php',
     'pages/cards.php',
     'pages/photos.php',
+    'places/places.php',
     // справка в админке
     'admin/help.php',
     // скорость

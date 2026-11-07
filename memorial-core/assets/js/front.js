@@ -63,18 +63,52 @@
       if (top < 0) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }));
     if (!q) return;
-    q.addEventListener('input', () => {
-      const words = q.value.toLowerCase().replace(/ё/g, 'е').split(/\s+/).filter(w => w.length > 1);
+    // Поиск без учёта окончаний: «похороны» найдёт «похорон», «документов» — «документы».
+    // Показываются вопросы, где совпало больше всего слов (не обязательно все).
+    const stop = new Set('как что где кто когда какие какой какая можно ли не на в во и или по за для от до из у о об при это мне нам вы вас ваш если а но то же бы'.split(' '));
+    const stem = w => w.length > 6 ? w.slice(0, w.length - 3) : w.length > 4 ? w.slice(0, w.length - 2) : w.length > 3 ? w.slice(0, -1) : w;
+    items.forEach(it => { it.s = it.el.querySelector('summary')?.textContent.toLowerCase().replace(/ё/g, 'е') || ''; });
+    let timer;
+    const run = () => {
+      const words = q.value.toLowerCase().replace(/ё/g, 'е').split(/[^a-zа-я0-9]+/).filter(w => w.length > 1 && !stop.has(w)).map(stem);
       setChip('');
-      let shown = 0;
-      items.forEach(({ el, t }) => {
-        const ok = !words.length || words.every(w => t.includes(w));
-        el.hidden = !ok; if (ok) shown++;
-        el.open = !!words.length && ok;
+      let best = 0;
+      items.forEach(it => {
+        it.n = words.filter(w => it.t.includes(w)).length;
+        it.k = it.n * 2 + words.filter(w => it.s.includes(w)).length;   // совпадение в самом вопросе — выше
+        if (it.n > best) best = it.n;
       });
+      let shown = 0;
+      items.forEach(it => {
+        const ok = !words.length || (best > 0 && it.n === best);
+        it.el.hidden = !ok; if (ok) shown++;
+        it.el.open = false;
+      });
+      if (words.length && shown && shown <= 3) items.forEach(it => { if (!it.el.hidden) it.el.open = true; });
       groups.forEach(g => g.hidden = !g.querySelector('details:not([hidden])'));
-      if (none) none.hidden = shown > 0;
-    });
+      if (none) none.hidden = !words.length || shown > 0;
+    };
+    q.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 120); });
+    q.addEventListener('search', run);
+    q.closest('form')?.addEventListener('submit', e => { e.preventDefault(); run(); });
+  });
+
+  // Кладбища [mem_cemeteries]: фильтр и карта при раскрытии «Подробнее»
+  d.querySelectorAll('[data-cem]').forEach(box => {
+    const chips = [...box.querySelectorAll('[data-cem-f]')];
+    const items = [...box.querySelectorAll('[data-cem-s]')];
+    chips.forEach(c => c.addEventListener('click', () => {
+      const f = c.dataset.cemF;
+      chips.forEach(x => { const on = x === c; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on)); });
+      items.forEach(it => { it.hidden = !!f && it.dataset.cemS !== f; });
+    }));
+    box.querySelectorAll('details').forEach(dt => dt.addEventListener('toggle', () => {
+      const m = dt.querySelector('[data-map-src]');
+      if (!dt.open || !m || m.firstChild) return;
+      const fr = d.createElement('iframe');
+      fr.src = m.dataset.mapSrc; fr.title = m.dataset.mapTitle || 'Карта'; fr.loading = 'lazy'; fr.allowFullscreen = true;
+      m.append(fr);
+    }));
   });
 
   // Отзывы Rewio: вкладки филиалов, «Читать полностью», «Показать ещё»
