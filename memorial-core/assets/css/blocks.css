@@ -387,9 +387,3 @@ figure.mem-fit > a::before{content:"";position:absolute;inset:-16px;z-index:-1;b
 .mem-cem__more summary{cursor:pointer;color:var(--gold3,#9a7b3c);font-weight:600}
 .mem-cem__text{font-size:.98rem}.mem-cem__text p{margin:.5rem 0}
 .mem-cem__map iframe{display:block;width:100%;height:260px;border:0;border-radius:8px;margin-top:.6rem}
-.mem-xlink{display:flex;align-items:center;gap:.9rem;margin:2rem 0;padding:1rem 1.2rem;border:1px solid var(--line,#e4ded4);border-radius:12px;background:var(--bg2,#f6f3ee);color:var(--ink)!important;text-decoration:none!important;transition:border-color .2s}
-.mem-xlink:hover{border-color:var(--gold,#b8964f)}
-.mem-xlink>svg{width:1.6rem;height:1.6rem;flex:none;color:var(--gold3,#9a7b3c)}
-.mem-xlink b{display:block;font-size:1.08rem}
-.mem-xlink small{display:block;color:var(--mute);font-size:.92rem;margin-top:.15rem}
-.mem-xlink__go{margin-left:auto;font-size:1.3rem;color:var(--gold3,#9a7b3c)}

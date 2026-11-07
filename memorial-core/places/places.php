@@ -2,7 +2,8 @@
 /**
  * Места, которые заполняются в админке:
  *   «Мемориал → Залы для поминок» → [mem_restaurants] — блок на странице «Поминальный обед»;
- *   «Мемориал → Кладбища»         → [mem_cemeteries]  — страница «Кладбища» (+ ссылки на неё с выбранных страниц).
+ *   «Мемориал → Кладбища»         → [mem_cemeteries]  — список кладбищ; ставится на любую страницу
+ *     (страница «Кладбища» создаётся черновиком, ссылки на неё — обычные ссылки в тексте).
  *
  * Залы — без телефонов и сайтов ресторанов: заказ идёт через нас (кнопка «Перезвоните мне»),
  * поэтому блок помогает выбрать, а не уводит посетителя к ресторану.
@@ -42,15 +43,6 @@ function mem_rest_defaults() {
 
 function mem_cem_schema() {
     return [
-        'page'  => ['type' => 'group', 'label' => 'Страница', 'fields' => [
-            'page'  => ['type' => 'page', 'label' => 'Страница со списком кладбищ', 'help' => 'На ней должен стоять шорткод [mem_cemeteries].'],
-            'title' => ['type' => 'text', 'label' => 'Подпись ссылки на других страницах'],
-            'text'  => ['type' => 'text', 'label' => 'Текст ссылки (мелко)'],
-        ]],
-        'links' => ['type' => 'repeater', 'label' => 'Где показывать ссылку на страницу кладбищ', 'add' => 'Добавить страницу', 'inline' => true,
-                    'help' => 'Ссылка-карточка появляется в конце выбранных страниц (перед блоком «Позвоните нам», если он есть).', 'fields' => [
-            'page' => ['type' => 'page', 'label' => 'Страница'],
-        ]],
         'items' => ['type' => 'repeater', 'label' => 'Кладбища', 'add' => 'Добавить кладбище', 'collapse' => 'name', 'fields' => [
             'name'   => ['type' => 'text', 'label' => 'Название', 'placeholder' => 'Северное кладбище'],
             'status' => ['type' => 'select', 'label' => 'Захоронения', 'options' => [
@@ -69,8 +61,6 @@ function mem_cem_schema() {
 }
 function mem_cem_defaults() {
     return [
-        'page'  => ['page' => '', 'title' => 'Кладбища Белгорода и района', 'text' => 'Адреса, какие открыты для захоронений, как оформить место'],
-        'links' => [],
         'items' => [],
     ];
 }
@@ -80,16 +70,11 @@ add_filter('mem_admin_pages', function ($pages) {
         'intro' => 'Залы и рестораны для поминального обеда. Блок выводится шорткодом <code>[mem_restaurants]</code> (он уже стоит на странице «Поминальный обед»). '
                  . 'Телефоны и сайты ресторанов на сайт не выводятся — посетитель заказывает через вас кнопкой «Перезвоните мне».'];
     $pages['mem_cem'] = ['slug' => 'mem-cem', 'title' => 'Кладбища', 'schema' => 'mem_cem_schema',
-        'intro' => 'Список кладбищ для страницы <code>[mem_cemeteries]</code>. Порядок — перетаскиванием за ⋮⋮. '
-                 . 'На странице есть фильтр «действующие / подзахоронение / закрытые» и разметка для поисковиков.'];
+        'intro' => 'Список кладбищ выводится шорткодом <code>[mem_cemeteries]</code> на любой странице (например, «Кладбища Белгорода и района»). '
+                 . 'Только действующие: <code>[mem_cemeteries status="действующие"]</code>, без кнопок-фильтров: <code>filtr="нет"</code>. '
+                 . 'Порядок — перетаскиванием за ⋮⋮.'];
     return $pages;
 });
-
-/** Адрес и id страницы кладбищ */
-function mem_cem_page_id() {
-    $id = (int) (mem_settings('mem_cem')['page']['page'] ?? 0);
-    return $id && get_post_status($id) === 'publish' ? $id : 0;
-}
 
 /** Фото по адресу из настроек: <img> с размерами и srcset (если картинка из медиатеки) */
 function mem_place_img($url, $alt, $sizes) {
@@ -143,13 +128,21 @@ function mem_cem_items() {
     return array_values(array_filter((array) (mem_settings('mem_cem')['items'] ?? []), fn($r) => trim($r['name'] ?? '') !== ''));
 }
 
-add_shortcode('mem_cemeteries', function () {
+add_shortcode('mem_cemeteries', function ($atts) {
+    $a = shortcode_atts(['status' => '', 'filtr' => 'да'], $atts, 'mem_cemeteries');
     $items = mem_cem_items();
+    $want = [];   // status="действующие, подзахоронение"
+    foreach (array_filter(array_map('trim', explode(',', mb_strtolower($a['status'])))) as $w) {
+        if (preg_match('~^(действ|откр|open)~u', $w)) $want[] = 'open';
+        elseif (preg_match('~^(подзах|родств|family)~u', $w)) $want[] = 'family';
+        elseif (preg_match('~^(закр|closed)~u', $w)) $want[] = 'closed';
+    }
+    if ($want) $items = array_values(array_filter($items, fn($r) => in_array($r['status'] ?? 'open', $want, true)));
     if (!$items) return current_user_can('edit_pages') ? '<p class="is-style-note">[mem_cemeteries]: кладбища не добавлены — «Мемориал → Кладбища». Посетители этот блок не видят.</p>' : '';
     $names = mem_cem_status_names();
     $cnt = array_count_values(array_map(fn($r) => $r['status'] ?? 'open', $items));
     $h = '<div class="mem-cem" data-cem>';
-    if (count($cnt) > 1) {
+    if (count($cnt) > 1 && !mem_sc_no($a['filtr'])) {
         $h .= '<div class="srow"><div class="srow__in" role="group" aria-label="Какие кладбища показать">'
             . '<button type="button" class="chip is-on" data-cem-f="" aria-pressed="true">Все <small>' . count($items) . '</small></button>';
         foreach ($names as $k => $n) if (!empty($cnt[$k])) $h .= '<button type="button" class="chip" data-cem-f="' . esc_attr($k) . '" aria-pressed="false">' . esc_html($n) . ' <small>' . (int) $cnt[$k] . '</small></button>';
@@ -202,34 +195,6 @@ add_action('wp_head', function () {
 }, 7);
 
 /* =========================================================
- * Ссылка на страницу кладбищ с выбранных страниц
- * ======================================================= */
-function mem_cem_link_html() {
-    $id = mem_cem_page_id();
-    if (!$id) return '';
-    $o = mem_settings('mem_cem')['page'];
-    $n = count(mem_cem_items());
-    return '<a class="mem-xlink" href="' . esc_url(get_permalink($id)) . '">' . mem_icon('pin')
-        . '<span><b>' . esc_html($o['title'] ?: get_the_title($id)) . '</b>'
-        . ($o['text'] ? '<small>' . esc_html($o['text']) . ($n ? ' · ' . $n . ' ' . mem_word($n, 'кладбище', 'кладбища', 'кладбищ') : '') . '</small>' : '')
-        . '</span><span class="mem-xlink__go" aria-hidden="true">→</span></a>';
-}
-add_shortcode('mem_cemeteries_link', 'mem_cem_link_html');
-
-add_filter('the_content', function ($c) {
-    if (!is_singular('page') || !in_the_loop() || !is_main_query()) return $c;
-    $id = get_the_ID();
-    if ($id === mem_cem_page_id() || strpos($c, 'mem_cemeteries_link') !== false) return $c;
-    $ids = array_map(fn($r) => (int) ($r['page'] ?? 0), (array) (mem_settings('mem_cem')['links'] ?? []));
-    if (!in_array($id, $ids, true) || !($link = mem_cem_link_html())) return $c;
-    $block = "\n<!-- wp:html -->\n" . $link . "\n<!-- /wp:html -->\n";
-    // перед последним блоком «Позвоните нам» [mem_cta], иначе — в конце
-    $pos = strrpos($c, '<!-- wp:shortcode -->' . "\n" . '[mem_cta');
-    if ($pos === false) $pos = strrpos($c, '[mem_cta');
-    return $pos === false ? $c . $block : substr($c, 0, $pos) . $block . substr($c, $pos);
-}, 8);
-
-/* =========================================================
  * Новые страницы (черновики) и блок залов — один раз, при заходе в админку
  * ======================================================= */
 add_action('admin_init', function () {
@@ -257,29 +222,6 @@ add_action('admin_init', function () {
         $made[] = '<a href="' . esc_url(get_edit_post_link($pom->ID)) . '">«' . esc_html($pom->post_title) . '»</a> — добавлен блок залов (сами залы — «Мемориал → Залы для поминок»)';
     }
 
-    // 2) Страница «Кладбища Белгорода»
-    $o = get_option('mem_cem');
-    $o = is_array($o) ? $o : mem_cem_defaults();
-    $cem = $find(['кладбищ', 'kladbishh']);
-    if (!$cem) {
-        $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Кладбища Белгорода и района', 'post_name' => 'kladbishha',
-                              'post_content' => mem_places_tpl('cem')]);
-        if ($id && !is_wp_error($id)) {
-            $cem = get_post($id);
-            $made[] = '<a href="' . esc_url(get_edit_post_link($id)) . '">«Кладбища Белгорода и района»</a> — черновик; заполните «Мемориал → Кладбища» и опубликуйте';
-        }
-    }
-    if ($cem && empty($o['page']['page'])) $o['page']['page'] = (string) $cem->ID;
-    if (empty($o['links'])) {   // ссылки — с подходящих страниц
-        foreach (['организац', 'что делать', 'благоустр', 'памятник', 'оградк', 'плитк', 'крест', 'груз', 'сво', 'услуг'] as $w) {
-            foreach (get_pages(['post_status' => 'publish']) as $p) {
-                if ($cem && $p->ID === $cem->ID) continue;
-                if (mb_stripos($p->post_title, $w) !== false && !in_array((string) $p->ID, array_column($o['links'], 'page'), true)) $o['links'][] = ['page' => (string) $p->ID];
-            }
-        }
-    }
-    update_option('mem_cem', $o);
-
     // 3) Страница «Прижизненный договор»
     if (!$find(['прижизненн', 'prizhiznenn'])) {
         $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Прижизненный договор на ритуальные услуги', 'post_name' => 'prizhiznennyj-dogovor',
@@ -287,6 +229,25 @@ add_action('admin_init', function () {
         if ($id && !is_wp_error($id)) $made[] = '<a href="' . esc_url(get_edit_post_link($id)) . '">«Прижизненный договор на ритуальные услуги»</a> — черновик с текстом; проверьте условия и опубликуйте';
     }
     if ($made) set_transient('mem_places_report', $made, DAY_IN_SECONDS);
+});
+
+/* Страница «Кладбища Белгорода и района» — черновик, если ни на одной странице ещё нет [mem_cemeteries].
+   (1.5.0 по ошибке принимал за неё любую страницу со словом «кладбище» в названии и добавлял ссылки-карточки — это убрано.) */
+add_action('admin_init', function () {
+    if (get_option('mem_places_fix1') || !current_user_can('edit_pages')) return;
+    update_option('mem_places_fix1', 1, false);
+    $o = get_option('mem_cem');
+    if (is_array($o) && (isset($o['page']) || isset($o['links']))) { unset($o['page'], $o['links']); update_option('mem_cem', $o); }
+    foreach (get_posts(['post_type' => 'page', 'post_status' => ['publish', 'draft', 'private', 'pending'], 'posts_per_page' => -1]) as $p) {
+        if (has_shortcode($p->post_content, 'mem_cemeteries')) return;
+    }
+    $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Кладбища Белгорода и района', 'post_name' => 'kladbishha',
+                          'post_content' => mem_places_tpl('cem')]);
+    if ($id && !is_wp_error($id)) {
+        $r = (array) get_transient('mem_places_report');
+        $r[] = '<a href="' . esc_url(get_edit_post_link($id)) . '">«Кладбища Белгорода и района»</a> — черновик; добавьте кладбища в «Мемориал → Кладбища» и опубликуйте';
+        set_transient('mem_places_report', array_filter($r), DAY_IN_SECONDS);
+    }
 });
 
 add_action('admin_notices', function () {
