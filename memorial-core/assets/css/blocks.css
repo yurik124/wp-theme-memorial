@@ -342,3 +342,9 @@ a.mem-wcard:hover{box-shadow:0 10px 26px -12px rgba(0,0,0,.25);transform:transla
 /* Переход к товару по ссылке #p-123 (старые адреса /tovar/…): карточка не под панелью и подсвечена */
 .mcard,.card{scroll-margin-top:calc(var(--hh,70px) + 90px)}
 .mcard:target .mcard__link,.card:target{outline:2px solid var(--gold,#b39a5b);outline-offset:3px;border-radius:12px}
+
+/* Галерея с одинаковыми пропорциями: фото другой формы — целиком, поля размыты (pages/media.php → mem_fit_odd_photos) */
+.mem-eq figure.mem-fit img,.mem-eq-cols figure.mem-fit img{object-fit:contain!important}
+figure.mem-fit > a,figure.mem-fit{position:relative}
+figure.mem-fit > a{display:block;overflow:hidden;isolation:isolate;border-radius:inherit}
+figure.mem-fit > a::before{content:"";position:absolute;inset:-16px;z-index:-1;background:var(--mbg) center/cover no-repeat;filter:blur(14px) brightness(.95);opacity:.9}

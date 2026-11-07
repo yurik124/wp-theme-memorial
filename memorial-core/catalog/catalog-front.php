@@ -97,7 +97,7 @@ function mem_catalog_card($p, $i) {
     elseif ($big) echo '<a class="mcard__link" href="' . esc_url($big) . '" data-lb data-cap="' . esc_attr($cap) . '">';
     else echo '<div class="mcard__link">';
     // фото другой формы, чем карточка: поля по бокам — размытая копия этого же фото (а не пустой белый фон)
-    $mbg = $thumb && mem_card_ratio_differs($thumb) ? wp_get_attachment_image_url($thumb, 'thumbnail') : '';
+    $mbg = $thumb && mem_card_ratio_differs($thumb) ? mem_blur_bg_url($thumb) : '';
     echo '<span class="mcard__img' . ($mbg ? ' has-bg" style="--mbg:url(&quot;' . esc_url($mbg) . '&quot;)' : '') . '">';
     echo $thumb ? wp_get_attachment_image($thumb, 'medium_large', false, ['loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width:600px) 50vw, 260px', 'alt' => get_post_meta($thumb, '_wp_attachment_image_alt', true) ?: $title])
                 : '<span class="mcard__noimg" aria-hidden="true">✝</span>';

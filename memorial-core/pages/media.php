@@ -23,6 +23,13 @@ function mem_common_ratio(array $ids) {
     return max(.5, min(2, $mid));
 }
 
+/** Картинка для размытых полей вокруг фото другой формы. PNG/GIF (часто с прозрачным фоном) — без размытия: поля просто светлые */
+function mem_blur_bg_url($id) {
+    $mime = (string) get_post_mime_type($id);
+    if ($mime === 'image/png' || $mime === 'image/gif' || $mime === 'image/svg+xml') return '';
+    return (string) wp_get_attachment_image_url($id, 'thumbnail');
+}
+
 function mem_ratio_css($r) {
     return round($r * 1000) . '/1000';
 }
@@ -46,11 +53,26 @@ add_filter('render_block_core/gallery', function ($html, $block) {
         $html = preg_replace('/<figure class="wp-block-gallery/', '<figure style="--mem-ar:' . mem_ratio_css($r) . '" class="mem-eq wp-block-gallery', $html, 1);
     }
     // Фото без ссылки — делаем ссылку на крупное фото, его откроет просмотрщик
-    return preg_replace_callback('~(<figure[^>]*class="[^"]*wp-block-image[^"]*"[^>]*>)\s*(<img[^>]*wp-image-(\d+)[^>]*>)~', function ($mm) {
+    $html = preg_replace_callback('~(<figure[^>]*class="[^"]*wp-block-image[^"]*"[^>]*>)\s*(<img[^>]*wp-image-(\d+)[^>]*>)~', function ($mm) {
         $big = wp_get_attachment_image_url((int) $mm[3], 'large');
         return $big ? $mm[1] . '<a href="' . esc_url($big) . '" data-lb>' . $mm[2] . '</a>' : $mm[0];
     }, $html);
+    return isset($r) && $r ? mem_fit_odd_photos($html, $r) : $html;
 }, 10, 2);
+
+/**
+ * Фото другой формы в ряду одинаковых: не обрезаем, а показываем целиком,
+ * поля по бокам — размытая копия этого же фото (класс mem-fit + --mbg).
+ */
+function mem_fit_odd_photos($html, $r) {
+    return preg_replace_callback('~<figure class="([^"]*wp-block-image[^"]*)"([^>]*)>((?:(?!</figure>).)*?wp-image-(\d+)(?:(?!</figure>).)*?)</figure>~s', function ($m) use ($r) {
+        $ir = mem_img_ratio((int) $m[4]);
+        if (!$ir || abs($ir / $r - 1) <= .12) return $m[0];
+        $bg = mem_blur_bg_url((int) $m[4]);
+        $style = $bg ? ' style="--mbg:url(&quot;' . esc_url($bg) . '&quot;)"' : '';
+        return '<figure class="' . $m[1] . ' mem-fit"' . $m[2] . $style . '>' . $m[3] . '</figure>';
+    }, $html);
+}
 
 /* Ряд колонок, где в каждой только одно фото: тоже одинаковые пропорции */
 add_filter('render_block_core/columns', function ($html, $block) {
@@ -62,7 +84,7 @@ add_filter('render_block_core/columns', function ($html, $block) {
         $ids[] = (int) $inner[0]['attrs']['id'];
     }
     $r = mem_common_ratio($ids);
-    return $r ? preg_replace('/<div class="wp-block-columns/', '<div style="--mem-ar:' . mem_ratio_css($r) . '" class="mem-eq-cols wp-block-columns', $html, 1) : $html;
+    return $r ? mem_fit_odd_photos(preg_replace('/<div class="wp-block-columns/', '<div style="--mem-ar:' . mem_ratio_css($r) . '" class="mem-eq-cols wp-block-columns', $html, 1), $r) : $html;
 }, 10, 2);
 
 /* =========================================================

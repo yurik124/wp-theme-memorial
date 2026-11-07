@@ -8,7 +8,7 @@ $mem_big   = $mem_thumb ? wp_get_attachment_image_url($mem_thumb, 'large') : '';
 $mem_href  = $mem_page ? get_permalink() : $mem_big;
 $mem_lb    = !$mem_page && $mem_big ? ' data-lb data-cap="' . esc_attr(get_the_title()) . '"' : '';
 // фото другой формы, чем квадрат карточки: поля — размытая копия этого же фото
-$mem_bg = $mem_thumb && function_exists('mem_card_ratio_differs') && mem_card_ratio_differs($mem_thumb, 1) ? wp_get_attachment_image_url($mem_thumb, 'thumbnail') : '';
+$mem_bg = $mem_thumb && function_exists('mem_card_ratio_differs') && mem_card_ratio_differs($mem_thumb, 1) && function_exists('mem_blur_bg_url') ? mem_blur_bg_url($mem_thumb) : '';
 ?>
 <article class="card" id="p-<?php echo (int) $mem_id; ?>">
   <?php if ($mem_href) : ?><a class="card__img<?php echo $mem_bg ? ' has-bg' : ''; ?>" href="<?php echo esc_url($mem_href); ?>"<?php echo $mem_lb; ?><?php echo $mem_bg ? ' style="--mbg:url(&quot;' . esc_url($mem_bg) . '&quot;)"' : ''; ?> tabindex="-1" aria-hidden="true">
