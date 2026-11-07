@@ -71,6 +71,41 @@ add_shortcode('mem_cat_photos', function ($atts) {
     return mem_photos_grid($items, $n, $rand, 3);
 });
 
+/** Разделы для «Венки и гробы»: для каждого слова — раздел, название которого с него НАЧИНАЕТСЯ
+ *  (чтобы «гроб» не находил «Памятники и надгробия»), с наибольшим числом товаров. */
+function mem_photos_pick_cats() {
+    $cats = [];
+    foreach (['венк', 'гроб'] as $w) {
+        $best = null; $max = 0;
+        foreach (get_terms(['taxonomy' => 'mem_cat', 'hide_empty' => false]) as $t) {
+            if (!preg_match('~(^|[^а-яё])' . $w . '~ui', $t->name)) continue;
+            $n = (int) (mem_cat_stats($t->term_id)[0] ?? 0);
+            if ($n > $max) { $max = $n; $best = $t; }
+        }
+        if ($best) $cats[] = mem_cat_ref($best->term_id);
+    }
+    return $cats;
+}
+
+/* Исправление 1.4.0: тогда вместо гробов мог выбраться раздел «Памятники и надгробия» — меняем на правильный */
+add_action('admin_init', function () {
+    if (get_option('mem_photos_fix2') || !current_user_can('edit_pages')) return;
+    update_option('mem_photos_fix2', 1, false);
+    $cats = mem_photos_pick_cats();
+    if (!$cats) return;
+    foreach (get_posts(['post_type' => 'page', 'post_status' => ['publish', 'draft', 'private'], 'posts_per_page' => -1, 's' => 'mem_cat_photos']) as $p) {
+        $c = preg_replace_callback('~\[mem_cat_photos\s+cat="([^"]*)"~u', function ($m) use ($cats) {
+            $names = '';
+            foreach (array_map('trim', explode(',', $m[1])) as $ref) {
+                $t = ctype_digit($ref) ? get_term((int) $ref, 'mem_cat') : null;
+                $names .= ' ' . ($t && !is_wp_error($t) ? $t->name : $ref);
+            }
+            return preg_match('~надгроб|памятник~ui', $names) ? '[mem_cat_photos cat="' . esc_attr(implode(', ', $cats)) . '"' : $m[0];
+        }, $p->post_content);
+        if ($c && $c !== $p->post_content) wp_update_post(['ID' => $p->ID, 'post_content' => wp_slash($c)]);
+    }
+});
+
 /* Разово: на странице «Фотогалерея» ручные галереи «Наши работы» и «Венки и гробы» заменяются на собираемые сами.
    Прежний вариант — в «Редакциях» страницы. */
 add_action('admin_init', function () {
@@ -80,16 +115,7 @@ add_action('admin_init', function () {
         'Наши работы'    => '[mem_works vid="фото" chislo="12" poryadok="случайно"]',
         'Венки и гробы'  => '[mem_cat_photos cat="%s" chislo="6" poryadok="случайно"]',
     ];
-    $cats = [];
-    foreach (['венк', 'гроб'] as $w) {   // раздел с этим словом, в котором больше всего товаров
-        $best = null; $max = 0;
-        foreach (get_terms(['taxonomy' => 'mem_cat', 'hide_empty' => false]) as $t) {
-            if (mb_stripos($t->name, $w) === false) continue;
-            $n = (int) (mem_cat_stats($t->term_id)[0] ?? 0);
-            if ($n > $max) { $max = $n; $best = $t; }
-        }
-        if ($best) $cats[] = mem_cat_ref($best->term_id);
-    }
+    $cats = mem_photos_pick_cats();
     $done = [];
     foreach (get_posts(['post_type' => 'page', 'post_status' => ['publish', 'draft', 'private'], 'posts_per_page' => -1]) as $p) {
         $c = $p->post_content;
