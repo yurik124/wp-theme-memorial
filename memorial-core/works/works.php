@@ -152,9 +152,10 @@ add_action('admin_enqueue_scripts', function () {
 
 /* ---------- Вывод: [mem_works] ---------- */
 add_shortcode('mem_works', function ($atts) {
-    $a = shortcode_atts(['type' => '', 'limit' => -1, 'sort' => '1', 'nav' => '1', 'vid' => '', 'chislo' => '6', 'poryadok' => '',
+    $a = shortcode_atts(['type' => '', 'limit' => -1, 'sort' => '1', 'nav' => '1', 'vid' => '', 'chislo' => '', 'poryadok' => '',
                          'raboty' => '', 'razmer' => 'да', 'cena' => 'да'], $atts, 'mem_works');
     if (in_array(mb_strtolower(trim($a['vid'])), ['карточки', 'cards'], true)) return mem_works_cards($a);
+    if (in_array(mb_strtolower(trim($a['vid'])), ['фото', 'photos'], true)) return mem_works_photos($a);
     $a['nav'] = mem_sc_no($a['nav']) ? '0' : '1';
     $a['sort'] = mem_sc_no($a['sort']) ? '0' : '1';
     $args = ['post_type' => 'mem_work', 'post_status' => 'publish', 'posts_per_page' => (int) $a['limit'] ?: -1,
@@ -278,7 +279,7 @@ add_action('init', function () {
 
 /** Карточки работ: [mem_works vid="карточки" …] */
 function mem_works_cards($a) {
-    $n = max(1, min(30, (int) $a['chislo'] ?: 6));
+    $n = max(1, min(30, (int) ($a['chislo'] ?: 6)));
     $args = ['post_type' => 'mem_work', 'post_status' => 'publish', 'posts_per_page' => -1, 'orderby' => ['menu_order' => 'ASC', 'date' => 'ASC']];
     if (trim($a['type']) !== '') $args['tax_query'] = [['taxonomy' => 'mem_work_type', 'field' => 'slug', 'terms' => mem_work_type_slugs($a['type'])]];
     $works = get_posts($args);

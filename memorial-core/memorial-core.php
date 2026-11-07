@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Memorial Core
  * Description: Функционал сайта «Мемориал»: каталог, цены, отзывы (Rewio, книга отзывов), «Наши работы», заявки, настройки «Мемориал», шорткоды, SEO, Метрика, кэш. Дизайн — в теме Memorial Modern.
- * Version: 1.3.1
+ * Version: 1.4.0
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Author: Мемориал
@@ -16,15 +16,18 @@ defined('ABSPATH') || exit;
  * Старая тема (до 3.0) сама содержит весь этот функционал. Если её не обновили — плагин ничего не подключает,
  * иначе функции объявились бы дважды. Сайт работает на старой теме, в админке — подсказка обновить тему.
  */
-if (is_file(get_template_directory() . '/inc/settings.php')) {
+$mem_theme_ver = (string) (get_file_data(get_template_directory() . '/style.css', ['v' => 'Version'])['v'] ?? '');
+// старая тема = её версия ниже 3.0 (по файлам не судим: при выгрузке на хостинг старые файлы могут остаться в папке темы)
+if (get_template() === 'memorial_speshu' && $mem_theme_ver !== '' && version_compare($mem_theme_ver, '3.0', '<')) {
     add_action('admin_notices', function () {
         echo '<div class="notice notice-warning"><p><b>Memorial Core:</b> обновите тему «Memorial Modern» до версии 3.0 — '
            . 'пока стоит старая тема, плагин не работает (весь функционал пока в самой теме, сайт работает как раньше).</p></div>';
     });
     return;
 }
+unset($mem_theme_ver);
 
-define('MEM_CORE_VER', '1.3.1');
+define('MEM_CORE_VER', '1.4.0');
 define('MEM_CORE_FILE', __FILE__);
 define('MEM_CORE_DIR', __DIR__);                          // без «/» в конце: MEM_CORE_DIR . '/assets/…'
 define('MEM_CORE_URL', untrailingslashit(plugins_url('', __FILE__)));
@@ -98,6 +101,7 @@ $mem_core_modules = [
     'pages/media.php',
     'content/patterns.php',
     'pages/cards.php',
+    'pages/photos.php',
     // справка в админке
     'admin/help.php',
     // скорость
