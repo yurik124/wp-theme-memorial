@@ -6,6 +6,7 @@
  *   [mem_faq]                     — все вопросы, по разделам (страницам)
  *   [mem_faq exclude="12,34"]     — без вопросов с этих страниц (номера страниц)
  *   [mem_faq search="0"]          — без поля поиска
+ *   [mem_faq chasto="документы, морг"] — слова под полем поиска «Часто ищут» (без результатов — скрываются)
  */
 defined('ABSPATH') || exit;
 
@@ -58,7 +59,7 @@ add_action('deleted_post', fn() => delete_transient('mem_faq_all'));
 add_action('wp_update_nav_menu', fn() => delete_transient('mem_faq_all'));
 
 add_shortcode('mem_faq', function ($atts) {
-    $a = shortcode_atts(['exclude' => '', 'search' => '1'], $atts, 'mem_faq');
+    $a = shortcode_atts(['exclude' => '', 'search' => '1', 'chasto' => 'документы, стоимость, пособие, кремация, морг, памятник'], $atts, 'mem_faq');
     $skip = array_map('intval', array_filter(explode(',', $a['exclude'])));
     $groups = array_values(array_filter(mem_faq_all(), fn($g) => !in_array($g['id'], $skip, true) && $g['id'] !== get_the_ID()));
     if (!$groups) return current_user_can('edit_pages') ? '<p class="is-style-note">[mem_faq]: на страницах пока нет вопросов (блоков «Подробности»).</p>' : '';
@@ -67,10 +68,9 @@ add_shortcode('mem_faq', function ($atts) {
     ob_start();
     echo '<div class="mfaq" data-faq>';
     if ($a['search'] !== '0') {
-        echo '<div class="mfaq__search"><label class="screen-reader-text" for="mfaq-q">Поиск по вопросам</label>'
-           . '<input id="mfaq-q" type="search" placeholder="Поиск по вопросам" autocomplete="off" data-faq-q>'
-           . '<p class="mfaq__hint">' . $total . ' ' . mem_word($total, 'вопрос', 'вопроса', 'вопросов') . '. Например: «документы», «зал», «цена».</p>'
-           . '<p class="mfaq__none" hidden>Ничего не нашли. Позвоните — ответим на любой вопрос.</p></div>';
+        echo mem_search_box(['id' => 'mfaq-q', 'label' => 'Поиск по вопросам', 'placeholder' => 'Например: какие документы нужны',
+            'popular' => array_map('trim', explode(',', $a['chasto'])),
+            'none' => 'Такого вопроса пока нет на сайте. Позвоните или оставьте номер — ответим.']);
     }
     if (count($groups) > 1) {
         // Темы — фильтр: показывают вопросы одной темы на этой же странице
@@ -78,10 +78,14 @@ add_shortcode('mem_faq', function ($atts) {
         foreach ($groups as $g) echo '<button type="button" class="chip" data-faq-group="faq-' . (int) $g['id'] . '" aria-pressed="false">' . esc_html($g['title']) . ' <small>' . count($g['qs']) . '</small></button>';
         echo '</div></div>';
     }
+    $used = [];
     foreach ($groups as $g) {
         echo '<section class="mfaq__group" id="faq-' . (int) $g['id'] . '"><h2 class="mfaq__title">' . esc_html($g['title']) . '</h2>';
         foreach ($g['qs'] as [$q, $ans]) {
-            echo '<details class="wp-block-details"><summary>' . esc_html($q) . '</summary>' . $ans . '</details>';
+            $id = mem_q_anchor($q);
+            $used[$id] = ($used[$id] ?? 0) + 1;
+            if ($used[$id] > 1) $id .= '-' . $used[$id];
+            echo '<details class="wp-block-details"' . ($id ? ' id="' . esc_attr($id) . '"' : '') . ' data-g="' . esc_attr($g['title']) . '"><summary>' . esc_html($q) . '</summary>' . $ans . '</details>';
         }
         echo '<p class="mfaq__more"><a href="' . esc_url($g['url']) . '">Подробнее — на странице «' . esc_html($g['title']) . '» →</a></p></section>';
     }

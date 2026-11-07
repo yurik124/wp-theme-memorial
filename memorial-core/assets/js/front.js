@@ -44,54 +44,212 @@
   });
 
 
-  // Вопрос–ответ: темы-фильтры и поиск
-  d.querySelectorAll('[data-faq]').forEach(box => {
-    const q = box.querySelector('[data-faq-q]');
-    const chips = [...box.querySelectorAll('[data-faq-group]')];
-    const groups = [...box.querySelectorAll('.mfaq__group')];
-    const items = [...box.querySelectorAll('details')].map(el => ({ el, t: el.textContent.toLowerCase().replace(/ё/g, 'е') }));
-    const none = box.querySelector('.mfaq__none');
-    const setChip = id => chips.forEach(c => { const on = c.dataset.faqGroup === id; c.classList.toggle('is-on', on); c.setAttribute('aria-pressed', String(on)); });
-    chips.forEach(c => c.addEventListener('click', () => {
-      const id = c.dataset.faqGroup;
-      if (q) q.value = '';
-      items.forEach(({ el }) => { el.hidden = false; el.open = false; });
-      groups.forEach(g => g.hidden = !!id && g.id !== id);
-      if (none) none.hidden = true;
-      setChip(id);
-      const top = box.getBoundingClientRect().top;
-      if (top < 0) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }));
-    if (!q) return;
-    // Поиск без учёта окончаний: «похороны» найдёт «похорон», «документов» — «документы».
-    // Показываются вопросы, где совпало больше всего слов (не обязательно все).
-    const stop = new Set('как что где кто когда какие какой какая можно ли не на в во и или по за для от до из у о об при это мне нам вы вас ваш если а но то же бы'.split(' '));
-    const stem = w => w.length > 6 ? w.slice(0, w.length - 3) : w.length > 4 ? w.slice(0, w.length - 2) : w.length > 3 ? w.slice(0, -1) : w;
-    items.forEach(it => { it.s = it.el.querySelector('summary')?.textContent.toLowerCase().replace(/ё/g, 'е') || ''; });
-    let timer;
-    const run = () => {
-      const words = q.value.toLowerCase().replace(/ё/g, 'е').split(/[^a-zа-я0-9]+/).filter(w => w.length > 1 && !stop.has(w)).map(stem);
-      setChip('');
+  // ---------- Поиск с подсказками (общий для «Вопрос–ответ» и «Полезно знать») ----------
+  // Без учёта окончаний («похороны» = «похорон»), с синонимами («стоимость» = «цена»), служебные слова не учитываются.
+  const sNorm = s => (s || '').toLowerCase().replace(/ё/g, 'е');
+  const sStop = new Set('как что где кто когда какие какой какая каких можно ли не на в во и или по за для от до из у о об при это мне нам вы вас ваш если а но то же бы нужно надо есть ли'.split(' '));
+  const sStem = w => w.length >= 8 ? w.slice(0, -3) : w.length >= 6 ? w.slice(0, -2) : w.length >= 5 ? w.slice(0, -1) : w;
+  const sSyn = [['цен', 'стоим', 'стоит', 'скольк', 'прайс'], ['докум', 'справк', 'бумаг', 'свидетельст'], ['пособ', 'выплат', 'компенсац'],
+    ['кладбищ', 'могил', 'захоронен'], ['крема', 'прах'], ['памятник', 'надгроб'], ['перевоз', 'транспорт', 'катафалк', 'доставк'], ['поминк', 'поминал', 'обед'],
+    ['умер', 'смерт', 'скончал'], ['морг']];
+  const sWords = q => sNorm(q).split(/[^a-zа-я0-9]+/).filter(w => w.length > 1 && !sStop.has(w)).map(w => {
+    const st = sStem(w);
+    const g = sSyn.find(g => g.some(x => st.startsWith(x) || x.startsWith(st)));
+    return g ? [st, ...g] : [st];
+  });
+  const sEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const sHtml = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const sMark = (text, words) => {
+    const alts = words.flat().filter(x => x.length > 1);
+    if (!alts.length) return sHtml(text);
+    const re = new RegExp('([а-яёa-z0-9]*(?:' + alts.map(a => sEsc(a).replace(/е/g, '[её]')).join('|') + ')[а-яёa-z0-9]*)', 'gi');   // слово целиком
+    return sHtml(text).replace(re, '<mark>$1</mark>');
+  };
+  const sWord = (n, a, b, c) => { const m = n % 100, k = n % 10; return (m > 10 && m < 20) ? c : k === 1 ? a : (k > 1 && k < 5) ? b : c; };
+
+  /**
+   * box — [data-msearch]; items — [{q, t, g?, ...}]; opts.pick(item) — выбрали подсказку; opts.filter(words, found[]) — показать найденное;
+   * opts.status(found, words) — текст под полем.
+   */
+  const memSearch = (box, items, opts) => {
+    const q = box.querySelector('[data-msearch-q]'), list = box.querySelector('.msearch__list'), x = box.querySelector('[data-msearch-clear]');
+    const st = box.querySelector('[data-msearch-status]'), none = box.querySelector('[data-msearch-none]'), pop = box.querySelector('[data-msearch-pop]');
+    items.forEach(it => { it._t = sNorm(it.t || it.q); it._q = sNorm(it.q); });
+    const score = (words) => {
       let best = 0;
       items.forEach(it => {
-        it.n = words.filter(w => it.t.includes(w)).length;
-        it.k = it.n * 2 + words.filter(w => it.s.includes(w)).length;   // совпадение в самом вопросе — выше
+        it.n = words.filter(alts => alts.some(w => it._t.includes(w))).length;
+        it.k = words.filter(alts => alts.some(w => it._q.includes(w))).length * 4 + it.n * 2 + (it.k0 || 0) * .5;   // совпало в самом вопросе — выше
         if (it.n > best) best = it.n;
       });
-      let shown = 0;
-      items.forEach(it => {
-        const ok = !words.length || (best > 0 && it.n === best);
-        it.el.hidden = !ok; if (ok) shown++;
-        it.el.open = false;
-      });
-      if (words.length && shown && shown <= 3) items.forEach(it => { if (!it.el.hidden) it.el.open = true; });
-      groups.forEach(g => g.hidden = !g.querySelector('details:not([hidden])'));
-      if (none) none.hidden = !words.length || shown > 0;
+      // все слова — точно; если так ничего нет — где совпало больше всего
+      return best ? items.filter(it => it.n === best) : [];
     };
-    q.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 120); });
-    q.addEventListener('search', run);
-    q.closest('form')?.addEventListener('submit', e => { e.preventDefault(); run(); });
+    let sel = -1, shown = [], timer;
+    const close = () => { list.hidden = true; q.setAttribute('aria-expanded', 'false'); sel = -1; };
+    const fitList = () => {   // на телефоне список не прячется под клавиатурой
+      const vh = window.visualViewport ? visualViewport.height + visualViewport.offsetTop : innerHeight;
+      list.style.maxHeight = Math.max(160, vh - list.getBoundingClientRect().top - 12) + 'px';
+    };
+    const render = (words, found) => {
+      shown = found.slice().sort((a, b) => b.k - a.k).slice(0, innerWidth < 700 ? 5 : 7);
+      list.innerHTML = shown.map((it, i) => '<li role="option" id="' + q.id + '-o' + i + '" class="msearch__opt"><span class="msearch__oq">' + sMark(it.q, words) + '</span>'
+        + (it.g ? '<span class="msearch__og">' + sHtml(it.g) + '</span>' : '') + '</li>').join('');
+      list.hidden = !shown.length || d.activeElement !== q;
+      q.setAttribute('aria-expanded', String(!list.hidden));
+      if (!list.hidden) fitList();
+      sel = -1;
+    };
+    const run = () => {
+      const val = q.value.trim(), words = sWords(val);
+      x.hidden = !val;
+      (box.closest('[data-faq],[data-guide]') || box).classList.toggle('is-searching', !!words.length);
+      const found = words.length ? score(words) : [];
+      opts.filter(words, found);
+      render(words, found);
+      if (st) st.innerHTML = opts.status(found, words, val);
+      if (none) none.hidden = !words.length || found.length > 0;
+      if (pop) pop.hidden = !!val;
+    };
+    const go = i => { const it = shown[i]; if (!it) return; close(); q.blur(); opts.pick(it); };
+    q.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 90); });
+    q.addEventListener('focus', () => {
+      if (innerWidth < 700) {   // на телефоне поле — вверх экрана, чтобы подсказки поместились над клавиатурой
+        const hh = d.querySelector('.header')?.getBoundingClientRect().bottom || 0;
+        const top = box.querySelector('.msearch__bar').getBoundingClientRect().top;
+        if (Math.abs(top - hh) > 40) scrollTo({ top: scrollY + top - hh, behavior: 'smooth' });
+        setTimeout(() => { if (!list.hidden) fitList(); }, 350);
+      }
+      if (q.value.trim() && shown.length) { list.hidden = false; q.setAttribute('aria-expanded', 'true'); fitList(); }
+    });
+    q.addEventListener('blur', () => setTimeout(close, 180));
+    q.addEventListener('keydown', e => {
+      const opts2 = [...list.children];
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        if (list.hidden || !opts2.length) return;
+        e.preventDefault();
+        sel = (sel + (e.key === 'ArrowDown' ? 1 : -1) + opts2.length) % opts2.length;
+        opts2.forEach((o, i) => o.classList.toggle('is-sel', i === sel));
+        q.setAttribute('aria-activedescendant', opts2[sel].id);
+        opts2[sel].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (sel >= 0) go(sel);
+        else { clearTimeout(timer); run(); close(); q.blur(); opts.enter && opts.enter(); }   // Enter — убрать клавиатуру и показать найденное
+      } else if (e.key === 'Escape') close();
+    });
+    list.addEventListener('mousedown', e => e.preventDefault());
+    list.addEventListener('click', e => { const o = e.target.closest('.msearch__opt'); if (o) go([...list.children].indexOf(o)); });
+    x.addEventListener('click', () => { q.value = ''; run(); q.focus(); });
+    if (pop) pop.querySelectorAll('[data-q]').forEach(b => {
+      if (!score(sWords(b.dataset.q)).length) { b.remove(); return; }   // слово без результатов не показываем
+      b.addEventListener('click', () => { q.value = b.dataset.q; run(); close(); opts.enter && opts.enter(); });
+    });
+    if (pop && !pop.querySelector('[data-q]')) pop.remove();
+    if (window.visualViewport) visualViewport.addEventListener('resize', () => { if (!list.hidden) fitList(); });
+    const pre = new URLSearchParams(location.search).get('q');   // /vopros-otvet/?q=пособие
+    if (pre) { q.value = pre; run(); close(); } else run();
+    return { run };
+  };
+  // плавная прокрутка к найденному и короткая подсветка
+  const sFlash = el => { el.classList.remove('is-flash'); void el.offsetWidth; el.classList.add('is-flash'); };
+  const sTo = el => {   // под шапкой и прилипшим полем поиска
+    const hh = (d.querySelector('.header')?.getBoundingClientRect().bottom || 0) + (el.closest('[data-faq],[data-guide]')?.querySelector('.msearch__bar')?.offsetHeight || 0) + 12;
+    scrollTo({ top: scrollY + el.getBoundingClientRect().top - hh, behavior: 'smooth' });
+  };
+
+  // Вопрос–ответ [mem_faq]: темы, поиск с подсказками
+  d.querySelectorAll('[data-faq]').forEach(box => {
+    const chips = [...box.querySelectorAll('[data-faq-group]')];
+    const groups = [...box.querySelectorAll('.mfaq__group')];
+    const dets = [...box.querySelectorAll('details')];
+    const toc = box.querySelector('.mfaq__toc');
+    const setChip = id => chips.forEach(c => { const on = c.dataset.faqGroup === id; c.classList.toggle('is-on', on); c.setAttribute('aria-pressed', String(on)); });
+    let ms = null;
+    chips.forEach(c => c.addEventListener('click', () => {
+      const id = c.dataset.faqGroup;
+      const inp = box.querySelector('[data-msearch-q]');
+      if (inp && inp.value) { inp.value = ''; ms && ms.run(); }
+      dets.forEach(el => { el.hidden = false; el.open = false; });
+      groups.forEach(g => g.hidden = !!id && g.id !== id);
+      setChip(id);
+      const top = (groups.find(g => !g.hidden) || box).getBoundingClientRect().top;
+      if (id || top < 0) sTo(groups.find(g => !g.hidden) || box);
+    }));
+    // на ПК много тем — сначала несколько, остальные по кнопке
+    if (toc && chips.length > 7) {
+      const more = d.createElement('button');
+      more.type = 'button'; more.className = 'chip mfaq__more-t';
+      more.textContent = 'Ещё темы: ' + (chips.length - 6);
+      more.addEventListener('click', () => { toc.classList.remove('is-cut'); more.remove(); });
+      toc.classList.add('is-cut'); toc.append(more);
+    }
+    const sbox = box.querySelector('[data-msearch]');
+    if (!sbox) return;
+    const items = dets.map(el => {
+      const s = el.querySelector('summary');
+      return { el, s, html: s.innerHTML, q: s.textContent.trim(), t: el.textContent, g: el.dataset.g || '' };
+    });
+    ms = memSearch(sbox, items, {
+      filter: (words, found) => {
+        setChip('');
+        const ok = new Set(found);
+        items.forEach(it => {
+          const vis = !words.length || ok.has(it);
+          it.el.hidden = !vis; it.el.open = false;
+          it.s.innerHTML = words.length && vis ? sMark(it.q, words) : it.html;
+        });
+        if (words.length && found.length && found.length <= 2) found.forEach(it => { it.el.open = true; });
+        groups.forEach(g => g.hidden = !g.querySelector('details:not([hidden])'));
+        box.classList.remove('is-upd'); void box.offsetWidth; box.classList.add('is-upd');
+      },
+      status: (found, words, val) => !words.length
+        ? items.length + ' ' + sWord(items.length, 'вопрос', 'вопроса', 'вопросов') + ' с ответами. Начните вводить — подскажем.'
+        : found.length ? 'По запросу «' + sHtml(val) + '» — ' + found.length + ' ' + sWord(found.length, 'вопрос', 'вопроса', 'вопросов') + ' ниже. <button type="button" class="msearch__reset">Показать все</button>' : '',
+      pick: it => { it.el.hidden = false; it.el.closest('.mfaq__group').hidden = false; it.el.open = true; sTo(it.el); sFlash(it.el); },
+      enter: () => { const f = box.querySelector('details:not([hidden])'); if (f) sTo(f.closest('.mfaq__group') || f); }
+    });
+    sbox.addEventListener('click', e => { if (e.target.closest('.msearch__reset')) { const i = sbox.querySelector('[data-msearch-q]'); i.value = ''; ms.run(); } });
   });
+
+  // Полезно знать [mem_guide]: карточки статей и поиск по ним (и по вопросам со всего сайта)
+  d.querySelectorAll('[data-guide]').forEach(box => {
+    const sbox = box.querySelector('[data-msearch]');
+    let idx = [];
+    try { idx = JSON.parse(box.querySelector('[data-guide-idx]').textContent); } catch (e) { return; }
+    const cards = [...box.querySelectorAll('[data-card]')];
+    idx.forEach(it => { it.k0 = it.k === 'p' ? 2 : it.k === 'h' ? 1 : 0; });
+    const ms = memSearch(sbox, idx, {
+      filter: (words, found) => {
+        const hit = new Set(found.map(it => it.c));
+        cards.forEach(c => { c.hidden = !!words.length && !hit.has(+c.dataset.card); });
+        box.classList.remove('is-upd'); void box.offsetWidth; box.classList.add('is-upd');
+      },
+      status: (found, words, val) => {
+        if (!words.length) return '';
+        if (!found.length) return '';
+        const arts = new Set(found.filter(it => it.c >= 0).map(it => it.c)).size;
+        const other = found.filter(it => it.c < 0).length;
+        return 'По запросу «' + sHtml(val) + '»: ' + (arts ? arts + ' ' + sWord(arts, 'статья', 'статьи', 'статей') : '')
+          + (arts && other ? ' и ' : '') + (other ? other + ' ' + sWord(other, 'ответ', 'ответа', 'ответов') + ' на других страницах' : '')
+          + '. Нажмите на подсказку, чтобы открыть нужное место. <button type="button" class="msearch__reset">Показать все</button>';
+      },
+      pick: it => { location.href = it.u; },
+      enter: () => { const c = cards.find(c => !c.hidden); if (c) sTo(c); }
+    });
+    sbox.addEventListener('click', e => { if (e.target.closest('.msearch__reset')) { const i = sbox.querySelector('[data-msearch-q]'); i.value = ''; ms.run(); } });
+  });
+
+  // Ссылка на вопрос (#v-…) — раскрыть его
+  const openHash = () => {
+    let el = location.hash.length > 1 && d.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (!el) return;
+    if (el.tagName === 'DETAILS') { el.hidden = false; el.open = true; sFlash(el); setTimeout(() => sTo(el), 250); }
+    for (let p = el.parentElement; p; p = p.parentElement) if (p.tagName === 'DETAILS') p.open = true;
+  };
+  openHash();
+  addEventListener('hashchange', openHash);
+
 
   // Кладбища [mem_cemeteries]: фильтр и карта при раскрытии «Подробнее»
   d.querySelectorAll('[data-cem]').forEach(box => {

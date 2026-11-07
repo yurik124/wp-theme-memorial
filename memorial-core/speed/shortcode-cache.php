@@ -11,7 +11,7 @@ defined('ABSPATH') || exit;
 
 function mem_sc_cache_tags() {
     return apply_filters('mem_sc_cache_tags', ['mem_cat_count', 'mem_cat_price', 'mem_cat_list', 'mem_price', 'mem_cremation', 'mem_packages',
-                                               'mem_cards', 'mem_catalog', 'mem_works', 'mem_services', 'mem_cat_photos', 'mem_restaurants', 'mem_cemeteries']);
+                                               'mem_cards', 'mem_catalog', 'mem_works', 'mem_services', 'mem_cat_photos', 'mem_restaurants', 'mem_cemeteries', 'mem_guide']);
 }
 
 function mem_sc_cache_on() {
