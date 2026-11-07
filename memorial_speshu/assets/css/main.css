@@ -479,3 +479,14 @@ a.svc__item:hover{box-shadow:var(--sh);transform:translateY(-3px);border-color:v
 
 /* Фото товара целиком, без обрезки: товар на белом фоне — и поле вокруг белое */
 .card__img:has(img),.product__media:has(img){background:#fff}
+
+/* Узкие телефоны (до 380 px): шапка и подвал помещаются целиком — меньше отступы и разрядка */
+@media (max-width:380px){
+  .header__in{gap:.6rem}
+  .logo{gap:.5rem;min-width:0;flex:0 1 auto}
+  .logo__text small{font-size:.58rem;letter-spacing:.06em}
+  .header__call{margin-left:auto}
+  .fnav__title{letter-spacing:.06em;hyphens:auto;overflow-wrap:anywhere}  /* «БЛАГОУСТРОЙСТВО» в колонке подвала */
+}
+/* Длинные слова в заголовках («конфиденциальности») на телефоне переносятся, а не растягивают страницу */
+@media (max-width:480px){h1,h2,h3{overflow-wrap:break-word;hyphens:auto}}
