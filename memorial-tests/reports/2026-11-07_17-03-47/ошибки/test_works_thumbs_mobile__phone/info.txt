@@ -1,0 +1,16 @@
+Тест: tests/test_blocks.py::test_works_thumbs[mobile]
+Адрес: https://memorialbel.test-handyhost.ru/blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode/
+Экран: phone
+
+Ошибки JavaScript:
+нет
+
+Ошибка теста:
+tests\test_blocks.py:62: in test_works_thumbs
+    assert work.locator(".work__img img").get_attribute("src") != before, "фото не переключилось"
+E   AssertionError: фото не переключилось
+E   assert 'https://memorialbel.test-handyhost.ru/wp-content/uploads/2023/04/plitka-bulvar-na-mogile-vid-s-boku.webp' != 'https://memorialbel.test-handyhost.ru/wp-content/uploads/2023/04/plitka-bulvar-na-mogile-vid-s-boku.webp'
+E    +  where 'https://memorialbel.test-handyhost.ru/wp-content/uploads/2023/04/plitka-bulvar-na-mogile-vid-s-boku.webp' = get_attribute('src')
+E    +    where get_attribute = <Locator frame=<Frame name= url='https://memorialbel.test-handyhost.ru/blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode/'> selector='.work >> internal:has=".work__thumb" >> nth=0 >> .work__img img'>.get_attribute
+E    +      where <Locator frame=<Frame name= url='https://memorialbel.test-handyhost.ru/blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode/'> selector='.work >> internal:has=".work__thumb" >> nth=0 >> .work__img img'> = locator('.work__img img')
+E    +        where locator = <Locator frame=<Frame name= url='https://memorialbel.test-handyhost.ru/blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode/'> selector='.work >> internal:has=".work__thumb" >> nth=0'>.locator

@@ -53,13 +53,15 @@ def test_works_thumbs(request, find_page, device):
     p.goto(find_page('class="work__thumb'))
     work = p.locator(".work").filter(has=p.locator(".work__thumb")).first
     work.scroll_into_view_if_needed()
-    thumb = work.locator(".work__thumb").nth(1)
+    main = work.locator("a.work__img")
+    before = main.get_attribute("href")
+    thumbs = work.locator(".work__thumb")
+    thumb = next((thumbs.nth(i) for i in range(thumbs.count()) if thumbs.nth(i).get_attribute("href") != before), thumbs.nth(1))
     box = thumb.bounding_box()
     assert box["width"] < 160, f"миниатюра слишком большая: {box['width']:.0f}px — стили блока не подключены?"
-    before = work.locator(".work__img img").get_attribute("src")
     thumb.tap() if device == "mobile" else thumb.click()
-    p.wait_for_timeout(500)
-    assert work.locator(".work__img img").get_attribute("src") != before, "фото не переключилось"
+    p.wait_for_timeout(800)
+    assert main.get_attribute("href") != before, "по нажатию на миниатюру большое фото не сменилось"
     assert not p.js_errors, p.js_errors
 
 

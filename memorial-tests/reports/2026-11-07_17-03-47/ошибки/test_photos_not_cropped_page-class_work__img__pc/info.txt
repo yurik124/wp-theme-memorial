@@ -1,0 +1,12 @@
+Тест: tests/test_images_speed.py::test_photos_not_cropped[page-class="work__img]
+Адрес: https://memorialbel.test-handyhost.ru/blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode/
+Экран: pc
+
+Ошибки JavaScript:
+нет
+
+Ошибка теста:
+tests\test_images_speed.py:20: in test_photos_not_cropped
+    assert not bad, "крупные фото обрезаны (видно < 80%): " + ", ".join(f"{b['src']} ({b['vis']:.0%}, {b['cls']})" for b in bad[:5])
+E   AssertionError: крупные фото обрезаны (видно < 80%): e7336512-27e5-4270-b1f7-3ebcd6da2685-1024x576.jpg (42%, ), 03da8bb0-ffe3-449f-90d6-06b53b775d5d-1024x576.jpg (42%, )
+E   assert not [{'src': 'e7336512-27e5-4270-b1f7-3ebcd6da2685-1024x576.jpg', 'vis': 0.42213493530499074, 'cls': ''}, {'src': '03da8bb0-ffe3-449f-90d6-06b53b775d5d-1024x576.jpg', 'vis': 0.42213493530499074, 'cls': ''}]

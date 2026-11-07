@@ -30,7 +30,7 @@ def test_cookie_banner_and_metrika(page, base_url):
         assert not banner.is_visible()
         return
     assert banner.is_visible(), "плашка cookie не показалась"
-    assert banner.locator("a").count() >= 1, "в плашке нет ссылки на политику"
+    assert banner.locator("a").count() >= 1, "в плашке cookie нет ссылки на политику — создайте и опубликуйте её в «Мемориал → Документы»"
     if mode == "ask":
         assert not [c for c in _ym_calls(page) if c[1:2] == ["init"]], "Метрика запустилась до согласия"
         banner.locator("[data-consent=yes]").click()

@@ -73,6 +73,13 @@ function mem_word($n, $one, $few, $many) {
     return $many;
 }
 
+/** Форма фото заметно отличается от формы карточки (> 12 %) */
+function mem_card_ratio_differs($thumb, $card = 0) {
+    $card = $card ?: ($GLOBALS['mem_card_ratio'] ?? 4 / 3);
+    $r = function_exists('mem_img_ratio') ? mem_img_ratio($thumb) : 0;
+    return $r && abs($r / $card - 1) > .12;
+}
+
 /** Карточка товара каталога */
 function mem_catalog_card($p, $i) {
     $id    = $p->ID;
@@ -80,16 +87,18 @@ function mem_catalog_card($p, $i) {
     $sub   = get_post_meta($id, '_mem_sub', true);
     $thumb = get_post_thumbnail_id($id);
     $big   = $thumb ? wp_get_attachment_image_url($thumb, 'large') : '';
-    $page  = trim(wp_strip_all_tags($p->post_content)) !== '' ? get_permalink($id) : '';
+    $page  = mem_product_has_page($id) ? get_permalink($id) : '';
     $title = get_the_title($id);
     $cap   = $title . ($sub ? ' · ' . $sub : '') . implode('', array_map(fn($x) => ' · ' . ($x[0] !== '' ? $x[0] . ' ' : '') . $x[1], mem_product_specs($id)))
            . ($price ? ' · ' . wp_strip_all_tags(mem_price_html($id)) : '');
 
-    echo '<li class="mcard" data-price="' . $price . '" data-i="' . (int) $i . '">';
+    echo '<li class="mcard" id="' . mem_product_anchor($id) . '" data-price="' . $price . '" data-i="' . (int) $i . '">';
     if ($page) echo '<a class="mcard__link" href="' . esc_url($page) . '">';
     elseif ($big) echo '<a class="mcard__link" href="' . esc_url($big) . '" data-lb data-cap="' . esc_attr($cap) . '">';
     else echo '<div class="mcard__link">';
-    echo '<span class="mcard__img">';
+    // фото другой формы, чем карточка: поля по бокам — размытая копия этого же фото (а не пустой белый фон)
+    $mbg = $thumb && mem_card_ratio_differs($thumb) ? wp_get_attachment_image_url($thumb, 'thumbnail') : '';
+    echo '<span class="mcard__img' . ($mbg ? ' has-bg" style="--mbg:url(&quot;' . esc_url($mbg) . '&quot;)' : '') . '">';
     echo $thumb ? wp_get_attachment_image($thumb, 'medium_large', false, ['loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width:600px) 50vw, 260px', 'alt' => get_post_meta($thumb, '_wp_attachment_image_alt', true) ?: $title])
                 : '<span class="mcard__noimg" aria-hidden="true">✝</span>';
     if (get_post_meta($id, '_mem_on_order', true)) echo '<span class="mcard__tag">Под заказ</span>';
@@ -176,7 +185,9 @@ add_shortcode('mem_catalog', function ($atts) {
             unset($GLOBALS['mem_cat_ctx']);
         }
         echo '<ul class="mcat__grid mcat--' . esc_attr($ratio) . '" style="--cols:' . $cols . '">';
+        $GLOBALS['mem_card_ratio'] = ['photo' => 4 / 3, 'portrait' => 3 / 4, 'tall' => 3 / 5, 'land' => 5 / 3, 'square' => 1][$ratio] ?? 4 / 3;
         foreach ($items as $i => $p) mem_catalog_card($p, $i);
+        unset($GLOBALS['mem_card_ratio']);
         echo '</ul></section>';
     }
     echo '</div>';

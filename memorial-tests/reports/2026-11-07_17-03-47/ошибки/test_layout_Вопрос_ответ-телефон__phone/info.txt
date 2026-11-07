@@ -1,0 +1,15 @@
+Тест: tests/test_layout.py::test_layout[Вопрос–ответ-телефон]
+Адрес: https://memorialbel.test-handyhost.ru/vopros-otvet/
+Экран: phone
+
+Ошибки JavaScript:
+нет
+
+Ошибка теста:
+tests\test_layout.py:120: in test_layout
+    assert not problems, f"{u}\n" + "\n".join(problems)
+E   AssertionError: https://memorialbel.test-handyhost.ru/vopros-otvet/
+E     страница шире экрана на 25 px из-за: button#burger.burger (вылезает на 25 px); span (вылезает на 14 px)
+E     текст не помещается (длинное слово или ссылка): div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E   assert not ['страница шире экрана на 25 px из-за: button#burger.burger (вылезает на 25 px); span (вылезает на 14 px)', 'текст не помещается (длинное слово или ссылка): div.wrap.header__in «Мемориал\nРИТУАЛЬНАЯ КОМПАНИЯ»']

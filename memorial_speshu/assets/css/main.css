@@ -483,10 +483,18 @@ a.svc__item:hover{box-shadow:var(--sh);transform:translateY(-3px);border-color:v
 /* Узкие телефоны (до 380 px): шапка и подвал помещаются целиком — меньше отступы и разрядка */
 @media (max-width:380px){
   .header__in{gap:.6rem}
-  .logo{gap:.5rem;min-width:0;flex:0 1 auto}
-  .logo__text small{font-size:.58rem;letter-spacing:.06em}
+  .logo{gap:.5rem;min-width:0;flex:0 1 auto;overflow:hidden}
+  .logo__img{height:34px}
+  .logo b{font-size:1.05rem}
+  .logo__text small{font-size:.52rem;letter-spacing:.04em}
+  .logo b,.logo__text small{overflow:hidden;text-overflow:ellipsis}   /* в крайнем случае текст обрежется «…», а не растянет страницу */
+  .burger,.header__call{flex:none}
   .header__call{margin-left:auto}
   .fnav__title{letter-spacing:.06em;hyphens:auto;overflow-wrap:anywhere}  /* «БЛАГОУСТРОЙСТВО» в колонке подвала */
 }
 /* Длинные слова в заголовках («конфиденциальности») на телефоне переносятся, а не растягивают страницу */
 @media (max-width:480px){h1,h2,h3{overflow-wrap:break-word;hyphens:auto}}
+
+/* Фото другой формы в карточке товара: поля — размытая копия того же фото (класс has-bg ставит шаблон карточки) */
+.card__img.has-bg{position:relative;overflow:hidden;isolation:isolate}
+.card__img.has-bg::before{content:"";position:absolute;inset:-16px;z-index:-1;background:var(--mbg) center/cover no-repeat;filter:blur(14px) brightness(.95);opacity:.9}

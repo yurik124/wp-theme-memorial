@@ -32,6 +32,28 @@ from playwright.sync_api import sync_playwright
 HERE = Path(__file__).parent
 RUN = HERE / "reports" / time.strftime("%Y-%m-%d_%H-%M-%S")   # папка этого запуска
 RESULTS = []                                                  # для отчёта
+ISSUES = {}   # найденные проблемы без повторов: подпись → {"text", "pages", "tests", "shot"}
+
+
+def issue_key(text):
+    """Подпись проблемы: без адресов и чисел — одна и та же ошибка на разных страницах считается одной"""
+    t = re.sub(r"https?://\S+", "", text)
+    t = re.sub(r"\d+", "N", t)
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def add_issue(text, url="", test="", shot_path=""):
+    """Записать проблему. True — новая, False — такая уже была (на другой странице или в другом тесте)"""
+    k = issue_key(text)
+    new = k not in ISSUES
+    it = ISSUES.setdefault(k, {"text": text, "pages": [], "tests": [], "shot": shot_path})
+    if url and url not in it["pages"]:
+        it["pages"].append(url)
+    if test and test not in it["tests"]:
+        it["tests"].append(test)
+    if shot_path and not it["shot"]:
+        it["shot"] = shot_path
+    return new
 
 _SSL = ssl.create_default_context()
 _SSL.check_hostname = False
@@ -100,6 +122,8 @@ def pytest_runtest_makereport(item, call):
             reason = _short_error(rep.longreprtext)
         mark = {"ok": "  ✔", "fail": "  ✘", "skip": "  –"}[status]
         say(f"{mark} {_title(item)}  ({rep.duration:.1f} с)" + (f"\n      → {reason}" if reason else ""))
+        if status == "fail" and not getattr(item, "mem_issue_done", False):
+            add_issue(f"{_title(item)}: {reason}", test=_title(item))
         RESULTS.append({"file": item.fspath.basename, "title": _title(item), "status": status, "time": rep.duration,
                         "reason": reason, "full": rep.longreprtext if status == "fail" else "",
                         "shots": getattr(item, "mem_shots", [])})
@@ -135,7 +159,8 @@ def pytest_sessionfinish(session, exitstatus):
     path = _write_report(session.config.getoption("--base-url"))
     ok = sum(r["status"] == "ok" for r in RESULTS)
     bad = sum(r["status"] == "fail" for r in RESULTS)
-    say(f"\n  Итого: ✔ {ok} прошло, ✘ {bad} ошибок, – {len(RESULTS) - ok - bad} пропущено.\n  Отчёт: {path}\n")
+    say(f"\n  Итого: ✔ {ok} прошло, ✘ {bad} ошибок, – {len(RESULTS) - ok - bad} пропущено."
+        f"\n  Разных проблем: {len(ISSUES)} — список: {RUN / 'ошибки.txt'}\n  Отчёт: {path}\n")
     if not session.config.getoption("--no-open") and hasattr(os, "startfile"):
         try:
             os.startfile(path)  # Windows: открыть отчёт в браузере
@@ -143,7 +168,28 @@ def pytest_sessionfinish(session, exitstatus):
             pass
 
 
+def _write_issues(site):
+    """ошибки.txt — каждая проблема один раз, со списком страниц, где она есть"""
+    lines = [f"Проблемы на сайте {site} — {time.strftime('%d.%m.%Y %H:%M')}", ""]
+    if not ISSUES:
+        lines.append("Проблем не найдено.")
+    for i, it in enumerate(ISSUES.values(), 1):
+        lines.append(f"{i}. {it['text']}")
+        if it["pages"]:
+            lines.append(f"   Страниц с этой проблемой: {len(it['pages'])}")
+            lines += [f"     {u}" for u in it["pages"][:30]]
+            if len(it["pages"]) > 30:
+                lines.append(f"     … и ещё {len(it['pages']) - 30}")
+        if it["tests"]:
+            lines.append("   Нашли проверки: " + "; ".join(it["tests"][:5]))
+        if it["shot"]:
+            lines.append(f"   Снимок: {RUN / it['shot']}")
+        lines.append("")
+    (RUN / "ошибки.txt").write_text("\n".join(lines), encoding="utf-8")
+
+
 def _write_report(site):
+    _write_issues(site)
     e = htmlmod.escape
     rows, groups = [], {}
     for r in RESULTS:
@@ -165,6 +211,16 @@ def _write_report(site):
     ok = sum(r["status"] == "ok" for r in RESULTS)
     bad = sum(r["status"] == "fail" for r in RESULTS)
     skip = len(RESULTS) - ok - bad
+    issues = ""
+    if ISSUES:
+        li = []
+        for it in ISSUES.values():
+            pages = "".join(f'<li><a href="{e(u)}" target="_blank">{e(u)}</a></li>' for u in it["pages"][:15])
+            more = f"<li>… и ещё {len(it['pages']) - 15}</li>" if len(it["pages"]) > 15 else ""
+            img = f'<div class="shots"><a href="{e(it["shot"])}" target="_blank"><img src="{e(it["shot"])}"></a></div>' if it["shot"] else ""
+            cnt = f" <small>— страниц: {len(it['pages'])}</small>" if it["pages"] else ""
+            li.append(f'<div class="iss"><b>{e(it["text"])}</b>{cnt}<ul>{pages}{more}</ul>{img}</div>')
+        issues = f'<h2>Найденные проблемы ({len(ISSUES)}) — каждая один раз, со списком страниц</h2>' + "".join(li) + '<p><a href="ошибки.txt">ошибки.txt</a></p>'
     page = f"""<!doctype html><meta charset="utf-8"><title>Тесты сайта — {e(time.strftime('%d.%m.%Y %H:%M'))}</title>
 <style>body{{font:15px/1.5 system-ui,sans-serif;max-width:1100px;margin:24px auto;padding:0 16px;color:#222}}
 h1{{font-size:22px}}h2{{font-size:17px;margin:28px 0 8px}}table{{width:100%;border-collapse:collapse}}
@@ -172,9 +228,11 @@ td{{border-top:1px solid #eee;padding:6px 8px;vertical-align:top}}td.i{{width:24
 tr.ok td.i{{color:#1a7f37}}tr.fail td.i{{color:#c62828}}tr.fail{{background:#fff3f3}}tr.skip{{color:#888}}
 .why{{color:#a33;font-size:13px}}tr.skip .why{{color:#888}}pre{{white-space:pre-wrap;font-size:12px;background:#f6f6f6;padding:8px}}
 .sum b{{font-size:20px;margin-right:16px}}.shots{{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}}
-.shots img{{height:160px;border:1px solid #ddd;border-radius:4px}}</style>
+.shots img{{height:160px;border:1px solid #ddd;border-radius:4px}}
+.iss{{background:#fff3f3;border-left:4px solid #c62828;padding:8px 12px;margin:8px 0}}.iss ul{{margin:4px 0 0;font-size:13px}}</style>
 <h1>Тесты сайта {e(site)}</h1><p>{e(time.strftime('%d.%m.%Y %H:%M'))}</p>
 <p class="sum"><b style="color:#1a7f37">✔ {ok}</b><b style="color:#c62828">✘ {bad}</b><b style="color:#888">– {skip}</b></p>
+{issues}
 {''.join(rows)}"""
     path = RUN / "отчет.html"
     path.write_text(page, encoding="utf-8")
@@ -214,25 +272,34 @@ def _block_trackers(ctx):
     ctx.route(re.compile(r"mc\.yandex\.(ru|com)|google-analytics|googletagmanager|top-fwz1\.mail\.ru|vk\.com/rtrg"), lambda r: r.abort())
 
 
+def _patch_goto(page):
+    """Не ждать полной загрузки чужих виджетов (карты, отзывы): страница готова, когда построен HTML"""
+    page.set_default_navigation_timeout(60000)
+    page.set_default_timeout(20000)
+    orig = page.goto
+    page.goto = lambda url, **kw: orig(url, **{"wait_until": "domcontentloaded", **kw})
+
+
 def _new_page(browser, **ctx_opts):
     ctx = browser.new_context(ignore_https_errors=True, **ctx_opts)
     _block_trackers(ctx)
     page = ctx.new_page()
+    _patch_goto(page)
     page.js_errors = []
     page.on("pageerror", lambda e: page.js_errors.append(str(e)))
     return ctx, page
 
 
-def shot(request, page, name, full_page=False):
-    """Снимок страницы в отчёт этого теста"""
-    d = RUN / "снимки"
+def fail_shot(page, name):
+    """Снимок страницы с проблемой (только при ошибке) → путь для отчёта"""
+    d = RUN / "ошибки"
     d.mkdir(parents=True, exist_ok=True)
-    fn = re.sub(r"[^\w.-]+", "_", f"{request.node.name}_{name}")[:120] + ".jpg"
+    fn = re.sub(r"[^\w.-]+", "_", name)[:120] + ".jpg"
     try:
-        page.screenshot(path=str(d / fn), full_page=full_page, type="jpeg", quality=70)
-        request.node.mem_shots = getattr(request.node, "mem_shots", []) + [f"снимки/{fn}"]
+        page.screenshot(path=str(d / fn), type="jpeg", quality=70)
+        return f"ошибки/{fn}"
     except Exception:
-        pass
+        return ""
 
 
 def _save_failure(request, page, label):
@@ -317,9 +384,11 @@ def _sitemap(base_url):
                 continue
             if u.endswith(".xml"):
                 fn = u.rsplit("/", 1)[-1]
+                if "attachment" in fn:
+                    continue   # страницы картинок не проверяем: сайт перенаправляет их (см. test_redirects)
                 k = "товар" if "mem_product" in fn else "раздел каталога" if "mem_cat" in fn else "страница" if "page" in fn else "другое"
                 queue.append((u, k))
-            elif not re.search(r"\.(jpe?g|png|webp|pdf)$", u, re.I) and u not in [x[0] for x in out]:
+            elif not re.search(r"\.(jpe?g|png|webp|pdf)$|[?&]attachment_id=", u, re.I) and u not in [x[0] for x in out]:
                 out.append((u, kind or "другое"))
     return out
 
@@ -414,6 +483,7 @@ def admin(browser, admin_state, request):
     ctx = browser.new_context(ignore_https_errors=True, viewport={"width": 1440, "height": 900}, storage_state=admin_state)
     _block_trackers(ctx)
     p = ctx.new_page()
+    _patch_goto(p)
     p.js_errors = []
     p.on("pageerror", lambda e: p.js_errors.append(str(e)))
     yield p

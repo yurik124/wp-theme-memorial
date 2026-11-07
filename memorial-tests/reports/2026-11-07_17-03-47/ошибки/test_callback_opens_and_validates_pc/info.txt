@@ -1,0 +1,27 @@
+Тест: tests/test_callback.py::test_callback_opens_and_validates
+Адрес: chrome-error://chromewebdata/
+Экран: pc
+
+Ошибки JavaScript:
+нет
+
+Ошибка теста:
+tests\test_callback.py:18: in test_callback_opens_and_validates
+    dlg = _open(page, base_url)
+          ^^^^^^^^^^^^^^^^^^^^^
+tests\test_callback.py:6: in _open
+    page.goto(base_url)
+.venv\Lib\site-packages\playwright\sync_api\_generated.py:18528: in goto
+    self._sync(
+.venv\Lib\site-packages\playwright\_impl\_page.py:564: in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\playwright\_impl\_frame.py:157: in goto
+    await self._channel.send(
+.venv\Lib\site-packages\playwright\_impl\_connection.py:78: in send
+    return await self._connection.wrap_api_call(
+.venv\Lib\site-packages\playwright\_impl\_connection.py:636: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.TimeoutError: Page.goto: Timeout 30000ms exceeded.
+E   Call log:
+E     - navigating to "https://memorialbel.test-handyhost.ru/", waiting until "load"

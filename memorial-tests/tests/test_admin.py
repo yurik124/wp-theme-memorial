@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 import pytest
 
-from conftest import shot
+from conftest import add_issue, fail_shot
 
 PHP_ERR = re.compile(r"(Fatal error|Warning|Notice|Deprecated|Parse error)</b>:|Uncaught |Stack trace:")
 
@@ -31,13 +31,19 @@ def test_admin_pages_open(admin, base_url, request):
         resp = admin.goto(href)
         admin.wait_for_timeout(800)
         html = admin.content()
+        found = []
         if not resp or resp.status >= 400:
-            problems.append(f"«{text}»: код {resp.status if resp else '—'}")
+            found.append(f"Админка «{text}»: страница не открывается (код {resp.status if resp else '—'})")
         if PHP_ERR.search(html):
-            problems.append(f"«{text}»: на странице ошибка PHP")
+            found.append(f"Админка «{text}»: на странице ошибка PHP")
         if admin.js_errors:
-            problems.append(f"«{text}»: ошибки JavaScript: {admin.js_errors[:2]}")
-        shot(request, admin, text)
+            found.append(f"Админка «{text}»: ошибки JavaScript: {admin.js_errors[:2]}")
+        if found:
+            path = fail_shot(admin, "admin_" + text)
+            for t in found:
+                add_issue(t, href, "Админка", path)
+            problems += found
+    request.node.mem_issue_done = True
     assert not problems, f"проверено {len(links)} страниц:\n" + "\n".join(problems)
 
 
@@ -58,7 +64,6 @@ def test_catalog_manager(admin, base_url, request):
     if sort.count():
         sort.click()
         admin.wait_for_timeout(400)
-    shot(request, admin, "catalog")
     assert not admin.js_errors, admin.js_errors
 
 
@@ -68,7 +73,6 @@ def test_works_manager(admin, base_url, request):
     rows = admin.locator("tr[data-id]")
     rows.first.wait_for(state="attached", timeout=20000)
     assert rows.count() > 0, "список работ пустой"
-    shot(request, admin, "works")
     assert not admin.js_errors, admin.js_errors
 
 
@@ -80,5 +84,4 @@ def test_shortcode_help(admin, base_url, request):
     admin.wait_for_timeout(1500)
     text = admin.locator("body").inner_text()
     assert "карточк" in text.lower(), "расшифровка шорткода не появилась"
-    shot(request, admin, "help")
     assert not admin.js_errors, admin.js_errors

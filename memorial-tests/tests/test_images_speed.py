@@ -4,7 +4,8 @@ import pytest
 CROP_JS = """() => [...document.images].filter(i => i.offsetWidth > 200 && i.naturalWidth && getComputedStyle(i).objectFit === 'cover')
   .filter(i => !i.closest('.cat, .hub, .page-tiles, .hero, .mem-card'))   // плитки разделов обрезаются намеренно (точка фокуса)
   .map(i => { const n = i.naturalWidth / i.naturalHeight, b = i.clientWidth / i.clientHeight;
-              return { src: i.currentSrc.split('/').pop(), vis: Math.min(n, b) / Math.max(n, b), cls: i.parentElement.className }; })
+              const path = []; for (let x = i.parentElement; x && path.length < 3; x = x.parentElement) if (typeof x.className === 'string' && x.className) path.push(x.className.split(' ')[0]);
+              return { src: i.currentSrc.split('/').pop(), vis: Math.min(n, b) / Math.max(n, b), cls: path.join(' < ') }; })
   .filter(x => x.vis < 0.8)"""
 
 

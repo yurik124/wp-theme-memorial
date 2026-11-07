@@ -1,7 +1,7 @@
 """Вёрстка на ПК и телефоне: шапка, меню, подвал, ширина страниц, картинки, снимки страниц в отчёт."""
 import pytest
 
-from conftest import shot
+from conftest import add_issue, fail_shot
 
 # Какую страницу взять (кусок HTML, «url:часть адреса» или «kind:вид из карты сайта») → как назвать в отчёте.
 KINDS = [
@@ -63,7 +63,6 @@ def test_burger_menu_mobile(mobile, base_url, request):
     burger.click()
     mobile.wait_for_timeout(500)
     assert mobile.locator("#nav a:visible").count() > 3, "меню на телефоне не открылось"
-    shot(request, mobile, "menu")
     assert not mobile.js_errors, mobile.js_errors
 
 
@@ -104,31 +103,55 @@ def test_layout(request, site, base_url, device, marker, label):
     p.goto(u)
     p.evaluate("document.querySelectorAll('img[loading=lazy]').forEach(i => i.loading = 'eager')")
     p.wait_for_timeout(1500)
-    shot(request, p, "screen")
-    r = p.evaluate(LAYOUT_JS)
-    problems = []
+    problems = _problems(p, p.evaluate(LAYOUT_JS))
+    if not problems:
+        return
+    where = "ПК" if device == "page" else "телефон"
+    path = fail_shot(p, f"layout_{label}_{where}")
+    # одна и та же проблема на ПК и телефоне, на разных страницах — считается одной
+    new = [t for t in problems if add_issue(t, u, f"Вёрстка [{label}, {where}]", path)]
+    request.node.mem_issue_done = True
+    if not new:   # та же проблема уже найдена на другой странице — не дублируем
+        pytest.skip("та же проблема, что уже найдена на другой странице (см. «Найденные проблемы»)")
+    assert False, f"{u}\n" + "\n".join(new)
+
+
+def _problems(p, r):
+    """Список проблем вёрстки — короткими фразами, без адреса (адрес добавляется отдельно)"""
+    out = []
     if r["wide"] or r["width"] > 1:
-        problems.append(f"страница шире экрана на {r['width']} px" + (" из-за: " + "; ".join(r["wide"]) if r["wide"] else ""))
+        out.append(f"страница шире экрана на {r['width']} px" + (" из-за: " + "; ".join(r["wide"]) if r["wide"] else ""))
     if r["text"]:
-        problems.append("текст не помещается (длинное слово или ссылка): " + "; ".join(r["text"]))
+        out.append("текст не помещается (длинное слово или ссылка): " + "; ".join(r["text"]))
     if r["broken"]:
-        problems.append("не загрузились картинки: " + ", ".join(r["broken"][:5]))
+        out.append("не загрузились картинки: " + ", ".join(r["broken"][:5]))
     if r["huge"]:
-        problems.append("слишком высокие картинки: " + "; ".join(r["huge"][:3]))
+        out.append("слишком высокие картинки: " + "; ".join(r["huge"][:3]))
     if p.js_errors:
-        problems.append("ошибки JavaScript: " + "; ".join(p.js_errors[:3]))
-    assert not problems, f"{u}\n" + "\n".join(problems)
+        out.append("ошибки JavaScript: " + "; ".join(p.js_errors[:3]))
+    return out
 
 
 @pytest.mark.slow
 def test_no_horizontal_scroll_mobile(mobile, site, request):
-    """Все страницы на телефоне — не шире экрана, текст помещается"""
-    bad = []
+    """Все страницы на телефоне — не шире экрана, текст помещается (одна и та же проблема — один раз, со списком страниц)"""
     urls = [u for u, d in site.items() if d["status"] == 200]
+    new = []
     for u in urls:
         mobile.goto(u)
         r = mobile.evaluate(LAYOUT_JS)
-        if r["width"] > 1 or r["wide"] or r["text"]:
-            bad.append(f"{u}: шире на {r['width']} px; " + "; ".join(r["wide"] + r["text"]))
-            shot(request, mobile, f"wide_{len(bad)}")
-    assert not bad, f"проверено {len(urls)} страниц, проблемы на {len(bad)}:\n" + "\n".join(bad[:15])
+        r["broken"], r["huge"] = [], []           # картинки проверяет test_layout
+        for t in _problems(mobile, r):
+            text = t
+            if add_issue(text, u, "Все страницы на телефоне"):
+                _first_shot(mobile, text)
+                new.append(f"{t}  (впервые: {u})")
+        mobile.js_errors.clear()
+    request.node.mem_issue_done = True
+    assert not new, f"проверено {len(urls)} страниц; разных проблем: {len(new)}:\n" + "\n".join(new[:10])
+
+
+def _first_shot(page, text):
+    """Снимок — только для первой страницы с этой проблемой"""
+    from conftest import ISSUES, issue_key
+    ISSUES[issue_key(text)]["shot"] = fail_shot(page, "phone_" + text[:60])

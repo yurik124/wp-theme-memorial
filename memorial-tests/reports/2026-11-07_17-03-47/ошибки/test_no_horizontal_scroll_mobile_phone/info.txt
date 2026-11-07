@@ -1,0 +1,42 @@
+Тест: tests/test_layout.py::test_no_horizontal_scroll_mobile
+Адрес: https://memorialbel.test-handyhost.ru/tovar/f7/
+Экран: phone
+
+Ошибки JavaScript:
+нет
+
+Ошибка теста:
+tests\test_layout.py:134: in test_no_horizontal_scroll_mobile
+    assert not bad, f"проверено {len(urls)} страниц, проблемы на {len(bad)}:\n" + "\n".join(bad[:15])
+E   AssertionError: проверено 474 страниц, проблемы на 163:
+E     https://memorialbel.test-handyhost.ru/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/ogradki-2/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/chto-delat-esli-umer-chelovek/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/ritualnye-uslugi/gruz-200/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/blagoustrojstvo-zahoroneniya/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/otzyvy/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/kontakty/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/ritualnye-uslugi/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/ritualnye-tovary/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/metallicheskie-kresty/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/pamyatniki/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/venki/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/ceny/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E     https://memorialbel.test-handyhost.ru/posobie-na-pogrebenie/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал
+E     РИТУАЛЬНАЯ КОМПАНИЯ»
+E   assert not ['https://memorialbel.test-handyhost.ru/: шире на 25 px; button#burger.burger (вылезает на 25 px); span (вылезает на 1...burger.burger (вылезает на 25 px); span (вылезает на 14 px); div.wrap.header__in «Мемориал\nРИТУАЛЬНАЯ КОМПАНИЯ»', ...]
