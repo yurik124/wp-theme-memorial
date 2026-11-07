@@ -1,0 +1,29 @@
+<?php get_header();
+$cats = get_terms(['taxonomy' => 'mem_cat', 'parent' => 0, 'hide_empty' => true]); ?>
+<main id="main" class="section nf">
+  <div class="wrap nf__in">
+    <p class="nf__code" aria-hidden="true">404</p>
+    <h1>Страница не найдена</h1>
+    <p class="nf__lead">Возможно, ссылка устарела или в адресе опечатка. Если вам нужна помощь прямо сейчас — позвоните, мы подскажем.</p>
+
+    <div class="nf__cta">
+      <?php if (mem_tel()) : ?>
+        <a class="btn btn--gold btn--lg" href="tel:<?php echo esc_attr(mem_tel()); ?>"><?php echo mem_icon('phone'); ?><span class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></span></a>
+      <?php endif; ?>
+      <a class="btn btn--line btn--lg" href="<?php echo esc_url(home_url('/')); ?>">На главную</a>
+    </div>
+
+    <?php if (!is_wp_error($cats) && $cats) : ?>
+      <nav class="nf__links" aria-label="Разделы каталога">
+        <p>Разделы каталога:</p>
+        <div class="chips">
+          <a class="chip" href="<?php echo esc_url(mem_catalog_url()); ?>">Весь каталог</a>
+          <?php foreach ($cats as $c) : ?>
+            <a class="chip" href="<?php echo esc_url(get_term_link($c)); ?>"><?php echo esc_html($c->name); ?></a>
+          <?php endforeach; ?>
+        </div>
+      </nav>
+    <?php endif; ?>
+  </div>
+</main>
+<?php get_footer(); ?>

@@ -1,0 +1,224 @@
+/* «Каталог → Товары» */
+.mcm{--g:#b89b5e;--line:#dcdcde;--mute:#646970;max-width:none}
+.mcm__head{display:flex;align-items:baseline;gap:16px}
+.mcm__classic{margin-left:auto;font-size:13px}
+.mcm__tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);margin:14px 0 18px}
+.mcm__tab{padding:9px 16px;border:1px solid transparent;border-bottom:0;border-radius:8px 8px 0 0;text-decoration:none;color:#1d2327;font-size:14px;font-weight:500;margin-bottom:-1px;background:none;cursor:pointer}
+.mcm__tab span{color:var(--mute);font-weight:400;font-size:12px;margin-left:2px}
+.mcm__tab:hover{background:#f6f7f7;color:#1d2327}
+.mcm__tab.is-on{background:#fff;border-color:var(--line);color:#1d2327}
+.mcm__tab--add{color:#2271b1}
+.mcm__typeinp{margin:4px 0;min-width:220px}
+.mcm__loading,.mcm__empty{color:var(--mute);font-size:14px;padding:12px 0}
+.mcm__hint{background:#fff;border-left:4px solid var(--g);padding:10px 14px;margin:14px 0;max-width:900px}
+
+/* зона загрузки */
+.mcm__drop{display:grid;justify-items:center;gap:4px;text-align:center;padding:22px 16px;border:2px dashed #c3c4c7;border-radius:12px;background:#fff;cursor:pointer;transition:border-color .15s,background .15s}
+.mcm__drop:hover,.mcm__drop:focus{border-color:var(--g);outline:none}
+.mcm__drop.is-over{border-color:var(--g);background:#fbf7ee}
+.mcm__drop strong{font-size:15px}
+.mcm__drop span{color:var(--mute)}
+.mcm__drop span u{color:#2271b1}
+.mcm__drop em{color:var(--mute);font-size:12px;font-style:normal}
+.mcm__queue{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:6px}
+.mcm__queue span{font-size:12px;padding:2px 8px;border-radius:999px;background:#f0f0f1}
+.mcm__queue .is-ok{background:#edfaef;color:#00650f}
+.mcm__queue .is-err{background:#fcf0f1;color:#b32d2e}
+
+/* панель: поиск, фильтры, статус */
+.mcm__bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:16px 0 10px}
+.mcm__search{min-width:260px;flex:0 1 320px}
+.mcm__filters{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 auto}
+.mcm__f{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;cursor:pointer;font-size:13px}
+.mcm__f b{font-weight:400;color:var(--mute);margin-left:2px}
+.mcm__f.is-on{background:#1d2327;border-color:#1d2327;color:#fff}
+.mcm__f.is-on b{color:#c3c4c7}
+.mcm__status{font-size:12px;color:#00a32a;white-space:nowrap}
+.mcm__status.is-busy{color:var(--mute)}
+.mcm__status.is-err{color:#d63638;font-weight:600}
+
+/* таблица */
+.mcm__wrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:10px}
+.mcm__table{border-collapse:collapse;width:100%;min-width:900px}
+.mcm__table th{position:sticky;top:0;background:#f6f7f7;text-align:left;font-weight:600;font-size:12px;color:#50575e;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.mcm__table th small{font-weight:400;color:var(--mute)}
+.mcm__table td{padding:8px;border-bottom:1px solid #f0f0f1;vertical-align:top}
+.mcm__table tr:last-child td{border-bottom:0}
+.mcm__table tr.is-hidden td{background:#fafafa}
+.mcm__table tr.is-hidden .mcm__photo img{opacity:.45}
+.mcm__table tr.is-new td{animation:mcm-new 2.5s ease-out}
+@keyframes mcm-new{from{background:#fbf2dc}to{background:transparent}}
+.mcm__table input[type=text],.mcm__table input[type=number],.mcm__table select{width:100%;min-width:0;border-color:#e0e0e0;border-radius:6px;font-size:13px;padding:4px 8px;min-height:32px;box-shadow:none;background:#fff}
+.mcm__table input:hover,.mcm__table select:hover{border-color:#c3c4c7}
+.mcm__table input:focus,.mcm__table select:focus{border-color:var(--g);box-shadow:0 0 0 1px var(--g)}
+.mcm__table input::placeholder{color:#a7aaad}
+.mcm__table .is-saving{background:#fcf9e8}
+.mcm__drag{width:18px;cursor:grab;color:#a7aaad;letter-spacing:-3px;padding-top:16px!important;user-select:none}
+.no-sort .mcm__drag{visibility:hidden}
+.mcm__ph{width:64px}
+.mcm__photo{display:grid;place-items:center;width:60px;height:60px;padding:0;border:1px dashed #c3c4c7;border-radius:8px;background:#f6f7f7;cursor:pointer;overflow:hidden}
+.mcm__photo img{width:100%;height:100%;object-fit:cover}
+.mcm__photo span{font-size:11px;color:var(--mute)}
+.mcm__name{min-width:200px;width:22%;position:relative}
+.mcm__name input[data-f=title]{font-weight:600}
+.mcm__sub{margin-top:4px;font-size:12px!important;min-height:28px!important}
+.mcm__badge{display:inline-block;margin-top:4px;font-size:11px;background:#f0f0f1;border-radius:4px;padding:1px 6px;color:var(--mute)}
+.mcm__price{width:150px;min-width:140px}
+.mcm__num{display:flex;align-items:center;gap:4px}
+.mcm__num i{font-style:normal;color:var(--mute);font-size:12px;white-space:nowrap}
+.mcm__from{display:inline-flex;align-items:center;gap:3px;margin:4px 8px 0 0;font-size:12px;color:#50575e}
+.mcm__unit{margin-top:4px;font-size:12px!important;min-height:28px!important}
+.mcm__fld{min-width:120px}
+.mcm__cats{min-width:150px}
+.mcm__catbtn{display:flex;flex-wrap:wrap;gap:4px;width:100%;min-height:32px;padding:4px 6px;border:1px solid #e0e0e0;border-radius:6px;background:#fff;cursor:pointer;text-align:left;align-items:center}
+.mcm__catbtn:hover{border-color:#c3c4c7}
+.mcm__chip{background:#f3ece0;color:#5f4b21;border-radius:999px;padding:1px 8px;font-size:12px}
+.mcm__none{color:#a7aaad;font-size:12px}
+.mcm__more{width:34px}
+.mcm__dots{border:0;background:none;font-size:20px;line-height:1;cursor:pointer;color:var(--mute);padding:4px 6px;border-radius:6px}
+.mcm__dots:hover{background:#f0f0f1;color:#1d2327}
+
+/* всплывающее окно */
+.mcm__pop{position:absolute;z-index:100000;background:#fff;border:1px solid var(--line,#dcdcde);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.16);padding:8px;min-width:220px;max-width:320px;display:grid;gap:2px}
+.mcm__pop a,.mcm__pop button{display:block;text-align:left;padding:7px 10px;border-radius:6px;border:0;background:none;font-size:13px;color:#1d2327;text-decoration:none;cursor:pointer}
+.mcm__pop a:hover,.mcm__pop button:hover{background:#f6f7f7}
+.mcm__pop .is-danger{color:#b32d2e}
+.mcm__poph{margin:2px 6px 6px;font-weight:600;font-size:12px;color:#50575e}
+.mcm__catlist{display:grid;gap:2px;max-height:260px;overflow:auto;margin-bottom:6px}
+.mcm__catlist label{padding:4px 6px;border-radius:6px;font-size:13px}
+.mcm__catlist label:hover{background:#f6f7f7}
+.mcm__newcat{width:100%}
+
+/* окно настройки типа */
+.mcm__modal{position:fixed;inset:0;z-index:100001;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:20px}
+.mcm__dialog{position:relative;background:#fff;border-radius:12px;width:min(820px,100%);max-height:calc(100vh - 40px);overflow:auto;padding:22px 26px}
+.mcm__dialog h2{margin:.4em 0 .2em}
+.mcm__x{position:absolute;top:10px;right:12px;border:0;background:none;font-size:26px;cursor:pointer;color:var(--mute,#646970)}
+.mcm__flist{display:grid;gap:8px;margin:12px 0}
+.mcm__frow{display:grid;grid-template-columns:auto minmax(160px,1.3fr) 150px minmax(160px,1.5fr) auto;gap:8px;align-items:center;background:#f6f7f7;padding:8px;border-radius:8px}
+.mcm__frow input[hidden]{display:none}
+.mcm__frow .mcm__funit,.mcm__frow .mcm__fopts{grid-column:4}
+.mcm__fmove{display:flex;flex-direction:column}
+.mcm__fmove button{border:0;background:none;cursor:pointer;line-height:1;padding:1px 4px;color:var(--mute,#646970)}
+.mcm__fdel{border:0;background:none;font-size:20px;cursor:pointer;color:#b32d2e}
+.mcm__clist{margin:8px 0;display:flex;flex-wrap:wrap;gap:6px}
+.mcm__clist li{margin:0;background:#f3ece0;border-radius:999px;padding:2px 10px}
+.mcm__dfoot{border-top:1px solid #f0f0f1;padding-top:14px;margin-top:16px}
+@media (max-width:782px){
+  .mcm__frow{grid-template-columns:auto 1fr auto}
+  .mcm__frow .mcm__ftype,.mcm__frow .mcm__funit,.mcm__frow .mcm__fopts{grid-column:2}
+  .mcm__search{min-width:0;flex:1 1 100%}
+}
+
+/* отметки и действия с отмеченными */
+.mcm__chk{width:22px;padding-top:14px!important}
+.mcm__table tr.is-sel td{background:#f6f1e5}
+.mcm__bulk{position:sticky;top:32px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:#1d2327;color:#fff;border-radius:10px;padding:8px 12px;margin:0 0 10px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.mcm__bulk[hidden]{display:none}
+.mcm__bulk b{margin-right:6px}
+.mcm__bulk .button-link{color:#c3c4c7;margin-left:auto}
+.mcm__bulk .mcm__danger{color:#b32d2e}
+.mcm__popbtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.mcm__pop .mcm__popbtns .button{display:inline-block;padding:0 10px}
+.mcm__pricef{display:grid;gap:6px}
+.mcm__pricef label{font-size:12px;color:#50575e}
+.mcm__pprev{margin:8px 2px 2px;font-size:12px}
+.mcm__pop .description{margin:4px 2px;font-size:12px}
+
+/* «Типы и категории» */
+.mct__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:16px}
+.mct__card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+.mct__card h2{margin:.2em 0 .5em;font-size:16px}
+.mct__card h3{margin:1.4em 0 .2em;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:#50575e}
+.mct__lbl{display:grid;gap:4px;font-size:12px;color:#50575e;margin:8px 0}
+.mct__lbl input,.mct__lbl select{font-size:14px;min-height:34px;border-radius:6px}
+.mct__name{font-size:16px!important;font-weight:600}
+.mct__defs{display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px 16px}
+.mct__defs .mcm__num input{width:120px}
+.mct__danger{margin-top:20px;padding-top:12px;border-top:1px solid #f0f0f1}
+.mct__deltype{color:#b32d2e!important}
+.mct__cats{margin:10px 0;display:grid;gap:4px}
+.mct__cats li{display:flex;align-items:center;gap:8px;margin:0;padding:4px 6px 4px calc(6px + var(--d,0) * 22px);border-radius:8px;background:#f6f7f7}
+.mct__cats .mcm__drag{padding-top:0!important;cursor:grab}
+.mct__cname{flex:1;border-color:transparent!important;background:transparent!important;font-size:14px;min-height:30px}
+.mct__cname:hover{border-color:#dcdcde!important;background:#fff!important}
+.mct__cname:focus{background:#fff!important;border-color:var(--g)!important}
+.mct__ccount{font-size:12px;color:var(--mute);white-space:nowrap}
+.mct__add{display:flex;gap:6px}
+.mct__add input{flex:1}
+.mct__ftable{min-width:760px}
+.mct__ftable td{vertical-align:middle}
+.mct__foot{color:var(--mute);margin-top:18px}
+.mct__tabs .mcm__tab{cursor:grab}
+@media (max-width:960px){.mct__grid{grid-template-columns:1fr}}
+
+/* Панель отмеченных: светлые кнопки на тёмном фоне — хорошо читаются */
+.mcm__bulk .button{background:#fff;border-color:#fff;color:#1d2327;font-weight:500}
+.mcm__bulk .button:hover,.mcm__bulk .button:focus{background:#f0e6d2;border-color:#f0e6d2;color:#1d2327;box-shadow:none}
+.mcm__bulk .button.mcm__danger{background:#fff;border-color:#fff;color:#b32d2e}
+.mcm__bulk .button.mcm__danger:hover{background:#fcf0f1;border-color:#fcf0f1;color:#8a2424}
+.mcm__bulk .button-link{color:#dcdcde;text-decoration:underline}
+.mcm__bulk .button-link:hover{color:#fff}
+
+/* «Наши работы» */
+.mwm .mcm__photo{position:relative}
+.mwm__more{position:absolute;right:2px;bottom:2px;background:rgba(29,35,39,.85);color:#fff;font-size:11px;border-radius:4px;padding:0 4px}
+.mwm__textbtn{display:block;width:100%;margin-top:4px;text-align:left;border:1px dashed #dcdcde;border-radius:6px;background:#fff;padding:4px 8px;font-size:12px;color:#50575e;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mwm__textbtn:hover{border-color:#c3c4c7;color:#1d2327}
+.mwm__year{width:84px}
+.mwm__size{width:130px}
+.mwm__rows{min-width:170px}
+.mwm__rows b{font-weight:600}
+.mcm__pop.mwm__wide{max-width:520px;min-width:min(480px,92vw)}
+.mwm__text{width:100%;font-size:13px}
+.mwm__rtable{width:100%;border-collapse:collapse}
+.mwm__rtable td{padding:2px}
+.mwm__rtable td:first-child{width:62%}
+.mwm__rtable input{width:100%}
+.mwm__rfoot{display:flex;justify-content:space-between;align-items:center;margin:8px 2px 2px}
+.mcm__pop.mwm__phpop{max-width:460px;min-width:min(420px,92vw)}
+.mwm__phlist{display:flex;flex-wrap:wrap;gap:6px;margin:4px 2px 8px}
+.mwm__phlist li{position:relative;margin:0;cursor:move}
+.mwm__phlist li:first-child img{outline:3px solid var(--g,#b89b5e);outline-offset:-3px}
+.mwm__phlist img{width:84px;height:84px;object-fit:cover;border-radius:6px;display:block}
+.mwm__phlist button{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;cursor:pointer;line-height:1;padding:0!important;text-align:center!important}
+.mwm__phdrop{border:2px dashed #c3c4c7;border-radius:8px;padding:12px;text-align:center;color:#646970;font-size:12px}
+.mwm__phdrop.is-over{border-color:var(--g,#b89b5e);background:#fbf7ee}
+
+.mct__cats li{flex-wrap:wrap}
+.mct__cdesc{flex-basis:100%;margin:2px 0 4px 26px;width:calc(100% - 26px);font-size:12px;border-color:transparent;background:transparent;resize:vertical;min-height:30px}
+.mct__cdesc:hover{border-color:#dcdcde;background:#fff}
+.mct__cdesc:focus{border-color:var(--g);background:#fff}
+
+/* Вкладки типов и кнопки-категории — в одну строку, листаются влево-вправо (как разделы на сайте) */
+.mhs{position:relative;min-width:0}
+.mhs__in{flex-wrap:nowrap!important;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth}
+.mhs__in::-webkit-scrollbar{display:none}
+.mhs__in>*{flex:none;white-space:nowrap}
+.mhs__in.is-drag{scroll-behavior:auto;cursor:grabbing;user-select:none}
+.mhs__in.is-drag *{pointer-events:none}
+.mhs__arr{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15);font-size:18px;line-height:1;cursor:pointer;display:none;color:#1d2327;padding:0}
+.mhs__arr--l{left:-6px}.mhs__arr--r{right:-6px}
+.mhs.has-l .mhs__arr--l,.mhs.has-r .mhs__arr--r{display:grid;place-items:center}
+.mhs.has-r .mhs__in{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 50px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 50px),transparent)}
+.mhs.has-l .mhs__in{-webkit-mask-image:linear-gradient(90deg,transparent,#000 50px);mask-image:linear-gradient(90deg,transparent,#000 50px)}
+.mhs.has-l.has-r .mhs__in{-webkit-mask-image:linear-gradient(90deg,transparent,#000 50px,#000 calc(100% - 50px),transparent);mask-image:linear-gradient(90deg,transparent,#000 50px,#000 calc(100% - 50px),transparent)}
+@media (hover:hover) and (pointer:fine){.mhs--filters .mhs__in{cursor:grab}}
+/* вкладки: линия под рядом — у обёртки, чтобы не обрезалась прокруткой */
+.mhs--tabs{border-bottom:1px solid var(--line);margin:14px 0 18px}
+.mhs--tabs .mcm__tabs{border-bottom:0;margin:0}
+.mhs--tabs .mcm__tab{margin-bottom:0}
+.mhs--tabs .mcm__tab.is-on{box-shadow:0 2px 0 #fff}
+.mhs--tabs .mhs__arr{top:calc(50% - 1px)}
+/* категории — отдельной строкой под поиском и кнопками */
+.mcm__bar>.mhs--filters{flex:1 1 100%;order:10}
+.mcm__filters{flex:none}
+
+/* сортировка по столбцам */
+.mcm__sort{all:unset;cursor:pointer;color:inherit;font:inherit;display:inline-flex;align-items:center;gap:4px;border-radius:4px;padding:2px 4px;margin:-2px -4px}
+.mcm__sort:hover{background:#f0f0f1}
+.mcm__sort i{font-style:normal;font-size:10px;color:#a7aaad;width:9px}
+.mcm__sort.is-on{color:#2271b1}
+.mcm__sort.is-on i{color:#2271b1}
+.mcm__sortnote{caption-side:top;text-align:left;padding:8px 12px;background:#f0f6fc;color:#1d2327;font-size:13px;border-bottom:1px solid var(--line)}
+.mcm__badge.mwm__ex{background:#fbf3dc;color:#8a6f35;border-color:#e8d8a8}
