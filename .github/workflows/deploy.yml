@@ -1,0 +1,35 @@
+name: Деплой на сайт (FTP)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # кнопка ручного запуска
+
+jobs:
+  deploy-theme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Загрузить тему
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          port: 21
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./memorial_speshu/
+          server-dir: /wp-content/themes/memorial_speshu/
+
+  deploy-plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Загрузить плагин
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          port: 21
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./memorial-core/
+          server-dir: /wp-content/plugins/memorial-core/
