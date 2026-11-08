@@ -6,51 +6,46 @@ $tel    = esc_attr(mem_tel());
 $hero   = mem_home('hero');
 $img    = $hero['img'] ?? '';
 $e      = fn($s) => memorial_nbsp(esc_html(mem_t($s)));   // текст из настроек с подстановками {years} и т.п.; предлоги не отрываются
-$head   = function ($sec) use ($e) {       // заголовок блока
-    if (!empty($sec['eyebrow']) || !empty($sec['title'])) {
-        echo '<header class="sec-head">';
-        if (!empty($sec['eyebrow'])) echo '<p class="eyebrow">' . $e($sec['eyebrow']) . '</p>';
-        if (!empty($sec['title'])) echo '<h2>' . $e($sec['title']) . '</h2>';
-        echo '</header>';
-    }
-};
+$head   = fn($sec) => memorial_sec_head($sec, $e);   // надзаголовок — лавровый разделитель — H2 (functions.php)
 ?>
 <main id="main">
 
 <?php
-// Тонировка первого экрана: цвет, сила, вид (настройки «Главная страница → Первый экран»)
-$tint = $hero['tint'] ?? 'grad';
-$op = max(0, min(100, (int) (($hero['tint_op'] ?? '') === '' ? 75 : $hero['tint_op'])));
-if ($tint === 'off') $op = 0;
-$a1 = $tint === 'flat' ? $op : (int) round($op * .73);
-$a2 = $tint === 'flat' ? $op : min(100, (int) round($op * 1.23));
-$hs = ['--hero-a1:' . $a1 . '%', '--hero-a2:' . $a2 . '%'];
-if (!empty($hero['tint_color'])) $hs[] = '--hero-tint:' . $hero['tint_color'];
-if ($img) {   // ПК — оригинал, телефон — 1024 px (предзагрузка обоих — memorial_hero_srcs в functions.php)
-    [$img_d, $img_m] = memorial_hero_srcs($img);
-    $hs[] = '--hero-d:url(' . esc_url($img_d) . ')';
-    $hs[] = '--hero-m:url(' . esc_url($img_m) . ')';
-}
+// Первый экран «Светлая память»: текст слева, фото траурного зала справа в рамке (без тёмного затемнения), ветвь лавра в углу.
+// На телефоне фото — под текстом; настройка «сначала фото» ставит его над текстом, но невысокой полосой.
+$hero_mtop = $img && ($hero['mobile'] ?? 'bg') === 'top';
 ?>
-<section class="hero<?php echo $a2 < 45 ? ' hero--light' : ''; echo $img && ($hero['mobile'] ?? 'bg') === 'top' ? ' hero--mtop' : ''; ?>" style="<?php echo esc_attr(implode(';', $hs)); ?>">
+<section class="hero<?php echo $img ? ' hero--img' : ''; echo $hero_mtop ? ' hero--mtop' : ''; ?>">
+  <span class="hero__branch" aria-hidden="true"><?php echo mem_laurel('branch'); ?></span>
   <div class="wrap hero__in">
-    <?php if (!empty($hero['eyebrow'])) : ?><p class="eyebrow"><?php echo $e($hero['eyebrow']); ?></p><?php endif; ?>
-    <h1><?php echo $e($hero['title']);
-      if (!empty($hero['title_em'])) echo ($hero['title'] ? '<br>' : '') . '<em>' . $e($hero['title_em']) . '</em>'; ?></h1>
-    <?php if (!empty($hero['lead'])) : ?><p class="hero__lead"><?php echo nl2br($e($hero['lead'])); ?></p><?php endif; ?>
-    <?php if (!empty($hero['trust'])) : ?>
-      <ul class="hero__trust">
-        <?php foreach ($hero['trust'] as $t) : ?><li><?php echo mem_icon('check') . $e($t['text']); ?></li><?php endforeach; ?>
-      </ul>
-    <?php endif; ?>
-    <div class="hero__cta">
-      <?php if ($tel) : ?><a class="btn btn--gold btn--lg" href="tel:<?php echo $tel; ?>"><?php echo mem_icon('phone'); ?><span class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></span></a><?php endif; ?>
-      <?php // вторая кнопка — «Что делать, если умер человек»: следующий шаг виден сразу, без меню
-      if (function_exists('mem_home_help_link') && ($help = mem_home_help_link())) : ?>
-        <a class="btn btn--light btn--lg" href="<?php echo esc_url($help[0]); ?>"><?php echo esc_html($help[1]); ?> <span aria-hidden="true">→</span></a>
+    <div class="hero__text">
+      <?php if (!empty($hero['eyebrow'])) : ?><p class="eyebrow"><?php echo $e($hero['eyebrow']); ?></p><?php endif; ?>
+      <h1><?php echo $e($hero['title']);
+        if (!empty($hero['title_em'])) echo ($hero['title'] ? '<br>' : '') . '<em>' . $e($hero['title_em']) . '</em>'; ?></h1>
+      <?php if (!empty($hero['lead'])) : ?><p class="hero__lead"><?php echo nl2br($e($hero['lead'])); ?></p><?php endif; ?>
+      <div class="hero__cta">
+        <?php if ($tel) : ?><a class="btn btn--gold btn--lg btn--tel" href="tel:<?php echo $tel; ?>"><?php echo mem_icon('phone'); ?><span class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></span></a>
+        <button class="btn btn--line btn--lg" type="button" data-callback>Перезвоните мне</button><?php endif; ?>
+      </div>
+      <?php if (!empty($hero['trust'])) : ?>
+        <ul class="hero__trust lv-list">
+          <?php foreach ($hero['trust'] as $t) : ?><li><?php echo mem_laurel('leaf') . '<span>' . $e($t['text']) . '</span>'; ?></li><?php endforeach; ?>
+        </ul>
       <?php endif; ?>
-      <?php if ($tel && mem_night()) : ?><p class="hero__night"><span class="dot" aria-hidden="true"></span><?php echo esc_html(mem_night()); ?></p><?php endif; ?>
+      <?php // «Что делать, если умер человек»: следующий шаг виден сразу, без меню
+      if (function_exists('mem_home_help_link') && ($help = mem_home_help_link())) : ?>
+        <a class="link-more hero__help" href="<?php echo esc_url($help[0]); ?>"><?php echo esc_html($help[1]); ?> <span aria-hidden="true">→</span></a>
+      <?php endif; ?>
+      <?php if ($tel && mem_night()) : ?><p class="hero__night"><?php echo mem_icon('clock') . esc_html(mem_night()); ?></p><?php endif; ?>
     </div>
+    <?php if ($img) : [$img_d, $img_m] = memorial_hero_srcs($img); ?>
+      <figure class="hero__photo">
+        <picture>
+          <?php if ($img_m !== $img_d) : ?><source media="(max-width:700px)" srcset="<?php echo esc_url($img_m); ?>"><?php endif; ?>
+          <img src="<?php echo esc_url($img_d); ?>" alt="" fetchpriority="high" decoding="async">
+        </picture>
+      </figure>
+    <?php endif; ?>
   </div>
 </section>
 
@@ -122,10 +117,11 @@ if (!is_wp_error($cats) && $cats) : ?>
 <?php $s = mem_home('stats'); if (!empty($s['show']) && !empty($s['items'])) : ?>
 <section class="stats">
   <div class="wrap stats__in" style="--n:<?php echo min(4, count($s['items'])); ?>">
-    <?php foreach ($s['items'] as $st) : ?>
-      <div class="stat">
-        <b<?php if ($st['num'] !== '') echo ' data-count="' . (int) $st['num'] . '"'; ?>><?php echo $st['num'] !== '' ? esc_html(number_format((int) $st['num'], 0, '', "\u{00A0}")) : ''; ?></b>
-        <span><?php echo $e($st['label']); ?></span>
+    <?php foreach ($s['items'] as $st) : $num = $st['num'] !== '' ? number_format((int) $st['num'], 0, '', "\u{00A0}") : ''; ?>
+      <div class="stat<?php echo mb_strlen($num) > 3 ? ' stat--long' : ''; ?>">
+        <span class="stat__ring"><?php echo mem_laurel('wreath_berry'); ?>
+          <b<?php if ($st['num'] !== '') echo ' data-count="' . (int) $st['num'] . '"'; ?>><?php echo esc_html($num); ?></b></span>
+        <span class="stat__label"><?php echo $e($st['label']); ?></span>
       </div>
     <?php endforeach; ?>
   </div>
@@ -136,10 +132,12 @@ if (!is_wp_error($cats) && $cats) : ?>
 <?php ob_start(); ?>
 <?php $s = mem_home('about'); if (!empty($s['show'])) : ?>
 <section class="section" id="about">
+  <span class="sec-branch" aria-hidden="true"><?php echo mem_laurel('branch_plain'); ?></span>
   <div class="wrap about">
     <div>
       <?php if (!empty($s['eyebrow'])) : ?><p class="eyebrow"><?php echo $e($s['eyebrow']); ?></p><?php endif; ?>
       <?php if (!empty($s['title'])) : ?><h2><?php echo $e($s['title']); ?></h2><?php endif; ?>
+      <span class="about__div"><?php echo mem_laurel('divider'); ?></span>
     </div>
     <div class="about__text">
       <?php echo wp_kses_post(wpautop(mem_t($s['text'] ?? ''))); ?>
@@ -171,7 +169,7 @@ if (!is_wp_error($cats) && $cats) : ?>
 
 <?php
 $order = mem_settings('mem_home')['layout'] ?? array_keys(mem_home_blocks());
-$alt = false;
+$alt = true;   // первый блок после первого экрана — на «слоновой кости», дальше чередуются
 foreach (array_unique(array_merge($order, array_keys($blocks))) as $k) {
     $html = trim($blocks[$k] ?? '');
     if ($html === '') continue;
@@ -180,7 +178,7 @@ foreach (array_unique(array_merge($order, array_keys($blocks))) as $k) {
         $html = preg_replace('/^<section class="section( section--alt)?"/', '<section class="section' . ($alt ? ' section--alt' : '') . '"', $html);
         $alt = !$alt;
     } else {
-        $alt = false; // после тёмной полосы с цифрами — снова светлый
+        $alt = false; // после шалфейной полосы с цифрами — снова светлый
     }
     echo $html, "\n";
 }

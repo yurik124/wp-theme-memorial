@@ -1,12 +1,13 @@
 <?php
 /**
- * Тема «Memorial Modern» — ДИЗАЙН сайта: шаблоны страниц, шапка, подвал, стили, шрифты, «Мемориал → Оформление».
+ * Тема «Memorial Modern» 4 «Светлая память» — ДИЗАЙН сайта: светлые шапка и подвал, лавровая графика (inc/laurel.php),
+ * шаблоны страниц, стили, шрифты, «Мемориал → Оформление».
  * Весь функционал (каталог, цены, отзывы, заявки, настройки, шорткоды, SEO, кэш) — в плагине «Memorial Core».
  * Без плагина тема выглядит так же (шапка, меню, подвал, страницы, оформление), просто без данных и блоков плагина (inc/no-plugin.php).
  */
 defined('ABSPATH') || exit;
 
-define('MEM_VER', '3.5.0');
+define('MEM_VER', '4.0.0');
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -41,7 +42,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('memorial', $uri . $css, [], filemtime($dir . $css));
     // предзагрузка основного начертания заголовков — без «прыжка» шрифта на первом экране
     add_action('wp_head', function () use ($uri) {
-        $head = mem_design_opts()['fonts']['head'] ?? 'lora';
+        $head = mem_design_opts()['fonts']['head'] ?? 'cormorant';
         $file = ['lora' => 'lora-500', 'cormorant' => 'cormorant-garamond-500'][$head] ?? '';
         if ($file) echo '<link rel="preload" href="' . esc_url($uri . '/assets/fonts/' . $file . '.woff2') . '" as="font" type="font/woff2" crossorigin>' . "\n";
     }, 2);
@@ -127,6 +128,7 @@ add_action('wp_enqueue_scripts', function () {
 
 require get_template_directory() . '/inc/icons.php';
 require get_template_directory() . '/inc/design.php';
+require get_template_directory() . '/inc/laurel.php';
 
 /* Функционал — в плагине Memorial Core. Без него шаблоны работают на запасных функциях (inc/no-plugin.php):
    шапка, меню, подвал, страницы и оформление на месте, нет только того, что даёт плагин (контакты, каталог, цены…). */
@@ -160,3 +162,26 @@ function memorial_nbsp($s) {
     return $s;
 }
 add_filter('the_title', function ($t, $id = 0) { return is_admin() ? $t : memorial_nbsp($t); }, 20, 2);
+
+/** Ссылка на MAX из «Мемориал → Контакты» (для нижней панели на телефоне) */
+function memorial_max_url() {
+    $m = function_exists('mem_messengers') ? (array) mem_messengers() : [];
+    return $m['max'] ?? '';
+}
+
+/** Заголовок блока главной: надзаголовок, лавровый разделитель, H2 */
+function memorial_sec_head($sec, $e = null) {
+    $e = $e ?: fn($s) => memorial_nbsp(esc_html(function_exists('mem_t') ? mem_t($s) : $s));
+    if (empty($sec['eyebrow']) && empty($sec['title'])) return;
+    echo '<header class="sec-head">';
+    if (!empty($sec['eyebrow'])) echo '<p class="eyebrow">' . $e($sec['eyebrow']) . '</p>';
+    echo '<span class="sec-head__div">' . mem_laurel('divider') . '</span>';
+    if (!empty($sec['title'])) echo '<h2>' . $e($sec['title']) . '</h2>';
+    echo '</header>';
+}
+
+/** Год основания из «Мемориал → Контакты» (для «© 2003–2026»), 0 — если не задан */
+function mem_founded_year() {
+    if (function_exists('mem_opt') && ($y = (int) mem_opt('founded')) > 1900) return $y;
+    return function_exists('mem_years') && mem_years() ? (int) date('Y') - (int) mem_years() : 0;
+}

@@ -8,7 +8,7 @@ while (have_posts()) : the_post();
 
     <div class="product">
       <div class="product__media">
-        <?php if (has_post_thumbnail()) the_post_thumbnail('large', ['fetchpriority' => 'high']); else echo '<span class="card__noimg">✝</span>'; ?>
+        <?php if (has_post_thumbnail()) the_post_thumbnail('large', ['fetchpriority' => 'high']); else echo '<span class="card__noimg">' . mem_laurel('wreath') . '</span>'; ?>
       </div>
       <div class="product__info">
         <h1><?php the_title(); ?></h1>
@@ -28,7 +28,9 @@ while (have_posts()) : the_post();
 
         <div class="product__cta">
           <a class="btn btn--gold btn--lg" href="tel:<?php echo esc_attr(mem_tel()); ?>"><?php echo mem_icon('phone'); ?><span class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></span></a>
+          <button class="btn btn--line btn--lg" type="button" data-callback>Перезвоните мне</button>
         </div>
+        <p class="product__hint">Уточнить наличие, размеры и сроки можно по телефону — подскажем и подберём.</p>
       </div>
     </div>
 

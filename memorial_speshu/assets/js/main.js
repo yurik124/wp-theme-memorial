@@ -81,7 +81,7 @@
   const place = a => {
     const pkg = a.closest('.pkg');
     if (pkg) return 'Пакет «' + (pkg.querySelector('h3')?.textContent.trim() || '') + '»';
-    const map = [['.fab', 'Плавающая кнопка'], ['.header', 'Шапка'], ['.hero', 'Первый экран'],
+    const map = [['.mbar', 'Нижняя панель (телефон)'], ['.fab', 'Плавающая кнопка'], ['.header', 'Шапка'], ['.hero', 'Первый экран'],
       ['.card', 'Карточка товара в каталоге'], ['.product', 'Страница товара'], ['#contacts', 'Блок «Контакты»'],
       ['.footer', 'Подвал'], ['.nf', 'Страница 404'], ['.empty', 'Пустой раздел каталога']];
     for (const [sel, name] of map) if (a.closest(sel)) return name;

@@ -32,7 +32,9 @@ function mem_services_grid(array $items) {
         if ($it['img']) $h .= '<span class="svc__img" style="background-image:url(' . esc_url(mem_img_sized($it['img'])) . ')"></span>';   // не оригинал, а 768 px
         $h .= '<span class="svc__body"><h3>' . $e($it['title']) . '</h3>';
         if (!empty($it['text'])) $h .= '<p>' . $e($it['text']) . '</p>';
-        $h .= '<span class="svc__foot">' . (!empty($it['price']) ? '<b>' . $e($it['price']) . '</b>' : '') . ($it['url'] ? '<span class="svc__more">Подробнее →</span>' : '') . '</span>';
+        // «от 36 700 ₽»: «от» — обычным текстом, сумма — крупно
+        $price = !empty($it['price']) ? preg_replace('/^(от|до)\s+/u', '<small>$1</small> ', $e($it['price'])) : '';
+        $h .= '<span class="svc__foot">' . ($price !== '' ? '<b>' . $price . '</b>' : '') . ($it['url'] ? '<span class="svc__more">Подробнее →</span>' : '') . '</span>';
         $h .= '</span></' . $tag . '>';
     }
     return $h . '</div>';

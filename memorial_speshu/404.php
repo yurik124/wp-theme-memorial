@@ -2,7 +2,7 @@
 $cats = get_terms(['taxonomy' => 'mem_cat', 'parent' => 0, 'hide_empty' => true]); ?>
 <main id="main" class="section nf">
   <div class="wrap nf__in">
-    <p class="nf__code" aria-hidden="true">404</p>
+    <p class="nf__code" aria-hidden="true"><span class="nf__ring"><?php echo mem_laurel('wreath'); ?><b>404</b></span></p>
     <h1>Страница не найдена</h1>
     <p class="nf__lead">Возможно, ссылка устарела или в адресе опечатка. Если вам нужна помощь прямо сейчас — позвоните, мы подскажем.</p>
 

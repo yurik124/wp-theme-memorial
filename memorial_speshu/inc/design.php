@@ -1,6 +1,6 @@
 <?php
 /**
- * «Мемориал → Оформление» (часть темы): цветовая схема (готовые шаблоны + свои цвета), шрифты (встроенные и свои), WebP.
+ * «Мемориал → Оформление» (часть темы): цветовая схема «Светлая память» (готовые светлые схемы + свои цвета), шрифты, WebP.
  * Страница настроек появляется через рамку плагина Memorial Core (фильтр mem_admin_pages);
  * сами цвета и шрифты применяются и без плагина.
  */
@@ -9,32 +9,35 @@ defined('ABSPATH') || exit;
 /** Цвета, которыми окрашен сайт. Ключ = CSS-переменная. */
 function mem_color_keys() {
     return [
-        'dark'  => ['Тёмный фон (шапка, подвал, тёмные карточки)', '#16181b'],
-        'dark2' => ['Тёмный фон — второй оттенок', '#202328'],
-        'gold'  => ['Акцент: кнопки, иконки, линии', '#b89b5e'],
-        'gold2' => ['Акцент на тёмном фоне (светлее)', '#d4bd8a'],
-        'gold3' => ['Акцент для текста на светлом (темнее)', '#75602e'],
-        'bg'    => ['Фон страницы', '#f6f4f0'],
-        'bg2'   => ['Фон чередующихся блоков', '#ece8e1'],
-        'ink'   => ['Основной текст', '#1d1f22'],
-        'mute'  => ['Второстепенный текст', '#6b6862'],
-        'line'  => ['Рамки и разделители', '#e3ddd2'],
+        'dark'   => ['Фон шапки-плашек и подвала (в светлой схеме — светлый)', '#f2efe6'],
+        'dark2'  => ['Фон плашек — второй оттенок', '#e6ebdf'],
+        'gold'   => ['Акцент: кнопки, иконки, лавр', '#5e7052'],
+        'gold2'  => ['Светлый акцент: орнамент, разделители', '#a9b796'],
+        'gold3'  => ['Тёмный акцент: ссылки, надзаголовки, наведение', '#3f4d36'],
+        'bg'     => ['Фон страницы', '#fbfaf6'],
+        'bg2'    => ['Фон чередующихся блоков', '#f2efe6'],
+        'ink'    => ['Основной текст', '#2a2c28'],
+        'mute'   => ['Второстепенный текст', '#66675e'],
+        'line'   => ['Рамки и разделители', '#e2ded2'],
+        'sage'   => ['Шалфейная подложка: «Что делать», цифры, подвал', '#e6ebdf'],
+        'bronze' => ['Бронза: тонкие линии, ягоды лавра (в малых дозах)', '#a88a5a'],
     ];
 }
 
-/** Готовые цветовые схемы */
+/** Готовые цветовые схемы (все светлые: тёмный цвет — только для текста) */
 function mem_color_presets() {
     $k = array_keys(mem_color_keys());
     $p = fn($name, ...$c) => ['name' => $name, 'c' => array_combine($k, $c)];
+    //                                                  dark       dark2      gold       gold2      gold3      bg         bg2        ink        mute       line       sage       bronze
     return [
-        'classic'  => $p('Графит и золото (исходная)', '#16181b', '#202328', '#b89b5e', '#d4bd8a', '#75602e', '#f6f4f0', '#ece8e1', '#1d1f22', '#6b6862', '#e3ddd2'),
-        'navy'     => $p('Тёмно-синий и серебро',      '#142033', '#1c2a40', '#7d8fa6', '#c3cedb', '#4f6177', '#f4f6f8', '#e7ebf0', '#1b2230', '#5f6876', '#dbe1e8'),
-        'burgundy' => $p('Бордо',                      '#2a1418', '#3a1d22', '#8e2f3c', '#d9a5ab', '#6e2430', '#f7f3f2', '#eee5e3', '#241a1b', '#6d6162', '#e6d9d7'),
-        'olive'    => $p('Оливковый',                  '#1e2420', '#28302a', '#7c8b5a', '#c5cfa6', '#56633c', '#f5f5f0', '#e9eae1', '#1e2220', '#646a62', '#dfe1d5'),
-        'bronze'   => $p('Светлый: чёрный и бронза',   '#111111', '#1d1d1d', '#9c7a4b', '#d8bf98', '#6f5531', '#ffffff', '#f3f1ee', '#111111', '#666666', '#e7e3dd'),
-        'brown'    => $p('Тёплый коричневый',          '#2b2420', '#3a312b', '#b07a45', '#e0b98c', '#7d5228', '#f8f4ef', '#efe7dd', '#2a2420', '#6f655c', '#e7dccf'),
+        'laurel'        => $p('Светлая память — лавр (основная)', '#f2efe6', '#e6ebdf', '#5e7052', '#a9b796', '#3f4d36', '#fbfaf6', '#f2efe6', '#2a2c28', '#66675e', '#e2ded2', '#e6ebdf', '#a88a5a'),
+        'laurel_bronze' => $p('Светлая память — бронза',          '#f2efe6', '#ece6da', '#8c6f45', '#cdbb98', '#5c4628', '#fbfaf6', '#f2efe6', '#2a2c28', '#66675e', '#e2ded2', '#ede7db', '#a88a5a'),
+        'stone'         => $p('Светлый камень (серо-голубой)',    '#f0f0ec', '#e5e9ec', '#56687a', '#aebac6', '#3a4a5a', '#fafaf8', '#f0f0ec', '#2a2c2e', '#62666b', '#e0e0da', '#e5e9ec', '#a88a5a'),
     ];
 }
+
+/** Ключ схемы по умолчанию (её цвета прописаны в main.css) */
+function mem_default_preset() { return 'laurel'; }
 
 /** Встроенные шрифты: ключ => [название, CSS-стек, для заголовков, для текста] */
 function mem_builtin_fonts() {
@@ -73,7 +76,7 @@ function mem_design_schema() {
         ] + $colors],
         'fonts' => ['type' => 'group', 'label' => 'Шрифты',
             'help' => 'Свой шрифт: скачайте файлы .woff2 (лучше) или .ttf, например с fonts.google.com — нужна кириллица; добавьте шрифт ниже, сохраните, затем выберите его в списке. Файлы хранятся на вашем сайте, со сторонних серверов ничего не загружается.', 'fields' => [
-            'head'   => ['type' => 'fontsel', 'label' => 'Шрифт заголовков, цен и телефонов', 'options' => $fonts],
+            'head'   => ['type' => 'fontsel', 'label' => 'Шрифт крупных заголовков (H1, H2). Заголовки карточек, цены и телефоны — Lora', 'options' => $fonts],
             'body'   => ['type' => 'fontsel', 'label' => 'Шрифт основного текста', 'options' => ['system' => $fonts['system']] + $fonts],
             'custom' => ['type' => 'repeater', 'label' => 'Свои шрифты', 'add' => 'Добавить шрифт', 'collapse' => 'name', 'fields' => [
                 'name'  => ['type' => 'text', 'label' => 'Название (любое, например «PT Serif»)'],
@@ -106,8 +109,8 @@ function mem_design_opts() {
 
 function mem_design_defaults() {
     return [
-        'colors' => ['preset' => 'classic'] + array_fill_keys(array_keys(mem_color_keys()), ''),
-        'fonts'  => ['head' => get_option('mem_font', 'lora') === 'cormorant' ? 'cormorant' : 'lora', 'body' => 'system', 'custom' => []],
+        'colors' => ['preset' => mem_default_preset()] + array_fill_keys(array_keys(mem_color_keys()), ''),
+        'fonts'  => ['head' => 'cormorant', 'body' => 'system', 'custom' => []],
         'img'    => ['webp' => (int) get_option('mem_webp', 0)],
     ];
 }
@@ -117,7 +120,7 @@ add_filter('mem_admin_pages', function ($pages) {
     $sw = '';
     foreach (mem_color_presets() as $pr) {
         $sw .= '<span style="display:inline-flex;align-items:center;gap:6px;margin:4px 14px 4px 0">';
-        foreach (['dark', 'gold', 'bg2', 'bg'] as $c) $sw .= '<i style="width:18px;height:18px;border-radius:50%;display:inline-block;border:1px solid #0002;background:' . esc_attr($pr['c'][$c]) . '"></i>';
+        foreach (['gold', 'sage', 'bg2', 'bronze'] as $c) $sw .= '<i style="width:18px;height:18px;border-radius:50%;display:inline-block;border:1px solid #0002;background:' . esc_attr($pr['c'][$c]) . '"></i>';
         $sw .= ' ' . esc_html($pr['name']) . '</span>';
     }
     $pages['mem_design'] = [
@@ -168,26 +171,30 @@ function mem_design_css() {
 
     $vars = [];
     $all = mem_all_fonts();
-    $head = $d['fonts']['head'] ?? 'lora';
+    $head = $d['fonts']['head'] ?? 'cormorant';
     $body = $d['fonts']['body'] ?? 'system';
-    if ($head !== 'lora' && isset($all[$head])) $vars[] = '--serif:' . $all[$head][1];
+    if ($head !== 'cormorant' && isset($all[$head])) $vars[] = '--serif:' . $all[$head][1];
     if ($body !== 'system' && isset($all[$body])) $vars[] = '--sans:' . $all[$body][1];
 
-    // Цвета: схема, поверх — свои
+    // Цвета: схема, поверх — свои. В main.css прописана схема по умолчанию — выводим только отличия.
     $presets = mem_color_presets();
-    $base = $presets[$d['colors']['preset'] ?? 'classic']['c'] ?? $presets['classic']['c'];
-    $def = $presets['classic']['c'];
+    $def = $presets[mem_default_preset()]['c'];
+    $base = $presets[$d['colors']['preset'] ?? '']['c'] ?? $def;
     $fin = [];
     foreach ($base as $k => $v) {
         $v = !empty($d['colors'][$k]) ? $d['colors'][$k] : $v;
-        if ($k === 'gold3' && strtolower($v) === '#8a6f35') $v = $def['gold3'];   // прежний цвет по умолчанию был слишком светлым для текста
         $fin[$k] = $v;
         if (strtolower($v) !== $def[$k]) $vars[] = '--' . $k . ':' . $v;
     }
-    // текст на золотых кнопках: тёмный или белый — что контрастнее с цветом акцента
-    if (!empty($fin['gold']) && strtolower($fin['gold']) !== $def['gold']) {
-        $dark = $fin['dark'] ?? '#16181b';
-        $vars[] = '--on-gold:' . (mem_contrast($fin['gold'], $dark) >= mem_contrast($fin['gold'], '#ffffff') ? $dark : '#fff');
+    // текст на кнопках с заливкой акцентом: белый, если читается (иначе — основной цвет текста)
+    if (strtolower($fin['gold']) !== $def['gold'] || strtolower($fin['ink']) !== $def['ink']) {
+        $vars[] = '--on-gold:' . (mem_contrast($fin['gold'], '#ffffff') >= 4.5 || mem_contrast($fin['gold'], '#ffffff') >= mem_contrast($fin['gold'], $fin['ink']) ? '#fff' : $fin['ink']);
+    }
+    // текст на плашках «бывшего тёмного» цвета: если такой цвет выбрали тёмным — белый текст
+    if (strtolower($fin['dark']) !== $def['dark']) {
+        $light = mem_contrast($fin['dark'], $fin['ink']) >= mem_contrast($fin['dark'], '#ffffff');
+        $vars[] = '--on-dark:' . ($light ? $fin['ink'] : '#fff');
+        $vars[] = '--on-dark-mute:' . ($light ? $fin['mute'] : 'rgba(255,255,255,.72)');
     }
     if ($vars) $css .= ':root{' . implode(';', $vars) . '}';
     return $css;
@@ -214,17 +221,31 @@ add_action('enqueue_block_editor_assets', function () {
 function mem_scheme_color($key, $effective = false) {
     $d = mem_design_opts();
     $p = mem_color_presets();
-    $base = $p[$d['colors']['preset'] ?? 'classic']['c'] ?? $p['classic']['c'];
+    $base = $p[$d['colors']['preset'] ?? '']['c'] ?? $p[mem_default_preset()]['c'];
     if ($effective && !empty($d['colors'][$key])) return $d['colors'][$key];
     return $base[$key] ?? '';
 }
 
-/* Цвет панели браузера на телефоне — под тёмный цвет схемы */
+/* Цвет панели браузера на телефоне — под фон страницы (дизайн светлый целиком) */
 function mem_theme_color() {
-    $d = mem_design_opts();
-    $p = mem_color_presets();
-    return !empty($d['colors']['dark']) ? $d['colors']['dark'] : ($p[$d['colors']['preset'] ?? 'classic']['c']['dark'] ?? '#16181b');
+    return mem_scheme_color('bg', true) ?: '#fbfaf6';
 }
+
+/*
+ * Переход на «Светлую память» (тема 4.0): прежние тёмные схемы убраны. Если на сайте была выбрана тёмная схема
+ * (или свои цвета под неё), один раз переключаем на светлую «лавр» и шрифт заголовков Cormorant Garamond.
+ * Свои шрифты и настройку WebP не трогаем.
+ */
+add_action('init', function () {
+    if (get_option('mem_design_v4')) return;
+    $o = get_option('mem_design');
+    if (is_array($o)) {
+        $o['colors'] = ['preset' => mem_default_preset()] + array_fill_keys(array_keys(mem_color_keys()), '');
+        if (in_array($o['fonts']['head'] ?? 'lora', ['lora', ''], true)) $o['fonts']['head'] = 'cormorant';
+        update_option('mem_design', $o);
+    }
+    update_option('mem_design_v4', 1, false);
+}, 1);
 
 /** Контраст двух цветов #rrggbb по WCAG (1…21) */
 function mem_contrast($a, $b) {

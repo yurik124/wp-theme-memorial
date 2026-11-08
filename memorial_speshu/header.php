@@ -14,9 +14,8 @@
 <?php $a0 = mem_addrs()[0] ?? null; if ($a0) : ?>
 <div class="topbar">
   <div class="wrap topbar__in">
-    <span><?php echo mem_icon('pin') . esc_html($a0['addr']); ?></span>
+    <span><?php echo mem_icon('pin') . esc_html(memorial_addr($a0['addr'])); ?></span>
     <?php if (!empty($a0['hours'])) : ?><span><?php echo mem_icon('clock') . esc_html($a0['hours']); ?></span><?php endif; ?>
-    <?php if (mem_night()) : ?><span class="topbar__night"><?php echo mem_icon('phone') . esc_html(mem_night()); ?></span><?php endif; ?>
   </div>
 </div>
 <?php endif; ?>
@@ -27,7 +26,7 @@
       <?php if (has_custom_logo()) :
           echo wp_get_attachment_image(get_theme_mod('custom_logo'), 'full', false, ['class' => 'logo__img', 'alt' => '']);
       else : ?>
-        <span class="logo__mark" aria-hidden="true">✝</span>
+        <span class="logo__mark" aria-hidden="true"><?php echo mem_laurel('mark', mem_logo_letter()); ?></span>
       <?php endif; ?>
       <span class="logo__text">
         <b><?php bloginfo('name'); ?></b>
@@ -51,12 +50,16 @@
           },
       ]);
       ?>
+      <?php if (mem_tel()) : ?><button class="btn btn--line nav__cb" type="button" data-callback>Перезвоните мне</button><?php endif; ?>
     </nav>
 
     <?php if (mem_tel()) : ?>
-    <a class="btn btn--gold header__call" href="tel:<?php echo esc_attr(mem_tel()); ?>" aria-label="Позвонить <?php echo esc_attr(mem_opt('phone')); ?>">
-      <?php echo mem_icon('phone'); ?><span><?php echo esc_html(mem_opt('phone')); ?></span>
+    <a class="header__phone" href="tel:<?php echo esc_attr(mem_tel()); ?>">
+      <b class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></b>
+      <?php if (mem_night()) : ?><small>круглосуточно</small><?php endif; ?>
     </a>
+    <button class="btn btn--line header__cb" type="button" data-callback>Перезвоните мне</button>
+    <a class="header__call" href="tel:<?php echo esc_attr(mem_tel()); ?>" aria-label="Позвонить <?php echo esc_attr(mem_opt('phone')); ?>"><?php echo mem_icon('phone'); ?></a>
     <?php endif; ?>
 
     <button class="burger" id="burger" type="button" aria-label="Меню" aria-controls="nav" aria-expanded="false"><span></span></button>
@@ -68,7 +71,7 @@
   var h = document.getElementById('header'), nav = document.getElementById('nav');
   if (!h || !nav) return;
   function over() { // последний пункт вылез за край меню или пункты переносятся на новую строку
-    var li = nav.querySelectorAll(':scope > ul > li');
+    var li = nav.querySelectorAll(':scope > ul > li');   // кнопка .nav__cb видна только в мобильном меню
     if (!li.length) return false;
     var a = li[0].getBoundingClientRect(), b = li[li.length - 1].getBoundingClientRect();
     return b.right > nav.getBoundingClientRect().right + 1 || b.top > a.top + 4;
