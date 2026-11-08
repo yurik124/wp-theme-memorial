@@ -24,11 +24,7 @@
 <header class="header" id="header">
   <div class="wrap header__in">
     <a class="logo" href="<?php echo esc_url(home_url('/')); ?>" aria-label="<?php bloginfo('name'); ?> — на главную">
-      <?php if (has_custom_logo()) :
-          echo wp_get_attachment_image(get_theme_mod('custom_logo'), 'full', false, ['class' => 'logo__img', 'alt' => '']);
-      else : ?>
-        <span class="logo__mark" aria-hidden="true"><?php echo mem_laurel('mark', mem_logo_letter()); ?></span>
-      <?php endif; ?>
+      <?php echo memorial_logo_mark(44); // свой логотип → значок сайта → лавровый знак (inc/laurel.php) ?>
       <span class="logo__text">
         <b><?php bloginfo('name'); ?></b>
         <small>ритуальная компания</small>

@@ -7,7 +7,7 @@
  */
 defined('ABSPATH') || exit;
 
-define('MEM_VER', '4.0.1');
+define('MEM_VER', '4.0.2');
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');

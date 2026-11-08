@@ -50,3 +50,21 @@ add_action('wp_head', function () {
     if (function_exists('has_site_icon') && has_site_icon()) return;
     echo '<link rel="icon" href="' . esc_url(get_template_directory_uri() . '/assets/img/favicon.svg') . '" type="image/svg+xml">' . "\n";
 }, 3);
+
+/**
+ * Знак логотипа для шапки и подвала:
+ *   1) свой логотип (Внешний вид → Настроить → Свойства сайта → Логотип);
+ *   2) иначе — значок сайта (там же, «Значок сайта»; можно SVG) — файл целиком, без обрезки;
+ *   3) иначе — лавровый полувенок с первой буквой названия.
+ */
+function memorial_logo_mark($size = 44) {
+    $logo = (int) get_theme_mod('custom_logo');
+    if ($logo && ($u = wp_get_attachment_image_url($logo, 'full'))) {
+        return '<img class="logo__img" src="' . esc_url($u) . '" alt="" decoding="async">';
+    }
+    $icon = (int) get_option('site_icon');
+    if ($icon && ($u = wp_get_attachment_url($icon))) {   // оригинал файла: SVG остаётся векторным
+        return '<span class="logo__mark logo__mark--img" aria-hidden="true"><img src="' . esc_url($u) . '" alt="" width="' . (int) $size . '" height="' . (int) $size . '" decoding="async"></span>';
+    }
+    return '<span class="logo__mark" aria-hidden="true">' . mem_laurel('mark', mem_logo_letter()) . '</span>';
+}

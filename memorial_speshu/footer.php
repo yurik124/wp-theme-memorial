@@ -2,7 +2,7 @@
   <div class="wrap footer__in">
     <div class="footer__about">
       <a class="footer__logo" href="<?php echo esc_url(home_url('/')); ?>">
-        <span class="logo__mark" aria-hidden="true"><?php echo mem_laurel('mark', mem_logo_letter()); ?></span>
+        <?php echo memorial_logo_mark(48); ?>
         <b class="footer__brand"><?php bloginfo('name'); ?></b>
       </a>
       <p class="footer__slogan"><?php echo mem_years()

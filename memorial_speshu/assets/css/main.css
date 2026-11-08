@@ -104,6 +104,9 @@ p{text-wrap:pretty}
 .logo{display:flex;align-items:center;gap:.65rem;flex:none;color:var(--ink);min-height:44px}
 .logo__img{height:48px;width:auto;max-width:none;flex:none}
 .logo__mark{display:block;width:40px;height:40px;flex:none;color:var(--gold)}
+.logo__mark--img{width:44px;height:44px}
+.logo__mark--img img{display:block;width:100%;height:100%;object-fit:contain}
+.footer__logo .logo__img{height:52px;width:auto}
 .logo__text{display:block;min-width:0;line-height:1.1}
 .logo b{display:block;font:500 1.5rem/1.1 var(--serif);color:var(--ink);white-space:nowrap}
 .logo small{display:block;font-size:.75rem;color:var(--mute);white-space:nowrap;margin-top:.1rem}
@@ -196,7 +199,7 @@ html.hdr-two .reviews__intro{top:calc(var(--top) + 140px)}
 .hero__lead{margin:0;max-width:34em}
 .hero__cta{display:flex;flex-wrap:wrap;gap:.75rem}
 .hero__trust{margin-top:.2rem}
-.hero__cta .btn--line{white-space:normal}
+.hero__cta .btn--light,.hero__cta .btn--line{white-space:normal}
 .hero__night{display:flex;align-items:center;gap:.6rem;margin:0;padding-top:.9rem;border-top:1px solid var(--line);color:var(--mute);font-size:1rem}
 .hero__night .ico{color:var(--gold);width:18px;height:18px}
 .hero__photo{margin:0;aspect-ratio:4/4.4;max-height:640px;width:100%;border-radius:var(--r);overflow:hidden;background:var(--bg2);box-shadow:0 1px 2px rgba(42,44,40,.04),0 12px 32px rgba(42,44,40,.06)}
@@ -261,9 +264,9 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .cat{display:flex;flex-direction:column;min-height:0;padding:0;background:#fff;border-radius:var(--r);overflow:hidden;color:var(--ink);box-shadow:0 1px 2px rgba(42,44,40,.04);transition:box-shadow .3s var(--ease)}
 .cat:hover{box-shadow:0 10px 28px rgba(42,44,40,.08)}
 .cat__ph{display:block;aspect-ratio:1;background-color:var(--tbg,var(--bg2));background-image:var(--img,none);background-position:var(--pos,center);background-size:var(--fit,cover);background-repeat:no-repeat}
-.cat__cap{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:1rem 1.1rem}
+.cat__cap{display:flex;flex-direction:column;align-items:flex-start;gap:.3rem;padding:1rem 1.1rem}
 .cat h3{margin:0;font:500 1.125rem/1.3 var(--lora);color:var(--ink)}
-.cat .cat__more{flex:none;width:18px;height:18px;overflow:hidden;color:transparent;font-size:0;background:var(--gold);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat}
+.cat .cat__more{flex:none;display:inline-flex;align-items:center;gap:.3rem;color:var(--gold3);font-size:1rem;font-weight:500;white-space:nowrap}
 @media (max-width:600px){.cats{grid-template-columns:repeat(2,1fr)}.cat__cap{padding:.8rem .85rem}.cat h3{font-size:1rem}}
 
 /* Цены: пакеты похорон — тихая плашка у рекомендуемого, состав с лавровыми маркерами */
@@ -351,7 +354,8 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .reviews__ph{height:100%;display:grid;place-content:center;justify-items:center;gap:.6rem;text-align:center;padding:2rem}
 .reviews__ph p{margin:0 0 .6rem;color:var(--mute)}
 .reviews__stars{color:var(--bronze);font-size:1.6rem;letter-spacing:.15em}
-.reviews__credit{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:10px;color:#6f6f6f;padding:0 16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reviews__credit{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;min-height:44px;text-align:center;font-size:10px;color:#6f6f6f;padding:0 16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reviews__widget:not(.is-loaded) .reviews__credit{display:flex}
 @media (max-width:900px){
   .reviews{grid-template-columns:1fr;gap:2rem}
   .reviews__intro{position:static}
@@ -647,3 +651,34 @@ body .mfaq__more{font-size:1rem!important}
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .reveal,.stat b[data-count]{opacity:1}
 }
+
+/* ---------- Наведение: заметно, но спокойно (затемнение до тёмного лавра, без «прыжков») ---------- */
+.btn--line:hover,.btn--ghost:hover,.btn--light:hover,.cb__m:hover,.kmsg__btn:hover,.kmsg__btn--max:hover,.nav__cb:hover,.header__cb:hover{background:color-mix(in srgb,var(--gold) 14%,transparent);border-color:var(--gold3);color:var(--gold3)}
+.btn--line:active,.btn--ghost:active,.cb__m:active{background:color-mix(in srgb,var(--gold) 24%,transparent)}
+.btn.btn--gold:active{background:color-mix(in srgb,var(--gold3) 85%,#000)}
+/* меню */
+.nav>ul>li>a:hover,.nav>ul>li:hover>a,.nav>ul>li:focus-within>a{color:var(--gold);text-decoration:underline;text-decoration-color:var(--gold2);text-decoration-thickness:1px;text-underline-offset:6px}
+.nav .sub-menu a:hover{background:var(--sage);color:var(--gold3)}
+.is-compact .nav li>a:hover{color:var(--gold);text-decoration:none}
+.sub-toggle:hover,.burger:hover,.header__call:hover{background:var(--sage)}
+.header__phone:hover b{color:var(--gold)}
+.logo:hover b{color:var(--gold3)}
+/* карточки: тень, тонкая рамка акцента, заголовок темнеет */
+.card:hover{box-shadow:var(--sh2);border-color:var(--gold2)}
+.card:hover .card__title a,.card__title a:hover{color:var(--gold)}
+.card__img:hover img{opacity:.92}
+a.svc__item:hover{box-shadow:var(--sh2);outline:1px solid var(--gold2)}
+a.svc__item:hover h3,.cat:hover h3{color:var(--gold3)}
+.cat:hover{box-shadow:var(--sh2);outline:1px solid var(--gold2)}
+.cat:hover .cat__more{color:var(--gold)}
+.mcard:hover,.mem-card:hover{outline:1px solid var(--gold2)}
+/* ссылки и вкладки */
+.link-more:hover,.kaddr__route:hover,.svc__more:hover{color:var(--gold);text-decoration:underline;text-underline-offset:4px}
+.clist a:hover,.kphones a:hover,.kmail a:hover,.footer a:hover,.fnav a:hover{color:var(--gold)}
+.maps__tab:hover:not([aria-selected=true]),.chip:hover:not(.is-on){border-color:var(--gold);color:var(--gold3);background:color-mix(in srgb,var(--gold) 8%,#fff)}
+.page-numbers:hover:not(.current){border-color:var(--gold);color:var(--gold3)}
+.totop:hover{border-color:var(--gold);background:var(--sage)}
+.pkg__list summary:hover{color:var(--gold)}
+.reviews__btns .btn--line:hover{background:color-mix(in srgb,var(--gold) 14%,transparent)}
+@media (hover:none){.card:hover,.cat:hover,a.svc__item:hover{outline:0}}
+.is-compact .nav>ul>li:hover>a,.is-compact .nav>ul>li:focus-within>a{text-decoration:none}

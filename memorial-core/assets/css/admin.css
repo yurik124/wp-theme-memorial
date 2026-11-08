@@ -72,3 +72,13 @@ details.rep__row>.rep__fields{padding:12px 14px 2px;border-top:1px solid #dcdcde
 .rep__itogo{display:grid;grid-template-columns:1fr 140px auto;gap:0 10px;align-items:center;padding:10px 8px;margin:4px 0 8px;border-top:2px solid #c3c4c7;font-weight:600}
 .rep__itogo b{font-size:15px}
 @media (max-width:782px){.rep__itogo{grid-template-columns:1fr 100px auto}}
+
+/* Порядок блоков главной: тянуть за любое место строки (мышью и пальцем) */
+.mem-order li{cursor:grab;touch-action:none;user-select:none;transition:box-shadow .15s}
+.mem-order li:hover{border-color:#8c8f94}
+.mem-order li.is-drag{cursor:grabbing;opacity:.75;box-shadow:0 4px 14px rgba(0,0,0,.15);border-color:#2271b1;position:relative;z-index:2}
+.mem-order li.is-off .mem-order__name{color:#8c8f94}
+.mem-order__off{display:inline-block;margin-left:4px;padding:0 6px;border-radius:3px;background:#f0f0f1;color:#646970;font-size:11px;line-height:18px}
+.mem-order__btns button:hover{color:#135e96}
+.mem-order__save{display:flex;align-items:center;gap:10px;margin:10px 0 0}
+.mem-order__note{color:#996800;font-weight:600}

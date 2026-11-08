@@ -124,7 +124,7 @@ function mem_catalog_card($p, $i) {
                               'alt' => get_post_meta($p, '_wp_attachment_image_alt', true) ?: $title . ($k ? ', фото ' . ($k + 1) : ''),
                               'class' => 'mcard__ph' . ($k ? '' : ' is-on'), 'data-big' => wp_get_attachment_image_url($p, 'large'),
                               'data-bg' => $k && mem_card_ratio_differs($p) ? mem_blur_bg_url($p) : ''];
-    if (!$thumb) echo '<span class="mcard__noimg" aria-hidden="true">✝</span>';
+    if (!$thumb) echo '<span class="mcard__noimg" aria-hidden="true">' . (function_exists('mem_laurel') ? mem_laurel('wreath') : '✝') . '</span>';
     // несколько фото: остальные лежат рядом скрытыми (грузятся, только когда до них долистают), стрелки и точки — front.js
     foreach ($photos as $k => $p) echo wp_get_attachment_image($p, 'medium_large', false, $imgattr($p, $k));
     if (get_post_meta($id, '_mem_on_order', true)) echo '<span class="mcard__tag">Под заказ</span>';

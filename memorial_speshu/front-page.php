@@ -14,8 +14,10 @@ $head   = fn($sec) => memorial_sec_head($sec, $e);   // надзаголовок
 // Первый экран «Светлая память»: порядок элементов прежний; фото траурного зала — справа в рамке (без тёмного затемнения), ветвь лавра в углу.
 // На телефоне фото — под текстом; настройка «сначала фото» ставит его над текстом, но невысокой полосой.
 $hero_mtop = $img && ($hero['mobile'] ?? 'bg') === 'top';
+$hero_vars = '';
+if ($img) { [$img_d, $img_m] = memorial_hero_srcs($img); $hero_vars = '--hero-d:url(' . esc_url($img_d) . ');--hero-m:url(' . esc_url($img_m) . ')'; }   // адреса фото — как раньше (их читают проверки и скрипты)
 ?>
-<section class="hero<?php echo $img ? ' hero--img' : ''; echo $hero_mtop ? ' hero--mtop' : ''; ?>">
+<section class="hero<?php echo $img ? ' hero--img' : ''; echo $hero_mtop ? ' hero--mtop' : ''; ?>"<?php echo $hero_vars ? ' style="' . esc_attr($hero_vars) . '"' : ''; ?>>
   <span class="hero__branch" aria-hidden="true"><?php echo mem_laurel('branch'); ?></span>
   <div class="wrap hero__in">
     <div class="hero__text">
@@ -32,12 +34,12 @@ $hero_mtop = $img && ($hero['mobile'] ?? 'bg') === 'top';
         <?php if ($tel) : ?><a class="btn btn--gold btn--lg btn--tel" href="tel:<?php echo $tel; ?>"><?php echo mem_icon('phone'); ?><span class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></span></a><?php endif; ?>
         <?php // вторая кнопка — «Что делать, если умер человек»: следующий шаг виден сразу, без меню
         if (function_exists('mem_home_help_link') && ($help = mem_home_help_link())) : ?>
-          <a class="btn btn--line btn--lg" href="<?php echo esc_url($help[0]); ?>"><?php echo esc_html($help[1]); ?> <span aria-hidden="true">→</span></a>
+          <a class="btn btn--light btn--lg" href="<?php echo esc_url($help[0]); ?>"><?php echo esc_html($help[1]); ?> <span aria-hidden="true">→</span></a>
         <?php endif; ?>
       </div>
       <?php if ($tel && mem_night()) : ?><p class="hero__night"><?php echo mem_icon('clock') . esc_html(mem_night()); ?></p><?php endif; ?>
     </div>
-    <?php if ($img) : [$img_d, $img_m] = memorial_hero_srcs($img); ?>
+    <?php if ($img) : ?>
       <figure class="hero__photo">
         <picture>
           <?php if ($img_m !== $img_d) : ?><source media="(max-width:700px)" srcset="<?php echo esc_url($img_m); ?>"><?php endif; ?>

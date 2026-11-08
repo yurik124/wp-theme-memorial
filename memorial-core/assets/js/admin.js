@@ -49,11 +49,42 @@ jQuery(function ($) {
     f.open();
   });
 
-  // Порядок блоков главной
-  $('.mem-order').sortable({ axis: 'y', handle: '.rep__handle', tolerance: 'pointer', placeholder: 'rep__ph', forcePlaceholderSize: true });
-  $(document).on('click', '.mem-order [data-mv]', function () {
-    const li = $(this).closest('li');
-    this.dataset.mv === '-1' ? li.prev().before(li) : li.next().after(li);
+  // Порядок блоков главной: строку тянут мышью или пальцем (за любое место), либо кнопками ↑ ↓.
+  // Без jQuery UI — работает, даже если библиотека не загрузилась.
+  document.querySelectorAll('.mem-order').forEach(list => {
+    const note = list.parentElement.querySelector('.mem-order__note');
+    const changed = () => { if (note) note.hidden = false; list.classList.add('is-changed'); };
+    let drag = null, moved = false;
+    list.addEventListener('pointerdown', e => {
+      const li = e.target.closest('li');
+      if (!li || e.target.closest('button') || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      e.preventDefault();
+      drag = li; moved = false;
+      li.classList.add('is-drag');
+      try { list.setPointerCapture(e.pointerId); } catch (x) {}
+    });
+    list.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const over = [...list.children].find(li => { if (li === drag) return false; const r = li.getBoundingClientRect(); return e.clientY >= r.top && e.clientY <= r.bottom; });
+      if (!over) return;
+      const r = over.getBoundingClientRect();
+      if (e.clientY < r.top + r.height / 2) { if (over.previousElementSibling !== drag) { over.before(drag); moved = true; } }
+      else if (over.nextElementSibling !== drag) { over.after(drag); moved = true; }
+    });
+    const end = () => { if (!drag) return; drag.classList.remove('is-drag'); drag = null; if (moved) changed(); };
+    list.addEventListener('pointerup', end);
+    list.addEventListener('pointercancel', end);
+    list.addEventListener('lostpointercapture', end);
+    list.addEventListener('click', e => {
+      const b = e.target.closest('[data-mv]');
+      if (!b) return;
+      const li = b.closest('li'), prev = li.previousElementSibling, next = li.nextElementSibling;
+      if (b.dataset.mv === '-1' && prev) prev.before(li);
+      else if (b.dataset.mv === '1' && next) next.after(li);
+      else return;
+      b.focus();
+      changed();
+    });
   });
 
   // Добавить пункт

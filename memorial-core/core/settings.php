@@ -88,7 +88,7 @@ function mem_home_schema() {
     $eyebrow = ['type' => 'text', 'label' => 'Надзаголовок (мелкие буквы над заголовком)'];
     return [
         'layout' => ['type' => 'order', 'label' => 'Порядок блоков на главной',
-            'help' => 'Перетащите строки за ⋮⋮, чтобы поменять блоки местами. Первый экран всегда наверху. Скрыть блок — снимите «Показывать этот блок» в его настройках ниже.',
+            'help' => 'Перетащите строку мышью или пальцем либо нажмите ↑ ↓, затем «Сохранить порядок». Первый экран всегда наверху. Блоки с пометкой «скрыт» на сайте не видны — включите «Показывать этот блок» в их настройках ниже.',
             'options' => mem_home_blocks()],
         'hero' => ['type' => 'group', 'label' => 'Первый экран', 'fields' => [
             'eyebrow'  => $eyebrow,
@@ -693,12 +693,18 @@ function mem_field($name, $f, $v, $depth = 1, $top = false) {
             $v = is_array($v) ? $v : [];
             $keys = array_values(array_unique(array_merge(array_intersect($v, array_keys($f['options'])), array_keys($f['options']))));
             if ($help) echo '<p class="description">' . wp_strip_all_tags($help) . '</p>';
-            echo '<ol class="mem-order">';
+            // какие блоки сейчас скрыты (галочка «Показывать этот блок» снята) — чтобы было понятно, почему перестановка их не видна
+            $home = strpos($name, 'mem_home') === 0 && function_exists('mem_settings') ? mem_settings('mem_home') : [];
+            echo '<ol class="mem-order" aria-label="' . esc_attr($label ?: 'Порядок') . '">';
             foreach ($keys as $key) {
-                echo '<li><span class="rep__handle" aria-hidden="true">⋮⋮</span><input type="hidden" name="' . esc_attr($name) . '[]" value="' . esc_attr($key) . '">'
-                   . esc_html($f['options'][$key]) . '<span class="mem-order__btns"><button type="button" class="button-link" data-mv="-1" aria-label="Выше">↑</button><button type="button" class="button-link" data-mv="1" aria-label="Ниже">↓</button></span></li>';
+                $off = $home && isset($home[$key]) && is_array($home[$key]) && array_key_exists('show', $home[$key]) && empty($home[$key]['show']);
+                echo '<li' . ($off ? ' class="is-off"' : '') . '><span class="rep__handle" aria-hidden="true">⋮⋮</span><input type="hidden" name="' . esc_attr($name) . '[]" value="' . esc_attr($key) . '">'
+                   . '<span class="mem-order__name">' . esc_html($f['options'][$key]) . ($off ? ' <small class="mem-order__off">скрыт</small>' : '') . '</span>'
+                   . '<span class="mem-order__btns"><button type="button" class="button-link" data-mv="-1" aria-label="Выше">↑</button><button type="button" class="button-link" data-mv="1" aria-label="Ниже">↓</button></span></li>';
             }
             echo '</ol>';
+            echo '<p class="mem-order__save"><button type="submit" class="button button-primary">Сохранить порядок</button> '
+               . '<span class="mem-order__note" hidden>Порядок изменён — сохраните, чтобы он появился на сайте.</span></p>';
             return;
 
         case 'color':
