@@ -68,7 +68,7 @@ add_shortcode('mem_faq', function ($atts) {
     ob_start();
     echo '<div class="mfaq" data-faq>';
     if ($a['search'] !== '0') {
-        echo mem_search_box(['id' => 'mfaq-q', 'label' => 'Поиск по вопросам', 'placeholder' => 'Например: какие документы нужны',
+        echo mem_search_box(['id' => 'mfaq-q', 'label' => 'Поиск по вопросам', 'placeholder' => 'Например: документы',
             'popular' => array_map('trim', explode(',', $a['chasto'])),
             'none' => 'Такого вопроса пока нет на сайте. Позвоните или оставьте номер — ответим.']);
     }

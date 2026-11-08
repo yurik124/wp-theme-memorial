@@ -114,11 +114,18 @@
     const go = i => { const it = shown[i]; if (!it) return; close(); q.blur(); opts.pick(it); };
     q.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 90); });
     q.addEventListener('focus', () => {
-      if (innerWidth < 700) {   // на телефоне поле — вверх экрана, чтобы подсказки поместились над клавиатурой
-        const hh = d.querySelector('.header')?.getBoundingClientRect().bottom || 0;
-        const top = box.querySelector('.msearch__bar').getBoundingClientRect().top;
-        if (Math.abs(top - hh) > 40) scrollTo({ top: scrollY + top - hh, behavior: 'smooth' });
-        setTimeout(() => { if (!list.hidden) fitList(); }, 350);
+      if (innerWidth < 700) {
+        // на телефоне поле — под шапку, чтобы подсказки поместились над клавиатурой.
+        // Браузер сам прокручивает к полю, когда выезжает клавиатура, — поэтому поднимаем после этого, без плавности.
+        const bar = box.querySelector('.msearch__bar');
+        const lift = () => {
+          const hh = d.querySelector('.header')?.getBoundingClientRect().bottom || 0;
+          const top = bar.getBoundingClientRect().top;
+          if (Math.abs(top - hh) > 16) scrollTo({ top: scrollY + top - hh, behavior: 'instant' });
+          if (!list.hidden) fitList();
+        };
+        setTimeout(lift, 60); setTimeout(lift, 450);
+        if (window.visualViewport) visualViewport.addEventListener('resize', () => setTimeout(lift, 30), { once: true });
       }
       if (q.value.trim() && shown.length) { list.hidden = false; q.setAttribute('aria-expanded', 'true'); fitList(); }
     });
