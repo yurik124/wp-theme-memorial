@@ -443,14 +443,14 @@
     const a = e.target.closest('.mcard__arr');
     if (!a) return;
     e.preventDefault(); e.stopPropagation();
-    cardGo(a.closest('.mcard__img'), +a.dataset.dir);
+    cardGo(a.closest('.mcard__media').querySelector('.mcard__img'), +a.dataset.dir);
   }, true);
   d.addEventListener('keydown', e => {
     const a = e.target.closest?.('.mcard__arr');
-    if (a && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); cardGo(a.closest('.mcard__img'), +a.dataset.dir); }
+    if (a && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); cardGo(a.closest('.mcard__media').querySelector('.mcard__img'), +a.dataset.dir); }
   }, true);
   d.querySelectorAll('.mcard__img').forEach(box => {
-    if (!box.querySelector('.mcard__arr')) return;
+    if (!box.parentElement.querySelector('.mcard__arr')) return;
     const link = box.closest('a');
     // наведение на карточку — подгрузить второе фото заранее
     box.closest('.mcard')?.addEventListener('pointerenter', () => { const p = box.querySelectorAll('.mcard__ph')[1]; if (p) p.loading = 'eager'; }, { once: true });

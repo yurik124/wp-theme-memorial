@@ -119,7 +119,7 @@ function mem_catalog_card($p, $i) {
     else echo '<div class="mcard__link">';
     // фото другой формы, чем карточка: поля по бокам — размытая копия этого же фото (а не пустой белый фон)
     $mbg = $thumb && mem_card_ratio_differs($thumb) ? mem_blur_bg_url($thumb) : '';
-    echo '<span class="mcard__img' . ($mbg ? ' has-bg" style="--mbg:url(&quot;' . esc_url($mbg) . '&quot;)' : '') . '">';
+    echo '<span class="mcard__media"><span class="mcard__img' . ($mbg ? ' has-bg" style="--mbg:url(&quot;' . esc_url($mbg) . '&quot;)' : '') . '">';
     $imgattr = fn($p, $k) => ['loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width:600px) 50vw, 260px',
                               'alt' => get_post_meta($p, '_wp_attachment_image_alt', true) ?: $title . ($k ? ', фото ' . ($k + 1) : ''),
                               'class' => 'mcard__ph' . ($k ? '' : ' is-on'), 'data-big' => wp_get_attachment_image_url($p, 'large'),
@@ -127,11 +127,13 @@ function mem_catalog_card($p, $i) {
     if (!$thumb) echo '<span class="mcard__noimg" aria-hidden="true">✝</span>';
     // несколько фото: остальные лежат рядом скрытыми (грузятся, только когда до них долистают), стрелки и точки — front.js
     foreach ($photos as $k => $p) echo wp_get_attachment_image($p, 'medium_large', false, $imgattr($p, $k));
+    if (get_post_meta($id, '_mem_on_order', true)) echo '<span class="mcard__tag">Под заказ</span>';
+    echo '</span>';
+    // стрелки — снаружи фото (центр круга на краю фото), поэтому почти не закрывают снимок
     if (count($photos) > 1) {
         echo '<span class="mcard__arr mcard__arr--l" role="button" tabindex="0" aria-label="Предыдущее фото" data-dir="-1">' . mem_chevron('l') . '</span>'
            . '<span class="mcard__arr mcard__arr--r" role="button" tabindex="0" aria-label="Следующее фото" data-dir="1">' . mem_chevron('r') . '</span>';
     }
-    if (get_post_meta($id, '_mem_on_order', true)) echo '<span class="mcard__tag">Под заказ</span>';
     echo '</span>';
     if (count($photos) > 1) {
         echo '<span class="mcard__dots" aria-hidden="true">';

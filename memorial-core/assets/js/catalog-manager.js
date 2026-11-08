@@ -41,7 +41,7 @@ jQuery(function ($) {
     <tr data-id="${p.id}" class="${p.status !== 'publish' ? 'is-hidden' : ''}${sel.has(p.id) ? ' is-sel' : ''}">
       <td class="mcm__drag" title="Перетащите, чтобы поменять порядок">⋮⋮</td>
       <td class="mcm__chk"><input type="checkbox" class="mcm__sel" aria-label="Отметить"${sel.has(p.id) ? ' checked' : ''}></td>
-      <td class="mcm__ph"><button type="button" class="mcm__photo" data-act="photo" title="Фото товара: можно выбрать несколько, первое — главное">${p.thumb ? `<img src="${esc(p.thumb)}" alt="">` : '<span>+ фото</span>'}${(p.pids || []).length > 1 ? `<b class="mcm__phn">${p.pids.length}</b>` : ''}</button></td>
+      <td class="mcm__ph"><div class="mcm__phw"><button type="button" class="mcm__photo" data-act="photo" title="Фото товара: нажмите, чтобы выбрать или добавить (можно несколько, первое — главное)">${p.thumb ? `<img src="${esc(p.thumb)}" alt="">` : '<span>+ фото</span>'}</button>${p.tid ? `<button type="button" class="mcm__phx" data-act="phdel" data-pid="${p.tid}" title="Убрать это фото" aria-label="Убрать главное фото">×</button>` : ''}</div>${(p.pids || []).length > 1 ? `<div class="mcm__phs">${p.pids.slice(1).map((id, k) => `<span class="mcm__pht"><img src="${esc((p.pth || [])[k + 1] || '')}" alt=""><button type="button" class="mcm__phx" data-act="phdel" data-pid="${id}" title="Убрать это фото" aria-label="Убрать фото">×</button></span>`).join('')}</div>` : ''}</td>
       <td class="mcm__name">
         <input type="text" data-f="title" value="${esc(p.title)}" placeholder="Название" aria-label="Название">
         <input type="text" data-f="sub" value="${esc(p.sub)}" placeholder="подпись (необязательно)" class="mcm__sub" aria-label="Подпись">
@@ -237,21 +237,31 @@ jQuery(function ($) {
   $(app).on('click', '[data-act="blank"]', () => track(post('mem_cm_new', { type: D.id })).done(r => { if (r.success) addRows(r.data); }));
 
   /* ---------- фото товара ---------- */
+  const savePhotos = (p, ids) => track(post('mem_cm_save', { id: p.id, f: 'photos', v: ids.join(',') })).done(r => {
+    if (r.success) { p.pids = r.data.pids; p.pth = r.data.pth; p.tid = r.data.tid; p.thumb = r.data.thumb; p.big = r.data.big; render(); }
+  });
+  // × на миниатюре — убрать фото у товара (из медиатеки оно не удаляется). Убрали главное — главным станет следующее
+  $(app).on('click', '[data-act="phdel"]', function () {
+    const p = prod(this.closest('tr').dataset.id), pid = +this.dataset.pid;
+    savePhotos(p, (p.pids && p.pids.length ? p.pids : [p.tid]).filter(x => x && x !== pid));
+  });
   $(app).on('click', '[data-act="photo"]', function () {
     const tr = this.closest('tr'), p = prod(tr.dataset.id);
     // несколько фото: отмечайте по порядку — первое станет главным, остальные листаются в карточке на сайте
     const fr = wp.media({ title: 'Фото товара «' + p.title + '» — можно несколько, первое главное', multiple: 'add', library: { type: 'image' }, button: { text: 'Поставить' } });
-    fr.on('select', () => {
-      const ids = fr.state().get('selection').map(a => a.id);
-      track(post('mem_cm_save', { id: p.id, f: 'photos', v: ids.join(',') })).done(r => { if (r.success) { p.pids = r.data.pids; p.tid = r.data.tid; p.thumb = r.data.thumb; p.big = r.data.big; render(); } });
-    });
-    // в окне сразу отмечены текущие фото товара (внизу окна — их миниатюры по порядку)
+    fr.on('select', () => savePhotos(p, fr.state().get('selection').map(a => a.id)));
+    // в окне: текущие фото товара отмечены и стоят первыми в медиатеке (внизу окна — их миниатюры по порядку)
     fr.on('open', () => {
       const ids = (p.pids && p.pids.length) ? p.pids : (p.tid ? [p.tid] : []);
       if (!ids.length) return;
-      const atts = ids.map(id => { const a = wp.media.attachment(id); a.fetch(); return a; });
+      const atts = ids.map(id => wp.media.attachment(id));
       fr.state().get('selection').reset(atts);
       fr.content.mode('browse');
+      const lib = fr.state().get('library');
+      const base = lib.comparator;
+      const pos = m => { const i = ids.indexOf(m.id); return i < 0 ? 1e9 : i; };
+      lib.comparator = (a, b) => (pos(a) - pos(b)) || (base ? base.call(lib, a, b) : 0);
+      Promise.all(atts.map(a => a.fetch())).then(() => { lib.add(atts); lib.sort(); });   // старые фото могли ещё не загрузиться в список — добавляем
     });
     fr.open();
   });

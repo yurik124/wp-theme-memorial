@@ -54,6 +54,7 @@ function mem_manager_product($p, $type_id) {
         'thumb'  => $thumb ? wp_get_attachment_image_url($thumb, 'thumbnail') : '',
         'tid'    => (int) $thumb,   // номер фото — чтобы в окне выбора было отмечено текущее
         'pids'   => mem_product_photos($p->ID),   // все фото товара: первое — главное
+        'pth'    => array_map(fn($a) => wp_get_attachment_image_url($a, 'thumbnail'), mem_product_photos($p->ID)),
         'big'    => $thumb ? wp_get_attachment_image_url($thumb, 'large') : '',
         'price'  => (int) get_post_meta($p->ID, '_mem_price', true) ?: '',
         'from'   => get_post_meta($p->ID, '_mem_price_from', true) === '1',
@@ -172,9 +173,10 @@ add_action('wp_ajax_mem_cm_save', function () {
         // photos: «12,34,56» — первое фото главное, остальные листаются в карточке
         $ids = array_values(array_unique(array_filter(array_map('absint', explode(',', (string) $v)), 'wp_attachment_is_image')));
         if ($ids) set_post_thumbnail($id, $ids[0]);
+        elseif ($f === 'photos') delete_post_thumbnail($id);   // убрали все фото
         if ($f === 'photos') $ids && count($ids) > 1 ? update_post_meta($id, '_mem_gallery', implode(',', array_slice($ids, 1))) : delete_post_meta($id, '_mem_gallery');
         $tid = get_post_thumbnail_id($id);
-        wp_send_json_success(['pids' => mem_product_photos($id), 'tid' => (int) $tid, 'thumb' => $tid ? wp_get_attachment_image_url($tid, 'thumbnail') : '', 'big' => $tid ? wp_get_attachment_image_url($tid, 'large') : '']);
+        wp_send_json_success(['pth' => array_map(fn($a) => wp_get_attachment_image_url($a, 'thumbnail'), mem_product_photos($id)), 'pids' => mem_product_photos($id), 'tid' => (int) $tid, 'thumb' => $tid ? wp_get_attachment_image_url($tid, 'thumbnail') : '', 'big' => $tid ? wp_get_attachment_image_url($tid, 'large') : '']);
     } else {
         wp_send_json_error('Неизвестное поле');
     }

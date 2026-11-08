@@ -229,3 +229,15 @@
 /* число фото у товара (несколько фото — листаются в карточке на сайте) */
 .mcm__photo{position:relative}
 .mcm__phn{position:absolute;right:-4px;bottom:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#1d2327;color:#fff;font-size:11px;line-height:18px;text-align:center}
+
+/* Фото товара в таблице: главное + миниатюры остальных, × — убрать фото у товара */
+.mcm__ph{width:72px;vertical-align:top}
+.mcm__phw{position:relative;width:60px}
+.mcm__phx{position:absolute;top:-6px;right:-6px;width:20px;height:20px;padding:0;border:0;border-radius:50%;background:#1d2327;color:#fff;font-size:14px;line-height:20px;text-align:center;cursor:pointer;opacity:0;transition:opacity .15s}
+.mcm__phw:hover .mcm__phx,.mcm__pht:hover .mcm__phx,.mcm__phx:focus{opacity:1}
+@media (hover:none){.mcm__phx{opacity:.85}}
+.mcm__phx:hover{background:#b32d2e}
+.mcm__phs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;width:64px}
+.mcm__pht{position:relative;width:28px;height:28px;border-radius:5px;overflow:visible}
+.mcm__pht img{width:28px;height:28px;object-fit:cover;border-radius:5px;display:block}
+.mcm__pht .mcm__phx{top:-5px;right:-5px;width:16px;height:16px;font-size:12px;line-height:16px}
