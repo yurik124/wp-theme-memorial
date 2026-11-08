@@ -240,3 +240,9 @@
   .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) td:last-child,
   .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) th:last-child{width:48%;min-width:0;white-space:normal;padding-left:.5rem}
 }
+
+/* Таблицы цен на телефоне — текст не мельче 16 px, заголовки колонок читаемые */
+@media (max-width:600px){
+  body .wp-block-table.is-style-price{font-size:1rem}
+  body .wp-block-table.is-style-price thead th{font-size:.82rem}
+}

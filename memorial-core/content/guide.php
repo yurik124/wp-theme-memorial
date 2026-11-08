@@ -42,6 +42,11 @@ add_action('save_post_page', function ($id) {
 
 /* ---------- Данные страницы для карточки ---------- */
 
+/** Текст без шорткодов [mem_…] (в поиске не нужны; иначе в коде страницы видно «[mem_price …]») */
+function mem_guide_nosc($s) {
+    return preg_replace('~\[/?[a-z_]+[^\]]*\]~u', '', (string) $s);
+}
+
 /** Первый абзац (лучше — «вводный» is-style-lead) обычным текстом */
 function mem_guide_lead($content) {
     $p = '';
@@ -55,15 +60,15 @@ function mem_guide_lead($content) {
 function mem_guide_parts($blocks, array &$out) {
     foreach ($blocks as $b) {
         if ($b['blockName'] === 'core/heading' && (int) ($b['attrs']['level'] ?? 2) === 2) {
-            $t = trim(html_entity_decode(wp_strip_all_tags($b['innerHTML']), ENT_QUOTES, 'UTF-8'));
+            $t = trim(html_entity_decode(wp_strip_all_tags(do_shortcode($b['innerHTML'])), ENT_QUOTES, 'UTF-8'));
             $anchor = $b['attrs']['anchor'] ?? '';
             if (!$anchor && preg_match('/\sid="([^"]+)"/', $b['innerHTML'], $m)) $anchor = $m[1];
             if (!$anchor) $anchor = substr(mem_slug($t), 0, 70);
             if ($t !== '' && !preg_match('~^(частые вопросы|вопросы и ответы|остались вопросы)~ui', $t)) $out[] = [$t, $anchor, 'h', ''];
         } elseif ($b['blockName'] === 'core/details' && preg_match('~<summary[^>]*>(.*?)</summary>~s', $b['innerHTML'], $m)) {
-            $q = trim(html_entity_decode(wp_strip_all_tags($m[1]), ENT_QUOTES, 'UTF-8'));
+            $q = trim(html_entity_decode(wp_strip_all_tags(do_shortcode($m[1])), ENT_QUOTES, 'UTF-8'));
             $a = '';
-            foreach ($b['innerBlocks'] as $ib) $a .= ' ' . wp_strip_all_tags($ib['innerHTML']);
+            foreach ($b['innerBlocks'] as $ib) $a .= ' ' . wp_strip_all_tags(mem_guide_nosc($ib['innerHTML']));
             if ($q !== '') $out[] = [$q, mem_q_anchor($q), 'q', trim(preg_replace('/\s+/u', ' ', $a))];
         } elseif (!empty($b['innerBlocks'])) {
             mem_guide_parts($b['innerBlocks'], $out);
@@ -121,7 +126,7 @@ add_shortcode('mem_guide', function ($atts) {
         foreach (mem_faq_all() as $g) {
             if (isset($seen[$g['id']]) || $g['id'] === get_the_ID()) continue;
             foreach ($g['qs'] as [$q, $ans]) {
-                $idx[] = ['q' => $q, 't' => $q . ' ' . mb_substr(trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags($ans))), 0, 300),
+                $idx[] = ['q' => $q, 't' => $q . ' ' . mb_substr(trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags(mem_guide_nosc($ans)))), 0, 300),
                           'u' => $g['url'] . '#' . mem_q_anchor($q), 'c' => -1, 'g' => $g['title'], 'k' => 'q'];
             }
         }
