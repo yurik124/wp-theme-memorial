@@ -11,7 +11,7 @@ $head   = fn($sec) => memorial_sec_head($sec, $e);   // надзаголовок
 <main id="main">
 
 <?php
-// Первый экран «Светлая память»: текст слева, фото траурного зала справа в рамке (без тёмного затемнения), ветвь лавра в углу.
+// Первый экран «Светлая память»: порядок элементов прежний; фото траурного зала — справа в рамке (без тёмного затемнения), ветвь лавра в углу.
 // На телефоне фото — под текстом; настройка «сначала фото» ставит его над текстом, но невысокой полосой.
 $hero_mtop = $img && ($hero['mobile'] ?? 'bg') === 'top';
 ?>
@@ -23,19 +23,18 @@ $hero_mtop = $img && ($hero['mobile'] ?? 'bg') === 'top';
       <h1><?php echo $e($hero['title']);
         if (!empty($hero['title_em'])) echo ($hero['title'] ? '<br>' : '') . '<em>' . $e($hero['title_em']) . '</em>'; ?></h1>
       <?php if (!empty($hero['lead'])) : ?><p class="hero__lead"><?php echo nl2br($e($hero['lead'])); ?></p><?php endif; ?>
-      <div class="hero__cta">
-        <?php if ($tel) : ?><a class="btn btn--gold btn--lg btn--tel" href="tel:<?php echo $tel; ?>"><?php echo mem_icon('phone'); ?><span class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></span></a>
-        <button class="btn btn--line btn--lg" type="button" data-callback>Перезвоните мне</button><?php endif; ?>
-      </div>
       <?php if (!empty($hero['trust'])) : ?>
         <ul class="hero__trust lv-list">
           <?php foreach ($hero['trust'] as $t) : ?><li><?php echo mem_laurel('leaf') . '<span>' . $e($t['text']) . '</span>'; ?></li><?php endforeach; ?>
         </ul>
       <?php endif; ?>
-      <?php // «Что делать, если умер человек»: следующий шаг виден сразу, без меню
-      if (function_exists('mem_home_help_link') && ($help = mem_home_help_link())) : ?>
-        <a class="link-more hero__help" href="<?php echo esc_url($help[0]); ?>"><?php echo esc_html($help[1]); ?> <span aria-hidden="true">→</span></a>
-      <?php endif; ?>
+      <div class="hero__cta">
+        <?php if ($tel) : ?><a class="btn btn--gold btn--lg btn--tel" href="tel:<?php echo $tel; ?>"><?php echo mem_icon('phone'); ?><span class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></span></a><?php endif; ?>
+        <?php // вторая кнопка — «Что делать, если умер человек»: следующий шаг виден сразу, без меню
+        if (function_exists('mem_home_help_link') && ($help = mem_home_help_link())) : ?>
+          <a class="btn btn--line btn--lg" href="<?php echo esc_url($help[0]); ?>"><?php echo esc_html($help[1]); ?> <span aria-hidden="true">→</span></a>
+        <?php endif; ?>
+      </div>
       <?php if ($tel && mem_night()) : ?><p class="hero__night"><?php echo mem_icon('clock') . esc_html(mem_night()); ?></p><?php endif; ?>
     </div>
     <?php if ($img) : [$img_d, $img_m] = memorial_hero_srcs($img); ?>

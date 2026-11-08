@@ -9,6 +9,14 @@
           ? esc_html(memorial_nbsp('Ритуальная компания, которая на рынке больше ' . (int) mem_years() . ' лет'))
           : esc_html(get_bloginfo('description') ?: 'Ритуальная компания'); ?></p>
     </div>
+    <?php if (mem_addrs()) : ?>
+    <div class="footer__col">
+      <p class="fnav__title">Адреса</p>
+      <?php foreach (mem_addrs() as $a) : ?>
+        <p class="footer__addr"><?php echo esc_html(memorial_addr($a['addr'])); ?><?php if (!empty($a['hours'])) echo '<br><small>' . esc_html($a['hours']) . '</small>'; ?></p>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
     <?php if (mem_phones() || mem_emails()) : ?>
     <div class="footer__col">
       <p class="fnav__title">Телефоны</p>
@@ -18,14 +26,6 @@
       <?php if (mem_night()) : ?><p class="footer__night"><?php echo esc_html(mem_night()); ?></p><?php endif; ?>
       <?php foreach (mem_emails() as $m) : ?>
         <p class="footer__line"><a class="footer__mail" href="mailto:<?php echo esc_attr($m); ?>"><?php echo esc_html($m); ?></a></p>
-      <?php endforeach; ?>
-    </div>
-    <?php endif; ?>
-    <?php if (mem_addrs()) : ?>
-    <div class="footer__col">
-      <p class="fnav__title">Адреса</p>
-      <?php foreach (mem_addrs() as $a) : ?>
-        <p class="footer__addr"><?php echo esc_html(memorial_addr($a['addr'])); ?><?php if (!empty($a['hours'])) echo '<br><small>' . esc_html($a['hours']) . '</small>'; ?></p>
       <?php endforeach; ?>
     </div>
     <?php endif; ?>

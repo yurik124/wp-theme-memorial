@@ -498,4 +498,4 @@ details[id]{scroll-margin-top:calc(var(--hh,72px) + 24px)}
 /* Аватары авторов отзывов — приглушённые тёплые тона */
 .rwo__ava{background:hsl(var(--h) 14% 52%)}
 /* Пакеты: полный состав с лавровыми маркерами */
-.mem-pkgs .pkg__all li{margin:0}
+.mem-pkgs .pkg__key li{margin:0}

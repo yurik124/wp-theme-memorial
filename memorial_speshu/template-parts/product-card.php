@@ -27,6 +27,6 @@ $mem_bg = $mem_thumb && function_exists('mem_card_ratio_differs') && mem_card_ra
   <div class="card__body">
     <h3 class="card__title"><?php if ($mem_page) : ?><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a><?php else : the_title(); endif; ?></h3>
     <div class="card__price"><?php echo function_exists('mem_price_html') ? wp_kses_post(mem_price_html($mem_id)) : ''; ?></div>
-    <?php if (function_exists('mem_tel') && mem_tel()) : ?><a class="btn btn--line btn--sm" href="tel:<?php echo esc_attr(mem_tel()); ?>">Уточнить по телефону</a><?php endif; ?>
+    <?php if (function_exists('mem_tel') && mem_tel()) : ?><a class="btn btn--line btn--sm" href="tel:<?php echo esc_attr(mem_tel()); ?>">Заказать</a><?php endif; ?>
   </div>
 </article>

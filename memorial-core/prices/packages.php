@@ -1,7 +1,7 @@
 <?php
 /**
  * Карточки пакетов услуг (главная и шорткод [mem_packages] для страниц).
- * «Светлая память»: название и цена по центру, лавровый разделитель, весь состав с ценами и лавровыми маркерами.
+ * Ключевые позиции (отмечаются в настройках) — списком с лавровыми листками, весь состав с ценами — свёрнут («Весь состав и цены»).
  * Данные — «Мемориал → Цены → Пакеты похорон».
  */
 defined('ABSPATH') || exit;
@@ -19,13 +19,24 @@ function mem_packages_html() {
           <?php if ($feat && !empty($s['badge'])) : ?><span class="pkg__badge"><?php echo $e($s['badge']); ?></span><?php endif; ?>
           <h3><?php echo esc_html($p['name']); ?></h3>
           <?php if ($total) : ?><p class="pkg__total"><?php echo esc_html(mem_rub($total)); ?></p><?php endif; ?>
-          <?php if ($p['items']) : ?>
-          <span class="pkg__div" aria-hidden="true"><?php echo function_exists('mem_laurel') ? mem_laurel('divider') : ''; ?></span>
-          <ul class="pkg__all">
-            <?php foreach ($p['items'] as $it) : ?>
-              <li><?php echo function_exists('mem_laurel') ? mem_laurel('leaf') : mem_icon('check'); ?><span><?php echo esc_html($it[0]); ?></span><?php if ($it[1]) : ?><b><?php echo esc_html(mem_rub($it[1])); ?></b><?php endif; ?></li>
-            <?php endforeach; ?>
+          <?php if ($p['items']) :
+              $keys = array_filter($p['items'], fn($it) => !empty($it[2]));
+              // ничего не отмечено в настройках — берём главное по названию, иначе первые четыре
+              if (!$keys) $keys = array_filter($p['items'], fn($it) => preg_match('/^(Гроб|Крест|Катафалк|Венок|Услуги по захоронению)/u', $it[0]));
+              if (!$keys) $keys = array_slice($p['items'], 0, 4);
+              $mark = function_exists('mem_laurel') ? mem_laurel('leaf') : mem_icon('check'); ?>
+          <?php if (function_exists('mem_laurel')) : ?><span class="pkg__div" aria-hidden="true"><?php echo mem_laurel('divider'); ?></span><?php endif; ?>
+          <ul class="pkg__key">
+            <?php foreach ($keys as $it) : ?><li><?php echo $mark; ?><span><?php echo esc_html($it[0]); ?></span></li><?php endforeach; ?>
           </ul>
+          <details class="pkg__list">
+            <summary>Весь состав и цены (<?php echo count($p['items']); ?>)</summary>
+            <ul>
+              <?php foreach ($p['items'] as $it) : ?>
+                <li><span><?php echo esc_html($it[0]); ?></span><?php if ($it[1]) : ?><b><?php echo esc_html(mem_rub($it[1])); ?></b><?php endif; ?></li>
+              <?php endforeach; ?>
+            </ul>
+          </details>
           <?php endif; ?>
           <?php if ($tel) : ?><a class="btn <?php echo $feat ? 'btn--gold' : 'btn--line'; ?>" href="tel:<?php echo $tel; ?>"><?php echo $e($s['btn'] ?: 'Заказать'); ?></a><?php endif; ?>
         </article>

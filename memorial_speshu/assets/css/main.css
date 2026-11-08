@@ -95,6 +95,7 @@ p{text-wrap:pretty}
 .topbar__in{display:flex;gap:2rem;justify-content:flex-end;padding:.4rem 0}
 .topbar span{display:flex;align-items:center;gap:.4rem}
 .topbar .ico{color:var(--gold)}
+.topbar__night{color:var(--gold3)}
 
 /* Шапка: светлая, тонкая линия снизу, липкая */
 .header{position:sticky;top:var(--top);z-index:50;background:var(--bg);color:var(--ink);border-bottom:1px solid var(--line);transition:box-shadow .3s var(--ease)}
@@ -186,7 +187,7 @@ html.hdr-two .reviews__intro{top:calc(var(--top) + 140px)}
 /* ---------- Первый экран: текст слева, фото справа в рамке, ветвь лавра в углу ---------- */
 .hero{position:relative;overflow:hidden;background:var(--bg)}
 .hero__branch{position:absolute;top:-40px;right:-70px;width:clamp(220px,26vw,380px);height:clamp(340px,40vw,560px);color:var(--gold2);opacity:.22;transform:rotate(-24deg);pointer-events:none}
-.hero__in{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(2rem,5vw,4.5rem);align-items:center;padding:clamp(2rem,6vw,5.5rem) 0 clamp(3.5rem,7vw,6rem)}
+.hero__in{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(2rem,5vw,4.5rem);align-items:center;padding:clamp(2rem,6vw,5.5rem) 0 clamp(3.5rem,7vw,6rem)}
 .hero:not(.hero--img) .hero__in{grid-template-columns:minmax(0,760px)}
 .hero__text{display:flex;flex-direction:column;gap:1.35rem;min-width:0}
 .hero .eyebrow{margin:0}
@@ -195,7 +196,7 @@ html.hdr-two .reviews__intro{top:calc(var(--top) + 140px)}
 .hero__lead{margin:0;max-width:34em}
 .hero__cta{display:flex;flex-wrap:wrap;gap:.75rem}
 .hero__trust{margin-top:.2rem}
-.hero__help{align-self:flex-start}
+.hero__cta .btn--line{white-space:normal}
 .hero__night{display:flex;align-items:center;gap:.6rem;margin:0;padding-top:.9rem;border-top:1px solid var(--line);color:var(--mute);font-size:1rem}
 .hero__night .ico{color:var(--gold);width:18px;height:18px}
 .hero__photo{margin:0;aspect-ratio:4/4.4;max-height:640px;width:100%;border-radius:var(--r);overflow:hidden;background:var(--bg2);box-shadow:0 1px 2px rgba(42,44,40,.04),0 12px 32px rgba(42,44,40,.06)}
@@ -266,7 +267,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 @media (max-width:600px){.cats{grid-template-columns:repeat(2,1fr)}.cat__cap{padding:.8rem .85rem}.cat h3{font-size:1rem}}
 
 /* Цены: пакеты похорон — тихая плашка у рекомендуемого, состав с лавровыми маркерами */
-.pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(1rem,2vw,1.75rem);align-items:stretch}
+.pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:clamp(1rem,2vw,1.75rem);align-items:stretch}
 .pkg{position:relative;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:1.9rem 1.75rem 1.75rem;display:flex;flex-direction:column;gap:1.1rem}
 .pkg--feat{border-color:var(--gold)}
 .pkg__badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--gold);color:var(--gold3);font:600 .75rem/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;padding:.25rem .9rem;border-radius:999px;white-space:nowrap}
@@ -274,27 +275,24 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .pkg h3{margin:0;text-align:center;font:500 1.875rem/1.1 var(--serif)}
 .pkg__total{margin:-.4rem 0 0;text-align:center;font:600 clamp(1.375rem,2vw,1.625rem)/1.2 var(--lora);color:var(--ink)}
 .pkg__div{display:block;width:120px;height:16px;margin:0 auto;color:var(--gold2)}
-.pkg__all{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem;flex:1;font-size:1rem;line-height:1.45}
-.pkg__all li{display:flex;gap:.65rem;align-items:baseline}
-.pkg__all .lv--leaf{width:13px;height:13px;flex:none;color:var(--gold);transform:translateY(1px)}
-.pkg__all li>span{flex:1}
-.pkg__all b{font-weight:400;color:var(--mute);white-space:nowrap;font-variant-numeric:tabular-nums}
-/* прежняя разметка (ключевые позиции + «Весь состав») — если плагин старый */
-.pkg__key{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
-.pkg__key li{display:flex;gap:.55rem;align-items:flex-start}
+.pkg__key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem;font-size:1rem;line-height:1.45}
+.pkg__key li{display:flex;gap:.65rem;align-items:baseline}
+.pkg__key .lv--leaf{width:13px;height:13px;flex:none;color:var(--gold);transform:translateY(1px)}
 .pkg__key .ico{color:var(--gold);flex:none;margin-top:.2em}
-.pkg__list summary{cursor:pointer;font-weight:500;list-style:none;padding:.6rem 0;border-bottom:1px solid var(--line);color:var(--gold3)}
+.pkg__list{border-top:1px solid var(--line)}
+.pkg__list summary{cursor:pointer;font-weight:500;list-style:none;padding:.75rem 0;color:var(--gold3);min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .pkg__list summary::-webkit-details-marker{display:none}
-.pkg__list summary::after{content:"+";float:right;color:var(--gold)}
+.pkg__list summary::after{content:"+";font:300 1.5rem/1 var(--sans);color:var(--gold)}
 .pkg__list[open] summary::after{content:"−"}
-.pkg__list ul{list-style:none;margin:0;padding:.5rem 0 0}
+.pkg__list summary:hover{color:var(--ink)}
+.pkg__list ul{list-style:none;margin:0;padding:0 0 .25rem}
 .pkg__list li{display:flex;justify-content:space-between;gap:1rem;padding:.45rem 0;border-bottom:1px dashed var(--line)}
-.pkg__list b{font-weight:500;white-space:nowrap}
+.pkg__list li:last-child{border-bottom:0}
+.pkg__list b{font-weight:400;color:var(--mute);white-space:nowrap}
+.pkg>.btn{margin-top:auto}
 .pkg>.btn{margin-top:auto;width:100%}
 @media (max-width:700px){.pkgs,.mem-pkgs .pkgs{gap:2.2rem}.pkg{padding:1.6rem 1.25rem 1.4rem}}
-/* Пакеты внутри текста страницы (шорткод [mem_packages], страница «Цены»): шире колонки текста — во всю ширину сайта */
-.content .mem-pkgs{--pw:min(1200px,100vw - 4rem);width:var(--pw);margin-left:calc(50% - var(--pw) / 2);margin-top:2.5rem;margin-bottom:2.5rem}
-@media (max-width:600px){.content .mem-pkgs{--pw:calc(100vw - 2rem)}}
+
 
 /* Цифры: светлая шалфейная полоса, цифры в лавровых венках */
 .stats{position:relative;overflow:hidden;background:var(--sage);color:var(--ink);padding:clamp(3.5rem,6vw,5rem) 0}
@@ -605,8 +603,8 @@ select,.sort select{min-height:44px}
 /* ---------- Доступность и мелочи ---------- */
 /* Зона нажатия не меньше 44 px: у ссылок в списках — невидимое расширение (::after), вид не меняется */
 .btn,.maps__tab,.cb__m{min-height:44px}
-.fnav a,.clist a,.crumbs a,.footer .footer__tel,.footer .footer__mail,.reviews__credit,.logo,.kcard a,.kaddr__route,.kmail a,.mguide__q a,.mguide__in a{position:relative}
-.fnav a::after,.clist a::after,.crumbs a::after,.footer .footer__tel::after,.footer .footer__mail::after,.reviews__credit::after,
+.fnav a,.clist a,.crumbs a,.footer .footer__tel,.footer .footer__mail,.logo,.kcard a,.kaddr__route,.kmail a,.mguide__q a,.mguide__in a{position:relative}
+.fnav a::after,.clist a::after,.crumbs a::after,.footer .footer__tel::after,.footer .footer__mail::after,
 .kcard a::after,.kaddr__route::after,.kmail a::after,.mguide__q a::after,.mguide__in a::after{content:"";position:absolute;left:0;right:0;top:50%;min-height:44px;height:100%;transform:translateY(-50%)}
 .mcat__arr,.msearch__tag,.srow__arr{min-width:44px;min-height:44px}
 

@@ -16,6 +16,7 @@
   <div class="wrap topbar__in">
     <span><?php echo mem_icon('pin') . esc_html(memorial_addr($a0['addr'])); ?></span>
     <?php if (!empty($a0['hours'])) : ?><span><?php echo mem_icon('clock') . esc_html($a0['hours']); ?></span><?php endif; ?>
+    <?php if (mem_night()) : ?><span class="topbar__night"><?php echo mem_icon('phone') . esc_html(mem_night()); ?></span><?php endif; ?>
   </div>
 </div>
 <?php endif; ?>
