@@ -6,7 +6,7 @@
  *   [mem_faq]                     — все вопросы, по разделам (страницам)
  *   [mem_faq exclude="12,34"]     — без вопросов с этих страниц (номера страниц)
  *   [mem_faq search="0"]          — без поля поиска
- *   [mem_faq chasto="документы, морг"] — слова под полем поиска «Часто ищут» (без результатов — скрываются)
+ *   [mem_faq chasto="документы, морг"] — свои слова «Часто ищут» (по умолчанию — из статистики «Что ищут на сайте»)
  */
 defined('ABSPATH') || exit;
 
@@ -59,7 +59,7 @@ add_action('deleted_post', fn() => delete_transient('mem_faq_all'));
 add_action('wp_update_nav_menu', fn() => delete_transient('mem_faq_all'));
 
 add_shortcode('mem_faq', function ($atts) {
-    $a = shortcode_atts(['exclude' => '', 'search' => '1', 'chasto' => 'документы, стоимость, пособие, кремация, морг, памятник'], $atts, 'mem_faq');
+    $a = shortcode_atts(['exclude' => '', 'search' => '1', 'chasto' => ''], $atts, 'mem_faq');
     $skip = array_map('intval', array_filter(explode(',', $a['exclude'])));
     $groups = array_values(array_filter(mem_faq_all(), fn($g) => !in_array($g['id'], $skip, true) && $g['id'] !== get_the_ID()));
     if (!$groups) return current_user_can('edit_pages') ? '<p class="is-style-note">[mem_faq]: на страницах пока нет вопросов (блоков «Подробности»).</p>' : '';
@@ -69,7 +69,8 @@ add_shortcode('mem_faq', function ($atts) {
     echo '<div class="mfaq" data-faq>';
     if ($a['search'] !== '0') {
         echo mem_search_box(['id' => 'mfaq-q', 'label' => 'Поиск по вопросам', 'placeholder' => 'Например: документы',
-            'popular' => array_map('trim', explode(',', $a['chasto'])),
+            // «Часто ищут»: заданные в шорткоде слова, иначе — из статистики поиска (content/search-stats.php)
+            'popular' => trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : mem_sq_popular(['документы', 'стоимость', 'пособие', 'кремация', 'морг', 'памятник']),
             'none' => 'Такого вопроса пока нет на сайте. Позвоните или оставьте номер — ответим.']);
     }
     if (count($groups) > 1) {

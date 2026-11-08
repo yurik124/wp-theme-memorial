@@ -26,12 +26,12 @@ add_filter('render_block_core/details', function ($html) {
 });
 
 /**
- * Поле поиска. $o: id, label, placeholder, popular (слова «Часто ищут»), none (текст «ничего не нашли»).
+ * Поле поиска. $o: id, label, placeholder, popular (слова «Часто ищут»), none (текст «ничего не нашли»), where (f / g — для статистики).
  */
 function mem_search_box(array $o) {
     $id = $o['id'] ?? 'ms-' . wp_rand(100, 999);
     $pop = array_filter(array_map('trim', (array) ($o['popular'] ?? [])));
-    $h = '<div class="msearch" data-msearch>'
+    $h = '<div class="msearch" data-msearch data-log="' . esc_url(admin_url('admin-ajax.php')) . '" data-w="' . esc_attr($o['where'] ?? 'f') . '">'
         . '<div class="msearch__bar">'
         . '<label class="screen-reader-text" for="' . esc_attr($id) . '">' . esc_html($o['label'] ?? 'Поиск') . '</label>'
         . '<svg class="msearch__ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'

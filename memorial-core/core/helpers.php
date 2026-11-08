@@ -41,3 +41,17 @@ add_action('customize_register', function ($c) {
     $c->add_setting('mem_moved_note', ['sanitize_callback' => '__return_empty_string']);
     $c->add_control('mem_moved_note', ['section' => 'mem_moved', 'type' => 'hidden']);
 });
+
+/**
+ * Картинка из медиатеки нужного размера по адресу оригинала (для фото, заданных в настройках адресом).
+ * Не из медиатеки или размера нет — тот же адрес. Так блоки не грузят оригиналы по 200+ КБ.
+ */
+function mem_img_sized($url, $size = 'medium_large') {
+    if (!$url) return $url;
+    static $memo = [];
+    $k = $url . '|' . $size;
+    if (isset($memo[$k])) return $memo[$k];
+    $id = attachment_url_to_postid(preg_replace('/-\d+x\d+(?=\.\w+$)/', '', $url));
+    $s = $id ? wp_get_attachment_image_url($id, $size) : '';
+    return $memo[$k] = $s ?: $url;
+}

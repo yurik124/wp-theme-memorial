@@ -6,7 +6,7 @@
  */
 defined('ABSPATH') || exit;
 
-define('MEM_VER', '3.3.0');
+define('MEM_VER', '3.3.1');
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -45,6 +45,14 @@ add_action('wp_enqueue_scripts', function () {
         $file = ['lora' => 'lora-500', 'cormorant' => 'cormorant-garamond-500'][$head] ?? '';
         if ($file) echo '<link rel="preload" href="' . esc_url($uri . '/assets/fonts/' . $file . '.woff2') . '" as="font" type="font/woff2" crossorigin>' . "\n";
     }, 2);
+    // фото первого экрана главной: браузер начинает грузить его сразу, а не после стилей (ускоряет LCP)
+    if (is_front_page() && function_exists('mem_home') && ($hero_img = (mem_home('hero')['img'] ?? ''))) {
+        add_action('wp_head', function () use ($hero_img) {
+            [$d, $m] = memorial_hero_srcs($hero_img);
+            echo '<link rel="preload" as="image" href="' . esc_url($m) . '" media="(max-width:700px)" fetchpriority="high">' . "\n"
+               . '<link rel="preload" as="image" href="' . esc_url($d) . '" media="(min-width:701px)" fetchpriority="high">' . "\n";
+        }, 2);
+    }
     wp_enqueue_script('memorial', $uri . $js, [], filemtime($dir . $js), ['strategy' => 'defer', 'in_footer' => true]);
 
     if (is_front_page()) {
@@ -123,3 +131,11 @@ require get_template_directory() . '/inc/design.php';
 /* Функционал — в плагине Memorial Core. Без него шаблоны работают на запасных функциях (inc/no-plugin.php):
    шапка, меню, подвал, страницы и оформление на месте, нет только того, что даёт плагин (контакты, каталог, цены…). */
 if (!defined('MEM_CORE_VER')) require get_template_directory() . '/inc/no-plugin.php';
+
+/** Фото первого экрана: [для ПК — как загружено, для телефона — 1024 px из медиатеки (если есть)] */
+function memorial_hero_srcs($url) {
+    $m = $url;
+    $id = attachment_url_to_postid(preg_replace('/-\d+x\d+(?=\.\w+$)/', '', $url));
+    if ($id && ($l = wp_get_attachment_image_src($id, 'large')) && $l[1] < (wp_get_attachment_image_src($id, 'full')[1] ?? 0)) $m = $l[0];
+    return [$url, $m];
+}

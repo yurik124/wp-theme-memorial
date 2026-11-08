@@ -29,7 +29,7 @@ function mem_services_grid(array $items) {
     foreach ($items as $it) {
         $tag = $it['url'] ? 'a' : 'div';
         $h .= '<' . $tag . ' class="svc__item reveal' . ($it['img'] ? ' svc__item--img' : '') . '"' . ($it['url'] ? ' href="' . esc_url($it['url']) . '"' : '') . '>';
-        if ($it['img']) $h .= '<span class="svc__img" style="background-image:url(' . esc_url($it['img']) . ')"></span>';
+        if ($it['img']) $h .= '<span class="svc__img" style="background-image:url(' . esc_url(mem_img_sized($it['img'])) . ')"></span>';   // не оригинал, а 768 px
         $h .= '<span class="svc__body"><h3>' . $e($it['title']) . '</h3>';
         if (!empty($it['text'])) $h .= '<p>' . $e($it['text']) . '</p>';
         $h .= '<span class="svc__foot">' . (!empty($it['price']) ? '<b>' . $e($it['price']) . '</b>' : '') . ($it['url'] ? '<span class="svc__more">Подробнее →</span>' : '') . '</span>';

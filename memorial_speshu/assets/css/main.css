@@ -85,7 +85,7 @@ h3{font-size:1.4rem}
 .burger[aria-expanded=true] span::after{transform:translateY(-7px) rotate(-45deg)}
 
 /* Первый экран */
-.hero{color:#fff;background:linear-gradient(180deg,color-mix(in srgb,var(--hero-tint,var(--dark)) var(--hero-a1,55%),transparent),color-mix(in srgb,var(--hero-tint,var(--dark)) var(--hero-a2,92%),transparent)),var(--hero,radial-gradient(ellipse at 70% 20%,#3a3d44 0,var(--dark) 70%)) center/cover;padding:clamp(4rem,12vw,9rem) 0 clamp(3.5rem,9vw,6rem)}
+.hero{--hero:var(--hero-d);color:#fff;background:linear-gradient(180deg,color-mix(in srgb,var(--hero-tint,var(--dark)) var(--hero-a1,55%),transparent),color-mix(in srgb,var(--hero-tint,var(--dark)) var(--hero-a2,92%),transparent)),var(--hero,radial-gradient(ellipse at 70% 20%,#3a3d44 0,var(--dark) 70%)) center/cover;padding:clamp(4rem,12vw,9rem) 0 clamp(3.5rem,9vw,6rem)}
 .hero h1 em{font-style:italic;color:var(--gold2)}
 .hero__lead{max-width:580px;color:#cfcac1;font-size:1.1rem;margin:0 0 1.5rem}
 .hero__trust{list-style:none;padding:0;margin:0 0 2.2rem;display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;color:#e6e1d8}
@@ -520,3 +520,13 @@ a.svc__item:hover{box-shadow:var(--sh);transform:translateY(-3px);border-color:v
   .hero--mtop::before{content:"";display:block;aspect-ratio:4/3;background:var(--hero) center/cover no-repeat;margin-bottom:2rem}
   .hero--mtop .hero__in{text-shadow:none}
 }
+
+/* фото первого экрана на телефоне — уменьшенное (1024 px) */
+@media (max-width:700px){.hero{--hero:var(--hero-m,var(--hero-d))}}
+
+/* Контраст (проверка доступности PageSpeed): белый текст на золоте и золотые подписи на светлом фоне читались плохо */
+.btn--gold{color:var(--dark)}
+.btn--gold:hover{background:var(--gold3);color:#fff}
+.eyebrow{color:var(--gold3)}
+.hero .eyebrow,.stats .eyebrow,.footer .eyebrow,.kcard--dark .eyebrow,.pkg--feat .eyebrow,.consent .eyebrow{color:var(--gold2)}
+.reviews__credit{color:#6f6f6f}

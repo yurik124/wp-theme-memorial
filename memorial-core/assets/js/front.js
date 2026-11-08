@@ -86,6 +86,18 @@
       return best ? items.filter(it => it.n === best) : [];
     };
     let sel = -1, shown = [], timer;
+    // статистика «Что ищут на сайте»: итоговый запрос (не каждую букву) и сколько нашлось
+    let sent = '', lt, last = ['', 0];
+    const log = () => {
+      clearTimeout(lt);
+      const [val, n] = last;
+      if (!box.dataset.log || val.length < 3 || val === sent) return;
+      sent = val;
+      const f = new FormData();
+      f.append('action', 'mem_sq'); f.append('q', val); f.append('n', n); f.append('w', box.dataset.w || 'f');
+      try { navigator.sendBeacon ? navigator.sendBeacon(box.dataset.log, f) : fetch(box.dataset.log, { method: 'POST', body: f, keepalive: true }); } catch (e) {}
+    };
+    addEventListener('pagehide', log);
     const close = () => { list.hidden = true; q.setAttribute('aria-expanded', 'false'); sel = -1; };
     const fitList = () => {   // на телефоне список не прячется под клавиатурой
       const vh = window.visualViewport ? visualViewport.height + visualViewport.offsetTop : innerHeight;
@@ -110,8 +122,12 @@
       if (st) st.innerHTML = opts.status(found, words, val);
       if (none) none.hidden = !words.length || found.length > 0;
       if (pop) pop.hidden = !!val;
+      clearTimeout(lt);
+      if (words.length && !pre0) { last = [val, found.length]; lt = setTimeout(log, 2500); }   // перестал печатать — запрос итоговый
+      pre0 = false;
     };
-    const go = i => { const it = shown[i]; if (!it) return; close(); q.blur(); opts.pick(it); };
+    let pre0 = false;
+    const go = i => { const it = shown[i]; if (!it) return; log(); close(); q.blur(); opts.pick(it); };
     q.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 90); });
     q.addEventListener('focus', () => {
       if (innerWidth < 700) {
@@ -142,7 +158,7 @@
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (sel >= 0) go(sel);
-        else { clearTimeout(timer); run(); close(); q.blur(); opts.enter && opts.enter(); }   // Enter — убрать клавиатуру и показать найденное
+        else { clearTimeout(timer); run(); log(); close(); q.blur(); opts.enter && opts.enter(); }   // Enter — убрать клавиатуру и показать найденное
       } else if (e.key === 'Escape') close();
     });
     list.addEventListener('mousedown', e => e.preventDefault());
@@ -150,12 +166,12 @@
     x.addEventListener('click', () => { q.value = ''; run(); q.focus(); });
     if (pop) pop.querySelectorAll('[data-q]').forEach(b => {
       if (!score(sWords(b.dataset.q)).length) { b.remove(); return; }   // слово без результатов не показываем
-      b.addEventListener('click', () => { q.value = b.dataset.q; run(); close(); opts.enter && opts.enter(); });
+      b.addEventListener('click', () => { q.value = b.dataset.q; run(); log(); close(); opts.enter && opts.enter(); });
     });
     if (pop && !pop.querySelector('[data-q]')) pop.remove();
     if (window.visualViewport) visualViewport.addEventListener('resize', () => { if (!list.hidden) fitList(); });
     const pre = new URLSearchParams(location.search).get('q');   // /vopros-otvet/?q=пособие
-    if (pre) { q.value = pre; run(); close(); } else run();
+    if (pre) { q.value = pre; pre0 = true; run(); close(); } else run();   // ?q= из ссылки не считаем
     return { run };
   };
   // плавная прокрутка к найденному и короткая подсветка

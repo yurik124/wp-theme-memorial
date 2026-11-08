@@ -26,7 +26,11 @@ $a1 = $tint === 'flat' ? $op : (int) round($op * .73);
 $a2 = $tint === 'flat' ? $op : min(100, (int) round($op * 1.23));
 $hs = ['--hero-a1:' . $a1 . '%', '--hero-a2:' . $a2 . '%'];
 if (!empty($hero['tint_color'])) $hs[] = '--hero-tint:' . $hero['tint_color'];
-if ($img) $hs[] = '--hero:url(' . esc_url($img) . ')';
+if ($img) {   // ПК — оригинал, телефон — 1024 px (предзагрузка обоих — memorial_hero_srcs в functions.php)
+    [$img_d, $img_m] = memorial_hero_srcs($img);
+    $hs[] = '--hero-d:url(' . esc_url($img_d) . ')';
+    $hs[] = '--hero-m:url(' . esc_url($img_m) . ')';
+}
 ?>
 <section class="hero<?php echo $a2 < 45 ? ' hero--light' : ''; echo $img && ($hero['mobile'] ?? 'bg') === 'top' ? ' hero--mtop' : ''; ?>" style="<?php echo esc_attr(implode(';', $hs)); ?>">
   <div class="wrap hero__in">

@@ -126,9 +126,9 @@ add_shortcode('mem_guide', function ($atts) {
             }
         }
     }
-    $pop = trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : ['документы', 'пособие', 'кладбище', 'стоимость', 'морг'];
+    $pop = trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : mem_sq_popular(['документы', 'пособие', 'кладбище', 'стоимость', 'морг'], 5);
     return '<div class="mguide" data-guide>'
-        . mem_search_box(['id' => 'mguide-q', 'label' => 'Поиск по статьям', 'placeholder' => 'Например: справка о смерти', 'popular' => $pop,
+        . mem_search_box(['id' => 'mguide-q', 'where' => 'g', 'label' => 'Поиск по статьям', 'placeholder' => 'Например: справка о смерти', 'popular' => $pop,
                           'none' => 'Ответа на такой вопрос пока нет на сайте. Позвоните или оставьте номер — подскажем.'])
         . '<script type="application/json" data-guide-idx>' . wp_json_encode($idx, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) . '</script>'
         . '<div class="mguide__grid">' . $cards . '</div></div>';

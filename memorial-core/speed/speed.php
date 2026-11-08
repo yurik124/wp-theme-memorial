@@ -85,7 +85,7 @@ function mem_cache_stats() {
 /* Любое сохранение в админке (страницы, товары, цены, настройки, каталог, работы) */
 add_action('init', function () {
     if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' || !is_user_logged_in() || !current_user_can('edit_posts')) return;
-    if (wp_doing_ajax() && in_array($_REQUEST['action'] ?? '', ['heartbeat', 'mem_cm_load', 'mem_sc_explain', 'mem_rewio_catalog'], true)) return;
+    if (wp_doing_ajax() && in_array($_REQUEST['action'] ?? '', ['heartbeat', 'mem_cm_load', 'mem_sc_explain', 'mem_rewio_catalog', 'mem_sq'], true)) return;
     mem_cache_purge(true);
 });
 /* Изменения без админки (расписание, импорт): записи, рубрики, меню, настройки */
@@ -100,7 +100,7 @@ foreach (['created_term', 'edited_term', 'delete_term', 'wp_update_nav_menu', 's
 }
 foreach (['updated_option', 'added_option', 'deleted_option'] as $h) {
     add_action($h, function ($name) {
-        if (in_array($name, ['mem_logos_queue', 'mem_rewio_status', 'mem_core_flush', 'mem_core_ver', 'cron', 'rewrite_rules'], true)) return;
+        if (in_array($name, ['mem_logos_queue', 'mem_rewio_status', 'mem_core_flush', 'mem_core_ver', 'mem_sq_stats', 'cron', 'rewrite_rules'], true)) return;   // служебное и статистика поиска — кэш не трогаем
         if (strpos($name, 'mem_') === 0 || strpos($name, 'theme_mods_') === 0 || strpos($name, 'widget_') === 0
             || in_array($name, ['blogname', 'blogdescription', 'site_icon', 'page_on_front', 'show_on_front', 'permalink_structure', 'sidebars_widgets', 'date_format', 'time_format', 'aioseo_options'], true)) {
             mem_cache_purge(true);
