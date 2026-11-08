@@ -79,7 +79,7 @@ add_filter('mem_admin_pages', function ($pages) {
 /** Фото по адресу из настроек: <img> с размерами и srcset (если картинка из медиатеки) */
 function mem_place_img($url, $alt, $sizes) {
     if (!$url) return '';
-    $id = attachment_url_to_postid($url);
+    $id = mem_attachment_id_by_url($url);
     if ($id) return wp_get_attachment_image($id, 'medium_large', false, ['alt' => $alt, 'loading' => 'lazy', 'decoding' => 'async', 'sizes' => $sizes]);
     return '<img src="' . esc_url($url) . '" alt="' . esc_attr($alt) . '" loading="lazy" decoding="async">';
 }

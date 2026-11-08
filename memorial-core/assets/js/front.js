@@ -383,8 +383,34 @@
     if (!pa !== !pb) return pa ? -1 : 1; // «по запросу» — в конце
     return dir === 'asc' ? pa - pb : pb - pa;
   });
+  // Каталог: в больших разделах сначала часть товаров, остальные — «Показать ещё»
+  d.querySelectorAll('.mcat__grid[data-more]').forEach(g => {
+    const step = +g.dataset.more;
+    let shown = step;
+    const btn = d.createElement('button');
+    btn.type = 'button'; btn.className = 'btn btn--line mcat__more';
+    g.after(btn);
+    const apply = () => {
+      const li = [...g.children];
+      li.forEach((x, i) => { x.hidden = i >= shown; });
+      const rest = li.length - shown;
+      btn.hidden = rest <= 0;
+      btn.textContent = 'Показать ещё ' + Math.min(step, rest) + (rest > step ? ' из ' + rest : '');
+    };
+    btn.addEventListener('click', () => {
+      const first = g.children[shown];
+      shown += step; apply();
+      first?.querySelector('a,button')?.focus({ preventScroll: true });   // для клавиатуры — на первый из новых
+    });
+    g.memMore = apply;
+    // ссылка на товар (#p-123) из скрытой части — показать до него
+    const h = location.hash.length > 1 && g.querySelector(location.hash.replace(/[^\w#-]/g, ''));
+    if (h) { const i = [...g.children].indexOf(h.closest('li')); if (i >= shown) shown = Math.ceil((i + 1) / step) * step; }
+    apply();
+    if (h) setTimeout(() => h.scrollIntoView({ block: 'center' }), 100);
+  });
   d.querySelectorAll('[data-mcat-sort]').forEach(sel => sel.addEventListener('change', () => {
-    sel.closest('[data-mcat]').querySelectorAll('.mcat__grid').forEach(g => sortBy([...g.children], sel.value).forEach(li => g.appendChild(li)));
+    sel.closest('[data-mcat]').querySelectorAll('.mcat__grid').forEach(g => { sortBy([...g.children], sel.value).forEach(li => g.appendChild(li)); g.memMore?.(); });
   }));
   d.querySelectorAll('[data-works]').forEach(box => {
     const list = box.querySelector('.works__list');

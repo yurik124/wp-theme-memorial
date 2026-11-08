@@ -51,7 +51,17 @@ function mem_img_sized($url, $size = 'medium_large') {
     static $memo = [];
     $k = $url . '|' . $size;
     if (isset($memo[$k])) return $memo[$k];
-    $id = attachment_url_to_postid(preg_replace('/-\d+x\d+(?=\.\w+$)/', '', $url));
+    $id = mem_attachment_id_by_url($url);
     $s = $id ? wp_get_attachment_image_url($id, $size) : '';
     return $memo[$k] = $s ?: $url;
+}
+
+/** Номер фото в медиатеке по адресу — по пути после /uploads/, поэтому находит и адреса другого домена (рабочего на тестовом) */
+function mem_attachment_id_by_url($url) {
+    if (!preg_match('~/uploads/(.+?\.(?:jpe?g|png|gif|webp|avif))(?:\?.*)?$~i', (string) $url, $m)) return 0;
+    $rel = preg_replace('/-\d+x\d+(?=\.\w+$)/', '', rawurldecode($m[1]));
+    global $wpdb;
+    $id = (int) $wpdb->get_var($wpdb->prepare("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value IN (%s, %s) LIMIT 1",
+        $rel, preg_replace('/(\.\w+)$/', '-scaled$1', $rel)));
+    return $id;
 }

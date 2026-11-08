@@ -6,7 +6,7 @@
  */
 defined('ABSPATH') || exit;
 
-define('MEM_VER', '3.3.4');
+define('MEM_VER', '3.3.5');
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -135,7 +135,8 @@ if (!defined('MEM_CORE_VER')) require get_template_directory() . '/inc/no-plugin
 /** Фото первого экрана: [для ПК — как загружено, для телефона — 1024 px из медиатеки (если есть)] */
 function memorial_hero_srcs($url) {
     $m = $url;
-    $id = attachment_url_to_postid(preg_replace('/-\d+x\d+(?=\.\w+$)/', '', $url));
+    $id = function_exists('mem_attachment_id_by_url') ? mem_attachment_id_by_url($url)   // находит и фото с адресом рабочего сайта
+        : attachment_url_to_postid(preg_replace('/-\d+x\d+(?=\.\w+$)/', '', $url));
     if ($id && ($l = wp_get_attachment_image_src($id, 'large')) && $l[1] < (wp_get_attachment_image_src($id, 'full')[1] ?? 0)) $m = $l[0];
     return [$url, $m];
 }

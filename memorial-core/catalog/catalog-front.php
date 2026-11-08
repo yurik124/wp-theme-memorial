@@ -124,7 +124,7 @@ function mem_catalog_card($p, $i) {
 }
 
 add_shortcode('mem_catalog', function ($atts) {
-    $a = shortcode_atts(['cat' => '', 'nav' => '1', 'sort' => '1', 'heading' => 'h2'], $atts, 'mem_catalog');
+    $a = shortcode_atts(['cat' => '', 'nav' => '1', 'sort' => '1', 'heading' => 'h2', 'pokazat' => ''], $atts, 'mem_catalog');
     $root = mem_resolve_cat($a['cat'], get_the_ID());
     if (!$root) {
         return current_user_can('edit_posts')
@@ -184,7 +184,10 @@ add_shortcode('mem_catalog', function ($atts) {
             echo '<div class="mcat__desc">' . do_shortcode(wp_kses_post(wpautop($t->description))) . '</div>';
             unset($GLOBALS['mem_cat_ctx']);
         }
-        echo '<ul class="mcat__grid mcat--' . esc_attr($ratio) . '" style="--cols:' . $cols . '">';
+        // много товаров — сначала 3 ряда, остальные по кнопке «Показать ещё» (pokazat="20" — своё число, pokazat="все" — все сразу)
+        $more = mem_sc_no($a['pokazat']) || in_array(mb_strtolower($a['pokazat']), ['все', 'all'], true) ? 0 : ((int) $a['pokazat'] ?: max(8, $cols * 3));
+        $more = $more && count($items) > $more + 2 ? $more : 0;
+        echo '<ul class="mcat__grid mcat--' . esc_attr($ratio) . '" style="--cols:' . $cols . '"' . ($more ? ' data-more="' . $more . '"' : '') . '>';
         $GLOBALS['mem_card_ratio'] = ['photo' => 4 / 3, 'portrait' => 3 / 4, 'tall' => 3 / 5, 'land' => 5 / 3, 'square' => 1][$ratio] ?? 4 / 3;
         foreach ($items as $i => $p) mem_catalog_card($p, $i);
         unset($GLOBALS['mem_card_ratio']);

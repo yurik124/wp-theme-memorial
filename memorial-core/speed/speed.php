@@ -26,6 +26,9 @@ function mem_speed_schema() {
             'hosts'    => ['type' => 'textarea', 'label' => 'Домены этого сайта (рабочий и тестовый), по одному в строке', 'rows' => 3,
                            'help' => 'Ссылки на них в тексте страниц тоже станут относительными. Текущий домен учитывается сам.'],
         ]],
+        'img' => ['type' => 'group', 'label' => 'Фото', 'render' => 'mem_img_group', 'fields' => [   // поле + кнопка пересжатия — speed/images.php
+            'q'   => mem_img_q_field(),
+        ]],
         'sc' => ['type' => 'group', 'label' => 'Кэш блоков', 'fields' => [
             'on' => ['type' => 'checkbox', 'label' => 'Запоминать готовые блоки из каталога (цены «от … ₽», число моделей, карточки разделов, каталог на странице) — помогает и тогда, когда кэш страниц не работает (вы вошли в админку, ссылка с параметрами)'],
         ]],
@@ -38,6 +41,7 @@ function mem_speed_defaults() {
         'static' => ['htaccess' => (int) !empty($old['speed']['cache']), 'automin' => 1],
         'pages'  => ['on' => 1, 'hours' => '12'],
         'sc'     => ['on' => 1],
+        'img'    => ['q' => '75'],
         'links'  => ['relative' => 1, 'hosts' => "memorialbel.ru\nmemorialbel.test-handyhost.ru"],
     ];
 }
