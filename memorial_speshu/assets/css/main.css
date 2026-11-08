@@ -549,12 +549,32 @@ a.svc__item:hover{box-shadow:var(--sh);transform:translateY(-3px);border-color:v
 .hero__cta{flex-wrap:wrap;gap:.75rem}
 @media (max-width:700px){.hero__cta .btn--light{white-space:normal;text-align:center}}
 
-/* Кнопки и ссылки на телефоне — не меньше 44 px по высоте (удобно попасть пальцем) */
-.btn,.maps__tab,.chip{min-height:44px}
-.footer .footer__tel,.footer .footer__mail{display:inline-flex;align-items:center;min-height:44px}
-.crumbs a{display:inline-block;padding:.7rem 0}
-.crumbs{margin-bottom:.4rem}
-@media (max-width:700px){.footer__copy a,.footer li>a{display:inline-flex;align-items:center;min-height:44px}}
+/* Удобно попасть пальцем: зона нажатия не меньше 44 px.
+   Кнопки и плашки — сами 44 px; ссылки в списках (подвал, контакты, крошки) — невидимое расширение зоны нажатия (::after),
+   поэтому вид и отступы не меняются. Ссылки на документы в подвале и ссылки в тексте — как есть. */
+.btn,.maps__tab,.cb__m{min-height:44px}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-height:44px;font-size:.95rem;line-height:1.2}
+.fnav a,.clist a,.crumbs a,.footer .footer__tel,.footer .footer__mail,.reviews__credit,.logo{position:relative}
+.fnav a::after,.clist a::after,.crumbs a::after,.footer .footer__tel::after,.footer .footer__mail::after,.reviews__credit::after{content:"";position:absolute;left:0;right:0;top:50%;min-height:44px;height:100%;transform:translateY(-50%)}
+
+/* Читаемость (рекомендации для сайтов, куда приходят в тяжёлый день: основной текст ≥ 18 px, подписи ≥ 16 px).
+   body — двойной класс, чтобы перекрыть стили блоков плагина, не меняя их. */
+body .about__text p,body .reviews__text,body .hero__lead,body .mguide__a,body .mcat__desc,body .is-style-note,body .mem-cta__sub{font-size:1.125rem;line-height:1.6}
+body .svc__body p,body .svc__more,body .stat span,body .clist__note,body .map__hours,body .kaddr__hours,body .kcard__hint,body .kontakty__legal p,
+body .kontakty__badge,body .hero__night,body .footer__addr small,body .footer__night,body .mcard__sub,body .mcat__meta,body .mcat__sortlbl,
+body .mguide__cnt,body .msearch__pop,body .msearch__pop span,body .msearch__tag,body .consent p,body .fnav a,body .footer__brand+p,body .content .mguide__in li,body .msearch__status,body .nf__links,body .maps__tab,body .cb__m{font-size:1rem}
+body .btn{font-size:1rem}
+body .chip,body .mcat__nav .chip,body .mfaq__toc .chip{font-size:1rem}
+body .chip small{font-size:.85em}
+body .crumbs{font-size:.9375rem}
+@media (max-width:480px){.fnav__title{letter-spacing:.06em;overflow-wrap:anywhere;hyphens:auto}}
 .logo{min-height:44px}
-.reviews__credit{display:inline-block;padding:.85rem 0;min-height:44px}
-li>a[href^="tel:"],li>a[href^="mailto:"],.clist a[href^="tel:"],.cb__m{display:inline-flex;align-items:center;min-height:44px}
+.mcat__arr,.msearch__tag{min-width:44px;min-height:44px}
+select{min-height:44px}
+.kcard a,.kaddr__route,.kmail a{position:relative}
+.kcard a::after,.kaddr__route::after,.kmail a::after{content:"";position:absolute;left:0;right:0;top:50%;min-height:44px;height:100%;transform:translateY(-50%)}
+body .chip,body .msearch__status,body .cat__more,body .pkg li,body .pkg summary,body .pkg__list li{font-size:1rem!important}
+.srow__arr{min-width:44px;min-height:44px}
+body .mfaq__more{font-size:1rem!important}
+.mguide__q a,.mguide__in a{position:relative}
+.mguide__q a::after,.mguide__in a::after{content:"";position:absolute;left:0;right:0;top:50%;min-height:44px;height:100%;transform:translateY(-50%)}

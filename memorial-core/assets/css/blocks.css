@@ -25,7 +25,7 @@ html.hdr-two .mcat__bar{top:calc(var(--top,0px) + var(--hh2,124px))}
 .mcat__arr--r{right:0}
 .is-stuck .has-l .mcat__arr--l,.is-stuck .has-r .mcat__arr--r{display:grid}
 .mcat__nav::-webkit-scrollbar{display:none}
-.mcat__nav .chip{white-space:nowrap;text-decoration:none!important;color:var(--ink,#1d1f22)!important;font:500 .9rem/1.2 inherit;cursor:pointer}
+.mcat__nav .chip{white-space:nowrap;text-decoration:none!important;color:var(--ink,#1d1f22)!important;font:500 .95rem/1.2 inherit;cursor:pointer}
 .mcat__nav .chip small{color:var(--mute,#6b6862);margin-left:.15rem}
 .mcat__nav .chip.is-on{background:var(--dark,#16181b);border-color:var(--dark,#16181b);color:#fff!important}
 .mcat__sort{margin-left:auto;flex:none}
@@ -58,7 +58,7 @@ a.mcard__link:hover{border-color:var(--gold,#b89b5e);box-shadow:0 10px 26px -14p
 .mcard__price .price--ask{font-size:.85rem}
 .mcard.is-hidden,.work.is-hidden{display:none}
 @media (max-width:900px){.mcat__grid{--cols:3!important}}
-@media (max-width:600px){.mcat__grid{--cols:2!important;gap:.6rem}.mcard__link{padding:.5rem .5rem 0}.mcard__name{font-size:1.05rem}.mcat__bar{gap:.5rem}.mcat__nav .chip{font-size:.85rem;padding:.4rem .7rem}.mcat__sort select{max-width:128px;padding:.45rem .4rem;font-size:.85rem}}
+@media (max-width:600px){.mcat__grid{--cols:2!important;gap:.6rem}.mcard__link{padding:.5rem .5rem 0}.mcard__name{font-size:1.05rem}.mcat__bar{gap:.5rem}.mcat__nav .chip{font-size:.95rem;padding:.4rem .9rem}.mcat__sort select{max-width:128px;padding:.45rem .4rem;font-size:.85rem}}
 /* ---------- Наши работы [mem_works] ---------- */
 .works{margin:1.5rem 0 2.5rem}
 .works__list{display:grid;gap:1.5rem}
@@ -123,7 +123,7 @@ a.mcard__link:hover{border-color:var(--gold,#b89b5e);box-shadow:0 10px 26px -14p
 .mfaq__search input:focus{outline:2px solid var(--gold,#b89b5e);outline-offset:1px}
 .content .mfaq__none{margin:.8rem 0 0;color:var(--mute,#6b6862)}
 .mfaq__toc{display:flex;flex-wrap:wrap;gap:.45rem;margin:1rem 0 .5rem}
-.mfaq__toc .chip{text-decoration:none!important;color:var(--ink,#1d1f22)!important;font-size:.9rem}
+.mfaq__toc .chip{text-decoration:none!important;color:var(--ink,#1d1f22)!important;font-size:.95rem}
 .mfaq__toc .chip small{color:var(--mute,#6b6862)}
 .mfaq__group{scroll-margin-top:90px;margin-top:2rem}
 .content .mfaq__title{margin:0 0 .8rem}
