@@ -36,7 +36,7 @@
     }, { passive: false });
 
     // потянуть мышью (кроме вкладок типов на «Типы и категории» — их там перетаскивают для порядка)
-    if (!el.classList.contains('mct__tabs')) {
+    if (!el.classList.contains('mct__tabs') && !el.classList.contains('mcm__phs')) {   // в ряду фото мышью меняют порядок фото
       let x0 = 0, s0 = 0, down = false, moved = false;
       el.addEventListener('dragstart', e => e.preventDefault());
       el.addEventListener('pointerdown', e => {

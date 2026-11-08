@@ -249,3 +249,19 @@
 .mcm__phrow.is-hidden img{opacity:.45}
 
 .mcm__table tr.is-sel + .mcm__phrow td{background:#f6f1e5}   /* строка с фото отмеченного товара — тоже подсвечена */
+
+/* Порядок фото: перетаскивание, ★ — сделать главным; у первого — подпись «главное» */
+.mcm__pht{cursor:grab}
+.mcm__pht.ui-sortable-helper{cursor:grabbing;box-shadow:0 6px 16px rgba(0,0,0,.25);border-radius:8px}
+.mcm__phph{flex:none;width:60px;height:60px;border:2px dashed #c3c4c7;border-radius:8px;visibility:visible!important}
+.mcm__pht.is-main img{outline:2px solid #b89b5e;outline-offset:1px}
+.mcm__phbadge{position:absolute;left:3px;bottom:3px;padding:0 4px;border-radius:4px;background:#b89b5e;color:#1d2327;font:600 9px/14px system-ui,sans-serif;pointer-events:none}
+.mcm__phmain{position:absolute;left:-6px;top:-6px;z-index:1;width:20px;height:20px;padding:0;border:0;border-radius:50%;background:#fff;color:#b89b5e;font-size:13px;line-height:20px;text-align:center;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.25);opacity:0;transition:opacity .15s}
+.mcm__pht:hover .mcm__phmain,.mcm__phmain:focus{opacity:1}
+@media (hover:none){.mcm__phmain{opacity:.9}}
+.mcm__phmain:hover{background:#b89b5e;color:#fff}
+.mcm__phs{padding-top:8px;padding-left:8px}
+
+/* Полоска между товарами (строка товара и его строка фото — одно целое) */
+.mcm__table tbody tr[data-id]:not(:first-child) td{border-top:2px solid #e2ddd2}
+.mcm__table tbody tr td{border-bottom:0}

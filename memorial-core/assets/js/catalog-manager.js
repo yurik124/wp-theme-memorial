@@ -56,7 +56,7 @@ jQuery(function ($) {
       <td class="mcm__cats"><button type="button" class="mcm__catbtn" data-act="cats">${catChips(p)}</button></td>
       <td class="mcm__more"><button type="button" class="mcm__dots" data-act="menu" aria-label="Действия">⋯</button></td>
     </tr>${(p.pids || []).length > 1 ? `
-    <tr class="mcm__phrow${p.status !== 'publish' ? ' is-hidden' : ''}" data-for="${p.id}"><td colspan="2"></td><td colspan="${D.fields.length + 5}"><div class="mcm__phs" aria-label="Остальные фото товара">${p.pids.slice(1).map((id, k) => `<span class="mcm__pht"><img src="${esc((p.pth || [])[k + 1] || '')}" alt=""><button type="button" class="mcm__phx" data-act="phdel" data-pid="${id}" title="Убрать это фото" aria-label="Убрать фото">×</button></span>`).join('')}</div></td></tr>` : ''}`;
+    <tr class="mcm__phrow${p.status !== 'publish' ? ' is-hidden' : ''}" data-for="${p.id}"><td colspan="2"></td><td colspan="${D.fields.length + 5}"><div class="mcm__phs" aria-label="Все фото товара — перетащите, чтобы поменять порядок">${p.pids.map((id, k) => `<span class="mcm__pht${k ? '' : ' is-main'}" data-pid="${id}" title="Перетащите, чтобы поменять порядок"><img src="${esc((p.pth || [])[k] || '')}" alt="" draggable="false">${k ? `<button type="button" class="mcm__phmain" data-act="phmain" data-pid="${id}" title="Сделать главным" aria-label="Сделать главным">★</button>` : '<b class="mcm__phbadge">главное</b>'}<button type="button" class="mcm__phx" data-act="phdel" data-pid="${id}" title="Убрать это фото" aria-label="Убрать фото">×</button></span>`).join('')}</div></td></tr>` : ''}`;
 
   const catName = p => { const c = p.cats.map(id => (D.cats.find(x => x.id === id) || {}).name).filter(Boolean)[0]; return c ? c.replace(/^(— )+/, '') : ''; };
   const visible = () => {
@@ -132,6 +132,7 @@ jQuery(function ($) {
         } });
     }
     root.classList.toggle('no-sort', !sortable);
+    photoSort();
   }
 
   const prod = id => D.products.find(p => p.id === +id);
@@ -249,6 +250,17 @@ jQuery(function ($) {
     const tr = this.closest('tr'), p = prod(tr.dataset.id || tr.dataset.for), pid = +this.dataset.pid;
     savePhotos(p, (p.pids && p.pids.length ? p.pids : [p.tid]).filter(x => x && x !== pid));
   });
+  // ★ — сделать фото главным (встаёт первым)
+  $(app).on('click', '[data-act="phmain"]', function () {
+    const tr = this.closest('tr'), p = prod(tr.dataset.for), pid = +this.dataset.pid;
+    savePhotos(p, [pid, ...p.pids.filter(x => x !== pid)]);
+  });
+  // порядок фото — перетаскиванием в строке фото; первое = главное
+  function photoSort() { $(app).find('.mcm__phs').each(function () {
+    const tr = this.closest('tr'), p = prod(tr.dataset.for);
+    $(this).sortable({ items: '> .mcm__pht', axis: 'x', tolerance: 'pointer', distance: 4, placeholder: 'mcm__phph', forcePlaceholderSize: true,
+      cancel: 'button', update: () => savePhotos(p, [...this.querySelectorAll('.mcm__pht')].map(x => +x.dataset.pid)) });
+  }); }
   $(app).on('click', '[data-act="photo"]', function () {
     const tr = this.closest('tr'), p = prod(tr.dataset.id);
     // несколько фото: отмечайте по порядку — первое станет главным, остальные листаются в карточке на сайте
