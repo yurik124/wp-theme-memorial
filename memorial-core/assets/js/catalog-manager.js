@@ -41,7 +41,7 @@ jQuery(function ($) {
     <tr data-id="${p.id}" class="${p.status !== 'publish' ? 'is-hidden' : ''}${sel.has(p.id) ? ' is-sel' : ''}">
       <td class="mcm__drag" title="Перетащите, чтобы поменять порядок">⋮⋮</td>
       <td class="mcm__chk"><input type="checkbox" class="mcm__sel" aria-label="Отметить"${sel.has(p.id) ? ' checked' : ''}></td>
-      <td class="mcm__ph"><div class="mcm__phw"><button type="button" class="mcm__photo" data-act="photo" title="Фото товара: нажмите, чтобы выбрать или добавить (можно несколько, первое — главное)">${p.thumb ? `<img src="${esc(p.thumb)}" alt="">` : '<span>+ фото</span>'}</button>${p.tid ? `<button type="button" class="mcm__phx" data-act="phdel" data-pid="${p.tid}" title="Убрать это фото" aria-label="Убрать главное фото">×</button>` : ''}</div>${(p.pids || []).length > 1 ? `<div class="mcm__phs">${p.pids.slice(1).map((id, k) => `<span class="mcm__pht"><img src="${esc((p.pth || [])[k + 1] || '')}" alt=""><button type="button" class="mcm__phx" data-act="phdel" data-pid="${id}" title="Убрать это фото" aria-label="Убрать фото">×</button></span>`).join('')}</div>` : ''}</td>
+      <td class="mcm__ph"><div class="mcm__phw"><button type="button" class="mcm__photo" data-act="photo" title="Фото товара: нажмите, чтобы выбрать или добавить (можно несколько, первое — главное)">${p.thumb ? `<img src="${esc(p.thumb)}" alt="">` : '<span>+ фото</span>'}</button>${p.tid ? `<button type="button" class="mcm__phx" data-act="phdel" data-pid="${p.tid}" title="Убрать это фото" aria-label="Убрать главное фото">×</button>` : ''}</div></td>
       <td class="mcm__name">
         <input type="text" data-f="title" value="${esc(p.title)}" placeholder="Название" aria-label="Название">
         <input type="text" data-f="sub" value="${esc(p.sub)}" placeholder="подпись (необязательно)" class="mcm__sub" aria-label="Подпись">
@@ -55,7 +55,8 @@ jQuery(function ($) {
       ${D.fields.map(f => `<td class="mcm__fld">${fieldInput(f, p)}</td>`).join('')}
       <td class="mcm__cats"><button type="button" class="mcm__catbtn" data-act="cats">${catChips(p)}</button></td>
       <td class="mcm__more"><button type="button" class="mcm__dots" data-act="menu" aria-label="Действия">⋯</button></td>
-    </tr>`;
+    </tr>${(p.pids || []).length > 1 ? `
+    <tr class="mcm__phrow${p.status !== 'publish' ? ' is-hidden' : ''}" data-for="${p.id}"><td colspan="2"></td><td colspan="${D.fields.length + 5}"><div class="mcm__phs" aria-label="Остальные фото товара">${p.pids.slice(1).map((id, k) => `<span class="mcm__pht"><img src="${esc((p.pth || [])[k + 1] || '')}" alt=""><button type="button" class="mcm__phx" data-act="phdel" data-pid="${id}" title="Убрать это фото" aria-label="Убрать фото">×</button></span>`).join('')}</div></td></tr>` : ''}`;
 
   const catName = p => { const c = p.cats.map(id => (D.cats.find(x => x.id === id) || {}).name).filter(Boolean)[0]; return c ? c.replace(/^(— )+/, '') : ''; };
   const visible = () => {
@@ -121,11 +122,12 @@ jQuery(function ($) {
     const sortable = !filterCat && !query && !sortKey;
     const tb = app.querySelector('tbody');
     if (tb && sortable) {
-      $(tb).sortable({ handle: '.mcm__drag', axis: 'y', helper: (e, tr) => { tr.children().each(function () { $(this).width($(this).width()); }); return tr; },
+      $(tb).sortable({ items: '> tr[data-id]', handle: '.mcm__drag', axis: 'y', helper: (e, tr) => { tr.children().each(function () { $(this).width($(this).width()); }); return tr; },
         update: () => {
-          const ids = [...tb.children].map(tr => +tr.dataset.id);
+          const ids = [...tb.querySelectorAll(':scope > tr[data-id]')].map(tr => +tr.dataset.id);
           D.products.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
           track(post('mem_cm_order', { ids }));
+          render();   // строки с фото — снова под своими товарами
         } });
     }
     root.classList.toggle('no-sort', !sortable);
@@ -159,7 +161,8 @@ jQuery(function ($) {
   $(app).on('keydown', 'tbody input[data-f]', function (e) {
     if (e.key !== 'Enter') return;
     e.preventDefault();
-    const tr = this.closest('tr').nextElementSibling;
+    let tr = this.closest('tr').nextElementSibling;
+    while (tr && !tr.dataset.id) tr = tr.nextElementSibling;   // строку с фото пропускаем
     const next = tr && tr.querySelector(`[data-f="${CSS.escape(this.dataset.f)}"]`);
     if (next) { next.focus(); next.select && next.select(); } else this.blur();
   });
@@ -242,7 +245,7 @@ jQuery(function ($) {
   });
   // × на миниатюре — убрать фото у товара (из медиатеки оно не удаляется). Убрали главное — главным станет следующее
   $(app).on('click', '[data-act="phdel"]', function () {
-    const p = prod(this.closest('tr').dataset.id), pid = +this.dataset.pid;
+    const tr = this.closest('tr'), p = prod(tr.dataset.id || tr.dataset.for), pid = +this.dataset.pid;
     savePhotos(p, (p.pids && p.pids.length ? p.pids : [p.tid]).filter(x => x && x !== pid));
   });
   $(app).on('click', '[data-act="photo"]', function () {
@@ -344,7 +347,7 @@ jQuery(function ($) {
   let lastIdx = null;
   $(app).on('click', '.mcm__sel', function (e) {
     const tr = this.closest('tr'), id = +tr.dataset.id;
-    const rows = [...app.querySelectorAll('tbody tr')], idx = rows.indexOf(tr);
+    const rows = [...app.querySelectorAll('tbody tr[data-id]')], idx = rows.indexOf(tr);
     if (e.shiftKey && lastIdx !== null) { // Shift — отметить диапазон
       const [a, b] = [Math.min(lastIdx, idx), Math.max(lastIdx, idx)];
       rows.slice(a, b + 1).forEach(r => { r.querySelector('.mcm__sel').checked = this.checked; this.checked ? sel.add(+r.dataset.id) : sel.delete(+r.dataset.id); r.classList.toggle('is-sel', this.checked); });
@@ -353,7 +356,7 @@ jQuery(function ($) {
   });
   $(app).on('change', '.mcm__selall', function () {
     visible().forEach(p => this.checked ? sel.add(p.id) : sel.delete(p.id));
-    app.querySelectorAll('tbody tr').forEach(tr => { tr.querySelector('.mcm__sel').checked = this.checked; tr.classList.toggle('is-sel', this.checked); });
+    app.querySelectorAll('tbody tr[data-id]').forEach(tr => { tr.querySelector('.mcm__sel').checked = this.checked; tr.classList.toggle('is-sel', this.checked); });
     bulkBar();
   });
   const bulk = (op, extra = {}) => track(post('mem_cm_bulk', Object.assign({ type: D.id, op, ids: [...sel] }, extra))).done(r => {

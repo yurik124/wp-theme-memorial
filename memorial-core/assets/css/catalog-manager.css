@@ -230,14 +230,20 @@
 .mcm__photo{position:relative}
 .mcm__phn{position:absolute;right:-4px;bottom:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#1d2327;color:#fff;font-size:11px;line-height:18px;text-align:center}
 
-/* Фото товара в таблице: главное + миниатюры остальных, × — убрать фото у товара */
-.mcm__ph{width:72px;vertical-align:top}
+/* Фото товара в таблице: главное + строка остальных фото под товаром (тот же размер), × — убрать фото у товара.
+   Много фото — строка листается вбок: стрелки по краям, колёсико, мышью (admin-scroll.js) */
+.mcm__ph{width:64px}
 .mcm__phw{position:relative;width:60px}
-.mcm__phx{position:absolute;top:-6px;right:-6px;width:20px;height:20px;padding:0;border:0;border-radius:50%;background:#1d2327;color:#fff;font-size:14px;line-height:20px;text-align:center;cursor:pointer;opacity:0;transition:opacity .15s}
+.mcm__phx{position:absolute;top:-6px;right:-6px;z-index:1;width:20px;height:20px;padding:0;border:0;border-radius:50%;background:#1d2327;color:#fff;font-size:14px;line-height:20px;text-align:center;cursor:pointer;opacity:0;transition:opacity .15s}
 .mcm__phw:hover .mcm__phx,.mcm__pht:hover .mcm__phx,.mcm__phx:focus{opacity:1}
 @media (hover:none){.mcm__phx{opacity:.85}}
 .mcm__phx:hover{background:#b32d2e}
-.mcm__phs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;width:64px}
-.mcm__pht{position:relative;width:28px;height:28px;border-radius:5px;overflow:visible}
-.mcm__pht img{width:28px;height:28px;object-fit:cover;border-radius:5px;display:block}
-.mcm__pht .mcm__phx{top:-5px;right:-5px;width:16px;height:16px;font-size:12px;line-height:16px}
+.mcm__table tr[data-id]:has(+ .mcm__phrow) td{border-bottom:0}
+.mcm__phrow td{padding-top:0!important}
+.mcm__phrow>td:last-child{max-width:0;width:100%}   /* ячейка не растягивает таблицу — длинный ряд фото листается внутри */
+.mcm__phrow .mhs{width:100%}
+.mcm__phs{display:flex;gap:8px;padding:6px 6px 4px 0}
+.mcm__pht{position:relative;flex:none;width:60px;height:60px}
+.mcm__pht img{width:60px;height:60px;object-fit:cover;border-radius:8px;display:block}
+.mcm__phrow .mhs__arr{top:calc(50% + 1px)}
+.mcm__phrow.is-hidden img{opacity:.45}

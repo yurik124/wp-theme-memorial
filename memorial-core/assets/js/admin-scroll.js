@@ -1,9 +1,9 @@
 /* Ряды вкладок и кнопок в админке каталога и работ: в одну строку, листаются влево-вправо
    стрелками, колёсиком/тачпадом, пальцем и мышью (потянуть). Как разделы на сайте. */
 (function () {
-  const SEL = '.mcm__tabs, .mcm__filters';
+  const SEL = '.mcm__tabs, .mcm__filters, .mcm__phs';
   const memory = {};                       // где был ряд до перерисовки — чтобы не прыгал в начало
-  const key = el => el.classList.contains('mcm__tabs') ? 'tabs' : 'filters';
+  const key = el => el.classList.contains('mcm__tabs') ? 'tabs' : el.classList.contains('mcm__phs') ? 'phs' : 'filters';
 
   function init(el) {
     if (el._mhs) return;
@@ -17,14 +17,14 @@
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'mhs__arr mhs__arr--' + s; b.tabIndex = -1;
       b.setAttribute('aria-label', s === 'l' ? 'Прокрутить влево' : 'Прокрутить вправо');
-      b.textContent = s === 'l' ? '‹' : '›';
+      b.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="' + (s === 'l' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7') + '" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';   // ровно по центру
       b.addEventListener('click', () => el.scrollBy({ left: (s === 'l' ? -1 : 1) * el.clientWidth * .7, behavior: 'smooth' }));
       box.appendChild(b);
     });
     const edges = () => {
       box.classList.toggle('has-l', el.scrollLeft > 4);
       box.classList.toggle('has-r', el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
-      memory[key(el)] = el.scrollLeft;
+      if (key(el) !== 'phs') memory[key(el)] = el.scrollLeft;   // у рядов фото — своё место у каждого товара
     };
     el.addEventListener('scroll', edges, { passive: true });
     addEventListener('resize', edges);
@@ -54,7 +54,7 @@
     }
 
     // после перерисовки — на прежнее место; выбранная кнопка должна быть видна
-    if (memory[key(el)]) el.scrollLeft = memory[key(el)];
+    if (key(el) !== 'phs' && memory[key(el)]) el.scrollLeft = memory[key(el)];
     const on = el.querySelector('.is-on');
     if (on) {
       const l = on.offsetLeft - el.offsetLeft, r = l + on.offsetWidth;
