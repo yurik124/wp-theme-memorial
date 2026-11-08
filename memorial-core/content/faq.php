@@ -70,7 +70,7 @@ add_shortcode('mem_faq', function ($atts) {
     if ($a['search'] !== '0') {
         echo mem_search_box(['id' => 'mfaq-q', 'label' => 'Поиск по вопросам', 'placeholder' => 'Например: документы',
             // «Часто ищут»: заданные в шорткоде слова, иначе — из статистики поиска (content/search-stats.php)
-            'popular' => trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : mem_sq_popular(['документы', 'стоимость', 'пособие', 'кремация', 'морг', 'памятник']),
+            'popular' => trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : (function_exists('mem_sq_popular') ? mem_sq_popular(['документы', 'стоимость', 'пособие', 'кремация', 'морг', 'памятник']) : ['документы', 'стоимость', 'пособие', 'кремация', 'морг', 'памятник']),
             'none' => 'Такого вопроса пока нет на сайте. Позвоните или оставьте номер — ответим.']);
     }
     if (count($groups) > 1) {

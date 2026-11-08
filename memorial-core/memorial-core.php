@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Memorial Core
  * Description: Функционал сайта «Мемориал»: каталог, цены, отзывы (Rewio, книга отзывов), «Наши работы», заявки, настройки «Мемориал», шорткоды, SEO, Метрика, кэш. Дизайн — в теме Memorial Modern.
- * Version: 1.9.0
+ * Version: 1.10.0
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * Author: Мемориал
@@ -27,7 +27,7 @@ if (get_template() === 'memorial_speshu' && $mem_theme_ver !== '' && version_com
 }
 unset($mem_theme_ver);
 
-define('MEM_CORE_VER', '1.9.0');
+define('MEM_CORE_VER', '1.10.0');
 define('MEM_CORE_FILE', __FILE__);
 define('MEM_CORE_DIR', __DIR__);                          // без «/» в конце: MEM_CORE_DIR . '/assets/…'
 define('MEM_CORE_URL', untrailingslashit(plugins_url('', __FILE__)));
@@ -50,6 +50,48 @@ function mem_core_part($name, $args = []) {
     $f = locate_template('template-parts/' . $name . '.php');
     if (!$f) $f = mem_core_path('templates/' . $name . '.php');
     if (is_file($f)) load_template($f, false, $args);
+}
+
+/**
+ * Отключаемые функции: ключ => [название, описание, файлы, шорткоды (на страницах вместо них — пусто), зависит от].
+ * Остальное (каталог, цены, контакты, документы, SEO-основа, скорость) — основа сайта, выключить нельзя.
+ */
+function mem_core_optional() {
+    return [
+        'callback'  => ['Заявка «Перезвоните мне»', 'Окно с формой обратного звонка и уведомления о заявках. Выключено — кнопки «Перезвоните мне» просто звонят по телефону.',
+                        ['leads/callback.php'], []],
+        'metrika'   => ['Яндекс Метрика и уведомление о cookie', 'Счётчик, цели, очистка адреса от UTM-меток, плашка о cookie.',
+                        ['seo/metrika.php'], []],
+        'seoplug'   => ['Совместимость с SEO-плагинами', 'Шорткоды [mem_…] в заголовках и описаниях AIOSEO, Yoast, Rank Math, SEOPress.',
+                        ['seo/seo-plugins.php'], []],
+        'rewio'     => ['Отзывы с Яндекс Карт (Rewio)', 'Загрузка отзывов по расписанию, блок отзывов [mem_rewio].',
+                        ['reviews/rewio.php'], ['mem_rewio']],
+        'book'      => ['Книга отзывов', 'Отзывы, оставленные на сайте, [mem_bookreviews].',
+                        ['reviews/bookreviews.php'], ['mem_bookreviews']],
+        'works'     => ['«Наши работы»', 'Раздел работ с фото и ценами, менеджер работ, блоки [mem_works].',
+                        ['works/works.php', 'works/works-manager.php'], ['mem_works']],
+        'photos'    => ['Фотогалерея: фото товаров и работ', 'Блоки [mem_cat_photos] и [mem_works vid="фото"] — фото подтягиваются сами.',
+                        ['pages/photos.php'], ['mem_cat_photos']],
+        'faq'       => ['Вопрос–ответ', 'Все вопросы сайта на одной странице с поиском [mem_faq].',
+                        ['content/faq.php'], ['mem_faq']],
+        'guide'     => ['Полезно знать', 'Статьи-карточки с поиском [mem_guide], поле «Полезно знать» у страниц.',
+                        ['content/guide.php'], ['mem_guide']],
+        'sq'        => ['Статистика поиска', '«Что ищут на сайте» и автоматические «Часто ищут».',
+                        ['content/search-stats.php'], []],
+        'places'    => ['Залы для поминок и кладбища', 'Блоки [mem_restaurants] и [mem_cemeteries], их настройки.',
+                        ['places/places.php'], ['mem_restaurants', 'mem_cemeteries']],
+        'patterns'  => ['Готовые блоки в редакторе', 'Шаблоны блоков «Мемориал» во вставке блоков редактора.',
+                        ['content/patterns.php'], []],
+    ];
+}
+
+/** Выключенные файлы: ['файл' => ключ функции] */
+function mem_core_disabled_files() {
+    $on = get_option('mem_modules');
+    if (!is_array($on)) return [];
+    $off = [];
+    foreach (mem_core_optional() as $k => $m) if (isset($on[$k]) && !$on[$k]) foreach ($m[2] as $f) $off[$f] = $k;
+    return $off;
 }
 
 /*
@@ -119,8 +161,11 @@ $mem_core_modules = [
     // стили и скрипты блоков на сайте
     'core/assets.php',
 ];
-foreach ($mem_core_modules as $m) require MEM_CORE_DIR . '/' . $m;
-unset($mem_core_modules, $m);
+// функции, которые можно выключить в «Мемориал → Функции» (core/modules.php): выключенные файлы не подключаются
+$mem_core_off = mem_core_disabled_files();
+foreach ($mem_core_modules as $m) if (!isset($mem_core_off[$m])) require MEM_CORE_DIR . '/' . $m;
+require MEM_CORE_DIR . '/core/modules.php';
+unset($mem_core_modules, $mem_core_off, $m);
 
 /* Иконки рисует тема (mem_icon). Тема другая и своих иконок нет — запасной набор плагина */
 add_action('after_setup_theme', function () {

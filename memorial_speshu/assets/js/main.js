@@ -161,7 +161,10 @@
   // Любая ссылка/кнопка с data-callback открывает окно
   d.addEventListener('click', e => {
     const b = e.target.closest('[data-callback]');
-    if (b) { e.preventDefault(); openCallback('', place(b)); }
+    if (!b) return;
+    e.preventDefault();
+    if (dlg) openCallback('', place(b));
+    else { const t = d.querySelector('a[href^="tel:"]'); if (t) location.href = t.href; }   // заявки выключены в плагине — кнопка звонит
   });
 
   /* ---------- Попытка открыть приложение MAX ---------- */

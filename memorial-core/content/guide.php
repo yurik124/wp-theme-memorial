@@ -126,7 +126,7 @@ add_shortcode('mem_guide', function ($atts) {
             }
         }
     }
-    $pop = trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : mem_sq_popular(['документы', 'пособие', 'кладбище', 'стоимость', 'морг'], 5);
+    $pop = trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : (function_exists('mem_sq_popular') ? mem_sq_popular(['документы', 'пособие', 'кладбище', 'стоимость', 'морг'], 5) : ['документы', 'пособие', 'кладбище', 'стоимость', 'морг']);
     return '<div class="mguide" data-guide>'
         . mem_search_box(['id' => 'mguide-q', 'where' => 'g', 'label' => 'Поиск по статьям', 'placeholder' => 'Например: справка о смерти', 'popular' => $pop,
                           'none' => 'Ответа на такой вопрос пока нет на сайте. Позвоните или оставьте номер — подскажем.'])

@@ -82,7 +82,7 @@ function mem_review_rating_html($s) {
     $r = mem_review_rating($s);
     if ($r <= 0) return '';
     $n = (int) preg_replace('/\D/', '', (string) ($s['count'] ?? ''));
-    return '<span class="mrev__rate"><b>' . esc_html(number_format(min(5, $r), 1, ',', '')) . '</b>' . mem_rewio_stars(min(5, $r))
+    return '<span class="mrev__rate"><b>' . esc_html(number_format(min(5, $r), 1, ',', '')) . '</b>' . (function_exists('mem_rewio_stars') ? mem_rewio_stars(min(5, $r)) : '')
         . ($n ? '<small>' . $n . ' ' . esc_html(mem_word($n, 'отзыв', 'отзыва', 'отзывов')) . '</small>' : '') . '</span>';
 }
 

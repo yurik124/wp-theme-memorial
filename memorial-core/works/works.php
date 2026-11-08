@@ -155,7 +155,7 @@ add_shortcode('mem_works', function ($atts) {
     $a = shortcode_atts(['type' => '', 'limit' => -1, 'sort' => '1', 'nav' => '1', 'vid' => '', 'chislo' => '', 'poryadok' => '',
                          'raboty' => '', 'razmer' => 'да', 'cena' => 'да'], $atts, 'mem_works');
     if (in_array(mb_strtolower(trim($a['vid'])), ['карточки', 'cards'], true)) return mem_works_cards($a);
-    if (in_array(mb_strtolower(trim($a['vid'])), ['фото', 'photos'], true)) return mem_works_photos($a);
+    if (in_array(mb_strtolower(trim($a['vid'])), ['фото', 'photos'], true)) return function_exists('mem_works_photos') ? mem_works_photos($a) : '';
     $a['nav'] = mem_sc_no($a['nav']) ? '0' : '1';
     $a['sort'] = mem_sc_no($a['sort']) ? '0' : '1';
     $args = ['post_type' => 'mem_work', 'post_status' => 'publish', 'posts_per_page' => (int) $a['limit'] ?: -1,
