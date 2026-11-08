@@ -64,6 +64,15 @@ function mem_font_options() {
     return array_map(fn($f) => $f[0], mem_all_fonts());
 }
 
+/** Варианты размера текста: ['100' => '100 % — как задумано', …] */
+function mem_text_scales($min = 85, $max = 130) {
+    $o = [];
+    for ($v = $min; $v <= $max; $v += 5) {
+        $o[(string) $v] = $v . ' %' . ($v === 100 ? ' — как задумано' : ($v < 100 ? ' — мельче' : ' — крупнее'));
+    }
+    return $o;
+}
+
 function mem_design_schema() {
     $colors = [];
     foreach (mem_color_keys() as $k => [$label, $def]) $colors[$k] = ['type' => 'color', 'label' => $label, 'scheme' => $k];
@@ -85,6 +94,11 @@ function mem_design_schema() {
                 'i'     => ['type' => 'file', 'label' => 'Файл: курсив (необязательно)'],
                 'serif' => ['type' => 'checkbox', 'label' => 'Шрифт с засечками (для запасного варианта, пока файл загружается)'],
             ]],
+        ]],
+        'text' => ['type' => 'group', 'label' => 'Размер текста',
+            'help' => 'Увеличивает или уменьшает весь текст сайта: меню, заголовки, кнопки, цены, подписи. Отступы растут вместе с текстом, вёрстка подстраивается сама: меню при нехватке места уходит во вторую строку или в «бургер», длинные слова переносятся. На телефоне текст не становится мельче задуманного (меньше 100 % — только на компьютере), чтобы оставаться читаемым. Посетитель видит результат сразу после сохранения.', 'fields' => [
+            'scale' => ['type' => 'select', 'label' => 'Весь текст сайта', 'options' => mem_text_scales()],
+            'head'  => ['type' => 'select', 'label' => 'Заголовки — дополнительно (к размеру всего текста)', 'options' => mem_text_scales(80, 130)],
         ]],
         'img' => ['type' => 'group', 'label' => 'Изображения', 'fields' => [
             'webp' => ['type' => 'checkbox', 'label' => 'Сохранять уменьшенные копии новых фото в WebP (весят в 1,5–3 раза меньше)'],
@@ -111,6 +125,7 @@ function mem_design_defaults() {
     return [
         'colors' => ['preset' => mem_default_preset()] + array_fill_keys(array_keys(mem_color_keys()), ''),
         'fonts'  => ['head' => 'cormorant', 'body' => 'system', 'custom' => []],
+        'text'   => ['scale' => '100', 'head' => '100'],
         'img'    => ['webp' => (int) get_option('mem_webp', 0)],
     ];
 }
@@ -175,6 +190,12 @@ function mem_design_css() {
     $body = $d['fonts']['body'] ?? 'system';
     if ($head !== 'cormorant' && isset($all[$head])) $vars[] = '--serif:' . $all[$head][1];
     if ($body !== 'system' && isset($all[$body])) $vars[] = '--sans:' . $all[$body][1];
+
+    // Размер текста: общий масштаб (root font-size в main.css берёт --fs) и заголовки
+    $sc = max(70, min(150, (int) ($d['text']['scale'] ?? 100) ?: 100));
+    $hd = max(70, min(150, (int) ($d['text']['head'] ?? 100) ?: 100));
+    if ($sc !== 100) $vars[] = '--fs:' . rtrim(rtrim(number_format($sc / 100, 2, '.', ''), '0'), '.');
+    if ($hd !== 100) $vars[] = '--fs-h:' . rtrim(rtrim(number_format($hd / 100, 2, '.', ''), '0'), '.');
 
     // Цвета: схема, поверх — свои. В main.css прописана схема по умолчанию — выводим только отличия.
     $presets = mem_color_presets();

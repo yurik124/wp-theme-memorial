@@ -49,11 +49,32 @@ jQuery(function ($) {
     f.open();
   });
 
+  // Карточки настроек: сворачиваются щелчком по заголовку; что свёрнуто — запоминается в этом браузере
+  const CK = 'mem_admin_collapsed';
+  const getC = () => { try { return JSON.parse(localStorage.getItem(CK) || '[]'); } catch (x) { return []; } };
+  const setC = list => { try { localStorage.setItem(CK, JSON.stringify(list)); } catch (x) {} };
+  const fold = (card, closed, save = true) => {
+    card.classList.toggle('is-collapsed', closed);
+    card.querySelector('.mem-card__toggle')?.setAttribute('aria-expanded', String(!closed));
+    if (!save) return;
+    const key = card.dataset.card, list = getC().filter(k => k !== key);
+    if (closed) list.push(key);
+    setC(list);
+  };
+  const saved = getC();
+  document.querySelectorAll('.mem-card[data-card]').forEach(card => { if (saved.includes(card.dataset.card)) fold(card, true, false); });
+  document.addEventListener('click', e => {
+    const t = e.target.closest('.mem-card__toggle');
+    if (t) { const card = t.closest('.mem-card'); fold(card, !card.classList.contains('is-collapsed')); return; }
+    const all = e.target.closest('[data-cards]');
+    if (all) document.querySelectorAll('.mem-card[data-card]').forEach(c => fold(c, all.dataset.cards === 'collapse'));
+  });
+
   // Порядок блоков главной: строку тянут мышью или пальцем (за любое место), либо кнопками ↑ ↓.
   // Без jQuery UI — работает, даже если библиотека не загрузилась.
   document.querySelectorAll('.mem-order').forEach(list => {
     const note = list.parentElement.querySelector('.mem-order__note');
-    const changed = () => { if (note) note.hidden = false; list.classList.add('is-changed'); };
+    const changed = () => { if (note) note.hidden = false; list.classList.add('is-changed'); list.dispatchEvent(new Event('mem:changed')); };
     let drag = null, moved = false;
     list.addEventListener('pointerdown', e => {
       const li = e.target.closest('li');
@@ -75,6 +96,10 @@ jQuery(function ($) {
     list.addEventListener('pointerup', end);
     list.addEventListener('pointercancel', end);
     list.addEventListener('lostpointercapture', end);
+    // карточки блоков ниже идут в том же порядке, что и список
+    const cards = document.querySelector('.mem-blocks');
+    const syncCards = () => { if (!cards) return; [...list.querySelectorAll('input')].forEach(i => { const c = cards.querySelector(':scope > [data-block="' + i.value + '"]'); if (c) cards.appendChild(c); }); };
+    list.addEventListener('mem:changed', syncCards);
     list.addEventListener('click', e => {
       const b = e.target.closest('[data-mv]');
       if (!b) return;
@@ -84,6 +109,50 @@ jQuery(function ($) {
       else return;
       b.focus();
       changed();
+    });
+  });
+
+  // Карточки блоков главной: тянуть за ⋮⋮ или кнопками ↑ ↓ в заголовке; список «Порядок блоков» меняется вместе с ними
+  document.querySelectorAll('.mem-blocks').forEach(box => {
+    const list = document.querySelector('.mem-order');
+    const syncList = () => {
+      if (!list) return;
+      [...box.children].forEach(c => { const i = list.querySelector('input[value="' + c.dataset.block + '"]'); if (i) list.appendChild(i.closest('li')); });
+      const note = list.parentElement.querySelector('.mem-order__note');
+      if (note) note.hidden = false;
+      document.querySelectorAll('.mem-blocks__note').forEach(n => n.hidden = false);
+    };
+    let drag = null, moved = false;
+    box.addEventListener('pointerdown', e => {
+      const h = e.target.closest('.mem-card__drag');
+      if (!h || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      e.preventDefault();
+      drag = h.closest('.mem-card'); moved = false;
+      drag.classList.add('is-drag');
+      try { box.setPointerCapture(e.pointerId); } catch (x) {}
+    });
+    box.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const over = [...box.children].find(c => { if (c === drag) return false; const r = c.getBoundingClientRect(); return e.clientY >= r.top && e.clientY <= r.bottom; });
+      if (!over) return;
+      const r = over.getBoundingClientRect();
+      if (e.clientY < r.top + r.height / 2) { if (over.previousElementSibling !== drag) { over.before(drag); moved = true; } }
+      else if (over.nextElementSibling !== drag) { over.after(drag); moved = true; }
+    });
+    const end = () => { if (!drag) return; drag.classList.remove('is-drag'); drag = null; if (moved) syncList(); };
+    box.addEventListener('pointerup', end);
+    box.addEventListener('pointercancel', end);
+    box.addEventListener('lostpointercapture', end);
+    box.addEventListener('click', e => {
+      const b = e.target.closest('[data-cmv]');
+      if (!b) return;
+      const c = b.closest('.mem-card'), prev = c.previousElementSibling, next = c.nextElementSibling;
+      if (b.dataset.cmv === '-1' && prev) prev.before(c);
+      else if (b.dataset.cmv === '1' && next) next.after(c);
+      else return;
+      b.focus();
+      c.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      syncList();
     });
   });
 

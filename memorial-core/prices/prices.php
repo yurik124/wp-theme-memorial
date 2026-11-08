@@ -17,7 +17,7 @@ function mem_prices_schema() {
             'btn'   => ['type' => 'text', 'label' => 'Текст кнопки'],
             'items' => ['type' => 'repeater', 'label' => 'Пакеты', 'add' => 'Добавить пакет', 'collapse' => 'name', 'fields' => [
                 'name'     => ['type' => 'text', 'label' => 'Название пакета'],
-                'featured' => ['type' => 'checkbox', 'label' => 'Выделить (тёмная карточка с надписью)'],
+                'featured' => ['type' => 'checkbox', 'label' => 'Выделить (рамка акцентом и надпись)'],
                 'rows'     => ['type' => 'repeater', 'label' => 'Состав пакета — итог считается сам. «На карточке» — 3–5 главных позиций, видны без раскрытия списка', 'add' => 'Добавить позицию', 'inline' => true, 'fields' => [
                     'name'  => ['type' => 'text', 'label' => 'Позиция'],
                     'price' => ['type' => 'number', 'label' => 'Цена, ₽'],
@@ -28,11 +28,14 @@ function mem_prices_schema() {
         'cremation' => ['type' => 'group', 'label' => 'Пакет кремации', 'help' => 'Таблица на странице кремации — шорткод [mem_cremation]. Итог считается сам; на других страницах его выводит [mem_price id="kremaciya"].', 'fields' => [
             'head_l' => ['type' => 'text', 'label' => 'Заголовок левой колонки'],
             'head_r' => ['type' => 'text', 'label' => 'Заголовок правой колонки'],
-            'rows'   => ['type' => 'repeater', 'label' => 'Что входит', 'add' => 'Добавить позицию', 'inline' => true, 'fields' => [
+            'rows'   => ['type' => 'repeater', 'label' => 'Что входит. «На карточке» — позиции, видные на карточке кремации без раскрытия списка', 'add' => 'Добавить позицию', 'inline' => true, 'fields' => [
                 'name'  => ['type' => 'text', 'label' => 'Позиция'],
                 'price' => ['type' => 'number', 'label' => 'Цена, ₽'],
+                'key'   => ['type' => 'checkbox', 'label' => 'На карточке'],
             ]],
             'total' => ['type' => 'text', 'label' => 'Подпись итоговой строки'],
+            'card'  => ['type' => 'checkbox', 'label' => 'Карточка «Кремация» рядом с пакетами похорон на странице «Цены» (там, где стоит [mem_packages]; на других страницах — [mem_packages cremation="1"])'],
+            'card_title' => ['type' => 'text', 'label' => 'Название карточки', 'placeholder' => 'Кремация'],
         ]],
         'other' => ['type' => 'group', 'label' => 'Отдельные цены', 'help' => 'Цены, которые упоминаются в текстах страниц. В текст вставляется шорткод с кодом цены, например [mem_price id="lenta"]. Цену можно писать числом (500), диапазоном (200–300) или словами (бесплатно) — знак ₽ к числам тема добавит сама.', 'fields' => [
             'items' => ['type' => 'repeater', 'label' => 'Цены', 'add' => 'Добавить цену', 'inline' => true, 'fields' => [
@@ -65,6 +68,7 @@ function mem_prices_defaults() {
                 ['name' => 'Выдача праха в день кремирования', 'price' => 5000],
             ],
             'total' => 'Итого с доставкой до крематория',
+            'card' => 1, 'card_title' => '',
         ],
         'other' => ['items' => [
             ['name' => 'Надпись на ленту', 'price' => '200–300', 'code' => 'lenta'],

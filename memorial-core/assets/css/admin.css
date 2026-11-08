@@ -82,3 +82,18 @@ details.rep__row>.rep__fields{padding:12px 14px 2px;border-top:1px solid #dcdcde
 .mem-order__btns button:hover{color:#135e96}
 .mem-order__save{display:flex;align-items:center;gap:10px;margin:10px 0 0}
 .mem-order__note{color:#996800;font-weight:600}
+
+/* Карточки настроек: сворачиваются по заголовку; карточки блоков главной перетаскиваются за ⋮⋮ */
+.mem-cards__tools{margin:4px 0 10px}
+.mem-card__head{display:flex;align-items:center;gap:8px}
+.mem-card__toggle{flex:1;display:flex;align-items:center;gap:8px;margin:0;padding:0;border:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.mem-card__toggle::after{content:"";width:7px;height:7px;margin-left:auto;border:solid #8c8f94;border-width:0 2px 2px 0;transform:rotate(45deg);transition:transform .15s}
+.mem-card.is-collapsed .mem-card__toggle::after{transform:rotate(-45deg)}
+.mem-card__toggle:hover{color:#2271b1}
+.mem-card.is-collapsed .mem-card__body{display:none}
+.mem-card.is-collapsed .mem-card__head{margin-bottom:0}
+.mem-card__drag{cursor:grab;color:#8c8f94;font-size:16px;letter-spacing:-3px;padding:4px 6px;user-select:none;touch-action:none;border-radius:4px}
+.mem-card__drag:hover{background:#f0f0f1;color:#2271b1}
+.mem-card__mv{display:flex;gap:2px}
+.mem-card__mv button{font-size:16px;padding:0 5px;text-decoration:none}
+.mem-blocks>.mem-card.is-drag{opacity:.8;box-shadow:0 8px 24px rgba(0,0,0,.18);outline:2px solid #2271b1;position:relative;z-index:5}

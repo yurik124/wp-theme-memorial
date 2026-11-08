@@ -88,7 +88,7 @@ function mem_home_schema() {
     $eyebrow = ['type' => 'text', 'label' => 'Надзаголовок (мелкие буквы над заголовком)'];
     return [
         'layout' => ['type' => 'order', 'label' => 'Порядок блоков на главной',
-            'help' => 'Перетащите строку мышью или пальцем либо нажмите ↑ ↓, затем «Сохранить порядок». Первый экран всегда наверху. Блоки с пометкой «скрыт» на сайте не видны — включите «Показывать этот блок» в их настройках ниже.',
+            'help' => 'Перетащите строку (или карточку блока ниже за ⋮⋮) мышью или пальцем либо нажмите ↑ ↓, затем «Сохранить порядок». Первый экран всегда наверху. Блоки с пометкой «скрыт» на сайте не видны — включите «Показывать этот блок» в их настройках ниже.',
             'options' => mem_home_blocks()],
         'hero' => ['type' => 'group', 'label' => 'Первый экран', 'fields' => [
             'eyebrow'  => $eyebrow,
@@ -633,15 +633,41 @@ function mem_admin_render($opt) {
       <?php settings_errors(); do_action('mem_admin_after_intro', $opt); ?>
       <form method="post" action="options.php">
         <?php settings_fields($opt);
-        foreach (call_user_func($p['schema']) as $k => $f) {
+        $schema = call_user_func($p['schema']);
+        // «Главная страница»: карточки блоков идут в порядке блоков на сайте, их можно перетаскивать (порядок сохраняется в «layout»)
+        $movable = [];
+        if ($opt === 'mem_home' && function_exists('mem_home_blocks')) {
+            $all = array_values(array_intersect(array_keys(mem_home_blocks()), array_keys($schema)));
+            $movable = array_values(array_unique(array_merge(array_intersect((array) ($val['layout'] ?? []), $all), $all)));
+        }
+        $card = function ($k, $f, $move) use ($opt, $val) {
             $title = $f['label'];
             if ($f['type'] !== 'group') $f['label'] = '';
-            echo '<section class="mem-card' . (!empty($f['class']) ? ' ' . esc_attr($f['class']) : '') . '"><h2>' . esc_html($title) . '</h2>';
+            echo '<section class="mem-card' . (!empty($f['class']) ? ' ' . esc_attr($f['class']) : '') . '" data-card="' . esc_attr($opt . '.' . $k) . '"' . ($move ? ' data-block="' . esc_attr($k) . '"' : '') . '>';
+            echo '<h2 class="mem-card__head">';
+            if ($move) echo '<span class="mem-card__drag" title="Перетащите, чтобы поменять блок местами на главной" aria-hidden="true">⋮⋮</span>';
+            echo '<button type="button" class="mem-card__toggle" aria-expanded="true">' . esc_html($title) . '</button>';
+            if ($move) echo '<span class="mem-card__mv"><button type="button" class="button-link" data-cmv="-1" aria-label="Блок выше">↑</button><button type="button" class="button-link" data-cmv="1" aria-label="Блок ниже">↓</button></span>';
+            echo '</h2><div class="mem-card__body">';
             if (!empty($f['help']) && $f['type'] === 'group') echo '<p class="description">' . esc_html($f['help']) . '</p>';
             // группа со своим видом (например, выбор филиалов кнопками) — рисует себя сама, сохраняется по полям схемы
             if (!empty($f['render'])) call_user_func($f['render'], $opt . '[' . $k . ']', $val[$k] ?? null);
             else mem_field($opt . '[' . $k . ']', $f, $val[$k] ?? null, 1, true);
-            echo '</section>';
+            echo '</div></section>';
+        };
+        echo '<p class="mem-cards__tools"><button type="button" class="button" data-cards="collapse">Свернуть все</button> <button type="button" class="button" data-cards="expand">Развернуть все</button></p>';
+        $printed = false;
+        foreach ($schema as $k => $f) {
+            if (in_array($k, $movable, true)) {
+                if (!$printed) {
+                    echo '<div class="mem-blocks">';
+                    foreach ($movable as $mk) $card($mk, $schema[$mk], true);
+                    echo '</div>';
+                    $printed = true;
+                }
+                continue;
+            }
+            $card($k, $f, false);
         }
         ?>
         <div class="mem-admin__bar">

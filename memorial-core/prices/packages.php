@@ -45,8 +45,41 @@ function mem_packages_html() {
     <?php
 }
 
-add_shortcode('mem_packages', function () {
+/** Карточка «Кремация» в том же виде, что пакеты похорон (данные — «Мемориал → Цены → Пакет кремации») */
+function mem_cremation_card_html() {
+    $c = mem_prices('cremation');
+    $rows = array_values(array_filter((array) ($c['rows'] ?? []), fn($r) => trim($r['name'] ?? '') !== ''));
+    if (!$rows) return '';
+    $total = mem_cremation_total();
+    $keys = array_filter($rows, fn($r) => !empty($r['key']));
+    if (!$keys) $keys = count($rows) <= 5 ? $rows : array_slice($rows, 0, 4);
+    $mark = function_exists('mem_laurel') ? mem_laurel('leaf') : mem_icon('check');
+    $tel = mem_tel();
+    $page = function_exists('mem_guess_page') ? (int) mem_guess_page(['ritualnye-uslugi/kremacziya', 'kremacziya', 'kremaciya', 'kremaciya-v-belgorode']) : 0;
+    $page = $page && get_post_status($page) === 'publish' && $page !== get_the_ID() ? get_permalink($page) : '';
+    $btn = mem_prices('packages')['btn'] ?? '';
+    $h = '<article class="pkg pkg--crem reveal"><h3>' . esc_html(trim($c['card_title'] ?? '') ?: 'Кремация') . '</h3>';
+    if ($total) $h .= '<p class="pkg__total">' . esc_html(mem_rub($total)) . '</p>';
+    if (function_exists('mem_laurel')) $h .= '<span class="pkg__div" aria-hidden="true">' . mem_laurel('divider') . '</span>';
+    $h .= '<ul class="pkg__key">';
+    foreach ($keys as $r) $h .= '<li>' . $mark . '<span>' . esc_html($r['name']) . '</span></li>';
+    $h .= '</ul><details class="pkg__list"><summary>' . 'Весь состав и цены' . ' (' . count($rows) . ')</summary><ul>';
+    foreach ($rows as $r) $h .= '<li><span>' . esc_html($r['name']) . '</span>' . (!empty($r['price']) ? '<b>' . esc_html(mem_rub((int) $r['price'])) . '</b>' : '') . '</li>';
+    $h .= '</ul></details>';
+    if (!empty($c['total'])) $h .= '<p class="pkg__note">' . esc_html($c['total']) . '</p>';
+    if ($page) $h .= '<a class="link-more pkg__more" href="' . esc_url($page) . '">Подробнее о кремации <span aria-hidden="true">→</span></a>';
+    if ($tel) $h .= '<a class="btn btn--line" href="tel:' . esc_attr($tel) . '">' . esc_html(mem_t($btn ?: 'Заказать')) . '</a>';
+    return $h . '</article>';
+}
+
+add_shortcode('mem_packages', function ($atts = []) {
+    $a = shortcode_atts(['cremation' => ''], $atts, 'mem_packages');
     ob_start();
     mem_packages_html();
-    return '<div class="mem-pkgs">' . ob_get_clean() . '</div>';
+    $html = ob_get_clean();
+    // карточка кремации: на странице «Цены» (если включено в настройках) или по cremation="1"; cremation="0" — никогда
+    $slug = (string) get_post_field('post_name', get_the_ID());
+    $crem = $a['cremation'] === '1' || ($a['cremation'] === '' && !empty(mem_prices('cremation')['card']) && in_array($slug, ['ceny', 'tseny', 'prices'], true));
+    if ($crem && $html && ($card = mem_cremation_card_html())) $html = preg_replace('~</div>\s*$~', $card . '</div>', $html, 1);
+    return '<div class="mem-pkgs">' . $html . '</div>';
 });

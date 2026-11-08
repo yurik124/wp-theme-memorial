@@ -41,12 +41,14 @@
   --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
   --lora:"Lora",Georgia,"Times New Roman",serif;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --fs:1;            /* размер всего текста (Мемориал → Оформление → Размер текста): 1 = 100 % */
+  --fs-h:1;          /* заголовки — дополнительно к общему размеру */
   --ease:cubic-bezier(.3,.1,.3,1);
 }
 
 /* Основа */
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hh) + 16px)}
+html{font-size:calc(100% * var(--fs));scroll-behavior:smooth;scroll-padding-top:calc(var(--hh) + 16px)}
 body{margin:0;font:400 1.0625rem/1.6 var(--sans);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
 @media (min-width:1024px){body{font-size:1.125rem}}
 body.menu-open{overflow:hidden}
@@ -55,9 +57,9 @@ a{color:inherit;text-decoration:none}
 a[href^="tel"]{color:inherit;text-decoration:none}
 h1,h2,h3{margin:0 0 .5em;color:var(--ink);text-wrap:balance}
 h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:0}
-h1{font-size:clamp(2.125rem,4.2vw,3.5rem);line-height:1.15}
-h2{font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.2}
-h3{font:500 clamp(1.1875rem,1.6vw,1.375rem)/1.3 var(--lora)}
+h1{font-size:calc(clamp(2.125rem,4.2vw * var(--fs),3.5rem) * var(--fs-h));line-height:1.15}
+h2{font-size:calc(clamp(1.75rem,3vw * var(--fs),2.5rem) * var(--fs-h));line-height:1.2}
+h3{font:500 calc(clamp(1.1875rem,1.6vw * var(--fs),1.375rem) * var(--fs-h))/1.3 var(--lora)}
 p{text-wrap:pretty}
 ::selection{background:color-mix(in srgb,var(--gold2) 45%,transparent)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
@@ -190,7 +192,7 @@ html.hdr-two .reviews__intro{top:calc(var(--top) + 140px)}
 /* ---------- Первый экран: текст слева, фото справа в рамке, ветвь лавра в углу ---------- */
 .hero{position:relative;overflow:hidden;background:var(--bg)}
 .hero__branch{position:absolute;top:-40px;right:-70px;width:clamp(220px,26vw,380px);height:clamp(340px,40vw,560px);color:var(--gold2);opacity:.22;transform:rotate(-24deg);pointer-events:none}
-.hero__in{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(2rem,5vw,4.5rem);align-items:center;padding:clamp(2rem,6vw,5.5rem) 0 clamp(3.5rem,7vw,6rem)}
+.hero__in{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(2rem,5vw * var(--fs),4.5rem);align-items:center;padding:clamp(2rem,6vw * var(--fs),5.5rem) 0 clamp(3.5rem,7vw * var(--fs),6rem)}
 .hero:not(.hero--img) .hero__in{grid-template-columns:minmax(0,760px)}
 .hero__text{display:flex;flex-direction:column;gap:1.35rem;min-width:0}
 .hero .eyebrow{margin:0}
@@ -220,10 +222,10 @@ html.hdr-two .reviews__intro{top:calc(var(--top) + 140px)}
 }
 
 /* ---------- Секции ---------- */
-.section{position:relative;padding:clamp(3.5rem,7vw,6rem) 0;overflow-x:clip}
+.section{position:relative;padding:clamp(3.5rem,7vw * var(--fs),6rem) 0;overflow-x:clip}
 #about{overflow:hidden}
 .section--alt{background:var(--bg2)}
-.sec-head{display:flex;flex-direction:column;align-items:center;gap:.9rem;text-align:center;max-width:720px;margin:0 auto clamp(2rem,4vw,3.25rem)}
+.sec-head{display:flex;flex-direction:column;align-items:center;gap:.9rem;text-align:center;max-width:720px;margin:0 auto clamp(2rem,4vw * var(--fs),3.25rem)}
 .sec-head .eyebrow,.sec-head h2{margin:0}
 .sec-head__div{display:block;width:140px;height:18px;color:var(--gold2)}
 /* ветвь у края блока «О компании»: снизу справа, уходит за край и не ложится под текст */
@@ -232,7 +234,7 @@ html.hdr-two .reviews__intro{top:calc(var(--top) + 140px)}
 .section>.wrap{position:relative}
 
 /* Преимущества: иконки в тонком линейном стиле */
-.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:clamp(1.75rem,3vw,2.5rem)}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:clamp(1.75rem,3vw * var(--fs),2.5rem)}
 .feat{display:flex;flex-direction:column;gap:.75rem}
 .feat h3,.feat p{margin:0}
 .feat p{color:var(--mute);font-size:1.0625rem;line-height:1.55}
@@ -245,7 +247,7 @@ html.hdr-two .reviews__intro{top:calc(var(--top) + 140px)}
 .feat__img img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* Наши услуги: белые карточки, фото 4:3, цена «от», «Подробнее» */
-.svc{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:clamp(1rem,2vw,1.75rem)}
+.svc{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:clamp(1rem,2vw * var(--fs),1.75rem)}
 .svc__item{display:flex;flex-direction:column;background:#fff;border-radius:var(--r);overflow:hidden;color:var(--ink);box-shadow:var(--sh);transition:box-shadow .3s var(--ease)}
 a.svc__item:hover{box-shadow:var(--sh2)}
 .svc__img{display:block;aspect-ratio:4/3;background:var(--bg2) center/cover}
@@ -260,23 +262,24 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 @media (max-width:600px){.svc{grid-template-columns:1fr;gap:1rem}.svc__body{padding:1.15rem 1.2rem 1.25rem}}
 
 /* Каталог: плитки разделов — фото без затемнения, название и стрелка под фото */
-.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:clamp(.875rem,1.6vw,1.375rem)}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:clamp(.875rem,1.6vw * var(--fs),1.375rem)}
 .cat{display:flex;flex-direction:column;min-height:0;padding:0;background:#fff;border-radius:var(--r);overflow:hidden;color:var(--ink);box-shadow:0 1px 2px rgba(42,44,40,.04);transition:box-shadow .3s var(--ease)}
 .cat:hover{box-shadow:0 10px 28px rgba(42,44,40,.08)}
 .cat__ph{display:block;aspect-ratio:1;background-color:var(--tbg,var(--bg2));background-image:var(--img,none);background-position:var(--pos,center);background-size:var(--fit,cover);background-repeat:no-repeat}
-.cat__cap{display:flex;flex-direction:column;align-items:flex-start;gap:.3rem;padding:1rem 1.1rem}
+.cat__cap{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:.5rem;padding:1rem 1.1rem}
+.cat .cat__more{margin-top:auto}
 .cat h3{margin:0;font:500 1.125rem/1.3 var(--lora);color:var(--ink)}
 .cat .cat__more{flex:none;display:inline-flex;align-items:center;gap:.3rem;color:var(--gold3);font-size:1rem;font-weight:500;white-space:nowrap}
 @media (max-width:600px){.cats{grid-template-columns:repeat(2,1fr)}.cat__cap{padding:.8rem .85rem}.cat h3{font-size:1rem}}
 
 /* Цены: пакеты похорон — тихая плашка у рекомендуемого, состав с лавровыми маркерами */
-.pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:clamp(1rem,2vw,1.75rem);align-items:stretch}
+.pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:clamp(1rem,2vw * var(--fs),1.75rem);align-items:stretch}
 .pkg{position:relative;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:var(--r);padding:1.9rem 1.75rem 1.75rem;display:flex;flex-direction:column;gap:1.1rem}
 .pkg--feat{border-color:var(--gold)}
 .pkg__badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--gold);color:var(--gold3);font:600 .75rem/1.4 var(--sans);letter-spacing:.1em;text-transform:uppercase;padding:.25rem .9rem;border-radius:999px;white-space:nowrap}
 .section--alt .pkg__badge{background:var(--bg2)}
-.pkg h3{margin:0;text-align:center;font:500 1.875rem/1.1 var(--serif)}
-.pkg__total{margin:-.4rem 0 0;text-align:center;font:600 clamp(1.375rem,2vw,1.625rem)/1.2 var(--lora);color:var(--ink)}
+.pkg h3{margin:0;text-align:center;font:500 calc(1.875rem * var(--fs-h))/1.1 var(--serif)}
+.pkg__total{margin:-.4rem 0 0;text-align:center;font:600 clamp(1.375rem,2vw * var(--fs),1.625rem)/1.2 var(--lora);color:var(--ink)}
 .pkg__div{display:block;width:120px;height:16px;margin:0 auto;color:var(--gold2)}
 .pkg__key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem;font-size:1rem;line-height:1.45}
 .pkg__key li{display:flex;gap:.65rem;align-items:baseline}
@@ -298,7 +301,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 
 
 /* Цифры: светлая шалфейная полоса, цифры в лавровых венках */
-.stats{position:relative;overflow:hidden;background:var(--sage);color:var(--ink);padding:clamp(3.5rem,6vw,5rem) 0}
+.stats{position:relative;overflow:hidden;background:var(--sage);color:var(--ink);padding:clamp(3.5rem,6vw * var(--fs),5rem) 0}
 .stats__in{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:2rem 1rem;text-align:center}
 .stat{display:flex;flex-direction:column;align-items:center;gap:.6rem}
 .stat__ring{position:relative;display:grid;place-items:center;width:148px;height:148px}
@@ -310,20 +313,21 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 @media (max-width:480px){.stats__in{grid-template-columns:1fr}.stat__ring{width:132px;height:132px}}
 
 /* О компании */
-.about{display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(2rem,5vw,4.5rem);align-items:start}
+.about{display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(2rem,5vw * var(--fs),4.5rem);align-items:start}
 .about h2{margin:0}
-.about__div{display:block;width:140px;height:18px;color:var(--gold2);margin-top:1.1rem}
+.about__div{display:none;width:140px;height:18px;color:var(--gold2)}
+@media (max-width:900px){.about__div{display:block;margin:1.25rem auto 0}}
 .about__text{max-width:36em}
 .about__text p{color:var(--ink)}
 
 /* Контакты */
-.contacts{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(2rem,4vw,3.5rem)}
+.contacts{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(2rem,4vw * var(--fs),3.5rem)}
 .contacts h2{margin-bottom:0}
 .clist{list-style:none;padding:0;margin:1.5rem 0 0;display:grid;gap:0}
 .clist li{display:flex;gap:.9rem;align-items:flex-start;padding:1rem 0;border-top:1px solid var(--line)}
 .clist .ico{color:var(--gold);width:1.35em;height:1.35em;margin-top:.15em}
 .clist a:hover{color:var(--gold3)}
-.clist li:first-child a[href^="tel"]{font:600 clamp(1.375rem,2.4vw,1.75rem)/1.25 var(--lora);font-variant-numeric:tabular-nums}
+.clist li:first-child a[href^="tel"]{font:600 clamp(1.375rem,2.4vw * var(--fs),1.75rem)/1.25 var(--lora);font-variant-numeric:tabular-nums}
 .clist a[href^="tel"]{font:600 1.1875rem/1.3 var(--lora);font-variant-numeric:tabular-nums}
 .clist__note{display:flex;align-items:center;gap:.35rem;color:var(--mute);font-size:.95rem;margin-top:.15rem}
 .clist__note .ico{width:1em;height:1em;margin:0;color:var(--mute)}
@@ -342,7 +346,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .map__addr{margin:0;color:var(--ink);font:500 1.1875rem/1.35 var(--lora)}
 
 /* Отзывы с Яндекс Карт */
-.reviews{display:grid;grid-template-columns:1fr minmax(0,560px);gap:clamp(2rem,4vw,3.5rem);align-items:start}
+.reviews{display:grid;grid-template-columns:1fr minmax(0,560px);gap:clamp(2rem,4vw * var(--fs),3.5rem);align-items:start}
 .reviews__intro{position:sticky;top:calc(var(--top) + var(--hh) + 2rem)}
 .reviews__intro h2{margin-bottom:.6rem}
 .reviews__text{color:var(--mute);margin:0 0 1.75rem;max-width:460px}
@@ -380,7 +384,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 select,.sort select{min-height:44px}
 .sort select{width:100%;padding:.55rem .7rem;border:1px solid var(--line);border-radius:var(--rb);font:inherit;font-size:1rem;background:#fff;color:var(--ink);cursor:pointer}
 
-.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(.75rem,1.6vw,1.375rem)}
+.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(.75rem,1.6vw * var(--fs),1.375rem)}
 @media (max-width:1100px){.products{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .card{background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;transition:box-shadow .3s var(--ease),border-color .3s var(--ease)}
 .card:hover{box-shadow:var(--sh2);border-color:transparent}
@@ -405,12 +409,12 @@ select,.sort select{min-height:44px}
 .page-numbers.current{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
 .empty{padding:3rem 1.5rem;text-align:center;background:#fff;border:1px solid var(--line);border-radius:var(--r)}
 
-.product{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(2rem,4vw,3.5rem);align-items:start}
+.product{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(2rem,4vw * var(--fs),3.5rem);align-items:start}
 .product__media{border-radius:var(--r);overflow:hidden;background:var(--bg2);aspect-ratio:1;display:grid;place-items:center;border:1px solid var(--line)}
 .product__media img{width:100%;height:100%;object-fit:contain}
 .product__media .card__noimg{width:96px;height:96px}
 .product__price{margin:.3rem 0 1.5rem}
-.product__price .price{font-size:clamp(1.375rem,2.4vw,1.75rem)}
+.product__price .price{font-size:clamp(1.375rem,2.4vw * var(--fs),1.75rem)}
 .specs{display:grid;grid-template-columns:auto 1fr;gap:0 1.5rem;margin:0 0 1.5rem;font-size:1rem}
 .specs dt,.specs dd{padding:.55rem 0;border-bottom:1px solid var(--line)}
 .specs dt{color:var(--mute)}
@@ -425,7 +429,7 @@ select,.sort select{min-height:44px}
 .entry{padding:1.5rem 0;border-bottom:1px solid var(--line)}
 
 /* ---------- Подвал: светлый шалфей с водяным орнаментом ---------- */
-.footer{position:relative;overflow:hidden;background:var(--sage);color:var(--ink);padding:clamp(3rem,6vw,4.5rem) 0 1.75rem;font-size:1rem}
+.footer{position:relative;overflow:hidden;background:var(--sage);color:var(--ink);padding:clamp(3rem,6vw * var(--fs),4.5rem) 0 1.75rem;font-size:1rem}
 .footer::before{content:"";position:absolute;inset:0;background:url(../img/laurel-pattern.svg) 0 0/180px 180px repeat;opacity:.04;pointer-events:none}
 .footer>*{position:relative}
 .footer__in{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:2.25rem 2rem}
@@ -500,7 +504,7 @@ select,.sort select{min-height:44px}
 .nf__ring{position:relative;display:grid;place-items:center;width:120px;height:120px}
 .nf__ring .lv{position:absolute;inset:0;color:var(--gold2)}
 .nf__ring b{position:relative;font:500 2rem/1 var(--serif);color:var(--gold3);margin-top:.2rem}
-.nf h1{font-size:clamp(2rem,5vw,3rem)}
+.nf h1{font-size:calc(clamp(2rem,5vw * var(--fs),3rem) * var(--fs-h))}
 .nf__lead{color:var(--mute);margin:0 auto 2rem;max-width:520px}
 .nf__cta{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-bottom:2.5rem}
 .nf__links p{color:var(--mute);font-size:1rem;margin:0 0 .8rem}
@@ -516,7 +520,7 @@ select,.sort select{min-height:44px}
 .cb__body::before{content:"";display:block;width:120px;height:16px;margin:0 auto 1rem;background:url(../img/laurel-divider.svg) center/contain no-repeat}
 .cb__x{position:absolute;top:.6rem;right:.6rem;width:44px;height:44px;border:0;background:none;font-size:1.7rem;line-height:1;color:var(--mute);cursor:pointer;border-radius:var(--rb)}
 .cb__x:hover{background:var(--bg2);color:var(--ink)}
-.cb h2{font-size:2rem;margin:0 0 .4rem;text-align:center;line-height:1.15}
+.cb h2{font-size:calc(2rem * var(--fs-h));margin:0 0 .4rem;text-align:center;line-height:1.15}
 .cb__note{color:var(--mute);margin:0 0 1.25rem;text-align:center}
 .cb__status{background:var(--sage);border-left:3px solid var(--gold);padding:.6rem .8rem;border-radius:6px;font-size:.95rem;margin:0 0 1rem}
 .cb__f{display:block;margin-bottom:.9rem}
@@ -682,3 +686,19 @@ a.svc__item:hover h3,.cat:hover h3{color:var(--gold3)}
 .reviews__btns .btn--line:hover{background:color-mix(in srgb,var(--gold) 14%,transparent)}
 @media (hover:none){.card:hover,.cat:hover,a.svc__item:hover{outline:0}}
 .is-compact .nav>ul>li:hover>a,.is-compact .nav>ul>li:focus-within>a{text-decoration:none}
+
+/* Карточка «Кремация» рядом с пакетами (страница «Цены») */
+.pkg__note{margin:0;color:var(--mute);font-size:.94rem;text-align:center}
+.pkg__more{align-self:center}
+/* крупный текст (Оформление → Размер текста): длинные слова переносятся, а не растягивают блоки */
+h1,h2,h3,.pkg h3,.cat h3,.svc__body h3,.card__title,.mcard__name,.fnav__title{overflow-wrap:break-word}
+.btn{max-width:100%}
+.mbar .btn{white-space:normal;line-height:1.15}
+.pkg__more{align-self:center;white-space:nowrap}
+/* на странице «Цены» с карточкой кремации — 4 карточки сеткой 2 × 2 */
+.mem-pkgs .pkgs:has(> .pkg--crem){grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:640px){.mem-pkgs .pkgs:has(> .pkg--crem){grid-template-columns:1fr}}
+/* Фокус и прокрутка к элементу не прячут его под липкой шапкой, панелью разделов и нижней панелью телефона (WCAG 2.4.11) */
+:where(a,button,input,select,textarea,summary,[tabindex]){scroll-margin-top:calc(var(--top) + var(--hh) + 5.5rem);scroll-margin-bottom:calc(6rem + var(--consent-off,0px))}
+/* На телефоне текст не мельче, чем задумано (≥ 16 px), даже если в «Оформлении» выбран размер меньше 100 % */
+@media (max-width:600px){html{font-size:max(100%,calc(100% * var(--fs)))}}

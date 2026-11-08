@@ -18,7 +18,7 @@ $hero_vars = '';
 if ($img) { [$img_d, $img_m] = memorial_hero_srcs($img); $hero_vars = '--hero-d:url(' . esc_url($img_d) . ');--hero-m:url(' . esc_url($img_m) . ')'; }   // адреса фото — как раньше (их читают проверки и скрипты)
 ?>
 <section class="hero<?php echo $img ? ' hero--img' : ''; echo $hero_mtop ? ' hero--mtop' : ''; ?>"<?php echo $hero_vars ? ' style="' . esc_attr($hero_vars) . '"' : ''; ?>>
-  <span class="hero__branch" aria-hidden="true"><?php echo mem_laurel('branch'); ?></span>
+  <span class="hero__branch" aria-hidden="true"><?php echo mem_laurel('branch_plain'); ?></span>
   <div class="wrap hero__in">
     <div class="hero__text">
       <?php if (!empty($hero['eyebrow'])) : ?><p class="eyebrow"><?php echo $e($hero['eyebrow']); ?></p><?php endif; ?>
