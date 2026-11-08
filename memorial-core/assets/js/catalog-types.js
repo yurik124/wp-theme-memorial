@@ -41,7 +41,7 @@ jQuery(function ($) {
     <li data-id="${c.id}" style="--d:${c.depth}">
       <span class="mcm__drag" title="Перетащите">⋮⋮</span>
       <input type="text" class="mct__cname" value="${esc(c.name)}" aria-label="Название категории">
-      <span class="mct__ccount">${c.count} ${c.count % 10 === 1 && c.count % 100 !== 11 ? 'товар' : (c.count % 10 >= 2 && c.count % 10 <= 4 && (c.count % 100 < 10 || c.count % 100 >= 20)) ? 'товара' : 'товаров'}</span>
+      <a class="mct__ccount" href="${esc(D.products)}&cat=${c.id}" title="Открыть товары этой категории">${c.count} ${c.count % 10 === 1 && c.count % 100 !== 11 ? 'товар' : (c.count % 10 >= 2 && c.count % 10 <= 4 && (c.count % 100 < 10 || c.count % 100 >= 20)) ? 'товара' : 'товаров'} →</a>
       <button type="button" class="mcm__dots mct__cdel" aria-label="Удалить категорию" title="Удалить">×</button>
       <textarea class="mct__cdesc" rows="2" placeholder="Описание раздела под его заголовком на сайте (необязательно)">${esc(c.desc || '')}</textarea>
     </li>`;
@@ -65,7 +65,7 @@ jQuery(function ($) {
           <p class="description">Что сразу вписывается в новый товар этого типа. Остаётся поправить отличия.</p>
           <div class="mct__defs">
             <label class="mct__lbl">Цена<span class="mcm__num"><input type="text" inputmode="numeric" class="mct__dprice" value="${esc(d.price)}" placeholder="по запросу"><i>₽</i></span></label>
-            <label class="mcm__from"><input type="checkbox" class="mct__dfrom"${d.from ? ' checked' : ''}> «от»</label>
+            <label class="mcm__from mct__dfromw"><input type="checkbox" class="mct__dfrom"${d.from ? ' checked' : ''}> «от»</label>
             <label class="mct__lbl">Единица<input type="text" class="mct__dunit" value="${esc(d.unit)}" placeholder="за шт."></label>
           </div>
           <h3>Вид каталога на сайте</h3>

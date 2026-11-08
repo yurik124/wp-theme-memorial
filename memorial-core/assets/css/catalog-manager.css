@@ -66,8 +66,8 @@
 .mcm__price{width:150px;min-width:140px}
 .mcm__num{display:flex;align-items:center;gap:4px}
 .mcm__num i{font-style:normal;color:var(--mute);font-size:12px;white-space:nowrap}
-.mcm__from{display:inline-flex;align-items:center;gap:3px;margin:4px 8px 0 0;font-size:12px;color:#50575e}
-.mcm__unit{margin-top:4px;font-size:12px!important;min-height:28px!important}
+.mcm__from{display:inline-flex;align-items:center;gap:3px;margin:0;font-size:12px;color:#50575e;white-space:nowrap}
+.mcm__unit{flex:1;min-width:0;font-size:12px!important;min-height:28px!important}
 .mcm__fld{min-width:120px}
 .mcm__cats{min-width:150px}
 .mcm__catbtn{display:flex;flex-wrap:wrap;gap:4px;width:100%;min-height:32px;padding:4px 6px;border:1px solid #e0e0e0;border-radius:6px;background:#fff;cursor:pointer;text-align:left;align-items:center}
@@ -265,3 +265,19 @@
 /* Полоска между товарами (строка товара и его строка фото — одно целое) */
 .mcm__table tbody tr[data-id]:not(:first-child) td{border-top:2px solid #e2ddd2}
 .mcm__table tbody tr td{border-bottom:0}
+
+/* Цена: «от» и единица — в одну строку под ценой */
+.mcm__pline{display:flex;align-items:center;gap:8px;margin-top:6px}
+.mcm__from input[type=checkbox]{margin:0}
+
+/* Много характеристик — одной колонкой, подпись над полем, поля в несколько рядов */
+.mcm__flds{min-width:280px;width:40%}
+.mcm__fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px 10px}
+.mcm__fl{display:grid;gap:2px;font-size:11px;color:#646970}
+.mcm__fl small{color:#8c8f94}
+.mcm__fl input,.mcm__fl select{width:100%;min-width:0}
+
+/* «Типы и категории»: «от» — по высоте поля цены; число товаров категории — ссылка в каталог */
+.mct__dfromw{align-self:flex-end;height:34px;margin:8px 0}
+a.mct__ccount{text-decoration:none;white-space:nowrap}
+a.mct__ccount:hover{text-decoration:underline}

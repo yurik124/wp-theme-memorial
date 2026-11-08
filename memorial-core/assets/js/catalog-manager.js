@@ -4,7 +4,7 @@ jQuery(function ($) {
   if (!root || !window.memCM) return;
   const app = root.querySelector('.mcm__app');
   let D = memCM.data;              // данные вкладки: id, name, fields, cats, products
-  let filterCat = 0, query = '';
+  let filterCat = +(new URLSearchParams(location.search).get('cat') || 0), query = '';   // ?cat=… — ссылка «товары категории» со страницы «Типы и категории»
   let sortKey = '', sortDir = 1;    // сортировка по столбцу: photo | title | price | cats
   const sel = new Set();             // отмеченные товары
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -21,6 +21,8 @@ jQuery(function ($) {
 
   /* ---------- отрисовка ---------- */
   const numOf = v => { const m = String(v || '').replace(',', '.').match(/-?\d+(\.\d+)?/); return m ? m[0] : ''; };
+  // больше двух характеристик — не колонками (уходят за экран), а одной колонкой: подпись + поле, в несколько рядов
+  const manyF = () => D.fields.length > 2;
   const fieldInput = (f, p) => {
     const v = p.specs[f.label] || '';
     const k = 'spec:' + f.label;
@@ -49,14 +51,13 @@ jQuery(function ($) {
       </td>
       <td class="mcm__price">
         <span class="mcm__num"><input type="text" inputmode="numeric" data-f="price" value="${esc(p.price)}" placeholder="по запросу" aria-label="Цена"><i>₽</i></span>
-        <label class="mcm__from"><input type="checkbox" data-f="from"${p.from ? ' checked' : ''}> от</label>
-        <input type="text" data-f="unit" value="${esc(p.unit)}" placeholder="за шт." class="mcm__unit" aria-label="Единица">
+        <span class="mcm__pline"><label class="mcm__from"><input type="checkbox" data-f="from"${p.from ? ' checked' : ''}> от</label><input type="text" data-f="unit" value="${esc(p.unit)}" placeholder="за шт." class="mcm__unit" aria-label="Единица"></span>
       </td>
-      ${D.fields.map(f => `<td class="mcm__fld">${fieldInput(f, p)}</td>`).join('')}
+      ${manyF() ? `<td class="mcm__flds"><div class="mcm__fgrid">${D.fields.map(f => `<label class="mcm__fl"><span>${esc(f.label)}${f.unit ? ` <small>${esc(f.unit)}</small>` : ''}</span>${fieldInput(f, p)}</label>`).join('')}</div></td>` : D.fields.map(f => `<td class="mcm__fld">${fieldInput(f, p)}</td>`).join('')}
       <td class="mcm__cats"><button type="button" class="mcm__catbtn" data-act="cats">${catChips(p)}</button></td>
       <td class="mcm__more"><button type="button" class="mcm__dots" data-act="menu" aria-label="Действия">⋯</button></td>
     </tr>${(p.pids || []).length > 1 ? `
-    <tr class="mcm__phrow${p.status !== 'publish' ? ' is-hidden' : ''}" data-for="${p.id}"><td colspan="2"></td><td colspan="${D.fields.length + 5}"><div class="mcm__phs" aria-label="Все фото товара — перетащите, чтобы поменять порядок">${p.pids.map((id, k) => `<span class="mcm__pht${k ? '' : ' is-main'}" data-pid="${id}" title="Перетащите, чтобы поменять порядок"><img src="${esc((p.pth || [])[k] || '')}" alt="" draggable="false">${k ? `<button type="button" class="mcm__phmain" data-act="phmain" data-pid="${id}" title="Сделать главным" aria-label="Сделать главным">★</button>` : '<b class="mcm__phbadge">главное</b>'}<button type="button" class="mcm__phx" data-act="phdel" data-pid="${id}" title="Убрать это фото" aria-label="Убрать фото">×</button></span>`).join('')}</div></td></tr>` : ''}`;
+    <tr class="mcm__phrow${p.status !== 'publish' ? ' is-hidden' : ''}" data-for="${p.id}"><td colspan="2"></td><td colspan="${(manyF() ? 1 : D.fields.length) + 5}"><div class="mcm__phs" aria-label="Все фото товара — перетащите, чтобы поменять порядок">${p.pids.map((id, k) => `<span class="mcm__pht${k ? '' : ' is-main'}" data-pid="${id}" title="Перетащите, чтобы поменять порядок"><img src="${esc((p.pth || [])[k] || '')}" alt="" draggable="false">${k ? `<button type="button" class="mcm__phmain" data-act="phmain" data-pid="${id}" title="Сделать главным" aria-label="Сделать главным">★</button>` : '<b class="mcm__phbadge">главное</b>'}<button type="button" class="mcm__phx" data-act="phdel" data-pid="${id}" title="Убрать это фото" aria-label="Убрать фото">×</button></span>`).join('')}</div></td></tr>` : ''}`;
 
   const catName = p => { const c = p.cats.map(id => (D.cats.find(x => x.id === id) || {}).name).filter(Boolean)[0]; return c ? c.replace(/^(— )+/, '') : ''; };
   const visible = () => {
@@ -113,7 +114,7 @@ jQuery(function ($) {
       ${total ? `
       <div class="mcm__wrap"><table class="mcm__table">${sortKey ? `<caption class="mcm__sortnote">Отсортировано по столбцу, на сайте порядок прежний. <button type="button" class="button-link" data-sort="">Вернуть порядок сайта</button></caption>` : ''}
         <thead><tr><th></th><th class="mcm__chk"><input type="checkbox" class="mcm__selall" aria-label="Отметить все"${list.length && list.every(p => sel.has(p.id)) ? ' checked' : ''}></th>${th('photo', 'Фото')}${th('title', 'Название')}${th('price', 'Цена')}
-          ${D.fields.map(f => `<th>${esc(f.label)}${f.unit ? ` <small>${esc(f.unit)}</small>` : ''}</th>`).join('')}
+          ${manyF() ? '<th>Характеристики</th>' : D.fields.map(f => `<th>${esc(f.label)}${f.unit ? ` <small>${esc(f.unit)}</small>` : ''}</th>`).join('')}
           ${th('cats', 'Категории')}<th></th></tr></thead>
         <tbody>${list.map(row).join('')}</tbody>
       </table></div>
