@@ -247,3 +247,5 @@
 .mcm__pht img{width:60px;height:60px;object-fit:cover;border-radius:8px;display:block}
 .mcm__phrow .mhs__arr{top:calc(50% + 1px)}
 .mcm__phrow.is-hidden img{opacity:.45}
+
+.mcm__table tr.is-sel + .mcm__phrow td{background:#f6f1e5}   /* строка с фото отмеченного товара — тоже подсвечена */

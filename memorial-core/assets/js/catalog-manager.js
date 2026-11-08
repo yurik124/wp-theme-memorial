@@ -106,6 +106,7 @@ jQuery(function ($) {
         <button type="button" class="button" data-act="prices">Цены…</button>
         <button type="button" class="button" data-bulk="draft">Скрыть с сайта</button>
         <button type="button" class="button" data-bulk="publish">Показать на сайте</button>
+        <button type="button" class="button" data-bulk="merge" title="Фото всех отмеченных соберутся в одном товаре">Объединить в один товар</button>
         <button type="button" class="button mcm__danger" data-bulk="trash">Удалить</button>
         <button type="button" class="button-link" data-bulk="none">снять отметку</button>
       </div>
@@ -370,6 +371,22 @@ jQuery(function ($) {
     if (op === 'none') { sel.clear(); render(); return; }
     if (op === 'trash') { if (confirm('Удалить отмеченные товары (' + sel.size + ')? Их можно будет вернуть из корзины в классическом списке.')) bulk('trash'); return; }
     if (op === 'draft' || op === 'publish') return bulk(op);
+    if (op === 'merge') {
+      // главный — первый из отмеченных по порядку в таблице
+      const list = D.products.filter(p => sel.has(p.id));
+      if (list.length < 2) return alert('Отметьте хотя бы два товара.');
+      const main = list[0];
+      if (!confirm(`Объединить ${list.length} ${list.length < 5 ? 'товара' : 'товаров'} в «${main.title}»?\n\nФото всех соберутся в нём по порядку, недостающие цена, подпись и характеристики возьмутся у остальных. Остальные товары уйдут в корзину (их можно вернуть).`)) return;
+      track(post('mem_cm_merge', { type: D.id, ids: list.map(p => p.id) })).done(r => {
+        if (!r.success) return alert(r.data || 'Не получилось');
+        if (r.data.conflicts) return alert('Не объединено — у товаров разные значения:\n\n• ' + r.data.conflicts.join('\n• ') + '\n\nИсправьте, чтобы совпадали (или сотрите у лишних), и объедините снова.');
+        const i = D.products.findIndex(p => p.id === r.data.product.id);
+        if (i >= 0) D.products[i] = r.data.product;
+        D.products = D.products.filter(p => !r.data.trashed.includes(p.id));
+        sel.clear(); render();
+      });
+      return;
+    }
     if (op === 'cats') {
       const el = openPop(this, `<p class="mcm__poph">Категории для отмеченных (${sel.size})</p>
         <div class="mcm__catlist">${D.cats.length ? D.cats.map(c => `<label><input type="checkbox" value="${c.id}"> ${esc(c.name)}</label>`).join('') : '<em>У типа пока нет категорий</em>'}</div>

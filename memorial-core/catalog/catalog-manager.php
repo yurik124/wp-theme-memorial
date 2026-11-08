@@ -290,6 +290,78 @@ add_action('wp_ajax_mem_cm_term', function () {
 });
 
 /* Действия с отмеченными товарами: цены, категории, скрыть/показать, удалить */
+/**
+ * Объединить товары в один (отмеченные; главный — первый по порядку в таблице).
+ * Можно, если цена, «от», единица, подпись и характеристики у всех совпадают или не заполнены у части товаров.
+ * Главный товар получает фото всех (по порядку), недостающие поля и все категории; остальные — в корзину.
+ * Возвращает ['conflicts' => [...]] — что мешает объединить — или null.
+ */
+function mem_cm_merge_conflicts(array $ids) {
+    $vals = [];
+    foreach ($ids as $id) {
+        $row = [
+            'Цена'         => (string) (int) get_post_meta($id, '_mem_price', true) ?: '',
+            '«от»'         => get_post_meta($id, '_mem_price_from', true) === '1' ? 'да' : '',
+            'Единица'      => trim((string) get_post_meta($id, '_mem_unit', true)),
+            'Подпись'      => trim((string) get_post_meta($id, '_mem_sub', true)),
+        ];
+        foreach (mem_product_spec_map($id) as $k => $v) $row[$k] = trim((string) $v);
+        foreach ($row as $k => $v) if ($v !== '' && $v !== '0') $vals[$k][$v][] = get_the_title($id);
+    }
+    $out = [];
+    foreach ($vals as $k => $variants) {
+        // «от» не мешает: отмеченное «от» просто сохраняется
+        if (count($variants) > 1 && $k !== '«от»') $out[] = $k . ': ' . implode(' / ', array_map(fn($v, $who) => $v . ' (' . implode(', ', $who) . ')', array_keys($variants), $variants));
+    }
+    return $out;
+}
+
+add_action('wp_ajax_mem_cm_merge', function () {
+    mem_cm_check();
+    $type = absint($_POST['type'] ?? 0);
+    $ids = array_values(array_unique(array_filter(array_map('absint', (array) ($_POST['ids'] ?? [])), fn($id) => get_post_type($id) === 'mem_product' && current_user_can('edit_post', $id))));
+    if (count($ids) < 2) wp_send_json_error('Отметьте хотя бы два товара');
+    if ($c = mem_cm_merge_conflicts($ids)) wp_send_json_success(['conflicts' => $c]);
+    $main = $ids[0];
+    $photos = [];
+    foreach ($ids as $id) foreach (mem_product_photos($id) as $p) if (!in_array($p, $photos, true)) $photos[] = $p;
+    if ($photos) {
+        set_post_thumbnail($main, $photos[0]);
+        count($photos) > 1 ? update_post_meta($main, '_mem_gallery', implode(',', array_slice($photos, 1))) : delete_post_meta($main, '_mem_gallery');
+    }
+    $cats = [];
+    foreach ($ids as $id) {
+        if ($id !== $main) {
+            foreach (['_mem_price', '_mem_price_from', '_mem_unit', '_mem_sub', '_mem_price_old', '_mem_on_order'] as $k) {
+                $v = get_post_meta($id, $k, true);
+                if ((string) $v !== '' && (string) $v !== '0' && ((string) get_post_meta($main, $k, true) === '' || (string) get_post_meta($main, $k, true) === '0')) update_post_meta($main, $k, $v);
+            }
+            foreach (mem_product_spec_map($id) as $k => $v) if (trim((string) $v) !== '' && trim((string) (mem_product_spec_map($main)[$k] ?? '')) === '') mem_set_spec($main, $k, $v);
+            if (trim(get_post_field('post_content', $main)) === '' && trim(get_post_field('post_content', $id)) !== '') wp_update_post(['ID' => $main, 'post_content' => get_post_field('post_content', $id)]);
+        }
+        $cats = array_merge($cats, array_map('intval', wp_get_object_terms($id, 'mem_cat', ['fields' => 'ids'])));
+    }
+    $cats = array_values(array_unique(array_diff($cats, [$type])));
+    wp_set_object_terms($main, $cats ?: [$type], 'mem_cat');
+    $gone = array_slice($ids, 1);
+    foreach ($gone as $id) {
+        update_post_meta($id, '_mem_merged_into', $main);   // старый адрес товара будет вести к объединённому
+        wp_trash_post($id);
+    }
+    wp_send_json_success(['product' => mem_manager_product(get_post($main), $type), 'trashed' => $gone]);
+});
+
+/* Адрес товара, объединённого с другим (в корзине), ведёт к тому товару */
+add_action('template_redirect', function () {
+    if (!is_404()) return;
+    $slug = get_query_var('name') ?: get_query_var('mem_product');
+    if (!$slug) return;
+    $old = get_posts(['post_type' => 'mem_product', 'post_status' => 'trash', 'name' => $slug . '__trashed', 'posts_per_page' => 1, 'fields' => 'ids'])
+        ?: get_posts(['post_type' => 'mem_product', 'post_status' => 'trash', 'name' => $slug, 'posts_per_page' => 1, 'fields' => 'ids']);
+    $to = $old ? (int) get_post_meta($old[0], '_mem_merged_into', true) : 0;
+    if ($to && get_post_status($to) === 'publish') { wp_safe_redirect(get_permalink($to), 301); exit; }
+});
+
 add_action('wp_ajax_mem_cm_bulk', function () {
     mem_cm_check();
     $type = absint($_POST['type'] ?? 0);
