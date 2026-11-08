@@ -242,7 +242,15 @@ jQuery(function ($) {
     const fr = wp.media({ title: 'Фото товара «' + p.title + '»', multiple: false, library: { type: 'image' }, button: { text: 'Поставить' } });
     fr.on('select', () => {
       const a = fr.state().get('selection').first().toJSON();
-      track(post('mem_cm_save', { id: p.id, f: 'photo', v: a.id })).done(r => { if (r.success) { p.thumb = r.data.thumb; p.big = r.data.big; render(); } });
+      track(post('mem_cm_save', { id: p.id, f: 'photo', v: a.id })).done(r => { if (r.success) { p.tid = r.data.tid; p.thumb = r.data.thumb; p.big = r.data.big; render(); } });
+    });
+    // в окне сразу отмечено текущее фото товара (внизу окна — его миниатюра)
+    fr.on('open', () => {
+      if (!p.tid) return;
+      const att = wp.media.attachment(p.tid);
+      fr.state().get('selection').reset([att]);
+      att.fetch();
+      fr.content.mode('browse');   // сразу медиатека (а не «Загрузить файлы»), текущее фото отмечено галочкой
     });
     fr.open();
   });

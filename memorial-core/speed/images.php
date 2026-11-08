@@ -109,6 +109,7 @@ function mem_img_recompress($id, $q, $fix = false) {
     }
     update_post_meta($id, '_mem_img_q', $q);
     update_post_meta($id, '_mem_img_rot', 1);
+    update_post_meta($id, '_mem_img_v', time());   // новая версия копий — браузеры не возьмут старые из своей памяти
     return $saved;
 }
 
@@ -123,4 +124,33 @@ add_action('admin_init', function () {
     if (!empty($st['running'])) $ids = array_values(array_unique(array_merge($ids, (array) $st['ids'])));
     update_option('mem_img_job', ['running' => 1, 'fix' => 1, 'q' => mem_img_quality(), 'ids' => $ids, 'total' => count($ids), 'done' => 0, 'saved' => 0], false);
     if (!wp_next_scheduled('mem_img_job_tick')) wp_schedule_event(time() + 5, 'mem_minute', 'mem_img_job_tick');
+});
+
+/*
+ * Копии пересоздаются под теми же именами файлов, а браузер хранит картинки долго (до года).
+ * Поэтому к адресу пересозданных копий добавляется ?v=… — браузер загрузит новую версию, а не покажет старую.
+ */
+function mem_img_ver_url($url, $id) {
+    $v = (int) get_post_meta($id, '_mem_img_v', true);
+    return $v && $url && strpos($url, '?') === false ? $url . '?v=' . $v : $url;
+}
+add_filter('wp_get_attachment_image_src', function ($img, $id) {
+    if ($img && !empty($img[0])) $img[0] = mem_img_ver_url($img[0], $id);
+    return $img;
+}, 10, 2);
+add_filter('wp_calculate_image_srcset', function ($sources, $size, $src, $meta, $id) {
+    foreach ((array) $sources as $w => $s) $sources[$w]['url'] = mem_img_ver_url($s['url'], $id);
+    return $sources;
+}, 10, 5);
+
+/* Разово: фото, уже пересозданные в 1.11.2, получают версию — чтобы браузеры, где осталась старая (повёрнутая) копия, загрузили новую */
+add_action('admin_init', function () {
+    if (get_option('mem_img_vfix') || !current_user_can('manage_options')) return;
+    update_option('mem_img_vfix', 1, false);
+    global $wpdb;
+    $t = time();
+    foreach ($wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_mem_img_q'") as $id) {
+        if (!get_post_meta($id, '_mem_img_v', true)) update_post_meta((int) $id, '_mem_img_v', $t);
+    }
+    if (function_exists('mem_cache_purge')) mem_cache_purge(true);
 });

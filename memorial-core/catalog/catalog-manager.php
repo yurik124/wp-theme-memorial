@@ -52,6 +52,7 @@ function mem_manager_product($p, $type_id) {
         'title'  => html_entity_decode(get_the_title($p), ENT_QUOTES, 'UTF-8'),
         'status' => $p->post_status,
         'thumb'  => $thumb ? wp_get_attachment_image_url($thumb, 'thumbnail') : '',
+        'tid'    => (int) $thumb,   // номер фото — чтобы в окне выбора было отмечено текущее
         'big'    => $thumb ? wp_get_attachment_image_url($thumb, 'large') : '',
         'price'  => (int) get_post_meta($p->ID, '_mem_price', true) ?: '',
         'from'   => get_post_meta($p->ID, '_mem_price_from', true) === '1',
@@ -170,7 +171,7 @@ add_action('wp_ajax_mem_cm_save', function () {
         $att = absint($v);
         if ($att && wp_attachment_is_image($att)) set_post_thumbnail($id, $att);
         $tid = get_post_thumbnail_id($id);
-        wp_send_json_success(['thumb' => $tid ? wp_get_attachment_image_url($tid, 'thumbnail') : '', 'big' => $tid ? wp_get_attachment_image_url($tid, 'large') : '']);
+        wp_send_json_success(['tid' => (int) $tid, 'thumb' => $tid ? wp_get_attachment_image_url($tid, 'thumbnail') : '', 'big' => $tid ? wp_get_attachment_image_url($tid, 'large') : '']);
     } else {
         wp_send_json_error('Неизвестное поле');
     }
