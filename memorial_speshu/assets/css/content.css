@@ -227,3 +227,16 @@
 .mrev__feed .reviews__widget:not(.is-loaded),.reviews__widget:not(.is-loaded){height:auto!important;min-height:0}
 .mrev__feed .reviews__widget:not(.is-loaded) .reviews__ph,.reviews__widget:not(.is-loaded) .reviews__ph{height:auto;padding:1.4rem 1rem}
 .reviews__ph .btn{margin-top:.3rem}
+
+/* Ссылки: подчёркивание сплошное (без разрывов под «у», «р», «д») */
+.content a:not(.btn){text-decoration-skip-ink:none}
+
+/* Таблица цен на телефоне (две колонки): ширина колонок постоянная — 52 % / 48 %,
+   поэтому цена не сжимается в узкий столбик и не переносится по одному слову */
+@media (max-width:600px){
+  .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))){table-layout:fixed!important}
+  .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) td:first-child,
+  .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) th:first-child{width:52%;min-width:0;padding-right:.5rem}
+  .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) td:last-child,
+  .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) th:last-child{width:48%;min-width:0;white-space:normal;padding-left:.5rem}
+}
