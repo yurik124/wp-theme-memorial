@@ -69,7 +69,7 @@ add_action('mem_img_job_tick', function () {
     $t0 = microtime(true);
     while ($st['ids'] && microtime(true) - $t0 < 20) {
         $id = array_shift($st['ids']);
-        $st['saved'] += mem_img_recompress($id, (int) $st['q']);
+        $st['saved'] += mem_img_recompress($id, (int) $st['q'], !empty($st['fix']));
         $st['done']++;
         if ($st['done'] % 10 === 0) break;
     }
@@ -77,9 +77,12 @@ add_action('mem_img_job_tick', function () {
     update_option('mem_img_job', $st, false);
 });
 
-/** Пересоздать уменьшенные копии одного фото с качеством $q; вернуть, сколько байт сэкономлено */
-function mem_img_recompress($id, $q) {
-    if ((int) get_post_meta($id, '_mem_img_q', true) === $q) return 0;
+/**
+ * Пересоздать уменьшенные копии одного фото с качеством $q; вернуть, сколько байт сэкономлено.
+ * $fix — ремонт: копия заменяется в любом случае (даже если не стала меньше).
+ */
+function mem_img_recompress($id, $q, $fix = false) {
+    if (!$fix && (int) get_post_meta($id, '_mem_img_q', true) === $q && get_post_meta($id, '_mem_img_rot', true)) return 0;
     $meta = wp_get_attachment_metadata($id);
     $file = get_attached_file($id);
     if (!$file || !is_file($file) || empty($meta['sizes'])) return 0;
@@ -91,6 +94,9 @@ function mem_img_recompress($id, $q) {
         if (!is_file($dst)) continue;
         $ed = wp_get_image_editor($src);
         if (is_wp_error($ed)) break;
+        // фото с телефона: поворот записан меткой EXIF — поворачиваем, как WordPress при загрузке
+        // (без этого копии из исходника получались лёжа на боку — ошибка 1.9.0, исправлена в 1.11.2)
+        if (method_exists($ed, 'maybe_exif_rotate')) $ed->maybe_exif_rotate();
         $crop = !empty($reg[$name]['crop']) ? $reg[$name]['crop'] : false;
         if (is_wp_error($ed->resize($s['width'], $s['height'], $crop))) continue;
         $ed->set_quality($q);   // после resize: он сам заново выставляет качество по умолчанию
@@ -98,9 +104,23 @@ function mem_img_recompress($id, $q) {
         $r = $ed->save($tmp, $s['mime-type'] ?? null);
         if (is_wp_error($r) || !is_file($r['path'])) continue;
         $old = filesize($dst); $new = filesize($r['path']);
-        if ($new > 0 && $new < $old * 0.97) { @rename($r['path'], $dst); $saved += $old - $new; }
+        if ($new > 0 && ($fix || $new < $old * 0.97)) { @rename($r['path'], $dst); $saved += $old - $new; }
         else @unlink($r['path']);
     }
     update_post_meta($id, '_mem_img_q', $q);
+    update_post_meta($id, '_mem_img_rot', 1);
     return $saved;
 }
+
+/* Ремонт после 1.9.0–1.11.1: копии, пересжатые без учёта поворота, пересоздаются заново (один раз, в фоне) */
+add_action('admin_init', function () {
+    if (get_option('mem_img_rotfix') || !current_user_can('manage_options')) return;
+    update_option('mem_img_rotfix', 1, false);
+    global $wpdb;
+    $ids = array_map('intval', $wpdb->get_col("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_mem_img_q'"));
+    if (!$ids) return;
+    $st = get_option('mem_img_job', []);
+    if (!empty($st['running'])) $ids = array_values(array_unique(array_merge($ids, (array) $st['ids'])));
+    update_option('mem_img_job', ['running' => 1, 'fix' => 1, 'q' => mem_img_quality(), 'ids' => $ids, 'total' => count($ids), 'done' => 0, 'saved' => 0], false);
+    if (!wp_next_scheduled('mem_img_job_tick')) wp_schedule_event(time() + 5, 'mem_minute', 'mem_img_job_tick');
+});
