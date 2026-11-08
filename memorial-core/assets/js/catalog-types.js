@@ -142,7 +142,7 @@ jQuery(function ($) {
   const saveType = (f, v) => track(post('mem_ct_type', { type: D.id, f, v }));
   $(app).on('input', '.mct__name', function () {
     const v = this.value.trim(); if (!v) return;
-    later('name', () => saveType('name', v).done(r => { if (r.success) { D.name = v; const t = root.querySelector(`.mct__tabs [data-id="${D.id}"]`); if (t) t.firstChild.textContent = v + ' '; } }));
+    later('name', () => saveType('name', v).done(r => { if (r.success) { D.name = v; const t = root.querySelector(`.mct__tabs [data-id="${D.id}"]`); if (t) t.querySelector('.mct__tname').textContent = v; } }));
   });
   const saveDefaults = () => later('defs', () => saveType('defaults', JSON.stringify({
     price: app.querySelector('.mct__dprice').value, from: app.querySelector('.mct__dfrom').checked ? 1 : 0, unit: app.querySelector('.mct__dunit').value })));
@@ -186,7 +186,9 @@ jQuery(function ($) {
   $(app).on('keydown', '.mct__cnew', e => { if (e.key === 'Enter') { e.preventDefault(); addCat(); } });
 
   /* ---------- вкладки: порядок и новый тип ---------- */
-  $(root.querySelector('.mct__tabs')).sortable({ items: '> a.mcm__tab', axis: 'x', distance: 8, update: function () {
+  // порядок типов — только за стрелочки ⇆ слева от названия; нажатие на само название открывает тип
+  $(root).on('click', '.mct__grip', e => e.preventDefault());
+  $(root.querySelector('.mct__tabs')).sortable({ items: '> a.mcm__tab', handle: '.mct__grip', axis: 'x', distance: 4, update: function () {
     track(post('mem_ct_order', { ids: [...this.querySelectorAll('a.mcm__tab')].map(a => +a.dataset.id) }));
   } });
   $(root).on('click', '[data-act="new-type"]', function () {

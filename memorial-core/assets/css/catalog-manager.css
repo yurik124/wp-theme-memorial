@@ -149,7 +149,10 @@
 .mct__ftable{min-width:760px}
 .mct__ftable td{vertical-align:middle}
 .mct__foot{color:var(--mute);margin-top:18px}
-.mct__tabs .mcm__tab{cursor:grab}
+.mct__tabs .mcm__tab{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.mct__grip{cursor:grab;color:#a7aaad;font-size:15px;line-height:1;padding:2px 3px;margin-left:-6px;border-radius:4px;user-select:none}
+.mct__grip:hover{color:#1d2327;background:#f0f0f1}
+.mct__grip:active,.ui-sortable-helper .mct__grip{cursor:grabbing}
 @media (max-width:960px){.mct__grid{grid-template-columns:1fr}}
 
 /* Панель отмеченных: светлые кнопки на тёмном фоне — хорошо читаются */

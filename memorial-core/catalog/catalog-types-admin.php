@@ -62,7 +62,7 @@ function mem_types_page() {
       </div>
       <nav class="mcm__tabs mct__tabs" aria-label="Типы товаров">
         <?php foreach ($types as $t) : ?>
-          <a class="mcm__tab<?php echo $t->term_id === $cur ? ' is-on' : ''; ?>" data-id="<?php echo (int) $t->term_id; ?>" href="<?php echo esc_url(add_query_arg('type', $t->term_id)); ?>"><?php echo esc_html($t->name); ?> <span><?php echo mem_cat_count($t->term_id); ?></span></a>
+          <a class="mcm__tab<?php echo $t->term_id === $cur ? ' is-on' : ''; ?>" data-id="<?php echo (int) $t->term_id; ?>" href="<?php echo esc_url(add_query_arg('type', $t->term_id)); ?>"><span class="mct__grip" title="Потяните, чтобы поменять порядок" aria-hidden="true">⇆</span><span class="mct__tname"><?php echo esc_html($t->name); ?></span> <span><?php echo mem_cat_count($t->term_id); ?></span></a>
         <?php endforeach; ?>
         <button type="button" class="mcm__tab mcm__tab--add" data-act="new-type">+ Новый тип</button>
       </nav>
