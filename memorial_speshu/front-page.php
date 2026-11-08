@@ -5,7 +5,7 @@ get_header();
 $tel    = esc_attr(mem_tel());
 $hero   = mem_home('hero');
 $img    = $hero['img'] ?? '';
-$e      = fn($s) => esc_html(mem_t($s));   // текст из настроек с подстановками {years} и т.п.
+$e      = fn($s) => memorial_nbsp(esc_html(mem_t($s)));   // текст из настроек с подстановками {years} и т.п.; предлоги не отрываются
 $head   = function ($sec) use ($e) {       // заголовок блока
     if (!empty($sec['eyebrow']) || !empty($sec['title'])) {
         echo '<header class="sec-head">';

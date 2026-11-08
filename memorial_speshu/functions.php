@@ -6,7 +6,7 @@
  */
 defined('ABSPATH') || exit;
 
-define('MEM_VER', '3.3.3');
+define('MEM_VER', '3.3.4');
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -139,3 +139,23 @@ function memorial_hero_srcs($url) {
     if ($id && ($l = wp_get_attachment_image_src($id, 'large')) && $l[1] < (wp_get_attachment_image_src($id, 'full')[1] ?? 0)) $m = $l[0];
     return [$url, $m];
 }
+
+/**
+ * Неразрывные пробелы, чтобы строка не рвалась некрасиво: «с 2003 года», «в Белгороде», «36 700 ₽» —
+ * короткие предлоги и союзы держатся со следующим словом, число — со словом после него.
+ */
+function memorial_nbsp($s) {
+    $s = (string) $s;
+    if ($s === '') return $s;
+    $nb = "\u{00A0}";
+    // предлог/союз (1–3 буквы и «для», «без», «под», «при») + пробел → неразрывный
+    $s = preg_replace('/(?<![\p{L}\d\-])(с|со|в|во|к|ко|и|а|о|об|у|по|от|до|на|за|из|не|но|ни|для|без|под|при|над)\s+(?=[\p{L}\d«"(])/iu', '$1' . $nb, $s);
+    // число + слово/знак после него: «2003 года», «23 лет», «700 ₽», «12 км»
+    $s = preg_replace('/(\d)\s+(?=(?:год|года|лет|г\.|₽|руб|км|м\b|мин|час|чел|шт|%))/u', '$1' . $nb, $s);
+    // разряды числа: «36 700»
+    $s = preg_replace('/(\d)\s(?=\d{3}(?!\d))/u', '$1' . $nb, $s);
+    // «·» и «—» не переносятся на новую строку отдельно
+    $s = preg_replace('/\s+([·—])\s/u', $nb . '$1 ', $s);
+    return $s;
+}
+add_filter('the_title', function ($t, $id = 0) { return is_admin() ? $t : memorial_nbsp($t); }, 20, 2);
