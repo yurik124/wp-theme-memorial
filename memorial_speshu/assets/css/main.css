@@ -216,7 +216,7 @@ h3{font-size:1.4rem}
 .fab{display:none;position:fixed;right:1rem;bottom:1rem;z-index:40;width:58px;height:58px;border-radius:50%;background:var(--gold);color:#fff;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.3)}
 .fab .ico{width:26px;height:26px}
 
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s,transform .7s}
+.reveal{opacity:0;transition:opacity .5s ease}   /* только мягкое проявление, без «выезда» — движение не отвлекает */
 .reveal.is-in{opacity:1;transform:none}
 
 /* Компактная шапка: включается скриптом в header.php, когда меню не помещается в строку */
@@ -541,3 +541,20 @@ a.svc__item:hover{box-shadow:var(--sh);transform:translateY(-3px);border-color:v
 .stat:nth-child(4) b[data-count]{transition-delay:.36s}
 .stat:nth-child(5) b[data-count]{transition-delay:.48s}
 @media (prefers-reduced-motion:reduce){.stat b[data-count]{opacity:1;transform:none;filter:none;transition:none}}
+
+/* Вторая кнопка первого экрана («Что делать, если умер человек») — контурная, светлая на тёмном */
+.btn--light{border-color:rgba(255,255,255,.6);color:#fff;background:transparent}
+.btn--light:hover{border-color:var(--gold2);color:var(--gold2)}
+.hero--light .btn--light{border-color:var(--ink);color:var(--ink)}
+.hero__cta{flex-wrap:wrap;gap:.75rem}
+@media (max-width:700px){.hero__cta .btn--light{white-space:normal;text-align:center}}
+
+/* Кнопки и ссылки на телефоне — не меньше 44 px по высоте (удобно попасть пальцем) */
+.btn,.maps__tab,.chip{min-height:44px}
+.footer .footer__tel,.footer .footer__mail{display:inline-flex;align-items:center;min-height:44px}
+.crumbs a{display:inline-block;padding:.7rem 0}
+.crumbs{margin-bottom:.4rem}
+@media (max-width:700px){.footer__copy a,.footer li>a{display:inline-flex;align-items:center;min-height:44px}}
+.logo{min-height:44px}
+.reviews__credit{display:inline-block;padding:.85rem 0;min-height:44px}
+li>a[href^="tel:"],li>a[href^="mailto:"],.clist a[href^="tel:"],.cb__m{display:inline-flex;align-items:center;min-height:44px}

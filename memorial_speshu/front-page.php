@@ -45,6 +45,10 @@ if ($img) {   // ПК — оригинал, телефон — 1024 px (пред
     <?php endif; ?>
     <div class="hero__cta">
       <?php if ($tel) : ?><a class="btn btn--gold btn--lg" href="tel:<?php echo $tel; ?>"><?php echo mem_icon('phone'); ?><span class="nowrap"><?php echo esc_html(mem_opt('phone')); ?></span></a><?php endif; ?>
+      <?php // вторая кнопка — «Что делать, если умер человек»: следующий шаг виден сразу, без меню
+      if (function_exists('mem_home_help_link') && ($help = mem_home_help_link())) : ?>
+        <a class="btn btn--light btn--lg" href="<?php echo esc_url($help[0]); ?>"><?php echo esc_html($help[1]); ?> <span aria-hidden="true">→</span></a>
+      <?php endif; ?>
       <?php if ($tel && mem_night()) : ?><p class="hero__night"><span class="dot" aria-hidden="true"></span><?php echo esc_html(mem_night()); ?></p><?php endif; ?>
     </div>
   </div>
