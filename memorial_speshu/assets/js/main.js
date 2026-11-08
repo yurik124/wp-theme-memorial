@@ -247,22 +247,12 @@
     d.addEventListener('mem:consent', load);
   });
 
-  // Появление блоков и счётчики
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Появление блоков и цифр (цифры не «пересчитываются» — сразу верные и плавно проявляются, см. .stat в main.css)
   const io = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if (!en.isIntersecting) return;
       const el = en.target;
       el.classList.add('is-in');
-      if (el.dataset.count && !reduce) {
-        const end = +el.dataset.count, t0 = performance.now();
-        const step = now => {
-          const p = Math.min((now - t0) / 1500, 1);
-          el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))).toLocaleString('ru-RU');
-          if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      }
       io.unobserve(el);
     });
   }, { threshold: 0.15 });

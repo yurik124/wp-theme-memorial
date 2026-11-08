@@ -527,6 +527,15 @@ a.svc__item:hover{box-shadow:var(--sh);transform:translateY(-3px);border-color:v
 /* Контраст (проверка доступности PageSpeed): белый текст на золоте и золотые подписи на светлом фоне читались плохо */
 .btn--gold{color:var(--dark)}
 .btn--gold:hover{background:var(--gold3);color:#fff}
-.eyebrow{color:var(--gold3)}
+.eyebrow{color:color-mix(in srgb,var(--gold3) 82%,#000)}   /* ≥4.5:1 и на --bg, и на --bg2 */
 .hero .eyebrow,.stats .eyebrow,.footer .eyebrow,.kcard--dark .eyebrow,.pkg--feat .eyebrow,.consent .eyebrow{color:var(--gold2)}
 .reviews__credit{color:#6f6f6f}
+
+/* Цифры в блоке «О компании»: вместо долгого пересчёта — мягкое проявление по очереди */
+.stat b[data-count]{opacity:0;transform:translateY(10px) scale(.96);filter:blur(3px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1),filter .8s ease}
+.stat b[data-count].is-in{opacity:1;transform:none;filter:none}
+.stat:nth-child(2) b[data-count]{transition-delay:.12s}
+.stat:nth-child(3) b[data-count]{transition-delay:.24s}
+.stat:nth-child(4) b[data-count]{transition-delay:.36s}
+.stat:nth-child(5) b[data-count]{transition-delay:.48s}
+@media (prefers-reduced-motion:reduce){.stat b[data-count]{opacity:1;transform:none;filter:none;transition:none}}
