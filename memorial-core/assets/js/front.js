@@ -421,6 +421,49 @@
     }));
   });
 
+  // Карточка товара с несколькими фото: стрелки, точки, листание пальцем.
+  // Ссылка карточки всегда ведёт на текущее фото — крупный просмотр открывается с него.
+  const cardGo = (box, dir) => {
+    const phs = [...box.querySelectorAll('.mcard__ph')];
+    if (phs.length < 2) return;
+    const i = phs.findIndex(x => x.classList.contains('is-on'));
+    const n = (i + dir + phs.length) % phs.length, ph = phs[n];
+    phs.forEach(x => x.classList.toggle('is-on', x === ph));
+    const after = phs[(n + dir + phs.length) % phs.length];
+    if (after) after.loading = 'eager';             // следующее фото — заранее, чтобы не ждать
+    if (box.dataset.mbg0 === undefined) box.dataset.mbg0 = box.style.getPropertyValue('--mbg') || '';
+    const bg = n ? (ph.dataset.bg ? 'url("' + ph.dataset.bg + '")' : '') : box.dataset.mbg0;
+    box.classList.toggle('has-bg', !!bg);
+    bg ? box.style.setProperty('--mbg', bg) : box.style.removeProperty('--mbg');
+    const link = box.closest('.mcard__link');
+    if (link && ph.dataset.big && link.hasAttribute('data-lb')) link.href = ph.dataset.big;
+    box.closest('.mcard')?.querySelectorAll('.mcard__dots i').forEach((d, k) => d.classList.toggle('is-on', k === n));
+  };
+  d.addEventListener('click', e => {
+    const a = e.target.closest('.mcard__arr');
+    if (!a) return;
+    e.preventDefault(); e.stopPropagation();
+    cardGo(a.closest('.mcard__img'), +a.dataset.dir);
+  }, true);
+  d.addEventListener('keydown', e => {
+    const a = e.target.closest?.('.mcard__arr');
+    if (a && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); cardGo(a.closest('.mcard__img'), +a.dataset.dir); }
+  }, true);
+  d.querySelectorAll('.mcard__img').forEach(box => {
+    if (!box.querySelector('.mcard__arr')) return;
+    const link = box.closest('a');
+    // наведение на карточку — подгрузить второе фото заранее
+    box.closest('.mcard')?.addEventListener('pointerenter', () => { const p = box.querySelectorAll('.mcard__ph')[1]; if (p) p.loading = 'eager'; }, { once: true });
+    let x0 = null, y0 = 0;
+    box.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    box.addEventListener('touchend', e => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { cardGo(box, dx < 0 ? 1 : -1); if (link) { link.dataset.swiped = '1'; setTimeout(() => delete link.dataset.swiped, 400); } }
+    });
+    if (link) link.addEventListener('click', e => { if (link.dataset.swiped) { e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+  });
+
   // «Наши работы»: миниатюры и стрелки меняют большое фото; крупный просмотр — по клику на большое фото
   const workGo = (work, t) => {
     const thumbs = [...work.querySelectorAll('.work__thumb')];

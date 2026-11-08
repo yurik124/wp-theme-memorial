@@ -53,6 +53,7 @@ function mem_manager_product($p, $type_id) {
         'status' => $p->post_status,
         'thumb'  => $thumb ? wp_get_attachment_image_url($thumb, 'thumbnail') : '',
         'tid'    => (int) $thumb,   // номер фото — чтобы в окне выбора было отмечено текущее
+        'pids'   => mem_product_photos($p->ID),   // все фото товара: первое — главное
         'big'    => $thumb ? wp_get_attachment_image_url($thumb, 'large') : '',
         'price'  => (int) get_post_meta($p->ID, '_mem_price', true) ?: '',
         'from'   => get_post_meta($p->ID, '_mem_price_from', true) === '1',
@@ -167,11 +168,13 @@ add_action('wp_ajax_mem_cm_save', function () {
         wp_set_object_terms($id, $ids ?: [$type], 'mem_cat');
     } elseif ($f === 'status') {
         wp_update_post(['ID' => $id, 'post_status' => $v === 'publish' ? 'publish' : 'draft']);
-    } elseif ($f === 'photo') {
-        $att = absint($v);
-        if ($att && wp_attachment_is_image($att)) set_post_thumbnail($id, $att);
+    } elseif ($f === 'photo' || $f === 'photos') {
+        // photos: «12,34,56» — первое фото главное, остальные листаются в карточке
+        $ids = array_values(array_unique(array_filter(array_map('absint', explode(',', (string) $v)), 'wp_attachment_is_image')));
+        if ($ids) set_post_thumbnail($id, $ids[0]);
+        if ($f === 'photos') $ids && count($ids) > 1 ? update_post_meta($id, '_mem_gallery', implode(',', array_slice($ids, 1))) : delete_post_meta($id, '_mem_gallery');
         $tid = get_post_thumbnail_id($id);
-        wp_send_json_success(['tid' => (int) $tid, 'thumb' => $tid ? wp_get_attachment_image_url($tid, 'thumbnail') : '', 'big' => $tid ? wp_get_attachment_image_url($tid, 'large') : '']);
+        wp_send_json_success(['pids' => mem_product_photos($id), 'tid' => (int) $tid, 'thumb' => $tid ? wp_get_attachment_image_url($tid, 'thumbnail') : '', 'big' => $tid ? wp_get_attachment_image_url($tid, 'large') : '']);
     } else {
         wp_send_json_error('Неизвестное поле');
     }

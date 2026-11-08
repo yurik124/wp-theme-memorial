@@ -80,12 +80,29 @@ function mem_card_ratio_differs($thumb, $card = 0) {
     return $r && abs($r / $card - 1) > .12;
 }
 
+/** Стрелка «‹ ›» картинкой — строго по центру кнопки (символы шрифта смещены) */
+function mem_chevron($dir) {
+    return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="' . ($dir === 'l' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7')
+         . '" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+
+/** Все фото товара: [главное, дополнительные…] (номера в медиатеке) */
+function mem_product_photos($id) {
+    $out = [];
+    if ($t = (int) get_post_thumbnail_id($id)) $out[] = $t;
+    foreach (array_map('absint', explode(',', (string) get_post_meta($id, '_mem_gallery', true))) as $g) {
+        if ($g && !in_array($g, $out, true) && wp_attachment_is_image($g)) $out[] = $g;
+    }
+    return $out;
+}
+
 /** Карточка товара каталога */
 function mem_catalog_card($p, $i) {
     $id    = $p->ID;
     $price = (int) get_post_meta($id, '_mem_price', true);
     $sub   = get_post_meta($id, '_mem_sub', true);
     $thumb = get_post_thumbnail_id($id);
+    $photos = mem_product_photos($id);
     $big   = $thumb ? wp_get_attachment_image_url($thumb, 'large') : '';
     $page  = mem_product_has_page($id) ? get_permalink($id) : '';
     $title = get_the_title($id);
@@ -94,15 +111,33 @@ function mem_catalog_card($p, $i) {
 
     echo '<li class="mcard" id="' . mem_product_anchor($id) . '" data-price="' . $price . '" data-i="' . (int) $i . '">';
     if ($page) echo '<a class="mcard__link" href="' . esc_url($page) . '">';
-    elseif ($big) echo '<a class="mcard__link" href="' . esc_url($big) . '" data-lb data-cap="' . esc_attr($cap) . '">';
+    elseif ($big) {
+        // несколько фото: в крупном просмотре листаются все фото товара, затем — следующий товар
+        $set = count($photos) > 1 ? ' data-lb-set="' . esc_attr(wp_json_encode(array_map(fn($p) => wp_get_attachment_image_url($p, 'large'), $photos))) . '"' : '';
+        echo '<a class="mcard__link" href="' . esc_url($big) . '" data-lb data-cap="' . esc_attr($cap) . '"' . $set . '>';
+    }
     else echo '<div class="mcard__link">';
     // фото другой формы, чем карточка: поля по бокам — размытая копия этого же фото (а не пустой белый фон)
     $mbg = $thumb && mem_card_ratio_differs($thumb) ? mem_blur_bg_url($thumb) : '';
     echo '<span class="mcard__img' . ($mbg ? ' has-bg" style="--mbg:url(&quot;' . esc_url($mbg) . '&quot;)' : '') . '">';
-    echo $thumb ? wp_get_attachment_image($thumb, 'medium_large', false, ['loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width:600px) 50vw, 260px', 'alt' => get_post_meta($thumb, '_wp_attachment_image_alt', true) ?: $title])
-                : '<span class="mcard__noimg" aria-hidden="true">✝</span>';
+    $imgattr = fn($p, $k) => ['loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width:600px) 50vw, 260px',
+                              'alt' => get_post_meta($p, '_wp_attachment_image_alt', true) ?: $title . ($k ? ', фото ' . ($k + 1) : ''),
+                              'class' => 'mcard__ph' . ($k ? '' : ' is-on'), 'data-big' => wp_get_attachment_image_url($p, 'large'),
+                              'data-bg' => $k && mem_card_ratio_differs($p) ? mem_blur_bg_url($p) : ''];
+    if (!$thumb) echo '<span class="mcard__noimg" aria-hidden="true">✝</span>';
+    // несколько фото: остальные лежат рядом скрытыми (грузятся, только когда до них долистают), стрелки и точки — front.js
+    foreach ($photos as $k => $p) echo wp_get_attachment_image($p, 'medium_large', false, $imgattr($p, $k));
+    if (count($photos) > 1) {
+        echo '<span class="mcard__arr mcard__arr--l" role="button" tabindex="0" aria-label="Предыдущее фото" data-dir="-1">' . mem_chevron('l') . '</span>'
+           . '<span class="mcard__arr mcard__arr--r" role="button" tabindex="0" aria-label="Следующее фото" data-dir="1">' . mem_chevron('r') . '</span>';
+    }
     if (get_post_meta($id, '_mem_on_order', true)) echo '<span class="mcard__tag">Под заказ</span>';
     echo '</span>';
+    if (count($photos) > 1) {
+        echo '<span class="mcard__dots" aria-hidden="true">';
+        foreach ($photos as $k => $p) echo '<i' . ($k ? '' : ' class="is-on"') . '></i>';
+        echo '</span>';
+    }
     echo '<span class="mcard__body"><span class="mcard__name">' . esc_html($title) . '</span>';
     $specs = mem_product_specs($id);
     // подпись повторяет характеристику («700 × 2050» и «Ширина × высота: 700 × 2050 мм») — не дублируем
@@ -204,10 +239,11 @@ function mem_term_anchor($t) {
 
 /* Окно для крупного фото — одно на страницу */
 add_action('wp_footer', function () {
-    echo '<dialog class="lb" id="lb" aria-label="Фото"><button class="lb__x" type="button" aria-label="Закрыть">×</button>'
-       . '<button class="lb__nav lb__prev" type="button" aria-label="Предыдущее">‹</button>'
-       . '<figure><img alt=""><figcaption></figcaption></figure>'
-       . '<button class="lb__nav lb__next" type="button" aria-label="Следующее">›</button></dialog>';
+    echo '<dialog class="lb" id="lb" aria-label="Фото"><button class="lb__x" type="button" aria-label="Закрыть">'
+       . '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>'
+       . '<button class="lb__nav lb__prev" type="button" aria-label="Предыдущее">' . mem_chevron('l') . '</button>'
+       . '<figure><div class="lb__stage"><img alt=""></div><figcaption></figcaption><p class="lb__count" aria-live="polite"></p></figure>'
+       . '<button class="lb__nav lb__next" type="button" aria-label="Следующее">' . mem_chevron('r') . '</button></dialog>';
 }, 20);
 
 /* Страница с шорткодом = страница своей категории: ссылки на категорию ведут на неё */

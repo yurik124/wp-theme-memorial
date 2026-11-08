@@ -334,45 +334,79 @@
     }, { once: true });
   });
 
-  // Крупное фото с листанием: карточки каталога, работы и фото в тексте страниц со ссылкой на файл
+  // Крупное фото с листанием: карточки каталога, работы и фото в тексте страниц со ссылкой на файл.
+  // У товара с несколькими фото (data-lb-set) листаются все его фото, затем — следующий товар.
+  // Пока крупное фото грузится, видно уже загруженную уменьшенную копию; соседние фото подгружаются заранее.
   const lb = d.getElementById('lb');
   if (lb && lb.showModal) {
     const isImg = a => /\.(jpe?g|png|webp|gif|avif)(\?.*)?$/i.test(a.getAttribute('href') || '');
     d.querySelectorAll('.content a:not(.work__thumb)').forEach(a => { if (isImg(a) && a.querySelector('img')) a.setAttribute('data-lb', ''); });
     let group = [], idx = 0;
-    const img = lb.querySelector('img'), cap = lb.querySelector('figcaption');
+    const img = lb.querySelector('img'), cap = lb.querySelector('figcaption'), count = lb.querySelector('.lb__count');
+    const loaded = new Set(), loading = new Map();
+    const preload = it => {
+      if (!it || loaded.has(it.href) || loading.has(it.href)) return;
+      const im = new Image();
+      loading.set(it.href, im);
+      im.onload = () => { loaded.add(it.href); loading.delete(it.href); if (group[idx] === it) { img.src = it.href; img.classList.remove('is-low'); } };
+      im.onerror = () => loading.delete(it.href);
+      im.decoding = 'async';
+      im.src = it.href;
+    };
+    const idle = window.requestIdleCallback || (f => setTimeout(f, 120));
     const show = i => {
       idx = (i + group.length) % group.length;
-      const a = group[idx];
-      img.src = a.href;
-      img.alt = a.querySelector('img')?.alt || '';
-      cap.textContent = a.dataset.cap || a.closest('figure')?.querySelector('figcaption')?.textContent.trim() || '';
-      lb.querySelectorAll('.lb__nav').forEach(b => b.hidden = group.length < 2);
+      const it = group[idx];
+      if (loaded.has(it.href)) { img.src = it.href; img.classList.remove('is-low'); }
+      else { if (it.low) { img.src = it.low; img.classList.add('is-low'); } preload(it); }
+      img.alt = it.alt || '';
+      cap.textContent = it.cap || '';
+      const many = group.length > 1;
+      lb.querySelectorAll('.lb__nav').forEach(b => b.hidden = !many);
+      if (count) { count.hidden = !many; count.textContent = (idx + 1) + ' / ' + group.length; }
+      idle(() => [1, -1, 2].forEach(k => preload(group[(idx + k + group.length) % group.length])));
+    };
+    // ссылка → список фото: [{href, low (уже загруженная копия), cap, alt}]
+    const itemsOf = a => {
+      let set = null;
+      try { set = a.dataset.lbSet ? JSON.parse(a.dataset.lbSet) : null; } catch (e) {}
+      const cap = a.dataset.cap || a.closest('figure')?.querySelector('figcaption')?.textContent.trim() || '';
+      const phs = [...a.querySelectorAll('img')];
+      if (!set) return [{ href: a.href, low: phs.find(x => x.classList.contains('is-on'))?.currentSrc || phs[0]?.currentSrc || '', cap, alt: phs[0]?.alt || '', a }];
+      return set.map((h, k) => ({ href: new URL(h, location.href).href, low: phs[k]?.currentSrc || '', cap: cap + (set.length > 1 ? ' · фото ' + (k + 1) + ' из ' + set.length : ''), alt: phs[k]?.alt || '', a }));
     };
     d.addEventListener('click', e => {
       const a = e.target.closest('a[data-lb]');
       if (!a || e.ctrlKey || e.metaKey || e.shiftKey) return;
       e.preventDefault();
       const items = a.closest('.work')?.querySelectorAll('[data-lb-item]');
+      let start = 0;
       if (items && items.length) {
-        group = [...items];
-        show(Math.max(0, group.findIndex(x => x.href === a.href)));
+        group = [...items].map(x => ({ href: x.href, low: x.querySelector('img')?.currentSrc || '', cap: x.dataset.cap || '', alt: x.querySelector('img')?.alt || '' }));
+        start = Math.max(0, group.findIndex(x => x.href === a.href));
       } else {
-        const scope = a.closest('.mcat__grid, .wp-block-gallery, .works__list') || a.parentElement;
-        group = [...scope.querySelectorAll('a[data-lb]')].filter(x => x.offsetParent !== null);
-        show(group.indexOf(a));
+        const scope = a.closest('.mcat__grid, .wp-block-gallery, .works__list, .mem-photos') || a.parentElement;
+        group = [];
+        [...scope.querySelectorAll('a[data-lb]')].filter(x => x.offsetParent !== null).forEach(x => {
+          const its = itemsOf(x);
+          if (x === a) start = group.length + Math.max(0, its.findIndex(t => t.href === a.href));
+          group.push(...its);
+        });
       }
+      show(start);
+      d.documentElement.classList.add('lb-open');     // страница под фото не прокручивается
       lb.showModal();
     });
     lb.querySelector('.lb__x').addEventListener('click', () => lb.close());
     lb.querySelector('.lb__prev').addEventListener('click', () => show(idx - 1));
     lb.querySelector('.lb__next').addEventListener('click', () => show(idx + 1));
-    lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+    lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb__stage')) lb.close(); });
     lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') show(idx - 1); if (e.key === 'ArrowRight') show(idx + 1); });
     let x0 = null;
     lb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
-    lb.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1)); x0 = null; });
-    lb.addEventListener('close', () => { img.src = ''; });
+    lb.addEventListener('touchmove', e => { if (e.cancelable) e.preventDefault(); }, { passive: false });   // без прокрутки страницы
+    lb.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50 && group.length > 1) show(idx + (dx < 0 ? 1 : -1)); x0 = null; });
+    lb.addEventListener('close', () => { img.removeAttribute('src'); d.documentElement.classList.remove('lb-open'); });
   }
 
 

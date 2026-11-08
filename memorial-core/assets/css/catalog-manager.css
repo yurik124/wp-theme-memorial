@@ -225,3 +225,7 @@
 .mcm__sort.is-on i{color:#2271b1}
 .mcm__sortnote{caption-side:top;text-align:left;padding:8px 12px;background:#f0f6fc;color:#1d2327;font-size:13px;border-bottom:1px solid var(--line)}
 .mcm__badge.mwm__ex{background:#fbf3dc;color:#8a6f35;border-color:#e8d8a8}
+
+/* число фото у товара (несколько фото — листаются в карточке на сайте) */
+.mcm__photo{position:relative}
+.mcm__phn{position:absolute;right:-4px;bottom:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#1d2327;color:#fff;font-size:11px;line-height:18px;text-align:center}

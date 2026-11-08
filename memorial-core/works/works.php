@@ -212,8 +212,8 @@ add_shortcode('mem_works', function ($atts) {
             if ($d['year']) echo '<span class="work__year">' . (int) $d['year'] . '</span>';
             echo '</a>';
             if (count($d['photos']) > 1) {
-                echo '<button type="button" class="work__arr work__arr--l" data-dir="-1" aria-label="Предыдущее фото">‹</button>'
-                   . '<button type="button" class="work__arr work__arr--r" data-dir="1" aria-label="Следующее фото">›</button>';
+                echo '<button type="button" class="work__arr work__arr--l" data-dir="-1" aria-label="Предыдущее фото">' . mem_chevron('l') . '</button>'
+                   . '<button type="button" class="work__arr work__arr--r" data-dir="1" aria-label="Следующее фото">' . mem_chevron('r') . '</button>';
             }
             echo '</div>';
             if (count($d['photos']) > 1) {
