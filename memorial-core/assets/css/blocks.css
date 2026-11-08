@@ -472,3 +472,10 @@ details[id]{scroll-margin-top:calc(var(--hh,72px) + 24px)}
 .work__stage .work__arr svg{width:20px;height:20px;display:block}
 .work__stage .work__arr--l{left:0;transform:translate(-50%,-50%)}
 .work__stage .work__arr--r{right:0;left:auto;transform:translate(50%,-50%)}
+/* Телефон: карточки стоят тесно — стрелки внутри фото у края, чтобы круги соседних карточек не наезжали друг на друга */
+@media (max-width:600px){
+  .mcard__arr{width:28px;height:28px;margin-top:-14px}
+  .mcard__arr--l{left:4px;transform:none}
+  .mcard__arr--r{right:4px;transform:none}
+  .mcard__arr::after{inset:-8px}
+}
