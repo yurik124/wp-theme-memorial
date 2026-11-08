@@ -13,7 +13,7 @@ function mem_color_keys() {
         'dark2' => ['Тёмный фон — второй оттенок', '#202328'],
         'gold'  => ['Акцент: кнопки, иконки, линии', '#b89b5e'],
         'gold2' => ['Акцент на тёмном фоне (светлее)', '#d4bd8a'],
-        'gold3' => ['Акцент для текста на светлом (темнее)', '#8a6f35'],
+        'gold3' => ['Акцент для текста на светлом (темнее)', '#75602e'],
         'bg'    => ['Фон страницы', '#f6f4f0'],
         'bg2'   => ['Фон чередующихся блоков', '#ece8e1'],
         'ink'   => ['Основной текст', '#1d1f22'],
@@ -27,7 +27,7 @@ function mem_color_presets() {
     $k = array_keys(mem_color_keys());
     $p = fn($name, ...$c) => ['name' => $name, 'c' => array_combine($k, $c)];
     return [
-        'classic'  => $p('Графит и золото (исходная)', '#16181b', '#202328', '#b89b5e', '#d4bd8a', '#8a6f35', '#f6f4f0', '#ece8e1', '#1d1f22', '#6b6862', '#e3ddd2'),
+        'classic'  => $p('Графит и золото (исходная)', '#16181b', '#202328', '#b89b5e', '#d4bd8a', '#75602e', '#f6f4f0', '#ece8e1', '#1d1f22', '#6b6862', '#e3ddd2'),
         'navy'     => $p('Тёмно-синий и серебро',      '#142033', '#1c2a40', '#7d8fa6', '#c3cedb', '#4f6177', '#f4f6f8', '#e7ebf0', '#1b2230', '#5f6876', '#dbe1e8'),
         'burgundy' => $p('Бордо',                      '#2a1418', '#3a1d22', '#8e2f3c', '#d9a5ab', '#6e2430', '#f7f3f2', '#eee5e3', '#241a1b', '#6d6162', '#e6d9d7'),
         'olive'    => $p('Оливковый',                  '#1e2420', '#28302a', '#7c8b5a', '#c5cfa6', '#56633c', '#f5f5f0', '#e9eae1', '#1e2220', '#646a62', '#dfe1d5'),
@@ -177,9 +177,17 @@ function mem_design_css() {
     $presets = mem_color_presets();
     $base = $presets[$d['colors']['preset'] ?? 'classic']['c'] ?? $presets['classic']['c'];
     $def = $presets['classic']['c'];
+    $fin = [];
     foreach ($base as $k => $v) {
         $v = !empty($d['colors'][$k]) ? $d['colors'][$k] : $v;
+        if ($k === 'gold3' && strtolower($v) === '#8a6f35') $v = $def['gold3'];   // прежний цвет по умолчанию был слишком светлым для текста
+        $fin[$k] = $v;
         if (strtolower($v) !== $def[$k]) $vars[] = '--' . $k . ':' . $v;
+    }
+    // текст на золотых кнопках: тёмный или белый — что контрастнее с цветом акцента
+    if (!empty($fin['gold']) && strtolower($fin['gold']) !== $def['gold']) {
+        $dark = $fin['dark'] ?? '#16181b';
+        $vars[] = '--on-gold:' . (mem_contrast($fin['gold'], $dark) >= mem_contrast($fin['gold'], '#ffffff') ? $dark : '#fff');
     }
     if ($vars) $css .= ':root{' . implode(';', $vars) . '}';
     return $css;
@@ -216,4 +224,17 @@ function mem_theme_color() {
     $d = mem_design_opts();
     $p = mem_color_presets();
     return !empty($d['colors']['dark']) ? $d['colors']['dark'] : ($p[$d['colors']['preset'] ?? 'classic']['c']['dark'] ?? '#16181b');
+}
+
+/** Контраст двух цветов #rrggbb по WCAG (1…21) */
+function mem_contrast($a, $b) {
+    $l = function ($h) {
+        $h = ltrim((string) $h, '#');
+        if (strlen($h) === 3) $h = $h[0] . $h[0] . $h[1] . $h[1] . $h[2] . $h[2];
+        $c = array_map(fn($i) => hexdec(substr($h, $i, 2)) / 255, [0, 2, 4]);
+        $c = array_map(fn($v) => $v <= .03928 ? $v / 12.92 : (($v + .055) / 1.055) ** 2.4, $c);
+        return .2126 * $c[0] + .7152 * $c[1] + .0722 * $c[2];
+    };
+    [$x, $y] = [$l($a), $l($b)];
+    return (max($x, $y) + .05) / (min($x, $y) + .05);
 }

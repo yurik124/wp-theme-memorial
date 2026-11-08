@@ -10,7 +10,7 @@
 
 :root{
   --bg:#f6f4f0;--bg2:#ece8e1;--ink:#1d1f22;--mute:#6b6862;--line:#e3ddd2;
-  --dark:#16181b;--dark2:#202328;--gold:#b89b5e;--gold2:#d4bd8a;--gold3:#8a6f35;
+  --dark:#16181b;--dark2:#202328;--gold:#b89b5e;--gold2:#d4bd8a;--gold3:#75602e;
   --r:14px;--sh:0 10px 30px -12px rgba(0,0,0,.18);--hh:72px;
   --top:var(--wp-admin--admin-bar--height,0px);
   --serif:"Lora",Georgia,"Times New Roman",serif;
@@ -172,7 +172,7 @@ h3{font-size:1.4rem}
 .card:hover{box-shadow:var(--sh);transform:translateY(-3px)}
 .card__img{position:relative;aspect-ratio:1;background:var(--bg2);display:grid;place-items:center}
 .card__img img{width:100%;height:100%;object-fit:contain}
-.card__noimg{font-size:2.5rem;color:#c9c2b5}
+.card__noimg{font-size:2.5rem;color:#857e72}
 .card__tag{position:absolute;top:.75rem;left:.75rem;background:var(--dark);color:#fff;font-size:.72rem;padding:.25rem .6rem;border-radius:999px}
 .card__body{padding:1rem 1.1rem 1.2rem;display:flex;flex-direction:column;gap:.6rem;flex:1}
 .card__title{font:600 1rem/1.35 var(--sans);margin:0}
@@ -524,11 +524,13 @@ a.svc__item:hover{box-shadow:var(--sh);transform:translateY(-3px);border-color:v
 /* фото первого экрана на телефоне — уменьшенное (1024 px) */
 @media (max-width:700px){.hero{--hero:var(--hero-m,var(--hero-d))}}
 
-/* Контраст (проверка доступности PageSpeed): белый текст на золоте и золотые подписи на светлом фоне читались плохо */
-.btn--gold{color:var(--dark)}
-.btn--gold:hover{background:var(--gold3);color:#fff}
-.eyebrow{color:color-mix(in srgb,var(--gold3) 82%,#000)}   /* ≥4.5:1 и на --bg, и на --bg2 */
-.hero .eyebrow,.stats .eyebrow,.footer .eyebrow,.kcard--dark .eyebrow,.pkg--feat .eyebrow,.consent .eyebrow{color:var(--gold2)}
+/* Контраст (проверка доступности PageSpeed, WCAG AA: мелкий текст ≥ 4.5:1, крупный ≥ 3:1).
+   Золото --gold — для фона, линий и иконок; текст на светлом — --gold3 (темнее), на тёмном — --gold2.
+   .btn.btn--gold — двойной класс, иначе ссылку-телефон перекрашивает правило a[href^="tel"] */
+.btn.btn--gold,.pkg__badge{color:var(--on-gold,var(--dark))}   /* --on-gold — из настроек цветов (inc/design.php) */
+.btn.btn--gold:hover{background:var(--gold3);color:#fff}
+.eyebrow,.feat__n,.pkg__total,.kcard__title,.kaddr__route,.chip:hover,.cb__m:hover,.totop:hover,.kmsg__btn:hover{color:var(--gold3)}
+.hero .eyebrow,.stats .eyebrow,.footer .eyebrow,.kcard--dark .eyebrow,.kcard--dark .kcard__title,.pkg--feat .eyebrow,.pkg--feat .pkg__total,.consent .eyebrow{color:var(--gold2)}
 .reviews__credit{color:#6f6f6f}
 
 /* Цифры в блоке «О компании»: вместо долгого пересчёта — мягкое проявление по очереди */

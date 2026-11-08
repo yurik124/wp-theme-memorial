@@ -26,7 +26,7 @@ html.hdr-two .mcat__bar{top:calc(var(--top,0px) + var(--hh2,124px))}
 .is-stuck .has-l .mcat__arr--l,.is-stuck .has-r .mcat__arr--r{display:grid}
 .mcat__nav::-webkit-scrollbar{display:none}
 .mcat__nav .chip{white-space:nowrap;text-decoration:none!important;color:var(--ink,#1d1f22)!important;font:500 .9rem/1.2 inherit;cursor:pointer}
-.mcat__nav .chip small{color:#9a958c;margin-left:.15rem}
+.mcat__nav .chip small{color:var(--mute,#6b6862);margin-left:.15rem}
 .mcat__nav .chip.is-on{background:var(--dark,#16181b);border-color:var(--dark,#16181b);color:#fff!important}
 .mcat__sort{margin-left:auto;flex:none}
 .mcat__sort select{padding:.5rem .7rem;border:1px solid var(--line,#e3ddd2);border-radius:8px;font:inherit;font-size:.92rem;background:#fff;color:var(--ink,#1d1f22);cursor:pointer}
@@ -47,7 +47,7 @@ a.mcard__link:hover{border-color:var(--gold,#b89b5e);box-shadow:0 10px 26px -14p
 .mcat--tall .mcard__img{aspect-ratio:3/5}
 .mcat--tall .mcard__img img,.mcat--land .mcard__img img{object-fit:contain}
 .mcat--land .mcard__img{aspect-ratio:5/3}
-.mcard__noimg{display:grid;place-items:center;height:100%;font-size:2rem;color:#c9c2b5;background:var(--bg2,#ece8e1)}
+.mcard__noimg{display:grid;place-items:center;height:100%;font-size:2rem;color:#857e72;background:var(--bg2,#ece8e1)}
 .mcard__tag{position:absolute;top:.5rem;left:.5rem;background:var(--dark,#16181b);color:#fff;font-size:.7rem;padding:.2rem .55rem;border-radius:999px}
 .mcard__body{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.15rem;padding:.6rem .2rem .75rem;flex:1}
 .mcard__name{font:600 1.15rem/1.2 var(--serif,Georgia,serif);color:var(--gold3,#8a6f35)}
@@ -124,7 +124,7 @@ a.mcard__link:hover{border-color:var(--gold,#b89b5e);box-shadow:0 10px 26px -14p
 .content .mfaq__none{margin:.8rem 0 0;color:var(--mute,#6b6862)}
 .mfaq__toc{display:flex;flex-wrap:wrap;gap:.45rem;margin:1rem 0 .5rem}
 .mfaq__toc .chip{text-decoration:none!important;color:var(--ink,#1d1f22)!important;font-size:.9rem}
-.mfaq__toc .chip small{color:#9a958c}
+.mfaq__toc .chip small{color:var(--mute,#6b6862)}
 .mfaq__group{scroll-margin-top:90px;margin-top:2rem}
 .content .mfaq__title{margin:0 0 .8rem}
 .content .mfaq__more{margin:.4rem 0 0;font-size:.95rem}
@@ -244,7 +244,7 @@ a.mcard__link:hover{border-color:var(--gold,#b89b5e);box-shadow:0 10px 26px -14p
 .rwo__card[hidden]{display:none}
 .rwo__card.is-in{animation:rwoIn .35s ease}
 .rwo__head{display:flex;align-items:center;gap:.7rem}
-.rwo__ava{--h:30;flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font:600 1.05rem/1 var(--sans,system-ui,sans-serif);color:#fff;background:hsl(var(--h) 32% 46%)}
+.rwo__ava{--h:30;flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font:600 1.05rem/1 var(--sans,system-ui,sans-serif);color:#fff;background:hsl(var(--h) 32% 36%)}
 .rwo__who{display:flex;flex-direction:column;min-width:0;flex:1}
 .rwo__who b{font-weight:600;line-height:1.3;overflow-wrap:anywhere}
 .rwo__line{display:flex;flex-wrap:wrap;align-items:center;gap:.15rem .6rem;margin-top:.15rem}
