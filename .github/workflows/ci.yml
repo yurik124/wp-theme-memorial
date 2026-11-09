@@ -120,7 +120,7 @@ jobs:
     name: WordPress 7.1.4 (wp-env), часть ${{ matrix.shard }}/2
     runs-on: ubuntu-24.04
     needs: [php, js]
-    timeout-minutes: 40
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
