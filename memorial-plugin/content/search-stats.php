@@ -102,7 +102,9 @@ function memorial_plugin_sq_page() {
     uasort($ok, $sort);
     uasort($none, $sort);
     $faq = '';
-    foreach (get_pages() as $p) if (has_shortcode($p->post_content, 'mem_faq')) { $faq = get_permalink($p); break; }
+    foreach (get_pages() as $p) {
+        if (has_shortcode($p->post_content, 'mem_faq')) { $faq = get_permalink($p); break; }
+    }
     $where = ['f' => 'Вопрос–ответ', 'g' => 'Полезно знать'];
 
     $table = function ($rows, $title, $note) use ($faq, $where) {

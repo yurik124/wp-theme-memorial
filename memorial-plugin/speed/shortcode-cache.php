@@ -19,7 +19,11 @@ function memorial_plugin_sc_cache_on() {
     if ($on !== null) return $on;
     $on = !empty(memorial_plugin_settings('mem_speed')['sc']['on']) && !is_admin() && !wp_doing_ajax() && !(defined('REST_REQUEST') && REST_REQUEST)
         && ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET' && !is_preview() && !is_customize_preview();
-    if ($on) foreach (array_keys($_GET) as $k) if (!memorial_plugin_page_cache_ignored_arg((string) $k)) { $on = false; break; }
+    if ($on) {
+        foreach (array_keys($_GET) as $k) {
+            if (!memorial_plugin_page_cache_ignored_arg((string) $k)) { $on = false; break; }
+        }
+    }
     return $on;
 }
 

@@ -87,7 +87,7 @@ jobs:
 
       - name: Файл блокировки версий (если его ещё нет в репозитории)
         if: hashFiles('package-lock.json') == ''
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: package-lock
           path: package-lock.json
@@ -108,7 +108,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: npm run build
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
           name: plugin-build
@@ -165,7 +165,7 @@ jobs:
             echo "::warning::Предупреждения PHP в коде темы/плагина — см. журнал выше (исправляются по этапам)"
           fi
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: wordpress-checks
