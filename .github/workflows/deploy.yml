@@ -16,10 +16,10 @@ concurrency:            # две выгрузки одновременно не 
   cancel-in-progress: false
 
 env:
-  SFTP_HOST: 109.95.211.14
-  SFTP_PORT: 34716
-  SFTP_USER: u63286
-  SITE_DIR: /var/www/u63286/data/www/memorialbel.test-handyhost.ru/wp-content
+  SFTP_HOST: ${{ secrets.SFTP_HOST }}
+  SFTP_PORT: ${{ secrets.SFTP_PORT }}
+  SFTP_USER: ${{ secrets.SFTP_USER }}
+  SITE_DIR: ${{ secrets.SITE_DIR }}
 
 jobs:
   deploy:
