@@ -2,6 +2,7 @@
 	"testsEnvironment": false,
 	"core": "https://wordpress.org/wordpress-7.1.4.zip",
 	"phpVersion": "8.4",
+	"phpIniSettings": { "memory_limit": "512M" },
 	"plugins": [ "./memorial-plugin" ],
 	"themes": [ "./memorial-theme" ],
 	"config": {
