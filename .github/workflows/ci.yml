@@ -149,7 +149,7 @@ jobs:
 
       - name: Запуск WordPress
         run: |
-          npx wp-env start
+          npx wp-env start --debug
           npx wp-env run cli wp theme activate memorial-theme
           npx wp-env run cli wp plugin list
           npx wp-env run cli wp core version
