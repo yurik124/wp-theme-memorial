@@ -8,6 +8,12 @@ defined('ABSPATH') || exit;
 
 function memorial_plugin_metrika_schema() {
     return ['counter' => ['type' => 'group', 'label' => 'Счётчик', 'fields' => [
+        'load'        => ['type' => 'select', 'label' => __('How Yandex Metrica loads', 'memorial-plugin'), 'options' => [
+                              'consent' => __('After cookie consent (recommended): the counter starts only after the visitor clicks “Accept”', 'memorial-plugin'),
+                              'always'  => __('Always: the counter loads on every page without waiting (deferred); the cookie notice is still shown', 'memorial-plugin'),
+                              'off'     => __('Off: no Metrica code on the site — connect it through a tag manager if needed', 'memorial-plugin'),
+                          ],
+                          'help' => __('“After cookie consent” and “Always” also set how the cookie bar works. With “Off” the bar follows the setting below.', 'memorial-plugin')],
         'id'          => ['type' => 'number', 'label' => 'Номер счётчика Яндекс.Метрики',
                           'help' => 'Только цифры, например 98765432. Пусто — Метрика на сайте отключена.'],
         'webvisor'    => ['type' => 'checkbox', 'label' => 'Вебвизор — запись того, как посетители смотрят сайт'],
@@ -33,7 +39,7 @@ function memorial_plugin_metrika_defaults() {
     $old = get_option('mem_metrika'); // до 1.1: галочка «Спрашивать согласие»
     $mode = is_array($old) && isset($old['consent']['on']) && !$old['consent']['on'] ? 'off' : 'ask';
     return [
-        'counter' => ['id' => '', 'webvisor' => 1, 'skip_admins' => 1, 'clean_utm' => 1],
+        'counter' => ['load' => 'consent', 'id' => '', 'webvisor' => 1, 'skip_admins' => 1, 'clean_utm' => 1],
         'consent' => ['mode' => $mode, 'code' => '',
                       'text' => 'Мы используем cookie и Яндекс Метрику, чтобы понимать, как посетители пользуются сайтом. Нажимая «Принять», вы соглашаетесь на обработку этих данных в соответствии с {cookies:Политикой использования cookie}.',
                       'text_notice' => 'Продолжая использовать сайт, вы соглашаетесь с обработкой персональных данных, собираемых посредством метрической программы «Яндекс Метрика», в соответствии с {cookies:Политикой использования cookie} и {policy:Политикой обработки персональных данных}.'],
@@ -57,9 +63,19 @@ add_filter('memorial_plugin_admin_pages', function ($pages) {
 });
 
 /** Номер счётчика, если Метрику нужно выводить на этой странице */
+/**
+ * Как загружается Метрика: consent — после согласия, always — сразу, off — не подключается.
+ *
+ * @return string
+ */
+function memorial_plugin_metrika_load() {
+    $l = memorial_plugin_settings('mem_metrika')['counter']['load'] ?? 'consent';
+    return in_array($l, ['consent', 'always', 'off'], true) ? $l : 'consent';
+}
+
 function memorial_plugin_metrika_id() {
     $m = memorial_plugin_settings('mem_metrika')['counter'];
-    $id = (int) ($m['id'] ?? 0);
+    $id = memorial_plugin_metrika_load() === 'off' ? 0 : (int) ($m['id'] ?? 0);
     if (!$id || is_admin() || is_customize_preview()) return 0;
     if (!empty($m['skip_admins']) && current_user_can('edit_posts')) return 0;
     return $id;
@@ -69,8 +85,13 @@ function memorial_plugin_consent_cfg() {
     return memorial_plugin_settings('mem_metrika')['consent'] ?? [];
 }
 
-/** Режим плашки: ask — спрашивать согласие, notice — только уведомлять, off — без плашки */
+/** Режим плашки: ask — спрашивать согласие, notice — только уведомлять, off — без плашки.
+ *  Режим загрузки Метрики главнее: «после согласия» — всегда спрашиваем, «всегда» — всегда уведомляем
+ *  (плашка нужна и виджету отзывов); при «выключено» — как выбрано в настройке плашки. */
 function memorial_plugin_consent_mode() {
+    $load = memorial_plugin_metrika_load();
+    if ($load === 'consent') return 'ask';
+    if ($load === 'always') return 'notice';
     $m = memorial_plugin_consent_cfg()['mode'] ?? 'ask';
     return in_array($m, ['ask', 'notice', 'off'], true) ? $m : 'ask';
 }
@@ -91,7 +112,8 @@ function memorial_plugin_tracking_on() {
     if (is_admin() || is_customize_preview()) return false;
     $m = memorial_plugin_settings('mem_metrika')['counter'];
     if (!empty($m['skip_admins']) && current_user_can('edit_posts')) return false;
-    return (bool) ((int) ($m['id'] ?? 0) || trim(memorial_plugin_consent_cfg()['code'] ?? ''));
+    $id = memorial_plugin_metrika_load() === 'off' ? 0 : (int) ($m['id'] ?? 0);
+    return (bool) ($id || trim(memorial_plugin_consent_cfg()['code'] ?? ''));
 }
 
 /** Показывать плашку согласия: всем посетителям, включая администратора (он должен её видеть),
@@ -215,4 +237,52 @@ add_action('rest_api_init', function () {
             update_option('mem_consent_log', $log, false);
             return ['ok' => true];
         }]);
+});
+
+/**
+ * Разовый перенос (2.0): режим загрузки Метрики выбирается по тому, как сайт работал до обновления.
+ *   номера счётчика нет            → «Выключено»
+ *   плашка «Спрашивать согласие»   → «После согласия»
+ *   «Только уведомлять» / «Без плашки» → «Всегда»
+ * Администратору показывается просьба подтвердить режим — пока он не сохранит «Аналитику».
+ */
+function memorial_plugin_metrika_migrate_load() {
+    if (get_option('memorial_plugin_metrika_load_migrated')) return;
+    $raw = get_option('mem_metrika', []);
+    $raw = is_array($raw) ? $raw : [];
+    if (empty($raw['counter']['load'])) {
+        $mode = $raw['consent']['mode'] ?? memorial_plugin_metrika_defaults()['consent']['mode'];
+        if (!(int) ($raw['counter']['id'] ?? 0)) $load = 'off';
+        elseif ($mode === 'ask') $load = 'consent';
+        else $load = 'always';
+        $raw['counter']['load'] = $load;
+        update_option('mem_metrika', $raw);
+        update_option('memorial_plugin_metrika_confirm', 1, false);
+    }
+    update_option('memorial_plugin_metrika_load_migrated', 1, false);
+}
+add_action('admin_init', 'memorial_plugin_metrika_migrate_load');
+
+/* Просьба подтвердить режим; снимается при сохранении страницы «Аналитика» (даже без изменений) */
+add_action('admin_notices', function () {
+    if (!get_option('memorial_plugin_metrika_confirm') || !current_user_can('manage_options')) return;
+    $labels = [
+        'consent' => __('after cookie consent', 'memorial-plugin'),
+        'always'  => __('always', 'memorial-plugin'),
+        'off'     => __('off', 'memorial-plugin'),
+    ];
+    printf(
+        '<div class="notice notice-info"><p>%s <a href="%s">%s</a></p></div>',
+        esc_html(sprintf(
+            /* translators: %s: current Yandex Metrica load mode. */
+            __('Yandex Metrica now has a load mode setting. It was set to “%s” to match how the site worked before the update. Please confirm or change it.', 'memorial-plugin'),
+            $labels[(get_option('mem_metrika', [])['counter']['load'] ?? '')] ?? $labels['consent']
+        )),
+        esc_url(admin_url('admin.php?page=mem-metrika')),
+        esc_html__('Open Analytics settings', 'memorial-plugin')
+    );
+});
+add_filter('pre_update_option_mem_metrika', function ($value) {
+    delete_option('memorial_plugin_metrika_confirm');
+    return $value;
 });

@@ -12,6 +12,15 @@
  */
 defined('ABSPATH') || exit;
 
+/* Переход со старого Memorial Core: пока он активен, новый плагин ничего не загружает (core/switchover.php) */
+require __DIR__ . '/core/switchover.php';
+register_activation_hook(__FILE__, 'memorial_plugin_switchover');
+if (memorial_plugin_legacy_active()) {
+    add_action('admin_notices', 'memorial_plugin_legacy_notice');
+    return;
+}
+add_action('wp_loaded', 'memorial_plugin_after_switch');
+
 define('MEMORIAL_PLUGIN_VER', '1.15.0');
 define('MEMORIAL_PLUGIN_FILE', __FILE__);
 define('MEMORIAL_PLUGIN_DIR', __DIR__);                          // без «/» в конце: MEMORIAL_PLUGIN_DIR . '/assets/…'
