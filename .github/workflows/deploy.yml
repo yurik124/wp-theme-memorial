@@ -40,8 +40,8 @@ jobs:
             open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
             mirror --reverse --delete --parallel=4 --verbose \
               --exclude-glob '*.lock' --exclude-glob '*.tmp' \
-              ./memorial_speshu/ $SITE_DIR/themes/memorial_speshu/;
+              ./memorial-theme/ $SITE_DIR/themes/memorial-theme/;
             mirror --reverse --delete --parallel=4 --verbose \
               --exclude-glob '*.lock' --exclude-glob '*.tmp' \
-              ./memorial-core/ $SITE_DIR/plugins/memorial-core/;
+              ./memorial-plugin/ $SITE_DIR/plugins/memorial-plugin/;
           "

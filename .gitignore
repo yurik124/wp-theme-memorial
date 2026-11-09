@@ -12,9 +12,9 @@ playwright-report/
 # Архивы, логи, скриншоты проверок
 *.zip
 *.log
-/memorial_speshu/*.png
-/memorial_speshu/*.jpg
-!/memorial_speshu/screenshot.png
+/memorial-theme/*.png
+/memorial-theme/*.jpg
+!/memorial-theme/screenshot.png
 
 # Системные файлы и редакторы
 .DS_Store
