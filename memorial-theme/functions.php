@@ -7,7 +7,7 @@
  */
 defined('ABSPATH') || exit;
 
-define('MEMORIAL_THEME_VER', '4.1.0');
+define('MEMORIAL_THEME_VER', '5.0.0-alpha.1');
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');

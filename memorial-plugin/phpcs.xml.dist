@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<ruleset name="Memorial Plugin">
+	<description>WordPress Coding Standards for Memorial Plugin. Covers code written or rewritten since stage 1; legacy modules are added here as they are rewritten (stages 3–4). Legacy code is checked by phpcs-compat.xml.dist and tools/check-prefixes.php.</description>
+
+	<!-- Новый код. Пополняется по мере переписывания модулей. -->
+	<file>core/switchover.php</file>
+	<file>admin/dataviews-check.php</file>
+	<file>includes</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+
+	<!-- Предупреждения показываются, но не валят проверку; ошибки — валят. -->
+	<config name="ignore_warnings_on_exit" value="1"/>
+	<config name="testVersion" value="8.1-"/>
+	<config name="minimum_wp_version" value="7.1"/>
+
+	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="WordPress-Extra"/>
+	<rule ref="PHPCompatibilityWP"/>
+	<rule ref="VariableAnalysis"/>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="memorial_plugin"/>
+			</property>
+		</properties>
+	</rule>
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="memorial-plugin"/>
+			</property>
+		</properties>
+	</rule>
+	<!-- Файлы называются по смыслу модуля (switchover.php), а не class-*.php: классов в них нет. -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="is_theme" value="false"/>
+		</properties>
+	</rule>
+</ruleset>

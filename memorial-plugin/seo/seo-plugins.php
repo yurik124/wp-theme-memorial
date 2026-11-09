@@ -28,12 +28,12 @@ foreach ([
     'rank_math/frontend/title', 'rank_math/frontend/description', 'rank_math/opengraph/facebook/og_title', 'rank_math/opengraph/facebook/og_description',
     'rank_math/opengraph/twitter/twitter_title', 'rank_math/opengraph/twitter/twitter_description',
     'seopress_titles_title', 'seopress_titles_desc', 'seopress_social_og_title', 'seopress_social_og_desc',
-] as $hook) {
-    add_filter($hook, 'memorial_plugin_seo_sc', 99);
+] as $memorial_plugin_hook) {
+    add_filter($memorial_plugin_hook, 'memorial_plugin_seo_sc', 99);
 }
 /* AIOSEO: теги соцсетей приходят массивом */
-foreach (['aioseo_facebook_tags', 'aioseo_twitter_tags'] as $hook) {
-    add_filter($hook, function ($tags) {
+foreach (['aioseo_facebook_tags', 'aioseo_twitter_tags'] as $memorial_plugin_hook) {
+    add_filter($memorial_plugin_hook, function ($tags) {
         if (!is_array($tags)) return $tags;
         foreach ($tags as $k => $v) if (is_string($v)) $tags[$k] = memorial_plugin_seo_sc($v);
         return $tags;

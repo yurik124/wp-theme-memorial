@@ -25,3 +25,11 @@ desktop.ini
 *.swp
 node_modules/
 .env
+
+# Сборка и зависимости (собираются в CI и при выгрузке)
+vendor/
+/memorial-plugin/build/
+/memorial-theme/build/
+/dist/
+/artifacts/
+/tests/e2e/.auth/

@@ -93,17 +93,17 @@ add_action('init', function () {
     memorial_plugin_cache_purge(true);
 });
 /* Изменения без админки (расписание, импорт): записи, рубрики, меню, настройки */
-foreach (['save_post', 'deleted_post', 'trashed_post', 'untrashed_post', 'edit_attachment'] as $h) {
-    add_action($h, function ($id) {
+foreach (['save_post', 'deleted_post', 'trashed_post', 'untrashed_post', 'edit_attachment'] as $memorial_plugin_hook) {
+    add_action($memorial_plugin_hook, function ($id) {
         if (in_array(get_post_type($id), ['mem_lead', 'revision', 'customize_changeset', 'oembed_cache'], true)) return;
         memorial_plugin_cache_purge(true);
     });
 }
-foreach (['created_term', 'edited_term', 'delete_term', 'wp_update_nav_menu', 'switch_theme', 'activated_plugin', 'deactivated_plugin', 'upgrader_process_complete'] as $h) {
-    add_action($h, fn() => memorial_plugin_cache_purge(true));
+foreach (['created_term', 'edited_term', 'delete_term', 'wp_update_nav_menu', 'switch_theme', 'activated_plugin', 'deactivated_plugin', 'upgrader_process_complete'] as $memorial_plugin_hook) {
+    add_action($memorial_plugin_hook, fn() => memorial_plugin_cache_purge(true));
 }
-foreach (['updated_option', 'added_option', 'deleted_option'] as $h) {
-    add_action($h, function ($name) {
+foreach (['updated_option', 'added_option', 'deleted_option'] as $memorial_plugin_hook) {
+    add_action($memorial_plugin_hook, function ($name) {
         if (in_array($name, ['mem_logos_queue', 'mem_rewio_status', 'mem_core_flush', 'mem_core_ver', 'mem_sq_stats', 'cron', 'rewrite_rules'], true)) return;   // служебное и статистика поиска — кэш не трогаем
         if (strpos($name, 'mem_') === 0 || strpos($name, 'theme_mods_') === 0 || strpos($name, 'widget_') === 0
             || in_array($name, ['blogname', 'blogdescription', 'site_icon', 'page_on_front', 'show_on_front', 'permalink_structure', 'sidebars_widgets', 'date_format', 'time_format', 'aioseo_options'], true)) {

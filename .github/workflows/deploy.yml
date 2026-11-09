@@ -1,10 +1,13 @@
 name: Деплой на сайт
 
-# Выгрузка темы и плагина на хостинг по SFTP через lftp mirror:
-#  — загружаются файлы темы и плагина (после клонирования у всех файлов новая дата, поэтому заливаются все — это быстро);
-#  — файлы, которых больше нет в репозитории, удаляются и на хостинге (--delete),
-#    поэтому старые файлы не остаются и не мешают;
-#  — папки целиком не удаляются, значит плагин не пропадает с сайта посреди выгрузки.
+# Выгрузка темы и плагина на хостинг по SFTP (lftp).
+#  1. Сборка: npm run build (JS плагина) и composer dump-autoload (автозагрузка классов плагина).
+#  2. В пакет попадает только то, что нужно сайту: без src/, node_modules/, тестов и конфигов разработки.
+#  3. Выгрузка во временную папку (.memorial-plugin-new), затем переименование одной операцией:
+#     сайт не видит полузалитый плагин. Предыдущая версия остаётся рядом как .memorial-plugin-old до следующей выгрузки.
+#  Старые папки memorial_speshu и memorial-core этот процесс не трогает (откат — см. MIGRATION.md).
+#
+# Запуск: push в main или вручную (Actions → «Деплой на сайт» → Run workflow → выбрать ветку).
 
 on:
   push:
@@ -27,21 +30,69 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Сборка
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+          npm run build
+          composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
+
+      - name: Пакет для сайта
+        run: |
+          mkdir -p dist
+          rsync -a --delete \
+            --exclude 'src/' --exclude 'node_modules/' --exclude 'tests/' \
+            --exclude 'phpcs.xml.dist' --exclude '*.lock' --exclude '*.tmp' --exclude '.*' \
+            memorial-plugin/ dist/memorial-plugin/
+          rsync -a --delete \
+            --exclude 'src/' --exclude 'node_modules/' --exclude 'tests/' \
+            --exclude 'phpcs.xml.dist' --exclude '*.lock' --exclude '*.tmp' --exclude '.*' \
+            memorial-theme/ dist/memorial-theme/
+          test -f dist/memorial-plugin/memorial-plugin.php
+          test -f dist/memorial-plugin/vendor/autoload.php
+          test -f dist/memorial-theme/style.css
+          du -sh dist/*
+
       - name: Установить lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
-      - name: Выгрузить тему и плагин
+      - name: Выгрузить во временные папки
         env:
           LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
           lftp -c "
-            set sftp:auto-confirm yes;
-            set net:max-retries 3; set net:timeout 30;
+            set sftp:auto-confirm yes; set net:max-retries 3; set net:timeout 30; set cmd:fail-exit yes;
             open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
-            mirror --reverse --delete --parallel=4 --verbose \
-              --exclude-glob '*.lock' --exclude-glob '*.tmp' \
-              ./memorial-theme/ $SITE_DIR/themes/memorial-theme/;
-            mirror --reverse --delete --parallel=4 --verbose \
-              --exclude-glob '*.lock' --exclude-glob '*.tmp' \
-              ./memorial-plugin/ $SITE_DIR/plugins/memorial-plugin/;
+            mirror --reverse --delete --parallel=4 --verbose ./dist/memorial-theme/ $SITE_DIR/themes/.memorial-theme-new/;
+            mirror --reverse --delete --parallel=4 --verbose ./dist/memorial-plugin/ $SITE_DIR/plugins/.memorial-plugin-new/;
           "
+
+      - name: Подменить папки
+        env:
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          for kind in themes:memorial-theme plugins:memorial-plugin; do
+            dir=${kind%%:*}; name=${kind##*:}
+            # прошлая резервная копия и текущая папка могут отсутствовать (первая выгрузка) — это не ошибка
+            lftp -c "
+              set sftp:auto-confirm yes; set cmd:fail-exit no;
+              open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
+              rm -r -f $SITE_DIR/$dir/.$name-old;
+              mv $SITE_DIR/$dir/$name $SITE_DIR/$dir/.$name-old;
+            " || true
+            # а вот переименование новой версии обязано пройти
+            lftp -c "
+              set sftp:auto-confirm yes; set cmd:fail-exit yes;
+              open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
+              mv $SITE_DIR/$dir/.$name-new $SITE_DIR/$dir/$name;
+            "
+          done

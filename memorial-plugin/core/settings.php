@@ -22,9 +22,6 @@ add_action('init', function () {
     update_option('mem_ver_15', 1, false);
 });
 
-if (!function_exists('array_is_list')) { // PHP < 8.1
-    function array_is_list(array $a) { return $a === [] || array_keys($a) === range(0, count($a) - 1); }
-}
 
 /* =========================================================
  * Схемы

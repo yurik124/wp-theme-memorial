@@ -67,6 +67,40 @@ foreach ($parts as $dir => $prefix) {
         }
     }
 }
+// Переменные в глобальной области файлов (вне функций, замыканий и классов). Шаблоны классической темы
+// (корневые *.php кроме functions.php и template-parts/) не проверяются: их заменяют HTML-шаблоны на этапе 2.
+foreach ($parts as $dir => $prefix) {
+    $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator("$root/$dir", FilesystemIterator::SKIP_DOTS));
+    foreach ($it as $file) {
+        $path = (string) $file; $rel = substr($path, strlen($root) + 1);
+        if (substr($path, -4) !== '.php' || preg_match('~/(vendor|node_modules|build)/~', $path)) continue;
+        if ($dir === 'memorial-theme' && (preg_match('~^memorial-theme/[^/]+\.php$~', $rel) && $rel !== 'memorial-theme/functions.php' || strpos($rel, 'memorial-theme/template-parts/') === 0)) continue;
+        $t = token_get_all(file_get_contents($path)); $stack = []; $fn = 0; $pending = false; $seen = [];
+        $cnt = count($t);
+        for ($i = 0; $i < $cnt; $i++) {
+            $x = $t[$i];
+            if (is_array($x) && $x[0] === T_FN) { // стрелочная функция: её параметры и тело — не глобальная область
+                $d = 0; $arrow = false;
+                for ($i++; $i < $cnt; $i++) {
+                    $y = $t[$i];
+                    if (in_array($y, ['(', '['], true)) $d++;
+                    elseif (in_array($y, [')', ']'], true)) { if ($d === 0) { $i--; break; } $d--; }
+                    elseif (is_array($y) && $y[0] === T_DOUBLE_ARROW && $d === 0) $arrow = true;
+                    elseif ($arrow && $d === 0 && ($y === ';' || $y === ',')) { $i--; break; }
+                }
+                continue;
+            }
+            if (is_array($x) && in_array($x[0], [T_FUNCTION, T_CLASS, T_TRAIT, T_INTERFACE], true)) $pending = true;
+            if ($x === '{' || (is_array($x) && in_array($x[0], [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES], true))) { $stack[] = $pending; if ($pending) $fn++; $pending = false; continue; }
+            if ($x === '}') { if (array_pop($stack)) $fn--; continue; }
+            if ($fn === 0 && !$pending && is_array($x) && $x[0] === T_VARIABLE && !isset($seen[$x[1]])
+                && !in_array($x[1], ['$GLOBALS', '$this', '$_GET', '$_POST', '$_SERVER', '$_REQUEST', '$_COOKIE', '$_FILES'], true)
+                && strpos($x[1], '$' . $prefix) !== 0) {
+                $seen[$x[1]] = 1; $issues[] = "$rel:{$x[2]} переменная в глобальной области без префикса: {$x[1]}";
+            }
+        }
+    }
+}
 foreach ($calls as $fn => $where) if (!isset($defined[$fn])) $issues[] = "{$where[0]} вызов необъявленной функции $fn" . (count($where) > 1 ? ' (+' . (count($where) - 1) . ')' : '');
 sort($issues);
 echo $issues ? implode("\n", $issues) . "\n\nЗамечаний: " . count($issues) . "\n" : "Префиксы в порядке: объявлено функций " . count($defined) . ", проверено вызовов " . count($calls) . ".\n";

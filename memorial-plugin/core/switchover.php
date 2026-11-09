@@ -58,7 +58,8 @@ function memorial_plugin_switchover() {
 		if ( ! function_exists( 'deactivate_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		deactivate_plugins( MEMORIAL_PLUGIN_LEGACY_PLUGIN ); // не тихо: хук выключения старого плагина уберёт свои расписания и кэш.
+		// Не тихо: хук выключения старого плагина уберёт свои расписания и кэш.
+		deactivate_plugins( MEMORIAL_PLUGIN_LEGACY_PLUGIN );
 		$log['from_plugin'] = true;
 	}
 
@@ -80,7 +81,8 @@ function memorial_plugin_switchover() {
 
 	update_option( 'memorial_plugin_switchover', $log, false );
 	update_option( 'memorial_plugin_after_switch', 1, false );
-	update_option( 'mem_core_flush', 1, false ); // пересборка адресов товаров и работ (ключ прежний).
+	// Пересборка адресов товаров и работ (ключ прежний).
+	update_option( 'mem_core_flush', 1, false );
 }
 
 /**
@@ -92,10 +94,12 @@ function memorial_plugin_after_switch() {
 	}
 	delete_option( 'memorial_plugin_after_switch' );
 	if ( function_exists( 'memorial_plugin_rewio_schedule' ) ) {
-		memorial_plugin_rewio_schedule(); // регулярная загрузка отзывов под новым именем хука.
+		// Регулярная загрузка отзывов под новым именем хука.
+		memorial_plugin_rewio_schedule();
 	}
 	$job = get_option( 'mem_img_job', array() );
 	if ( ! empty( $job['running'] ) && ! wp_next_scheduled( 'memorial_plugin_img_job_tick' ) ) {
-		wp_schedule_event( time() + 5, 'mem_minute', 'memorial_plugin_img_job_tick' ); // недоделанное пересжатие фото.
+		// Недоделанное пересжатие фото.
+		wp_schedule_event( time() + 5, 'mem_minute', 'memorial_plugin_img_job_tick' );
 	}
 }

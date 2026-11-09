@@ -1,0 +1,160 @@
+name: Проверки
+
+# PHP: синтаксис на 8.1 и 8.4, префиксы, дымовые тесты, WPCS для нового кода, совместимость PHP для всего кода.
+# JS/CSS: ESLint, Stylelint, сборка, JSON-схемы.
+# WordPress 7.1.4 (wp-env): проверка сборки DataViews/admin-ui и экранов плагина, ошибки PHP в debug.log.
+
+on:
+  push:
+    branches: [main, block-migration, 'stage-*']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Синтаксис PHP
+        run: |
+          find memorial-plugin memorial-theme tools tests -name '*.php' -not -path '*/vendor/*' -print0 \
+            | xargs -0 -n1 -P4 php -l > /dev/null
+
+      - name: Префиксы и вызовы (tools/check-prefixes.php)
+        run: php tools/check-prefixes.php
+
+      - name: Дымовые тесты без WordPress
+        run: |
+          php tests/smoke/switch.php
+          php tests/smoke/metrika.php
+
+      - name: Composer (инструменты)
+        if: matrix.php == '8.4'
+        run: composer install --no-interaction --no-progress
+
+      - name: WPCS — новый код плагина
+        if: matrix.php == '8.4'
+        run: vendor/bin/phpcs --standard=memorial-plugin/phpcs.xml.dist
+
+      - name: Совместимость с PHP 8.1+ — весь код
+        if: matrix.php == '8.4'
+        run: vendor/bin/phpcs --standard=phpcs-compat.xml.dist
+
+      # Тема переписывается на этапе 2 — тогда включается полный WPCS для неё:
+      # - run: vendor/bin/phpcs --standard=memorial-theme/phpcs.xml.dist
+
+      - name: Автозагрузка плагина (classmap)
+        if: matrix.php == '8.4'
+        run: composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
+
+  js:
+    name: JS, CSS, сборка
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Зависимости
+        run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Файл блокировки версий (если его ещё нет в репозитории)
+        if: hashFiles('package-lock.json') == ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-lock
+          path: package-lock.json
+
+      - name: ESLint
+        run: npm run lint:js
+
+      - name: Stylelint
+        run: npm run lint:css
+
+      - name: JSON-схемы (theme.json, block.json)
+        run: npm run lint:json
+
+      - name: Сборка
+        run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugin-build
+          path: memorial-plugin/build
+
+  wordpress:
+    name: WordPress 7.1.4 (wp-env)
+    runs-on: ubuntu-latest
+    needs: [php, js]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Зависимости
+        run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Сборка
+        run: npm run build
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Автозагрузка плагина
+        run: composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
+
+      - name: Запуск WordPress
+        run: |
+          npx wp-env start
+          npx wp-env run cli wp theme activate memorial-theme
+          npx wp-env run cli wp plugin list
+          npx wp-env run cli wp core version
+
+      - name: Браузер для проверок
+        run: npx playwright install --with-deps chromium
+
+      - name: Проверки этапа 1
+        run: npm run test:e2e
+
+      - name: Ошибки PHP в debug.log
+        if: always()
+        run: |
+          npx wp-env run cli sh -c 'cat wp-content/debug.log 2>/dev/null || true' > artifacts-debug.log
+          echo "---- debug.log (до 200 строк) ----"; head -n 200 artifacts-debug.log
+          if grep -E "PHP (Fatal error|Parse error)|Uncaught" artifacts-debug.log; then
+            echo "::error::В debug.log есть фатальные ошибки PHP"; exit 1
+          fi
+          if grep -E "PHP (Warning|Notice|Deprecated)" artifacts-debug.log | grep -E "memorial-(plugin|theme)" ; then
+            echo "::warning::Предупреждения PHP в коде темы/плагина — см. журнал выше (исправляются по этапам)"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wordpress-checks
+          path: |
+            artifacts
+            artifacts-debug.log

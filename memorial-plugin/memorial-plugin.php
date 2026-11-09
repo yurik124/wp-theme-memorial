@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Memorial Plugin
  * Description: Site features for Memorial funeral services: catalog, prices, reviews, works, leads, settings, SEO, analytics. Design lives in the Memorial Modern theme.
- * Version: 1.15.0
- * Requires at least: 6.4
- * Requires PHP: 7.4
+ * Version: 2.0.0-alpha.1
+ * Requires at least: 7.1
+ * Requires PHP: 8.1
  * Author: Memorial
  * Text Domain: memorial-plugin
  *
@@ -21,7 +21,7 @@ if (memorial_plugin_legacy_active()) {
 }
 add_action('wp_loaded', 'memorial_plugin_after_switch');
 
-define('MEMORIAL_PLUGIN_VER', '1.15.0');
+define('MEMORIAL_PLUGIN_VER', '2.0.0-alpha.1');
 define('MEMORIAL_PLUGIN_FILE', __FILE__);
 define('MEMORIAL_PLUGIN_DIR', __DIR__);                          // без «/» в конце: MEMORIAL_PLUGIN_DIR . '/assets/…'
 define('MEMORIAL_PLUGIN_URL', untrailingslashit(plugins_url('', __FILE__)));
@@ -157,9 +157,15 @@ $memorial_plugin_modules = [
 ];
 // функции, которые можно выключить в «Мемориал → Функции» (core/modules.php): выключенные файлы не подключаются
 $memorial_plugin_off = memorial_plugin_disabled_files();
-foreach ($memorial_plugin_modules as $m) if (!isset($memorial_plugin_off[$m])) require MEMORIAL_PLUGIN_DIR . '/' . $m;
+foreach ($memorial_plugin_modules as $memorial_plugin_module) if (!isset($memorial_plugin_off[$memorial_plugin_module])) require MEMORIAL_PLUGIN_DIR . '/' . $memorial_plugin_module;
 require MEMORIAL_PLUGIN_DIR . '/core/modules.php';
-unset($memorial_plugin_modules, $memorial_plugin_off, $m);
+unset($memorial_plugin_modules, $memorial_plugin_off, $memorial_plugin_module);
+
+/* Классы плагина (includes/) — автозагрузка Composer classmap; vendor/ собирается при выгрузке (composer dump-autoload) */
+if (is_readable(MEMORIAL_PLUGIN_DIR . '/vendor/autoload.php')) require MEMORIAL_PLUGIN_DIR . '/vendor/autoload.php';
+
+/* Проверка сборки DataViews / admin-ui — только при WP_DEBUG (этап 1, удаляется на этапе 4) */
+if (is_admin() && defined('WP_DEBUG') && WP_DEBUG) require MEMORIAL_PLUGIN_DIR . '/admin/dataviews-check.php';
 
 /* Иконки: memorial_plugin_icon() спрашивает тему (фильтр memorial_plugin_icon_html), без неё — запасной набор плагина */
 require MEMORIAL_PLUGIN_DIR . '/core/icons-fallback.php';

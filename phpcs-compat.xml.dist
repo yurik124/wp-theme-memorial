@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ruleset name="Memorial: PHP compatibility (all code)">
+	<description>PHP 8.1+ compatibility for all theme and plugin code, including legacy modules not yet covered by full WPCS.</description>
+
+	<file>memorial-plugin</file>
+	<file>memorial-theme</file>
+	<file>tools</file>
+	<file>tests</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+
+	<config name="testVersion" value="8.1-"/>
+	<config name="minimum_wp_version" value="7.1"/>
+	<config name="ignore_warnings_on_exit" value="1"/>
+
+	<rule ref="PHPCompatibilityWP"/>
+</ruleset>
