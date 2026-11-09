@@ -8,7 +8,18 @@ module.exports = defineConfig( {
 	testDir: '.',
 	timeout: 60_000,
 	retries: process.env.CI ? 1 : 0,
-	reporter: process.env.CI ? [ [ 'list' ], [ 'html', { open: 'never', outputFolder: '../../artifacts/playwright-report' } ] ] : 'list',
+	reporter: process.env.CI
+		? [
+				[ 'list' ],
+				[
+					'html',
+					{
+						open: 'never',
+						outputFolder: '../../artifacts/playwright-report',
+					},
+				],
+			]
+		: 'list',
 	use: {
 		baseURL: process.env.WP_BASE_URL || 'http://localhost:8888',
 		screenshot: 'only-on-failure',

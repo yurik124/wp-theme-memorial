@@ -1,6 +1,6 @@
 /**
  * Этап 1 на WordPress 7.1.x (wp-env):
- *  — сборка DataViews + @wordpress/admin-ui работает: таблица рисуется, сортировка меняет порядок, нет ошибок JS;
+ *  — сборка DataViews + admin-ui работает: таблица рисуется, сортировка меняет порядок, нет ошибок JS;
  *  — плагин и тема после переименования открывают свои экраны без ошибок PHP на странице.
  * Ошибки PHP из debug.log CI проверяет отдельным шагом.
  */
@@ -24,13 +24,17 @@ const ADMIN_PAGES = [
 	'edit.php?post_type=mem_work',
 ];
 
-const PHP_ERROR = /(Fatal error|Parse error|Warning|Notice|Deprecated)<\/b>:|Uncaught (Error|TypeError)/;
+const PHP_ERROR =
+	/(Fatal error|Parse error|Warning|Notice|Deprecated)<\/b>:|Uncaught (Error|TypeError)/;
 
 async function login( page ) {
 	await page.goto( '/wp-login.php' );
 	await page.fill( '#user_login', process.env.WP_USERNAME || 'admin' );
 	await page.fill( '#user_pass', process.env.WP_PASSWORD || 'password' );
-	await Promise.all( [ page.waitForURL( /wp-admin/ ), page.click( '#wp-submit' ) ] );
+	await Promise.all( [
+		page.waitForURL( /wp-admin/ ),
+		page.click( '#wp-submit' ),
+	] );
 }
 
 function collectJsErrors( page ) {
@@ -50,7 +54,9 @@ test.beforeEach( async ( { page } ) => {
 
 test( 'DataViews и admin-ui собираются и работают', async ( { page } ) => {
 	const errors = collectJsErrors( page );
-	await page.goto( '/wp-admin/tools.php?page=memorial-plugin-dataviews-check' );
+	await page.goto(
+		'/wp-admin/tools.php?page=memorial-plugin-dataviews-check'
+	);
 	const table = page.locator( '#memorial-plugin-dataviews-check table' );
 	await expect( table ).toBeVisible();
 	await expect( table ).toContainText( 'Wreath' );
@@ -64,7 +70,9 @@ test( 'экраны плагина открываются без ошибок PH
 		expect( res.status(), path ).toBeLessThan( 400 );
 		const html = await page.content();
 		expect( html, path ).not.toMatch( PHP_ERROR );
-		expect( html, path ).not.toContain( 'Sorry, you are not allowed to access this page' );
+		expect( html, path ).not.toContain(
+			'Sorry, you are not allowed to access this page'
+		);
 	}
 } );
 
@@ -74,5 +82,7 @@ test( 'сайт открывается на новой теме', async ( { page
 	expect( res.status() ).toBeLessThan( 400 );
 	expect( await page.content() ).not.toMatch( PHP_ERROR );
 	await expect( page.locator( 'link#memorial-theme-css' ) ).toHaveCount( 1 );
-	expect( errors.filter( ( e ) => ! /mc\.yandex|yandex/i.test( e ) ) ).toEqual( [] );
+	expect(
+		errors.filter( ( e ) => ! /mc\.yandex|yandex/i.test( e ) )
+	).toEqual( [] );
 } );

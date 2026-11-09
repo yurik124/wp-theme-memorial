@@ -1,5 +1,5 @@
 /**
- * Проверка сборки: DataViews (из @wordpress/dataviews/wp) и Page из @wordpress/admin-ui
+ * Проверка сборки: DataViews (пакет dataviews, вход /wp) и Page из пакета admin-ui
  * собираются внутрь плагина и работают на WordPress 7.1.x. Удаляется на этапе 4.
  */
 import { createRoot, useMemo, useState } from '@wordpress/element';

@@ -17,18 +17,18 @@ concurrency:
 jobs:
   php:
     name: PHP ${{ matrix.php }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         php: ['8.1', '8.4']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: composer:v2
+          tools: composer:v2, cs2pr
           coverage: none
 
       - name: Синтаксис PHP
@@ -37,39 +37,48 @@ jobs:
             | xargs -0 -n1 -P4 php -l > /dev/null
 
       - name: Префиксы и вызовы (tools/check-prefixes.php)
+        if: ${{ !cancelled() }}
         run: php tools/check-prefixes.php
 
       - name: Дымовые тесты без WordPress
+        if: ${{ !cancelled() }}
         run: |
           php tests/smoke/switch.php
           php tests/smoke/metrika.php
 
       - name: Composer (инструменты)
-        if: matrix.php == '8.4'
+        if: ${{ !cancelled() && matrix.php == '8.4' }}
         run: composer install --no-interaction --no-progress
 
+      # Полный отчёт — в журнале шага, замечания — ещё и аннотациями к строкам (cs2pr).
       - name: WPCS — новый код плагина
-        if: matrix.php == '8.4'
-        run: vendor/bin/phpcs --standard=memorial-plugin/phpcs.xml.dist
+        if: ${{ !cancelled() && matrix.php == '8.4' }}
+        run: |
+          vendor/bin/phpcs --standard=memorial-plugin/phpcs.xml.dist --report-full --report-checkstyle=phpcs-plugin.xml && s=0 || s=$?
+          cs2pr --graceful-warnings phpcs-plugin.xml || true
+          exit $s
 
       - name: Совместимость с PHP 8.1+ — весь код
-        if: matrix.php == '8.4'
-        run: vendor/bin/phpcs --standard=phpcs-compat.xml.dist
+        if: ${{ !cancelled() && matrix.php == '8.4' }}
+        run: |
+          vendor/bin/phpcs --standard=phpcs-compat.xml.dist --report-full --report-checkstyle=phpcs-compat.xml && s=0 || s=$?
+          cs2pr --graceful-warnings phpcs-compat.xml || true
+          exit $s
 
       # Тема переписывается на этапе 2 — тогда включается полный WPCS для неё:
       # - run: vendor/bin/phpcs --standard=memorial-theme/phpcs.xml.dist
 
       - name: Автозагрузка плагина (classmap)
-        if: matrix.php == '8.4'
+        if: ${{ !cancelled() && matrix.php == '8.4' }}
         run: composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
 
   js:
     name: JS, CSS, сборка
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
 
@@ -84,30 +93,35 @@ jobs:
           path: package-lock.json
 
       - name: ESLint
+        if: ${{ !cancelled() }}
         run: npm run lint:js
 
       - name: Stylelint
+        if: ${{ !cancelled() }}
         run: npm run lint:css
 
       - name: JSON-схемы (theme.json, block.json)
+        if: ${{ !cancelled() }}
         run: npm run lint:json
 
       - name: Сборка
+        if: ${{ !cancelled() }}
         run: npm run build
 
       - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
           name: plugin-build
           path: memorial-plugin/build
 
   wordpress:
     name: WordPress 7.1.4 (wp-env)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [php, js]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
 

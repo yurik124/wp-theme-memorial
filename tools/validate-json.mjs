@@ -20,7 +20,8 @@ function walk( dir, out = [] ) {
 		} else if (
 			name === 'block.json' ||
 			name === 'theme.json' ||
-			( /\.json$/.test( name ) && /(^|\/)styles\//.test( relative( '.', path ) ) )
+			( /\.json$/.test( name ) &&
+				/(^|\/)styles\//.test( relative( '.', path ) ) )
 		) {
 			out.push( path );
 		}
@@ -62,7 +63,9 @@ for ( const file of files ) {
 	if ( ! validate( json ) ) {
 		failed++;
 		// eslint-disable-next-line no-console
-		console.error( `${ file }:\n${ ajv.errorsText( validate.errors, { separator: '\n' } ) }` );
+		console.error(
+			`${ file }:\n${ ajv.errorsText( validate.errors, { separator: '\n' } ) }`
+		);
 	} else {
 		// eslint-disable-next-line no-console
 		console.log( `${ file }: ok` );
