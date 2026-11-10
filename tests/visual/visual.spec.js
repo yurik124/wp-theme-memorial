@@ -10,7 +10,11 @@ const urls = JSON.parse(
 	fs.readFileSync( process.env.URLS_FILE || 'urls.json', 'utf8' )
 );
 
-const MASK = [ '.reviews__widget', '.map', 'iframe', '#totop', '.consent' ];
+const MASK = [ '.reviews__widget', '.map', 'iframe' ];
+// «липкая» шапка встаёт на место, плавающие кнопка «наверх» и плашка cookie на длинном снимке не нужны
+const STYLE =
+	'.header{position:relative !important;top:0 !important}' +
+	'#totop,.consent{visibility:hidden !important}';
 
 for ( const { name, path } of urls ) {
 	test( name, async ( { page } ) => {
@@ -30,6 +34,7 @@ for ( const { name, path } of urls ) {
 		expect( text.length, 'почти нет текста' ).toBeGreaterThan( 200 );
 		await expect( page ).toHaveScreenshot( name + '.png', {
 			fullPage: true,
+			style: STYLE,
 			mask: MASK.map( ( s ) => page.locator( s ) ),
 		} );
 	} );

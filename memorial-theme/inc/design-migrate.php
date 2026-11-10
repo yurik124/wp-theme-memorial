@@ -171,12 +171,24 @@ function memorial_theme_design_migrate() {
 			if ( '' !== $plan['css'] ) {
 				$data['styles']['css'] = $plan['css'];
 			}
+			// Перенос может идти без пользователя (WP-CLI): тогда WordPress создаёт запись стилей без привязки
+			// к теме (рубрика wp_theme ставится только при наличии прав) и пропускает содержимое через kses.
+			if ( ! has_term( get_stylesheet(), 'wp_theme', $post_id ) ) {
+				wp_set_object_terms( $post_id, array( get_stylesheet() ), 'wp_theme' );
+			}
+			$kses = false !== has_filter( 'content_save_pre', 'wp_filter_global_styles_post' );
+			if ( $kses ) {
+				kses_remove_filters();
+			}
 			wp_update_post(
 				array(
 					'ID'           => $post_id,
 					'post_content' => wp_slash( wp_json_encode( $data ) ),
 				)
 			);
+			if ( $kses ) {
+				kses_init_filters();
+			}
 			$log['result'] = 'migrated';
 		}
 		$log += $plan;
