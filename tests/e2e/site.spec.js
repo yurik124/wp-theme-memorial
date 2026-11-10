@@ -35,15 +35,15 @@ test( '«Оформление» перенесено в стили сайта', 
 	await page.goto( '/wp-admin/' ); // перенос выполняется в админке
 	await page.goto( '/' );
 	const vars = await page.evaluate( () => {
-		const css = getComputedStyle( document.documentElement );
+		const css = window.getComputedStyle( document.documentElement );
+		const get = ( name ) => css.getPropertyValue( name ).trim();
 		return {
-			base: css.getPropertyValue( '--wp--preset--color--base' ).trim(),
-			primary: css.getPropertyValue( '--wp--preset--color--primary' ).trim(),
-			fs: css.getPropertyValue( '--fs' ).trim(),
+			base: get( '--wp--preset--color--base' ),
+			primary: get( '--wp--preset--color--primary' ),
+			fs: get( '--fs' ),
 		};
 	} );
 	expect( vars.base.toLowerCase() ).toBe( '#fafaf8' );
 	expect( vars.primary.toLowerCase() ).toBe( '#56687a' );
 	expect( vars.fs ).toBe( '1.1' );
 } );
-
