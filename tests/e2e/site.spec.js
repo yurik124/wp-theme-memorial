@@ -52,3 +52,13 @@ test( '«Оформление» перенесено в стили сайта', 
 	expect( vars.primary.toLowerCase() ).toBe( '#56687a' );
 	expect( vars.fs ).toBe( '1.1' );
 } );
+
+test( 'плавающие блоки встают в подвал сами (Block Hooks)', async ( {
+	page,
+} ) => {
+	await page.goto( '/' );
+	// Телефонная панель и окно «Перезвоните мне» — один раз на странице, после подвала.
+	await expect( page.locator( '.mbar' ) ).toHaveCount( 1 );
+	await expect( page.locator( 'dialog#callback' ) ).toHaveCount( 1 );
+	await expect( page.locator( 'footer.footer ~ .mbar' ) ).toHaveCount( 1 );
+} );

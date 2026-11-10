@@ -84,8 +84,19 @@ function memorial_plugin_callback_receive(WP_REST_Request $r) {
     return ['ok' => true];
 }
 
-/* ---------- Окно на сайте ---------- */
+/* ---------- Окно на сайте ----------
+   Блоковая тема: блок «Перезвоните мне» (memorial-plugin/callback-dialog) встаёт в подвал сам (Block Hooks,
+   blocks/floating/floating.php). Классическая тема — окно печатается в wp_footer, как раньше. */
 add_action('wp_footer', function () {
+    if (!wp_is_block_theme()) echo memorial_plugin_callback_html(); // phpcs:ignore WordPress.Security.EscapeOutput -- разметка собрана с экранированием.
+}, 5);
+
+/** Окно «Перезвоните мне» с формой (один раз на странице) */
+function memorial_plugin_callback_html() {
+    static $done = false;
+    if ($done) return '';
+    $done = true;
+    ob_start();
     $c = memorial_plugin_contacts()['call'] ?? [];
     $msg = memorial_plugin_messengers();
     $cfg = [
@@ -130,4 +141,5 @@ add_action('wp_footer', function () {
 </dialog>
 <script>window.memCall=<?php echo wp_json_encode($cfg); ?>;</script>
 <?php
-}, 5);
+    return (string) ob_get_clean();
+}
