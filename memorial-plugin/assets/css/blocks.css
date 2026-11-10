@@ -156,7 +156,7 @@ a.mcard__link:hover{border-color:var(--gold,#5e7052);box-shadow:0 10px 26px -14p
 .content .mfaq__hint{margin:.45rem 0 0;font-size:.88rem;color:var(--mute,#66675e)}
 .mfaq__toc button.chip{font:inherit;font-size:.9rem;cursor:pointer;color:var(--ink,#2a2c28)}
 .mfaq__toc button.chip.is-on{background:var(--gold,#5e7052);border-color:var(--gold,#5e7052);color:var(--on-gold,#fff)}
-.mfaq__toc button.chip.is-on small{color:#bdb8ae}
+.mfaq__toc button.chip.is-on small{color:inherit}
 .content .mfaq__title{font-size:1.35rem;padding-top:.4rem;border-top:1px solid var(--line,#e2ded2)}
 .mfaq__group:first-of-type .mfaq__title{border-top:0}
 @media (max-width:600px){.mfaq__toc{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-.25rem;padding:0 .25rem .2rem}.mfaq__toc::-webkit-scrollbar{display:none}.mfaq__toc .chip{flex:none;white-space:nowrap}}
