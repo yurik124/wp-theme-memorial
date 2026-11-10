@@ -25,12 +25,11 @@ add_action('after_setup_theme', function () {
 });
 
 /** Сжатая копия файла (.min.css / .min.js), если она есть и не старше исходника; иначе — сам файл.
-    С плагином устаревшая копия пересоздаётся сама. */
+    Копии собирает tools/minify.php. */
 function memorial_theme_asset($path) {
     $dir = get_template_directory();
     if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) return $path;
     $min = preg_replace('/\.(css|js)$/', '.min.$1', $path);
-    if (function_exists('memorial_plugin_min_refresh')) return memorial_plugin_min_refresh($dir . $path, $dir . $min) ? $min : $path;
     return is_file($dir . $min) && filemtime($dir . $min) + 300 >= filemtime($dir . $path) ? $min : $path;
 }
 

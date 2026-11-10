@@ -97,9 +97,4 @@ function memorial_plugin_after_switch() {
 		// Регулярная загрузка отзывов под новым именем хука.
 		memorial_plugin_rewio_schedule();
 	}
-	$job = get_option( 'mem_img_job', array() );
-	if ( ! empty( $job['running'] ) && ! wp_next_scheduled( 'memorial_plugin_img_job_tick' ) ) {
-		// Недоделанное пересжатие фото.
-		wp_schedule_event( time() + 5, 'mem_minute', 'memorial_plugin_img_job_tick' );
-	}
 }

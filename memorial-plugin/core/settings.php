@@ -584,7 +584,7 @@ add_action('admin_menu', function () {
 add_action('admin_menu', function () {
     global $submenu;
     if (empty($submenu['mem-contacts'])) return;
-    $order = ['edit.php?post_type=mem_lead', 'mem-contacts', 'mem-prices', 'mem-reviews', 'mem-home', 'mem-rest', 'mem-cem', 'mem-design', 'mem-speed', 'mem-metrika', 'mem-legal', 'mem-sq', 'mem-modules', 'mem-help-m'];
+    $order = ['edit.php?post_type=mem_lead', 'mem-contacts', 'mem-prices', 'mem-reviews', 'mem-home', 'mem-rest', 'mem-cem', 'mem-design', 'mem-metrika', 'mem-legal', 'mem-sq', 'mem-modules', 'mem-help-m'];
     $items = $submenu['mem-contacts'];
     usort($items, function ($a, $b) use ($order) {
         $ia = array_search($a[2], $order, true); $ib = array_search($b[2], $order, true);

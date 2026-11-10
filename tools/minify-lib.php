@@ -1,45 +1,11 @@
 <?php
 /**
- * Автосжатие стилей и скриптов на сервере.
- * Рядом с main.css / main.js темы и blocks.css / front.js плагина лежат сжатые копии .min.css / .min.js.
- * Если исходник поправили прямо на хостинге и он стал новее копии — копия пересоздаётся сама при следующем
- * открытии страницы (memorial_plugin_min_refresh вызывают mem_asset() темы и memorial_plugin_asset() плагина).
- *
- * Сжатие осторожное: убираются комментарии, отступы и лишние пробелы. Строки, шаблоны `…` и регулярные
- * выражения не трогаются; переносы строк в JS сохраняются (от них может зависеть смысл кода). Не получилось
- * (нет прав на запись и т. п.) — сайт просто отдаёт исходник.
+ * Сжатие CSS/JS для сборки (*.min.css / *.min.js): убираются комментарии, отступы и лишние пробелы,
+ * строки, шаблоны `…` и регулярные выражения не трогаются, переносы строк в JS сохраняются.
+ * Раньше то же делал модуль скорости плагина на сайте; с этапа 3 сжатые копии собираются только здесь.
  */
-defined('ABSPATH') || exit;
-
-function memorial_plugin_automin_on() {
-    return !empty(memorial_plugin_settings('mem_speed')['static']['automin']);
-}
-
-/**
- * Обновить сжатую копию, если она старше исходника. true — копия свежая (можно подключать).
- * $src, $min — полные пути к файлам.
- */
-function memorial_plugin_min_refresh($src, $min) {
-    if (!is_file($src)) return false;
-    if (is_file($min) && filemtime($min) + 300 >= filemtime($src)) return true;
-    if (!memorial_plugin_automin_on() || !is_writable(dirname($min)) || (is_file($min) && !is_writable($min))) return false;
-    $lock = $min . '.lock';
-    if (is_file($lock) && time() - filemtime($lock) < 30) return false; // уже сжимает другой запрос
-    @touch($lock);
-    $code = (string) file_get_contents($src);
-    $out = substr($src, -4) === '.css' ? memorial_plugin_minify_css($code) : memorial_plugin_minify_js($code);
-    $ok = false;
-    if ($out !== '' || trim($code) === '') {
-        $tmp = $min . '.' . getmypid() . '.tmp';
-        $ok = @file_put_contents($tmp, $out) !== false && @rename($tmp, $min);
-        if (!$ok) @unlink($tmp);
-    }
-    @unlink($lock);
-    return $ok;
-}
-
 /** Строка/шаблон/регулярка: длина литерала, начиная с позиции $i (кавычка или «/»). */
-function memorial_plugin_min_skip_quoted($s, $i, $q) {
+function memorial_tools_min_skip_quoted($s, $i, $q) {
     $n = strlen($s);
     for ($j = $i + 1; $j < $n; $j++) {
         if ($s[$j] === '\\') { $j++; continue; }
@@ -50,7 +16,7 @@ function memorial_plugin_min_skip_quoted($s, $i, $q) {
 }
 
 /* ---------- CSS ---------- */
-function memorial_plugin_minify_css($css) {
+function memorial_tools_minify_css($css) {
     $out = ''; $n = strlen($css); $ws = false;
     for ($i = 0; $i < $n; ) {
         $c = $css[$i];
@@ -59,7 +25,7 @@ function memorial_plugin_minify_css($css) {
             $i = $e === false ? $n : $e + 2; $ws = true; continue;
         }
         if ($c === '"' || $c === "'") {
-            $j = memorial_plugin_min_skip_quoted($css, $i, $c);
+            $j = memorial_tools_min_skip_quoted($css, $i, $c);
             if ($ws && $out !== '') $out .= ' ';
             $out .= substr($css, $i, $j - $i); $i = $j; $ws = false; continue;
         }
@@ -77,7 +43,7 @@ function memorial_plugin_minify_css($css) {
 }
 
 /* ---------- JS ---------- */
-function memorial_plugin_minify_js($js) {
+function memorial_tools_minify_js($js) {
     $out = ''; $n = strlen($js); $ws = ''; // $ws: '' / ' ' / "\n" — какой пробел нужен перед следующим символом
     $last = '';     // последний значимый символ
     $word = '';     // последнее слово (для «return /re/» и т. п.)
@@ -109,15 +75,15 @@ function memorial_plugin_minify_js($js) {
         // продолжение шаблона после ${ … }
         if ($c === '}' && $tpl && end($tpl) === 0) {
             array_pop($tpl);
-            $ws = ''; $j = memorial_plugin_min_tpl_part($js, $i + 1, $tpl);
+            $ws = ''; $j = memorial_tools_min_tpl_part($js, $i + 1, $tpl);
             $out .= substr($js, $i, $j - $i); $i = $j; $last = '`'; $word = ''; continue;
         }
         if ($c === '`') {
-            $soft(); $j = memorial_plugin_min_tpl_part($js, $i + 1, $tpl);
+            $soft(); $j = memorial_tools_min_tpl_part($js, $i + 1, $tpl);
             $out .= substr($js, $i, $j - $i); $i = $j; $last = '`'; $word = ''; continue;
         }
         if ($c === '"' || $c === "'") {
-            $soft(); $j = memorial_plugin_min_skip_quoted($js, $i, $c);
+            $soft(); $j = memorial_tools_min_skip_quoted($js, $i, $c);
             $out .= substr($js, $i, $j - $i); $i = $j; $last = $c; $word = ''; continue;
         }
         // регулярное выражение
@@ -158,7 +124,7 @@ function memorial_plugin_minify_js($js) {
 }
 
 /** Кусок шаблона `…` до закрывающей ` или до ${ (тогда в $tpl добавляется уровень). Возвращает позицию после куска. */
-function memorial_plugin_min_tpl_part($s, $j, &$tpl) {
+function memorial_tools_min_tpl_part($s, $j, &$tpl) {
     $n = strlen($s);
     for (; $j < $n; $j++) {
         if ($s[$j] === '\\') { $j++; continue; }

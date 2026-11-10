@@ -4,6 +4,7 @@
 
 	<!-- Новый код. Пополняется по мере переписывания модулей. -->
 	<file>core/switchover.php</file>
+	<file>core/speed-removed.php</file>
 	<file>admin/dataviews-check.php</file>
 	<file>includes</file>
 
