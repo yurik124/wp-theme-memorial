@@ -83,11 +83,16 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      # Пока package-lock.json нет в репозитории, npm install создаёт его — сохраняем артефактом, чтобы закоммитить.
+      - name: Есть ли файл блокировки версий
+        id: lock
+        run: echo "missing=$([ -f package-lock.json ] && echo no || echo yes)" >> "$GITHUB_OUTPUT"
+
       - name: Зависимости
         run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
 
       - name: Файл блокировки версий (если его ещё нет в репозитории)
-        if: hashFiles('package-lock.json') == ''
+        if: steps.lock.outputs.missing == 'yes'
         uses: actions/upload-artifact@v5
         with:
           name: package-lock
