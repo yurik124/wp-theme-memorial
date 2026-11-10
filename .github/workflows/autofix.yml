@@ -1,10 +1,13 @@
 name: Автоправка (Prettier и package-lock)
 
-# Запускается вручную на ветке: обновляет package-lock.json под package.json и исправляет
-# оформление JS (Prettier через ESLint --fix), затем коммитит изменения в эту же ветку.
-# Коммит от github-actions не запускает другие проверки — «Проверки» после него запускаются вручную.
+# Запуск: push ветки autofix/<ветка> (например, git push -f origin stage-3:autofix/stage-3).
+# Обновляет package-lock.json под package.json и исправляет оформление JS (Prettier через ESLint --fix),
+# затем коммитит изменения в <ветку>. Коммит от github-actions не запускает другие проверки —
+# «Проверки» после него запускаются вручную.
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - 'autofix/**'
 
 permissions:
   contents: write
@@ -39,4 +42,4 @@ jobs:
           if git diff --cached --quiet; then echo "Нечего исправлять"; exit 0; fi
           git diff --cached --stat
           git commit -m "Автоправка: Prettier и package-lock.json"
-          git push
+          git push origin "HEAD:${GITHUB_REF_NAME#autofix/}"
