@@ -14,6 +14,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# По умолчанию проверки только читают репозиторий. Право записи есть у одного job — lockfile (см. ниже).
+permissions:
+  contents: read
+
 jobs:
   php:
     name: PHP ${{ matrix.php }}
@@ -76,6 +80,8 @@ jobs:
   js:
     name: JS, CSS, сборка
     runs-on: ubuntu-24.04
+    outputs:
+      lock_missing: ${{ steps.lock.outputs.missing }}
     steps:
       - uses: actions/checkout@v5
 
@@ -119,6 +125,35 @@ jobs:
         with:
           name: plugin-build
           path: memorial-plugin/build
+
+  # Разовая задача: пока package-lock.json нет в репозитории, коммитит созданный npm install файл в ту же ветку.
+  # Единственный job с правом записи; на pull request не запускается. Когда файл в репозитории — пропускается.
+  # Коммит от GITHUB_TOKEN новый прогон проверок не запускает; версии проверит следующий обычный push (npm ci).
+  lockfile:
+    name: Закоммитить package-lock.json
+    runs-on: ubuntu-24.04
+    needs: [js]
+    if: ${{ needs.js.result == 'success' && needs.js.outputs.lock_missing == 'yes' && github.event_name == 'push' }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/download-artifact@v5
+        with:
+          name: package-lock
+
+      - name: Коммит и push
+        run: |
+          test -s package-lock.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git commit -m "package-lock.json: зафиксированы версии npm-пакетов (создан в CI)"
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
 
   # Проверки на WordPress делятся на две части, у каждой — свой WordPress в Docker и один браузер:
   # меньше нагрузки на раннер и быстрее в сумме.
