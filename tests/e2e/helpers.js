@@ -16,10 +16,13 @@ async function login( page ) {
 
 function collectJsErrors( page ) {
 	const errors = [];
-	page.on( 'pageerror', ( e ) => errors.push( e.message ) );
+	page.on( 'pageerror', ( e ) =>
+		errors.push( e.message + ' @ ' + ( e.stack || '' ).split( '\n' )[ 1 ] )
+	);
 	page.on( 'console', ( m ) => {
 		if ( m.type() === 'error' ) {
-			errors.push( m.text() );
+			const at = m.location();
+			errors.push( m.text() + ' @ ' + at.url + ':' + at.lineNumber );
 		}
 	} );
 	return errors;

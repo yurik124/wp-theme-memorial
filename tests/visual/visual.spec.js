@@ -24,6 +24,10 @@ for ( const { name, path } of urls ) {
 			window.scrollTo( 0, 0 );
 		} );
 		await page.waitForLoadState( 'networkidle' );
+		// пустая или сломанная страница — ошибка, а не «совпадает»
+		await expect( page.locator( 'main#main' ) ).toBeAttached();
+		const text = await page.locator( 'body' ).innerText();
+		expect( text.length, 'на странице почти нет текста' ).toBeGreaterThan( 200 );
 		await expect( page ).toHaveScreenshot( name + '.png', {
 			fullPage: true,
 			mask: MASK.map( ( s ) => page.locator( s ) ),

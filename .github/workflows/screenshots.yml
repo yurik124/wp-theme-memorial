@@ -116,13 +116,16 @@ jobs:
           WPENV=../after/node_modules/.bin/wp-env
           $WPENV start
           $WPENV run cli wp db import wp-content/ci-data/db.sql
-          $WPENV run cli sh -c 'wp option get siteurl > wp-content/ci-data/siteurl.txt'
+          # адрес сайта — прямо из таблицы (wp option get отдаёт адрес wp-env из wp-config)
+          $WPENV run cli sh -c 'wp db query "SELECT option_value FROM $(wp db prefix)options WHERE option_name=\"siteurl\"" --skip-column-names > wp-content/ci-data/siteurl.txt'
           old=$(tr -d '\r\n' < ../data/siteurl.txt)
           echo "Адрес сайта в базе: $old"
           $WPENV run cli wp search-replace "$old" "http://localhost:8888" --all-tables --skip-columns=guid --quiet
           $WPENV run cli wp search-replace "${old/https:/http:}" "http://localhost:8888" --all-tables --skip-columns=guid --quiet
           $WPENV run cli wp rewrite flush
-          $WPENV run cli sh -c 'rm -rf wp-content/cache/memorial; wp option get stylesheet; wp plugin list --status=active --field=name'
+          # в копии базы могут быть активны старые папки (memorial_speshu, memorial-core) — их здесь нет:
+          # включаем Memorial Plugin (он сам переключит тему, как на сайте) и тему memorial-theme
+          $WPENV run cli sh -c 'wp plugin deactivate memorial-core --quiet 2>/dev/null; wp plugin activate memorial-plugin; wp theme activate memorial-theme; rm -rf wp-content/cache/memorial; echo "тема: $(wp option get stylesheet)"; wp plugin list --status=active --field=name'
 
       - name: Список страниц
         run: |
@@ -148,7 +151,7 @@ jobs:
           WPENV=../after/node_modules/.bin/wp-env
           $WPENV start --update
           # переносы при обновлении (стили сайта и т. п.) выполняются в админке — запускаем их, кэш плагина чистим
-          $WPENV run cli sh -c 'rm -rf wp-content/cache/memorial; wp eval "do_action(\"admin_init\");" || true; wp option get stylesheet'
+          $WPENV run cli sh -c 'rm -rf wp-content/cache/memorial; wp eval "do_action(\"admin_init\");" || true; echo "тема: $(wp option get stylesheet)"'
 
       - name: Сравнение — «после»
         run: |
