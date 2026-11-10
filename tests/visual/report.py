@@ -57,6 +57,14 @@ for title, t in (x for s in data["suites"] for x in walk(s)):
             break
     rows.append((title, proj, kind, pct or msg[:160]))
 
+# Образцы: эталон главной и «Контактов» — чтобы было видно, что снимки не пустые
+for proj in ("pc", "phone"):
+    for name in ("home", "page-kontakty"):
+        src = os.path.join(shots, "baseline", proj, name + ".png")
+        if os.path.exists(src):
+            os.makedirs(os.path.join(out, "sample", proj), exist_ok=True)
+            shutil.copy(src, os.path.join(out, "sample", proj, name + ".png"))
+
 diff = [r for r in rows if r[2] not in ("совпадает", "пропущено")]
 lines = [
     f"# Скриншоты: `{before}` → `{after}`",
