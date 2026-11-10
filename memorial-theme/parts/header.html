@@ -1,11 +1,11 @@
 <!-- wp:memorial-plugin/topbar /-->
 
-<!-- wp:group {"tagName":"header","anchor":"header","className":"header","layout":{"type":"default"}} -->
-<header id="header" class="wp-block-group header"><!-- wp:group {"className":"wrap header__in","layout":{"type":"default"}} -->
-<div class="wp-block-group wrap header__in"><!-- wp:group {"className":"logo","layout":{"type":"default"}} -->
+<!-- wp:group {"tagName":"header","anchor":"header","className":"header","layout":{"type":"default"},"style":{"spacing":{"blockGap":"0"}}} -->
+<header id="header" class="wp-block-group header"><!-- wp:group {"className":"wrap header__in","layout":{"type":"default"},"style":{"spacing":{"blockGap":"0"}}} -->
+<div class="wp-block-group wrap header__in"><!-- wp:group {"className":"logo","layout":{"type":"default"},"style":{"spacing":{"blockGap":"0"}}} -->
 <div class="wp-block-group logo"><!-- wp:site-logo {"width":44,"className":"logo__mark-wrap"} /-->
 
-<!-- wp:group {"className":"logo__text","layout":{"type":"default"}} -->
+<!-- wp:group {"className":"logo__text","layout":{"type":"default"},"style":{"spacing":{"blockGap":"0"}}} -->
 <div class="wp-block-group logo__text"><!-- wp:site-title {"level":0} /-->
 
 <!-- wp:paragraph {"className":"logo__sub"} -->
@@ -42,7 +42,7 @@
     var was = h.classList.contains('is-compact');
     h.classList.add('is-measuring');
     h.classList.remove('is-compact', 'is-tworow');
-    var compact = innerWidth <= 900, two = false;
+    var compact = !(innerWidth > 900), two = false; // без знака «меньше»: WordPress обрабатывает HTML шаблона (wptexturize) и ломает скрипт после него
     if (!compact && over()) {
       h.classList.add('is-tworow');
       two = !over();

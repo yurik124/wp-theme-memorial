@@ -202,7 +202,6 @@
 			]
 		},
 		"spacing": {
-			"blockGap": null,
 			"units": [
 				"px",
 				"rem",

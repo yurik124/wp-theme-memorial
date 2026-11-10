@@ -63,6 +63,7 @@ jobs:
           php tests/smoke/switch.php
           php tests/smoke/metrika.php
           php tests/smoke/settings.php
+          php tools/check-templates.php
 
       - name: Composer (инструменты)
         if: ${{ !cancelled() && matrix.php == '8.4' }}

@@ -44,9 +44,10 @@ for title, t in (x for s in data["suites"] for x in walk(s)):
         p = a.get("path") or ""
         if p.endswith(".png") and os.path.exists(p):
             os.makedirs(dest, exist_ok=True)
-            name = os.path.basename(p)
-            for key in ("expected", "actual", "diff"):
-                if key in name:
+            base = os.path.basename(p)
+            name = "expected.png"  # эталон приходит под именем страницы
+            for key in ("actual", "diff"):
+                if key in base:
                     name = key + ".png"
             shutil.copy(p, os.path.join(dest, name))
             copied.append(name)
