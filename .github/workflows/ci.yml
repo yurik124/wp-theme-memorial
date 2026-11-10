@@ -177,6 +177,8 @@ jobs:
           # «Оформление» как на сайте со своей схемой: проверка переноса в стили сайта (tests/e2e/site.spec.js)
           npx wp-env run cli wp option update mem_design '{"colors":{"preset":"stone"},"text":{"scale":"110","head":"100"}}' --format=json
           npx wp-env run cli wp theme activate memorial-theme
+          # Страница со всеми блоками плагина: проверка, что каждый выводится без ошибок (tests/e2e/blocks.spec.js)
+          npx wp-env run cli wp eval-file wp-content/plugins/memorial-plugin/tools/create-blocks-check-page.php
           npx wp-env run cli wp plugin list
           npx wp-env run cli wp core version
 

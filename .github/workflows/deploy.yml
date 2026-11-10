@@ -61,11 +61,11 @@ jobs:
         run: |
           mkdir -p dist
           rsync -a --delete \
-            --exclude 'src/' --exclude 'node_modules/' --exclude 'tests/' \
+            --exclude 'src/' --exclude 'node_modules/' --exclude 'tests/' --exclude 'tools/' \
             --exclude 'phpcs.xml.dist' --exclude '*.lock' --exclude '*.tmp' --exclude '.*' \
             memorial-plugin/ dist/memorial-plugin/
           rsync -a --delete \
-            --exclude 'src/' --exclude 'node_modules/' --exclude 'tests/' \
+            --exclude 'src/' --exclude 'node_modules/' --exclude 'tests/' --exclude 'tools/' \
             --exclude 'phpcs.xml.dist' --exclude '*.lock' --exclude '*.tmp' --exclude '.*' \
             memorial-theme/ dist/memorial-theme/
           test -f dist/memorial-plugin/memorial-plugin.php
