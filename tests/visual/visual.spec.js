@@ -13,21 +13,39 @@ const urls = JSON.parse(
 const MASK = [ '.reviews__widget', '.map', 'iframe' ];
 // «липкая» шапка встаёт на место, плавающие кнопка «наверх» и плашка cookie на длинном снимке не нужны
 const STYLE =
-	'.header{position:relative !important;top:0 !important}' +
-	'#totop,.consent{visibility:hidden !important}';
+	'.header{position:relative !important;top:0 !important;transform:none !important}' +
+	'#totop,.totop,.consent{display:none !important}' +
+	'*,*::before,*::after{transition:none !important;animation:none !important}';
 
 for ( const { name, path } of urls ) {
 	test( name, async ( { page } ) => {
 		await page.goto( path, { waitUntil: 'networkidle' } );
-		// ленивые картинки: прокрутка до конца и обратно
+		await page.addStyleTag( { content: STYLE } );
+		// ленивые картинки: грузим все сразу, прокручиваем до конца и обратно, ждём загрузки
 		await page.evaluate( async () => {
-			for ( let y = 0; y < document.body.scrollHeight; y += 600 ) {
+			document
+				.querySelectorAll( 'img[loading="lazy"]' )
+				.forEach( ( img ) => ( img.loading = 'eager' ) );
+			for ( let y = 0; y < document.body.scrollHeight; y += 400 ) {
 				window.scrollTo( 0, y );
-				await new Promise( ( r ) => window.setTimeout( r, 60 ) );
+				await new Promise( ( r ) => window.setTimeout( r, 100 ) );
 			}
 			window.scrollTo( 0, 0 );
+			await Promise.all(
+				[ ...document.images ]
+					.filter( ( img ) => ! img.complete )
+					.map(
+						( img ) =>
+							new Promise( ( r ) => {
+								img.onload = r;
+								img.onerror = r;
+								window.setTimeout( r, 5000 );
+							} )
+					)
+			);
 		} );
 		await page.waitForLoadState( 'networkidle' );
+		await page.waitForTimeout( 300 );
 		// пустая или сломанная страница — ошибка, а не «совпадает»
 		await expect( page.locator( 'main#main' ) ).toBeAttached();
 		const text = await page.locator( 'body' ).innerText();

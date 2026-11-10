@@ -165,8 +165,6 @@ html.lb-open,html.lb-open body{overflow:hidden}
 .ico-heart{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z'/%3E%3C/svg%3E")}
 .ico-card{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.5' y='5' width='19' height='14' rx='2'/%3E%3Cpath d='M2.5 10h19M6.5 15h4'/%3E%3C/svg%3E")}
 .ico-truck{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 16.5V6h12v10.5M14 9.5h4l3.5 3.5v3.5H14'/%3E%3Ccircle cx='6.5' cy='17.5' r='2'/%3E%3Ccircle cx='17.5' cy='17.5' r='2'/%3E%3C/svg%3E")}
-.mem-steps>.mem-step{margin:0!important;padding-bottom:1.3rem}
-.mem-steps>.mem-step:last-child{padding-bottom:.2rem}
 /* Ряд кнопок с прокруткой: стрелки и затухание */
 .srow{position:relative}
 .srow__arr{display:none;position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid var(--line,#e2ded2);background:#fff;color:var(--ink,#2a2c28);font-size:1.4rem;line-height:1;place-items:center;padding:0 0 2px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12)}

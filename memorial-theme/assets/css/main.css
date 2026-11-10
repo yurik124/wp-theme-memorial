@@ -720,7 +720,6 @@ h1,h2,h3,.pkg h3,.cat h3,.svc__body h3,.card__title,.mcard__name,.fnav__title{ov
   .logo__text .logo__sub{font-size:.7rem}
   .logo__text .wp-block-site-title,.logo__text .logo__sub{overflow:hidden;text-overflow:ellipsis}
 }
-.footer__logo{display:flex;align-items:center;gap:.75rem}
 .footer__logo .wp-block-site-logo{margin:0;line-height:0}
 .footer__logo .wp-block-site-logo img{width:48px;height:auto}
 .footer__brand.wp-block-site-title{margin:0}
