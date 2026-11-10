@@ -32,7 +32,9 @@ test( 'shortcodes are converted to blocks and rolled back', async ( {
 		'%%mem_years%%'
 	);
 	await modal.getByRole( 'button', { name: 'Convert', exact: true } ).click();
-	await expect( page.getByText( '1 post converted.' ) ).toBeVisible();
+	await expect(
+		page.locator( '.components-notice' ).getByText( '1 post converted.' )
+	).toBeVisible();
 
 	const converted = await rawContent( page );
 	expect( converted ).toContain( '<!-- wp:memorial-plugin/cta' );
@@ -51,7 +53,9 @@ test( 'shortcodes are converted to blocks and rolled back', async ( {
 		.filter( { hasText: 'Convert check' } );
 	await again.getByRole( 'button', { name: 'Actions' } ).click();
 	await page.getByRole( 'menuitem', { name: 'Roll back' } ).click();
-	await expect( page.getByText( 'is back as it was' ) ).toBeVisible();
+	await expect(
+		page.locator( '.components-notice' ).getByText( 'is back as it was' )
+	).toBeVisible();
 	expect( await rawContent( page ) ).toContain( '[mem_cta title=' );
 
 	expect( errors ).toEqual( [] );

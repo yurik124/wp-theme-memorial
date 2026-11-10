@@ -91,7 +91,8 @@ add_action( 'init', 'memorial_plugin_floating_register', 30 );
  * @return string[]
  */
 function memorial_plugin_floating_hooks( $hooked, $position, $anchor, $context ) {
-	if ( 'lastChild' !== $position || 'core/template-part' !== $anchor ) {
+	// The filter gets snake_case positions (last_child); block.json spells them lastChild.
+	if ( ! in_array( $position, array( 'last_child', 'lastChild' ), true ) || 'core/template-part' !== $anchor ) {
 		return $hooked;
 	}
 	if ( ! $context instanceof WP_Block_Template || 'wp_template_part' !== $context->type || 'footer' !== $context->area ) {
