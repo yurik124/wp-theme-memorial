@@ -24,7 +24,10 @@ const API = '/memorial-plugin/v1/convert';
 const RESULT_TEXT = {
 	converted: __( 'converted', 'memorial-plugin' ),
 	unchanged: __( 'nothing to convert', 'memorial-plugin' ),
-	'no-revision': __( 'not converted: could not save a revision', 'memorial-plugin' ),
+	'no-revision': __(
+		'not converted: could not save a revision',
+		'memorial-plugin'
+	),
 	forbidden: __( 'not converted: no permission', 'memorial-plugin' ),
 	'not-found': __( 'not found', 'memorial-plugin' ),
 };
@@ -51,7 +54,11 @@ function Preview( { item, closeModal, onConvert } ) {
 			.catch( ( e ) => setError( e.message ) );
 	}, [ item.id ] );
 	if ( error ) {
-		return <Notice status="error" isDismissible={ false }>{ error }</Notice>;
+		return (
+			<Notice status="error" isDismissible={ false }>
+				{ error }
+			</Notice>
+		);
 	}
 	if ( ! preview ) {
 		return <Spinner />;
@@ -65,13 +72,21 @@ function Preview( { item, closeModal, onConvert } ) {
 					dangerouslySetInnerHTML={ { __html: preview.diff } }
 				/>
 			) : (
-				<p>{ __( 'Nothing to convert automatically in this post.', 'memorial-plugin' ) }</p>
+				<p>
+					{ __(
+						'Nothing to convert automatically in this post.',
+						'memorial-plugin'
+					) }
+				</p>
 			) }
 			{ Object.keys( preview.after ).length > 0 && (
 				<Notice status="warning" isDismissible={ false }>
 					{ sprintf(
 						/* translators: %s: list of shortcodes. */
-						__( 'Will stay as shortcodes (inside other text): %s. Edit them in the post.', 'memorial-plugin' ),
+						__(
+							'Will stay as shortcodes (inside other text): %s. Edit them in the post.',
+							'memorial-plugin'
+						),
 						shortcodeList( preview.after )
 					) }
 				</Notice>
@@ -137,7 +152,9 @@ function App() {
 					} );
 					Object.assign( done, part );
 				}
-				const ok = Object.values( done ).filter( ( r ) => r === 'converted' ).length;
+				const ok = Object.values( done ).filter(
+					( r ) => r === 'converted'
+				).length;
 				const failed = Object.entries( done ).filter(
 					( [ , r ] ) => r !== 'converted' && r !== 'unchanged'
 				);
@@ -146,13 +163,21 @@ function App() {
 					text:
 						sprintf(
 							/* translators: %d: number of posts. */
-							_n( '%d post converted.', '%d posts converted.', ok, 'memorial-plugin' ),
+							_n(
+								'%d post converted.',
+								'%d posts converted.',
+								ok,
+								'memorial-plugin'
+							),
 							ok
 						) +
 						( failed.length
 							? ' ' +
-							  failed
-									.map( ( [ id, r ] ) => `#${ id }: ${ RESULT_TEXT[ r ] || r }` )
+								failed
+									.map(
+										( [ id, r ] ) =>
+											`#${ id }: ${ RESULT_TEXT[ r ] || r }`
+									)
 									.join( '; ' )
 							: '' ),
 				} );
@@ -179,10 +204,16 @@ function App() {
 						res.result === 'restored'
 							? sprintf(
 									/* translators: %s: post title. */
-									__( '“%s” is back as it was before converting.', 'memorial-plugin' ),
+									__(
+										'“%s” is back as it was before converting.',
+										'memorial-plugin'
+									),
 									item.title
-							  )
-							: __( 'Could not roll back: the revision saved before converting is missing.', 'memorial-plugin' ),
+								)
+							: __(
+									'Could not roll back: the revision saved before converting is missing.',
+									'memorial-plugin'
+								),
 				} );
 			} catch ( e ) {
 				setNotice( { status: 'error', text: e.message } );
@@ -230,9 +261,21 @@ function App() {
 				label: __( 'State', 'memorial-plugin' ),
 				getValue: ( { item } ) => stateOf( item ),
 				elements: [
-					{ value: 'pending', label: __( 'Can be converted', 'memorial-plugin' ) },
-					{ value: 'converted', label: __( 'Converted', 'memorial-plugin' ) },
-					{ value: 'manual', label: __( 'Only manual edits left', 'memorial-plugin' ) },
+					{
+						value: 'pending',
+						label: __( 'Can be converted', 'memorial-plugin' ),
+					},
+					{
+						value: 'converted',
+						label: __( 'Converted', 'memorial-plugin' ),
+					},
+					{
+						value: 'manual',
+						label: __(
+							'Only manual edits left',
+							'memorial-plugin'
+						),
+					},
 				],
 				filterBy: { operators: [ 'isAny' ] },
 			},
@@ -249,7 +292,11 @@ function App() {
 				modalHeader: __( 'Changes in the post', 'memorial-plugin' ),
 				modalSize: 'large',
 				RenderModal: ( { items: [ item ], closeModal } ) => (
-					<Preview item={ item } closeModal={ closeModal } onConvert={ convert } />
+					<Preview
+						item={ item }
+						closeModal={ closeModal }
+						onConvert={ convert }
+					/>
 				),
 			},
 			{
@@ -283,7 +330,10 @@ function App() {
 			) }
 		>
 			{ notice && (
-				<Notice status={ notice.status } onRemove={ () => setNotice( null ) }>
+				<Notice
+					status={ notice.status }
+					onRemove={ () => setNotice( null ) }
+				>
 					{ notice.text }
 				</Notice>
 			) }
@@ -298,7 +348,12 @@ function App() {
 				defaultLayouts={ { table: {}, list: {} } }
 				getItemId={ ( item ) => String( item.id ) }
 				empty={
-					<p>{ __( 'No posts with shortcodes left.', 'memorial-plugin' ) }</p>
+					<p>
+						{ __(
+							'No posts with shortcodes left.',
+							'memorial-plugin'
+						) }
+					</p>
 				}
 			/>
 		</Page>

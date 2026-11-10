@@ -42,7 +42,9 @@ test( 'shortcodes are converted to blocks and rolled back', async ( {
 	).toContainText( 'Convert check heading' );
 
 	await page.goto( '/wp-admin/admin.php?page=memorial-plugin-convert' );
-	const again = page.getByRole( 'row' ).filter( { hasText: 'Convert check' } );
+	const again = page
+		.getByRole( 'row' )
+		.filter( { hasText: 'Convert check' } );
 	await again.getByRole( 'button', { name: 'Actions' } ).click();
 	await page.getByRole( 'menuitem', { name: 'Roll back' } ).click();
 	await expect( page.getByText( 'is back as it was' ) ).toBeVisible();

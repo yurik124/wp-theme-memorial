@@ -26,10 +26,14 @@ function ValueModal( { value, onChange, onClose } ) {
 	const def = VALUES.find( ( v ) => v.key === key );
 
 	const add = () => {
-		const atts = def?.param && param.trim() ? { [ def.param ]: param.trim() } : {};
+		const atts =
+			def?.param && param.trim() ? { [ def.param ]: param.trim() } : {};
 		const query = [ [ 'key', key ] ]
 			.concat(
-				Object.entries( atts ).map( ( [ k, v ] ) => [ `atts[${ k }]`, v ] )
+				Object.entries( atts ).map( ( [ k, v ] ) => [
+					`atts[${ k }]`,
+					v,
+				] )
 			)
 			.map(
 				( [ k, v ] ) =>
@@ -40,7 +44,10 @@ function ValueModal( { value, onChange, onClose } ) {
 			.then( ( res ) => {
 				if ( ! res.html ) {
 					setError(
-						__( 'This value is empty — check the parameter.', 'memorial-plugin' )
+						__(
+							'This value is empty — check the parameter.',
+							'memorial-plugin'
+						)
 					);
 					return;
 				}
@@ -51,13 +58,19 @@ function ValueModal( { value, onChange, onClose } ) {
 	};
 
 	return (
-		<Modal title={ __( 'Insert a site value', 'memorial-plugin' ) } onRequestClose={ onClose }>
+		<Modal
+			title={ __( 'Insert a site value', 'memorial-plugin' ) }
+			onRequestClose={ onClose }
+		>
 			<SelectControl
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom
 				label={ __( 'Value', 'memorial-plugin' ) }
 				value={ key }
-				options={ VALUES.map( ( v ) => ( { value: v.key, label: v.label } ) ) }
+				options={ VALUES.map( ( v ) => ( {
+					value: v.key,
+					label: v.label,
+				} ) ) }
 				onChange={ ( k ) => {
 					setKey( k );
 					setError( '' );
