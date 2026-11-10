@@ -139,7 +139,7 @@ add_filter('memorial_plugin_admin_pages', function ($pages) {
         $sw .= ' ' . esc_html($pr['name']) . '</span>';
     }
     $pages['mem_design'] = [
-        'slug' => 'mem-design', 'title' => 'Оформление', 'schema' => 'memorial_theme_design_schema', 'defaults' => 'memorial_theme_design_defaults',
+        'slug' => 'mem-design', 'title' => 'Оформление', 'schema' => 'memorial_theme_design_schema',
         'intro' => 'Цвета и шрифты меняются на всём сайте сразу после сохранения. Откройте сайт в соседней вкладке и обновляйте её, чтобы сравнить.<br>'
             . '<b>Готовые схемы:</b><br>' . $sw . '<br>'
             . '<b>WebP на вашем хостинге:</b> ' . ($webp ? 'поддерживается.' : 'не поддерживается — попросите хостинг включить WebP в PHP (GD или Imagick).')
@@ -283,3 +283,6 @@ function memorial_theme_contrast($a, $b) {
 
 /* Цвет схемы для поля «цвет» в настройках плагина */
 add_filter('memorial_plugin_scheme_color', fn($color, $key, $effective = false) => memorial_theme_scheme_color($key, $effective), 10, 3);
+
+/* Значения по умолчанию для настройки mem_design — функция темы */
+add_filter('memorial_plugin_settings_defaults', fn($fn, $name) => $name === 'mem_design' ? 'memorial_theme_design_defaults' : $fn, 10, 2);

@@ -345,11 +345,11 @@ function memorial_plugin_merge($def, $saved) {
 function memorial_plugin_settings($name) {
     static $cache = [];
     if (!isset($cache[$name])) {
-        // Значения по умолчанию: функция из описания страницы ('defaults'), иначе memorial_plugin_<имя без mem_>_defaults.
-        // Имена настроек в базе (mem_…) прежние — переименованы только функции.
-        $page = memorial_plugin_admin_pages()[$name] ?? [];
-        $fn   = $page['defaults'] ?? 'memorial_plugin_' . preg_replace('/^mem_/', '', $name) . '_defaults';
-        $def  = is_callable($fn) ? call_user_func($fn) : [];
+        // Значения по умолчанию: memorial_plugin_<имя без mem_>_defaults; тема подставляет свою функцию фильтром
+        // memorial_plugin_settings_defaults. Имена настроек в базе (mem_…) прежние — переименованы только функции.
+        // Список страниц (memorial_plugin_admin_pages) здесь спрашивать нельзя: его обработчики сами читают настройки.
+        $fn  = apply_filters('memorial_plugin_settings_defaults', 'memorial_plugin_' . preg_replace('/^mem_/', '', $name) . '_defaults', $name);
+        $def = is_callable($fn) ? call_user_func($fn) : [];
         $cache[$name] = memorial_plugin_merge($def, get_option($name, null));
     }
     return $cache[$name];
