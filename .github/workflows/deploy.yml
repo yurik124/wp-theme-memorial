@@ -7,6 +7,7 @@ name: Деплой на сайт
 #     сайт не видит полузалитый плагин. Предыдущая версия остаётся рядом как .memorial-plugin-old до следующей выгрузки.
 #  Старые папки memorial_speshu и memorial-core этот процесс не трогает (откат — см. MIGRATION.md).
 #
+# Перед выгрузкой — все проверки, включая WordPress 7.1.4 (ci.yml). Не прошли — выгрузки нет.
 # Запуск: push в main или вручную (Actions → «Деплой на сайт» → Run workflow → выбрать ветку).
 
 on:
@@ -24,8 +25,18 @@ env:
   SFTP_USER: ${{ secrets.SFTP_USER }}
   SITE_DIR: ${{ secrets.SITE_DIR }}
 
+permissions:
+  contents: read
+
 jobs:
+  checks:
+    name: Проверки перед выгрузкой
+    uses: ./.github/workflows/ci.yml
+    with:
+      wordpress: true
+
   deploy:
+    needs: [checks]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
