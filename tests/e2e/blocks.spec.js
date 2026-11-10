@@ -22,7 +22,10 @@ test( 'все блоки плагина выводятся', async ( { page } ) 
 		'.product',
 		'.nf__in',
 	] ) {
-		await expect( page.locator( selector ).first(), selector ).toBeAttached();
+		await expect(
+			page.locator( selector ).first(),
+			selector
+		).toBeAttached();
 	}
 	expect(
 		errors.filter( ( e ) => ! /mc\.yandex|yandex/i.test( e ) )

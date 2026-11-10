@@ -1,0 +1,178 @@
+name: Скриншоты
+
+# Сравнение страниц «до» и «после» на настоящем контенте тестового сайта. Только по кнопке.
+#  1. С хостинга (секреты SFTP_*) скачиваются последняя копия базы UpdraftPlus и папка uploads — только чтение.
+#  2. Из них во временной машине Actions поднимается WordPress 7.1.4 (wp-env), адреса заменяются на localhost.
+#  3. Ветка «до»: снимаются эталоны (все опубликованные страницы, каталог, разделы, товары, 404; ПК и телефон).
+#  4. Ветка «после»: те же страницы сравниваются с эталонами (допуск 0,2 % пикселей).
+#  5. Отчёт (report.md) и картинки только для отличающихся страниц — в ветку ci-screenshots
+#     (одним коммитом, без истории). База в репозиторий не попадает.
+
+# Запуск: Actions → «Скриншоты» → Run workflow (когда файл есть в main),
+# или push ветки shots/<что угодно> — сравнивается её код с block-migration.
+
+on:
+  push:
+    branches: ['shots/**']
+  workflow_dispatch:
+    inputs:
+      before:
+        description: Ветка «до» (эталон)
+        default: block-migration
+        required: true
+      after:
+        description: Ветка «после» (пусто — ветка, из которой запущено)
+        default: ''
+        required: false
+
+concurrency:
+  group: screenshots
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  SFTP_HOST: ${{ secrets.SFTP_HOST }}
+  SFTP_PORT: ${{ secrets.SFTP_PORT }}
+  SFTP_USER: ${{ secrets.SFTP_USER }}
+  SITE_DIR: ${{ secrets.SITE_DIR }}
+
+jobs:
+  shots:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Код «до»
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.before || 'block-migration' }}
+          path: before
+
+      - name: Код «после»
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.after || github.ref_name }}
+          path: after
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: after/.nvmrc
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Сборка «до» и «после»
+        run: |
+          for d in before after; do
+            (cd $d && npm ci --no-audit --no-fund && npm run build && composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative)
+          done
+
+      - name: Установить lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Скачать базу и uploads с тестового сайта (только чтение)
+        env:
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          mkdir -p data uploads
+          open="set sftp:auto-confirm yes; set net:max-retries 3; set net:timeout 30; open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT"
+          db=$(lftp -c "$open; cls -1 $SITE_DIR/updraft/" | grep -E -- '-db\.gz$' | sort | tail -n 1)
+          if [ -z "$db" ]; then echo "::error::В $SITE_DIR/updraft нет копии базы UpdraftPlus — сделайте резервную копию"; exit 1; fi
+          echo "Копия базы: $(basename "$db")"
+          lftp -c "$open; get $db -o data/db.sql.gz"
+          gunzip -f data/db.sql.gz
+          lftp -c "$open; mirror --parallel=8 --exclude-glob '*.zip' --exclude-glob 'cache/*' --exclude-glob 'updraft*' $SITE_DIR/uploads ./uploads" > /dev/null
+          du -sh data uploads
+
+      - name: WordPress с базой сайта
+        run: |
+          mkdir -p env
+          cp after/tests/visual/collect-urls.php data/
+          # кэш страниц и шорткодов плагина выключен: иначе «после» показывал бы страницы, сохранённые «до»
+          cat > env/.wp-env.json <<'JSON'
+          {
+            "testsEnvironment": false,
+            "core": "https://wordpress.org/wordpress-7.1.4.zip",
+            "phpVersion": "8.4",
+            "plugins": [],
+            "themes": [],
+            "mappings": {
+              "wp-content/plugins/memorial-plugin": "../before/memorial-plugin",
+              "wp-content/themes/memorial-theme": "../before/memorial-theme",
+              "wp-content/uploads": "../uploads",
+              "wp-content/ci-data": "../data"
+            },
+            "config": {
+              "WP_DEBUG": true, "WP_DEBUG_LOG": true, "WP_DEBUG_DISPLAY": false,
+              "MEMORIAL_PLUGIN_NO_PAGE_CACHE": true, "MEM_NO_PAGE_CACHE": true
+            }
+          }
+          JSON
+          cd env
+          WPENV=../after/node_modules/.bin/wp-env
+          $WPENV start
+          $WPENV run cli wp db import wp-content/ci-data/db.sql
+          $WPENV run cli sh -c 'wp option get siteurl > wp-content/ci-data/siteurl.txt'
+          old=$(tr -d '\r\n' < ../data/siteurl.txt)
+          echo "Адрес сайта в базе: $old"
+          $WPENV run cli wp search-replace "$old" "http://localhost:8888" --all-tables --skip-columns=guid --quiet
+          $WPENV run cli wp search-replace "${old/https:/http:}" "http://localhost:8888" --all-tables --skip-columns=guid --quiet
+          $WPENV run cli wp rewrite flush
+          $WPENV run cli sh -c 'rm -rf wp-content/cache/memorial; wp option get stylesheet; wp plugin list --status=active --field=name'
+
+      - name: Список страниц
+        run: |
+          cd env
+          ../after/node_modules/.bin/wp-env run cli wp eval-file wp-content/ci-data/collect-urls.php
+          cp ../data/urls.json ../urls.json
+          python3 -c "import json; u=json.load(open('../urls.json')); print(len(u), 'страниц:', ', '.join(x['name'] for x in u))"
+
+      - name: Браузер
+        run: cd after && npx playwright install --with-deps chromium
+
+      - name: Эталон — «до»
+        run: |
+          cd after
+          URLS_FILE=$GITHUB_WORKSPACE/urls.json SHOTS_DIR=$GITHUB_WORKSPACE/shots \
+            npx playwright test --config tests/visual/visual.config.js --update-snapshots || true
+          ls shots/baseline 2>/dev/null || ls $GITHUB_WORKSPACE/shots/baseline
+
+      - name: Переключить на «после»
+        run: |
+          cd env
+          sed -i 's#\.\./before/#../after/#g' .wp-env.json
+          WPENV=../after/node_modules/.bin/wp-env
+          $WPENV start --update
+          # переносы при обновлении (стили сайта и т. п.) выполняются в админке — запускаем их, кэш плагина чистим
+          $WPENV run cli sh -c 'rm -rf wp-content/cache/memorial; wp eval "do_action(\"admin_init\");" || true; wp option get stylesheet'
+
+      - name: Сравнение — «после»
+        run: |
+          cd after
+          URLS_FILE=$GITHUB_WORKSPACE/urls.json SHOTS_DIR=$GITHUB_WORKSPACE/shots \
+            npx playwright test --config tests/visual/visual.config.js || true
+
+      - name: Ошибки PHP
+        if: always()
+        run: |
+          cd env
+          ../after/node_modules/.bin/wp-env run cli sh -c 'cat wp-content/debug.log 2>/dev/null || true' > ../shots-debug.log || true
+          grep -E "PHP (Fatal|Warning|Notice|Deprecated)" ../shots-debug.log | sort | uniq -c | sort -rn | head -40 || true
+
+      - name: Отчёт в ветку ci-screenshots
+        if: always()
+        run: |
+          python3 after/tests/visual/report.py shots out "${{ inputs.before || 'block-migration' }}" "${{ inputs.after || github.ref_name }}" "${{ github.run_id }}"
+          cp shots-debug.log out/debug.log 2>/dev/null || true
+          cd out
+          git init -q -b ci-screenshots
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Скриншоты: ${{ inputs.before || 'block-migration' }} → ${{ inputs.after || github.ref_name }} (прогон ${{ github.run_id }})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-screenshots
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
