@@ -21,12 +21,17 @@ test( 'все блоки плагина выводятся', async ( { page } ) 
 		'.kgrid',
 		'.product',
 		'.nf__in',
+		'.wp-block-memorial-plugin-cta',
 	] ) {
 		await expect(
 			page.locator( selector ).first(),
 			selector
 		).toBeAttached();
 	}
+	// Inline value: the stored text is replaced with the current one.
+	await expect(
+		page.locator( '.memorial-plugin-value' ).first()
+	).not.toHaveText( 'STALE' );
 	expect(
 		errors.filter( ( e ) => ! /mc\.yandex|yandex/i.test( e ) )
 	).toEqual( [] );

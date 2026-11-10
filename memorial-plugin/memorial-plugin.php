@@ -168,6 +168,9 @@ require MEMORIAL_PLUGIN_DIR . '/core/icons-fallback.php';
 
 /* Блоки-обёртки для блоковой темы (этап 2): шапка, подвал, главная, товар, каталог… */
 require MEMORIAL_PLUGIN_DIR . '/blocks/legacy/legacy.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/content/content-blocks.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/content/inline-values.php';
+require MEMORIAL_PLUGIN_DIR . '/admin/convert.php';
 
 /* Включение: адреса товаров/работ заработают после пересборки ссылок (на следующем запросе, когда типы записей уже есть) */
 register_activation_hook(__FILE__, function () {
