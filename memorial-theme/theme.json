@@ -1,0 +1,277 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Светлая память — лавр",
+	"settings": {
+		"appearanceTools": true,
+		"color": {
+			"defaultPalette": false,
+			"defaultGradients": false,
+			"defaultDuotone": false,
+			"custom": true,
+			"palette": [
+				{
+					"slug": "base",
+					"name": "Фон страницы (тёплая бумага)",
+					"color": "#fbfaf6"
+				},
+				{
+					"slug": "base-2",
+					"name": "Фон чередующихся разделов (слоновая кость)",
+					"color": "#f2efe6"
+				},
+				{
+					"slug": "surface",
+					"name": "Шалфейная подложка",
+					"color": "#e6ebdf"
+				},
+				{
+					"slug": "primary",
+					"name": "Акцент: кнопки, иконки, лавр",
+					"color": "#5e7052"
+				},
+				{
+					"slug": "on-primary",
+					"name": "Текст на кнопке с заливкой",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "secondary",
+					"name": "Тёмный лавр: ссылки, надзаголовки",
+					"color": "#3f4d36"
+				},
+				{
+					"slug": "tertiary",
+					"name": "Светлый лавр: орнамент, разделители",
+					"color": "#a9b796"
+				},
+				{
+					"slug": "accent",
+					"name": "Бронза: тонкие линии (в малых дозах)",
+					"color": "#a88a5a"
+				},
+				{
+					"slug": "contrast",
+					"name": "Основной текст",
+					"color": "#2a2c28"
+				},
+				{
+					"slug": "contrast-2",
+					"name": "Второстепенный текст",
+					"color": "#66675e"
+				},
+				{
+					"slug": "line",
+					"name": "Рамки и разделители",
+					"color": "#e2ded2"
+				}
+			]
+		},
+		"typography": {
+			"defaultFontSizes": false,
+			"fluid": true,
+			"fontFamilies": [
+				{
+					"slug": "cormorant-garamond",
+					"name": "Cormorant Garamond",
+					"fontFamily": "\"Cormorant Garamond\", Georgia, \"Times New Roman\", serif",
+					"fontFace": [
+						{
+							"fontFamily": "Cormorant Garamond",
+							"fontStyle": "normal",
+							"fontWeight": "500",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/cormorant-garamond-500.woff2",
+								"file:./assets/fonts/cormorant-garamond-500.woff"
+							]
+						},
+						{
+							"fontFamily": "Cormorant Garamond",
+							"fontStyle": "normal",
+							"fontWeight": "600 700",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/cormorant-garamond-600.woff2",
+								"file:./assets/fonts/cormorant-garamond-600.woff"
+							]
+						},
+						{
+							"fontFamily": "Cormorant Garamond",
+							"fontStyle": "italic",
+							"fontWeight": "500",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/cormorant-garamond-500-italic.woff2",
+								"file:./assets/fonts/cormorant-garamond-500-italic.woff"
+							]
+						}
+					]
+				},
+				{
+					"slug": "lora",
+					"name": "Lora",
+					"fontFamily": "\"Lora\", Georgia, \"Times New Roman\", serif",
+					"fontFace": [
+						{
+							"fontFamily": "Lora",
+							"fontStyle": "normal",
+							"fontWeight": "500",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/lora-500.woff2",
+								"file:./assets/fonts/lora-500.woff"
+							]
+						},
+						{
+							"fontFamily": "Lora",
+							"fontStyle": "normal",
+							"fontWeight": "600 700",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/lora-600.woff2",
+								"file:./assets/fonts/lora-600.woff"
+							]
+						},
+						{
+							"fontFamily": "Lora",
+							"fontStyle": "italic",
+							"fontWeight": "500",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/lora-500-italic.woff2",
+								"file:./assets/fonts/lora-500-italic.woff"
+							]
+						}
+					]
+				},
+				{
+					"slug": "georgia",
+					"name": "Georgia (системный с засечками)",
+					"fontFamily": "Georgia, \"Times New Roman\", serif"
+				},
+				{
+					"slug": "system-sans",
+					"name": "Системный без засечек",
+					"fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif"
+				}
+			],
+			"fontSizes": [
+				{
+					"slug": "small",
+					"name": "Мелкий",
+					"size": "0.9375rem",
+					"fluid": false
+				},
+				{
+					"slug": "medium",
+					"name": "Основной",
+					"size": "1.125rem",
+					"fluid": {
+						"min": "1.0625rem",
+						"max": "1.125rem"
+					}
+				},
+				{
+					"slug": "large",
+					"name": "Заголовок карточки (H3)",
+					"size": "1.375rem",
+					"fluid": {
+						"min": "1.1875rem",
+						"max": "1.375rem"
+					}
+				},
+				{
+					"slug": "x-large",
+					"name": "Заголовок раздела (H2)",
+					"size": "2.5rem",
+					"fluid": {
+						"min": "1.75rem",
+						"max": "2.5rem"
+					}
+				},
+				{
+					"slug": "xx-large",
+					"name": "Заголовок страницы (H1)",
+					"size": "3.5rem",
+					"fluid": {
+						"min": "2.125rem",
+						"max": "3.5rem"
+					}
+				}
+			]
+		},
+		"spacing": {
+			"units": [
+				"px",
+				"rem",
+				"em",
+				"%",
+				"vw",
+				"vh"
+			],
+			"defaultSpacingSizes": false,
+			"spacingSizes": [
+				{
+					"slug": "20",
+					"name": "XS",
+					"size": "0.5rem"
+				},
+				{
+					"slug": "30",
+					"name": "S",
+					"size": "1rem"
+				},
+				{
+					"slug": "40",
+					"name": "M",
+					"size": "clamp(1.25rem, 2.5vw, 2rem)"
+				},
+				{
+					"slug": "50",
+					"name": "L",
+					"size": "clamp(2rem, 4vw, 3rem)"
+				},
+				{
+					"slug": "60",
+					"name": "XL",
+					"size": "clamp(3rem, 7vw, 5.5rem)"
+				}
+			]
+		},
+		"shadow": {
+			"defaultPresets": false,
+			"presets": [
+				{
+					"slug": "soft",
+					"name": "Мягкая",
+					"shadow": "0 1px 2px rgba(42,44,40,.04), 0 6px 20px rgba(42,44,40,.045)"
+				},
+				{
+					"slug": "raised",
+					"name": "Приподнятая",
+					"shadow": "0 1px 2px rgba(42,44,40,.05), 0 12px 32px rgba(42,44,40,.08)"
+				}
+			]
+		},
+		"custom": {
+			"radius": {
+				"card": "14px",
+				"button": "10px"
+			},
+			"text-scale": "1",
+			"heading-scale": "1"
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--base)",
+			"text": "var(--wp--preset--color--contrast)"
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--system-sans)"
+		}
+	},
+	"templateParts": [],
+	"customTemplates": []
+}

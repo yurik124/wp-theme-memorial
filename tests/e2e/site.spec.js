@@ -1,5 +1,5 @@
 /**
- * Этап 1, часть 1: сборка DataViews + admin-ui работает на WordPress 7.1.x,
+ * Сборка DataViews + admin-ui работает на WordPress 7.1.x,
  * главная открывается на новой теме без ошибок PHP и JS.
  */
 const { test, expect } = require( '@playwright/test' );
@@ -28,3 +28,22 @@ test( 'сайт открывается на новой теме', async ( { page
 		errors.filter( ( e ) => ! /mc\.yandex|yandex/i.test( e ) )
 	).toEqual( [] );
 } );
+
+test( '«Оформление» перенесено в стили сайта', async ( { page } ) => {
+	// В CI до включения темы задана схема «камень» и текст 110 % (см. ci.yml).
+	await login( page );
+	await page.goto( '/wp-admin/' ); // перенос выполняется в админке
+	await page.goto( '/' );
+	const vars = await page.evaluate( () => {
+		const css = getComputedStyle( document.documentElement );
+		return {
+			base: css.getPropertyValue( '--wp--preset--color--base' ).trim(),
+			primary: css.getPropertyValue( '--wp--preset--color--primary' ).trim(),
+			fs: css.getPropertyValue( '--fs' ).trim(),
+		};
+	} );
+	expect( vars.base.toLowerCase() ).toBe( '#fafaf8' );
+	expect( vars.primary.toLowerCase() ).toBe( '#56687a' );
+	expect( vars.fs ).toBe( '1.1' );
+} );
+

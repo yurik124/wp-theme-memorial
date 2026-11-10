@@ -1,7 +1,7 @@
 <?php
 /**
  * Тема «Memorial Modern» 4 «Светлая память» — ДИЗАЙН сайта: светлые шапка и подвал, лавровая графика (inc/laurel.php),
- * шаблоны страниц, стили, шрифты, «Мемориал → Оформление».
+ * шаблоны страниц, стили, шрифты; цвета и шрифты — в стилях сайта (theme.json).
  * Весь функционал (каталог, цены, отзывы, заявки, настройки, шорткоды, SEO, кэш) — в плагине «Memorial Core».
  * Без плагина тема выглядит так же (шапка, меню, подвал, страницы, оформление), просто без данных и блоков плагина (inc/no-plugin.php).
  */
@@ -42,8 +42,9 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('memorial-theme', $uri . $css, [], filemtime($dir . $css));
     // предзагрузка основного начертания заголовков — без «прыжка» шрифта на первом экране
     add_action('wp_head', function () use ($uri) {
-        $head = memorial_theme_design_opts()['fonts']['head'] ?? 'cormorant';
-        $file = ['lora' => 'lora-500', 'cormorant' => 'cormorant-garamond-500'][$head] ?? '';
+        // шрифт заголовков из стилей сайта: Cormorant Garamond (по умолчанию) или Lora
+        $head = (string) wp_get_global_styles(['elements', 'heading', 'typography', 'fontFamily']);
+        $file = str_contains($head, 'font-family--lora') ? 'lora-500' : (($head === '' || str_contains($head, 'cormorant')) ? 'cormorant-garamond-500' : '');
         if ($file) echo '<link rel="preload" href="' . esc_url($uri . '/assets/fonts/' . $file . '.woff2') . '" as="font" type="font/woff2" crossorigin>' . "\n";
     }, 2);
     // фото первого экрана главной: браузер начинает грузить его сразу, а не после стилей (ускоряет LCP)
@@ -128,6 +129,7 @@ add_action('wp_enqueue_scripts', function () {
 
 require get_template_directory() . '/inc/icons.php';
 require get_template_directory() . '/inc/design.php';
+require get_template_directory() . '/inc/design-migrate.php';
 require get_template_directory() . '/inc/laurel.php';
 
 /* Функционал — в плагине Memorial Core. Без него шаблоны работают на запасных функциях (inc/no-plugin.php):

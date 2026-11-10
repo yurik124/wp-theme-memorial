@@ -1,8 +1,13 @@
 <?php
 /**
- * «Мемориал → Оформление» (часть темы): цветовая схема «Светлая память» (готовые светлые схемы + свои цвета), шрифты, WebP.
- * Страница настроек появляется через рамку плагина Memorial Core (фильтр memorial_plugin_admin_pages);
- * сами цвета и шрифты применяются и без плагина.
+ * Оформление сайта — стили сайта WordPress (Внешний вид → Редактор → Стили).
+ *
+ * Палитра, шрифты и размеры — в theme.json, готовые схемы — styles/*.json («лавр» — сама тема,
+ * «бронза», «камень», «тёмная»). Прежняя страница «Мемориал → Оформление» (настройка mem_design) убрана:
+ * её значения один раз переносятся в стили сайта (inc/design-migrate.php), сама настройка остаётся
+ * в базе для отката до 2.1.0.
+ *
+ * Здесь — только то, что нужно переносу: старые схемы и шрифты, значения по умолчанию, контраст.
  */
 defined('ABSPATH') || exit;
 
@@ -60,52 +65,6 @@ function memorial_theme_all_fonts() {
     return $out;
 }
 
-function memorial_theme_font_options() {
-    return array_map(fn($f) => $f[0], memorial_theme_all_fonts());
-}
-
-/** Варианты размера текста: ['100' => '100 % — как задумано', …] */
-function memorial_theme_text_scales($min = 85, $max = 130) {
-    $o = [];
-    for ($v = $min; $v <= $max; $v += 5) {
-        $o[(string) $v] = $v . ' %' . ($v === 100 ? ' — как задумано' : ($v < 100 ? ' — мельче' : ' — крупнее'));
-    }
-    return $o;
-}
-
-function memorial_theme_design_schema() {
-    $colors = [];
-    foreach (memorial_theme_color_keys() as $k => [$label, $def]) $colors[$k] = ['type' => 'color', 'label' => $label, 'scheme' => $k];
-    $fonts = memorial_theme_font_options();
-    return [
-        'colors' => ['type' => 'group', 'label' => 'Цветовая схема',
-            'help' => 'Выберите готовую схему — рядом с каждым цветом видно, какой цвет даёт схема. Любой цвет можно заменить своим; кнопка «Очистить» в палитре возвращает цвет из схемы.', 'fields' => [
-            'preset' => ['type' => 'select', 'label' => 'Готовая схема', 'options' => array_map(fn($p) => $p['name'], memorial_theme_color_presets()),
-                         'data' => array_map(fn($p) => $p['c'], memorial_theme_color_presets())],
-        ] + $colors],
-        'fonts' => ['type' => 'group', 'label' => 'Шрифты',
-            'help' => 'Свой шрифт: скачайте файлы .woff2 (лучше) или .ttf, например с fonts.google.com — нужна кириллица; добавьте шрифт ниже, сохраните, затем выберите его в списке. Файлы хранятся на вашем сайте, со сторонних серверов ничего не загружается.', 'fields' => [
-            'head'   => ['type' => 'fontsel', 'label' => 'Шрифт крупных заголовков (H1, H2). Заголовки карточек, цены и телефоны — Lora', 'options' => $fonts],
-            'body'   => ['type' => 'fontsel', 'label' => 'Шрифт основного текста', 'options' => ['system' => $fonts['system']] + $fonts],
-            'custom' => ['type' => 'repeater', 'label' => 'Свои шрифты', 'add' => 'Добавить шрифт', 'collapse' => 'name', 'fields' => [
-                'name'  => ['type' => 'text', 'label' => 'Название (любое, например «PT Serif»)'],
-                'r'     => ['type' => 'file', 'label' => 'Файл: обычное начертание (обязательно)'],
-                'b'     => ['type' => 'file', 'label' => 'Файл: жирное (необязательно)'],
-                'i'     => ['type' => 'file', 'label' => 'Файл: курсив (необязательно)'],
-                'serif' => ['type' => 'checkbox', 'label' => 'Шрифт с засечками (для запасного варианта, пока файл загружается)'],
-            ]],
-        ]],
-        'text' => ['type' => 'group', 'label' => 'Размер текста',
-            'help' => 'Увеличивает или уменьшает весь текст сайта: меню, заголовки, кнопки, цены, подписи. Отступы растут вместе с текстом, вёрстка подстраивается сама: меню при нехватке места уходит во вторую строку или в «бургер», длинные слова переносятся. На телефоне текст не становится мельче задуманного (меньше 100 % — только на компьютере), чтобы оставаться читаемым. Посетитель видит результат сразу после сохранения.', 'fields' => [
-            'scale' => ['type' => 'select', 'label' => 'Весь текст сайта', 'options' => memorial_theme_text_scales()],
-            'head'  => ['type' => 'select', 'label' => 'Заголовки — дополнительно (к размеру всего текста)', 'options' => memorial_theme_text_scales(80, 130)],
-        ]],
-        'img' => ['type' => 'group', 'label' => 'Изображения', 'fields' => [
-            'webp' => ['type' => 'checkbox', 'label' => 'Сохранять уменьшенные копии новых фото в WebP (весят в 1,5–3 раза меньше)'],
-        ]],
-    ];
-}
-
 /** Сохранённое «Оформление» поверх значений по умолчанию. Работает и без плагина (тогда — прямо из базы). */
 function memorial_theme_design_opts() {
     if (function_exists('memorial_plugin_settings')) return memorial_plugin_settings('mem_design');
@@ -130,144 +89,6 @@ function memorial_theme_design_defaults() {
     ];
 }
 
-add_filter('memorial_plugin_admin_pages', function ($pages) {
-    $webp = wp_image_editor_supports(['mime_type' => 'image/webp']);
-    $sw = '';
-    foreach (memorial_theme_color_presets() as $pr) {
-        $sw .= '<span style="display:inline-flex;align-items:center;gap:6px;margin:4px 14px 4px 0">';
-        foreach (['gold', 'sage', 'bg2', 'bronze'] as $c) $sw .= '<i style="width:18px;height:18px;border-radius:50%;display:inline-block;border:1px solid #0002;background:' . esc_attr($pr['c'][$c]) . '"></i>';
-        $sw .= ' ' . esc_html($pr['name']) . '</span>';
-    }
-    $pages['mem_design'] = [
-        'slug' => 'mem-design', 'title' => 'Оформление', 'schema' => 'memorial_theme_design_schema',
-        'intro' => 'Цвета и шрифты меняются на всём сайте сразу после сохранения. Откройте сайт в соседней вкладке и обновляйте её, чтобы сравнить.<br>'
-            . '<b>Готовые схемы:</b><br>' . $sw . '<br>'
-            . '<b>WebP на вашем хостинге:</b> ' . ($webp ? 'поддерживается.' : 'не поддерживается — попросите хостинг включить WebP в PHP (GD или Imagick).')
-            . ' Чтобы перевести уже загруженные фото, после включения галочки установите плагин <b>Regenerate Thumbnails</b> и запустите его в «Инструменты → Regenerate Thumbnails»; сайт сам подставит новые адреса фото.<br>'
-            . 'Кэширование и сжатие — в «Мемориал → Скорость».',
-    ];
-    return $pages;
-});
-
-/* Свои шрифты: разрешаем загружать файлы шрифтов администратору */
-add_filter('upload_mimes', function ($m) {
-    if (current_user_can('manage_options')) {
-        $m['woff']  = 'font/woff';
-        $m['woff2'] = 'font/woff2';
-        $m['ttf']   = 'font/ttf';
-        $m['otf']   = 'font/otf';
-    }
-    return $m;
-});
-add_filter('wp_check_filetype_and_ext', function ($data, $file, $filename) {
-    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-    $map = ['woff' => 'font/woff', 'woff2' => 'font/woff2', 'ttf' => 'font/ttf', 'otf' => 'font/otf'];
-    if (isset($map[$ext]) && current_user_can('manage_options')) {
-        $data = ['ext' => $ext, 'type' => $map[$ext], 'proper_filename' => false];
-    }
-    return $data;
-}, 10, 3);
-
-/** CSS со шрифтами и цветами — в шапку сайта и в редактор */
-function memorial_theme_design_css() {
-    $d = memorial_theme_design_opts();
-    $css = '';
-
-    // Свои шрифты
-    foreach (memorial_theme_all_fonts() as $key => $f) {
-        if (empty($f[2])) continue;
-        $c = $f[2]; $fam = str_replace('"', '', trim($c['name']));
-        $fmt = fn($u) => ['woff2' => 'woff2', 'woff' => 'woff', 'ttf' => 'truetype', 'otf' => 'opentype'][strtolower(pathinfo(parse_url($u, PHP_URL_PATH), PATHINFO_EXTENSION))] ?? 'woff2';
-        foreach ([['r', 'normal', '400 500'], ['b', 'normal', '600 800'], ['i', 'italic', '400 500']] as [$k, $style, $w]) {
-            if (empty($c[$k])) continue;
-            $css .= '@font-face{font-family:"' . $fam . '";font-style:' . $style . ';font-weight:' . $w . ';font-display:swap;src:url(' . esc_url($c[$k]) . ') format("' . $fmt($c[$k]) . '")}';
-        }
-    }
-
-    $vars = [];
-    $all = memorial_theme_all_fonts();
-    $head = $d['fonts']['head'] ?? 'cormorant';
-    $body = $d['fonts']['body'] ?? 'system';
-    if ($head !== 'cormorant' && isset($all[$head])) $vars[] = '--serif:' . $all[$head][1];
-    if ($body !== 'system' && isset($all[$body])) $vars[] = '--sans:' . $all[$body][1];
-
-    // Размер текста: общий масштаб (root font-size в main.css берёт --fs) и заголовки
-    $sc = max(70, min(150, (int) ($d['text']['scale'] ?? 100) ?: 100));
-    $hd = max(70, min(150, (int) ($d['text']['head'] ?? 100) ?: 100));
-    if ($sc !== 100) $vars[] = '--fs:' . rtrim(rtrim(number_format($sc / 100, 2, '.', ''), '0'), '.');
-    if ($hd !== 100) $vars[] = '--fs-h:' . rtrim(rtrim(number_format($hd / 100, 2, '.', ''), '0'), '.');
-
-    // Цвета: схема, поверх — свои. В main.css прописана схема по умолчанию — выводим только отличия.
-    $presets = memorial_theme_color_presets();
-    $def = $presets[memorial_theme_default_preset()]['c'];
-    $base = $presets[$d['colors']['preset'] ?? '']['c'] ?? $def;
-    $fin = [];
-    foreach ($base as $k => $v) {
-        $v = !empty($d['colors'][$k]) ? $d['colors'][$k] : $v;
-        $fin[$k] = $v;
-        if (strtolower($v) !== $def[$k]) $vars[] = '--' . $k . ':' . $v;
-    }
-    // текст на кнопках с заливкой акцентом: белый, если читается (иначе — основной цвет текста)
-    if (strtolower($fin['gold']) !== $def['gold'] || strtolower($fin['ink']) !== $def['ink']) {
-        $vars[] = '--on-gold:' . (memorial_theme_contrast($fin['gold'], '#ffffff') >= 4.5 || memorial_theme_contrast($fin['gold'], '#ffffff') >= memorial_theme_contrast($fin['gold'], $fin['ink']) ? '#fff' : $fin['ink']);
-    }
-    // текст на плашках «бывшего тёмного» цвета: если такой цвет выбрали тёмным — белый текст
-    if (strtolower($fin['dark']) !== $def['dark']) {
-        $light = memorial_theme_contrast($fin['dark'], $fin['ink']) >= memorial_theme_contrast($fin['dark'], '#ffffff');
-        $vars[] = '--on-dark:' . ($light ? $fin['ink'] : '#fff');
-        $vars[] = '--on-dark-mute:' . ($light ? $fin['mute'] : 'rgba(255,255,255,.72)');
-    }
-    if ($vars) $css .= ':root{' . implode(';', $vars) . '}';
-    return $css;
-}
-
-add_action('wp_head', function () {
-    $css = memorial_theme_design_css();
-    if ($css !== '') echo '<style id="mem-design">' . $css . "</style>\n";
-}, 30);
-
-/* Те же цвета и шрифты в редакторе страниц */
-add_action('enqueue_block_editor_assets', function () {
-    $css = memorial_theme_design_css();
-    if ($css === '') return;
-    wp_register_style('memorial-theme-design-editor', false);
-    wp_enqueue_style('memorial-theme-design-editor');
-    wp_add_inline_style('memorial-theme-design-editor', str_replace(':root{', '.editor-styles-wrapper{', $css));
-});
-
-/**
- * Цвет из схемы. $effective = true — с учётом своих цветов (что сейчас на сайте),
- * false — только схема (что будет, если поле оставить пустым).
- */
-function memorial_theme_scheme_color($key, $effective = false) {
-    $d = memorial_theme_design_opts();
-    $p = memorial_theme_color_presets();
-    $base = $p[$d['colors']['preset'] ?? '']['c'] ?? $p[memorial_theme_default_preset()]['c'];
-    if ($effective && !empty($d['colors'][$key])) return $d['colors'][$key];
-    return $base[$key] ?? '';
-}
-
-/* Цвет панели браузера на телефоне — под фон страницы (дизайн светлый целиком) */
-function memorial_theme_theme_color() {
-    return memorial_theme_scheme_color('bg', true) ?: '#fbfaf6';
-}
-
-/*
- * Переход на «Светлую память» (тема 4.0): прежние тёмные схемы убраны. Если на сайте была выбрана тёмная схема
- * (или свои цвета под неё), один раз переключаем на светлую «лавр» и шрифт заголовков Cormorant Garamond.
- * Свои шрифты и настройку WebP не трогаем.
- */
-add_action('init', function () {
-    if (get_option('mem_design_v4')) return;
-    $o = get_option('mem_design');
-    if (is_array($o)) {
-        $o['colors'] = ['preset' => memorial_theme_default_preset()] + array_fill_keys(array_keys(memorial_theme_color_keys()), '');
-        if (in_array($o['fonts']['head'] ?? 'lora', ['lora', ''], true)) $o['fonts']['head'] = 'cormorant';
-        update_option('mem_design', $o);
-    }
-    update_option('mem_design_v4', 1, false);
-}, 1);
-
 /** Контраст двух цветов #rrggbb по WCAG (1…21) */
 function memorial_theme_contrast($a, $b) {
     $l = function ($h) {
@@ -281,8 +102,21 @@ function memorial_theme_contrast($a, $b) {
     return (max($x, $y) + .05) / (min($x, $y) + .05);
 }
 
-/* Цвет схемы для поля «цвет» в настройках плагина */
-add_filter('memorial_plugin_scheme_color', fn($color, $key, $effective = false) => memorial_theme_scheme_color($key, $effective), 10, 3);
+/** Цвет из палитры стилей сайта (с учётом выбранной схемы и правок пользователя), например 'base' */
+function memorial_theme_palette_color($slug, $fallback = '') {
+    $palette = wp_get_global_settings(['color', 'palette']);
+    foreach (['custom', 'theme'] as $origin) {
+        foreach ((array) ($palette[$origin] ?? []) as $c) {
+            if (($c['slug'] ?? '') === $slug && !empty($c['color'])) return $c['color'];
+        }
+    }
+    return $fallback;
+}
 
-/* Значения по умолчанию для настройки mem_design — функция темы */
+/* Цвет панели браузера на телефоне — под фон страницы */
+function memorial_theme_theme_color() {
+    return memorial_theme_palette_color('base', '#fbfaf6');
+}
+
+/* Значения по умолчанию для настройки mem_design — функция темы (нужно переносу и откату) */
 add_filter('memorial_plugin_settings_defaults', fn($fn, $name) => $name === 'mem_design' ? 'memorial_theme_design_defaults' : $fn, 10, 2);

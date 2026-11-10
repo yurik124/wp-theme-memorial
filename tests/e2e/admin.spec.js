@@ -1,5 +1,5 @@
 /**
- * Этап 1, часть 2: экраны плагина открываются после переименования без ошибок PHP.
+ * Экраны плагина открываются без ошибок PHP.
  * Каждый экран — отдельный тест: при разбиении на части они распределяются поровну,
  * а при падении видно, какой именно экран сломан.
  */
@@ -13,7 +13,6 @@ const ADMIN_PAGES = [
 	'admin.php?page=mem-reviews',
 	'admin.php?page=mem-metrika',
 	'admin.php?page=mem-legal',
-	'admin.php?page=mem-design',
 	'admin.php?page=mem-modules',
 	'admin.php?page=mem-speed',
 	'admin.php?page=mem-sq',
