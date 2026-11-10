@@ -64,11 +64,19 @@ add_action('init', function () {
  * @return string
  */
 function memorial_plugin_legacy_render($slug, $block = null) {
+    static $active = [];
     $file = __DIR__ . '/render/' . $slug . '.php';
-    if (!is_readable($file)) return '';
+    // блок, выводящий текст записи, не может стоять в этом же тексте — иначе бесконечный круг
+    if (!is_readable($file) || !empty($active[$slug])) return '';
+    $active[$slug] = true;
     ob_start();
-    require $file;
-    return (string) ob_get_clean();
+    try {
+        require $file;
+    } finally {
+        $html = (string) ob_get_clean();
+        unset($active[$slug]);
+    }
+    return $html;
 }
 
 /** id текущей записи для блоков на шаблонах отдельной страницы/товара */
@@ -82,3 +90,37 @@ function memorial_plugin_legacy_part($name) {
     $file = __DIR__ . '/render/parts/' . $name . '.php';
     if (is_readable($file)) (static function () use ($file) { require $file; })();
 }
+
+/*
+ * Шаблоны для блоковых тем (WordPress 6.7+ register_block_template): товар, каталог, раздел каталога,
+ * страница с товарами. Шапка и подвал — части активной темы; тема может заменить шаблон своим файлом.
+ */
+add_action('init', function () {
+    if (!function_exists('register_block_template')) return;
+    $templates = [
+        'single-mem_product'  => [__('Product', 'memorial-plugin'), __('A single product from the catalog.', 'memorial-plugin')],
+        'archive-mem_product' => [__('Catalog', 'memorial-plugin'), __('All products of the catalog.', 'memorial-plugin')],
+        'taxonomy-mem_cat'    => [__('Catalog section', 'memorial-plugin'), __('Products of one catalog section.', 'memorial-plugin')],
+        'page-products'       => [__('Page with products', 'memorial-plugin'), __('Pages set to show catalog tiles or products.', 'memorial-plugin')],
+    ];
+    foreach ($templates as $slug => [$title, $desc]) {
+        register_block_template('memorial-plugin//' . $slug, [
+            'title'       => $title,
+            'description' => $desc,
+            'content'     => (string) file_get_contents(__DIR__ . '/templates/' . $slug . '.html'),
+        ]);
+    }
+});
+
+/* Страница с товарами (поле «Товары на странице») — свой шаблон page-products */
+add_filter('page_template_hierarchy', function ($templates) {
+    $id = (int) get_queried_object_id();
+    if ($id && get_post_meta($id, '_mem_products', true)) array_unshift($templates, 'page-products');
+    return $templates;
+});
+
+/* «Скрыть фото страницы над текстом» (поле _mem_hide_thumb) — для блока «Изображение записи» */
+add_filter('render_block_core/post-featured-image', function ($html, $block) {
+    $id = (int) ($block['attrs']['postId'] ?? 0) ?: (int) get_queried_object_id();
+    return ($id && is_singular('page') && get_post_meta($id, '_mem_hide_thumb', true)) ? '' : $html;
+}, 10, 2);

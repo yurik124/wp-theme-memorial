@@ -192,6 +192,8 @@ jobs:
         if: always()
         run: |
           npx wp-env run cli sh -c 'cat wp-content/debug.log 2>/dev/null || true' > artifacts-debug.log
+          echo "---- журналы переносов ----"
+          npx wp-env run cli sh -c 'for o in memorial_theme_design_migrated memorial_theme_nav_migrated memorial_plugin_switchover; do echo "$o: $(wp option get $o --format=json 2>/dev/null)"; done' || true
           echo "---- debug.log (до 200 строк) ----"; head -n 200 artifacts-debug.log
           if grep -E "PHP (Fatal error|Parse error)|Uncaught" artifacts-debug.log; then
             echo "::error::В debug.log есть фатальные ошибки PHP"; exit 1

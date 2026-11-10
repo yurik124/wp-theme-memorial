@@ -24,6 +24,10 @@ test( 'сайт открывается на новой теме', async ( { page
 	expect( res.status() ).toBeLessThan( 400 );
 	expect( await page.content() ).not.toMatch( PHP_ERROR );
 	await expect( page.locator( 'link#memorial-theme-css' ) ).toHaveCount( 1 );
+	// блоковая тема: шапка с «Навигацией», подвал, нижняя панель — из частей шаблона
+	await expect( page.locator( '#header .wp-block-navigation' ) ).toHaveCount( 1 );
+	await expect( page.locator( '.footer .footer__copy' ) ).toHaveCount( 1 );
+	await expect( page.locator( 'main#main' ) ).toHaveCount( 1 );
 	expect(
 		errors.filter( ( e ) => ! /mc\.yandex|yandex/i.test( e ) )
 	).toEqual( [] );

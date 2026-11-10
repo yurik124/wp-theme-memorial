@@ -141,7 +141,7 @@ if (!is_wp_error($cats) && $cats) : ?>
     <div class="about__text">
       <?php echo wp_kses_post(wpautop(memorial_plugin_t($s['text'] ?? ''))); ?>
       <?php // текст самой главной страницы (если главная — страница)
-      if (is_page() && ($front = get_post(get_queried_object_id()))) echo apply_filters('the_content', $front->post_content); ?>
+      if (is_front_page() && is_page() && ($front = get_post(get_queried_object_id()))) echo apply_filters('the_content', $front->post_content); ?>
     </div>
   </div>
 </section>
