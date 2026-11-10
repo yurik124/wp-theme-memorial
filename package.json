@@ -13,7 +13,7 @@
 		"lint:css": "wp-scripts lint-style \"memorial-plugin/src/**/*.{css,scss}\" \"memorial-theme/src/**/*.{css,scss}\" --allow-empty-input",
 		"lint:json": "node tools/validate-json.mjs",
 		"lint:php:prefixes": "php tools/check-prefixes.php",
-		"test:smoke": "php tests/smoke/switch.php && php tests/smoke/metrika.php && php tests/smoke/settings.php",
+		"test:smoke": "php tests/smoke/switch.php && php tests/smoke/metrika.php && php tests/smoke/settings.php && php tests/smoke/seo.php",
 		"env:start": "wp-env start",
 		"env:stop": "wp-env stop",
 		"test:e2e": "playwright test --config tests/e2e/playwright.config.js"

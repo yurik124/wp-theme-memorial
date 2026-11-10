@@ -8,6 +8,7 @@
 	<file>blocks/content</file>
 	<file>blocks/floating</file>
 	<file>admin/convert.php</file>
+	<file>seo/seo-registry.php</file>
 	<file>admin/dataviews-check.php</file>
 	<file>includes</file>
 

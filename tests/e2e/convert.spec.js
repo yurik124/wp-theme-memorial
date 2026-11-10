@@ -27,6 +27,10 @@ test( 'shortcodes are converted to blocks and rolled back', async ( {
 	await row.getByRole( 'button', { name: 'Preview and convert' } ).click();
 	const modal = page.getByRole( 'dialog' );
 	await expect( modal.locator( 'table.diff' ) ).toBeVisible();
+	// SEO title: the shortcode becomes a SEOPress variable from the registry.
+	await expect( modal.locator( 'table.diff' ) ).toContainText(
+		'%%mem_years%%'
+	);
 	await modal.getByRole( 'button', { name: 'Convert', exact: true } ).click();
 	await expect( page.getByText( '1 post converted.' ) ).toBeVisible();
 

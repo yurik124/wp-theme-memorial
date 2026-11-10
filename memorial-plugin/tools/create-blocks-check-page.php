@@ -33,6 +33,7 @@ $memorial_plugin_id = wp_insert_post(
 		'post_name'    => 'convert-check',
 		'post_content' => "<!-- wp:paragraph -->\n<p>In business for [mem_years] years, call [mem_phone].</p>\n<!-- /wp:paragraph -->\n\n"
 			. "<!-- wp:shortcode -->\n[mem_cta title=\"Convert check heading\" text=\"Convert check text\"]\n<!-- /wp:shortcode -->",
+		'meta_input'   => array( '_seopress_titles_title' => 'Convert check — [mem_years] years | %%sitetitle%%' ),
 	)
 );
 echo is_wp_error( $memorial_plugin_id ) ? 'error: ' . esc_html( $memorial_plugin_id->get_error_message() ) : 'page ' . (int) $memorial_plugin_id . "\n";

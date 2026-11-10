@@ -63,6 +63,7 @@ jobs:
           php tests/smoke/switch.php
           php tests/smoke/metrika.php
           php tests/smoke/settings.php
+          php tests/smoke/seo.php
           php tools/check-templates.php
 
       - name: Сжатые копии CSS/JS свежие (tools/minify.php)

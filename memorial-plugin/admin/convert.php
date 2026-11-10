@@ -9,7 +9,9 @@
  *  - a Shortcode block (or a paragraph) with only block-level shortcodes → the plugin blocks
  *    ([mem_cta title="…"] → <!-- wp:memorial-plugin/cta {"title":"…"} /-->);
  *  - inline shortcodes in text ([mem_cat_price cat="…"], [mem_years]…) → inline values
- *    (blocks/content/inline-values.php).
+ *    (blocks/content/inline-values.php);
+ *  - shortcodes in SEOPress fields → %%mem_…%% variables where the SEO registry has a match
+ *    (seo/seo-registry.php).
  * Anything else stays as it is. Only the touched parts of the content change — the rest is kept byte for byte.
  *
  * Rollback: before saving, the current content is stored as a revision; its ID is kept in the post meta
@@ -226,9 +228,20 @@ function memorial_plugin_convert_items() {
 	$ids = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- admin screen, fresh data needed.
 		$wpdb->prepare(
 			"SELECT ID FROM {$wpdb->posts} WHERE post_type IN ($in_types) AND post_status IN ($in_stats)
-			AND ( post_content LIKE %s OR ID IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s ) )
+			AND ( post_content LIKE %s
+				OR ID IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s )
+				OR ID IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key LIKE %s AND meta_value LIKE %s ) )
 			ORDER BY post_type, menu_order, post_title",
-			array_merge( $types, $statuses, array( '%' . $wpdb->esc_like( '[mem_' ) . '%', '_memorial_plugin_converted' ) )
+			array_merge(
+				$types,
+				$statuses,
+				array(
+					'%' . $wpdb->esc_like( '[mem_' ) . '%',
+					'_memorial_plugin_converted',
+					$wpdb->esc_like( '_seopress_' ) . '%',
+					'%' . $wpdb->esc_like( '[mem_' ) . '%',
+				)
+			)
 		)
 	);
 	// phpcs:enable
@@ -238,7 +251,8 @@ function memorial_plugin_convert_items() {
 			continue;
 		}
 		$post  = get_post( $id );
-		$count = memorial_plugin_convert_count( $post->post_content );
+		$text  = memorial_plugin_convert_text( $post );
+		$count = memorial_plugin_convert_count( $text );
 		$conv  = get_post_meta( $id, '_memorial_plugin_converted', true );
 		$type  = get_post_type_object( $post->post_type );
 		if ( ! $count && ! $conv ) {
@@ -254,11 +268,44 @@ function memorial_plugin_convert_items() {
 			'edit'       => (string) get_edit_post_link( $post, 'raw' ),
 			'shortcodes' => $count,
 			'total'      => array_sum( $count ),
-			'pending'    => memorial_plugin_convert_content( $post->post_content ) !== $post->post_content,
+			'pending'    => memorial_plugin_convert_text( $post, true ) !== $text,
 			'converted'  => is_array( $conv ) ? (int) ( $conv['time'] ?? 0 ) : 0,
 		);
 	}
 	return $items;
+}
+
+/**
+ * SEO fields of a post that hold [mem_ shortcodes: meta key => value.
+ *
+ * @param int $id Post ID.
+ * @return array<string,string>
+ */
+function memorial_plugin_convert_seo_meta( $id ) {
+	$out = array();
+	foreach ( array_keys( memorial_plugin_seo_fields() ) as $key ) {
+		$value = get_post_meta( $id, $key, true );
+		if ( is_string( $value ) && false !== strpos( $value, '[mem_' ) ) {
+			$out[ $key ] = $value;
+		}
+	}
+	return $out;
+}
+
+/**
+ * Everything the converter changes in a post as one text (content, then SEO fields) — for counting and diff.
+ *
+ * @param WP_Post $post      Post.
+ * @param bool    $converted Text after converting.
+ * @return string
+ */
+function memorial_plugin_convert_text( $post, $converted = false ) {
+	$text = $converted ? memorial_plugin_convert_content( $post->post_content ) : (string) $post->post_content;
+	foreach ( memorial_plugin_convert_seo_meta( $post->ID ) as $key => $value ) {
+		$label = memorial_plugin_seo_fields()[ $key ];
+		$text .= "\n\n— " . $label . ":\n" . ( $converted ? memorial_plugin_seo_convert( $value ) : $value );
+	}
+	return $text;
 }
 
 /**
@@ -269,8 +316,8 @@ function memorial_plugin_convert_items() {
  */
 function memorial_plugin_convert_preview( $id ) {
 	$post   = get_post( $id );
-	$before = (string) $post->post_content;
-	$after  = memorial_plugin_convert_content( $before );
+	$before = memorial_plugin_convert_text( $post );
+	$after  = memorial_plugin_convert_text( $post, true );
 	$diff   = '';
 	if ( $before !== $after ) {
 		$diff = (string) wp_text_diff(
@@ -303,28 +350,41 @@ function memorial_plugin_convert_post( $id ) {
 		return 'not-found';
 	}
 	$after = memorial_plugin_convert_content( $post->post_content );
-	if ( $after === $post->post_content ) {
+	$meta  = array();
+	foreach ( memorial_plugin_convert_seo_meta( $id ) as $key => $value ) {
+		$new = memorial_plugin_seo_convert( $value );
+		if ( $new !== $value ) {
+			$meta[ $key ] = array( $value, $new );
+		}
+	}
+	if ( $after === $post->post_content && ! $meta ) {
 		return 'unchanged';
 	}
 	$revision = _wp_put_post_revision( $post );
 	if ( ! $revision || is_wp_error( $revision ) ) {
 		return 'no-revision';
 	}
-	$saved = wp_update_post(
-		array(
-			'ID'           => $id,
-			'post_content' => wp_slash( $after ),
-		),
-		true
-	);
-	if ( is_wp_error( $saved ) ) {
-		return $saved->get_error_message();
+	if ( $after !== $post->post_content ) {
+		$saved = wp_update_post(
+			array(
+				'ID'           => $id,
+				'post_content' => wp_slash( $after ),
+			),
+			true
+		);
+		if ( is_wp_error( $saved ) ) {
+			return $saved->get_error_message();
+		}
+	}
+	foreach ( $meta as $key => $pair ) {
+		update_post_meta( $id, $key, wp_slash( $pair[1] ) );
 	}
 	update_post_meta(
 		$id,
 		'_memorial_plugin_converted',
 		array(
 			'revision' => (int) $revision,
+			'meta'     => array_map( static fn( $pair ) => $pair[0], $meta ),
 			'time'     => time(),
 			'user'     => get_current_user_id(),
 		)
@@ -349,6 +409,9 @@ function memorial_plugin_convert_rollback( $id ) {
 		return 'no-revision';
 	}
 	wp_restore_post_revision( $rev, array( 'post_content' ) );
+	foreach ( (array) ( $conv['meta'] ?? array() ) as $key => $value ) {
+		update_post_meta( $id, $key, wp_slash( (string) $value ) );
+	}
 	delete_post_meta( $id, '_memorial_plugin_converted' );
 	return 'restored';
 }
