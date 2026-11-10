@@ -1,0 +1,80 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Тёмная",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"slug": "base",
+					"name": "Фон страницы (тёплая бумага)",
+					"color": "#1c1e1a"
+				},
+				{
+					"slug": "base-2",
+					"name": "Фон чередующихся разделов (слоновая кость)",
+					"color": "#23261f"
+				},
+				{
+					"slug": "surface",
+					"name": "Шалфейная подложка",
+					"color": "#2a3125"
+				},
+				{
+					"slug": "primary",
+					"name": "Акцент: кнопки, иконки, лавр",
+					"color": "#b5c4a0"
+				},
+				{
+					"slug": "on-primary",
+					"name": "Текст на кнопке с заливкой",
+					"color": "#1c1e1a"
+				},
+				{
+					"slug": "secondary",
+					"name": "Тёмный лавр: ссылки, надзаголовки",
+					"color": "#cfdbbd"
+				},
+				{
+					"slug": "tertiary",
+					"name": "Светлый лавр: орнамент, разделители",
+					"color": "#5e7052"
+				},
+				{
+					"slug": "accent",
+					"name": "Бронза: тонкие линии (в малых дозах)",
+					"color": "#c9a978"
+				},
+				{
+					"slug": "contrast",
+					"name": "Основной текст",
+					"color": "#ecebe4"
+				},
+				{
+					"slug": "contrast-2",
+					"name": "Второстепенный текст",
+					"color": "#b9b8ae"
+				},
+				{
+					"slug": "line",
+					"name": "Рамки и разделители",
+					"color": "#3a3e35"
+				}
+			]
+		},
+		"shadow": {
+			"presets": [
+				{
+					"slug": "soft",
+					"name": "Мягкая",
+					"shadow": "0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25)"
+				},
+				{
+					"slug": "raised",
+					"name": "Приподнятая",
+					"shadow": "0 1px 2px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.35)"
+				}
+			]
+		}
+	}
+}

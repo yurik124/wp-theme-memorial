@@ -1,0 +1,66 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Светлая память — бронза",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"slug": "base",
+					"name": "Фон страницы (тёплая бумага)",
+					"color": "#fbfaf6"
+				},
+				{
+					"slug": "base-2",
+					"name": "Фон чередующихся разделов (слоновая кость)",
+					"color": "#f2efe6"
+				},
+				{
+					"slug": "surface",
+					"name": "Шалфейная подложка",
+					"color": "#ede7db"
+				},
+				{
+					"slug": "primary",
+					"name": "Акцент: кнопки, иконки, лавр",
+					"color": "#8c6f45"
+				},
+				{
+					"slug": "on-primary",
+					"name": "Текст на кнопке с заливкой",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "secondary",
+					"name": "Тёмный лавр: ссылки, надзаголовки",
+					"color": "#5c4628"
+				},
+				{
+					"slug": "tertiary",
+					"name": "Светлый лавр: орнамент, разделители",
+					"color": "#cdbb98"
+				},
+				{
+					"slug": "accent",
+					"name": "Бронза: тонкие линии (в малых дозах)",
+					"color": "#a88a5a"
+				},
+				{
+					"slug": "contrast",
+					"name": "Основной текст",
+					"color": "#2a2c28"
+				},
+				{
+					"slug": "contrast-2",
+					"name": "Второстепенный текст",
+					"color": "#66675e"
+				},
+				{
+					"slug": "line",
+					"name": "Рамки и разделители",
+					"color": "#e2ded2"
+				}
+			]
+		}
+	}
+}

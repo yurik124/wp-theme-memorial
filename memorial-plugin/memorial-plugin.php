@@ -95,6 +95,7 @@ function memorial_plugin_disabled_files() {
 $memorial_plugin_modules = [
     // основа: помощники, рамка настроек «Мемориал → …», контакты и главная
     'core/helpers.php',
+    'core/presentation.php',
     'seo/schema.php',
     'core/settings.php',
     'core/data.php',
@@ -169,6 +170,9 @@ if (is_admin() && defined('WP_DEBUG') && WP_DEBUG) require MEMORIAL_PLUGIN_DIR .
 
 /* Иконки: memorial_plugin_icon() спрашивает тему (фильтр memorial_plugin_icon_html), без неё — запасной набор плагина */
 require MEMORIAL_PLUGIN_DIR . '/core/icons-fallback.php';
+
+/* Блоки-обёртки для блоковой темы (этап 2): шапка, подвал, главная, товар, каталог… */
+require MEMORIAL_PLUGIN_DIR . '/blocks/legacy/legacy.php';
 
 /* Включение: адреса товаров/работ заработают после пересборки ссылок (на следующем запросе, когда типы записей уже есть) */
 register_activation_hook(__FILE__, function () {

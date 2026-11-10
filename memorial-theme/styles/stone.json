@@ -1,0 +1,66 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Светлый камень",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"slug": "base",
+					"name": "Фон страницы (тёплая бумага)",
+					"color": "#fafaf8"
+				},
+				{
+					"slug": "base-2",
+					"name": "Фон чередующихся разделов (слоновая кость)",
+					"color": "#f0f0ec"
+				},
+				{
+					"slug": "surface",
+					"name": "Шалфейная подложка",
+					"color": "#e5e9ec"
+				},
+				{
+					"slug": "primary",
+					"name": "Акцент: кнопки, иконки, лавр",
+					"color": "#56687a"
+				},
+				{
+					"slug": "on-primary",
+					"name": "Текст на кнопке с заливкой",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "secondary",
+					"name": "Тёмный лавр: ссылки, надзаголовки",
+					"color": "#3a4a5a"
+				},
+				{
+					"slug": "tertiary",
+					"name": "Светлый лавр: орнамент, разделители",
+					"color": "#aebac6"
+				},
+				{
+					"slug": "accent",
+					"name": "Бронза: тонкие линии (в малых дозах)",
+					"color": "#a88a5a"
+				},
+				{
+					"slug": "contrast",
+					"name": "Основной текст",
+					"color": "#2a2c2e"
+				},
+				{
+					"slug": "contrast-2",
+					"name": "Второстепенный текст",
+					"color": "#62666b"
+				},
+				{
+					"slug": "line",
+					"name": "Рамки и разделители",
+					"color": "#e0e0da"
+				}
+			]
+		}
+	}
+}

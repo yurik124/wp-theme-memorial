@@ -17,7 +17,7 @@ $memorial_plugin_bg = $memorial_plugin_thumb && function_exists('memorial_plugin
     if (has_post_thumbnail()) {
         the_post_thumbnail('medium_large', ['loading' => 'lazy', 'decoding' => 'async']);
     } else {
-        echo '<span class="card__noimg">✝</span>';
+        echo '<span class="card__noimg">' . (memorial_plugin_laurel('wreath') ?: '✝') . '</span>';
     }
     if (get_post_meta($memorial_plugin_id, '_mem_on_order', true)) {
         echo '<span class="card__tag">Под заказ</span>';

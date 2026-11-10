@@ -74,6 +74,9 @@ foreach ($parts as $dir => $prefix) {
     foreach ($it as $file) {
         $path = (string) $file; $rel = substr($path, strlen($root) + 1);
         if (substr($path, -4) !== '.php' || preg_match('~/(vendor|node_modules|build)/~', $path)) continue;
+        // Шаблоны вывода блоков подключаются внутри функции (memorial_plugin_legacy_render, render.php в block.json):
+        // их переменные локальные, не глобальные.
+        if (preg_match('~/blocks/.+/render(/|\.php$)~', $rel)) continue;
         if ($dir === 'memorial-theme' && (preg_match('~^memorial-theme/[^/]+\.php$~', $rel) && $rel !== 'memorial-theme/functions.php' || strpos($rel, 'memorial-theme/template-parts/') === 0)) continue;
         $t = token_get_all(file_get_contents($path)); $stack = []; $fn = 0; $pending = false; $seen = [];
         $cnt = count($t);

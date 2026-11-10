@@ -2,7 +2,8 @@
   const d = document, body = d.body;
   const header = d.getElementById('header');
   const burger = d.getElementById('burger');
-  const nav = d.getElementById('nav');
+  // меню — блок «Навигация» в шапке (id ему ставит скрипт шапки, parts/header.html)
+  const nav = header?.querySelector('.wp-block-navigation') || d.getElementById('nav');
 
   function setMenu(open) {
     if (!burger) return;
@@ -34,8 +35,8 @@
   });
 
   // Подменю в мобильном меню раскрываются стрелкой, а не висят все сразу
-  nav?.querySelectorAll('.menu-item-has-children').forEach((li, i) => {
-    const sub = li.querySelector(':scope > .sub-menu');
+  nav?.querySelectorAll('.has-child, .menu-item-has-children').forEach((li, i) => {
+    const sub = li.querySelector(':scope > .wp-block-navigation__submenu-container, :scope > .sub-menu');
     if (!sub) return;
     sub.id ||= 'sub-' + i;
     const b = d.createElement('button');
@@ -43,13 +44,14 @@
     b.className = 'sub-toggle';
     b.setAttribute('aria-expanded', 'false');
     b.setAttribute('aria-controls', sub.id);
-    b.setAttribute('aria-label', 'Раскрыть: ' + (li.querySelector(':scope > a')?.textContent.trim() || 'подменю'));
+    const link = li.querySelector(':scope > a, :scope > .wp-block-navigation-item__content');
+    b.setAttribute('aria-label', 'Раскрыть: ' + (link?.textContent.trim() || 'подменю'));
     b.addEventListener('click', () => {
       const open = !li.classList.contains('is-open');
       li.classList.toggle('is-open', open);
       b.setAttribute('aria-expanded', String(open));
     });
-    li.querySelector(':scope > a').after(b);
+    (link || sub).after(b);
     if (li.matches('.current-menu-ancestor')) b.click(); // ветка текущей страницы раскрыта
   });
   d.addEventListener('keydown', e => { if (e.key === 'Escape') { setMenu(false); } });
