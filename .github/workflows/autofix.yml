@@ -1,0 +1,42 @@
+name: Автоправка (Prettier и package-lock)
+
+# Запускается вручную на ветке: обновляет package-lock.json под package.json и исправляет
+# оформление JS (Prettier через ESLint --fix), затем коммитит изменения в эту же ветку.
+# Коммит от github-actions не запускает другие проверки — «Проверки» после него запускаются вручную.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autofix-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    name: Prettier и package-lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+
+      - name: Зависимости и файл блокировки
+        run: npm install --no-audit --no-fund
+
+      - name: Оформление JS
+        run: npm run lint:js -- --fix || true
+
+      - name: Коммит
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Нечего исправлять"; exit 0; fi
+          git diff --cached --stat
+          git commit -m "Автоправка: Prettier и package-lock.json"
+          git push

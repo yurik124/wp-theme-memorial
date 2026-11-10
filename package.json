@@ -21,11 +21,15 @@
 	"devDependencies": {
 		"@playwright/test": "latest",
 		"@wordpress/admin-ui": "latest",
+		"@wordpress/api-fetch": "latest",
+		"@wordpress/block-editor": "latest",
+		"@wordpress/components": "latest",
 		"@wordpress/dataviews": "latest",
 		"@wordpress/dependency-extraction-webpack-plugin": "latest",
 		"@wordpress/element": "latest",
 		"@wordpress/env": "latest",
 		"@wordpress/i18n": "latest",
+		"@wordpress/rich-text": "latest",
 		"@wordpress/scripts": "latest",
 		"ajv": "^8.17.1"
 	}
