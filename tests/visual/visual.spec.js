@@ -14,7 +14,7 @@ const MASK = [ '.reviews__widget', '.map', 'iframe' ];
 // «липкая» шапка встаёт на место; плавающие кнопка «наверх», плашка cookie и нижняя панель телефона
 // на длинном снимке встают где придётся — их убираем
 const STYLE =
-	'.header{position:relative !important;top:0 !important;transform:none !important}' +
+	'.header,.mcat__bar,.msearch__bar,.reviews__intro{position:relative !important;top:0 !important;transform:none !important}' +
 	'#totop,.totop,.consent,.mbar{display:none !important}' +
 	'*,*::before,*::after{transition:none !important;animation:none !important}';
 
