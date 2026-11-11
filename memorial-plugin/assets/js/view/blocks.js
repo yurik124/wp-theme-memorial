@@ -564,7 +564,6 @@ store( 'memorial-plugin/guide', {
 	callbacks: {
 		init() {
 			const { ref: box } = getElement();
-			const sbox = box.querySelector( '[data-msearch]' );
 			let idx = [];
 			try {
 				idx = JSON.parse(
@@ -573,6 +572,7 @@ store( 'memorial-plugin/guide', {
 			} catch {
 				return;
 			}
+			const sbox = box.querySelector( '[data-msearch]' );
 			const cards = [ ...box.querySelectorAll( '[data-card]' ) ];
 			idx.forEach( ( it ) => {
 				it.k0 = { p: 2, h: 1 }[ it.k ] || 0;
@@ -1360,10 +1360,6 @@ store( 'memorial-plugin/works', {
 
 /* ---------- The chosen point of a photo in the middle of a tile (as far as the edges allow) ---------- */
 function focusPos( el, nw, nh ) {
-	const [ fx, fy ] = el
-		.getAttribute( 'data-focus' )
-		.split( ' ' )
-		.map( ( v ) => v / 100 );
 	// a tile has its photo in a block above the caption
 	const box = el.querySelector( '.cat__ph' ) || el;
 	const w = box.clientWidth;
@@ -1371,6 +1367,10 @@ function focusPos( el, nw, nh ) {
 	if ( ! w || ! h || ! nw || ! nh ) {
 		return;
 	}
+	const [ fx, fy ] = el
+		.getAttribute( 'data-focus' )
+		.split( ' ' )
+		.map( ( v ) => v / 100 );
 	const k = Math.max( w / nw, h / nh );
 	const W = nw * k;
 	const H = nh * k;

@@ -54,11 +54,8 @@ test( 'клавиатура: ссылка «к содержимому» и ме�
 	await page.setViewportSize( { width: 390, height: 844 } );
 	await page.goto( '/' );
 	await page.keyboard.press( 'Tab' );
-	const first = await page.evaluate( () => ( {
-		cls: document.activeElement.className,
-		href: document.activeElement.getAttribute( 'href' ),
-	} ) );
-	expect( first.href ).toMatch( /#/ ); // the skip link is the first stop
+	// the skip link is the first stop
+	await expect( page.locator( ':focus' ) ).toHaveAttribute( 'href', /#/ );
 	await page.locator( '#burger' ).focus();
 	await page.keyboard.press( 'Enter' );
 	await expect( page.locator( '#burger' ) ).toHaveAttribute(
