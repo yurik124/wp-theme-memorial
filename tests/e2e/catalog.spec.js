@@ -28,7 +28,7 @@ test( 'товары: новый товар, цена правится в спи�
 		.click();
 	const modal = page.getByRole( 'dialog' );
 	await expect( modal ).toBeVisible();
-	await modal.getByLabel( 'Title' ).fill( 'Венок e2e' );
+	await modal.getByLabel( 'Title', { exact: true } ).fill( 'Венок e2e' );
 	await modal.getByLabel( 'Price, ₽' ).fill( '1500' );
 	await modal.getByLabel( 'Show “from”' ).check();
 	await modal.getByRole( 'button', { name: 'Save' } ).click();
