@@ -49,7 +49,9 @@ function Help( { text } ) {
 function ImageEdit( { def, value, onChange } ) {
 	return (
 		<div className="memorial-plugin-settings__image">
-			<span className="memorial-plugin-settings__label">{ def.label }</span>
+			<span className="memorial-plugin-settings__label">
+				{ def.label }
+			</span>
 			<HStack justify="flex-start" alignment="center">
 				{ value && (
 					<img
@@ -100,7 +102,9 @@ function OrderEdit( { def, value, onChange } ) {
 	};
 	return (
 		<div>
-			<span className="memorial-plugin-settings__label">{ def.label }</span>
+			<span className="memorial-plugin-settings__label">
+				{ def.label }
+			</span>
 			<Help text={ def.help } />
 			<ol className="memorial-plugin-settings__order">
 				{ keys.map( ( k, i ) => (
@@ -138,7 +142,9 @@ function RepeaterEdit( { def, value, onChange } ) {
 	};
 	return (
 		<div className="memorial-plugin-settings__repeater">
-			<span className="memorial-plugin-settings__label">{ def.label }</span>
+			<span className="memorial-plugin-settings__label">
+				{ def.label }
+			</span>
 			<Help text={ def.help } />
 			{ rows.map( ( row, i ) => (
 				<div className="memorial-plugin-settings__row" key={ i }>
@@ -172,7 +178,9 @@ function RepeaterEdit( { def, value, onChange } ) {
 								isDestructive
 								label={ __( 'Remove', 'memorial-plugin' ) }
 								onClick={ () =>
-									onChange( rows.filter( ( r, j ) => j !== i ) )
+									onChange(
+										rows.filter( ( r, j ) => j !== i )
+									)
 								}
 							/>
 						</HStack>
@@ -202,7 +210,9 @@ function GroupEdit( { def, value, onChange } ) {
 			<FieldsForm
 				defs={ def.fields || [] }
 				data={ value || {} }
-				onChange={ ( edits ) => onChange( { ...( value || {} ), ...edits } ) }
+				onChange={ ( edits ) =>
+					onChange( { ...( value || {} ), ...edits } )
+				}
 			/>
 		</fieldset>
 	);
@@ -217,17 +227,29 @@ function ControlFor( { def, value, onChange } ) {
 	};
 	switch ( def.type ) {
 		case 'group':
-			return <GroupEdit def={ def } value={ value } onChange={ onChange } />;
+			return (
+				<GroupEdit def={ def } value={ value } onChange={ onChange } />
+			);
 		case 'repeater':
 			return (
-				<RepeaterEdit def={ def } value={ value } onChange={ onChange } />
+				<RepeaterEdit
+					def={ def }
+					value={ value }
+					onChange={ onChange }
+				/>
 			);
 		case 'rewio-scope':
-			return <RewioScope def={ def } value={ value } onChange={ onChange } />;
+			return (
+				<RewioScope def={ def } value={ value } onChange={ onChange } />
+			);
 		case 'image':
-			return <ImageEdit def={ def } value={ value } onChange={ onChange } />;
+			return (
+				<ImageEdit def={ def } value={ value } onChange={ onChange } />
+			);
 		case 'order':
-			return <OrderEdit def={ def } value={ value } onChange={ onChange } />;
+			return (
+				<OrderEdit def={ def } value={ value } onChange={ onChange } />
+			);
 		case 'checkbox':
 			return (
 				<CheckboxControl
@@ -246,7 +268,15 @@ function ControlFor( { def, value, onChange } ) {
 					value={ String( value ?? '' ) }
 					options={ [
 						...( def.type === 'page'
-							? [ { value: '', label: __( '— not selected —', 'memorial-plugin' ) } ]
+							? [
+									{
+										value: '',
+										label: __(
+											'— not selected —',
+											'memorial-plugin'
+										),
+									},
+								]
 							: [] ),
 						...( def.options || [] ),
 					] }
@@ -264,7 +294,9 @@ function ControlFor( { def, value, onChange } ) {
 					placeholder={ def.placeholder }
 					rows={ def.rows || ( def.type === 'map' ? 2 : 3 ) }
 					className={
-						def.type === 'code' ? 'memorial-plugin-settings__code' : ''
+						def.type === 'code'
+							? 'memorial-plugin-settings__code'
+							: ''
 					}
 					value={ value ?? '' }
 					onChange={ onChange }
@@ -344,7 +376,9 @@ function App( { option } ) {
 				setPage( res );
 				setValue( res.value || {} );
 			} )
-			.catch( ( e ) => setNotice( { status: 'error', text: e.message } ) );
+			.catch( ( e ) =>
+				setNotice( { status: 'error', text: e.message } )
+			);
 	}, [ option ] );
 
 	// Leaving with unsaved changes — ask first.
@@ -372,7 +406,10 @@ function App( { option } ) {
 			setDirty( false );
 			setNotice( {
 				status: 'success',
-				text: __( 'Saved. The changes are already on the site.', 'memorial-plugin' ),
+				text: __(
+					'Saved. The changes are already on the site.',
+					'memorial-plugin'
+				),
 			} );
 		} catch ( e ) {
 			setNotice( { status: 'error', text: e.message } );
@@ -442,7 +479,10 @@ function App( { option } ) {
 										onChange={ ( edits ) => {
 											setValue( ( v ) => ( {
 												...v,
-												[ def.id ]: { ...( v[ def.id ] || {} ), ...edits },
+												[ def.id ]: {
+													...( v[ def.id ] || {} ),
+													...edits,
+												},
 											} ) );
 											setDirty( true );
 										} }
@@ -453,7 +493,10 @@ function App( { option } ) {
 									defs={ [ { ...def, label: '' } ] }
 									data={ value }
 									onChange={ ( edits ) => {
-										setValue( ( v ) => ( { ...v, ...edits } ) );
+										setValue( ( v ) => ( {
+											...v,
+											...edits,
+										} ) );
 										setDirty( true );
 									} }
 								/>

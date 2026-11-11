@@ -22,9 +22,13 @@ for ( const slug of PAGES ) {
 		const errors = collectJsErrors( page );
 		await login( page );
 		await page.goto( '/wp-admin/admin.php?page=' + slug );
-		await expect( page.locator( '.memorial-plugin-settings' ) ).toBeVisible();
 		await expect(
-			page.locator( '.memorial-plugin-settings .components-panel__body' ).first()
+			page.locator( '.memorial-plugin-settings' )
+		).toBeVisible();
+		await expect(
+			page
+				.locator( '.memorial-plugin-settings .components-panel__body' )
+				.first()
 		).toBeVisible();
 		await expect(
 			page.getByRole( 'button', { name: 'Save' } ).first()
@@ -43,7 +47,7 @@ test( 'Контакты: изменение сохраняется', async ( { p
 		page.locator( '.components-notice.is-success' )
 	).toBeVisible();
 	await page.reload();
-	await expect(
-		page.getByLabel( 'Звонки в нерабочее время' )
-	).toHaveValue( 'Звоните круглосуточно — проверка e2e' );
+	await expect( page.getByLabel( 'Звонки в нерабочее время' ) ).toHaveValue(
+		'Звоните круглосуточно — проверка e2e'
+	);
 } );

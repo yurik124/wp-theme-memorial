@@ -70,16 +70,16 @@ export default function RewioScope( { def, value, onChange } ) {
 							ob.name +
 							( ob.count !== null ? ` (${ ob.count })` : '' ) +
 							( ob.demo
-								? ' — ' + __( 'Rewio example', 'memorial-plugin' )
+								? ' — ' +
+									__( 'Rewio example', 'memorial-plugin' )
 								: '' )
 						}
 						checked={ selected.includes( ob.id ) }
 						onChange={ ( on ) =>
 							update( {
-								objects: (
-									on
-										? [ ...selected, ob.id ]
-										: selected.filter( ( x ) => x !== ob.id )
+								objects: ( on
+									? [ ...selected, ob.id ]
+									: selected.filter( ( x ) => x !== ob.id )
 								).join( ',' ),
 							} )
 						}
@@ -94,9 +94,14 @@ export default function RewioScope( { def, value, onChange } ) {
 								onChange={ ( on ) => {
 									const list = on
 										? [ ...onFor( ob ), sid ]
-										: onFor( ob ).filter( ( x ) => x !== sid );
+										: onFor( ob ).filter(
+												( x ) => x !== sid
+											);
 									update( {
-										per: formatPer( { ...per, [ ob.id ]: list } ),
+										per: formatPer( {
+											...per,
+											[ ob.id ]: list,
+										} ),
 									} );
 								} }
 							/>
