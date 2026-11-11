@@ -77,7 +77,7 @@ add_shortcode('mem_works', function ($atts) {
     $has_year = (bool) array_filter($works, fn($w) => get_post_meta($w->ID, '_mem_year', true));
 
     ob_start();
-    echo '<div class="works" data-works>';
+    echo '<div class="works" data-works data-wp-interactive="memorial-plugin/works" data-wp-init="callbacks.init">';
     $show_nav = $a['nav'] !== '0' && count($types) > 1 && $a['type'] === '';
     if ($show_nav || ($a['sort'] !== '0' && count($works) > 1)) {
         echo '<span class="mcat__pin" aria-hidden="true"></span><div class="mcat__bar">';
@@ -87,7 +87,7 @@ add_shortcode('mem_works', function ($atts) {
             echo '</nav></div>';
         }
         if ($a['sort'] !== '0' && count($works) > 1) {
-            echo '<label class="mcat__sort"><span class="mcat__sortlbl">Сортировка:</span><select data-works-sort>'
+            echo '<label class="mcat__sort"><span class="mcat__sortlbl">Сортировка:</span><select data-works-sort data-wp-on--change="actions.sort">'
                . '<option value="">По умолчанию</option>'
                . ($has_year ? '<option value="new">Сначала новые</option>' : '')
                . '<option value="asc">Сначала дешевле</option><option value="desc">Сначала дороже</option></select></label>';
@@ -212,7 +212,7 @@ function memorial_plugin_works_cards($a) {
     $base = memorial_plugin_works_page_url();
     // общие пропорции карточек — как у большинства фото (фото другой формы показывается целиком, с полями)
     $ar = memorial_plugin_common_ratio(array_map(fn($w) => memorial_plugin_work_data($w->ID)['photos'][0], array_slice($works, 0, 30)));
-    $h = '<div class="mem-wcards"' . ($ar ? ' style="--mem-ar:' . memorial_plugin_ratio_css($ar) . '"' : '') . ($rand ? ' data-wcards-rand="' . $n . '"' : '') . '>';
+    $h = '<div class="mem-wcards"' . ($ar ? ' style="--mem-ar:' . memorial_plugin_ratio_css($ar) . '"' : '') . ($rand ? ' data-wcards-rand="' . $n . '" data-wp-interactive="memorial-plugin/works" data-wp-init="callbacks.random"' : '') . '>';
     foreach (array_slice($works, 0, 30) as $i => $w) {
         $d = memorial_plugin_work_data($w->ID);
         $title = get_the_title($w);

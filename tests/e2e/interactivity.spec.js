@@ -93,3 +93,22 @@ test( 'стили плагина подключаются вместе с бло
 	);
 	expect( usesPreset ).toBe( true );
 } );
+
+test( 'поведение блоков — модуль Interactivity API вместо front.js', async ( {
+	page,
+} ) => {
+	const errors = collectJsErrors( page );
+	await page.goto( '/' );
+	await expect(
+		page.locator( 'script[type="module"][src*="assets/js/view/blocks.js"]' )
+	).toHaveCount( 1 );
+	await expect( page.locator( 'script[src*="assets/js/front"]' ) ).toHaveCount(
+		0
+	);
+	const importMap = await page
+		.locator( 'script[type="importmap"]' )
+		.first()
+		.textContent();
+	expect( importMap ).toContain( '@wordpress/interactivity' );
+	expect( errors.filter( ( e ) => ! /404|Failed to load resource/.test( e ) ) ).toEqual( [] );
+} );

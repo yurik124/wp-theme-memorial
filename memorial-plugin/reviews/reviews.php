@@ -126,7 +126,7 @@ add_shortcode('mem_reviews', function () {
     }
     if ($feeds) {
         $uid = 'mrev' . wp_rand(100, 999);
-        echo '<div class="mrev__feeds" data-tabs>';
+        echo '<div class="mrev__feeds" data-tabs data-wp-interactive="memorial-plugin/reviews" data-wp-init="callbacks.tabs">';
         if (count($feeds) > 1) {
             echo '<div class="mrev__tabs" role="tablist" aria-label="Отзывы по филиалам">';
             foreach ($feeds as $n => $s) {
@@ -143,7 +143,7 @@ add_shortcode('mem_reviews', function () {
                    . '<a class="reviews__credit" href="' . esc_url('https://yandex.ru/maps/org/' . $s['yid'] . '/') . '" target="_blank" rel="noopener">' . esc_html(get_bloginfo('name')) . ' — Яндекс Карты</a></div>';
             } else {
                 // код виджета: вставляется только после согласия на cookie или по кнопке
-                echo '<div class="mrev__embed" data-embed-code><template>' . $s['embed'] . '</template>'
+                echo '<div class="mrev__embed" data-embed-code data-wp-interactive="memorial-plugin/reviews" data-wp-init="callbacks.embed"><template>' . $s['embed'] . '</template>'
                    . '<div class="reviews__ph">' . $ph($s) . '<button class="btn btn--line" type="button" data-embed-code-load>Показать отзывы</button></div></div>';
             }
             echo '</div>';

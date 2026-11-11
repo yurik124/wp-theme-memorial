@@ -429,7 +429,7 @@ function memorial_plugin_home_render_review_buttons() {
 }
 
 /**
- * Yandex reviews widget (loads after consent or on a click — assets/js/front.js).
+ * Yandex reviews widget (loads after consent or on a click — assets/js/view/blocks.js, store memorial-plugin/reviews).
  *
  * @return string
  */

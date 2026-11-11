@@ -90,7 +90,7 @@ add_shortcode('mem_cards', function ($atts) {
             if ($bg) $st[] = 'background-color:' . $bg;
             $attr = ['class' => 'mem-card__img', 'loading' => 'lazy', 'decoding' => 'async', 'alt' => $title, 'sizes' => '(max-width:600px) 100vw, 400px'];
             if ($st) $attr['style'] = implode(';', $st);
-            if ($focus) $attr['data-focus'] = $focus;
+            if ($focus) $attr += ['data-focus' => $focus, 'data-wp-interactive' => 'memorial-plugin/focus', 'data-wp-init' => 'callbacks.init'];
             $img = wp_get_attachment_image($tid, 'medium_large', false, $attr);
         }
         $h .= '<a class="mem-card' . ($img ? '' : ' mem-card--noimg') . '" href="' . esc_url(get_permalink($pid)) . '">'

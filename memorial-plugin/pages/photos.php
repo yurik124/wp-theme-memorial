@@ -18,7 +18,7 @@ function memorial_plugin_photos_grid(array $items, $n, $rand, $cols = 3) {
     if ($rand) shuffle($items); else $items = array_slice($items, 0, $n);
     $items = array_slice($items, 0, max($n, $rand ? 60 : $n));   // для случайного — запас, браузер покажет $n
     $r = memorial_plugin_common_ratio(array_column($items, 'id')) ?: 4 / 3;
-    $h = '<div class="mem-photos" style="--mem-ar:' . memorial_plugin_ratio_css($r) . ';--cols:' . (int) $cols . '"' . ($rand ? ' data-wcards-rand="' . (int) $n . '"' : '') . '>';
+    $h = '<div class="mem-photos" style="--mem-ar:' . memorial_plugin_ratio_css($r) . ';--cols:' . (int) $cols . '"' . ($rand ? ' data-wcards-rand="' . (int) $n . '" data-wp-interactive="memorial-plugin/works" data-wp-init="callbacks.random"' : '') . '>';
     foreach ($items as $i => $x) {
         $big = wp_get_attachment_image_url($x['id'], 'large');
         if (!$big) continue;
