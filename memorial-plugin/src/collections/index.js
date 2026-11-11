@@ -27,6 +27,7 @@ import {
 } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
 import BooleanEdit from '../shared/boolean-edit';
+import './style.scss';
 
 const API = '/memorial-plugin/v1/collections/';
 
@@ -109,7 +110,16 @@ function toField( def ) {
 					{ value: false, label: __( 'No', 'memorial-plugin' ) },
 				],
 				filterBy: { operators: [ 'is' ] },
-				render: ( { item } ) => ( item[ def.id ] ? '✓' : '—' ),
+				render: ( { item } ) =>
+					item[ def.id ] ? (
+						<span className="memorial-plugin-badge">
+							{ __( 'Yes', 'memorial-plugin' ) }
+						</span>
+					) : (
+						<span className="memorial-plugin-badge is-muted">
+							{ __( 'No', 'memorial-plugin' ) }
+						</span>
+					),
 				Edit: BooleanEdit,
 			};
 		case 'select':

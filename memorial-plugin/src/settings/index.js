@@ -17,11 +17,12 @@ import {
 import { __, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import {
+	Card,
+	CardBody,
+	CardHeader,
 	Button,
 	CheckboxControl,
 	Notice,
-	Panel,
-	PanelBody,
 	SelectControl,
 	Spinner,
 	TextareaControl,
@@ -487,13 +488,12 @@ function App( { option } ) {
 						{ page.extra }
 					</RawHTML>
 				) }
-				<Panel>
 					{ page.fields.map( ( def ) => (
-						<PanelBody
-							key={ def.id }
-							title={ def.label || def.id }
-							initialOpen
-						>
+						<Card key={ def.id } className="memorial-plugin-settings__card">
+							<CardHeader>
+								<h2>{ def.label || def.id }</h2>
+							</CardHeader>
+							<CardBody>
 							{ def.type === 'group' ? (
 								<>
 									<Help text={ def.help } />
@@ -525,10 +525,29 @@ function App( { option } ) {
 									} }
 								/>
 							) }
-						</PanelBody>
+							</CardBody>
+						</Card>
 					) ) }
-				</Panel>
-				<Flex justify="flex-end">{ actions }</Flex>
+				<div
+					className={
+						'memorial-plugin-settings__bar' +
+						( dirty ? ' is-dirty' : '' )
+					}
+				>
+					<span className="memorial-plugin-settings__state" role="status">
+						{ dirty
+							? __( 'There are unsaved changes', 'memorial-plugin' )
+							: __( 'All changes are saved', 'memorial-plugin' ) }
+					</span>
+					<Button
+						variant="primary"
+						isBusy={ busy }
+						disabled={ busy || ! dirty }
+						onClick={ save }
+					>
+						{ __( 'Save', 'memorial-plugin' ) }
+					</Button>
+				</div>
 			</Flex>
 		</Page>
 	);

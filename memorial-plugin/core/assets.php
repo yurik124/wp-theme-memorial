@@ -17,3 +17,10 @@ add_action('wp_enqueue_scripts', function () {
     $js = memorial_plugin_asset('/assets/js/front.js');
     wp_enqueue_script('memorial-plugin', MEMORIAL_PLUGIN_URL . $js, [], filemtime(MEMORIAL_PLUGIN_DIR . $js), ['strategy' => 'defer', 'in_footer' => true]);
 }, 22);
+
+/* Те же стили блоков в редакторе (в его окне страницы), чтобы блоки плагина выглядели как на сайте */
+add_action('enqueue_block_assets', function () {
+    if (!is_admin() || !apply_filters('memorial_plugin_blocks_css', true)) return;
+    $css = memorial_plugin_asset('/assets/css/blocks.css');
+    wp_enqueue_style('memorial-plugin-editor-blocks', MEMORIAL_PLUGIN_URL . $css, [], filemtime(MEMORIAL_PLUGIN_DIR . $css));
+});

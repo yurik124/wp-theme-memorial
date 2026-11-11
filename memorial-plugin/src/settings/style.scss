@@ -1,6 +1,8 @@
+@use "../shared/admin";
+
 // Settings screens (src/settings): layout of the app's own elements only.
 .memorial-plugin-settings {
-	max-width: 960px;
+	max-width: 920px;
 
 	&__help {
 		margin: 4px 0 0;
@@ -68,5 +70,54 @@
 
 	&__code textarea {
 		font-family: Menlo, Consolas, monospace;
+	}
+}
+
+.memorial-plugin-admin .memorial-plugin-settings {
+
+	&__card .components-card__body > * + * {
+		margin-top: 16px;
+	}
+
+	// Save bar stays at the bottom of the window while the page scrolls.
+	&__bar {
+		position: sticky;
+		bottom: 0;
+		z-index: 5;
+		display: flex;
+		gap: 16px;
+		align-items: center;
+		justify-content: flex-end;
+		margin: 8px -4px 0;
+		padding: 14px 20px;
+		border: 1px solid #e6e2d8;
+		border-radius: 14px 14px 0 0;
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 -6px 24px rgba(31, 33, 28, 0.06);
+		backdrop-filter: blur(6px);
+	}
+
+	&__state {
+		margin-right: auto;
+		color: #5f6158;
+		font-size: 13px;
+	}
+
+	&__bar.is-dirty span.memorial-plugin-settings__state {
+		color: #7a4b00;
+		font-weight: 600;
+	}
+
+	&__extra {
+		padding: 16px 20px;
+		border: 1px solid #e6e2d8;
+		border-radius: 14px;
+		background: #fff;
+	}
+
+	&__row {
+		border-color: #e6e2d8;
+		border-radius: 10px;
+		background: #fbfaf7;
 	}
 }
