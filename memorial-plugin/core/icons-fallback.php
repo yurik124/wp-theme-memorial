@@ -1,7 +1,7 @@
 <?php
 /**
- * Иконки плагина. Если тема рисует свои (фильтр memorial_plugin_icon_html — в теме Memorial Modern это inc/icons.php),
- * берутся они; иначе — запасной набор ниже. Плагин не вызывает функции темы напрямую.
+ * Иконки плагина. Если тема рисует свои (фильтр memorial_plugin_icon_html), берутся они; иначе — из реестра иконок
+ * WordPress (core/icons-api.php, SVG Icon API 7.1+); без реестра — запасной набор ниже (линии, общий набор <symbol>).
  */
 defined('ABSPATH') || exit;
 
@@ -28,6 +28,8 @@ function memorial_plugin_feat_icon($item) {
 function memorial_plugin_icon($name) {
     $html = apply_filters('memorial_plugin_icon_html', null, $name);
     if (null !== $html) return (string) $html;
+    // реестр иконок WordPress 7.1 (core/icons-api.php): те же иконки, обводка переведена в контур
+    if (function_exists('memorial_plugin_icon_from_registry') && ($html = memorial_plugin_icon_from_registry($name)) !== '') return $html;
     $i = [
         'phone' => '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>',
         'pin'   => '<path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',

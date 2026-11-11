@@ -62,3 +62,14 @@ test( 'плавающие блоки встают в подвал сами (Bloc
 	await expect( page.locator( 'dialog#callback' ) ).toHaveCount( 1 );
 	await expect( page.locator( 'footer.footer ~ .mbar' ) ).toHaveCount( 1 );
 } );
+
+test( 'иконки — из реестра иконок WordPress (SVG Icon API)', async ( {
+	page,
+} ) => {
+	await page.goto( '/' );
+	const icon = page.locator( 'svg.ico--fill' ).first();
+	await expect( icon ).toBeAttached();
+	// Только залитые контуры: ни обводки, ни <use> на общий набор.
+	await expect( icon.locator( 'path[d]' ).first() ).toBeAttached();
+	await expect( page.locator( 'svg.ico use' ) ).toHaveCount( 0 );
+} );

@@ -1,6 +1,9 @@
 /* Стили блоков Memorial Core: каталог [mem_catalog], «Наши работы», пакеты, отзывы ([mem_reviews], [mem_rewio], книга), вопрос–ответ, услуги, карточки разделов, призыв [mem_cta].
    Подключаются после стилей темы. Тема может переопределить любое правило в своём content.css (селектор той же силы + выше по специфичности) —
    или отключить этот файл: add_filter('mem_core_blocks_css', '__return_false'). */
+/* иконки из реестра WordPress (SVG Icon API) — для любой темы: размер по тексту, заливка цветом текста */
+:where(.ico--fill){width:1.1em;height:1.1em;flex:none}
+.ico.ico--fill{fill:currentColor;stroke:none}
 /* Блок-призыв [mem_cta] */
 .mem-cta{position:relative;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.2rem 2rem;background:var(--sage,#e6ebdf);color:var(--ink,#2a2c28);border-radius:14px;padding:1.75rem 2rem;margin:2.2rem 0}
 .mem-cta__title{font:500 1.75rem/1.2 var(--serif,Georgia,serif);margin:0 0 .3rem!important;color:var(--ink,#2a2c28)}

@@ -2,7 +2,7 @@
 /**
  * Site data for SEO titles and descriptions: one registry, variables in SEOPress, Yoast and Rank Math.
  *
- * memorial_plugin_seo_registry() is a single list “key → label + value function”. Every key becomes
+ * The registry memorial_plugin_seo_registry() is a single list “key → label + value function”. Every key becomes
  * the variable %%mem_<key>%% in the SEO plugin, so a title can say
  * “Fences in Belgorod — %%mem_cat_price_ograda%%” and always show the current price.
  * A new value is one more line in the list (or the memorial_plugin_seo_registry filter).
@@ -219,7 +219,7 @@ function memorial_plugin_seo_convert( $text ) {
 			$atts = shortcode_parse_atts( $m[3] );
 			$atts = is_array( $atts ) ? array_map( 'trim', $atts ) : array();
 			foreach ( memorial_plugin_seo_registry() as $key => $def ) {
-				if ( ( $def['shortcode'][0] ?? '' ) === $m[2] && $atts == ( $def['shortcode'][1] ?? array() ) ) { // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual -- same keys and values in any order.
+				if ( $m[2] === ( $def['shortcode'][0] ?? '' ) && ( $def['shortcode'][1] ?? array() ) == $atts ) { // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual -- same keys and values in any order.
 					return memorial_plugin_seo_var( $key );
 				}
 			}

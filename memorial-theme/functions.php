@@ -5,7 +5,7 @@
  * Шаблоны — templates/*.html, части — parts/*.html (редактируются во «Внешний вид → Редактор»),
  * цвета, шрифты и размеры — theme.json и варианты стилей styles/*.json.
  * Данные сайта (телефоны, адреса, каталог, цены) выводят блоки плагина Memorial Plugin;
- * тема даёт им лавровую графику и иконки через их фильтры (inc/laurel.php, inc/icons.php).
+ * тема даёт им лавровую графику через фильтр (inc/laurel.php); иконки — из реестра иконок WordPress (плагин).
  *
  * @package memorial-theme
  */
@@ -93,7 +93,6 @@ add_action('init', function () {
     register_block_pattern_category('memorial-theme', ['label' => 'Мемориал: оформление']);
 });
 
-require get_template_directory() . '/inc/icons.php';
 require get_template_directory() . '/inc/design.php';
 require get_template_directory() . '/inc/design-migrate.php';
 require get_template_directory() . '/inc/laurel.php';

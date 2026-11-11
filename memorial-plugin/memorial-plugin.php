@@ -164,6 +164,7 @@ if (is_readable(MEMORIAL_PLUGIN_DIR . '/vendor/autoload.php')) require MEMORIAL_
 if (is_admin() && defined('WP_DEBUG') && WP_DEBUG) require MEMORIAL_PLUGIN_DIR . '/admin/dataviews-check.php';
 
 /* Иконки: memorial_plugin_icon() спрашивает тему (фильтр memorial_plugin_icon_html), без неё — запасной набор плагина */
+require MEMORIAL_PLUGIN_DIR . '/core/icons-api.php';
 require MEMORIAL_PLUGIN_DIR . '/core/icons-fallback.php';
 
 /* Блоки-обёртки для блоковой темы (этап 2): шапка, подвал, главная, товар, каталог… */

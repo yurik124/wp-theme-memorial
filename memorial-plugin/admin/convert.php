@@ -224,7 +224,7 @@ function memorial_plugin_convert_items() {
 	$statuses = array( 'publish', 'future', 'draft', 'pending', 'private' );
 	$in_types = implode( ',', array_fill( 0, count( $types ), '%s' ) );
 	$in_stats = implode( ',', array_fill( 0, count( $statuses ), '%s' ) );
-	// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders are built above.
+	// phpcs:disable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders are built above.
 	$ids = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- admin screen, fresh data needed.
 		$wpdb->prepare(
 			"SELECT ID FROM {$wpdb->posts} WHERE post_type IN ($in_types) AND post_status IN ($in_stats)

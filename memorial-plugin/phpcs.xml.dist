@@ -5,6 +5,7 @@
 	<!-- Новый код. Пополняется по мере переписывания модулей. -->
 	<file>core/switchover.php</file>
 	<file>core/speed-removed.php</file>
+	<file>core/icons-api.php</file>
 	<file>blocks/content</file>
 	<file>blocks/floating</file>
 	<file>admin/convert.php</file>
