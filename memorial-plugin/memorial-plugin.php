@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Memorial Plugin
  * Description: Site features for Memorial funeral services: catalog, prices, reviews, works, leads, settings, SEO, analytics. Design lives in the Memorial Modern theme.
- * Version: 2.0.0-alpha.5
+ * Version: 2.0.0-alpha.6
  * Requires at least: 7.1
  * Requires PHP: 8.1
  * Author: Memorial
@@ -21,7 +21,7 @@ if (memorial_plugin_legacy_active()) {
 }
 add_action('wp_loaded', 'memorial_plugin_after_switch');
 
-define('MEMORIAL_PLUGIN_VER', '2.0.0-alpha.5');
+define('MEMORIAL_PLUGIN_VER', '2.0.0-alpha.6');
 define('MEMORIAL_PLUGIN_FILE', __FILE__);
 define('MEMORIAL_PLUGIN_DIR', __DIR__);                          // без «/» в конце: MEMORIAL_PLUGIN_DIR . '/assets/…'
 define('MEMORIAL_PLUGIN_URL', untrailingslashit(plugins_url('', __FILE__)));

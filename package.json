@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "wp-scripts build",
 		"start": "wp-scripts start",
-		"lint:js": "wp-scripts lint-js memorial-plugin/src memorial-theme/src tests/e2e tests/visual tools --no-error-on-unmatched-pattern",
+		"lint:js": "wp-scripts lint-js memorial-plugin/src memorial-plugin/assets/js/view memorial-theme/src tests/e2e tests/visual tools --no-error-on-unmatched-pattern",
 		"lint:css": "wp-scripts lint-style \"memorial-plugin/src/**/*.{css,scss}\" \"memorial-theme/src/**/*.{css,scss}\" --allow-empty-input",
 		"lint:json": "node tools/validate-json.mjs",
 		"lint:php:prefixes": "php tools/check-prefixes.php",
@@ -35,6 +35,7 @@
 		"@wordpress/env": "latest",
 		"@wordpress/i18n": "latest",
 		"@wordpress/icons": "latest",
+		"@wordpress/interactivity": "latest",
 		"@wordpress/media-utils": "latest",
 		"@wordpress/plugins": "latest",
 		"@wordpress/url": "latest",

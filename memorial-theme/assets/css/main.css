@@ -755,4 +755,8 @@ h1,h2,h3,.pkg h3,.cat h3,.svc__body h3,.card__title,.mcard__name,.fnav__title{ov
 
 /* Подменю на компьютере: ширина по самому длинному пункту, длинный пункт переносится только если не влезает в 360px
    (иначе ширина зависела от положения пункта в шапке и менялась от страницы к странице) */
-.header:not(.is-compact) .nav .wp-block-navigation__submenu-container{width:max-content;min-width:220px;max-width:min(360px,calc(100vw - 2rem))}
+.header:not(.is-compact) .nav .wp-block-navigation__submenu-container{width:max-content !important;min-width:220px !important;max-width:min(360px,calc(100vw - 2rem)) !important}
+/* Мобильное меню: ветка, раскрытая скриптом (текущая страница), видна и без фокуса.
+   Ядро прячет подменю (visibility:hidden; opacity:0), пока внутри нет фокуса или наведения; раскрытая
+   кнопкой ветка была видна только потому, что фокус оставался на кнопке. */
+.header.is-compact .nav.is-open .has-child.is-open>.wp-block-navigation__submenu-container{visibility:visible !important;opacity:1 !important;height:auto !important;overflow:visible !important}

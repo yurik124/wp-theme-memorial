@@ -209,3 +209,56 @@ test.describe( 'админка', () => {
 		fs.writeFileSync( DIR + '/dom.json', JSON.stringify( DOM, null, 1 ) );
 	} );
 } );
+
+test.describe( 'ветка меню', () => {
+	test.use( { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } );
+	test( 'бургер-ветка: раскрытая ветка текущей страницы', async ( { page } ) => {
+		const p = PAGES.find( ( x ) => /фотогалере/i.test( x.post_title ) ) || PAGES[ 0 ];
+		await page.goto( p.url, { waitUntil: 'networkidle' } );
+		await page.addStyleTag( { content: NO_FLOAT } );
+		await page.locator( '#burger' ).tap();
+		await page.waitForTimeout( 800 );
+		await shot( page, 'phone-branch' );
+		log( 'branch', await page.evaluate( () => {
+			const li = document.querySelector( '#header li.is-open' );
+			if ( ! li ) return 'нет раскрытой ветки';
+			const sub = li.querySelector( '.wp-block-navigation__submenu-container' );
+			const a = sub?.querySelector( 'a' );
+			const st = ( el ) => {
+				if ( ! el ) return null;
+				const c = getComputedStyle( el );
+				return { cls: el.className, rect: el.getBoundingClientRect().toJSON(), display: c.display, visibility: c.visibility, opacity: c.opacity, color: c.color, height: c.height, overflow: c.overflow, transform: c.transform };
+			};
+			return { li: st( li ), sub: st( sub ), li2: st( sub?.querySelector( 'li' ) ), a: st( a ), focus: document.activeElement?.outerHTML.slice( 0, 120 ) };
+		} ) );
+	} );
+} );
+
+test.describe( 'подменю ПК', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'подменю ПК: наведение и нажатие', async ( { page } ) => {
+		const p = PAGES.find( ( x ) => /пособие/i.test( x.post_title ) ) || PAGES[ 0 ];
+		await page.goto( p.url, { waitUntil: 'networkidle' } );
+		await page.addStyleTag( { content: NO_FLOAT } );
+		const info = async () => page.evaluate( () => [ ...document.querySelectorAll( '#header .has-child' ) ].map( ( li ) => {
+			const sub = li.querySelector( '.wp-block-navigation__submenu-container' );
+			const c = getComputedStyle( sub );
+			return [ li.querySelector( 'a' ).textContent.trim(), sub.getBoundingClientRect().width, c.width, c.minWidth, c.visibility, li.matches( ':hover' ), li.matches( ':focus-within' ) ];
+		} ) );
+		const parent = page.locator( '#header li.has-child' ).last();
+		await parent.locator( ':scope > a' ).hover();
+		await page.waitForTimeout( 400 );
+		await shot( page, 'pc-sub-hover', { clip: { x: 0, y: 0, width: 1440, height: 450 } } );
+		const hover = await info();
+		const link = parent.locator( '.wp-block-navigation__submenu-container a' ).nth( 1 );
+		const box = await link.boundingBox();
+		await page.mouse.move( box.x + 10, box.y + 5 );
+		await page.waitForTimeout( 300 );
+		await shot( page, 'pc-sub-hover-link', { clip: { x: 0, y: 0, width: 1440, height: 450 } } );
+		await page.mouse.down();
+		await page.waitForTimeout( 300 );
+		await shot( page, 'pc-sub-mousedown', { clip: { x: 0, y: 0, width: 1440, height: 450 } } );
+		const down = await info();
+		log( 'pc-sub', { hover, down } );
+	} );
+} );
