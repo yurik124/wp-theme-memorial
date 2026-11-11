@@ -27,7 +27,7 @@ for ( const slug of PAGES ) {
 		).toBeVisible();
 		await expect(
 			page
-				.locator( '.memorial-plugin-settings .components-panel__body' )
+				.locator( '.memorial-plugin-settings .components-card' )
 				.first()
 		).toBeVisible();
 		await expect(
