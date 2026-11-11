@@ -14,6 +14,8 @@ let modulePromise = null;
 function abilitiesModule() {
 	if ( ! modulePromise ) {
 		modulePromise = import(
+			// A script module of WordPress, resolved by the page’s import map, not bundled.
+			// eslint-disable-next-line import/no-unresolved
 			/* webpackIgnore: true */ '@wordpress/abilities'
 		).catch( () => null );
 	}

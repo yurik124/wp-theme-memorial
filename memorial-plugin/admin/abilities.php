@@ -1,8 +1,8 @@
 <?php
 /**
  * Abilities API: the main actions of the plugin as abilities with input and output schemas and permission
- * checks. The admin screens (DataViews actions) and the Command Palette call them through
- * @wordpress/abilities (src/shared/abilities.js); the REST API exposes them at /wp-abilities/v1/.
+ * checks. The admin screens (DataViews actions) and the Command Palette call them through the
+ * package “wordpress/abilities” (src/shared/abilities.js); the REST API exposes them at /wp-abilities/v1/.
  *
  * Category: memorial. Abilities:
  *  - memorial-plugin/list-leads           — call back requests (readonly);
@@ -116,7 +116,7 @@ function memorial_plugin_abilities() {
 	$edit   = static fn() => current_user_can( 'edit_posts' );
 	$admin  = static fn() => current_user_can( 'manage_options' );
 	$lead   = static fn( $input ) => current_user_can( 'edit_post', (int) ( $input['id'] ?? 0 ) ) && 'mem_lead' === get_post_type( (int) ( $input['id'] ?? 0 ) );
-	$public = array(
+	$meta_public = array(
 		'public'       => true,
 		'show_in_rest' => true,
 	);
@@ -125,13 +125,13 @@ function memorial_plugin_abilities() {
 		memorial_plugin_abilities_leads( $edit, $lead );
 	}
 	if ( function_exists( 'memorial_plugin_products_data' ) ) {
-		memorial_plugin_abilities_catalog( $edit, $public );
+		memorial_plugin_abilities_catalog( $edit, $meta_public );
 	}
 	if ( function_exists( 'memorial_plugin_convert_post' ) ) {
 		memorial_plugin_abilities_convert();
 	}
 	if ( function_exists( 'memorial_plugin_sq_items' ) ) {
-		memorial_plugin_abilities_search( $admin, $public );
+		memorial_plugin_abilities_search( $admin, $meta_public );
 	}
 }
 add_action( 'wp_abilities_api_init', 'memorial_plugin_abilities' );
@@ -269,16 +269,15 @@ function memorial_plugin_abilities_leads( $edit, $lead ) {
 			),
 		)
 	);
-
 }
 
 /**
  * Abilities of the catalog and works.
  *
- * @param callable $edit   Permission: may edit posts.
- * @param array    $public Meta of public abilities.
+ * @param callable $edit        Permission: may edit posts.
+ * @param array    $meta_public Meta of public abilities.
  */
-function memorial_plugin_abilities_catalog( $edit, $public ) {
+function memorial_plugin_abilities_catalog( $edit, $meta_public ) {
 	wp_register_ability(
 		'memorial-plugin/list-products',
 		array(
@@ -319,7 +318,7 @@ function memorial_plugin_abilities_catalog( $edit, $public ) {
 				}
 				return $out;
 			},
-			'meta'                => array_merge( $public, array( 'annotations' => array( 'readonly' => true ) ) ),
+			'meta'                => array_merge( $meta_public, array( 'annotations' => array( 'readonly' => true ) ) ),
 		)
 	);
 
@@ -361,7 +360,7 @@ function memorial_plugin_abilities_catalog( $edit, $public ) {
 				memorial_plugin_product_save( $id, $input );
 				return memorial_plugin_ability_product( memorial_plugin_manager_product( get_post( $id ) ) );
 			},
-			'meta'                => array_merge( $public, array( 'annotations' => array( 'idempotent' => true ) ) ),
+			'meta'                => array_merge( $meta_public, array( 'annotations' => array( 'idempotent' => true ) ) ),
 		)
 	);
 
@@ -398,7 +397,7 @@ function memorial_plugin_abilities_catalog( $edit, $public ) {
 				$res = memorial_plugin_ability_rest( 'memorial_plugin_products_bulk', array_merge( $input, array( 'op' => 'price' ) ) );
 				return is_wp_error( $res ) ? $res : array_map( 'memorial_plugin_ability_product', $res['items'] );
 			},
-			'meta'                => $public,
+			'meta'                => $meta_public,
 		)
 	);
 
@@ -442,7 +441,7 @@ function memorial_plugin_abilities_catalog( $edit, $public ) {
 				);
 				return is_wp_error( $res ) ? $res : array( 'changed' => count( $res['items'] ) );
 			},
-			'meta'                => array_merge( $public, array( 'annotations' => array( 'idempotent' => true ) ) ),
+			'meta'                => array_merge( $meta_public, array( 'annotations' => array( 'idempotent' => true ) ) ),
 		)
 	);
 
@@ -489,7 +488,7 @@ function memorial_plugin_abilities_catalog( $edit, $public ) {
 				}
 				return $out;
 			},
-			'meta'                => $public,
+			'meta'                => $meta_public,
 		)
 	);
 
@@ -520,10 +519,9 @@ function memorial_plugin_abilities_catalog( $edit, $public ) {
 			),
 			'permission_callback' => $edit,
 			'execute_callback'    => 'memorial_plugin_export_catalog',
-			'meta'                => array_merge( $public, array( 'annotations' => array( 'readonly' => true ) ) ),
+			'meta'                => array_merge( $meta_public, array( 'annotations' => array( 'readonly' => true ) ) ),
 		)
 	);
-
 }
 
 /**
@@ -621,16 +619,15 @@ function memorial_plugin_abilities_convert() {
 			),
 		)
 	);
-
 }
 
 /**
  * Abilities of the search statistics.
  *
- * @param callable $admin  Permission: administrator.
- * @param array    $public Meta of public abilities.
+ * @param callable $admin       Permission: administrator.
+ * @param array    $meta_public Meta of public abilities.
  */
-function memorial_plugin_abilities_search( $admin, $public ) {
+function memorial_plugin_abilities_search( $admin, $meta_public ) {
 	wp_register_ability(
 		'memorial-plugin/search-stats',
 		array(
@@ -677,7 +674,7 @@ function memorial_plugin_abilities_search( $admin, $public ) {
 					array_slice( $items, 0, (int) ( $input['limit'] ?? 50 ) )
 				);
 			},
-			'meta'                => array_merge( $public, array( 'annotations' => array( 'readonly' => true ) ) ),
+			'meta'                => array_merge( $meta_public, array( 'annotations' => array( 'readonly' => true ) ) ),
 		)
 	);
 
