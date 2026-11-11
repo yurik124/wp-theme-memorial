@@ -17,6 +17,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { Button, Notice, Spinner } from '@wordpress/components';
 import { DataViews, filterSortAndPaginate } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
+import { runAbility } from '../shared/abilities';
 import './style.scss';
 
 const BATCH = window.memorialPluginConvert?.batch || 10;
@@ -146,12 +147,12 @@ function App() {
 			const done = {};
 			try {
 				for ( let i = 0; i < ids.length; i += BATCH ) {
-					const part = await apiFetch( {
-						path: API,
-						method: 'POST',
-						data: { ids: ids.slice( i, i + BATCH ) },
-					} );
-					Object.assign( done, part );
+					// Ability memorial-plugin/convert-content (admin/abilities.php).
+					const part = await runAbility(
+						'memorial-plugin/convert-content',
+						{ ids: ids.slice( i, i + BATCH ) }
+					);
+					part.forEach( ( r ) => ( done[ r.id ] = r.result ) );
 				}
 				const ok = Object.values( done ).filter(
 					( r ) => r === 'converted'
@@ -195,10 +196,10 @@ function App() {
 		async ( item ) => {
 			setBusy( true );
 			try {
-				const res = await apiFetch( {
-					path: `${ API }/${ item.id }/rollback`,
-					method: 'POST',
-				} );
+				const res = await runAbility(
+					'memorial-plugin/rollback-conversion',
+					{ id: item.id }
+				);
 				setNotice( {
 					status: res.result === 'restored' ? 'success' : 'warning',
 					text:

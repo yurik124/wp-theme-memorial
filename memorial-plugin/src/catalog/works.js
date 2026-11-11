@@ -7,6 +7,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { Button, Flex, Notice } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
 import BooleanEdit from '../shared/boolean-edit';
+import { runAbility } from '../shared/abilities';
 import {
 	useListData,
 	moved,
@@ -63,7 +64,7 @@ function KindsModal( { items, closeModal, run, op, kinds } ) {
 }
 
 export default function Works() {
-	const { data, error, merge } = useListData( API );
+	const { data, error, merge, reload } = useListData( API );
 	const [ notice, setNotice ] = useState( null );
 	const [ editing, setEditing ] = useState( null );
 	const [ busy, setBusy ] = useState( false );
@@ -308,14 +309,38 @@ export default function Works() {
 				label: __( 'Show on the site', 'memorial-plugin' ),
 				supportsBulk: true,
 				isEligible: ( item ) => item.status !== 'publish',
-				callback: ( list ) => run( list, { op: 'publish' } ),
+				callback: async ( list ) => {
+					// Ability memorial-plugin/set-visibility (admin/abilities.php).
+					try {
+						await runAbility( 'memorial-plugin/set-visibility', {
+							kind: 'works',
+							ids: list.map( ( i ) => i.id ),
+							visible: true,
+						} );
+						await reload();
+					} catch ( e ) {
+						setNotice( { status: 'error', text: e.message } );
+					}
+				},
 			},
 			{
 				id: 'draft',
 				label: __( 'Hide from the site', 'memorial-plugin' ),
 				supportsBulk: true,
 				isEligible: ( item ) => item.status === 'publish',
-				callback: ( list ) => run( list, { op: 'draft' } ),
+				callback: async ( list ) => {
+					// Ability memorial-plugin/set-visibility (admin/abilities.php).
+					try {
+						await runAbility( 'memorial-plugin/set-visibility', {
+							kind: 'works',
+							ids: list.map( ( i ) => i.id ),
+							visible: false,
+						} );
+						await reload();
+					} catch ( e ) {
+						setNotice( { status: 'error', text: e.message } );
+					}
+				},
 			},
 			{
 				id: 'copy',
@@ -331,7 +356,7 @@ export default function Works() {
 				callback: ( list ) => run( list, { op: 'trash' } ),
 			},
 		];
-	}, [ data, kinds, run ] );
+	}, [ data, kinds, run, reload ] );
 
 	if ( error ) {
 		return (
