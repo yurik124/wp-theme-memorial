@@ -739,16 +739,3 @@ function memorial_plugin_merged_redirect() {
 	}
 }
 add_action( 'template_redirect', 'memorial_plugin_merged_redirect' );
-
-/* ---------- Kept for “Types and categories” (catalog-types-admin.php) until its screen moves to DataViews ---------- */
-
-/**
- * Capability check of the old admin-ajax requests.
- *
- * @param string $cap Capability.
- */
-function memorial_plugin_cm_check( $cap = 'edit_posts' ) {
-	if ( ! check_ajax_referer( 'mem_cm', false, false ) || ! current_user_can( $cap ) ) {
-		wp_send_json_error( __( 'No permission. Reload the page.', 'memorial-plugin' ), 403 );
-	}
-}
