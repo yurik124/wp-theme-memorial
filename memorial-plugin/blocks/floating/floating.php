@@ -66,6 +66,7 @@ function memorial_plugin_floating_register() {
 				'category'        => 'memorial',
 				'icon'            => $def['icon'],
 				'textdomain'      => 'memorial-plugin',
+				'example'         => array(),
 				'supports'        => array(
 					'autoRegister' => true,
 					'html'         => false,

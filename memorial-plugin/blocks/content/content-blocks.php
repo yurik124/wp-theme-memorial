@@ -628,6 +628,7 @@ function memorial_plugin_content_blocks_register() {
 				'icon'            => $def['icon'],
 				'keywords'        => array( $def['tag'], 'memorial' ),
 				'textdomain'      => 'memorial-plugin',
+				'example'         => array(),
 				'attributes'      => $attributes,
 				'supports'        => array(
 					'autoRegister' => true,

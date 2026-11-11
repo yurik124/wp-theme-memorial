@@ -204,6 +204,7 @@ function memorial_plugin_home_blocks_register() {
 				'category'        => 'memorial',
 				'icon'            => $def['icon'],
 				'textdomain'      => 'memorial-plugin',
+				'example'         => array(),
 				'attributes'      => $def['attrs'],
 				'supports'        => array(
 					'autoRegister' => true,
