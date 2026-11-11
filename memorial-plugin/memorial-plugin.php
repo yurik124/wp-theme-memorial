@@ -161,9 +161,6 @@ unset($memorial_plugin_modules, $memorial_plugin_off, $memorial_plugin_module);
 /* Классы плагина (includes/) — автозагрузка Composer classmap; vendor/ собирается при выгрузке (composer dump-autoload) */
 if (is_readable(MEMORIAL_PLUGIN_DIR . '/vendor/autoload.php')) require MEMORIAL_PLUGIN_DIR . '/vendor/autoload.php';
 
-/* Проверка сборки DataViews / admin-ui — только при WP_DEBUG (этап 1, удаляется на этапе 4) */
-if (is_admin() && defined('WP_DEBUG') && WP_DEBUG) require MEMORIAL_PLUGIN_DIR . '/admin/dataviews-check.php';
-
 /* Иконки: memorial_plugin_icon() спрашивает тему (фильтр memorial_plugin_icon_html), без неё — запасной набор плагина */
 require MEMORIAL_PLUGIN_DIR . '/core/icons-api.php';
 require MEMORIAL_PLUGIN_DIR . '/core/icons-fallback.php';
