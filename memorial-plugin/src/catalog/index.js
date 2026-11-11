@@ -9,6 +9,7 @@ import Works from './works';
 import WorkTypes from './work-types';
 import Types from './types';
 import SearchStats from './search-stats';
+import ProductPages from './product-pages';
 import './style.scss';
 
 const SCREENS = {
@@ -17,6 +18,7 @@ const SCREENS = {
 	works: Works,
 	'work-types': WorkTypes,
 	'search-stats': SearchStats,
+	'product-pages': ProductPages,
 };
 
 const root = document.getElementById( 'memorial-plugin-catalog' );

@@ -83,30 +83,30 @@ add_filter('aioseo_sitemap_exclude_posts', function ($ids, $type = '') {
     return array_values(array_unique(array_merge((array) $ids, memorial_plugin_products_without_page())));
 }, 10, 2);
 
-/* Настройка: «Каталог → Страницы товаров» */
+/* Настройка: «Каталог → Страницы товаров» — форма DataForm (src/catalog, экран product-pages) */
 add_action('admin_menu', function () {
-    add_submenu_page('edit.php?post_type=mem_product', 'Страницы товаров', 'Страницы товаров', 'manage_options', 'mem-product-pages', function () {
-        if (isset($_POST['mem_product_pages']) && check_admin_referer('mem_product_pages')) {
-            update_option('mem_product_pages', $_POST['mem_product_pages'] === 'all' ? 'all' : 'auto');
-            echo '<div class="notice notice-success"><p>Сохранено.</p></div>';
-        }
-        $m = memorial_plugin_product_pages_mode();
-        $total = (int) (wp_count_posts('mem_product')->publish ?? 0);
-        $n = $total - count(memorial_plugin_products_without_page());
-        ?>
-        <div class="wrap"><h1>Страницы товаров</h1>
-        <form method="post"><?php wp_nonce_field('mem_product_pages'); ?>
-          <p><label><input type="radio" name="mem_product_pages" value="auto" <?php checked($m, 'auto'); ?>>
-            <b>Только у товаров с описанием</b> (рекомендуется). Товар без описания открывается крупным фото прямо в каталоге,
-            а его старый адрес /tovar/… ведёт на раздел каталога к этому товару. Такие адреса не попадают в карту сайта — поисковики не видят сотни пустых страниц.</label></p>
-          <p><label><input type="radio" name="mem_product_pages" value="all" <?php checked($m, 'all'); ?>>
-            <b>У каждого товара</b> — как раньше.</label></p>
-          <?php submit_button('Сохранить'); ?>
-        </form>
-        <p class="description">Сейчас товаров: <?php echo $total; ?>, из них со своей страницей: <?php echo $m === 'all' ? $total : max(0, $n); ?>.
-          Чтобы у товара появилась страница — напишите ему описание (в редакторе товара).
-          Страницы картинок (вложений) всегда ведут к записи, где стоит картинка, или к самому файлу.</p>
-        </div>
-        <?php
+    $hook = add_submenu_page('edit.php?post_type=mem_product', 'Страницы товаров', 'Страницы товаров', 'manage_options', 'mem-product-pages', function () {
+        echo '<div id="memorial-plugin-catalog" class="wrap" data-screen="product-pages"></div>';
     });
+    if ($hook && function_exists('memorial_plugin_catalog_views_assets')) add_action('load-' . $hook, 'memorial_plugin_catalog_views_assets');
 }, 20);
+
+/** Режим и счётчики для формы */
+function memorial_plugin_product_pages_data() {
+    $m = memorial_plugin_product_pages_mode();
+    $total = (int) (wp_count_posts('mem_product')->publish ?? 0);
+    return ['mode' => $m, 'total' => $total, 'withPage' => $m === 'all' ? $total : max(0, $total - count(memorial_plugin_products_without_page()))];
+}
+
+add_action('rest_api_init', function () {
+    register_rest_route('memorial-plugin/v1', '/product-pages', [
+        ['methods' => WP_REST_Server::READABLE, 'permission_callback' => fn() => current_user_can('manage_options'),
+         'callback' => fn() => rest_ensure_response(memorial_plugin_product_pages_data())],
+        ['methods' => WP_REST_Server::CREATABLE, 'permission_callback' => fn() => current_user_can('manage_options'),
+         'args' => ['mode' => ['type' => 'string', 'enum' => ['auto', 'all'], 'required' => true]],
+         'callback' => function (WP_REST_Request $request) {
+             update_option('mem_product_pages', $request['mode'] === 'all' ? 'all' : 'auto');
+             return rest_ensure_response(memorial_plugin_product_pages_data());
+         }],
+    ]);
+});
