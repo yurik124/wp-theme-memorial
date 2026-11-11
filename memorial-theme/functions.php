@@ -12,7 +12,7 @@
 
 defined('ABSPATH') || exit;
 
-define('MEMORIAL_THEME_VER', '5.0.0-alpha.3');
+define('MEMORIAL_THEME_VER', '5.0.0-alpha.4');
 
 add_action('after_setup_theme', function () {
     add_theme_support('post-thumbnails');
