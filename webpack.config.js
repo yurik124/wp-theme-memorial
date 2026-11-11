@@ -21,6 +21,8 @@ module.exports = {
 		'inline-value/index': path.resolve( __dirname, 'memorial-plugin/src/inline-value/index.js' ),
 		'settings/index': path.resolve( __dirname, 'memorial-plugin/src/settings/index.js' ),
 		'collections/index': path.resolve( __dirname, 'memorial-plugin/src/collections/index.js' ),
+		'catalog/index': path.resolve( __dirname, 'memorial-plugin/src/catalog/index.js' ),
+		'editor-meta/index': path.resolve( __dirname, 'memorial-plugin/src/editor-meta/index.js' ),
 	},
 	output: {
 		...base.output,

@@ -48,7 +48,12 @@ function Help( { text } ) {
 function ImageEdit( { def, value, onChange } ) {
 	return (
 		<div className="memorial-plugin-settings__image">
-			<span className="memorial-plugin-settings__label">
+			<span
+				className={
+					'memorial-plugin-settings__label' +
+					( def.hideLabel ? ' screen-reader-text' : '' )
+				}
+			>
 				{ def.label }
 			</span>
 			<Flex justify="flex-start" align="center">
@@ -101,7 +106,12 @@ function OrderEdit( { def, value, onChange } ) {
 	};
 	return (
 		<div>
-			<span className="memorial-plugin-settings__label">
+			<span
+				className={
+					'memorial-plugin-settings__label' +
+					( def.hideLabel ? ' screen-reader-text' : '' )
+				}
+			>
 				{ def.label }
 			</span>
 			<Help text={ def.help } />
@@ -141,7 +151,12 @@ function RepeaterEdit( { def, value, onChange } ) {
 	};
 	return (
 		<div className="memorial-plugin-settings__repeater">
-			<span className="memorial-plugin-settings__label">
+			<span
+				className={
+					'memorial-plugin-settings__label' +
+					( def.hideLabel ? ' screen-reader-text' : '' )
+				}
+			>
 				{ def.label }
 			</span>
 			<Help text={ def.help } />
@@ -204,7 +219,11 @@ function RepeaterEdit( { def, value, onChange } ) {
 function GroupEdit( { def, value, onChange } ) {
 	return (
 		<fieldset className="memorial-plugin-settings__group">
-			<legend>{ def.label }</legend>
+			<legend
+				className={ def.hideLabel ? 'screen-reader-text' : undefined }
+			>
+				{ def.label }
+			</legend>
 			<Help text={ def.help } />
 			<FieldsForm
 				defs={ def.fields || [] }
@@ -222,6 +241,7 @@ function ControlFor( { def, value, onChange } ) {
 		__next40pxDefaultSize: true,
 		__nextHasNoMarginBottom: true,
 		label: def.label,
+		hideLabelFromVision: !! def.hideLabel,
 		help: def.help,
 	};
 	switch ( def.type ) {
@@ -289,6 +309,7 @@ function ControlFor( { def, value, onChange } ) {
 				<TextareaControl
 					__nextHasNoMarginBottom
 					label={ def.label }
+					hideLabelFromVision={ !! def.hideLabel }
 					help={ def.help }
 					placeholder={ def.placeholder }
 					rows={ def.rows || ( def.type === 'map' ? 2 : 3 ) }
@@ -493,7 +514,7 @@ function App( { option } ) {
 								</>
 							) : (
 								<FieldsForm
-									defs={ [ { ...def, label: '' } ] }
+									defs={ [ { ...def, hideLabel: true } ] }
 									data={ value }
 									onChange={ ( edits ) => {
 										setValue( ( v ) => ( {

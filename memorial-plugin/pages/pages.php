@@ -11,43 +11,7 @@
  */
 defined('ABSPATH') || exit;
 
-/* ---------- Блок в редакторе страницы ---------- */
-add_action('add_meta_boxes_page', function () {
-    add_meta_box('mem_products', 'Товары на странице', 'memorial_plugin_products_box', 'page', 'side', 'high');
-});
-
-function memorial_plugin_products_box($post) {
-    wp_nonce_field('mem_products', 'mem_products_nonce');
-    $cur = get_post_meta($post->ID, '_mem_products', true);
-    $terms = get_terms(['taxonomy' => 'mem_cat', 'hide_empty' => false, 'orderby' => 'name']);
-    ?>
-    <p><select name="mem_products" style="width:100%">
-      <option value="">— не показывать —</option>
-      <option value="all" <?php selected($cur, 'all'); ?>>Все категории (плитками)</option>
-      <?php if (!is_wp_error($terms)) memorial_plugin_products_options($terms, 0, 0, $cur); ?>
-    </select></p>
-    <p class="description">Товары появятся под текстом страницы. Чтобы часть текста была над товарами, поставьте в тексте блок «Далее» (Read More): что до него — сверху, что после — снизу.</p>
-    <p class="description">Сами товары добавляются в «Каталог → Добавить товар».</p>
-    <?php
-}
-
-function memorial_plugin_products_options($terms, $parent, $depth, $cur) {
-    foreach ($terms as $t) {
-        if ((int) $t->parent !== $parent) continue;
-        printf('<option value="%d"%s>%s%s</option>', $t->term_id, selected((string) $cur, (string) $t->term_id, false),
-            str_repeat('— ', $depth), esc_html($t->name));
-        memorial_plugin_products_options($terms, $t->term_id, $depth + 1, $cur);
-    }
-}
-
-add_action('save_post_page', function ($id) {
-    if (!isset($_POST['mem_products_nonce']) || !wp_verify_nonce($_POST['mem_products_nonce'], 'mem_products')) return;
-    if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || !current_user_can('edit_page', $id)) return;
-    $v = sanitize_key($_POST['mem_products'] ?? '');
-    $v = $v === 'all' ? 'all' : (string) absint($v);
-    if ($v && $v !== '0') update_post_meta($id, '_mem_products', $v);
-    else delete_post_meta($id, '_mem_products');
-});
+/* Выбор категории — в боковой панели редактора страницы (admin/editor-meta.php, поле _mem_products) */
 
 /* Колонка в списке страниц: видно, где какие товары */
 add_filter('manage_page_posts_columns', function ($c) {

@@ -234,3 +234,34 @@ function memorial_plugin_type_page_content($type_id) {
     $content = memorial_plugin_type_page_content_raw($type_id);
     return function_exists('memorial_plugin_convert_content') ? memorial_plugin_convert_content($content) : $content;
 }
+
+/* Характеристики типа (пока экран «Типы и категории» на старом скрипте) */
+add_action('wp_ajax_mem_cm_fields', function () {
+    memorial_plugin_cm_check('manage_categories');
+    $type = absint($_POST['type'] ?? 0);
+    if (!$type || memorial_plugin_type_root($type) !== $type) wp_send_json_error('Нет типа');
+    $fields = array_values(array_filter(array_map('memorial_plugin_clean_field', (array) json_decode(wp_unslash((string) ($_POST['fields'] ?? '[]')), true))));
+    update_term_meta($type, 'mem_fields', wp_json_encode($fields, JSON_UNESCAPED_UNICODE));
+    foreach ((array) json_decode(wp_unslash((string) ($_POST['renames'] ?? '{}')), true) as $old => $new) {
+        $old = sanitize_text_field($old); $new = sanitize_text_field($new);
+        if ($old === '' || $new === '' || $old === $new) continue;
+        foreach (get_posts(['post_type' => 'mem_product', 'post_status' => 'any', 'posts_per_page' => -1, 'fields' => 'ids',
+                            'tax_query' => [['taxonomy' => 'mem_cat', 'terms' => $type, 'include_children' => true]]]) as $pid) {
+            $m = memorial_plugin_product_spec_map($pid);
+            if (isset($m[$old])) { memorial_plugin_set_spec($pid, $old, ''); memorial_plugin_set_spec($pid, $new, $m[$old]); }
+        }
+    }
+    wp_send_json_success(memorial_plugin_types_data($type));
+});
+
+/* Новая категория типа / новый тип */
+add_action('wp_ajax_mem_cm_term', function () {
+    memorial_plugin_cm_check('manage_categories');
+    $name = trim(sanitize_text_field(wp_unslash($_POST['name'] ?? '')));
+    $parent = absint($_POST['parent'] ?? 0);
+    if ($name === '') wp_send_json_error('Пустое название');
+    if ($parent && memorial_plugin_type_root($parent) !== $parent) wp_send_json_error('Нет типа');
+    $r = wp_insert_term($name, 'mem_cat', ['parent' => $parent]);
+    if (is_wp_error($r)) wp_send_json_error($r->get_error_message());
+    wp_send_json_success(['id' => (int) $r['term_id'], 'name' => $name, 'url' => admin_url('edit.php?post_type=mem_product&page=mem-types&type=' . (int) $r['term_id'])]);
+});

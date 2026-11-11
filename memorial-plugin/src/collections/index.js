@@ -26,6 +26,7 @@ import {
 	filterSortAndPaginate,
 } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
+import BooleanEdit from '../shared/boolean-edit';
 
 const API = '/memorial-plugin/v1/collections/';
 
@@ -109,6 +110,7 @@ function toField( def ) {
 				],
 				filterBy: { operators: [ 'is' ] },
 				render: ( { item } ) => ( item[ def.id ] ? '✓' : '—' ),
+				Edit: BooleanEdit,
 			};
 		case 'select':
 			return {

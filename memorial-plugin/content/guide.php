@@ -15,30 +15,7 @@
  */
 defined('ABSPATH') || exit;
 
-/* ---------- Поле в редакторе страницы ---------- */
-add_action('init', function () {
-    foreach (['_mem_q', '_mem_qa'] as $k) {
-        register_post_meta('page', $k, ['type' => 'string', 'single' => true, 'show_in_rest' => false,
-                                        'auth_callback' => fn() => current_user_can('edit_pages')]);
-    }
-});
-add_action('add_meta_boxes_page', function () {
-    add_meta_box('mem-guide-q', 'Полезно знать: какой вопрос решает страница', function ($post) {
-        wp_nonce_field('mem_guide_q', 'mem_guide_q_nonce');
-        echo '<p><label for="mem-q"><b>Вопрос</b> — как его задал бы человек</label>'
-           . '<input type="text" id="mem-q" name="mem_q" class="widefat" value="' . esc_attr(get_post_meta($post->ID, '_mem_q', true)) . '" placeholder="Например: Как получить пособие на погребение?"></p>'
-           . '<p><label for="mem-qa"><b>Короткий ответ</b> — 1–2 предложения</label>'
-           . '<textarea id="mem-qa" name="mem_qa" class="widefat" rows="3" placeholder="Например: Пособие получает тот, кто организовал похороны. Нужны свидетельство о смерти и паспорт.">'
-           . esc_textarea(get_post_meta($post->ID, '_mem_qa', true)) . '</textarea></p>'
-           . '<p class="description">Показывается на карточке страницы в «Полезно знать» и в поиске. Пусто — название страницы и первый абзац.</p>';
-    }, 'page', 'normal', 'default');
-});
-add_action('save_post_page', function ($id) {
-    if (!isset($_POST['mem_guide_q_nonce']) || !wp_verify_nonce($_POST['mem_guide_q_nonce'], 'mem_guide_q') || !current_user_can('edit_page', $id)) return;
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-    update_post_meta($id, '_mem_q', sanitize_text_field(wp_unslash($_POST['mem_q'] ?? '')));
-    update_post_meta($id, '_mem_qa', sanitize_textarea_field(wp_unslash($_POST['mem_qa'] ?? '')));
-});
+/* Вопрос и короткий ответ (_mem_q, _mem_qa) — в боковой панели редактора страницы (admin/editor-meta.php) */
 
 /* ---------- Данные страницы для карточки ---------- */
 

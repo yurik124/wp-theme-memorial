@@ -175,6 +175,7 @@ require MEMORIAL_PLUGIN_DIR . '/seo/seo-registry.php';
 require MEMORIAL_PLUGIN_DIR . '/admin/convert.php';
 require MEMORIAL_PLUGIN_DIR . '/admin/settings-form.php';
 require MEMORIAL_PLUGIN_DIR . '/admin/collections.php';
+require MEMORIAL_PLUGIN_DIR . '/admin/editor-meta.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/floating/floating.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/home.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/home-template.php';
