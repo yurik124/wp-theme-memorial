@@ -18,7 +18,7 @@ import { store, getElement, getConfig } from '@wordpress/interactivity';
 // Texts of the blocks, translated on the server (core/assets.php, memorial_plugin_view_i18n).
 const cfg = getConfig( 'memorial-plugin' ) || {};
 const T = cfg.i18n || {};
-const t = ( key, ...args ) => {
+const txt = ( key, ...args ) => {
 	let i = 0;
 	return String( T[ key ] || key )
 		.replace( /%(\d)\$[sd]/g, ( m, n ) => args[ n - 1 ] )
@@ -479,7 +479,7 @@ store( 'memorial-plugin/faq', {
 				const more = d.createElement( 'button' );
 				more.type = 'button';
 				more.className = 'chip mfaq__more-t';
-				more.textContent = t( 'moreTopics', chips.length - 6 );
+				more.textContent = txt( 'moreTopics', chips.length - 6 );
 				more.addEventListener( 'click', () => {
 					toc.classList.remove( 'is-cut' );
 					more.remove();
@@ -530,19 +530,19 @@ store( 'memorial-plugin/faq', {
 						return (
 							tn( 'questionsWithAnswers', items.length ) +
 							'. ' +
-							t( 'startTyping' )
+							txt( 'startTyping' )
 						);
 					}
 					return found.length
 						? sHtml(
-								t(
+								txt(
 									'foundBelow',
 									val,
 									tn( 'questions', found.length )
 								)
 							) +
 								' <button type="button" class="msearch__reset">' +
-								sHtml( t( 'showAll' ) ) +
+								sHtml( txt( 'showAll' ) ) +
 								'</button>'
 						: '';
 				},
@@ -606,11 +606,11 @@ store( 'memorial-plugin/guide', {
 						other ? tn( 'answersElsewhere', other ) : '',
 					]
 						.filter( Boolean )
-						.join( ' ' + t( 'and' ) + ' ' );
+						.join( ' ' + txt( 'and' ) + ' ' );
 					return (
-						sHtml( t( 'guideFound', val, what ) ) +
+						sHtml( txt( 'guideFound', val, what ) ) +
 						' <button type="button" class="msearch__reset">' +
-						sHtml( t( 'showAll' ) ) +
+						sHtml( txt( 'showAll' ) ) +
 						'</button>'
 					);
 				},
@@ -660,7 +660,7 @@ function tabs( box, onSelect ) {
 function toggleMore( button ) {
 	const open = button.previousElementSibling.classList.toggle( 'is-open' );
 	button.setAttribute( 'aria-expanded', String( open ) );
-	button.textContent = open ? t( 'collapse' ) : t( 'readMore' );
+	button.textContent = open ? txt( 'collapse' ) : txt( 'readMore' );
 }
 
 /* ---------- Reviews: branch tabs and third-party widgets ---------- */
@@ -778,12 +778,12 @@ store( 'memorial-plugin/rewio', {
 									me && st.dir === 'asc' ? '↑' : '↓';
 								if ( b.dataset.rwoSort === 'd' ) {
 									b.title = desc
-										? t( 'newestFirst' )
-										: t( 'sortByDate' );
+										? txt( 'newestFirst' )
+										: txt( 'sortByDate' );
 								} else {
 									b.title = desc
-										? t( 'highestFirst' )
-										: t( 'sortByRating' );
+										? txt( 'highestFirst' )
+										: txt( 'sortByRating' );
 								}
 							} );
 						apply();
@@ -807,7 +807,7 @@ store( 'memorial-plugin/rewio', {
 						if ( note ) {
 							note.innerHTML = st.src
 								? sHtml(
-										t(
+										txt(
 											'reviewsOf',
 											p.querySelector(
 												'span:not(.rw-ico)'
@@ -815,7 +815,7 @@ store( 'memorial-plugin/rewio', {
 										)
 									) +
 									' · <button type="button" class="rwo__all">' +
-									sHtml( t( 'showAllLower' ) ) +
+									sHtml( txt( 'showAllLower' ) ) +
 									'</button>'
 								: '';
 						}
@@ -926,7 +926,7 @@ function sectionBar( bar ) {
 		b.tabIndex = -1;
 		b.setAttribute(
 			'aria-label',
-			s === 'l' ? t( 'scrollLeft' ) : t( 'scrollRight' )
+			s === 'l' ? txt( 'scrollLeft' ) : txt( 'scrollRight' )
 		);
 		b.textContent = s === 'l' ? '‹' : '›';
 		b.addEventListener( 'click', () =>
@@ -1072,8 +1072,8 @@ function showMore( g ) {
 		btn.hidden = rest <= 0;
 		btn.textContent =
 			rest > step
-				? t( 'showMoreOf', Math.min( step, rest ), rest )
-				: t( 'showMore', Math.min( step, rest ) );
+				? txt( 'showMoreOf', Math.min( step, rest ), rest )
+				: txt( 'showMore', Math.min( step, rest ) );
 	};
 	btn.addEventListener( 'click', () => {
 		const firstNew = g.children[ shown ];
