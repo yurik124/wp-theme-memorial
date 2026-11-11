@@ -10,11 +10,9 @@ const PHASE = process.env.PHASE || 'block';
 const DIR = ( process.env.PROBE_DIR || '../../probe' ) + '/' + PHASE;
 fs.mkdirSync( DIR, { recursive: true } );
 const PAGES = JSON.parse( fs.readFileSync( process.env.PAGES_FILE, 'utf8' ) );
-const LOG = {};
-const log = ( k, v ) => {
-	LOG[ k ] = v;
-	fs.writeFileSync( DIR + '/log.json', JSON.stringify( LOG, null, 2 ) );
-};
+// отдельный файл на каждую запись: после упавшего теста Playwright перезапускает процесс
+const log = ( k, v ) =>
+	fs.writeFileSync( `${ DIR }/log-${ k }.json`, JSON.stringify( v, null, 2 ) );
 const shot = ( page, name, opts = {} ) =>
 	page.screenshot( { path: `${ DIR }/${ name }.png`, ...opts } );
 const errorsOf = ( page ) => {
@@ -55,6 +53,17 @@ test.describe( 'телефон', () => {
 				navVisibility: nav && getComputedStyle( nav ).visibility,
 				bodyClass: document.body.className,
 				scripts: [ ...document.scripts ].map( ( s ) => s.src ).filter( Boolean ),
+				header: document.getElementById( 'header' )?.outerHTML.slice( 0, 12000 ),
+				items: [ ...( nav?.querySelectorAll( 'li' ) || [] ) ].slice( 0, 12 ).map( ( li ) => {
+					const cs = getComputedStyle( li );
+					return [ li.className, li.getBoundingClientRect().height, cs.display, cs.visibility, cs.opacity ];
+				} ),
+				ul: ( () => {
+					const ul = nav?.querySelector( 'ul' );
+					if ( ! ul ) return null;
+					const cs = getComputedStyle( ul );
+					return [ ul.className, ul.getBoundingClientRect().toJSON(), cs.display, cs.visibility, ul.parentElement.className, getComputedStyle( ul.parentElement ).display ];
+				} )(),
 			};
 		} );
 		await shot( page, 'phone-burger-open' );
@@ -76,7 +85,12 @@ test.describe( 'компьютер', () => {
 		await page.goto( '/', { waitUntil: 'networkidle' } );
 		await page.addStyleTag( { content: NO_FLOAT } );
 		await shot( page, 'pc-home', { clip: { x: 0, y: 0, width: 1280, height: 400 } } );
-		const item = page.locator( '#header a, header a' ).filter( { hasText: /^\s*Кладбища/ } ).first();
+		log( 'pc-header', await page.evaluate( () => ( {
+			header: document.getElementById( 'header' )?.className,
+			html: document.getElementById( 'header' )?.outerHTML.slice( 0, 12000 ),
+		} ) ) );
+		const item = page.locator( '#header a, header a' ).filter( { hasText: /Кладбищ/ } ).first();
+		await item.waitFor( { state: 'attached', timeout: 5000 } ).catch( () => {} );
 		const info = await item.evaluate( ( a ) => ( {
 			href: a.getAttribute( 'href' ),
 			li: a.closest( 'li' )?.outerHTML.slice( 0, 1500 ),

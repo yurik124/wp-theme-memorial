@@ -80,7 +80,9 @@ jobs:
                       walk(r, l)
                   else:
                       files.append((r, l))
-          walk(site + '/uploads', 'uploads')
+          # картинки для разбора меню, редактора и админки не нужны — берём только файлы до 2 уровня (логотипы, иконки)
+          if os.environ.get('PROBE_UPLOADS') == '1':
+              walk(site + '/uploads', 'uploads')
           print(len(files), 'файлов')
           import threading, queue
           q = queue.Queue()
