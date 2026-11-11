@@ -67,18 +67,26 @@ if ( data.can.export ) {
 	commands.push( {
 		name: 'memorial-plugin/export-catalog',
 		label: __( 'Export the catalog to CSV', 'memorial-plugin' ),
-		searchLabel: __( 'Export the catalog to CSV products prices Excel', 'memorial-plugin' ),
+		searchLabel: __(
+			'Export the catalog to CSV products prices Excel',
+			'memorial-plugin'
+		),
 		icon: downloadIcon,
 		callback: async ( { close } ) => {
 			close();
 			try {
-				const res = await runAbility( 'memorial-plugin/export-catalog' );
+				const res = await runAbility(
+					'memorial-plugin/export-catalog'
+				);
 				download( res.filename, res.csv );
 				notice(
 					'success',
 					sprintf(
 						/* translators: %d: number of products. */
-						__( 'Catalog exported: %d products.', 'memorial-plugin' ),
+						__(
+							'Catalog exported: %d products.',
+							'memorial-plugin'
+						),
 						res.count
 					)
 				);
@@ -93,7 +101,10 @@ if ( data.can.leads ) {
 	commands.push( {
 		name: 'memorial-plugin/new-leads',
 		label: __( 'Who to call back', 'memorial-plugin' ),
-		searchLabel: __( 'Who to call back new call back requests leads', 'memorial-plugin' ),
+		searchLabel: __(
+			'Who to call back new call back requests leads',
+			'memorial-plugin'
+		),
 		icon: mobile,
 		callback: async ( { close } ) => {
 			close();
@@ -107,10 +118,16 @@ if ( data.can.leads ) {
 					list2.length
 						? sprintf(
 								/* translators: %d: number of requests. */
-								__( 'Not called back yet: %d. Opening the list…', 'memorial-plugin' ),
+								__(
+									'Not called back yet: %d. Opening the list…',
+									'memorial-plugin'
+								),
 								list2.length
-						  )
-						: __( 'Everyone has been called back.', 'memorial-plugin' )
+							)
+						: __(
+								'Everyone has been called back.',
+								'memorial-plugin'
+							)
 				);
 				if ( list2.length && data.leadsUrl ) {
 					window.setTimeout( go( data.leadsUrl ), 800 );
@@ -141,22 +158,40 @@ if ( data.can.convert ) {
 		}
 		dispatch( commandsStore ).registerCommand( {
 			name: 'memorial-plugin/convert-this',
-			label: __( 'Convert the shortcodes of this page to blocks', 'memorial-plugin' ),
+			label: __(
+				'Convert the shortcodes of this page to blocks',
+				'memorial-plugin'
+			),
 			icon: blockDefault,
 			callback: async ( { close } ) => {
 				close();
 				if ( editor.isEditedPostDirty() ) {
-					notice( 'warning', __( 'Save the page first.', 'memorial-plugin' ) );
+					notice(
+						'warning',
+						__( 'Save the page first.', 'memorial-plugin' )
+					);
 					return;
 				}
 				try {
-					const [ res ] = await runAbility( 'memorial-plugin/convert-content', {
-						ids: [ id ],
-					} );
+					const [ res ] = await runAbility(
+						'memorial-plugin/convert-content',
+						{
+							ids: [ id ],
+						}
+					);
 					if ( ! res?.ok ) {
-						throw new Error( res?.error || __( 'Could not convert.', 'memorial-plugin' ) );
+						throw new Error(
+							res?.error ||
+								__( 'Could not convert.', 'memorial-plugin' )
+						);
 					}
-					notice( 'success', __( 'Converted. Reloading the editor…', 'memorial-plugin' ) );
+					notice(
+						'success',
+						__(
+							'Converted. Reloading the editor…',
+							'memorial-plugin'
+						)
+					);
 					window.setTimeout( () => document.location.reload(), 800 );
 				} catch ( e ) {
 					notice( 'error', e.message );

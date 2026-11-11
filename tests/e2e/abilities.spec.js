@@ -7,9 +7,13 @@ const { login, collectJsErrors } = require( './helpers' );
 const api = ( page, options ) =>
 	page.evaluate( ( o ) => window.wp.apiFetch( o ), options );
 
-test( 'способности плагина зарегистрированы и выполняются', async ( { page } ) => {
+test( 'способности плагина зарегистрированы и выполняются', async ( {
+	page,
+} ) => {
 	await login( page );
-	await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products' );
+	await page.goto(
+		'/wp-admin/edit.php?post_type=mem_product&page=mem-products'
+	);
 	const list = await api( page, {
 		path: '/wp-abilities/v1/abilities?category=memorial&per_page=100',
 	} );
@@ -55,19 +59,25 @@ test( 'способности плагина зарегистрированы и
 	const [ changed ] = await api( page, {
 		path: '/wp-abilities/v1/abilities/memorial-plugin/change-prices/run',
 		method: 'POST',
-		data: { input: { ids: [ product.id ], mode: 'pct', value: 10, round: 10 } },
+		data: {
+			input: { ids: [ product.id ], mode: 'pct', value: 10, round: 10 },
+		},
 	} );
 	expect( changed.price ).toBe( 1100 );
 } );
 
-test( 'способности проверяют права: без входа — отказ', async ( { request } ) => {
+test( 'способности проверяют права: без входа — отказ', async ( {
+	request,
+} ) => {
 	const res = await request.get(
 		'/wp-json/wp-abilities/v1/abilities/memorial-plugin/list-leads/run'
 	);
 	expect( res.status() ).toBeGreaterThanOrEqual( 401 );
 } );
 
-test( 'палитра команд: экран плагина открывается по Ctrl+K', async ( { page } ) => {
+test( 'палитра команд: экран плагина открывается по Ctrl+K', async ( {
+	page,
+} ) => {
 	const errors = collectJsErrors( page );
 	await login( page );
 	await page.goto( '/wp-admin/index.php' );
@@ -78,9 +88,15 @@ test( 'палитра команд: экран плагина открывает
 			.some( ( c ) => c.name === 'memorial-plugin/open-products' )
 	);
 	await page.keyboard.press( 'ControlOrMeta+k' );
-	const box = page.getByRole( 'combobox' ).or( page.getByPlaceholder( /search|поиск/i ) ).first();
+	const box = page
+		.getByRole( 'combobox' )
+		.or( page.getByPlaceholder( /search|поиск/i ) )
+		.first();
 	await box.fill( 'Types and categories' );
-	await page.getByRole( 'option', { name: /Types and categories/ } ).first().click();
+	await page
+		.getByRole( 'option', { name: /Types and categories/ } )
+		.first()
+		.click();
 	await expect( page ).toHaveURL( /page=mem-types/ );
 	expect( errors ).toEqual( [] );
 } );

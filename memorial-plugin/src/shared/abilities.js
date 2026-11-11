@@ -54,7 +54,9 @@ export async function runAbility( name, input = {} ) {
 		return apiFetch( { path: run, method, data: { input } } );
 	}
 	return apiFetch( {
-		path: Object.keys( input ).length ? addQueryArgs( run, { input } ) : run,
+		path: Object.keys( input ).length
+			? addQueryArgs( run, { input } )
+			: run,
 		method,
 	} );
 }
