@@ -167,19 +167,9 @@ add_action('wp_footer', function () {
     if (memorial_plugin_tracking_on() && trim($c['code'] ?? '')) {
         echo '<template id="mem-after-consent">' . $c['code'] . '</template>' . "\n"; // код вставляет только администратор
     }
-    if (memorial_plugin_banner_on()) : $notice = memorial_plugin_consent_mode() === 'notice'; ?>
-<div class="consent<?php echo $notice ? ' consent--notice' : ''; ?>" id="consent" role="region" aria-label="Cookie" hidden>
-  <p><?php echo memorial_plugin_consent_text(); ?></p>
-  <div class="consent__btns">
-    <?php if ($notice) : ?>
-    <button class="btn btn--gold btn--sm" type="button" data-consent="ok">Понятно</button>
-    <?php else : ?>
-    <button class="btn btn--gold btn--sm" type="button" data-consent="yes">Принять</button>
-    <button class="btn btn--line btn--sm" type="button" data-consent="no">Отклонить</button>
-    <?php endif; ?>
-  </div>
-</div>
-<?php endif; ?>
+    // плашка: в блоковой теме — блок memorial-plugin/cookie-banner в подвале (Block Hooks), в классической — здесь
+    if (!wp_is_block_theme()) echo memorial_plugin_consent_banner_html(); // phpcs:ignore WordPress.Security.EscapeOutput -- разметка собрана с экранированием.
+    ?>
 <script>
 (function () {
   var T = window.memTrack, KEY = 'mem_consent_v1', box = document.getElementById('consent');
@@ -202,6 +192,19 @@ add_action('wp_footer', function () {
       } else document.body.appendChild(n.cloneNode(true));
     });
   }
+  // Отзыв согласия: счётчик больше ничего не отправляет, cookie Метрики (_ym*) удаляются.
+  // Уже отправленные данные отозвать нельзя — это написано в политике cookie.
+  function revoke() {
+    if (T.id) window['disableYaCounter' + T.id] = true;
+    var host = location.hostname.split('.'), doms = [''];
+    for (var i = 0; i < host.length - 1; i++) doms.push('; domain=.' + host.slice(i).join('.'));
+    document.cookie.split(';').forEach(function (c) {
+      var name = c.split('=')[0].trim();
+      if (name.indexOf('_ym') !== 0) return;
+      doms.forEach(function (d) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + d; });
+    });
+    document.dispatchEvent(new Event('mem:consent-revoked'));
+  }
   function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
   function log(v) { try { navigator.sendBeacon('<?php echo esc_url_raw(rest_url('mem/v1/consent')); ?>', new Blob([JSON.stringify({ choice: v })], { type: 'application/json' })); } catch (e) {} }
@@ -212,8 +215,9 @@ add_action('wp_footer', function () {
   else if (T.need && get() !== 'yes' && get() !== 'no') show(true);
   if (box) box.addEventListener('click', function (e) {
     var b = e.target.closest('[data-consent]'); if (!b) return;
-    var v = b.getAttribute('data-consent'); set(v); if (v !== 'ok') log(v); show(false);
+    var was = get(), v = b.getAttribute('data-consent'); set(v); if (v !== 'ok') log(v); show(false);
     if (v === 'yes') { load(); document.dispatchEvent(new Event('mem:consent')); }
+    if (v === 'no' && was === 'yes') revoke();
   });
   // «Настройки cookie» в подвале — передумать
   document.addEventListener('click', function (e) {
@@ -224,6 +228,28 @@ add_action('wp_footer', function () {
 </script>
 <?php
 }, 20);
+
+/** Плашка о cookie (один раз на странице; пусто, если плашка не нужна) */
+function memorial_plugin_consent_banner_html() {
+    static $done = false;
+    if ($done || !memorial_plugin_banner_on()) return '';
+    $done = true;
+    $notice = memorial_plugin_consent_mode() === 'notice';
+    ob_start(); ?>
+<div class="consent<?php echo $notice ? ' consent--notice' : ''; ?>" id="consent" role="region" aria-label="Cookie" hidden>
+  <p><?php echo memorial_plugin_consent_text(); ?></p>
+  <div class="consent__btns">
+    <?php if ($notice) : ?>
+    <button class="btn btn--gold btn--sm" type="button" data-consent="ok">Понятно</button>
+    <?php else : ?>
+    <button class="btn btn--gold btn--sm" type="button" data-consent="yes">Принять</button>
+    <button class="btn btn--line btn--sm" type="button" data-consent="no">Отклонить</button>
+    <?php endif; ?>
+  </div>
+</div>
+<?php
+    return (string) ob_get_clean();
+}
 
 /* Журнал согласий: сколько раз в день нажали «Принять» / «Отклонить» (без персональных данных) */
 add_action('rest_api_init', function () {

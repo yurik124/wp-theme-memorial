@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Memorial Plugin
  * Description: Site features for Memorial funeral services: catalog, prices, reviews, works, leads, settings, SEO, analytics. Design lives in the Memorial Modern theme.
- * Version: 2.0.0-alpha.1
+ * Version: 2.0.0-alpha.3
  * Requires at least: 7.1
  * Requires PHP: 8.1
  * Author: Memorial
@@ -21,7 +21,7 @@ if (memorial_plugin_legacy_active()) {
 }
 add_action('wp_loaded', 'memorial_plugin_after_switch');
 
-define('MEMORIAL_PLUGIN_VER', '2.0.0-alpha.1');
+define('MEMORIAL_PLUGIN_VER', '2.0.0-alpha.3');
 define('MEMORIAL_PLUGIN_FILE', __FILE__);
 define('MEMORIAL_PLUGIN_DIR', __DIR__);                          // без «/» в конце: MEMORIAL_PLUGIN_DIR . '/assets/…'
 define('MEMORIAL_PLUGIN_URL', untrailingslashit(plugins_url('', __FILE__)));
@@ -31,12 +31,13 @@ function memorial_plugin_path($rel) {
     return MEMORIAL_PLUGIN_DIR . '/' . ltrim($rel, '/');
 }
 
-/** Сжатая копия (.min.css / .min.js), если она есть и не старше исходника (устаревшая пересоздаётся) */
+/** Сжатая копия (.min.css / .min.js), если она есть и не старше исходника (копии собирает tools/minify.php) */
 function memorial_plugin_asset($path) {
     if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) return $path;
     $min = preg_replace('/\.(css|js)$/', '.min.$1', $path);
-    // копия устарела — пересоздаётся сама (speed/auto-minify.php)
-    return memorial_plugin_min_refresh(MEMORIAL_PLUGIN_DIR . $path, MEMORIAL_PLUGIN_DIR . $min) ? $min : $path;
+    $src = MEMORIAL_PLUGIN_DIR . $path;
+    $cpy = MEMORIAL_PLUGIN_DIR . $min;
+    return is_file($cpy) && filemtime($cpy) + 300 >= filemtime($src) ? $min : $path;
 }
 
 /** Шаблон блока: сначала из темы (template-parts/{name}.php — дизайн можно поменять в теме), иначе — из плагина (templates/) */
@@ -48,7 +49,7 @@ function memorial_plugin_part($name, $args = []) {
 
 /**
  * Отключаемые функции: ключ => [название, описание, файлы, шорткоды (на страницах вместо них — пусто), зависит от].
- * Остальное (каталог, цены, контакты, документы, SEO-основа, скорость) — основа сайта, выключить нельзя.
+ * Остальное (каталог, цены, контакты, документы, SEO-основа) — основа сайта, выключить нельзя.
  */
 function memorial_plugin_optional() {
     return [
@@ -145,14 +146,8 @@ $memorial_plugin_modules = [
     'places/places.php',
     // справка в админке
     'admin/help.php',
-    // скорость
-    'speed/speed.php',
-    'speed/page-cache.php',
-    'speed/shortcode-cache.php',
-    'speed/minify.php',
-    'speed/relative-urls.php',
-    'speed/auto-minify.php',
-    'speed/images.php',
+    // уборка после удалённых модулей скорости (этап 3)
+    'core/speed-removed.php',
     // стили и скрипты блоков на сайте
     'core/assets.php',
 ];
@@ -169,10 +164,18 @@ if (is_readable(MEMORIAL_PLUGIN_DIR . '/vendor/autoload.php')) require MEMORIAL_
 if (is_admin() && defined('WP_DEBUG') && WP_DEBUG) require MEMORIAL_PLUGIN_DIR . '/admin/dataviews-check.php';
 
 /* Иконки: memorial_plugin_icon() спрашивает тему (фильтр memorial_plugin_icon_html), без неё — запасной набор плагина */
+require MEMORIAL_PLUGIN_DIR . '/core/icons-api.php';
 require MEMORIAL_PLUGIN_DIR . '/core/icons-fallback.php';
 
 /* Блоки-обёртки для блоковой темы (этап 2): шапка, подвал, главная, товар, каталог… */
 require MEMORIAL_PLUGIN_DIR . '/blocks/legacy/legacy.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/content/content-blocks.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/content/inline-values.php';
+require MEMORIAL_PLUGIN_DIR . '/seo/seo-registry.php';
+require MEMORIAL_PLUGIN_DIR . '/admin/convert.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/floating/floating.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/home/home.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/home/home-template.php';
 
 /* Включение: адреса товаров/работ заработают после пересборки ссылок (на следующем запросе, когда типы записей уже есть) */
 register_activation_hook(__FILE__, function () {
@@ -182,17 +185,14 @@ add_action('init', function () {
     if (get_option('mem_core_flush')) { delete_option('mem_core_flush'); flush_rewrite_rules(); }
 }, 99);
 
-/* Выключение: убираем расписание, свои правила .htaccess и кэш */
+/* Выключение: убираем расписание */
 register_deactivation_hook(__FILE__, function () {
-    foreach (['mem_rewio_cron', 'mem_rewio_cron_once', 'mem_logos_cron'] as $h) wp_clear_scheduled_hook($h);
-    if (function_exists('memorial_plugin_htaccess_sync')) memorial_plugin_htaccess_sync(false);
-    if (function_exists('memorial_plugin_cache_purge')) memorial_plugin_cache_purge();
+    foreach (['mem_rewio_cron', 'mem_rewio_cron_once', 'mem_logos_cron', 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron'] as $h) wp_clear_scheduled_hook($h);
 });
 
-/* После обновления плагина: один раз обновить отзывы Rewio (фото к отзывам скачаются на свой сайт) и очистить кэш */
+/* После обновления плагина: один раз обновить отзывы Rewio (фото к отзывам скачаются на свой сайт) */
 add_action('admin_init', function () {
     if (get_option('mem_core_ver') === MEMORIAL_PLUGIN_VER) return;
     update_option('mem_core_ver', MEMORIAL_PLUGIN_VER, false);
     if (has_action('memorial_plugin_rewio_cron_once') && !wp_next_scheduled('memorial_plugin_rewio_cron_once')) wp_schedule_single_event(time() + 30, 'memorial_plugin_rewio_cron_once');
-    if (function_exists('memorial_plugin_cache_purge')) memorial_plugin_cache_purge(true);
 });

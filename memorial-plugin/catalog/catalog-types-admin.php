@@ -172,7 +172,7 @@ function memorial_plugin_type_page_any($type_id) {
 }
 
 /** Содержимое страницы: вступление, призыв позвонить, каталог, как заказать, вопросы, призыв */
-function memorial_plugin_type_page_content($type_id) {
+function memorial_plugin_type_page_content_raw($type_id) {
     $t = get_term($type_id, 'mem_cat');
     $name = $t ? $t->name : 'Товары';
     $low = mb_strtolower($name);
@@ -228,3 +228,9 @@ add_action('wp_ajax_mem_ct_page', function () {
     $type = memorial_plugin_ct_type();
     memorial_plugin_type_page_create($type) ? wp_send_json_success(memorial_plugin_types_data($type)) : wp_send_json_error('Не удалось создать страницу');
 });
+
+/** Заготовка страницы раздела каталога. Шорткоды [mem_…] в заготовке сразу становятся блоками и значениями сайта (admin/convert.php). */
+function memorial_plugin_type_page_content($type_id) {
+    $content = memorial_plugin_type_page_content_raw($type_id);
+    return function_exists('memorial_plugin_convert_content') ? memorial_plugin_convert_content($content) : $content;
+}

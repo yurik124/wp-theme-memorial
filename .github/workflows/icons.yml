@@ -1,0 +1,67 @@
+name: Иконки → SVG Icon API
+
+# Проверка: можно ли перевести линейные иконки сайта в реестр иконок WordPress 7.1 (SVG Icon API).
+# Реестр 7.1 оставляет только <svg>/<path>/<polygon> без атрибутов обводки, поэтому обводка
+# переводится в контурные заливки Inkscape («Объект в контур» + «Обводку в контур»), а затем:
+#  - результат проверяется по списку разрешённого WordPress 7.1 (ничего не должно вырезаться);
+#  - до/после рисуются в 24, 48 и 192 px и сравниваются попиксельно, с наложением.
+# Отчёт, сравнения и готовые SVG — в ветку ci-icons (одним коммитом).
+# Запуск: push ветки icons/<что угодно>.
+
+on:
+  push:
+    branches: ['icons/**']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: icons
+  cancel-in-progress: true
+
+jobs:
+  icons:
+    name: Обводка → заливка, сравнение
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Inkscape и librsvg
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q inkscape librsvg2-bin python3-pil
+          inkscape --version
+
+      - name: Иконки как на сайте
+        run: php tools/icons/export-sources.php icons-src
+
+      - name: Inkscape — обводка в контур
+        run: |
+          mkdir -p icons-ink
+          for f in icons-src/*.svg; do
+            n=$(basename "$f")
+            inkscape "$f" --actions="select-all:all;object-to-path;select-all:all;object-stroke-to-path;export-plain-svg;export-filename:icons-ink/$n;export-do" 2>&1 | grep -v "^$" || true
+          done
+          ls icons-ink
+
+      - name: Проверка и сравнение
+        id: check
+        run: python3 tools/icons/check.py icons-src icons-ink out || echo "failed=1" >> "$GITHUB_OUTPUT"
+
+      - name: Отчёт в ветку ci-icons
+        if: always()
+        run: |
+          cp -r icons-ink out/inkscape-raw
+          cd out
+          git init -q -b ci-icons
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Иконки: ${{ github.ref_name }} (прогон ${{ github.run_id }})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-icons
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Итог
+        if: steps.check.outputs.failed == '1'
+        run: exit 1

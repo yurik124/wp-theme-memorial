@@ -5,14 +5,14 @@
  * Шаблоны — templates/*.html, части — parts/*.html (редактируются во «Внешний вид → Редактор»),
  * цвета, шрифты и размеры — theme.json и варианты стилей styles/*.json.
  * Данные сайта (телефоны, адреса, каталог, цены) выводят блоки плагина Memorial Plugin;
- * тема даёт им лавровую графику и иконки через их фильтры (inc/laurel.php, inc/icons.php).
+ * тема даёт им лавровую графику через фильтр (inc/laurel.php); иконки — из реестра иконок WordPress (плагин).
  *
  * @package memorial-theme
  */
 
 defined('ABSPATH') || exit;
 
-define('MEMORIAL_THEME_VER', '5.0.0-alpha.1');
+define('MEMORIAL_THEME_VER', '5.0.0-alpha.3');
 
 add_action('after_setup_theme', function () {
     add_theme_support('post-thumbnails');
@@ -25,12 +25,11 @@ add_action('after_setup_theme', function () {
 });
 
 /** Сжатая копия файла (.min.css / .min.js), если она есть и не старше исходника; иначе — сам файл.
-    С плагином устаревшая копия пересоздаётся сама. */
+    Копии собирает tools/minify.php. */
 function memorial_theme_asset($path) {
     $dir = get_template_directory();
     if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) return $path;
     $min = preg_replace('/\.(css|js)$/', '.min.$1', $path);
-    if (function_exists('memorial_plugin_min_refresh')) return memorial_plugin_min_refresh($dir . $path, $dir . $min) ? $min : $path;
     return is_file($dir . $min) && filemtime($dir . $min) + 300 >= filemtime($dir . $path) ? $min : $path;
 }
 
@@ -94,7 +93,6 @@ add_action('init', function () {
     register_block_pattern_category('memorial-theme', ['label' => 'Мемориал: оформление']);
 });
 
-require get_template_directory() . '/inc/icons.php';
 require get_template_directory() . '/inc/design.php';
 require get_template_directory() . '/inc/design-migrate.php';
 require get_template_directory() . '/inc/laurel.php';

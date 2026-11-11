@@ -52,3 +52,48 @@ test( '«Оформление» перенесено в стили сайта', 
 	expect( vars.primary.toLowerCase() ).toBe( '#56687a' );
 	expect( vars.fs ).toBe( '1.1' );
 } );
+
+test( 'плавающие блоки встают в подвал сами (Block Hooks)', async ( {
+	page,
+} ) => {
+	await page.goto( '/' );
+	// Телефонная панель и окно «Перезвоните мне» — один раз на странице, после подвала.
+	await expect( page.locator( '.mbar' ) ).toHaveCount( 1 );
+	await expect( page.locator( 'dialog#callback' ) ).toHaveCount( 1 );
+	await expect( page.locator( 'footer.footer ~ .mbar' ) ).toHaveCount( 1 );
+} );
+
+test( 'иконки — из реестра иконок WordPress (SVG Icon API)', async ( {
+	page,
+} ) => {
+	await page.goto( '/' );
+	const icon = page.locator( 'svg.ico--fill' ).first();
+	await expect( icon ).toBeAttached();
+	// Только залитые контуры: ни обводки, ни <use> на общий набор.
+	await expect( icon.locator( 'path[d]' ).first() ).toBeAttached();
+	await expect( page.locator( 'svg.ico use' ) ).toHaveCount( 0 );
+} );
+
+test( 'главная — разделы блоками, шаблон сохранён один раз', async ( {
+	page,
+} ) => {
+	await login( page );
+	// Перенос — при входе в админку; на этом экране есть wp.apiFetch.
+	await page.goto( '/wp-admin/admin.php?page=memorial-plugin-convert' );
+	const template = await page.evaluate( () =>
+		window.wp.apiFetch( {
+			path: '/wp/v2/templates/memorial-theme//front-page?context=edit',
+		} )
+	);
+	expect( template.source ).toBe( 'custom' );
+	expect( template.content.raw ).toContain(
+		'wp:memorial-plugin/phone-button'
+	);
+	expect( template.content.raw ).not.toContain( 'memorial-theme/home' );
+
+	await page.goto( '/' );
+	await expect( page.locator( 'section.hero h1' ) ).toBeVisible();
+	await expect( page.locator( '.hero__cta .btn--tel' ) ).toBeAttached();
+	await expect( page.locator( 'section#uslugi .svc' ) ).toBeAttached();
+	expect( await page.content() ).not.toMatch( PHP_ERROR );
+} );

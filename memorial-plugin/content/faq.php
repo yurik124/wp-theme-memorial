@@ -44,7 +44,7 @@ function memorial_plugin_faq_all() {
     }
     $out = [];
     foreach ($pages as $p) {
-        if (has_shortcode($p->post_content, 'mem_faq') || post_password_required($p)) continue;
+        if (memorial_plugin_has_content_block($p->post_content, 'mem_faq') || post_password_required($p)) continue;
         $qs = [];
         memorial_plugin_faq_from_blocks(parse_blocks($p->post_content), $qs);
         if ($qs) $out[] = ['id' => $p->ID, 'title' => get_the_title($p), 'url' => get_permalink($p), 'qs' => $qs, 'o' => $order[$p->ID] ?? 999];
@@ -96,7 +96,7 @@ add_shortcode('mem_faq', function ($atts) {
 
 /* Разметка FAQ для поисковиков на самой странице «Вопрос–ответ» */
 add_action('wp_head', function () {
-    if (!is_page() || !has_shortcode((string) get_queried_object()->post_content, 'mem_faq') || !function_exists('memorial_plugin_ld')) return;
+    if (!is_page() || !memorial_plugin_has_content_block((string) get_queried_object()->post_content, 'mem_faq') || !function_exists('memorial_plugin_ld')) return;
     $items = [];
     foreach (memorial_plugin_faq_all() as $g) {
         if ($g['id'] === get_queried_object_id()) continue;
