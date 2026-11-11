@@ -137,7 +137,8 @@ function memorial_plugin_settings_page_data( $opt ) {
 		'option' => $opt,
 		'title'  => (string) ( $p['h1'] ?? $p['title'] ),
 		'intro'  => wp_kses_post( (string) ( $p['intro'] ?? '' ) ),
-		'extra'  => wp_kses_post( memorial_plugin_settings_extra_html( $opt ) ),
+		// The extra panels (tabs, Rewio status) are printed by PHP next to the app (with their own scripts) — see the container.
+		'extra'  => has_action( 'memorial_plugin_admin_tabs' ) || has_action( 'memorial_plugin_admin_after_intro' ),
 		'fields' => memorial_plugin_settings_describe( call_user_func( $p['schema'] ) ),
 		'value'  => memorial_plugin_settings( $opt ),
 	);
@@ -199,6 +200,12 @@ function memorial_plugin_settings_container( $opt ) {
 		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
 		return;
 	}
+	// Panels of other modules (tabs, Rewio status and preview) come with their own styles and scripts, so they
+	// are printed here as is (only for administrators, by the plugin’s own code) and the app moves them under its header.
+	$extra = memorial_plugin_settings_extra_html( $opt );
+	if ( '' !== $extra ) {
+		echo '<div id="memorial-plugin-settings-extra" class="memorial-plugin-settings__extra" hidden>' . $extra . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup of the plugin’s own admin panels, escaped where it is built.
+	}
 	echo '<div id="memorial-plugin-settings" class="wrap memorial-plugin-admin" data-option="' . esc_attr( $opt ) . '"></div>';
 }
 
@@ -212,6 +219,7 @@ function memorial_plugin_settings_assets() {
 	}
 	$asset = require $asset_file;
 	wp_enqueue_media(); // Image fields.
+	wp_enqueue_script( 'jquery' ); // Scripts of the extra panels (Rewio).
 	wp_enqueue_script(
 		'memorial-plugin-settings',
 		MEMORIAL_PLUGIN_URL . '/build/settings/index.js',

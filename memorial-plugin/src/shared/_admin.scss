@@ -50,10 +50,13 @@ body:has(.memorial-plugin-admin) {
 		background: transparent;
 	}
 
+	// The header stays at the top while the page scrolls: an opaque background, so the content
+	// goes under it instead of showing through the title.
 	.admin-ui-navigable-region > [class*="__header"]:first-child {
+		z-index: 6;
 		padding: 16px 0 20px;
-		border-bottom: 0;
-		background: transparent;
+		border-bottom: 1px solid transparent;
+		background: $mp-paper;
 	}
 
 	[class*="__header-title"] {

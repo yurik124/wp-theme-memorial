@@ -12,6 +12,7 @@ import {
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
@@ -414,6 +415,7 @@ function App( { option } ) {
 	const [ dirty, setDirty ] = useState( false );
 	const [ busy, setBusy ] = useState( false );
 	const [ notice, setNotice ] = useState( null );
+	const extraRef = useRef( null );
 
 	useEffect( () => {
 		apiFetch( { path: `/memorial-plugin/v1/settings/${ option }` } )
@@ -425,6 +427,17 @@ function App( { option } ) {
 				setNotice( { status: 'error', text: e.message } )
 			);
 	}, [ option ] );
+
+	// Panels printed by PHP (tabs, Rewio status with its scripts) go under the page header.
+	useEffect( () => {
+		const extra = document.getElementById(
+			'memorial-plugin-settings-extra'
+		);
+		if ( page && extra && extraRef.current ) {
+			extraRef.current.appendChild( extra );
+			extra.hidden = false;
+		}
+	}, [ page ] );
 
 	// Leaving with unsaved changes — ask first.
 	useEffect( () => {
@@ -507,11 +520,7 @@ function App( { option } ) {
 						{ notice.text }
 					</Notice>
 				) }
-				{ page.extra && (
-					<RawHTML className="memorial-plugin-settings__extra">
-						{ page.extra }
-					</RawHTML>
-				) }
+				<div ref={ extraRef } />
 				{ page.fields.map( ( def ) => (
 					<Card
 						key={ def.id }

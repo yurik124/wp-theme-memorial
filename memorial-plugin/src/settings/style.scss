@@ -163,11 +163,27 @@
 		font-weight: 600;
 	}
 
+	// Panels of other modules printed by PHP (tabs of “Reviews”, Rewio status and preview).
 	&__extra {
-		padding: 16px 20px;
-		border: 1px solid #e6e2d8;
-		border-radius: 14px;
-		background: #fff;
+
+		.nav-tab-wrapper {
+			margin: 0 0 16px !important;
+		}
+
+		.mem-card {
+			margin: 0 0 16px;
+			padding: 16px 20px;
+			border: 1px solid #e6e2d8;
+			border-radius: 14px;
+			background: #fff;
+			box-shadow: 0 1px 2px rgba(31, 33, 28, 0.04), 0 6px 24px rgba(31, 33, 28, 0.05);
+		}
+
+		.mrw__prev table {
+			margin-top: 8px;
+			border-radius: 10px;
+			overflow: hidden;
+		}
 	}
 
 	&__row {

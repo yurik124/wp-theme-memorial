@@ -752,3 +752,7 @@ h1,h2,h3,.pkg h3,.cat h3,.svc__body h3,.card__title,.mcard__name,.fnav__title{ov
 .wp-block-image.hero__photo,.wp-block-image.feat__img{margin:0}
 .wp-block-image.hero__photo img{width:100%;height:100%;object-fit:cover}
 .wp-block-image.feat__img img{width:100%;height:100%;object-fit:cover}
+
+/* Подменю на компьютере: ширина по самому длинному пункту, длинный пункт переносится только если не влезает в 360px
+   (иначе ширина зависела от положения пункта в шапке и менялась от страницы к странице) */
+.header:not(.is-compact) .nav .wp-block-navigation__submenu-container{width:max-content;min-width:220px;max-width:min(360px,calc(100vw - 2rem))}
