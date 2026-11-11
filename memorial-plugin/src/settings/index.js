@@ -163,48 +163,65 @@ function RepeaterEdit( { def, value, onChange } ) {
 			<Help text={ def.help } />
 			{ rows.map( ( row, i ) => (
 				<div className="memorial-plugin-settings__row" key={ i }>
-					<Flex justify="space-between">
-						<strong>
-							{ ( def.collapse && row[ def.collapse ] ) ||
-								sprintf(
-									/* translators: %d: row number. */
-									__( 'Item %d', 'memorial-plugin' ),
-									i + 1
-								) }
-						</strong>
-						<Flex justify="flex-end">
-							<Button
-								size="small"
-								icon="arrow-up-alt2"
-								label={ __( 'Up', 'memorial-plugin' ) }
-								disabled={ i === 0 }
-								onClick={ () => move( i, -1 ) }
-							/>
-							<Button
-								size="small"
-								icon="arrow-down-alt2"
-								label={ __( 'Down', 'memorial-plugin' ) }
-								disabled={ i === rows.length - 1 }
-								onClick={ () => move( i, 1 ) }
-							/>
-							<Button
-								size="small"
-								icon="trash"
-								isDestructive
-								label={ __( 'Remove', 'memorial-plugin' ) }
-								onClick={ () =>
-									onChange(
-										rows.filter( ( r, j ) => j !== i )
-									)
+					<span
+						className="memorial-plugin-settings__num"
+						aria-hidden="true"
+					>
+						{ i + 1 }
+					</span>
+					<div className="memorial-plugin-settings__row-main">
+						{ def.collapse && row[ def.collapse ] && (
+							<strong className="memorial-plugin-settings__row-title">
+								{ row[ def.collapse ] }
+							</strong>
+						) }
+						<div className="memorial-plugin-settings__fields">
+							<FieldsForm
+								defs={ def.fields || [] }
+								data={ row || {} }
+								onChange={ ( edits ) =>
+									set( i, { ...row, ...edits } )
 								}
 							/>
-						</Flex>
-					</Flex>
-					<FieldsForm
-						defs={ def.fields || [] }
-						data={ row || {} }
-						onChange={ ( edits ) => set( i, { ...row, ...edits } ) }
-					/>
+						</div>
+					</div>
+					<div className="memorial-plugin-settings__row-actions">
+						<Button
+							size="small"
+							icon="arrow-up-alt2"
+							label={ sprintf(
+								/* translators: %d: row number. */
+								__( 'Move row %d up', 'memorial-plugin' ),
+								i + 1
+							) }
+							disabled={ i === 0 }
+							onClick={ () => move( i, -1 ) }
+						/>
+						<Button
+							size="small"
+							icon="arrow-down-alt2"
+							label={ sprintf(
+								/* translators: %d: row number. */
+								__( 'Move row %d down', 'memorial-plugin' ),
+								i + 1
+							) }
+							disabled={ i === rows.length - 1 }
+							onClick={ () => move( i, 1 ) }
+						/>
+						<Button
+							size="small"
+							icon="trash"
+							isDestructive
+							label={ sprintf(
+								/* translators: %d: row number. */
+								__( 'Remove row %d', 'memorial-plugin' ),
+								i + 1
+							) }
+							onClick={ () =>
+								onChange( rows.filter( ( r, j ) => j !== i ) )
+							}
+						/>
+					</div>
 				</div>
 			) ) }
 			<Button

@@ -79,39 +79,41 @@ test.describe( 'телефон', () => {
 } );
 
 test.describe( 'компьютер', () => {
-	test.use( { viewport: { width: 1280, height: 900 } } );
+	test.use( { viewport: { width: 1600, height: 900 } } );
 	test( 'меню: Кладбища', async ( { page } ) => {
 		const errs = errorsOf( page );
 		await page.goto( '/', { waitUntil: 'networkidle' } );
 		await page.addStyleTag( { content: NO_FLOAT } );
-		await shot( page, 'pc-home', { clip: { x: 0, y: 0, width: 1280, height: 400 } } );
 		log( 'pc-header', await page.evaluate( () => ( {
 			header: document.getElementById( 'header' )?.className,
-			html: document.getElementById( 'header' )?.outerHTML.slice( 0, 12000 ),
+			html: document.getElementById( 'header' )?.outerHTML.slice( 0, 4000 ),
 		} ) ) );
-		const item = page.locator( '#header a, header a' ).filter( { hasText: /Кладбищ/ } ).first();
-		await item.waitFor( { state: 'attached', timeout: 5000 } ).catch( () => {} );
-		const info = await item.evaluate( ( a ) => ( {
-			href: a.getAttribute( 'href' ),
-			li: a.closest( 'li' )?.outerHTML.slice( 0, 1500 ),
-		} ) ).catch( ( e ) => ( { error: e.message } ) );
-		await item.hover().catch( () => {} );
+		await shot( page, 'pc-home', { clip: { x: 0, y: 0, width: 1600, height: 300 } } );
+		// пункт «Кладбища…» — в подменю; наводим на его родителя
+		const link = page.locator( '#header a' ).filter( { hasText: /Кладбищ/ } ).first();
+		const parent = page.locator( '#header li.has-child' ).filter( { has: link } ).first();
+		await parent.locator( ':scope > a' ).hover().catch( ( e ) => errs.push( 'hover: ' + e.message ) );
 		await page.waitForTimeout( 500 );
-		await shot( page, 'pc-menu-hover', { clip: { x: 0, y: 0, width: 1280, height: 600 } } );
-		await item.click().catch( ( e ) => errs.push( 'click: ' + e.message ) );
-		await page.waitForTimeout( 1500 );
+		await shot( page, 'pc-menu-hover', { clip: { x: 0, y: 0, width: 1600, height: 600 } } );
+		await link.click().catch( ( e ) => errs.push( 'click: ' + e.message ) );
 		await page.waitForLoadState( 'networkidle' ).catch( () => {} );
-		await shot( page, 'pc-menu-after-click' );
+		await page.waitForTimeout( 1000 );
+		await page.addStyleTag( { content: NO_FLOAT } );
+		await shot( page, 'pc-menu-after-click', { clip: { x: 0, y: 0, width: 1600, height: 700 } } );
 		const after = await page.evaluate( () => ( {
 			url: location.href,
 			header: document.getElementById( 'header' )?.className,
-			open: [ ...document.querySelectorAll( '#header li.is-open, #header .is-menu-open, #header [aria-expanded="true"]' ) ].map( ( e ) => e.outerHTML.slice( 0, 200 ) ),
-			focus: document.activeElement?.outerHTML.slice( 0, 200 ),
+			open: [ ...document.querySelectorAll( '#header li.is-open, #header [aria-expanded="true"]' ) ].map( ( e ) => e.outerHTML.slice( 0, 300 ) ),
+			focus: document.activeElement?.outerHTML.slice( 0, 300 ),
+			subs: [ ...document.querySelectorAll( '#header .wp-block-navigation__submenu-container' ) ].map( ( u ) => {
+				const cs = getComputedStyle( u );
+				return [ u.parentElement.className, cs.visibility, cs.opacity, cs.display ];
+			} ),
 		} ) );
-		await page.mouse.move( 640, 800 );
-		await page.waitForTimeout( 500 );
-		await shot( page, 'pc-menu-after-click-mouseaway' );
-		log( 'menu', { info, after, errs } );
+		await page.mouse.move( 800, 850 );
+		await page.waitForTimeout( 600 );
+		await shot( page, 'pc-menu-after-click-mouseaway', { clip: { x: 0, y: 0, width: 1600, height: 700 } } );
+		log( 'menu', { after, errs } );
 	} );
 	test( 'вопрос-ответ компьютер', async ( { page } ) => {
 		const p = PAGES.find( ( x ) => /вопрос/i.test( x.post_title ) );
@@ -179,7 +181,7 @@ test.describe( 'админка', () => {
 			await shot( page, name, { fullPage: true } );
 			// классы элементов приложения — для оформления
 			DOM[ name ] = await page.evaluate( () => {
-				const root = document.querySelector( '.memorial-plugin-admin, [id^="memorial-plugin-"]' );
+				const root = document.querySelector( 'div.memorial-plugin-admin, div[id^="memorial-plugin-"]' );
 				if ( ! root ) return null;
 				const out = new Set();
 				root.querySelectorAll( '*' ).forEach( ( el ) => {

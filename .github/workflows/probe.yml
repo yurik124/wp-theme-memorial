@@ -38,6 +38,12 @@ jobs:
         with:
           path: after
 
+      - name: Код сайта сейчас (block-migration)
+        uses: actions/checkout@v5
+        with:
+          ref: block-migration
+          path: before
+
       - uses: actions/setup-node@v5
         with:
           node-version-file: after/.nvmrc
@@ -49,7 +55,10 @@ jobs:
           coverage: none
 
       - name: Сборка
-        run: cd after && npm ci --no-audit --no-fund && npm run build && composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
+        run: |
+          for d in before after; do
+            (cd $d && npm ci --no-audit --no-fund && npm run build && composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative)
+          done
 
       - name: Скачать базу и uploads (только чтение)
         env:
@@ -116,8 +125,8 @@ jobs:
             "mappings": {
               "wp-content/plugins/memorial-core": "../classic/memorial-core",
               "wp-content/themes/memorial_speshu": "../classic/memorial_speshu",
-              "wp-content/plugins/memorial-plugin": "../after/memorial-plugin",
-              "wp-content/themes/memorial-theme": "../after/memorial-theme",
+              "wp-content/plugins/memorial-plugin": "../before/memorial-plugin",
+              "wp-content/themes/memorial-theme": "../before/memorial-theme",
               "wp-content/uploads": "../uploads",
               "wp-content/ci-data": "../data"
             },
@@ -146,12 +155,22 @@ jobs:
       - name: Снимки — старое
         run: cd after && PHASE=classic PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js || true
 
-      - name: Переключить на блочное
+      - name: Переключить на блочное — как на сайте сейчас
         run: |
           cd env
           ../after/node_modules/.bin/wp-env run cli sh -c 'wp plugin deactivate memorial-core --quiet; wp plugin activate memorial-plugin; wp theme activate memorial-theme; wp rewrite flush; rm -rf wp-content/cache/memorial; wp eval "wp_set_current_user(1); do_action(\"admin_init\");" || true; echo "тема: $(wp option get stylesheet)"'
 
-      - name: Снимки — блочное
+      - name: Снимки — как на сайте сейчас
+        run: cd after && PHASE=before PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js || true
+
+      - name: Переключить на исправленное
+        run: |
+          cd env
+          sed -i 's#\.\./before/#../after/#g' .wp-env.json
+          ../after/node_modules/.bin/wp-env start --update
+          ../after/node_modules/.bin/wp-env run cli sh -c 'rm -rf wp-content/cache/memorial; wp eval "wp_set_current_user(1); do_action(\"admin_init\");" || true'
+
+      - name: Снимки — исправленное
         run: cd after && PHASE=block PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js || true
 
       - name: В ветку ci-probe
