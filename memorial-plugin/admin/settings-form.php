@@ -199,7 +199,7 @@ function memorial_plugin_settings_container( $opt ) {
 		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
 		return;
 	}
-	echo '<div id="memorial-plugin-settings" class="wrap" data-option="' . esc_attr( $opt ) . '"></div>';
+	echo '<div id="memorial-plugin-settings" class="wrap memorial-plugin-admin" data-option="' . esc_attr( $opt ) . '"></div>';
 }
 
 /**

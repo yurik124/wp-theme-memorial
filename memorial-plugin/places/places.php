@@ -72,7 +72,7 @@ add_filter('memorial_plugin_admin_pages', function ($pages) {
     $pages['mem_cem'] = ['slug' => 'mem-cem', 'title' => 'Кладбища', 'schema' => 'memorial_plugin_cem_schema',
         'intro' => 'Список кладбищ выводится шорткодом <code>[mem_cemeteries]</code> на любой странице (например, «Кладбища Белгорода и района»). '
                  . 'Только действующие: <code>[mem_cemeteries status="действующие"]</code>, без кнопок-фильтров: <code>filtr="нет"</code>. '
-                 . 'Порядок — перетаскиванием за ⋮⋮.'];
+                 . 'Порядок — стрелками ↑ ↓ справа от кладбища.'];
     return $pages;
 });
 

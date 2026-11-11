@@ -194,7 +194,7 @@ jobs:
           npx wp-env run cli wp core version
 
       - name: Браузер для проверок
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium || npx playwright install chromium  # зеркала apt бывают недоступны: в образе раннера библиотеки браузера уже есть
 
       - name: Проверки в браузере, часть ${{ matrix.shard }}/2
         run: npm run test:e2e -- --shard=${{ matrix.shard }}/2

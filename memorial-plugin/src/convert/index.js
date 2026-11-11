@@ -17,6 +17,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { Button, Notice, Spinner } from '@wordpress/components';
 import { DataViews, filterSortAndPaginate } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
+import './style.scss';
 
 const BATCH = window.memorialPluginConvert?.batch || 10;
 const API = '/memorial-plugin/v1/convert';

@@ -77,3 +77,29 @@ function memorial_theme_nav_default_ref( $block ) {
 	return $block;
 }
 add_filter( 'render_block_data', 'memorial_theme_nav_default_ref' );
+
+/**
+ * Список пунктов меню без классов самого блока.
+ *
+ * WordPress 7.1 повторяет у списка пунктов (ul.wp-block-navigation__container) классы блока — «nav»
+ * и «wp-block-navigation». Стили шапки написаны для блока: на телефоне закрытое меню прячется, и вместе
+ * с блоком прятался и список — бургер открывал пустую полосу. Убираем повтор на сервере, до отрисовки.
+ *
+ * @param string $html  HTML блока.
+ * @param array  $block Блок.
+ * @return string
+ */
+function memorial_theme_nav_list_classes( $html, $block ) {
+	if ( 'core/navigation' !== ( $block['blockName'] ?? '' ) || ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		return $html;
+	}
+	$p = new WP_HTML_Tag_Processor( $html );
+	while ( $p->next_tag( array( 'tag_name' => 'UL' ) ) ) {
+		if ( $p->has_class( 'wp-block-navigation__container' ) ) {
+			$p->remove_class( 'nav' );
+			$p->remove_class( 'wp-block-navigation' );
+		}
+	}
+	return $p->get_updated_html();
+}
+add_filter( 'render_block', 'memorial_theme_nav_list_classes', 10, 2 );

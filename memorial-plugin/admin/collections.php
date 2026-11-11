@@ -388,7 +388,7 @@ function memorial_plugin_collections_menu() {
 			$col['cap'],
 			'memorial-plugin-' . $name,
 			static function () use ( $name ) {
-				echo '<div id="memorial-plugin-collection" class="wrap" data-name="' . esc_attr( $name ) . '"></div>';
+				echo '<div id="memorial-plugin-collection" class="wrap memorial-plugin-admin" data-name="' . esc_attr( $name ) . '"></div>';
 			}
 		);
 		if ( $hook ) {
@@ -444,6 +444,9 @@ function memorial_plugin_collections_assets() {
 			);
 			wp_set_script_translations( 'memorial-plugin-collections', 'memorial-plugin', MEMORIAL_PLUGIN_DIR . '/languages' );
 			wp_enqueue_style( 'wp-components' );
+			if ( is_readable( MEMORIAL_PLUGIN_DIR . '/build/collections/style-index.css' ) ) {
+				wp_enqueue_style( 'memorial-plugin-collections', MEMORIAL_PLUGIN_URL . '/build/collections/style-index.css', array( 'wp-components' ), $asset['version'] );
+			}
 		}
 	);
 }

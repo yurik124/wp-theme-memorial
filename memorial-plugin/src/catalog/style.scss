@@ -1,3 +1,4 @@
+@use "../shared/admin";
 @use "../shared/photos";
 
 .memorial-plugin-catalog {
@@ -12,10 +13,11 @@
 
 		img {
 			display: block;
-			width: 48px;
-			height: 48px;
-			border-radius: 2px;
+			width: 56px;
+			height: 56px;
+			border-radius: 10px;
 			object-fit: cover;
+			box-shadow: 0 0 0 1px rgba(31, 33, 28, 0.06);
 		}
 	}
 
@@ -26,7 +28,7 @@
 		min-width: 18px;
 		padding: 0 4px;
 		border-radius: 9px;
-		background: #1e1e1e;
+		background: #4f6145;
 		color: #fff;
 		font-size: 11px;
 		line-height: 18px;

@@ -540,6 +540,9 @@ function memorial_plugin_convert_assets() {
 				'before'
 			);
 			wp_enqueue_style( 'wp-components' );
+			if ( is_readable( MEMORIAL_PLUGIN_DIR . '/build/convert/style-index.css' ) ) {
+				wp_enqueue_style( 'memorial-plugin-convert', MEMORIAL_PLUGIN_URL . '/build/convert/style-index.css', array( 'wp-components' ), $asset['version'] );
+			}
 			// The diff table looks like on the Revisions screen.
 			wp_enqueue_style( 'revisions' );
 		}
@@ -554,5 +557,5 @@ function memorial_plugin_convert_page() {
 		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
 		return;
 	}
-	echo '<div id="memorial-plugin-convert" class="wrap"></div>';
+	echo '<div id="memorial-plugin-convert" class="wrap memorial-plugin-admin"></div>';
 }

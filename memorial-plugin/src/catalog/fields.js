@@ -148,9 +148,11 @@ export function statusField() {
 		filterBy: { operators: [ 'is' ] },
 		render: ( { item } ) =>
 			item.status === 'publish' ? (
-				__( 'Shown', 'memorial-plugin' )
+				<span className="memorial-plugin-badge">
+					{ __( 'Shown', 'memorial-plugin' ) }
+				</span>
 			) : (
-				<span className="memorial-plugin-catalog__hidden">
+				<span className="memorial-plugin-badge is-muted">
 					{ __( 'Hidden', 'memorial-plugin' ) }
 				</span>
 			),

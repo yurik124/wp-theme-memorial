@@ -1,0 +1,293 @@
+/* stylelint-disable selector-class-pattern -- classes of WordPress components and of the plugin are BEM (block__element) */
+// Common look of the plugin screens (settings, lists, forms): warm paper background, white cards with
+// soft shadows, the site’s sage green as the accent, rounded thumbnails and calm status badges.
+// Only the plugin’s own containers (.memorial-plugin-admin) are styled; the WordPress admin around stays as is.
+
+$mp-accent: #4f6145; // sage of the site, darkened for 4.5:1 contrast of white text on buttons
+$mp-accent-dark: #3f4d36;
+$mp-accent-darker: #33402c;
+$mp-ink: #1f211c;
+$mp-mute: #5f6158;
+$mp-line: #e6e2d8;
+$mp-paper: #f6f4ee;
+$mp-card: #fff;
+$mp-radius: 14px;
+$mp-shadow: 0 1px 2px rgba(31, 33, 28, 0.04), 0 6px 24px rgba(31, 33, 28, 0.05);
+
+// The screens of the plugin get the warm background of the site and its accent colour — on the whole
+// page, so that the modals and popovers (rendered outside the app) get it too.
+body:has(.memorial-plugin-admin) {
+	--wp-admin-theme-color: #{$mp-accent};
+	--wp-admin-theme-color--rgb: 79, 97, 69;
+	--wp-admin-theme-color-darker-10: #{$mp-accent-dark};
+	--wp-admin-theme-color-darker-10--rgb: 63, 77, 54;
+	--wp-admin-theme-color-darker-20: #{$mp-accent-darker};
+	--wp-admin-theme-color-darker-20--rgb: 51, 64, 44;
+
+	background: $mp-paper;
+
+	#wpcontent {
+		background: $mp-paper;
+	}
+}
+
+.memorial-plugin-admin {
+	--mp-line: #{$mp-line};
+	--mp-mute: #{$mp-mute};
+
+	max-width: 1240px;
+	margin: 0 20px 0 0;
+	padding-top: 8px;
+	color: $mp-ink;
+
+	@media (max-width: 782px) {
+		margin-right: 10px;
+	}
+
+	// Page of @wordpress/admin-ui (its classes are hashed: “<hash>__page”, “<hash>__header-title”…):
+	// header on the paper background, a larger title, the text under it in a readable width.
+	.admin-ui-navigable-region {
+		background: transparent;
+	}
+
+	.admin-ui-navigable-region > [class*="__header"]:first-child {
+		padding: 16px 0 20px;
+		border-bottom: 0;
+		background: transparent;
+	}
+
+	[class*="__header-title"] {
+		color: $mp-ink;
+		font-size: 26px;
+		font-weight: 600;
+		line-height: 1.25;
+		letter-spacing: -0.01em;
+	}
+
+	[class*="__header-subtitle"] {
+		max-width: 760px;
+		margin-top: 6px;
+		color: $mp-mute;
+		font-size: 14px;
+		line-height: 1.55;
+	}
+
+	// Labels of fields: normal case, readable size (WordPress makes them small capitals).
+	label,
+	label *,
+	.components-base-control__label,
+	.components-input-control__label,
+	.components-checkbox-control__label {
+		font-size: 13px;
+		font-weight: 600;
+		text-transform: none;
+	}
+
+	.components-base-control__help {
+		color: $mp-mute;
+		font-size: 13px;
+	}
+
+	// Cards: settings sections, list containers, side panels.
+	.components-card,
+	.components-panel {
+		border: 1px solid $mp-line;
+		border-radius: $mp-radius;
+		box-shadow: $mp-shadow;
+		overflow: hidden;
+	}
+
+	.components-card__header {
+		min-height: 56px;
+		padding: 14px 24px;
+		border-bottom: 1px solid $mp-line;
+
+		h2 {
+			margin: 0;
+			font-size: 16px;
+			font-weight: 600;
+		}
+	}
+
+	.components-card__body {
+		padding: 20px 24px 24px;
+	}
+
+	// Lists (DataViews) sit on a white card.
+	.dataviews-wrapper {
+		overflow: hidden;
+		border: 1px solid $mp-line;
+		border-radius: $mp-radius;
+		background: $mp-card;
+		box-shadow: $mp-shadow;
+	}
+
+	.dataviews__view-actions {
+		padding: 12px 20px;
+		border-bottom: 1px solid $mp-line;
+	}
+
+	.dataviews-filters__container {
+		padding: 8px 20px 12px;
+	}
+
+	.dataviews-view-table {
+		width: 100%;
+
+		thead th {
+			background: #fbfaf7;
+			color: $mp-mute;
+			font-size: 12px;
+			font-weight: 600;
+			text-transform: none;
+		}
+
+		thead .components-button {
+			color: $mp-mute;
+			font-weight: 600;
+		}
+
+		td {
+			vertical-align: middle;
+		}
+
+		tbody tr {
+			transition: background-color 0.12s;
+		}
+
+		tbody tr:hover {
+			background: #faf9f5;
+		}
+
+		td,
+		th {
+			padding-top: 12px;
+			padding-bottom: 12px;
+		}
+
+		td:first-child,
+		th:first-child {
+			padding-left: 20px;
+		}
+	}
+
+	.dataviews-view-table__primary-field,
+	.dataviews-title-field {
+		font-weight: 600;
+	}
+
+	.dataviews-footer,
+	.dataviews-pagination {
+		padding: 12px 20px;
+		border-top: 1px solid $mp-line;
+		background: #fbfaf7;
+	}
+
+	// Buttons: a little rounder.
+	.components-button.is-primary,
+	.components-button.is-secondary,
+	.components-button.is-tertiary {
+		border-radius: 8px;
+	}
+
+	.components-notice {
+		margin: 0 0 16px;
+		border-radius: 10px;
+	}
+
+	// Tabs above a list (product types): segmented pills.
+	.components-tab-panel__tabs,
+	[role="tablist"] {
+		flex-wrap: wrap;
+		gap: 6px;
+		padding: 4px;
+		border: 1px solid $mp-line;
+		border-radius: 999px;
+		background: $mp-card;
+		width: fit-content;
+		max-width: 100%;
+		box-shadow: $mp-shadow;
+
+		[role="tab"] {
+			height: 36px;
+			padding: 0 16px;
+			border-radius: 999px;
+			color: $mp-mute;
+			font-weight: 500;
+
+			&::after {
+				display: none;
+			}
+
+			&[aria-selected="true"] {
+				background: $mp-accent;
+				color: #fff;
+			}
+
+			&:hover:not([aria-selected="true"]) {
+				background: #f1efe8;
+				color: $mp-ink;
+			}
+		}
+	}
+}
+
+// Thumbnails and badges in lists.
+.memorial-plugin-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 2px 10px;
+	border-radius: 999px;
+	background: #edf1e8;
+	color: $mp-accent-dark;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 20px;
+	white-space: nowrap;
+
+	&::before {
+		content: "";
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: currentcolor;
+	}
+
+	&.is-muted {
+		background: #f0efeb;
+		color: $mp-mute;
+	}
+
+	&.is-warning {
+		background: #fbf0dc;
+		color: #7a4b00;
+	}
+}
+
+// Modals: rounded like the cards.
+body:has(.memorial-plugin-admin) .components-modal__frame {
+	border-radius: $mp-radius;
+}
+
+// Forms of DataForm: short fields two in a row on wide screens.
+.memorial-plugin-admin .components-card__body > [class*="__stack"].dataforms-layouts__wrapper,
+.memorial-plugin-admin .memorial-plugin-form-grid .dataforms-layouts__wrapper {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 16px 24px;
+
+	> .dataforms-layouts-regular__field:has(textarea, fieldset) {
+		grid-column: 1 / -1;
+	}
+}
+
+// Checkboxes with an explanation (Memorial → Features): name, then the explanation in normal text.
+.memorial-plugin-admin .components-checkbox-control {
+	padding: 6px 0;
+
+	.components-base-control__help {
+		margin: 2px 0 0;
+		padding-left: 0;
+	}
+}

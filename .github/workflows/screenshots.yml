@@ -135,7 +135,7 @@ jobs:
           python3 -c "import json; u=json.load(open('../urls.json')); print(len(u), 'страниц:', ', '.join(x['name'] for x in u))"
 
       - name: Браузер
-        run: cd after && npx playwright install --with-deps chromium
+        run: cd after && npx playwright install --with-deps chromium || npx playwright install chromium  # зеркала apt бывают недоступны: в образе раннера библиотеки браузера уже есть
 
       - name: Эталон — «до»
         run: |

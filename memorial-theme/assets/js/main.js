@@ -52,7 +52,8 @@
       b.setAttribute('aria-expanded', String(open));
     });
     (link || sub).after(b);
-    if (li.matches('.current-menu-ancestor')) b.click(); // ветка текущей страницы раскрыта
+    // ветка текущей страницы раскрыта — только в мобильном меню; на компьютере подменю открывается наведением
+    if (li.matches('.current-menu-ancestor') && header?.classList.contains('is-compact')) b.click();
   });
   d.addEventListener('keydown', e => { if (e.key === 'Escape') { setMenu(false); } });
 

@@ -850,7 +850,7 @@ export default function Types() {
 						>
 							{ () => null }
 						</TabPanel>
-						<Flex gap={ 2 } wrap>
+						<Flex gap={ 2 } wrap justify="flex-start">
 							<Button variant="primary" href={ type.products }>
 								{ sprintf(
 									/* translators: 1: type, 2: number of products. */

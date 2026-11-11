@@ -33,7 +33,7 @@ function memorial_plugin_types_container() {
 		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
 		return;
 	}
-	echo '<div id="memorial-plugin-catalog" class="wrap" data-screen="types"></div>';
+	echo '<div id="memorial-plugin-catalog" class="wrap memorial-plugin-admin" data-screen="types"></div>';
 }
 
 /**

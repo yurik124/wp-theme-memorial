@@ -17,11 +17,12 @@ import {
 import { __, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import {
+	Card,
+	CardBody,
+	CardHeader,
 	Button,
 	CheckboxControl,
 	Notice,
-	Panel,
-	PanelBody,
 	SelectControl,
 	Spinner,
 	TextareaControl,
@@ -162,48 +163,65 @@ function RepeaterEdit( { def, value, onChange } ) {
 			<Help text={ def.help } />
 			{ rows.map( ( row, i ) => (
 				<div className="memorial-plugin-settings__row" key={ i }>
-					<Flex justify="space-between">
-						<strong>
-							{ ( def.collapse && row[ def.collapse ] ) ||
-								sprintf(
-									/* translators: %d: row number. */
-									__( 'Item %d', 'memorial-plugin' ),
-									i + 1
-								) }
-						</strong>
-						<Flex justify="flex-end">
-							<Button
-								size="small"
-								icon="arrow-up-alt2"
-								label={ __( 'Up', 'memorial-plugin' ) }
-								disabled={ i === 0 }
-								onClick={ () => move( i, -1 ) }
-							/>
-							<Button
-								size="small"
-								icon="arrow-down-alt2"
-								label={ __( 'Down', 'memorial-plugin' ) }
-								disabled={ i === rows.length - 1 }
-								onClick={ () => move( i, 1 ) }
-							/>
-							<Button
-								size="small"
-								icon="trash"
-								isDestructive
-								label={ __( 'Remove', 'memorial-plugin' ) }
-								onClick={ () =>
-									onChange(
-										rows.filter( ( r, j ) => j !== i )
-									)
+					<span
+						className="memorial-plugin-settings__num"
+						aria-hidden="true"
+					>
+						{ i + 1 }
+					</span>
+					<div className="memorial-plugin-settings__row-main">
+						{ def.collapse && row[ def.collapse ] && (
+							<strong className="memorial-plugin-settings__row-title">
+								{ row[ def.collapse ] }
+							</strong>
+						) }
+						<div className="memorial-plugin-settings__fields">
+							<FieldsForm
+								defs={ def.fields || [] }
+								data={ row || {} }
+								onChange={ ( edits ) =>
+									set( i, { ...row, ...edits } )
 								}
 							/>
-						</Flex>
-					</Flex>
-					<FieldsForm
-						defs={ def.fields || [] }
-						data={ row || {} }
-						onChange={ ( edits ) => set( i, { ...row, ...edits } ) }
-					/>
+						</div>
+					</div>
+					<div className="memorial-plugin-settings__row-actions">
+						<Button
+							size="small"
+							icon="arrow-up-alt2"
+							label={ sprintf(
+								/* translators: %d: row number. */
+								__( 'Move row %d up', 'memorial-plugin' ),
+								i + 1
+							) }
+							disabled={ i === 0 }
+							onClick={ () => move( i, -1 ) }
+						/>
+						<Button
+							size="small"
+							icon="arrow-down-alt2"
+							label={ sprintf(
+								/* translators: %d: row number. */
+								__( 'Move row %d down', 'memorial-plugin' ),
+								i + 1
+							) }
+							disabled={ i === rows.length - 1 }
+							onClick={ () => move( i, 1 ) }
+						/>
+						<Button
+							size="small"
+							icon="trash"
+							isDestructive
+							label={ sprintf(
+								/* translators: %d: row number. */
+								__( 'Remove row %d', 'memorial-plugin' ),
+								i + 1
+							) }
+							onClick={ () =>
+								onChange( rows.filter( ( r, j ) => j !== i ) )
+							}
+						/>
+					</div>
 				</div>
 			) ) }
 			<Button
@@ -269,16 +287,23 @@ function ControlFor( { def, value, onChange } ) {
 			return (
 				<OrderEdit def={ def } value={ value } onChange={ onChange } />
 			);
-		case 'checkbox':
+		case 'checkbox': {
+			// “Name — what it does”: the name in bold, the explanation under it in normal text.
+			const [ name, ...rest ] = String( def.label ).split( ' — ' );
+			const about = rest.join( ' — ' );
 			return (
 				<CheckboxControl
 					__nextHasNoMarginBottom
-					label={ def.label }
-					help={ def.help }
+					label={ name }
+					help={
+						[ about, def.help ].filter( Boolean ).join( ' ' ) ||
+						undefined
+					}
 					checked={ !! Number( value ) }
 					onChange={ ( v ) => onChange( v ? 1 : 0 ) }
 				/>
 			);
+		}
 		case 'select':
 		case 'page':
 			return (
@@ -487,13 +512,15 @@ function App( { option } ) {
 						{ page.extra }
 					</RawHTML>
 				) }
-				<Panel>
-					{ page.fields.map( ( def ) => (
-						<PanelBody
-							key={ def.id }
-							title={ def.label || def.id }
-							initialOpen
-						>
+				{ page.fields.map( ( def ) => (
+					<Card
+						key={ def.id }
+						className="memorial-plugin-settings__card"
+					>
+						<CardHeader>
+							<h2>{ def.label || def.id }</h2>
+						</CardHeader>
+						<CardBody>
 							{ def.type === 'group' ? (
 								<>
 									<Help text={ def.help } />
@@ -525,10 +552,35 @@ function App( { option } ) {
 									} }
 								/>
 							) }
-						</PanelBody>
-					) ) }
-				</Panel>
-				<Flex justify="flex-end">{ actions }</Flex>
+						</CardBody>
+					</Card>
+				) ) }
+				<div
+					className={
+						'memorial-plugin-settings__bar' +
+						( dirty ? ' is-dirty' : '' )
+					}
+				>
+					<span
+						className="memorial-plugin-settings__state"
+						role="status"
+					>
+						{ dirty
+							? __(
+									'There are unsaved changes',
+									'memorial-plugin'
+								)
+							: __( 'All changes are saved', 'memorial-plugin' ) }
+					</span>
+					<Button
+						variant="primary"
+						isBusy={ busy }
+						disabled={ busy || ! dirty }
+						onClick={ save }
+					>
+						{ __( 'Save', 'memorial-plugin' ) }
+					</Button>
+				</div>
 			</Flex>
 		</Page>
 	);

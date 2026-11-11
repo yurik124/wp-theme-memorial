@@ -82,7 +82,7 @@ function memorial_plugin_sq_popular(array $fallback, $limit = 6, $min = 4) {
 /* ---------- Админка: «Мемориал → Что ищут на сайте» — список на DataViews (src/catalog, экран search-stats) ---------- */
 add_action('admin_menu', function () {
     $hook = add_submenu_page('mem-contacts', 'Что ищут на сайте', 'Что ищут на сайте', 'edit_pages', 'mem-sq', function () {
-        echo '<div id="memorial-plugin-catalog" class="wrap" data-screen="search-stats"></div>';
+        echo '<div id="memorial-plugin-catalog" class="wrap memorial-plugin-admin" data-screen="search-stats"></div>';
     });
     if ($hook && function_exists('memorial_plugin_catalog_views_assets')) add_action('load-' . $hook, 'memorial_plugin_catalog_views_assets');
 }, 20);
