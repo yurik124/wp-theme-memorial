@@ -287,16 +287,23 @@ function ControlFor( { def, value, onChange } ) {
 			return (
 				<OrderEdit def={ def } value={ value } onChange={ onChange } />
 			);
-		case 'checkbox':
+		case 'checkbox': {
+			// “Name — what it does”: the name in bold, the explanation under it in normal text.
+			const [ name, ...rest ] = String( def.label ).split( ' — ' );
+			const about = rest.join( ' — ' );
 			return (
 				<CheckboxControl
 					__nextHasNoMarginBottom
-					label={ def.label }
-					help={ def.help }
+					label={ name }
+					help={
+						[ about, def.help ].filter( Boolean ).join( ' ' ) ||
+						undefined
+					}
 					checked={ !! Number( value ) }
 					onChange={ ( v ) => onChange( v ? 1 : 0 ) }
 				/>
 			);
+		}
 		case 'select':
 		case 'page':
 			return (

@@ -73,6 +73,7 @@ body:has(.memorial-plugin-admin) {
 	}
 
 	// Labels of fields: normal case, readable size (WordPress makes them small capitals).
+	label,
 	.components-base-control__label,
 	.components-input-control__label,
 	.components-checkbox-control__label {
@@ -266,4 +267,25 @@ body:has(.memorial-plugin-admin) {
 // Modals: rounded like the cards.
 body:has(.memorial-plugin-admin) .components-modal__frame {
 	border-radius: $mp-radius;
+}
+
+// Forms of DataForm: short fields two in a row on wide screens.
+.memorial-plugin-admin .components-card__body > [class*="__stack"].dataforms-layouts__wrapper,
+.memorial-plugin-admin .memorial-plugin-form-grid .dataforms-layouts__wrapper {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 16px 24px;
+
+	> .dataforms-layouts-regular__field:has(textarea, fieldset) {
+		grid-column: 1 / -1;
+	}
+}
+
+// Checkboxes with an explanation (Memorial → Features): name, then the explanation in normal text.
+.memorial-plugin-admin .components-checkbox-control {
+	padding: 6px 0;
+
+	.components-base-control__help {
+		margin: 2px 0 0 28px;
+	}
 }

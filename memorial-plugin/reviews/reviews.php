@@ -19,7 +19,7 @@ function memorial_plugin_review_services() {
 function memorial_plugin_reviews_schema() {
     return [
         'sources' => ['type' => 'repeater', 'label' => 'Где о нас пишут отзывы', 'add' => 'Добавить сервис или филиал', 'collapse' => 'branch', 'open' => true,
-            'help' => 'По строке на каждый сервис и филиал. Порядок меняется перетаскиванием. Оценку и число отзывов пишите как в самом сервисе — их видно посетителям.',
+            'help' => 'По строке на каждый сервис и филиал. Порядок меняется стрелками ↑ ↓ справа от строки. Оценку и число отзывов пишите как в самом сервисе — их видно посетителям.',
             'fields' => [
                 'service' => ['type' => 'select', 'label' => 'Сервис', 'options' => memorial_plugin_review_services()],
                 'name'    => ['type' => 'text', 'label' => 'Название сервиса (только для «Другой сервис»)'],
