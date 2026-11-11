@@ -16,28 +16,7 @@ add_action('init', function () {
     ]);
 });
 
-add_filter('manage_mem_lead_posts_columns', fn() => [
-    'cb' => '<input type="checkbox">', 'title' => 'Телефон', 'mem_name' => 'Имя', 'mem_page' => 'Откуда', 'date' => 'Когда',
-]);
-add_action('manage_mem_lead_posts_custom_column', function ($col, $id) {
-    if ($col === 'mem_name') echo esc_html(get_post_meta($id, '_name', true) ?: '—');
-    if ($col === 'mem_page') {
-        $u = get_post_meta($id, '_page', true);
-        if ($u) echo '<a href="' . esc_url($u) . '" target="_blank">' . esc_html(urldecode(wp_parse_url($u, PHP_URL_PATH) ?: '/')) . '</a>';
-    }
-}, 10, 2);
-add_filter('post_row_actions', function ($a, $p) {
-    if ($p->post_type !== 'mem_lead') return $a;
-    $phone = preg_replace('/[^\d+]/', '', $p->post_title);
-    return ['call' => '<a href="tel:' . esc_attr($phone) . '">Позвонить</a>'] + array_intersect_key($a, ['trash' => 1]);
-}, 10, 2);
-add_action('add_meta_boxes_mem_lead', function () {
-    add_meta_box('mem_lead_info', 'Заявка', function ($p) {
-        foreach (['_name' => 'Имя', '_page' => 'Страница', '_ip' => 'IP'] as $k => $l) {
-            echo '<p><b>' . esc_html($l) . ':</b> ' . esc_html(get_post_meta($p->ID, $k, true) ?: '—') . '</p>';
-        }
-    }, 'mem_lead', 'normal', 'high');
-});
+/* Список заявок — DataViews (admin/collections.php, «Мемориал → Заявки»). */
 
 /* ---------- Приём заявки ---------- */
 add_action('rest_api_init', function () {
@@ -78,7 +57,7 @@ function memorial_plugin_callback_receive(WP_REST_Request $r) {
     $body = "Заявка на обратный звонок с сайта " . home_url('/') . "\n\n"
           . "Телефон: $phone\n" . ($name ? "Имя: $name\n" : '')
           . ($page ? "Страница: " . urldecode($page) . "\n" : '')
-          . "Время: " . wp_date('d.m.Y H:i') . "\n\nВсе заявки: " . admin_url('edit.php?post_type=mem_lead');
+          . "Время: " . wp_date('d.m.Y H:i') . "\n\nВсе заявки: " . admin_url('admin.php?page=memorial-plugin-leads');
     wp_mail($to, 'Перезвоните: ' . $phone . ($name ? " ($name)" : ''), $body);
 
     return ['ok' => true];

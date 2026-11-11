@@ -11,6 +11,7 @@
 	<file>blocks/home</file>
 	<file>admin/convert.php</file>
 	<file>admin/settings-form.php</file>
+	<file>admin/collections.php</file>
 	<file>seo/seo-registry.php</file>
 	<file>admin/dataviews-check.php</file>
 	<file>includes</file>

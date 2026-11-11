@@ -1,0 +1,411 @@
+/**
+ * Record lists (call-back requests, guest book reviews): DataViews for the list, DataForm in a modal
+ * for editing and adding. Fields, labels and options come from REST
+ * memorial-plugin/v1/collections/<name> (admin/collections.php).
+ */
+import {
+	createRoot,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from '@wordpress/element';
+import { __, _n, sprintf } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
+import {
+	Button,
+	Modal,
+	Notice,
+	TextareaControl,
+	__experimentalHStack as HStack,
+} from '@wordpress/components';
+import { MediaUpload } from '@wordpress/media-utils';
+import {
+	DataViews,
+	DataForm,
+	filterSortAndPaginate,
+} from '@wordpress/dataviews/wp';
+import { Page } from '@wordpress/admin-ui';
+
+const API = '/memorial-plugin/v1/collections/';
+
+function ImageEdit( { data, field, onChange } ) {
+	const value = data[ field.id ];
+	return (
+		<div>
+			<p>{ field.label }</p>
+			<HStack justify="flex-start">
+				{ value?.url && (
+					<img src={ value.url } alt="" width="64" height="64" />
+				) }
+				<MediaUpload
+					allowedTypes={ [ 'image' ] }
+					onSelect={ ( m ) =>
+						onChange( {
+							[ field.id ]: {
+								id: m.id,
+								url: m.sizes?.thumbnail?.url || m.url,
+							},
+						} )
+					}
+					render={ ( { open } ) => (
+						<Button variant="secondary" onClick={ open }>
+							{ value
+								? __( 'Replace photo', 'memorial-plugin' )
+								: __( 'Choose photo', 'memorial-plugin' ) }
+						</Button>
+					) }
+				/>
+				{ value && (
+					<Button
+						variant="link"
+						isDestructive
+						onClick={ () => onChange( { [ field.id ]: null } ) }
+					>
+						{ __( 'Remove', 'memorial-plugin' ) }
+					</Button>
+				) }
+			</HStack>
+		</div>
+	);
+}
+
+function TextareaEdit( { data, field, onChange } ) {
+	return (
+		<TextareaControl
+			__nextHasNoMarginBottom
+			label={ field.label }
+			help={ field.description }
+			rows={ 6 }
+			value={ data[ field.id ] || '' }
+			onChange={ ( v ) => onChange( { [ field.id ]: v } ) }
+		/>
+	);
+}
+
+/**
+ * Server field description → DataViews / DataForm field.
+ *
+ * @param {Object} def Field from the server.
+ * @return {Object} Field.
+ */
+function toField( def ) {
+	const field = {
+		id: def.id,
+		label: def.label,
+		description: def.help,
+		placeholder: def.placeholder,
+		readonly: !! def.readonly,
+		enableGlobalSearch: [ 'text', 'textarea' ].includes( def.type ),
+	};
+	switch ( def.type ) {
+		case 'boolean':
+			return {
+				...field,
+				type: 'boolean',
+				elements: [
+					{ value: true, label: __( 'Yes', 'memorial-plugin' ) },
+					{ value: false, label: __( 'No', 'memorial-plugin' ) },
+				],
+				filterBy: { operators: [ 'is' ] },
+				render: ( { item } ) =>
+					item[ def.id ] ? '✓' : '—',
+			};
+		case 'select':
+			return {
+				...field,
+				type: 'text',
+				elements: def.options,
+				filterBy: { operators: [ 'isAny' ] },
+			};
+		case 'integer':
+			return { ...field, type: 'integer' };
+		case 'date':
+			return { ...field, type: 'date' };
+		case 'datetime':
+			return {
+				...field,
+				type: 'datetime',
+				render: ( { item } ) =>
+					item[ def.id ]
+						? new Date( item[ def.id ] ).toLocaleString()
+						: '',
+			};
+		case 'url':
+			return {
+				...field,
+				type: 'text',
+				render: ( { item } ) =>
+					item[ def.id ] ? (
+						<a href={ item[ def.id ] } target="_blank" rel="noreferrer">
+							{ decodeURI( new URL( item[ def.id ] ).pathname ) }
+						</a>
+					) : (
+						'—'
+					),
+			};
+		case 'image':
+			return {
+				...field,
+				type: 'text',
+				enableSorting: false,
+				enableGlobalSearch: false,
+				render: ( { item } ) =>
+					item[ def.id ]?.url ? (
+						<img
+							src={ item[ def.id ].url }
+							alt=""
+							width="48"
+							height="48"
+							style={ { objectFit: 'cover', borderRadius: 4 } }
+						/>
+					) : null,
+				Edit: ImageEdit,
+			};
+		case 'textarea':
+			return {
+				...field,
+				type: 'text',
+				render: ( { item } ) => {
+					const t = String( item[ def.id ] || '' );
+					return t.length > 120 ? t.slice( 0, 120 ) + '…' : t;
+				},
+				Edit: TextareaEdit,
+			};
+		default:
+			return { ...field, type: 'text' };
+	}
+}
+
+function EditModal( { name, data, fields, onClose, onSaved } ) {
+	const [ item, setItem ] = useState( data );
+	const [ error, setError ] = useState( '' );
+	const [ busy, setBusy ] = useState( false );
+	const editable = fields.filter( ( f ) => ! f.readonly );
+	const fixed = fields.filter( ( f ) => f.readonly && item[ f.id ] );
+	const save = async () => {
+		setBusy( true );
+		const values = {};
+		editable.forEach( ( f ) => ( values[ f.id ] = item[ f.id ] ) );
+		try {
+			await apiFetch( {
+				path: API + name + ( item.id ? '/' + item.id : '' ),
+				method: item.id ? 'PUT' : 'POST',
+				data: { values },
+			} );
+			onSaved();
+			onClose();
+		} catch ( e ) {
+			setError( e.message );
+		}
+		setBusy( false );
+	};
+	return (
+		<Modal
+			title={
+				item.id
+					? __( 'Edit', 'memorial-plugin' )
+					: __( 'Add', 'memorial-plugin' )
+			}
+			onRequestClose={ onClose }
+			size="medium"
+		>
+			{ error && (
+				<Notice status="error" isDismissible={ false }>
+					{ error }
+				</Notice>
+			) }
+			{ fixed.length > 0 && (
+				<dl className="memorial-plugin-collection__fixed">
+					{ fixed.map( ( f ) => (
+						<div key={ f.id }>
+							<dt>{ f.label }</dt>
+							<dd>{ f.render ? f.render( { item } ) : item[ f.id ] }</dd>
+						</div>
+					) ) }
+				</dl>
+			) }
+			<DataForm
+				data={ item }
+				fields={ editable }
+				form={ {
+					layout: { type: 'regular' },
+					fields: editable.map( ( f ) => f.id ),
+				} }
+				onChange={ ( edits ) => setItem( ( i ) => ( { ...i, ...edits } ) ) }
+			/>
+			<HStack justify="flex-end">
+				<Button variant="tertiary" onClick={ onClose }>
+					{ __( 'Cancel', 'memorial-plugin' ) }
+				</Button>
+				<Button variant="primary" isBusy={ busy } onClick={ save }>
+					{ __( 'Save', 'memorial-plugin' ) }
+				</Button>
+			</HStack>
+		</Modal>
+	);
+}
+
+function App( { name } ) {
+	const [ meta, setMeta ] = useState( null );
+	const [ items, setItems ] = useState( null );
+	const [ editing, setEditing ] = useState( null );
+	const [ notice, setNotice ] = useState( null );
+	const [ view, setView ] = useState( null );
+
+	const load = useCallback(
+		() =>
+			apiFetch( { path: API + name } )
+				.then( ( res ) => {
+					setMeta( res );
+					setItems( res.items );
+					setView(
+						( v ) =>
+							v || {
+								type: 'table',
+								fields: res.fields
+									.map( ( f ) => f.id )
+									.filter( ( id ) => id !== res.fields[ 0 ].id ),
+								titleField: res.fields[ 0 ].id,
+								perPage: 25,
+								page: 1,
+								sort: { field: res.fields[ 0 ].id, direction: 'asc' },
+								filters: [],
+							}
+					);
+				} )
+				.catch( ( e ) => setNotice( { status: 'error', text: e.message } ) ),
+		[ name ]
+	);
+	useEffect( () => {
+		load();
+	}, [ load ] );
+
+	const fields = useMemo(
+		() => ( meta ? meta.fields.map( toField ) : [] ),
+		[ meta ]
+	);
+
+	const remove = useCallback(
+		async ( list ) => {
+			for ( const item of list ) {
+				await apiFetch( {
+					path: API + name + '/' + item.id,
+					method: 'DELETE',
+				} );
+			}
+			setNotice( {
+				status: 'success',
+				text: sprintf(
+					/* translators: %d: number of records. */
+					_n(
+						'%d record moved to the trash.',
+						'%d records moved to the trash.',
+						list.length,
+						'memorial-plugin'
+					),
+					list.length
+				),
+			} );
+			load();
+		},
+		[ name, load ]
+	);
+
+	const actions = useMemo( () => {
+		const out = [
+			{
+				id: 'edit',
+				label: __( 'Edit', 'memorial-plugin' ),
+				isPrimary: true,
+				icon: 'edit',
+				callback: ( [ item ] ) => setEditing( item ),
+			},
+			{
+				id: 'trash',
+				label: __( 'Move to trash', 'memorial-plugin' ),
+				isDestructive: true,
+				supportsBulk: true,
+				callback: ( list ) => remove( list ),
+			},
+		];
+		if ( name === 'leads' ) {
+			out.unshift( {
+				id: 'call',
+				label: __( 'Call', 'memorial-plugin' ),
+				icon: 'phone',
+				callback: ( [ item ] ) =>
+					( window.location.href =
+						'tel:' + String( item.phone ).replace( /[^\d+]/g, '' ) ),
+			} );
+		}
+		return out;
+	}, [ name, remove ] );
+
+	const { data, paginationInfo } = useMemo(
+		() =>
+			view
+				? filterSortAndPaginate( items || [], view, fields )
+				: { data: [], paginationInfo: { totalItems: 0, totalPages: 0 } },
+		[ items, view, fields ]
+	);
+
+	if ( ! meta || ! view ) {
+		return notice ? (
+			<Notice status={ notice.status } isDismissible={ false }>
+				{ notice.text }
+			</Notice>
+		) : null;
+	}
+
+	return (
+		<Page
+			title={ meta.title }
+			subTitle={ meta.intro }
+			actions={
+				meta.create ? (
+					<Button variant="primary" onClick={ () => setEditing( {} ) }>
+						{ __( 'Add', 'memorial-plugin' ) }
+					</Button>
+				) : null
+			}
+		>
+			{ notice && (
+				<Notice status={ notice.status } onRemove={ () => setNotice( null ) }>
+					{ notice.text }
+				</Notice>
+			) }
+			<DataViews
+				data={ data }
+				fields={ fields }
+				view={ view }
+				onChangeView={ setView }
+				actions={ actions }
+				paginationInfo={ paginationInfo }
+				defaultLayouts={ { table: {}, list: {}, grid: {} } }
+				getItemId={ ( item ) => String( item.id ) }
+				isLoading={ items === null }
+			/>
+			{ editing && (
+				<EditModal
+					name={ name }
+					data={ editing }
+					fields={ fields }
+					onClose={ () => setEditing( null ) }
+					onSaved={ () => {
+						setNotice( {
+							status: 'success',
+							text: __( 'Saved.', 'memorial-plugin' ),
+						} );
+						load();
+					} }
+				/>
+			) }
+		</Page>
+	);
+}
+
+const root = document.getElementById( 'memorial-plugin-collection' );
+if ( root ) {
+	createRoot( root ).render( <App name={ root.dataset.name } /> );
+}
