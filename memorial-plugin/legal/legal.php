@@ -16,16 +16,16 @@ require __DIR__ . '/templates.php';
 /** Документы: ключ → [название, для чего] */
 function memorial_plugin_legal_docs() {
     return [
-        'policy'  => ['Политика обработки персональных данных', 'ссылка в подвале и в окне «Перезвоните мне»; она же — страница политики конфиденциальности WordPress'],
-        'consent' => ['Согласие на обработку персональных данных', 'ссылка у галочки согласия в окне «Перезвоните мне»'],
-        'cookies' => ['Политика использования cookie', 'ссылка в плашке cookie и в подвале'],
+        'policy'  => [__( 'Personal data processing policy', 'memorial-plugin' ), __( 'the link in the footer and in the “Call me back” window; it is also the WordPress privacy policy page', 'memorial-plugin' )],
+        'consent' => [__( 'Consent to personal data processing', 'memorial-plugin' ), __( 'the link at the consent tick in the “Call me back” window', 'memorial-plugin' )],
+        'cookies' => [__( 'Cookie policy', 'memorial-plugin' ), __( 'the link in the cookie banner and in the footer', 'memorial-plugin' )],
     ];
 }
 
 function memorial_plugin_legal_page_options() {
-    $o = ['' => '— не выбрана —'];
+    $o = ['' => __( '— not chosen —', 'memorial-plugin' )];
     foreach (get_pages(['post_status' => 'publish,draft,private', 'sort_column' => 'post_title']) as $p) {
-        $o[(string) $p->ID] = $p->post_title . ($p->post_status !== 'publish' ? ' (черновик)' : '');
+        $o[(string) $p->ID] = $p->post_title . ($p->post_status !== 'publish' ? __( ' (draft)', 'memorial-plugin' ) : '');
     }
     return $o;
 }
@@ -33,9 +33,9 @@ function memorial_plugin_legal_page_options() {
 function memorial_plugin_legal_schema() {
     $f = [];
     foreach (memorial_plugin_legal_docs() as $k => [$title, $use]) {
-        $f[$k] = ['type' => 'select', 'label' => $title, 'options' => memorial_plugin_legal_page_options(), 'help' => 'Где используется: ' . $use . '.'];
+        $f[$k] = ['type' => 'select', 'label' => $title, 'options' => memorial_plugin_legal_page_options(), 'help' => __( 'Where it is used: ', 'memorial-plugin' ) . $use . '.'];
     }
-    return ['pages' => ['type' => 'group', 'label' => 'Страницы документов', 'fields' => $f]];
+    return ['pages' => ['type' => 'group', 'label' => __( 'Document pages', 'memorial-plugin' ), 'fields' => $f]];
 }
 
 function memorial_plugin_legal_defaults() {
@@ -82,31 +82,31 @@ add_filter('memorial_plugin_admin_pages', function ($pages) {
     $rows = '';
     foreach (memorial_plugin_legal_docs() as $k => [$title]) {
         $id = memorial_plugin_legal_page($k);
-        $st = !$id ? '<span style="color:#b32d2e">не выбрана</span>'
-            : (get_post_status($id) === 'publish' ? '<span style="color:#1a7f37">✔ опубликована</span>'
-            : '<span style="color:#9a6700">черновик — проверьте текст и опубликуйте</span>');
-        $act = $id ? ' · <a href="' . esc_url(get_edit_post_link($id)) . '">редактировать</a> · <a href="' . esc_url(get_permalink($id)) . '" target="_blank">открыть</a>' : '';
+        $st = !$id ? ( '<span style="color:#b32d2e">' . esc_html__( 'not chosen', 'memorial-plugin' ) . '</span>' )
+            : (get_post_status($id) === 'publish' ? ( '<span style="color:#1a7f37">' . esc_html__( '✔ published', 'memorial-plugin' ) . '</span>' )
+            : ( '<span style="color:#9a6700">' . esc_html__( 'draft — check the text and publish it', 'memorial-plugin' ) . '</span>' ));
+        $act = $id ? ' · <a href="' . esc_url(get_edit_post_link($id)) . ( '">' . esc_html__( 'edit', 'memorial-plugin' ) . '</a> · <a href="' ) . esc_url(get_permalink($id)) . ( '" target="_blank">' . esc_html__( 'open', 'memorial-plugin' ) . '</a>' ) : '';
         $act .= ' · <a href="' . esc_url(wp_nonce_url(admin_url('admin-post.php?action=mem_legal_create&doc=' . $k), 'mem_legal_create')) . '"'
-            . ($id ? ' onclick="return confirm(\'Создать новую страницу-черновик по шаблону и выбрать её вместо текущей? Текущая страница останется, её можно удалить вручную.\')"' : '')
-            . '>создать по шаблону</a>';
+            . ($id ? ( ' onclick="return confirm(\'' . esc_attr__( 'Create a new draft page from the template and choose it instead of the current one? The current page stays, you can delete it by hand.', 'memorial-plugin' ) . '\')"' ) : '')
+            . ( '>' . esc_html__( 'create from the template', 'memorial-plugin' ) . '</a>' );
         $rows .= '<li><b>' . esc_html($title) . '</b>: ' . $st . $act . '</li>';
     }
     $missing = array_filter(array_keys(memorial_plugin_legal_docs()), fn($k) => !memorial_plugin_legal_page($k));
-    $btn = $missing ? '<p><a class="button button-primary" href="' . esc_url(wp_nonce_url(admin_url('admin-post.php?action=mem_legal_create'), 'mem_legal_create')) . '">Создать недостающие страницы</a> '
-        . '<span class="description">— появятся черновики с шаблонами текстов; реквизиты (ИП, ИНН, ОГРНИП, адрес, почта) подставятся из «Контактов» сами.</span></p>' : '';
+    $btn = $missing ? '<p><a class="button button-primary" href="' . esc_url(wp_nonce_url(admin_url('admin-post.php?action=mem_legal_create'), 'mem_legal_create')) . ( '">' . esc_html__( 'Create the missing pages', 'memorial-plugin' ) . '</a> ' )
+        . ( '<span class="description">' . esc_html__( '— drafts with text templates will appear; the company details (sole proprietor, TIN, OGRNIP, address, email) are filled in from “Contacts” automatically.', 'memorial-plugin' ) . '</span></p>' ) : '';
     $pages['mem_legal'] = [
         'slug'   => 'mem-legal',
-        'title'  => 'Документы',
+        'title'  => __( 'Documents', 'memorial-plugin' ),
         'schema' => 'memorial_plugin_legal_schema',
         'intro'  => '<ul style="margin:.4em 0 .8em">' . $rows . '</ul>' . $btn
-            . '<p class="description">Шаблоны — образец по 152-ФЗ; перед публикацией проверьте их под вашу работу (лучше с юристом). '
-            . 'Режим плашки cookie (спрашивать согласие или только уведомлять) — в «Мемориал → Аналитика».</p>',
+            . ( '<p class="description">' . esc_html__( 'Templates are a sample under 152-FZ; check them for your business before publishing (better with a lawyer).', 'memorial-plugin' ) . ' ' )
+            . ( esc_html__( 'The cookie banner mode (ask for consent or only notify) — in “Memorial → Analytics”.', 'memorial-plugin' ) . '</p>' ),
     ];
     return $pages;
 });
 
 add_action('admin_post_mem_legal_create', function () {
-    if (!current_user_can('edit_pages') || !check_admin_referer('mem_legal_create')) wp_die('Нет доступа');
+    if (!current_user_can('edit_pages') || !check_admin_referer('mem_legal_create')) wp_die(__( 'No access', 'memorial-plugin' ));
     $opt = get_option('mem_legal');
     $opt = is_array($opt) ? $opt : memorial_plugin_legal_defaults();
     $only = sanitize_key($_GET['doc'] ?? '');

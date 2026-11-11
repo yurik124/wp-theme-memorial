@@ -47,6 +47,77 @@ function memorial_plugin_register_view_module() {
 	wp_register_script_module( 'memorial-plugin-view', MEMORIAL_PLUGIN_URL . $js, array( '@wordpress/interactivity' ), (string) filemtime( MEMORIAL_PLUGIN_DIR . $js ) );
 }
 add_action( 'init', 'memorial_plugin_register_view_module', 5 );
+
+/**
+ * Plural forms for the view module: one text per category of Intl.PluralRules, chosen with _n().
+ *
+ * @param callable $form Function of a number that returns its form (an _n() call).
+ * @return array<string,string>
+ */
+function memorial_plugin_view_plural( $form ) {
+	$out = array();
+	foreach ( array( 'zero' => 0, 'one' => 1, 'two' => 2, 'few' => 3, 'many' => 5, 'other' => 11 ) as $category => $n ) {
+		$out[ $category ] = $form( $n );
+	}
+	return $out;
+}
+
+/**
+ * Texts of the view module (assets/js/view/blocks.js), translated here: script modules get them
+ * through the Interactivity API config, getConfig( 'memorial-plugin' ).
+ *
+ * @return array<string,mixed>
+ */
+function memorial_plugin_view_i18n() {
+	return array(
+		/* translators: %d: number of hidden topics */
+		'moreTopics'           => __( 'More topics: %d', 'memorial-plugin' ),
+		/* translators: %d: number of questions */
+		'questionsWithAnswers' => memorial_plugin_view_plural( fn( $n ) => _n( '%d question with an answer', '%d questions with answers', $n, 'memorial-plugin' ) ),
+		'startTyping'          => __( 'Start typing — we will suggest.', 'memorial-plugin' ),
+		/* translators: %d: number of questions */
+		'questions'            => memorial_plugin_view_plural( fn( $n ) => _n( '%d question', '%d questions', $n, 'memorial-plugin' ) ),
+		/* translators: 1: search query, 2: “5 questions” */
+		'foundBelow'           => __( 'For “%1$s” — %2$s below.', 'memorial-plugin' ),
+		'showAll'              => __( 'Show all', 'memorial-plugin' ),
+		/* translators: %d: number of articles */
+		'articles'             => memorial_plugin_view_plural( fn( $n ) => _n( '%d article', '%d articles', $n, 'memorial-plugin' ) ),
+		/* translators: %d: number of answers */
+		'answersElsewhere'     => memorial_plugin_view_plural( fn( $n ) => _n( '%d answer on other pages', '%d answers on other pages', $n, 'memorial-plugin' ) ),
+		'and'                  => __( 'and', 'memorial-plugin' ),
+		/* translators: 1: search query, 2: what was found */
+		'guideFound'           => __( 'For “%1$s”: %2$s. Click a suggestion to open the right place.', 'memorial-plugin' ),
+		'collapse'             => __( 'Collapse', 'memorial-plugin' ),
+		'readMore'             => __( 'Read more', 'memorial-plugin' ),
+		'newestFirst'          => __( 'Newest first — click for the oldest first', 'memorial-plugin' ),
+		'sortByDate'           => __( 'Sort by date', 'memorial-plugin' ),
+		'highestFirst'         => __( 'Highest ratings first — click for the reverse', 'memorial-plugin' ),
+		'sortByRating'         => __( 'Sort by rating', 'memorial-plugin' ),
+		/* translators: %s: review site */
+		'reviewsOf'            => __( 'Reviews: %s', 'memorial-plugin' ),
+		'showAllLower'         => __( 'show all', 'memorial-plugin' ),
+		'scrollLeft'           => __( 'Scroll left', 'memorial-plugin' ),
+		'scrollRight'          => __( 'Scroll right', 'memorial-plugin' ),
+		/* translators: %d: how many more */
+		'showMore'             => __( 'Show %d more', 'memorial-plugin' ),
+		/* translators: 1: how many more, 2: how many are left */
+		'showMoreOf'           => __( 'Show %1$d more of %2$d', 'memorial-plugin' ),
+	);
+}
+add_action(
+	'wp_enqueue_scripts',
+	static function () {
+		if ( function_exists( 'wp_interactivity_config' ) ) {
+			wp_interactivity_config(
+				'memorial-plugin',
+				array(
+					'locale' => str_replace( '_', '-', determine_locale() ),
+					'i18n'   => memorial_plugin_view_i18n(),
+				)
+			);
+		}
+	}
+);
 add_action( 'wp_enqueue_scripts', 'memorial_plugin_register_front_assets', 21 );
 add_action(
 	'enqueue_block_assets',

@@ -24,15 +24,15 @@ function memorial_plugin_work_anchor($title) {
 add_action('init', function () {
     register_post_type('mem_work', [
         'labels' => [
-            'name' => 'Наши работы', 'singular_name' => 'Работа', 'menu_name' => 'Наши работы',
-            'all_items' => 'Все работы', 'add_new' => 'Добавить работу', 'add_new_item' => 'Новая работа', 'edit_item' => 'Редактировать работу',
+            'name' => __( 'Our works', 'memorial-plugin' ), 'singular_name' => __( 'Work', 'memorial-plugin' ), 'menu_name' => __( 'Our works', 'memorial-plugin' ),
+            'all_items' => __( 'All works', 'memorial-plugin' ), 'add_new' => __( 'Add a work', 'memorial-plugin' ), 'add_new_item' => __( 'New work', 'memorial-plugin' ), 'edit_item' => __( 'Edit work', 'memorial-plugin' ),
         ],
         'public' => false, 'show_ui' => true, 'show_in_rest' => true,
         'menu_icon' => 'dashicons-format-gallery', 'menu_position' => 6,
         'supports' => ['title', 'editor', 'page-attributes'],
     ]);
     register_taxonomy('mem_work_type', 'mem_work', [
-        'labels' => ['name' => 'Виды работ', 'singular_name' => 'Вид работ', 'add_new_item' => 'Добавить вид'],
+        'labels' => ['name' => __( 'Kinds of works', 'memorial-plugin' ), 'singular_name' => __( 'Kind of work', 'memorial-plugin' ), 'add_new_item' => __( 'Add a kind', 'memorial-plugin' )],
         'hierarchical' => true, 'public' => false, 'show_ui' => true, 'show_in_rest' => true, 'show_admin_column' => true, 'rewrite' => false,
     ]);
 });
@@ -82,15 +82,15 @@ add_shortcode('mem_works', function ($atts) {
     if ($show_nav || ($a['sort'] !== '0' && count($works) > 1)) {
         echo '<span class="mcat__pin" aria-hidden="true"></span><div class="mcat__bar">';
         if ($show_nav) {
-            echo '<div class="mcat__navwrap"><nav class="mcat__nav" aria-label="Виды работ"><button type="button" class="chip is-on" data-type="">Все</button>';
+            echo ( '<div class="mcat__navwrap"><nav class="mcat__nav" aria-label="' . esc_attr__( 'Kinds of works', 'memorial-plugin' ) . '"><button type="button" class="chip is-on" data-type="">' . esc_html__( 'All', 'memorial-plugin' ) . '</button>' );
             foreach ($types as $slug => $name) echo '<button type="button" class="chip" data-type="' . esc_attr($slug) . '">' . esc_html($name) . '</button>';
             echo '</nav></div>';
         }
         if ($a['sort'] !== '0' && count($works) > 1) {
-            echo '<label class="mcat__sort"><span class="mcat__sortlbl">Сортировка:</span><select data-works-sort data-wp-on--change="actions.sort">'
-               . '<option value="">По умолчанию</option>'
-               . ($has_year ? '<option value="new">Сначала новые</option>' : '')
-               . '<option value="asc">Сначала дешевле</option><option value="desc">Сначала дороже</option></select></label>';
+            echo ( '<label class="mcat__sort"><span class="mcat__sortlbl">' . esc_html__( 'Sorting:', 'memorial-plugin' ) . '</span><select data-works-sort data-wp-on--change="actions.sort">' )
+               . ( '<option value="">' . esc_html__( 'Default', 'memorial-plugin' ) . '</option>' )
+               . ($has_year ? ( '<option value="new">' . esc_html__( 'Newest first', 'memorial-plugin' ) . '</option>' ) : '')
+               . ( '<option value="asc">' . esc_html__( 'Cheapest first', 'memorial-plugin' ) . '</option><option value="desc">' . esc_html__( 'Most expensive first', 'memorial-plugin' ) . '</option></select></label>' );
         }
         echo '</div>';
     }
@@ -99,7 +99,7 @@ add_shortcode('mem_works', function ($atts) {
         $d = memorial_plugin_work_data($w->ID);
         $slugs = implode(' ', wp_list_pluck($terms_of($w), 'slug'));
         $title = get_the_title($w);
-        $cap = $title . ($d['year'] ? ' · ' . $d['year'] . ' г.' : '');
+        $cap = $title . ($d['year'] ? ' · ' . sprintf( /* translators: %d: year */ _x( '%d', 'year', 'memorial-plugin' ), $d['year'] ) : '');
         echo '<article class="work" id="' . esc_attr(memorial_plugin_work_anchor($title)) . '" data-price="' . (int) $d['total'] . '" data-year="' . (int) $d['year'] . '" data-i="' . $i . '" data-types="' . esc_attr($slugs) . '">';
         if ($d['photos']) {
             $main = $d['photos'][0];
@@ -113,14 +113,14 @@ add_shortcode('mem_works', function ($atts) {
             if ($d['year']) echo '<span class="work__year">' . (int) $d['year'] . '</span>';
             echo '</a>';
             if (count($d['photos']) > 1) {
-                echo '<button type="button" class="work__arr work__arr--l" data-dir="-1" aria-label="Предыдущее фото">' . memorial_plugin_chevron('l') . '</button>'
-                   . '<button type="button" class="work__arr work__arr--r" data-dir="1" aria-label="Следующее фото">' . memorial_plugin_chevron('r') . '</button>';
+                echo ( '<button type="button" class="work__arr work__arr--l" data-dir="-1" aria-label="' . esc_html__( 'Previous photo', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron('l') . '</button>'
+                   . ( '<button type="button" class="work__arr work__arr--r" data-dir="1" aria-label="' . esc_html__( 'Next photo', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron('r') . '</button>';
             }
             echo '</div>';
             if (count($d['photos']) > 1) {
                 echo '<div class="work__thumbs">';
                 foreach ($d['photos'] as $k => $p) {
-                    echo '<a class="work__thumb' . ($k ? '' : ' is-on') . '" href="' . esc_url(wp_get_attachment_image_url($p, 'large')) . '" data-lb-item data-cap="' . esc_attr($cap) . '" aria-label="Фото ' . ($k + 1) . '">'
+                    echo '<a class="work__thumb' . ($k ? '' : ' is-on') . '" href="' . esc_url(wp_get_attachment_image_url($p, 'large')) . '" data-lb-item data-cap="' . esc_attr($cap) . ( '" aria-label="' . esc_attr__( 'Photo', 'memorial-plugin' ) . ' ' ) . ($k + 1) . '">'
                        . wp_get_attachment_image($p, 'thumbnail', false, ['loading' => 'lazy', 'alt' => '']) . '</a>';
                 }
                 echo '</div>';
@@ -129,17 +129,17 @@ add_shortcode('mem_works', function ($atts) {
         }
         echo '<div class="work__body"><h3>' . esc_html($title) . '</h3>';
         $facts = [];
-        if ($d['year']) $facts[] = '<span><strong>Выполнено:</strong> ' . (int) $d['year'] . ' г.</span>';
-        if ($d['size']) $facts[] = '<span><strong>Размер участка:</strong> ' . esc_html($d['size']) . '</span>';
+        if ($d['year']) $facts[] = ( '<span><strong>' . esc_html__( 'Done in:', 'memorial-plugin' ) . '</strong> ' ) . esc_html(sprintf( /* translators: %d: year */ _x( '%d', 'year', 'memorial-plugin' ), (int) $d['year'] )) . '</span>';
+        if ($d['size']) $facts[] = ( '<span><strong>' . esc_html__( 'Plot size:', 'memorial-plugin' ) . '</strong> ' ) . esc_html($d['size']) . '</span>';
         if ($facts) echo '<p class="work__size">' . implode('', $facts) . '</p>';
         if (trim(wp_strip_all_tags($w->post_content)) !== '') echo '<div class="work__text">' . wp_kses_post(has_blocks($w->post_content) ? do_blocks($w->post_content) : wpautop($w->post_content)) . '</div>';
         if ($d['rows']) {
-            echo '<figure class="wp-block-table is-style-price"><table><thead><tr><th>Что сделано</th><th>Стоимость</th></tr></thead><tbody>';
+            echo ( '<figure class="wp-block-table is-style-price"><table><thead><tr><th>' . esc_html__( 'What was done', 'memorial-plugin' ) . '</th><th>' . esc_html__( 'Cost', 'memorial-plugin' ) . '</th></tr></thead><tbody>' );
             foreach ($d['rows'] as $r) echo '<tr><td>' . esc_html($r[0]) . '</td><td>' . ($r[1] ? esc_html(memorial_plugin_rub($r[1])) : '—') . '</td></tr>';
             echo '</tbody>';
-            if (count($d['rows']) > 1 && $d['total']) echo '<tfoot><tr><td>Итого</td><td>' . esc_html(memorial_plugin_rub($d['total'])) . '</td></tr></tfoot>';
+            if (count($d['rows']) > 1 && $d['total']) echo ( '<tfoot><tr><td>' . esc_html__( 'Total', 'memorial-plugin' ) . '</td><td>' ) . esc_html(memorial_plugin_rub($d['total'])) . '</td></tr></tfoot>';
             echo '</table></figure>';
-            echo '<p class="work__note">' . ($d['year'] ? 'Цены ' . (int) $d['year'] . ' года. ' : '') . 'Сейчас стоимость может отличаться — посчитаем по телефону бесплатно.</p>';
+            echo '<p class="work__note">' . ($d['year'] ? esc_html(sprintf( /* translators: %d: year */ __( 'Prices of %d.', 'memorial-plugin' ), (int) $d['year'] )) . ' ' : '') . ( esc_html__( 'Today the cost may differ — we will calculate it by phone for free.', 'memorial-plugin' ) . '</p>' );
         }
         echo '</div></article>';
     }
@@ -200,7 +200,7 @@ function memorial_plugin_works_cards($a) {
         if ($marked) $works = $marked;
     }
     if (!$works) {
-        return current_user_can('edit_posts') ? '<p class="is-style-note">[mem_works vid="карточки"]: нет подходящих работ с фото — добавьте их в «Наши работы».</p>' : '';
+        return current_user_can('edit_posts') ? ( '<p class="is-style-note">' . esc_html__( '[mem_works vid="карточки"]: no suitable works with photos — add them in “Our works”.', 'memorial-plugin' ) . '</p>' ) : '';
     }
     $ord = mb_strtolower(trim($a['poryadok']));
     $rand = in_array($ord, ['случайно', 'случайные', 'random'], true);
@@ -217,7 +217,7 @@ function memorial_plugin_works_cards($a) {
         $d = memorial_plugin_work_data($w->ID);
         $title = get_the_title($w);
         $sub = [];
-        if (!memorial_plugin_sc_no($a['razmer']) && $d['size'] !== '') $sub[] = '<span class="nowrap">участок ' . esc_html($d['size']) . '</span>';
+        if (!memorial_plugin_sc_no($a['razmer']) && $d['size'] !== '') $sub[] = ( '<span class="nowrap">' . esc_html__( 'plot', 'memorial-plugin' ) . ' ' ) . esc_html($d['size']) . '</span>';
         if (!memorial_plugin_sc_no($a['cena']) && $d['total']) $sub[] = '<span class="nowrap">' . esc_html(memorial_plugin_rub($d['total'])) . '</span>';
         $href = $base ? $base . '#' . memorial_plugin_work_anchor($title) : ''; // тот же якорь, что у работы в общем списке
         $img = wp_get_attachment_image($d['photos'][0], 'medium_large', false, ['class' => 'mem-wcard__img', 'loading' => 'lazy', 'decoding' => 'async',
@@ -253,6 +253,6 @@ add_action('admin_init', function () {
 add_action('admin_notices', function () {
     if (!($done = get_transient('mem_wcards_report')) || !current_user_can('edit_pages')) return;
     delete_transient('mem_wcards_report');
-    echo '<div class="notice notice-success is-dismissible"><p><b>Примеры работ:</b> карточки на страницах «' . esc_html(implode('», «', $done))
-       . '» теперь собираются сами из «Наших работ» (шорткод [mem_works vid="карточки"]). Какие работы показывать — отметьте «Показывать в примерах» в «Наши работы» (меню «⋯» у работы); без отметок показываются случайные из всех. Прежний вариант — в «Редакциях» страницы.</p></div>';
+    echo ( '<div class="notice notice-success is-dismissible"><p><b>' . esc_html__( 'Examples of works:', 'memorial-plugin' ) . '</b> ' . esc_html__( 'the cards on the pages “', 'memorial-plugin' ) ) . esc_html(implode('», «', $done))
+       . ( esc_html__( '” are now built automatically from “Our works” (the [mem_works vid="карточки"] shortcode). Which works to show — tick “In examples” in “Our works” (the “⋯” menu of a work); without ticks random ones of all are shown. The previous version is in the page’s “Revisions”.', 'memorial-plugin' ) . '</p></div>' );
 });

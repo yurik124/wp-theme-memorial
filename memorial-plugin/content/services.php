@@ -34,7 +34,7 @@ function memorial_plugin_services_grid(array $items) {
         if (!empty($it['text'])) $h .= '<p>' . $e($it['text']) . '</p>';
         // «от 36 700 ₽»: «от» — обычным текстом, сумма — крупно
         $price = !empty($it['price']) ? preg_replace('/^(от|до)\s+/u', '<small>$1</small> ', $e($it['price'])) : '';
-        $h .= '<span class="svc__foot">' . ($price !== '' ? '<b>' . $price . '</b>' : '') . ($it['url'] ? '<span class="svc__more">Подробнее →</span>' : '') . '</span>';
+        $h .= '<span class="svc__foot">' . ($price !== '' ? '<b>' . $price . '</b>' : '') . ($it['url'] ? '<span class="svc__more">' . esc_html__( 'More →', 'memorial-plugin' ) . '</span>' : '') . '</span>';
         $h .= '</span></' . $tag . '>';
     }
     return $h . '</div>';

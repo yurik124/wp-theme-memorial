@@ -18,16 +18,16 @@ defined('ABSPATH') || exit;
             <dt><?php echo esc_html($label); ?></dt>
             <dd><?php echo esc_html(implode(', ', wp_list_pluck($t, 'name'))); ?></dd>
           <?php endforeach; ?>
-          <?php if (get_post_meta($id, '_mem_on_order', true)) : ?><dt>Наличие</dt><dd>Под заказ</dd><?php endif; ?>
+          <?php if (get_post_meta($id, '_mem_on_order', true)) : ?><dt><?php esc_html_e( 'Availability', 'memorial-plugin' ); ?></dt><dd><?php esc_html_e( 'Made to order', 'memorial-plugin' ); ?></dd><?php endif; ?>
         </dl>
 
         <?php if (has_excerpt($id)) : ?><div class="about__text"><?php echo wpautop(esc_html(get_the_excerpt($id))); ?></div><?php endif; ?>
 
         <div class="product__cta">
           <a class="btn btn--gold btn--lg" href="tel:<?php echo esc_attr(memorial_plugin_tel()); ?>"><?php echo memorial_plugin_icon('phone'); ?><span class="nowrap"><?php echo esc_html(memorial_plugin_opt('phone')); ?></span></a>
-          <button class="btn btn--line btn--lg" type="button" data-callback>Перезвоните мне</button>
+          <button class="btn btn--line btn--lg" type="button" data-callback><?php esc_html_e( 'Call me back', 'memorial-plugin' ); ?></button>
         </div>
-        <p class="product__hint">Уточнить наличие, размеры и сроки можно по телефону — подскажем и подберём.</p>
+        <p class="product__hint"><?php esc_html_e( 'You can check the availability, sizes and terms by phone — we will help you choose.', 'memorial-plugin' ); ?></p>
       </div>
     </div>
 
@@ -40,7 +40,7 @@ defined('ABSPATH') || exit;
         ]);
         if ($rel->have_posts()) : ?>
       <section class="related">
-        <h2>Похожие товары</h2>
+        <h2><?php esc_html_e( 'Similar products', 'memorial-plugin' ); ?></h2>
         <div class="products">
           <?php while ($rel->have_posts()) : $rel->the_post(); memorial_plugin_part('product-card'); endwhile; wp_reset_postdata(); ?>
         </div>

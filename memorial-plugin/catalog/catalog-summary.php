@@ -39,7 +39,7 @@ add_shortcode('mem_cat_count', function ($atts) {
     if (!$t) return memorial_plugin_sc_missing('mem_cat_count', $a['cat']);
     [$n] = memorial_plugin_cat_stats($t->term_id);
     $word = !memorial_plugin_sc_no($a['slovo']) && !memorial_plugin_sc_no($a['word']);
-    return $n . ($word ? "\u{00A0}" . memorial_plugin_word($n, 'модель', 'модели', 'моделей') : '');
+    return $n . ($word ? "\u{00A0}" . _n( 'model', 'models', $n, 'memorial-plugin' ) : '');
 });
 
 add_shortcode('mem_cat_price', function ($atts) {
@@ -49,10 +49,11 @@ add_shortcode('mem_cat_price', function ($atts) {
     [, $min, $max] = memorial_plugin_cat_stats($t->term_id);
     $isMax = preg_match('/^(макс|max)/u', mb_strtolower($a['cena'])) || !memorial_plugin_sc_no($a['max']);
     $v = $isMax ? $max : $min;
-    if (!$v) return 'по запросу';
+    if (!$v) return __( 'on request', 'memorial-plugin' );
     $txt = memorial_plugin_sc_no($a['rub']) ? number_format($v, 0, '', "\u{202F}") : memorial_plugin_rub($v);
     $word = !memorial_plugin_sc_no($a['ot']) && !memorial_plugin_sc_no($a['prefix']);
-    return ($word ? ($isMax ? "до\u{00A0}" : "от\u{00A0}") : '') . $txt;
+    /* translators: %s: price */
+    return $word ? sprintf($isMax ? __( 'up to %s', 'memorial-plugin' ) : __( 'from %s', 'memorial-plugin' ), $txt) : $txt;
 });
 
 add_shortcode('mem_cat_list', function ($atts) {
@@ -65,7 +66,7 @@ add_shortcode('mem_cat_list', function ($atts) {
         [$n, $min] = memorial_plugin_cat_stats($k->term_id);
         if (!$n) continue;
         $items[] = '<li><a href="#' . esc_attr(memorial_plugin_term_anchor($k)) . '">' . esc_html($k->name) . '</a> — ' . $n
-                 . ($price && $min ? ', от ' . esc_html(memorial_plugin_rub($min)) : '') . '</li>';
+                 . ($price && $min ? __( ', from ', 'memorial-plugin' ) . esc_html(memorial_plugin_rub($min)) : '') . '</li>';
     }
     return $items ? '<ul class="wp-block-list is-style-checks mem-cat-list">' . implode('', $items) . '</ul>' : '';
 });
@@ -73,7 +74,7 @@ add_shortcode('mem_cat_list', function ($atts) {
 /** Раздел не найден: посетителю — ничего, редактору — подсказка */
 function memorial_plugin_sc_missing($tag, $cat) {
     if (!current_user_can('edit_pages')) return '';
-    return '<mark title="Видно только вам">[' . $tag . ': ' . ($cat !== '' ? 'раздел «' . esc_html($cat) . '» не найден' : 'у страницы нет раздела каталога — добавьте cat="Название раздела"') . ']</mark>';
+    return ( '<mark title="' . esc_html__( 'Only you see this', 'memorial-plugin' ) . '">[' ) . $tag . ': ' . ($cat !== '' ? __( 'section “', 'memorial-plugin' ) . esc_html($cat) . __( '” not found', 'memorial-plugin' ) : __( 'the page has no catalog section — add cat="Section name"', 'memorial-plugin' )) . ']</mark>';
 }
 
 /** Как сослаться на раздел в шорткоде: по названию, если оно не повторяется, иначе по адресу (slug), в крайнем случае по номеру */
@@ -123,5 +124,5 @@ add_action('admin_init', function () {
 add_action('admin_notices', function () {
     if (!($n = get_transient('mem_desc_report')) || !current_user_can('manage_categories')) return;
     delete_transient('mem_desc_report');
-    echo '<div class="notice notice-success is-dismissible"><p>Из описаний разделов каталога (' . (int) $n . ') убраны старые «N моделей, цена от … ₽» — эти цифры каталог показывает сам и обновляет автоматически.</p></div>';
+    echo ( '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'From the descriptions of catalog sections (', 'memorial-plugin' ) ) . (int) $n . ( esc_html__( ') the old “N models, price from … ₽” were removed — the catalog shows these numbers itself and updates them automatically.', 'memorial-plugin' ) . '</p></div>' );
 });

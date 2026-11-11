@@ -12,6 +12,7 @@ function add_action($h, $cb, $p = 10, $a = 1) { return add_filter($h, $cb, $p, $
 function apply_filters($h, $v, ...$args) { global $F; foreach ($F[$h] ?? [] as [$cb, $a]) $v = $cb(...array_slice(array_merge([$v], $args), 0, $a)); return $v; }
 function get_option($n, $d = false) { return $n === 'mem_demo' ? ['title' => 'из базы'] : $d; }
 function is_admin() { return false; }
+function __($s) { return $s; } function _n($a, $b, $n) { return $n === 1 ? $a : $b; } function esc_html__($s) { return $s; } function esc_attr__($s) { return $s; } function _x($s) { return $s; }
 require dirname(__DIR__, 2) . '/memorial-plugin/core/settings.php';
 
 function memorial_plugin_demo_defaults() { return ['title' => 'по умолчанию', 'text' => 'текст']; }

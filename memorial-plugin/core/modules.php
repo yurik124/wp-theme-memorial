@@ -9,8 +9,8 @@ defined('ABSPATH') || exit;
 
 function memorial_plugin_modules_schema() {
     $f = [];
-    foreach (memorial_plugin_optional() as $k => [$name, $desc]) $f[$k] = ['type' => 'checkbox', 'label' => $name . ' — ' . $desc];
-    return ['on' => ['type' => 'group', 'label' => 'Функции плагина', 'help' => 'Снимите галочку — функция выключится: её пункты пропадут из меню, блоки на страницах ничего не покажут. Данные не удаляются. Каталог, цены, контакты, документы и SEO — основа сайта, они работают всегда.',
+    foreach (memorial_plugin_optional_labels() as $k => [$name, $desc]) $f[$k] = ['type' => 'checkbox', 'label' => $name . ' — ' . $desc];
+    return ['on' => ['type' => 'group', 'label' => __( 'Plugin features', 'memorial-plugin' ), 'help' => __( 'Untick a feature and it turns off: its menu items disappear, its blocks on pages show nothing. The data is not deleted. The catalog, prices, contacts, documents and SEO are the base of the site, they always work.', 'memorial-plugin' ),
                      'fields' => $f]];
 }
 function memorial_plugin_modules_page_defaults() {
@@ -18,8 +18,8 @@ function memorial_plugin_modules_page_defaults() {
 }
 
 add_filter('memorial_plugin_admin_pages', function ($pages) {
-    $pages['mem_modules_page'] = ['slug' => 'mem-modules', 'title' => 'Функции', 'schema' => 'memorial_plugin_modules_schema',
-        'intro' => 'Что из плагина «Мемориал» работает на сайте.'];
+    $pages['mem_modules_page'] = ['slug' => 'mem-modules', 'title' => __( 'Features', 'memorial-plugin' ), 'schema' => 'memorial_plugin_modules_schema',
+        'intro' => __( 'What of the “Memorial” plugin works on the site.', 'memorial-plugin' )];
     return $pages;
 });
 

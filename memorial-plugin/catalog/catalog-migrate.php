@@ -112,11 +112,11 @@ add_action('admin_init', function () {
             if ($prev >= 0 && $ref[$prev]['blockName'] === 'core/heading') $ref[$prev] = $empty;
             unset($ref);
             wp_update_post(['ID' => $pg->ID, 'post_content' => wp_slash(serialize_blocks($blocks))]);
-            $report[] = '«' . $pg->post_title . '»: характеристики и цены ' . count($found) . ' моделей перенесены в карточки, таблица убрана';
+            $report[] = '«' . $pg->post_title . __( '»: specifications and prices of ', 'memorial-plugin' ) . count($found) . __( ' models were moved to the cards, the table was removed', 'memorial-plugin' );
             break; // одна таблица на страницу
         }
     }
-    if ($report) set_transient('mem_specs_report', implode('; ', $report) . '. Прежний текст страницы — в её «Редакциях».', DAY_IN_SECONDS);
+    if ($report) set_transient('mem_specs_report', implode('; ', $report) . __( '. The previous text of the page is in its “Revisions”.', 'memorial-plugin' ), DAY_IN_SECONDS);
 });
 
 add_action('admin_notices', function () {

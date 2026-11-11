@@ -75,7 +75,7 @@ add_shortcode('mem_guide', function ($atts) {
     }
     $pages = array_filter($pages, fn($p) => !post_password_required($p));
     if (!$pages) return current_user_can('edit_pages')
-        ? '<p class="is-style-note">[mem_guide]: внутри этой страницы пока нет опубликованных страниц. Откройте нужную страницу → «Атрибуты страницы» → «Родительская» → выберите эту страницу.</p>' : '';
+        ? ( '<p class="is-style-note">' . esc_html__( '[mem_guide]: there are no published pages inside this page yet. Open the page you need → “Page Attributes” → “Parent” → choose this page.', 'memorial-plugin' ) . '</p>' ) : '';
 
     $cards = '';
     $idx = [];          // поиск: q — что показать, t — где искать, u — ссылка, c — номер карточки, g — подпись
@@ -83,7 +83,7 @@ add_shortcode('mem_guide', function ($atts) {
     foreach (array_values($pages) as $i => $p) {
         $d = memorial_plugin_guide_page_data($p);
         $seen[$p->ID] = true;
-        $idx[] = ['q' => $d['q'], 't' => $d['q'] . ' ' . $d['title'] . ' ' . $d['qa'], 'u' => $d['url'], 'c' => $i, 'g' => 'Статья', 'k' => 'p'];
+        $idx[] = ['q' => $d['q'], 't' => $d['q'] . ' ' . $d['title'] . ' ' . $d['qa'], 'u' => $d['url'], 'c' => $i, 'g' => __( 'Article', 'memorial-plugin' ), 'k' => 'p'];
         $heads = array_values(array_filter($d['parts'], fn($x) => $x[2] === 'h'));
         $qs = array_values(array_filter($d['parts'], fn($x) => $x[2] === 'q'));
         foreach ($d['parts'] as [$t, $anc, $k, $ans]) {
@@ -93,9 +93,9 @@ add_shortcode('mem_guide', function ($atts) {
         $cards .= '<article class="mguide__card" data-card="' . $i . '">'
             . '<h2 class="mguide__q"><a href="' . esc_url($d['url']) . '">' . esc_html($d['q']) . '</a></h2>'
             . ($d['qa'] ? '<p class="mguide__a">' . esc_html($d['qa']) . '</p>' : '')
-            . ($in ? '<p class="mguide__in-t">В статье:</p><ul class="mguide__in">' . implode('', array_map(fn($h) => '<li><a href="' . esc_url($d['url'] . '#' . $h[1]) . '">' . esc_html($h[0]) . '</a></li>', $in)) . '</ul>' : '')
-            . '<p class="mguide__foot"><a class="mguide__go" href="' . esc_url($d['url']) . '">Читать ответ <span aria-hidden="true">→</span></a>'
-            . ($qs ? '<span class="mguide__cnt">' . count($qs) . ' ' . memorial_plugin_word(count($qs), 'вопрос', 'вопроса', 'вопросов') . ' с ответами</span>' : '') . '</p>'
+            . ($in ? ( '<p class="mguide__in-t">' . esc_html__( 'In the article:', 'memorial-plugin' ) . '</p><ul class="mguide__in">' ) . implode('', array_map(fn($h) => '<li><a href="' . esc_url($d['url'] . '#' . $h[1]) . '">' . esc_html($h[0]) . '</a></li>', $in)) . '</ul>' : '')
+            . '<p class="mguide__foot"><a class="mguide__go" href="' . esc_url($d['url']) . ( '">' . esc_html__( 'Read the answer', 'memorial-plugin' ) . ' <span aria-hidden="true">→</span></a>' )
+            . ($qs ? '<span class="mguide__cnt">' . count($qs) . ' ' . _n( 'question', 'questions', count($qs), 'memorial-plugin' ) . ( ' ' . esc_html__( 'with answers', 'memorial-plugin' ) . '</span>' ) : '') . '</p>'
             . '</article>';
     }
     // вопросы с остальных страниц сайта — тоже находятся поиском
@@ -110,8 +110,8 @@ add_shortcode('mem_guide', function ($atts) {
     }
     $pop = trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : (function_exists('memorial_plugin_sq_popular') ? memorial_plugin_sq_popular(['документы', 'пособие', 'кладбище', 'стоимость', 'морг'], 5) : ['документы', 'пособие', 'кладбище', 'стоимость', 'морг']);
     return '<div class="mguide" data-guide data-wp-interactive="memorial-plugin/guide" data-wp-init="callbacks.init">'
-        . memorial_plugin_search_box(['id' => 'mguide-q', 'where' => 'g', 'label' => 'Поиск по статьям', 'placeholder' => 'Например: справка о смерти', 'popular' => $pop,
-                          'none' => 'Ответа на такой вопрос пока нет на сайте. Позвоните или оставьте номер — подскажем.'])
+        . memorial_plugin_search_box(['id' => 'mguide-q', 'where' => 'g', 'label' => __( 'Search the articles', 'memorial-plugin' ), 'placeholder' => __( 'For example: death certificate', 'memorial-plugin' ), 'popular' => $pop,
+                          'none' => __( 'There is no answer to such a question on the site yet. Call or leave your number — we will help.', 'memorial-plugin' )])
         . '<script type="application/json" data-guide-idx>' . wp_json_encode($idx, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) . '</script>'
         . '<div class="mguide__grid">' . $cards . '</div></div>';
 });
@@ -156,8 +156,8 @@ add_action('admin_init', function () {
     $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Полезно знать', 'post_name' => 'poleznoe', 'post_content' => $c]);
     if ($id && !is_wp_error($id)) {
         $r = (array) get_transient('mem_places_report');
-        $r[] = '<a href="' . esc_url(get_edit_post_link($id)) . '">«Полезно знать»</a> — черновик с поиском. Чтобы статья появилась на ней: откройте статью → «Атрибуты страницы» → «Родительская» → «Полезно знать». '
-             . 'Вопрос и короткий ответ на карточке — поле «Полезно знать» под текстом статьи.';
+        $r[] = '<a href="' . esc_url(get_edit_post_link($id)) . ( '">' . esc_html__( '“Good to know”', 'memorial-plugin' ) . '</a> ' . esc_html__( '— a draft with the search. For an article to appear on it: open the article → “Page Attributes” → “Parent” → “Good to know”.', 'memorial-plugin' ) . ' ' )
+             . __( 'A question and a short answer on the card — the “Good to know” field under the text of the article.', 'memorial-plugin' );
         set_transient('mem_places_report', array_filter($r), DAY_IN_SECONDS);
     }
 });

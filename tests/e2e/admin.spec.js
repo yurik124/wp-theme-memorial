@@ -15,7 +15,6 @@ const ADMIN_PAGES = [
 	'admin.php?page=mem-legal',
 	'admin.php?page=mem-modules',
 	'admin.php?page=mem-sq',
-	'admin.php?page=mem-help-m',
 	'edit.php?post_type=mem_product&page=mem-products',
 	'edit.php?post_type=mem_product&page=mem-types',
 	'edit.php?post_type=mem_product&page=mem-product-pages',

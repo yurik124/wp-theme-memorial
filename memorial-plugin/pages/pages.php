@@ -15,13 +15,13 @@ defined('ABSPATH') || exit;
 
 /* Колонка в списке страниц: видно, где какие товары */
 add_filter('manage_page_posts_columns', function ($c) {
-    $c['mem_products'] = 'Товары';
+    $c['mem_products'] = __( 'Products', 'memorial-plugin' );
     return $c;
 });
 add_action('manage_page_posts_custom_column', function ($col, $id) {
     if ($col !== 'mem_products') return;
     $v = get_post_meta($id, '_mem_products', true);
-    if ($v === 'all') echo 'Все категории';
+    if ($v === 'all') echo __( 'All categories', 'memorial-plugin' );
     elseif ($v && ($t = get_term((int) $v, 'mem_cat')) && !is_wp_error($t)) echo esc_html($t->name);
     else echo '—';
 }, 10, 2);
@@ -145,7 +145,7 @@ add_action('enqueue_block_editor_assets', function () {
 function memorial_plugin_cat_tile_html($url, $name, $img, $st) {
     return '<a class="cat reveal" href="' . esc_url($url) . '"' . ($img ? ' style="--img:url(' . esc_url($img) . ')' . $st . '"' : '') . '>'
          . '<span class="cat__ph" aria-hidden="true"></span>'
-         . '<span class="cat__cap"><h3>' . esc_html($name) . '</h3><span class="cat__more">Смотреть →</span></span></a>';
+         . '<span class="cat__cap"><h3>' . esc_html($name) . ( '</h3><span class="cat__more">' . esc_html__( 'View →', 'memorial-plugin' ) . '</span></span></a>' );
 }
 
 function memorial_plugin_cat_tiles($cats) {
@@ -192,18 +192,18 @@ function memorial_plugin_products_grid($term_id, $base) {
     }
 
     if (!$q->have_posts()) {
-        echo '<div class="empty"><p>Товары скоро появятся. Позвоните — подберём нужное и расскажем о ценах.</p>';
+        echo ( '<div class="empty"><p>' . esc_html__( 'Products will appear soon. Call — we will find what you need and tell you about the prices.', 'memorial-plugin' ) . '</p>' );
         if (memorial_plugin_tel()) echo '<a class="btn btn--gold" href="tel:' . esc_attr(memorial_plugin_tel()) . '">' . memorial_plugin_icon('phone') . '<span class="nowrap">' . esc_html(memorial_plugin_opt('phone')) . '</span></a>';
         echo '</div>';
         return;
     }
     ?>
     <div class="toolbar" id="tovary">
-      <span class="toolbar__count">Товаров: <?php echo (int) $q->found_posts; ?></span>
+      <span class="toolbar__count"><?php echo esc_html(sprintf( /* translators: %d: number of products */ __( 'Products: %d', 'memorial-plugin' ), (int) $q->found_posts )); ?></span>
       <?php if ($q->found_posts > 1) : ?>
       <form class="sort" method="get" action="<?php echo esc_url($base); ?>" data-sort>
         <label>
-          <span class="screen-reader-text">Сортировка</span>
+          <span class="screen-reader-text"><?php esc_html_e( 'Sorting', 'memorial-plugin' ); ?></span>
           <select name="sort">
             <?php foreach (memorial_plugin_sorts() as $v => $l) : ?>
               <option value="<?php echo esc_attr($v); ?>" <?php selected($sort, $v); ?>><?php echo esc_html($l); ?></option>
@@ -219,7 +219,7 @@ function memorial_plugin_products_grid($term_id, $base) {
     </div>
     <?php
     if ($q->max_num_pages > 1) {
-        echo '<nav class="pagination" aria-label="Страницы"><div class="nav-links">'
+        echo '<nav class="pagination" aria-label="' . esc_attr__( 'Pages', 'memorial-plugin' ) . '"><div class="nav-links">'
            . paginate_links(['total' => $q->max_num_pages, 'current' => $paged, 'mid_size' => 1, 'prev_text' => '←', 'next_text' => '→', 'add_fragment' => '#tovary'])
            . '</div></nav>';
     }

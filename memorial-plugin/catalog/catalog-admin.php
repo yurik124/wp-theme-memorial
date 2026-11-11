@@ -10,12 +10,12 @@ function memorial_plugin_cat_fields($term = null) {
     $v = fn($k) => $term ? get_term_meta($term->term_id, $k, true) : '';
     $ratio = $v('mem_ratio');
     $rows = [
-        ['mem_ratio', 'Пропорции фото', '<select name="mem_ratio" id="mem_ratio"><option value="">Как у родительской категории</option>'
+        ['mem_ratio', __( 'Photo proportions', 'memorial-plugin' ), ( '<select name="mem_ratio" id="mem_ratio"><option value="">' . esc_html__( 'As in the parent category', 'memorial-plugin' ) . '</option>' )
             . implode('', array_map(fn($k, $l) => '<option value="' . esc_attr($k) . '"' . selected($ratio, $k, false) . '>' . esc_html($l) . '</option>', array_keys(memorial_plugin_ratios()), memorial_plugin_ratios()))
-            . '</select>', 'Как обрезать фото в карточках. «Целиком» — фото не обрезается, по краям белые поля.'],
-        ['mem_cols', 'Колонок на компьютере', '<input type="number" min="2" max="6" name="mem_cols" id="mem_cols" value="' . esc_attr($v('mem_cols')) . '" placeholder="4" style="width:6em">', 'На телефоне всегда 2.'],
-        ['mem_order', 'Порядок раздела', '<input type="number" name="mem_order" id="mem_order" value="' . esc_attr($v('mem_order')) . '" placeholder="0" style="width:6em">', 'Разделы на странице идут по возрастанию этого числа.'],
-        ['mem_anchor', 'Якорь раздела', '<input type="text" name="mem_anchor" id="mem_anchor" value="' . esc_attr($v('mem_anchor')) . '" placeholder="например: korziny">', 'Для ссылок вида #korziny. Можно не заполнять.'],
+            . '</select>', __( 'How to crop the photos in the cards. “Whole” — the photo is not cropped, with white margins at the edges.', 'memorial-plugin' )],
+        ['mem_cols', __( 'Columns on a computer', 'memorial-plugin' ), '<input type="number" min="2" max="6" name="mem_cols" id="mem_cols" value="' . esc_attr($v('mem_cols')) . '" placeholder="4" style="width:6em">', __( 'Always 2 on a phone.', 'memorial-plugin' )],
+        ['mem_order', __( 'Section order', 'memorial-plugin' ), '<input type="number" name="mem_order" id="mem_order" value="' . esc_attr($v('mem_order')) . '" placeholder="0" style="width:6em">', __( 'Sections on the page go in ascending order of this number.', 'memorial-plugin' )],
+        ['mem_anchor', __( 'Section anchor', 'memorial-plugin' ), '<input type="text" name="mem_anchor" id="mem_anchor" value="' . esc_attr($v('mem_anchor')) . ( '" placeholder="' . esc_attr__( 'for example: korziny', 'memorial-plugin' ) . '">' ), __( 'For links like #korziny. Can be left empty.', 'memorial-plugin' )],
     ];
     foreach ($rows as [$k, $label, $input, $help]) {
         if ($term) {

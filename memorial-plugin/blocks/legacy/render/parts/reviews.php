@@ -15,17 +15,17 @@ $reviews = 'https://yandex.ru/maps/org/' . $org . '/reviews/';
       <?php if (!empty($s['title'])) : ?><h2><?php echo esc_html(memorial_plugin_t($s['title'])); ?></h2><?php endif; ?>
       <?php if (!empty($s['text'])) : ?><p class="reviews__text"><?php echo nl2br(esc_html(memorial_plugin_t($s['text']))); ?></p><?php endif; ?>
       <div class="reviews__btns">
-        <a class="btn btn--gold" href="<?php echo esc_url($reviews); ?>" target="_blank" rel="noopener">Оставить отзыв</a>
-        <a class="btn btn--line" href="<?php echo esc_url($page); ?>" target="_blank" rel="noopener">Мы на Яндекс Картах</a>
+        <a class="btn btn--gold" href="<?php echo esc_url($reviews); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Leave a review', 'memorial-plugin' ); ?></a>
+        <a class="btn btn--line" href="<?php echo esc_url($page); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'We are on Yandex Maps', 'memorial-plugin' ); ?></a>
       </div>
     </div>
     <div class="reviews__widget" data-reviews="<?php echo esc_url($src); ?>">
       <div class="reviews__ph">
         <span class="reviews__stars" aria-hidden="true">★★★★★</span>
-        <p>Отзывы клиентов на Яндекс Картах</p>
-        <button class="btn btn--line" type="button" data-reviews-load>Показать отзывы</button>
+        <p><?php esc_html_e( 'Customer reviews on Yandex Maps', 'memorial-plugin' ); ?></p>
+        <button class="btn btn--line" type="button" data-reviews-load><?php esc_html_e( 'Show reviews', 'memorial-plugin' ); ?></button>
       </div>
-      <a class="reviews__credit" href="<?php echo esc_url($page); ?>" target="_blank" rel="noopener"><?php echo esc_html(get_bloginfo('name')); ?> на карте Белгорода — Яндекс Карты</a>
+      <a class="reviews__credit" href="<?php echo esc_url($page); ?>" target="_blank" rel="noopener"><?php echo esc_html(get_bloginfo('name')); ?><?php esc_html_e( ' on the map of Belgorod — Yandex Maps', 'memorial-plugin' ); ?></a>
     </div>
   </div>
 </section>

@@ -8,9 +8,9 @@ defined('ABSPATH') || exit;
 /* SVG-иконки */
 /** Иконки для пунктов «Почему нам доверяют» (выбираются в админке) */
 function memorial_plugin_feat_icons() {
-    return ['' => 'Номер (01, 02…)', 'candle' => 'Свеча — зал, прощание', 'flower' => 'Цветок — венки', 'building' => 'Здание',
-            'doc' => 'Документ', 'shield' => 'Щит с галочкой — надёжность', 'car' => 'Автомобиль — перевозка', 'clock' => 'Часы — круглосуточно',
-            'phone' => 'Телефон', 'heart' => 'Сердце — забота', 'ruble' => 'Рубль — цены', 'cross' => 'Крест'];
+    return ['' => __( 'Number (01, 02…)', 'memorial-plugin' ), 'candle' => __( 'Candle — hall, farewell', 'memorial-plugin' ), 'flower' => __( 'Flower — wreaths', 'memorial-plugin' ), 'building' => __( 'Building', 'memorial-plugin' ),
+            'doc' => __( 'Document', 'memorial-plugin' ), 'shield' => __( 'Shield with a tick — reliability', 'memorial-plugin' ), 'car' => __( 'Car — transport', 'memorial-plugin' ), 'clock' => __( 'Clock — round the clock', 'memorial-plugin' ),
+            'phone' => __( 'Phone', 'memorial-plugin' ), 'heart' => __( 'Heart — care', 'memorial-plugin' ), 'ruble' => __( 'Ruble — prices', 'memorial-plugin' ), 'cross' => __( 'Cross', 'memorial-plugin' )];
 }
 
 /** Иконка пункта: выбранная, иначе подбирается по заголовку */

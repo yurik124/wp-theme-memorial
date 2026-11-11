@@ -7,30 +7,30 @@
 defined('ABSPATH') || exit;
 
 function memorial_plugin_metrika_schema() {
-    return ['counter' => ['type' => 'group', 'label' => 'Счётчик', 'fields' => [
+    return ['counter' => ['type' => 'group', 'label' => __( 'Counter', 'memorial-plugin' ), 'fields' => [
         'load'        => ['type' => 'select', 'label' => __('How Yandex Metrica loads', 'memorial-plugin'), 'options' => [
                               'consent' => __('After cookie consent (recommended): the counter starts only after the visitor clicks “Accept”', 'memorial-plugin'),
                               'always'  => __('Always: the counter loads on every page without waiting (deferred); the cookie notice is still shown', 'memorial-plugin'),
                               'off'     => __('Off: no Metrica code on the site — connect it through a tag manager if needed', 'memorial-plugin'),
                           ],
                           'help' => __('“After cookie consent” and “Always” also set how the cookie bar works. With “Off” the bar follows the setting below.', 'memorial-plugin')],
-        'id'          => ['type' => 'number', 'label' => 'Номер счётчика Яндекс.Метрики',
-                          'help' => 'Только цифры, например 98765432. Пусто — Метрика на сайте отключена.'],
-        'webvisor'    => ['type' => 'checkbox', 'label' => 'Вебвизор — запись того, как посетители смотрят сайт'],
-        'skip_admins' => ['type' => 'checkbox', 'label' => 'Не считать визиты тех, кто вошёл в админку (ваши собственные заходы не испортят статистику)'],
-        'clean_utm'   => ['type' => 'checkbox', 'label' => 'Убирать рекламные метки из адресной строки (utm_…, yclid, gclid…): посетитель видит и копирует чистый адрес. Метрика всё равно получает адрес с метками — источники в отчётах не теряются'],
+        'id'          => ['type' => 'number', 'label' => __( 'Yandex Metrica counter number', 'memorial-plugin' ),
+                          'help' => __( 'Digits only, for example 98765432. Empty — Metrica is off on the site.', 'memorial-plugin' )],
+        'webvisor'    => ['type' => 'checkbox', 'label' => __( 'Webvisor — recording how visitors view the site', 'memorial-plugin' )],
+        'skip_admins' => ['type' => 'checkbox', 'label' => __( 'Do not count visits of those logged into the admin (your own visits will not spoil the statistics)', 'memorial-plugin' )],
+        'clean_utm'   => ['type' => 'checkbox', 'label' => __( 'Remove ad tags from the address bar (utm_…, yclid, gclid…): a visitor sees and copies a clean address. Metrica still gets the address with the tags — the sources in the reports are not lost', 'memorial-plugin' )],
     ]],
-    'consent' => ['type' => 'group', 'label' => 'Плашка о cookie',
-        'help' => 'Ссылки в тексте: {cookies:текст} — на Политику cookie, {policy:текст} — на Политику обработки ПД, {consent:текст} — на Согласие (страницы выбираются в «Мемориал → Документы»). Без меток ссылка на Политику cookie добавится в конце сама.', 'fields' => [
-        'mode' => ['type' => 'select', 'label' => 'Как работает', 'options' => [
-            'ask'    => 'Спрашивать согласие: Метрика и коды ниже запускаются после «Принять» (строгая трактовка 152-ФЗ)',
-            'notice' => 'Только уведомлять: «Продолжая использовать сайт…» — Метрика работает сразу, кнопка «Понятно»',
-            'off'    => 'Без плашки: Метрика работает сразу',
+    'consent' => ['type' => 'group', 'label' => __( 'Cookie banner', 'memorial-plugin' ),
+        'help' => __( 'Links in the text: {cookies:text} — to the Cookie policy, {policy:text} — to the Personal data policy, {consent:text} — to the Consent (the pages are chosen in “Memorial → Documents”). Without the tags a link to the Cookie policy is added at the end automatically.', 'memorial-plugin' ), 'fields' => [
+        'mode' => ['type' => 'select', 'label' => __( 'How it works', 'memorial-plugin' ), 'options' => [
+            'ask'    => __( 'Ask for consent: Metrica and the codes below start after “Accept” (the strict reading of 152-FZ)', 'memorial-plugin' ),
+            'notice' => __( 'Only notify: “By continuing to use the site…” — Metrica works at once, the “Got it” button', 'memorial-plugin' ),
+            'off'    => __( 'No banner: Metrica works at once', 'memorial-plugin' ),
         ]],
-        'text'        => ['type' => 'textarea', 'label' => 'Текст плашки — «Спрашивать согласие»', 'rows' => 3],
-        'text_notice' => ['type' => 'textarea', 'label' => 'Текст плашки — «Только уведомлять»', 'rows' => 3],
-        'code' => ['type' => 'code', 'label' => 'Другие счётчики — запускаются только после согласия', 'rows' => 8,
-                   'help' => 'Вставьте сюда целиком коды пикселя VK, подмены номеров (Gudok) и т.п. — вместе с тегами <script>. После переноса удалите их из плагина «Simple Custom CSS and JS».'],
+        'text'        => ['type' => 'textarea', 'label' => __( 'Banner text — “Ask for consent”', 'memorial-plugin' ), 'rows' => 3],
+        'text_notice' => ['type' => 'textarea', 'label' => __( 'Banner text — “Only notify”', 'memorial-plugin' ), 'rows' => 3],
+        'code' => ['type' => 'code', 'label' => __( 'Other counters — start only after consent', 'memorial-plugin' ), 'rows' => 8,
+                   'help' => __( 'Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags. After moving them, remove them from the “Simple Custom CSS and JS” plugin.', 'memorial-plugin' )],
     ]],
     ];
 }
@@ -49,15 +49,15 @@ function memorial_plugin_metrika_defaults() {
 add_filter('memorial_plugin_admin_pages', function ($pages) {
     $pages['mem_metrika'] = [
         'slug'   => 'mem-metrika',
-        'title'  => 'Аналитика',
+        'title'  => __( 'Analytics', 'memorial-plugin' ),
         'schema' => 'memorial_plugin_metrika_schema',
-        'intro'  => '<b>Как настроить подсчёт звонков:</b></p><ol class="mem-steps">'
-            . '<li>Создайте счётчик на <a href="https://metrika.yandex.ru/add" target="_blank" rel="noopener">metrika.yandex.ru</a> и вставьте его номер ниже. Сохраните.</li>'
-            . '<li>В Метрике откройте счётчик → <b>Цели</b> → <b>Добавить цель</b> → тип <b>«JavaScript-событие»</b>. '
-            . 'Название «Звонок», идентификатор <code>phone_click</code>. По желанию — ещё цели: <code>callback_sent</code> «Заявка на звонок», <code>max_click</code> «Переход в MAX», <code>email_click</code> «Письмо».</li>'
-            . '<li>Через день-два смотрите: <b>Отчёты → Источники → Сводка</b>, вверху выберите цель «Звонок» — увидите, откуда пришли звонящие (Яндекс, Google, карты, реклама). '
-            . 'В <b>Отчёты → Содержание → Параметры визитов</b> видно, на какой кнопке нажимают чаще: шапка, первый экран, карточка товара и т.д.</li>'
-            . '</ol><p class="description">Цель «Звонок» отправляется при нажатии на номер с мобильного телефона; на компьютере вместо звонка открывается MAX или окно заявки, их считают цели <code>max_click</code> и <code>callback_sent</code>. Если человек переписал номер с экрана вручную, Метрика такой звонок не увидит — для точного учёта всех звонков нужен коллтрекинг.',
+        'intro'  => ( '<b>' . esc_html__( 'How to set up call tracking:', 'memorial-plugin' ) . '</b></p><ol class="mem-steps">' )
+            . ( '<li>' . esc_html__( 'Create a counter at', 'memorial-plugin' ) . ' <a href="https://metrika.yandex.ru/add" target="_blank" rel="noopener">metrika.yandex.ru</a> ' . esc_html__( 'and paste its number below. Save.', 'memorial-plugin' ) . '</li>' )
+            . ( '<li>' . esc_html__( 'In Metrica open the counter →', 'memorial-plugin' ) . ' <b>' . esc_html__( 'Goals', 'memorial-plugin' ) . '</b> → <b>' . esc_html__( 'Add a goal', 'memorial-plugin' ) . '</b> ' . esc_html__( '→ type', 'memorial-plugin' ) . ' <b>' . esc_html__( '“JavaScript event”', 'memorial-plugin' ) . '</b>. ' )
+            . ( esc_html__( 'Name “Call”, identifier', 'memorial-plugin' ) . ' <code>phone_click</code>' . esc_html__( '. Optionally more goals:', 'memorial-plugin' ) . ' <code>callback_sent</code> ' . esc_html__( '“Call request”,', 'memorial-plugin' ) . ' <code>max_click</code> ' . esc_html__( '“Going to MAX”,', 'memorial-plugin' ) . ' <code>email_click</code> ' . esc_html__( '“Email”.', 'memorial-plugin' ) . '</li>' )
+            . ( '<li>' . esc_html__( 'In a day or two look at:', 'memorial-plugin' ) . ' <b>' . esc_html__( 'Reports → Sources → Summary', 'memorial-plugin' ) . '</b>' . esc_html__( ', choose the “Call” goal at the top — you will see where the callers came from (Yandex, Google, maps, ads).', 'memorial-plugin' ) . ' ' )
+            . ( esc_html__( 'In', 'memorial-plugin' ) . ' <b>' . esc_html__( 'Reports → Content → Visit parameters', 'memorial-plugin' ) . '</b> ' . esc_html__( 'shows which button is clicked more often: the header, the first screen, a product card and so on.', 'memorial-plugin' ) . '</li>' )
+            . ( '</ol><p class="description">' . esc_html__( 'The “Call” goal is sent when the number is tapped on a mobile phone; on a computer MAX or the request window opens instead of a call, they are counted by the goals', 'memorial-plugin' ) . ' <code>max_click</code> ' . esc_html__( 'and', 'memorial-plugin' ) . ' <code>callback_sent</code>' . esc_html__( '. If a person copied the number from the screen by hand, Metrica does not see such a call — exact counting of all calls needs call tracking.', 'memorial-plugin' ) ),
     ];
     return $pages;
 });
@@ -102,7 +102,7 @@ function memorial_plugin_consent_text() {
     $t = (string) (memorial_plugin_consent_mode() === 'notice' ? ($c['text_notice'] ?? '') : ($c['text'] ?? ''));
     $html = function_exists('memorial_plugin_legal_text') ? memorial_plugin_legal_text($t) : esc_html(preg_replace('~\{\w+:([^}]+)\}~u', '$1', $t));
     if (!preg_match('~\{\w+:~', $t) && function_exists('memorial_plugin_legal_url') && ($u = memorial_plugin_legal_url('cookies'))) {
-        $html .= ' <a href="' . esc_url($u) . '">Политика использования cookie</a>';
+        $html .= ' <a href="' . esc_url($u) . ( '">' . esc_html__( 'Cookie policy', 'memorial-plugin' ) . '</a>' );
     }
     return $html;
 }
@@ -240,10 +240,10 @@ function memorial_plugin_consent_banner_html() {
   <p><?php echo memorial_plugin_consent_text(); ?></p>
   <div class="consent__btns">
     <?php if ($notice) : ?>
-    <button class="btn btn--gold btn--sm" type="button" data-consent="ok">Понятно</button>
+    <button class="btn btn--gold btn--sm" type="button" data-consent="ok"><?php esc_html_e( 'Got it', 'memorial-plugin' ); ?></button>
     <?php else : ?>
-    <button class="btn btn--gold btn--sm" type="button" data-consent="yes">Принять</button>
-    <button class="btn btn--line btn--sm" type="button" data-consent="no">Отклонить</button>
+    <button class="btn btn--gold btn--sm" type="button" data-consent="yes"><?php esc_html_e( 'Accept', 'memorial-plugin' ); ?></button>
+    <button class="btn btn--line btn--sm" type="button" data-consent="no"><?php esc_html_e( 'Decline', 'memorial-plugin' ); ?></button>
     <?php endif; ?>
   </div>
 </div>

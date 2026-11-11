@@ -1,0 +1,5089 @@
+# Russian translation of memorial-plugin.
+# This file is distributed under the same license as the memorial-plugin package.
+msgid ""
+msgstr ""
+"Project-Id-Version: memorial-plugin\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: memorial-plugin\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: legal/legal.php:28
+msgid " (draft)"
+msgstr " (черновик)"
+
+#: reviews/rewio.php:467
+msgid " (hidden: "
+msgstr " (скрыто: "
+
+#: places/places.php:177
+msgid " and the map"
+msgstr " и карта"
+
+#: reviews/rewio.php:333
+msgid " at "
+msgstr " в "
+
+#: reviews/rewio.php:299
+msgid " h"
+msgstr " ч"
+
+#: catalog/catalog-migrate.php:115
+msgid " models were moved to the cards, the table was removed"
+msgstr " моделей перенесены в карточки, таблица убрана"
+
+#: reviews/rewio.php:211
+msgid " of "
+msgstr " из "
+
+#: blocks/legacy/render/parts/reviews.php:28
+msgid " on the map of Belgorod — Yandex Maps"
+msgstr " на карте Белгорода — Яндекс Карты"
+
+#: reviews/rewio.php:458
+msgid " · next check: "
+msgstr " · следующая проверка: "
+
+#: reviews/rewio.php:449
+msgid " — but showing is off (the tick in “1. Connection”)"
+msgstr " — но показ выключен (галочка в «1. Подключение»)"
+
+#: core/settings.php:252
+msgid " — calmer and more specific. You can change it in “Memorial → Home page”."
+msgstr " — спокойнее и конкретнее. Поменять можно в «Мемориал → Главная страница»."
+
+#. translators: %d: number of answers.
+#: src/catalog/search-stats.js:91
+#, php-format
+msgid "%d answer"
+msgid_plural "%d answers"
+msgstr[0] "%d ответ"
+msgstr[1] "%d ответа"
+msgstr[2] "%d ответов"
+
+#. translators: %d: number of answers
+#: core/assets.php:86
+#, php-format
+msgid "%d answer on other pages"
+msgid_plural "%d answers on other pages"
+msgstr[0] "%d ответ на других страницах"
+msgstr[1] "%d ответа на других страницах"
+msgstr[2] "%d ответов на других страницах"
+
+#. translators: %d: number of articles
+#: core/assets.php:84
+#, php-format
+msgid "%d article"
+msgid_plural "%d articles"
+msgstr[0] "%d статья"
+msgstr[1] "%d статьи"
+msgstr[2] "%d статей"
+
+#. translators: %d: number of items
+#: catalog/catalog-import.php:182 catalog/catalog-import.php:188
+#, php-format
+msgid "%d pcs."
+msgstr "%d шт."
+
+#. translators: %d: number of posts.
+#: src/convert/index.js:162
+#, php-format
+msgid "%d post converted."
+msgid_plural "%d posts converted."
+msgstr[0] "Переведена %d запись."
+msgstr[1] "Переведено %d записи."
+msgstr[2] "Переведено %d записей."
+
+#: src/catalog/products.js:435
+#, php-format
+msgid "%d product added at the end of the list — fill in its price and specifications."
+msgid_plural "%d products added at the end of the list — fill in their prices and specifications."
+msgstr[0] "%d товар добавлен в конец списка — заполните цену и характеристики."
+msgstr[1] "%d товара добавлены в конец списка — заполните цены и характеристики."
+msgstr[2] "%d товаров добавлены в конец списка — заполните цены и характеристики."
+
+#. translators: %d: number of questions
+#: core/assets.php:79
+#, php-format
+msgid "%d question"
+msgid_plural "%d questions"
+msgstr[0] "%d вопрос"
+msgstr[1] "%d вопроса"
+msgstr[2] "%d вопросов"
+
+#. translators: %d: number of questions
+#: core/assets.php:76
+#, php-format
+msgid "%d question with an answer"
+msgid_plural "%d questions with answers"
+msgstr[0] "%d вопрос с ответами"
+msgstr[1] "%d вопроса с ответами"
+msgstr[2] "%d вопросов с ответами"
+
+#. translators: %d: number of records.
+#: src/collections/index.js:321
+#, php-format
+msgid "%d record moved to the trash."
+msgid_plural "%d records moved to the trash."
+msgstr[0] "%d запись перемещена в корзину."
+msgstr[1] "%d записи перемещены в корзину."
+msgstr[2] "%d записей перемещены в корзину."
+
+#. translators: %s: title of the original.
+#: catalog/catalog-manager.php:445
+#, php-format
+msgid "%s (copy)"
+msgstr "%s (копия)"
+
+#. translators: %s: site name.
+#: blocks/home/home.php:446
+#, php-format
+msgid "%s on the map — Yandex Maps"
+msgstr "%s на карте — Яндекс Карты"
+
+#. translators: %s: amount.
+#: src/catalog/fields.js:17
+#, php-format
+msgid "%s ₽"
+msgstr "%s ₽"
+
+#: prices/prices.php:379
+msgid "(check whether they are up to date; replace them with a shortcode if you like):"
+msgstr "(проверьте, актуальны ли; при желании замените шорткодом):"
+
+#: src/convert/index.js:233
+msgid "(no title)"
+msgstr "(без названия)"
+
+#: leads/callback.php:98
+msgid "(optional)"
+msgstr "(необязательно)"
+
+#: catalog/catalog-summary.php:127
+msgid ") the old “N models, price from … ₽” were removed — the catalog shows these numbers itself and updates them automatically."
+msgstr ") убраны старые «N моделей, цена от … ₽» — эти цифры каталог показывает сам и обновляет автоматически."
+
+#: reviews/rewio.php:241
+msgid "), but were not saved in the site’s database. Tell the theme developer."
+msgstr "), но не сохранились в базе сайта. Сообщите разработчику темы."
+
+#: seo/metrika.php:58
+msgid ", choose the “Call” goal at the top — you will see where the callers came from (Yandex, Google, maps, ads)."
+msgstr ", вверху выберите цель «Звонок» — увидите, откуда пришли звонящие (Яндекс, Google, карты, реклама)."
+
+#: catalog/catalog-front.php:216 catalog/catalog-summary.php:69
+msgid ", from "
+msgstr ", от "
+
+#: catalog/catalog-front.php:124
+msgid ", photo "
+msgstr ", фото "
+
+#: seo/metrika.php:60
+msgid ". If a person copied the number from the screen by hand, Metrica does not see such a call — exact counting of all calls needs call tracking."
+msgstr ". Если человек переписал номер с экрана вручную, Метрика такой звонок не увидит — для точного учёта всех звонков нужен коллтрекинг."
+
+#: seo/metrika.php:57
+msgid ". Optionally more goals:"
+msgstr ". По желанию — ещё цели:"
+
+#: prices/prices.php:371
+msgid ". The previous text is kept in the page’s “Revisions”."
+msgstr ". Прежний текст сохранён в «Редакциях» страницы."
+
+#: catalog/catalog-migrate.php:119
+msgid ". The previous text of the page is in its “Revisions”."
+msgstr ". Прежний текст страницы — в её «Редакциях»."
+
+#: src/catalog/products.js:292 src/editor-meta/index.js:59
+msgid "0 — “price on request”."
+msgstr "0 — «цена по запросу»."
+
+#: reviews/rewio.php:37
+msgid "1 (a full-width feed)"
+msgstr "1 (лентой на всю ширину)"
+
+#: reviews/rewio.php:15
+msgid "1. Connection"
+msgstr "1. Подключение"
+
+#: places/places.php:55
+msgid "12 km from the centre of Belgorod"
+msgstr "12 км от центра Белгорода"
+
+#: reviews/rewio.php:19
+msgid "2. Which branches and sites"
+msgstr "2. Какие филиалы и площадки"
+
+#: reviews/reviews.php:12
+msgid "2GIS"
+msgstr "2ГИС"
+
+#: src/catalog/types.js:113
+msgid "2–6; empty — 4. On a phone always 2."
+msgstr "2–6; пусто — 4. На телефоне всегда 2."
+
+#: reviews/rewio.php:25
+msgid "3. Which reviews to show"
+msgstr "3. Какие отзывы показывать"
+
+#: core/settings.php:50 core/settings.php:182
+msgid "308000, Belgorod, 40 Studencheskaya St."
+msgstr "308000, г. Белгород, ул. Студенческая, 40"
+
+#: reviews/rewio.php:26
+msgid "3★ and higher"
+msgstr "3★ и выше"
+
+#: reviews/rewio.php:33
+msgid "4. How it looks on the site"
+msgstr "4. Как выглядит на сайте"
+
+#: blocks/legacy/legacy.php:32
+msgid "404 message with a call button and catalog sections."
+msgstr "Сообщение 404 с кнопкой звонка и разделами каталога."
+
+#: reviews/rewio.php:26
+msgid "4★ and higher"
+msgstr "4★ и выше"
+
+#: reviews/rewio.php:47
+msgid "5. Updating"
+msgstr "5. Обновление"
+
+#: prices/prices.php:95
+msgid "<br>Catalog prices are counted from the products: <code>[mem_cat_price]</code>, <code>[mem_cat_count]</code>."
+msgstr "<br>Цены каталога считаются из товаров: <code>[mem_cat_price]</code>, <code>[mem_cat_count]</code> (см. «Шорткоды и блоки»)."
+
+#: content/patterns.php:28
+msgid "A block with the phone. The title and the text are changed in the shortcode."
+msgstr "Тёмный блок с телефоном. Заголовок и текст меняются в коде шорткода."
+
+#: src/catalog/types.js:708
+msgid "A draft page for the new catalog section is created too."
+msgstr "Для нового раздела каталога создаётся и черновик страницы."
+
+#. translators: %d: years
+#: blocks/legacy/render/tagline.php:6
+#, php-format
+msgid "A funeral company on the market for more than %d years"
+msgstr "Ритуальная компания, которая на рынке больше %d лет"
+
+#: places/places.php:58
+msgid "A link from Yandex Maps. Empty — a map by the address."
+msgstr "Ссылка с Яндекс Карт. Пусто — карта по адресу."
+
+#: core/settings.php:99
+msgid "A link under the “Call” and “Call me back” buttons: a person immediately sees where to click if someone close has just died. Empty — the page “What to do when someone dies” (found automatically)."
+msgstr "Ссылка под кнопками «Позвонить» и «Перезвоните мне»: человек сразу видит, куда нажать, если только что умер близкий. Пусто — страница «Что делать, если умер человек» (находится сама)."
+
+#: core/settings.php:108
+msgid "A low strip of the photo first, the text below"
+msgstr "Сначала фото невысокой полосой, под ним текст"
+
+#: content/patterns.php:26
+msgid "A paragraph with the number of models and the list of sections with prices — everything is counted automatically."
+msgstr "Абзац с числом моделей и список разделов с ценами — всё считается само."
+
+#: content/patterns.php:30
+msgid "A photo of the craftsman’s work and a couple of sentences — for wreaths, portraits on monuments, ribbon printing."
+msgstr "Фото работы мастера и пара предложений — для венков, портретов на памятниках, печати лент."
+
+#: content/guide.php:160
+msgid "A question and a short answer on the card — the “Good to know” field under the text of the article."
+msgstr "Вопрос и короткий ответ на карточке — поле «Полезно знать» под текстом статьи."
+
+#: reviews/reviews.php:22
+msgid "A row for every service and branch. The order is changed with the ↑ ↓ arrows to the right of a row. Write the rating and the number of reviews as in the service itself — visitors see them."
+msgstr "По строке на каждый сервис и филиал. Порядок меняется стрелками ↑ ↓ справа от строки. Оценку и число отзывов пишите как в самом сервисе — их видно посетителям."
+
+#: src/editor-meta/index.js:112
+msgid "A short line in the card: size, material, colour."
+msgstr "Короткая строка в карточке: размер, материал, цвет."
+
+#: blocks/legacy/legacy.php:101
+msgid "A single product from the catalog."
+msgstr "Один товар из каталога."
+
+#: content/patterns.php:35
+msgid "A title and three expandable questions. They get onto the “Questions and answers” page automatically."
+msgstr "Заголовок и три раскрывающихся вопроса. Они сами попадут на страницу «Вопрос–ответ»."
+
+#: content/patterns.php:24
+msgid "A title, the automatic summary “96 models, from 35,000 ₽” and the catalog."
+msgstr "Заголовок, автоматическая сводка «96 моделей, от 35 000 ₽» и каталог."
+
+#: src/catalog/types.js:789
+msgid "A type is a top section of the catalog (Coffins, Wreaths…) with its own specifications and categories."
+msgstr "Тип — верхний раздел каталога (Гробы, Венки…) со своими характеристиками и категориями."
+
+#: reviews/rewio.php:16
+msgid "API key"
+msgstr "API-ключ"
+
+#: core/settings.php:212 core/settings.php:317
+msgid "About the company"
+msgstr "О компании"
+
+#: places/places.php:32
+msgid "About the hall in short (optional)"
+msgstr "Коротко о зале (необязательно)"
+
+#: seo/metrika.php:245
+msgid "Accept"
+msgstr "Принять"
+
+#: places/places.php:128
+msgid "Active"
+msgstr "Действующее"
+
+#: places/places.php:49
+msgid "Active — new burials"
+msgstr "Действующее — новые захоронения"
+
+#: src/catalog/works.js:48 src/catalog/products.js:154 src/catalog/types.js:484 src/catalog/types.js:716 src/catalog/work-types.js:227 src/settings/index.js:225
+msgid "Add"
+msgstr "Добавить"
+
+#: catalog/catalog.php:32
+msgid "Add a category"
+msgstr "Добавить категорию"
+
+#: places/places.php:46
+msgid "Add a cemetery"
+msgstr "Добавить кладбище"
+
+#: seo/metrika.php:56
+msgid "Add a goal"
+msgstr "Добавить цель"
+
+#: places/places.php:25
+msgid "Add a hall"
+msgstr "Добавить зал"
+
+#: works/works.php:35
+msgid "Add a kind"
+msgstr "Добавить вид"
+
+#: src/catalog/works.js:281
+msgid "Add a kind of work…"
+msgstr "Добавить вид работ…"
+
+#: prices/prices.php:21 prices/prices.php:31
+msgid "Add a line item"
+msgstr "Добавить позицию"
+
+#: core/settings.php:146
+msgid "Add a number"
+msgstr "Добавить цифру"
+
+#: prices/prices.php:18
+msgid "Add a package"
+msgstr "Добавить пакет"
+
+#: core/settings.php:33
+msgid "Add a phone"
+msgstr "Добавить телефон"
+
+#: prices/prices.php:41
+msgid "Add a price"
+msgstr "Добавить цену"
+
+#: catalog/catalog.php:19
+msgid "Add a product"
+msgstr "Добавить товар"
+
+#: reviews/bookreviews.php:13
+msgid "Add a review"
+msgstr "Добавить отзыв"
+
+#: core/settings.php:115
+msgid "Add a service"
+msgstr "Добавить услугу"
+
+#: reviews/reviews.php:21
+msgid "Add a service or a branch"
+msgstr "Добавить сервис или филиал"
+
+#: catalog/catalog.php:41
+msgid "Add a value"
+msgstr "Добавить значение"
+
+#: works/works.php:28
+msgid "Add a work"
+msgstr "Добавить работу"
+
+#: core/settings.php:47
+msgid "Add an address"
+msgstr "Добавить адрес"
+
+#: core/settings.php:41
+msgid "Add an email"
+msgstr "Добавить почту"
+
+#: core/settings.php:95 core/settings.php:127
+msgid "Add an item"
+msgstr "Добавить пункт"
+
+#: src/catalog/types.js:655
+msgid "Add category"
+msgstr "Добавить категорию"
+
+#: src/catalog/products.js:690
+msgid "Add from photos"
+msgstr "Добавить из фото"
+
+#: src/catalog/work-types.js:209
+msgid "Add kind"
+msgstr "Добавить вид"
+
+#: src/catalog/products.js:66
+msgid "Add or subtract roubles"
+msgstr "Прибавить или вычесть рубли"
+
+#: src/shared/photos.js:112
+msgid "Add photos"
+msgstr "Добавить фото"
+
+#: src/catalog/products.js:702
+msgid "Add product"
+msgstr "Добавить товар"
+
+#: src/catalog/fields.js:217 src/editor-meta/index.js:211
+msgid "Add row"
+msgstr "Добавить строку"
+
+#: src/catalog/types.js:401
+msgid "Add specification"
+msgstr "Добавить характеристику"
+
+#: src/catalog/products.js:602
+msgid "Add to categories…"
+msgstr "Добавить в категории…"
+
+#: places/places.php:54 core/settings.php:50
+msgid "Address"
+msgstr "Адрес"
+
+#: blocks/legacy/legacy.php:22
+msgid "Address and phone columns from Memorial → Contacts."
+msgstr "Колонки адресов и телефонов из «Мемориал → Контакты»."
+
+#: places/places.php:28
+msgid "Address or area"
+msgstr "Адрес или район"
+
+#: blocks/legacy/legacy.php:19
+msgid "Address, opening hours and night phone line above the header."
+msgstr "Адрес, время работы и ночная линия над шапкой."
+
+#: blocks/legacy/render/footer-contacts.php:7 blocks/legacy/render/parts/maps.php:10
+msgid "Addresses"
+msgstr "Адреса"
+
+#: core/settings.php:47
+msgid "Addresses and opening hours"
+msgstr "Адреса и время работы"
+
+#: core/settings.php:95
+msgid "Advantages (with laurel leaves)"
+msgstr "Преимущества (с лавровыми листками)"
+
+#: admin/convert.php:332
+msgid "After converting"
+msgstr "После перевода"
+
+#: seo/metrika.php:12
+msgid "After cookie consent (recommended): the counter starts only after the visitor clicks “Accept”"
+msgstr "После согласия на cookie (рекомендуется): счётчик запускается только после «Принять»"
+
+#: places/places.php:153 content/faq.php:78 works/works.php:85
+msgid "All"
+msgstr "Все"
+
+#: pages/pages.php:24
+msgid "All categories"
+msgstr "Все категории"
+
+#: src/editor-meta/index.js:307
+msgid "All categories (tiles)"
+msgstr "Все категории (плитки)"
+
+#: src/settings/index.js:568
+msgid "All changes are saved"
+msgstr "Все изменения сохранены"
+
+#. translators: %s: folder name
+#: reviews/rewio.php:369
+#, php-format
+msgid "All from the folder “%s”"
+msgstr "Все из папки «%s»"
+
+#: blocks/home/home.php:163
+msgid "All phones, emails, messengers and addresses with hours (Memorial → Contacts)."
+msgstr "Все телефоны, почта, мессенджеры и адреса со временем работы («Мемориал → Контакты»)."
+
+#: catalog/catalog.php:19
+msgid "All products"
+msgstr "Все товары"
+
+#: admin/abilities.php:501
+msgid "All products (or of one type) as CSV: type, title, price, “from”, unit, line under the title, categories, specifications, visibility."
+msgstr "Все товары (или одного типа) в CSV: тип, название, цена, «от», единица, строка под названием, категории, характеристики, видимость."
+
+#: blocks/legacy/legacy.php:102
+msgid "All products of the catalog."
+msgstr "Все товары каталога."
+
+#: blocks/content/content-blocks.php:234
+msgid "All questions and answers"
+msgstr "Все вопросы и ответы"
+
+#: memorial-plugin.php:90
+msgid "All questions of the site on one page with a search."
+msgstr "Все вопросы сайта на одной странице с поиском [mem_faq]."
+
+#: reviews/rewio.php:26
+msgid "All ratings"
+msgstr "Все оценки"
+
+#: leads/callback.php:61
+msgid "All requests:"
+msgstr "Все заявки:"
+
+#: content/patterns.php:40
+msgid "All reviews →"
+msgstr "Все отзывы →"
+
+#: works/works.php:28
+msgid "All works"
+msgstr "Все работы"
+
+#: catalog/catalog-admin.php:16
+msgid "Always 2 on a phone."
+msgstr "На телефоне всегда 2."
+
+#: seo/metrika.php:13
+msgid "Always: the counter loads on every page without waiting (deferred); the cookie notice is still shown"
+msgstr "Всегда: счётчик загружается на каждой странице без ожидания (отложенно); уведомление о cookie показывается"
+
+#: core/settings.php:156
+msgid "An empty line — a new paragraph. You can use <b>, <a> and other simple markup."
+msgstr "Пустая строка — новый абзац. Можно использовать <b>, <a> и другую простую разметку."
+
+#: seo/metrika.php:52
+msgid "Analytics"
+msgstr "Аналитика"
+
+#: reviews/reviews.php:15
+msgid "Another service"
+msgstr "Другой сервис"
+
+#: content/patterns.php:36
+msgid "Answer."
+msgstr "Ответ."
+
+#: blocks/content/content-blocks.php:418 blocks/home/home.php:110
+msgid "Arrow “→”"
+msgstr "Стрелка «→»"
+
+#: content/guide.php:86
+msgid "Article"
+msgstr "Статья"
+
+#: memorial-plugin.php:91
+msgid "Article cards with a search, the “Good to know” field of pages."
+msgstr "Статьи-карточки с поиском [mem_guide], поле «Полезно знать» у страниц."
+
+#: blocks/content/content-blocks.php:257
+msgid "Article cards with search: child pages of this or another page, or chosen pages."
+msgstr "Карточки статей с поиском: дочерние страницы этой или другой страницы либо выбранные страницы."
+
+#: catalog/catalog-admin.php:13
+msgid "As in the parent category"
+msgstr "Как у родительской категории"
+
+#: admin/collections.php:88
+msgid "As written in the book."
+msgstr "Как написано в книге."
+
+#: seo/metrika.php:26
+msgid "Ask for consent: Metrica and the codes below start after “Accept” (the strict reading of 152-FZ)"
+msgstr "Спрашивать согласие: Метрика и коды ниже запускаются после «Принять» (строгая трактовка 152-ФЗ)"
+
+#: reviews/rewio.php:533
+msgid "At least one site must stay — otherwise untick the branch itself"
+msgstr "Хотя бы одна площадка должна остаться — иначе снимите галочку у самого филиала"
+
+#: admin/collections.php:79
+msgid "Author"
+msgstr "Автор"
+
+#: blocks/legacy/render/product.php:21
+msgid "Availability"
+msgstr "Наличие"
+
+#: reviews/rewio.php:39
+msgid "Average rating and the number of reviews at the top"
+msgstr "Средняя оценка и число отзывов сверху"
+
+#: reviews/reviews.php:14
+msgid "Avito"
+msgstr "Авито"
+
+#: seo/metrika.php:30
+msgid "Banner text — “Ask for consent”"
+msgstr "Текст плашки — «Спрашивать согласие»"
+
+#: seo/metrika.php:31
+msgid "Banner text — “Only notify”"
+msgstr "Текст плашки — «Только уведомлять»"
+
+#: places/places.php:54
+msgid "Belgorod district, village of …"
+msgstr "Белгородский район, с. …"
+
+#: reviews/rewio.php:35
+msgid "Best first"
+msgstr "Сначала лучшие"
+
+#: places/places.php:20
+msgid "Block on the page"
+msgstr "Блок на странице"
+
+#: reviews/rewio.php:34
+msgid "Block title"
+msgstr "Заголовок блока"
+
+#: core/settings.php:144 core/settings.php:212
+msgid "Block with numbers"
+msgstr "Блок с цифрами"
+
+#: blocks/legacy/legacy.php:25
+msgid "Bottom bar on phones: Call and Message (MAX) or Call me back."
+msgstr "Нижняя панель на телефонах: «Позвонить» и «Написать» (MAX) или «Перезвоните мне»."
+
+#: reviews/reviews.php:26
+msgid "Branch"
+msgstr "Филиал"
+
+#: reviews/rewio.php:696
+msgid "Branch "
+msgstr "Филиал "
+
+#: src/settings/rewio-scope.js:116
+msgid "Branch list from Rewio:"
+msgstr "Список филиалов из Rewio:"
+
+#: reviews/rewio.php:364
+msgid "Branches and their sites"
+msgstr "Филиалы и их площадки"
+
+#: seo/seo.php:96 blocks/legacy/legacy.php:26
+msgid "Breadcrumbs"
+msgstr "Навигация"
+
+#: core/icons-api.php:31 core/icons-fallback.php:11
+msgid "Building"
+msgstr "Здание"
+
+#: places/places.php:48
+msgid "Burials"
+msgstr "Захоронения"
+
+#: places/places.php:23
+msgid "Button label at a hall"
+msgstr "Надпись на кнопке у зала"
+
+#: prices/prices.php:17
+msgid "Button text"
+msgstr "Текст кнопки"
+
+#: blocks/home/home.php:59
+msgid "Button that calls the main phone number (Memorial → Contacts)."
+msgstr "Кнопка звонка на основной номер («Мемориал → Контакты»)."
+
+#: blocks/home/home.php:78
+msgid "Button-styled link to a page of the site."
+msgstr "Ссылка-кнопка на страницу сайта."
+
+#: core/settings.php:52
+msgid "By default — the street and the house"
+msgstr "По умолчанию — улица и дом"
+
+#: src/catalog/products.js:59
+msgid "By percent (+10 or −5)"
+msgstr "На процент (+10 или −5)"
+
+#: places/places.php:26
+msgid "Cafe “…”"
+msgstr "Кафе «…»"
+
+#: src/collections/index.js:375 blocks/legacy/render/mobile-bar.php:8 blocks/legacy/render/contacts-page.php:27
+msgid "Call"
+msgstr "Позвонить"
+
+#. translators: %s: phone
+#: blocks/legacy/render/header-contacts.php:11
+#, php-format
+msgid "Call %s"
+msgstr "Позвонить %s"
+
+#: admin/commands.php:18
+msgid "Call back requests"
+msgstr "Заявки на звонок"
+
+#: admin/abilities.php:34
+msgid "Call back requests, catalog, works, content conversion and search statistics of the funeral services site."
+msgstr "Заявки на звонок, каталог, работы, перевод содержимого и статистика поиска сайта ритуальных услуг."
+
+#: leads/callback.php:62
+msgid "Call back: "
+msgstr "Перезвоните: "
+
+#: content/search.php:51 content/content.php:41 blocks/legacy/render/mobile-bar.php:12 blocks/legacy/render/product.php:28 blocks/legacy/render/contacts-page.php:36 blocks/legacy/render/header-contacts.php:10
+msgid "Call me back"
+msgstr "Перезвоните мне"
+
+#: blocks/floating/floating.php:24
+msgid "Call me back window"
+msgstr "Окно «Перезвоните мне»"
+
+#: leads/callback.php:11
+msgid "Call requests"
+msgstr "Заявки на звонок"
+
+#: content/patterns.php:28 blocks/content/content-blocks.php:284
+msgid "Call to action"
+msgstr "Призыв позвонить"
+
+#: blocks/legacy/render/contacts-page.php:20
+msgid "Call — we will tell you what to do and take care of everything."
+msgstr "Позвоните — подскажем, что делать, и возьмём хлопоты на себя."
+
+#: content/content.php:29
+msgid "Call — we will tell you where to start"
+msgstr "Позвоните — расскажем, с чего начать"
+
+#. translators: %s: site address
+#: leads/callback.php:58
+#, php-format
+msgid "Call-back request from the site %s"
+msgstr "Заявка на обратный звонок с сайта %s"
+
+#: admin/collections.php:30
+msgid "Call-back requests"
+msgstr "Заявки на обратный звонок"
+
+#: admin/collections.php:60
+msgid "Called back"
+msgstr "Перезвонили"
+
+#: core/settings.php:57
+msgid "Calls outside working hours"
+msgstr "Звонки в нерабочее время"
+
+#: src/convert/index.js:262
+msgid "Can be converted"
+msgstr "Можно перевести"
+
+#: src/catalog/list-screen.js:97 src/catalog/list-screen.js:124 src/convert/index.js:92 src/collections/index.js:252
+msgid "Cancel"
+msgstr "Отмена"
+
+#: core/icons-api.php:29
+msgid "Candle"
+msgstr "Свеча"
+
+#: core/icons-fallback.php:11
+msgid "Candle — hall, farewell"
+msgstr "Свеча — зал, прощание"
+
+#: src/catalog/products.js:189
+msgid "Cannot merge: the values differ."
+msgstr "Нельзя объединить: значения различаются."
+
+#: blocks/content/content-blocks.php:411 blocks/home/home.php:135 core/settings.php:148
+msgid "Caption"
+msgstr "Подпись"
+
+#: prices/prices.php:36
+msgid "Caption of the total row"
+msgstr "Подпись итоговой строки"
+
+#: core/icons-api.php:34
+msgid "Car"
+msgstr "Автомобиль"
+
+#: core/icons-fallback.php:12
+msgid "Car — transport"
+msgstr "Автомобиль — перевозка"
+
+#: src/editor-meta/index.js:102 content/content.php:17
+msgid "Card"
+msgstr "Карточка"
+
+#: prices/prices.php:38
+msgid "Card title"
+msgstr "Название карточки"
+
+#: blocks/content/content-blocks.php:384
+msgid "Cards of child pages (or chosen pages) with photo, product count and starting price."
+msgstr "Карточки дочерних (или выбранных) страниц с фото, числом товаров и ценой «от»."
+
+#: content/content.php:19
+msgid "Cards with captions"
+msgstr "Карточки с подписью"
+
+#: core/settings.php:111
+msgid "Cards with links to the service pages. The photo is optional: when it is not chosen, the featured image of the page is used."
+msgstr "Карточки со ссылками на страницы услуг. Фото необязательно: если не выбрано, берётся изображение записи у страницы."
+
+#: content/patterns.php:43
+msgid "Cards “photo, title, size and price” from “Our works” — 6 random ones, different every time. A click leads to the work."
+msgstr "Карточки «фото, название, размер и цена» из «Наших работ» — 6 случайных, при каждом открытии другие. Клик ведёт к работе."
+
+#: blocks/content/content-blocks.php:346
+msgid "Cards: these works by title, comma separated"
+msgstr "Карточки: эти работы по названию, через запятую"
+
+#: catalog/catalog.php:18 content/patterns.php:25 seo/seo.php:47 blocks/content/content-blocks.php:81 blocks/legacy/legacy.php:102 blocks/legacy/render/catalog-archive.php:7
+msgid "Catalog"
+msgstr "Каталог"
+
+#: src/editor-meta/index.js:298
+msgid "Catalog category"
+msgstr "Категория каталога"
+
+#: catalog/catalog-import.php:179
+msgid "Catalog category:"
+msgstr "Категория каталога:"
+
+#. translators: %d: number of products.
+#: src/commands/index.js:83
+#, php-format
+msgid "Catalog exported: %d products."
+msgstr "Каталог выгружен: товаров — %d."
+
+#: content/patterns.php:24
+msgid "Catalog of the page with a summary"
+msgstr "Каталог страницы со сводкой"
+
+#: blocks/legacy/legacy.php:31
+msgid "Catalog or category: sub-sections, sorting, product grid and pagination."
+msgstr "Каталог или категория: подразделы, сортировка, сетка товаров и страницы."
+
+#: blocks/content/content-blocks.php:134
+msgid "Catalog photos"
+msgstr "Фото каталога"
+
+#: blocks/content/inline-values.php:30 blocks/content/inline-values.php:36 blocks/legacy/legacy.php:31 blocks/legacy/legacy.php:103
+msgid "Catalog section"
+msgstr "Раздел каталога"
+
+#: blocks/content/content-blocks.php:36
+msgid "Catalog section (name or slug; empty — the section of this page)"
+msgstr "Раздел каталога (название или адрес; пусто — раздел этой страницы)"
+
+#. translators: %s: catalog section
+#: prices/prices.php:382
+#, php-format
+msgid "Catalog section “%s”"
+msgstr "Раздел каталога «%s»"
+
+#: catalog/catalog-front.php:193 blocks/legacy/render/not-found.php:18
+msgid "Catalog sections"
+msgstr "Разделы каталога"
+
+#: blocks/home/home.php:142
+msgid "Catalog sections as photo tiles (menu sub-items of the catalog page, or all sections)."
+msgstr "Разделы каталога плитками с фото (подпункты меню страницы каталога или все разделы)."
+
+#: blocks/content/content-blocks.php:138
+msgid "Catalog sections, comma separated"
+msgstr "Разделы каталога, через запятую"
+
+#: blocks/legacy/render/not-found.php:19
+msgid "Catalog sections:"
+msgstr "Разделы каталога:"
+
+#: blocks/content/content-blocks.php:117
+msgid "Catalog sub-sections list"
+msgstr "Список подразделов каталога"
+
+#: content/patterns.php:26
+msgid "Catalog summary by section"
+msgstr "Сводка каталога по разделам"
+
+#: blocks/home/home.php:141
+msgid "Catalog tiles"
+msgstr "Плитки каталога"
+
+#: blocks/legacy/legacy.php:28
+msgid "Catalog tiles or product grid for pages set to show products, with the page text above and below."
+msgstr "Плитки каталога или сетка товаров для страниц с показом товаров, с текстом страницы выше и ниже."
+
+#: catalog/catalog.php:32 admin/abilities.php:764 src/catalog/products.js:141 src/catalog/products.js:350 src/catalog/types.js:653
+msgid "Categories"
+msgstr "Категории"
+
+#: catalog/catalog.php:32 src/catalog/types.js:518
+msgid "Category"
+msgstr "Категория"
+
+#: places/places.php:46 places/places.php:72 blocks/content/content-blocks.php:146
+msgid "Cemeteries"
+msgstr "Кладбища"
+
+#: blocks/content/content-blocks.php:147
+msgid "Cemeteries with addresses, hours and burial status (Memorial → Cemeteries)."
+msgstr "Кладбища с адресами, временем работы и возможностью захоронения («Мемориал → Кладбища»)."
+
+#: src/catalog/products.js:111
+#, php-format
+msgid "Change %d price"
+msgid_plural "Change %d prices"
+msgstr[0] "Изменить %d цену"
+msgstr[1] "Изменить %d цены"
+msgstr[2] "Изменить %d цен"
+
+#: admin/abilities.php:372
+msgid "Change prices"
+msgstr "Изменить цены"
+
+#: src/catalog/products.js:536
+msgid "Change prices…"
+msgstr "Изменить цены…"
+
+#: src/convert/index.js:288
+msgid "Changes in the post"
+msgstr "Изменения в записи"
+
+#: admin/abilities.php:373
+msgid "Changes the prices of several products: by percent, by roubles or to one price, rounded. Products with the price “on request” stay as they are unless one price is set."
+msgstr "Меняет цены нескольких товаров: на процент, на сумму в рублях или на одну цену, с округлением. Товары с ценой «по запросу» не меняются, если не задана одна цена."
+
+#: admin/abilities.php:331
+msgid "Changes the title, price, “from”, unit, line under the title or visibility of one product."
+msgstr "Меняет название, цену, «от», единицу, строку под названием или видимость одного товара."
+
+#: catalog/catalog.php:88 catalog/catalog-front.php:201 works/works.php:93
+msgid "Cheapest first"
+msgstr "Сначала дешевле"
+
+#: core/icons-api.php:27
+msgid "Check mark"
+msgstr "Галочка"
+
+#: leads/callback.php:35
+msgid "Check the phone number."
+msgstr "Проверьте номер телефона."
+
+#: src/catalog/types.js:175
+msgid "Choice from a list"
+msgstr "Выбор из списка"
+
+#: src/catalog/types.js:276
+msgid "Choices, separated by commas"
+msgstr "Варианты через запятую"
+
+#: core/settings.php:130
+msgid "Choose by the title"
+msgstr "Подобрать по заголовку"
+
+#: src/settings/index.js:69 src/collections/index.js:54
+msgid "Choose photo"
+msgstr "Выбрать фото"
+
+#: reviews/bookreviews.php:14
+msgid "Choose the page photo"
+msgstr "Выбрать фото страницы"
+
+#: src/catalog/search-stats.js:219
+msgid "Clear"
+msgstr "Очистить"
+
+#: admin/abilities.php:688
+msgid "Clear search statistics"
+msgstr "Очистить статистику поиска"
+
+#: content/search.php:40
+msgid "Clear the search"
+msgstr "Очистить поиск"
+
+#: src/catalog/search-stats.js:193 src/catalog/search-stats.js:208
+msgid "Clear the statistics"
+msgstr "Очистить статистику"
+
+#: core/icons-api.php:25
+msgid "Clock"
+msgstr "Часы"
+
+#: core/icons-fallback.php:12
+msgid "Clock — round the clock"
+msgstr "Часы — круглосуточно"
+
+#: catalog/catalog-front.php:244 leads/callback.php:90
+msgid "Close"
+msgstr "Закрыть"
+
+#: places/places.php:128
+msgid "Closed"
+msgstr "Закрыто"
+
+#: places/places.php:51
+msgid "Closed for burials"
+msgstr "Закрыто для захоронений"
+
+#: prices/prices.php:44
+msgid "Code (Latin letters)"
+msgstr "Код (латиницей)"
+
+#: core/assets.php:90
+msgid "Collapse"
+msgstr "Свернуть"
+
+#: reviews/rewio.php:38
+msgid "Collapse long text after, characters"
+msgstr "Сворачивать длинный текст после, символов"
+
+#: catalog/catalog.php:8
+msgid "Colour"
+msgstr "Цвет"
+
+#: blocks/content/content-blocks.php:213
+msgid "Columns (0 — from settings)"
+msgstr "Колонки (0 — из настроек)"
+
+#: catalog/catalog-admin.php:16 src/catalog/types.js:112 reviews/rewio.php:37
+msgid "Columns on a computer"
+msgstr "Колонок на компьютере"
+
+#: blocks/legacy/render/contacts-page.php:79 core/settings.php:74
+msgid "Company details"
+msgstr "Реквизиты"
+
+#: blocks/content/inline-values.php:58
+msgid "Company details (personal data operator)"
+msgstr "Реквизиты (оператор персональных данных)"
+
+#: reviews/rewio.php:42 reviews/rewio.php:754
+msgid "Company’s reply"
+msgstr "Ответ компании"
+
+#: memorial-plugin.php:85
+msgid "Compatibility with SEO plugins"
+msgstr "Совместимость с SEO-плагинами"
+
+#: blocks/content/content-blocks.php:322
+msgid "Completed works with photos, plot sizes and prices: gallery, cards or photos only."
+msgstr "Выполненные работы с фото, размерами участка и ценами: галерея, карточки или только фото."
+
+#: legal/legal.php:20
+msgid "Consent to personal data processing"
+msgstr "Согласие на обработку персональных данных"
+
+#: leads/callback.php:36
+msgid "Consent to the data processing is needed."
+msgstr "Нужно согласие на обработку данных."
+
+#: blocks/legacy/render/mobile-bar.php:7
+msgid "Contact"
+msgstr "Связаться"
+
+#: core/settings.php:212 core/settings.php:325 core/settings.php:575
+msgid "Contacts"
+msgstr "Контакты"
+
+#: core/helpers.php:42
+msgid "Contacts and texts"
+msgstr "Контакты и тексты"
+
+#: blocks/home/home.php:162
+msgid "Contacts list"
+msgstr "Список контактов"
+
+#: blocks/legacy/legacy.php:29
+msgid "Contacts page"
+msgstr "Страница контактов"
+
+#: core/helpers.php:44
+msgid "Contacts, addresses and the texts of the home page are now edited in the admin:"
+msgstr "Контакты, адреса и тексты главной теперь редактируются в админке:"
+
+#: prices/prices.php:21
+msgid "Contents of the package — the total is counted automatically. “On the card” — 3–5 main items, visible without opening the list"
+msgstr "Состав пакета — итог считается сам. «На карточке» — 3–5 главных позиций, видны без раскрытия списка"
+
+#: src/convert/index.js:102 src/convert/index.js:300
+msgid "Convert"
+msgstr "Перевести"
+
+#: admin/abilities.php:537
+msgid "Convert shortcodes to blocks"
+msgstr "Перевести шорткоды в блоки"
+
+#: src/commands/index.js:158
+msgid "Convert the shortcodes of this page to blocks"
+msgstr "Перевести шорткоды этой страницы в блоки"
+
+#: admin/commands.php:24 admin/convert.php:505 admin/convert.php:506 src/convert/index.js:322
+msgid "Convert to blocks"
+msgstr "Перевод в блоки"
+
+#: src/convert/index.js:266
+msgid "Converted"
+msgstr "Переведено"
+
+#: src/commands/index.js:187
+msgid "Converted. Reloading the editor…"
+msgstr "Переведено. Редактор перезагружается…"
+
+#: seo/metrika.php:23 blocks/floating/floating.php:31
+msgid "Cookie banner"
+msgstr "Плашка о cookie"
+
+#: blocks/floating/floating.php:32
+msgid "Cookie notice or consent request (Memorial → Analytics). Without it, Yandex Metrica in the “after consent” mode never loads."
+msgstr "Уведомление о cookie или запрос согласия («Мемориал → Аналитика»). Без него Яндекс Метрика в режиме «после согласия» не загрузится."
+
+#: legal/legal.php:21 seo/metrika.php:105 blocks/legacy/render/footer-legal.php:12
+msgid "Cookie policy"
+msgstr "Политика использования cookie"
+
+#: blocks/legacy/render/footer-legal.php:13
+msgid "Cookie settings"
+msgstr "Настройки cookie"
+
+#: src/catalog/works.js:345 src/catalog/products.js:576
+msgid "Copy"
+msgstr "Копировать"
+
+#: blocks/legacy/legacy.php:24
+msgid "Copyright years, company details, privacy and cookie policy links."
+msgstr "Годы работы, реквизиты, ссылки на политику обработки данных и cookie."
+
+#: prices/prices.php:62 prices/prices.php:144 works/works.php:137
+msgid "Cost"
+msgstr "Стоимость"
+
+#: src/commands/index.js:182
+msgid "Could not convert."
+msgstr "Не удалось перевести."
+
+#: catalog/catalog-types-admin.php:339
+msgid "Could not create the page."
+msgstr "Не удалось создать страницу."
+
+#: works/works-manager.php:374
+msgid "Could not create the work."
+msgstr "Не удалось создать работу."
+
+#: reviews/rewio.php:351
+msgid "Could not get the list of branches:"
+msgstr "Не удалось получить список филиалов:"
+
+#: reviews/rewio.php:424
+msgid "Could not get the list of branches: "
+msgstr "Не удалось получить список филиалов: "
+
+#: reviews/rewio.php:448
+msgid "Could not load the reviews: "
+msgstr "Не удалось загрузить отзывы: "
+
+#: src/convert/index.js:209
+msgid "Could not roll back: the revision saved before converting is missing."
+msgstr "Не удалось откатить: нет редакции, сохранённой перед переводом."
+
+#: seo/metrika.php:10
+msgid "Counter"
+msgstr "Счётчик"
+
+#: seo/metrika.php:55
+msgid "Create a counter at"
+msgstr "Создайте счётчик на"
+
+#: legal/legal.php:90
+msgid "Create a new draft page from the template and choose it instead of the current one? The current page stays, you can delete it by hand."
+msgstr "Создать новую страницу-черновик по шаблону и выбрать её вместо текущей? Текущая страница останется, её можно удалить вручную."
+
+#: src/catalog/types.js:886
+msgid "Create a page for this type"
+msgstr "Создать страницу для этого типа"
+
+#: admin/abilities.php:453
+msgid "Create products from photos"
+msgstr "Создать товары из фото"
+
+#: legal/legal.php:95
+msgid "Create the missing pages"
+msgstr "Создать недостающие страницы"
+
+#: admin/abilities.php:454
+msgid "Creates products of a type: one product per photo (or one empty product), at the end of the type, with the type’s default price and specifications."
+msgstr "Создаёт товары типа: по товару на фото (или один пустой товар) в конце типа, с ценой и характеристиками по умолчанию."
+
+#: prices/prices.php:38 prices/packages.php:61
+msgid "Cremation"
+msgstr "Кремация"
+
+#: blocks/content/content-blocks.php:309
+msgid "Cremation card (auto — as set in Memorial → Prices)"
+msgstr "Карточка кремации (авто — как в «Мемориал → Цены»)"
+
+#: prices/prices.php:28
+msgid "Cremation package"
+msgstr "Пакет кремации"
+
+#: blocks/content/content-blocks.php:295
+msgid "Cremation price table (Memorial → Prices → Cremation)."
+msgstr "Таблица цен кремации («Мемориал → Цены → Кремация»)."
+
+#: blocks/content/content-blocks.php:294
+msgid "Cremation prices"
+msgstr "Цены кремации"
+
+#: core/icons-fallback.php:13
+msgid "Cross"
+msgstr "Крест"
+
+#: reviews/rewio.php:34 reviews/rewio.php:58
+msgid "Customer reviews"
+msgstr "Отзывы клиентов"
+
+#: blocks/home/home.php:443 blocks/legacy/render/parts/reviews.php:25
+msgid "Customer reviews on Yandex Maps"
+msgstr "Отзывы клиентов на Яндекс Картах"
+
+#: places/places.php:56
+msgid "Daily from 8:00 to 17:00"
+msgstr "Ежедневно с 8:00 до 17:00"
+
+#: core/settings.php:51 core/settings.php:188
+msgid "Daily from 9:00 to 18:00"
+msgstr "Ежедневно с 9:00 до 18:00"
+
+#: admin/collections.php:91
+msgid "Date in the book"
+msgstr "Дата в книге"
+
+#: seo/metrika.php:246
+msgid "Decline"
+msgstr "Отклонить"
+
+#: catalog/catalog.php:88 catalog/catalog-front.php:201 src/catalog/types.js:298 src/catalog/types.js:331 works/works.php:91
+msgid "Default"
+msgstr "По умолчанию"
+
+#: src/catalog/types.js:608 src/catalog/types.js:633 src/catalog/types.js:965 src/catalog/work-types.js:150 src/catalog/work-types.js:174
+msgid "Delete"
+msgstr "Удалить"
+
+#: src/catalog/search-stats.js:213
+msgid "Delete all search statistics? “Frequent searches” under the search field will show the default words until new statistics come in."
+msgstr "Удалить всю статистику поиска? «Часто ищут» под полем поиска будет показывать слова по умолчанию, пока не наберётся новая статистика."
+
+#: src/catalog/types.js:912 src/catalog/types.js:951
+msgid "Delete type"
+msgstr "Удалить тип"
+
+#. translators: 1: kind name, 2: number of works.
+#: src/catalog/work-types.js:158
+#, php-format
+msgid "Delete “%1$s”? %2$d work stays, without this kind."
+msgid_plural "Delete “%1$s”? %2$d works stay, without this kind."
+msgstr[0] "Удалить «%1$s»? %2$d работа останется, без этого вида."
+msgstr[1] "Удалить «%1$s»? %2$d работы останутся, без этого вида."
+msgstr[2] "Удалить «%1$s»? %2$d работ останутся, без этого вида."
+
+#. translators: 1: category, 2: number of products, 3: type.
+#: src/catalog/types.js:616
+#, php-format
+msgid "Delete “%1$s”? Its %2$d product stays in “%3$s”."
+msgid_plural "Delete “%1$s”? Its %2$d products stay in “%3$s”."
+msgstr[0] "Удалить «%1$s»? Его %2$d товар останется в «%3$s»."
+msgstr[1] "Удалить «%1$s»? Его %2$d товара останутся в «%3$s»."
+msgstr[2] "Удалить «%1$s»? Его %2$d товаров останутся в «%3$s»."
+
+#. translators: %s: type.
+#: src/catalog/types.js:957
+#, php-format
+msgid "Delete “%s” with its categories?"
+msgstr "Удалить «%s» вместе с его категориями?"
+
+#. translators: %s: category.
+#. translators: %s: kind name.
+#: src/catalog/types.js:628 src/catalog/work-types.js:169
+#, php-format
+msgid "Delete “%s”?"
+msgstr "Удалить «%s»?"
+
+#: admin/abilities.php:689
+msgid "Deletes the given queries from the search statistics, or all statistics when no queries are given."
+msgstr "Удаляет указанные запросы из статистики поиска или всю статистику, если запросы не указаны."
+
+#: src/catalog/types.js:72 src/catalog/types.js:460 src/catalog/types.js:535
+msgid "Description"
+msgstr "Описание"
+
+#: admin/editor-meta.php:176
+msgid "Description of the product (optional: with text the product gets its own page)…"
+msgstr "Описание товара (необязательно: с текстом у товара появится своя страница)…"
+
+#: src/catalog/products.js:765
+msgid "Description of the product — in the editor"
+msgstr "Описание товара — в редакторе"
+
+#. translators: %s: work title.
+#: src/catalog/works.js:441
+#, php-format
+msgid "Description of “%s” — in the editor"
+msgstr "Описание «%s» — в редакторе"
+
+#: seo/metrika.php:18
+msgid "Digits only, for example 98765432. Empty — Metrica is off on the site."
+msgstr "Только цифры, например 98765432. Пусто — Метрика на сайте отключена."
+
+#: seo/metrika.php:20
+msgid "Do not count visits of those logged into the admin (your own visits will not spoil the statistics)"
+msgstr "Не считать визиты тех, кто вошёл в админку (ваши собственные заходы не испортят статистику)"
+
+#: leads/callback.php:100
+msgid "Do not fill in"
+msgstr "Не заполняйте"
+
+#: core/settings.php:101
+msgid "Do not show the “what to do” link"
+msgstr "Не показывать ссылку «что делать»"
+
+#: core/icons-api.php:32 core/icons-fallback.php:12
+msgid "Document"
+msgstr "Документ"
+
+#: legal/legal.php:38
+msgid "Document pages"
+msgstr "Страницы документов"
+
+#: blocks/content/inline-values.php:87
+msgid "Document: policy, consent or cookies"
+msgstr "Документ: политика, согласие или cookie"
+
+#: legal/legal.php:99
+msgid "Documents"
+msgstr "Документы"
+
+#: works/works.php:132
+msgid "Done in:"
+msgstr "Выполнено:"
+
+#: catalog/catalog-import.php:167 src/catalog/search-stats.js:41 src/catalog/works.js:192 src/catalog/products.js:373 src/catalog/products.js:395
+msgid "Done."
+msgstr "Готово."
+
+#: reviews/rewio.php:627
+msgid "Done: loaded "
+msgstr "Готово: загружено "
+
+#: src/settings/index.js:127
+msgid "Down"
+msgstr "Вниз"
+
+#: core/settings.php:88
+msgid "Drag a row (or a block card below by ⋮⋮) with the mouse or a finger, or press ↑ ↓, then “Save order”. The first screen is always at the top. Blocks marked “hidden” are not visible on the site — turn on “Show this block” in their settings below."
+msgstr "Перетащите строку (или карточку блока ниже за ⋮⋮) мышью или пальцем либо нажмите ↑ ↓, затем «Сохранить порядок». Первый экран всегда наверху. Блоки с пометкой «скрыт» на сайте не видны — включите «Показывать этот блок» в их настройках ниже."
+
+#: src/settings/rewio-scope.js:111
+msgid "Each branch on its own tab"
+msgstr "Каждый филиал на своей вкладке"
+
+#: src/catalog/works.js:259 src/catalog/products.js:507 src/catalog/types.js:578 src/collections/index.js:214 src/collections/index.js:339
+msgid "Edit"
+msgstr "Изменить"
+
+#: catalog/catalog.php:20
+msgid "Edit product"
+msgstr "Редактировать товар"
+
+#: reviews/bookreviews.php:14
+msgid "Edit review"
+msgstr "Редактировать отзыв"
+
+#: src/catalog/works.js:266 src/catalog/products.js:514
+msgid "Edit text in the editor"
+msgstr "Изменить текст в редакторе"
+
+#: works/works.php:28
+msgid "Edit work"
+msgstr "Редактировать работу"
+
+#: core/settings.php:41 core/icons-api.php:26
+msgid "Email"
+msgstr "Электронная почта"
+
+#: core/settings.php:70
+msgid "Empty — to the first email of the list above"
+msgstr "Пусто — на первую почту из списка выше"
+
+#: src/catalog/types.js:83
+msgid "Empty — “price on request”."
+msgstr "Пусто — «цена по запросу»."
+
+#: catalog/catalog-types-admin.php:386
+msgid "Enter a name and choose where the category goes."
+msgstr "Введите название и выберите, куда поместить категорию."
+
+#: reviews/rewio.php:528
+msgid "Error"
+msgstr "Ошибка"
+
+#: core/settings.php:104
+msgid "Even over the whole photo"
+msgstr "Ровная по всему фото"
+
+#: reviews/rewio.php:48
+msgid "Every 3 hours"
+msgstr "Каждые 3 часа"
+
+#: reviews/rewio.php:48
+msgid "Every 6 hours"
+msgstr "Каждые 6 часов"
+
+#: reviews/rewio.php:400
+msgid "Every branch in its own tab (otherwise all reviews in one feed)"
+msgstr "Каждый филиал — отдельной вкладкой (иначе все отзывы одной лентой)"
+
+#: reviews/rewio.php:48
+msgid "Every hour"
+msgstr "Каждый час"
+
+#: src/catalog/types.js:205
+msgid "Every specification is a column in “Products” and a line in the product card on the site. The default value goes into new products of the type. Renaming a specification renames it in all products."
+msgstr "Каждая характеристика — колонка в «Товарах» и строка в карточке товара на сайте. Значение по умолчанию попадает в новые товары типа. Переименование характеристики меняет её во всех товарах."
+
+#: src/commands/index.js:124
+msgid "Everyone has been called back."
+msgstr "Всем перезвонили."
+
+#: content/patterns.php:42 content/patterns.php:44
+msgid "Examples of our works"
+msgstr "Примеры наших работ"
+
+#: catalog/catalog-import.php:188
+msgid "Examples of works"
+msgstr "Примеры работ"
+
+#: content/patterns.php:43
+msgid "Examples of works as cards (random)"
+msgstr "Примеры работ карточками (случайные)"
+
+#: works/works.php:256
+msgid "Examples of works:"
+msgstr "Примеры работ:"
+
+#: admin/abilities.php:500
+msgid "Export the catalog"
+msgstr "Выгрузить каталог"
+
+#: src/commands/index.js:66
+msgid "Export the catalog to CSV"
+msgstr "Выгрузить каталог в CSV"
+
+#: src/commands/index.js:67
+msgid "Export the catalog to CSV products prices Excel"
+msgstr "Выгрузить каталог в CSV товары цены Excel"
+
+#: src/catalog/products.js:725
+msgid "Export to CSV"
+msgstr "Выгрузить в CSV"
+
+#: blocks/content/content-blocks.php:227
+msgid "Extra pages, comma separated paths (ritualnye-uslugi/pominalnyj-obed…)"
+msgstr "Дополнительные страницы, адреса через запятую (ritualnye-uslugi/pominalnyj-obed…)"
+
+#: core/settings.php:85
+msgid "Eyebrow (small letters above the title)"
+msgstr "Надзаголовок (мелкие буквы над заголовком)"
+
+#. translators: date format of a guest book review: month and year, see https://www.php.net/manual/datetime.format.php
+#: reviews/bookreviews.php:40
+msgid "F Y"
+msgstr "F Y"
+
+#: seo/seo-registry.php:195
+msgid "Facebook description (SEOPress)"
+msgstr "Описание для Facebook (SEOPress)"
+
+#: seo/seo-registry.php:194
+msgid "Facebook title (SEOPress)"
+msgstr "Заголовок для Facebook (SEOPress)"
+
+#: places/places.php:128
+msgid "Family grave"
+msgstr "Подзахоронение"
+
+#: core/modules.php:21
+msgid "Features"
+msgstr "Функции"
+
+#: places/places.php:31
+msgid "Features — comma-separated"
+msgstr "Особенности — через запятую"
+
+#: blocks/home/home.php:123
+msgid "Figure in a laurel wreath"
+msgstr "Цифра в лавровом венке"
+
+#: reviews/rewio.php:41
+msgid "Filter by site: clicking a site in the rating summary shows only its reviews"
+msgstr "Фильтр по площадкам: нажатие на площадку в сводке оценок показывает только её отзывы"
+
+#: src/catalog/types.js:867
+msgid "Finish the page (draft)"
+msgstr "Доработать страницу (черновик)"
+
+#: reviews/rewio.php:344
+msgid "First paste the API key into “1. Connection” and click “Save” — your branches will appear here."
+msgstr "Сначала вставьте API-ключ в «1. Подключение» и нажмите «Сохранить» — здесь появятся ваши филиалы."
+
+#: reviews/rewio.php:418
+msgid "First paste the API key into “1. Connection” and save — your branches will appear here."
+msgstr "Сначала вставьте API-ключ в «1. Подключение» и сохраните — здесь появятся ваши филиалы."
+
+#: core/settings.php:90
+msgid "First screen"
+msgstr "Первый экран"
+
+#: blocks/legacy/legacy.php:27
+msgid "First screen and the home sections in the order set in Memorial → Home page."
+msgstr "Первый экран и разделы главной в порядке из «Мемориал → Главная страница»."
+
+#: content/content.php:92
+msgid "First step"
+msgstr "Первый шаг"
+
+#: core/icons-api.php:30
+msgid "Flower"
+msgstr "Цветок"
+
+#: core/icons-fallback.php:11
+msgid "Flower — wreaths"
+msgstr "Цветок — венки"
+
+#: blocks/legacy/render/menu-columns.php:33
+msgid "Footer menu"
+msgstr "Меню в подвале"
+
+#: blocks/legacy/legacy.php:23
+msgid "Footer menu: items with sub-items become columns, single items go to “Information”."
+msgstr "Меню подвала: пункты с подпунктами становятся колонками, одиночные — в «Информацию»."
+
+#: blocks/legacy/legacy.php:22
+msgid "Footer: addresses and phones"
+msgstr "Подвал: адреса и телефоны"
+
+#: blocks/legacy/legacy.php:24
+msgid "Footer: copyright and documents"
+msgstr "Подвал: годы работы и документы"
+
+#: reviews/reviews.php:28
+msgid "For Yandex Maps the theme shows the review feed by the link itself. For 2GIS and others — the “Read reviews” and “Leave a review” buttons."
+msgstr "Для Яндекс Карт по ссылке тема сама покажет ленту отзывов. Для 2ГИС и других — кнопки «Читать отзывы» и «Оставить отзыв»."
+
+#: src/catalog/product-pages.js:42
+msgid "For every product — as before."
+msgstr "Для каждого товара — как раньше."
+
+#: core/settings.php:164
+msgid "For example 75717068753 or a link like https://yandex.ru/maps/org/…/75717068753/"
+msgstr "Например 75717068753 или ссылка вида https://yandex.ru/maps/org/…/75717068753/"
+
+#: admin/collections.php:82
+msgid "For example: Elena V."
+msgstr "Например: Елена В."
+
+#: src/catalog/types.js:229
+msgid "For example: Height"
+msgstr "Например: Высота"
+
+#: src/editor-meta/index.js:334
+msgid "For example: How to get the funeral allowance?"
+msgstr "Например: Как получить пособие на погребение?"
+
+#: core/settings.php:75
+msgid "For example: Sole proprietor Ivan Ivanov"
+msgstr "Например: ИП Иванов Иван Иванович"
+
+#: content/guide.php:113
+msgid "For example: death certificate"
+msgstr "Например: справка о смерти"
+
+#: content/faq.php:71
+msgid "For example: documents"
+msgstr "Например: документы"
+
+#: core/settings.php:37
+msgid "For example: round the clock"
+msgstr "Например: круглосуточно"
+
+#: catalog/catalog-admin.php:18
+msgid "For links like #korziny. Can be left empty."
+msgstr "Для ссылок вида #korziny. Можно не заполнять."
+
+#. translators: 1: search query, 2: “5 questions”
+#: core/assets.php:81
+#, php-format
+msgid "For “%1$s” — %2$s below."
+msgstr "По запросу «%1$s» — %2$s ниже."
+
+#. translators: 1: search query, 2: what was found
+#: core/assets.php:89
+#, php-format
+msgid "For “%1$s”: %2$s. Click a suggestion to open the right place."
+msgstr "По запросу «%1$s»: %2$s. Нажмите на подсказку, чтобы открыть нужное место."
+
+#: src/catalog/search-stats.js:84
+msgid "Found"
+msgstr "Найдено"
+
+#: blocks/content/inline-values.php:64
+msgid "Founding year"
+msgstr "Год основания"
+
+#: content/search.php:44
+msgid "Frequent searches:"
+msgstr "Часто ищут:"
+
+#: content/patterns.php:35 content/patterns.php:36
+msgid "Frequently asked questions"
+msgstr "Частые вопросы"
+
+#: admin/abilities.php:761
+msgid "From"
+msgstr "От"
+
+#: admin/collections.php:48
+msgid "From page"
+msgstr "Со страницы"
+
+#: catalog/catalog-summary.php:127
+msgid "From the descriptions of catalog sections ("
+msgstr "Из описаний разделов каталога ("
+
+#: reviews/reviews.php:164 reviews/bookreviews.php:55 reviews/bookreviews.php:86
+msgid "From the guest book"
+msgstr "Из книги отзывов"
+
+#: blocks/legacy/render/tagline.php:7
+msgid "Funeral company"
+msgstr "Ритуальная компания"
+
+#: blocks/home/home.php:156
+msgid "Funeral package cards as on the home page (Memorial → Prices)."
+msgstr "Карточки пакетов похорон, как на главной («Мемориал → Цены»)."
+
+#: blocks/content/content-blocks.php:302
+msgid "Funeral package cards with prices (Memorial → Prices)."
+msgstr "Карточки пакетов похорон с ценами («Мемориал → Цены»)."
+
+#: prices/prices.php:15 blocks/content/content-blocks.php:301
+msgid "Funeral packages"
+msgstr "Пакеты похорон"
+
+#: blocks/home/home.php:155
+msgid "Funeral packages grid"
+msgstr "Сетка пакетов похорон"
+
+#: blocks/content/content-blocks.php:353
+msgid "Gallery: how many (-1 — all)"
+msgstr "Галерея: сколько (-1 — все)"
+
+#: blocks/content/content-blocks.php:375
+msgid "Gallery: sorting"
+msgstr "Галерея: сортировка"
+
+#: blocks/content/content-blocks.php:368
+msgid "Gallery: type filter"
+msgstr "Галерея: фильтр по видам"
+
+#: blocks/legacy/render/contacts-page.php:62
+msgid "Get directions →"
+msgstr "Построить маршрут →"
+
+#: seo/metrika.php:56
+msgid "Goals"
+msgstr "Цели"
+
+#: src/catalog/search-stats.js:11 src/editor-meta/index.js:324 memorial-plugin.php:91
+msgid "Good to know"
+msgstr "Полезно знать"
+
+#: reviews/reviews.php:13
+msgid "Google Maps"
+msgstr "Google Карты"
+
+#: seo/metrika.php:243
+msgid "Got it"
+msgstr "Понятно"
+
+#: core/settings.php:104
+msgid "Gradient: lighter at the top, darker at the bottom"
+msgstr "Плавная: сверху светлее, внизу темнее"
+
+#: reviews/rewio.php:284
+msgid "Guest"
+msgstr "Гость"
+
+#: reviews/bookreviews.php:65 memorial-plugin.php:87
+msgid "Guest book"
+msgstr "Книга отзывов"
+
+#: reviews/bookreviews.php:12
+msgid "Guest book review"
+msgstr "Отзыв из книги"
+
+#: admin/commands.php:25 reviews/bookreviews.php:12 reviews/bookreviews.php:13 blocks/content/content-blocks.php:184
+msgid "Guest book reviews"
+msgstr "Отзывы из книги"
+
+#: places/places.php:25
+msgid "Halls and restaurants"
+msgstr "Залы и рестораны"
+
+#: places/places.php:70
+msgid "Halls and restaurants for the memorial meal. The block is the “Memorial meal halls” block (or the <code>[mem_restaurants]</code> shortcode, already on the “Memorial meal” page). "
+msgstr "Залы и рестораны для поминального обеда. Блок выводится шорткодом <code>[mem_restaurants]</code> (он уже стоит на странице «Поминальный обед»). "
+
+#: blocks/content/content-blocks.php:168
+msgid "Halls for memorial meals with photos and an order button (Memorial → Halls)."
+msgstr "Залы для поминок с фото и кнопкой заказа («Мемориал → Залы»)."
+
+#: places/places.php:69
+msgid "Halls for the memorial meal"
+msgstr "Залы для поминок"
+
+#: blocks/legacy/legacy.php:20
+msgid "Header: phone and call back"
+msgstr "Шапка: телефон и обратный звонок"
+
+#: blocks/content/content-blocks.php:62
+msgid "Heading (empty — from settings)"
+msgstr "Заголовок (пусто — из настроек)"
+
+#: blocks/content/content-blocks.php:288
+msgid "Heading (empty — “Call us — we will tell you where to start”)"
+msgstr "Заголовок (пусто — «Позвоните — расскажем, с чего начать»)"
+
+#: blocks/content/content-blocks.php:285
+msgid "Heading, text and call / message buttons with the site phone."
+msgstr "Заголовок, текст и кнопки звонка / сообщения с телефоном сайта."
+
+#: core/icons-api.php:35
+msgid "Heart"
+msgstr "Сердце"
+
+#: core/icons-fallback.php:13
+msgid "Heart — care"
+msgstr "Сердце — забота"
+
+#: catalog/catalog-import.php:169
+msgid "Here are the pages where the catalog is made of “Cards with captions” galleries or examples of works with price tables. The ticked sections become products (the name, price, caption and photo are taken from the captions) or “Our works”. Moving again does not create duplicates."
+msgstr "Здесь видны страницы, где каталог сделан галереями «Карточки с подписью» или примерами работ с таблицами цен. Отмеченные разделы превратятся в товары (название, цена, подпись и фото берутся из подписей) или в «Наши работы». Повторный перенос не создаёт дублей."
+
+#: admin/collections.php:113 src/catalog/fields.js:123 src/catalog/fields.js:133
+msgid "Hidden"
+msgstr "Скрыто"
+
+#: blocks/floating/floating.php:25
+msgid "Hidden window with the call back form; opens from “Call me back” buttons."
+msgstr "Скрытое окно с формой обратного звонка; открывается кнопками «Перезвоните мне»."
+
+#: src/catalog/works.js:326 src/catalog/products.js:564
+msgid "Hide from the site"
+msgstr "Скрыть с сайта"
+
+#: reviews/rewio.php:30
+msgid "Hide reviews with the words (comma-separated)"
+msgstr "Скрывать отзывы со словами (через запятую)"
+
+#: core/assets.php:94
+msgid "Highest ratings first — click for the reverse"
+msgstr "Сначала высокие оценки — нажмите, чтобы наоборот"
+
+#: prices/prices.php:20
+msgid "Highlight (accent frame and the label)"
+msgstr "Выделить (рамка акцентом и надпись)"
+
+#: seo/seo.php:45
+msgid "Home"
+msgstr "Главная"
+
+#: core/settings.php:577
+msgid "Home page"
+msgstr "Главная страница"
+
+#: blocks/legacy/legacy.php:27
+msgid "Home page sections"
+msgstr "Разделы главной"
+
+#: core/settings.php:252
+msgid "Home page: updated "
+msgstr "Главная: обновлены "
+
+#: seo/metrika.php:11
+msgid "How Yandex Metrica loads"
+msgstr "Как загружается Яндекс Метрика"
+
+#: places/places.php:55
+msgid "How far (optional)"
+msgstr "Как далеко (необязательно)"
+
+#: seo/metrika.php:25
+msgid "How it works"
+msgstr "Как работает"
+
+#: blocks/content/content-blocks.php:191
+msgid "How many (-1 — all)"
+msgstr "Сколько (-1 — все)"
+
+#: blocks/content/content-blocks.php:206
+msgid "How many (0 — from settings)"
+msgstr "Сколько (0 — из настроек)"
+
+#: places/places.php:29
+msgid "How many guests it holds (up to)"
+msgstr "Сколько гостей вмещает (до)"
+
+#: reviews/rewio.php:31
+msgid "How many latest reviews to load from every branch (up to 1000)"
+msgstr "Сколько последних отзывов загружать с каждого филиала (до 1000)"
+
+#: blocks/content/content-blocks.php:42
+msgid "How many to show (0 — default)"
+msgstr "Сколько показывать (0 — по умолчанию)"
+
+#: reviews/rewio.php:36
+msgid "How many to show at once (the rest — with the “Show more” button)"
+msgstr "Сколько показывать сразу (остальные — кнопкой «Показать ещё»)"
+
+#: reviews/rewio.php:48
+msgid "How often to check for new reviews"
+msgstr "Как часто проверять новые отзывы"
+
+#: leads/callback.php:98
+msgid "How should we address you"
+msgstr "Как к вам обращаться"
+
+#: src/catalog/products.js:54
+msgid "How to change"
+msgstr "Как изменить"
+
+#: catalog/catalog-admin.php:15
+msgid "How to crop the photos in the cards. “Whole” — the photo is not cropped, with white margins at the edges."
+msgstr "Как обрезать фото в карточках. «Целиком» — фото не обрезается, по краям белые поля."
+
+#: seo/metrika.php:54
+msgid "How to set up call tracking:"
+msgstr "Как настроить подсчёт звонков:"
+
+#. translators: 1: link “consent to personal data processing”, 2: link “the personal data processing policy”
+#: leads/callback.php:105
+#, php-format
+msgid "I give my %1$s in accordance with %2$s"
+msgstr "Даю %1$s в соответствии с %2$s"
+
+#: blocks/home/home.php:52 core/settings.php:130
+msgid "Icon"
+msgstr "Значок"
+
+#: blocks/home/home.php:45
+msgid "Icon from the Memorial set in a round frame."
+msgstr "Значок из набора «Мемориал» в круглой рамке."
+
+#: admin/collections.php:94
+msgid "If the day cannot be read, use the 1st: the site shows only month and year."
+msgstr "Если день не разобрать, ставьте 1-е: на сайте видны только месяц и год."
+
+#: reviews/reviews.php:32
+msgid "If the service or a third-party review aggregator has a code for websites — paste it here whole. It is shown on the tab of this branch."
+msgstr "Если у сервиса или стороннего агрегатора отзывов есть код для сайта — вставьте его сюда целиком. Он покажется на вкладке этого филиала."
+
+#: seo/metrika.php:59
+msgid "In"
+msgstr "В"
+
+#: seo/metrika.php:56
+msgid "In Metrica open the counter →"
+msgstr "В Метрике откройте счётчик →"
+
+#: seo/metrika.php:58
+msgid "In a day or two look at:"
+msgstr "Через день-два смотрите:"
+
+#: src/catalog/works.js:156
+msgid "In examples"
+msgstr "В примерах"
+
+#: core/settings.php:62
+msgid "In the MAX app: Profile → Share profile → Copy link."
+msgstr "В приложении MAX: Профиль → Поделиться профилем → Скопировать ссылку."
+
+#: content/guide.php:96
+msgid "In the article:"
+msgstr "В статье:"
+
+#: core/settings.php:579
+msgid "In the text you can write <code>{years}</code> — how many years the company has worked, <code>{founded}</code> — the year it was founded, <code>{addr}</code> — the first address, <code>{phone}</code> — the main phone."
+msgstr "В тексте можно писать <code>{years}</code> — сколько лет компании, <code>{founded}</code> — год основания, <code>{addr}</code> — первый адрес, <code>{phone}</code> — основной телефон."
+
+#: src/editor-meta/index.js:275
+msgid "In the “Examples of our works” cards on other pages."
+msgstr "В карточках «Примеры наших работ» на других страницах."
+
+#: blocks/legacy/render/menu-columns.php:32
+msgid "Information"
+msgstr "Информация"
+
+#: src/inline-value/index.js:91
+msgid "Insert"
+msgstr "Вставить"
+
+#: src/inline-value/index.js:58
+msgid "Insert a site value"
+msgstr "Вставить значение сайта"
+
+#: src/catalog/types.js:453
+msgid "Inside"
+msgstr "Внутри"
+
+#: core/settings.php:127
+msgid "Items"
+msgstr "Пункты"
+
+#: src/catalog/types.js:243
+msgid "Kind"
+msgstr "Вид"
+
+#: works/works.php:35
+msgid "Kind of work"
+msgstr "Вид работ"
+
+#: admin/commands.php:22 src/catalog/works.js:35 src/catalog/works.js:151 src/catalog/works.js:407 src/catalog/work-types.js:199 works/works-manager.php:25
+msgid "Kinds of works"
+msgstr "Виды работ"
+
+#: prices/prices.php:16
+msgid "Label on the highlighted package"
+msgstr "Надпись на выделенном пакете"
+
+#: blocks/home/home.php:71 blocks/home/home.php:105
+msgid "Large"
+msgstr "Крупно"
+
+#: src/catalog/search-stats.js:131
+msgid "Last time"
+msgstr "Последний раз"
+
+#: blocks/home/home.php:31
+msgid "Laurel branch, divider, leaf or wreath drawn by the theme."
+msgstr "Ветвь лавра, разделитель, лист или венок, нарисованные темой."
+
+#: blocks/home/home.php:30
+msgid "Laurel decoration"
+msgstr "Лавровое украшение"
+
+#: content/content.php:16
+msgid "Lead text"
+msgstr "Вводный текст"
+
+#: blocks/home/home.php:426 blocks/legacy/render/parts/reviews.php:18
+msgid "Leave a review"
+msgstr "Оставить отзыв"
+
+#: reviews/reviews.php:116
+msgid "Leave a review ↗"
+msgstr "Оставить отзыв ↗"
+
+#: core/settings.php:54
+msgid "Leave empty — the map finds the address itself. To set an exact marker, paste a link from Yandex Maps or the code from the “Map Constructor”."
+msgstr "Оставьте пустым — карта сама найдёт адрес. Чтобы поставить точную метку, вставьте ссылку из Яндекс.Карт или код из «Конструктора карт»."
+
+#: prices/prices.php:29
+msgid "Left column title"
+msgstr "Заголовок левой колонки"
+
+#: core/icons-api.php:52
+msgid "Line icons of the Memorial site: phone, address, hours, services."
+msgstr "Линейные значки сайта «Мемориал»: телефон, адрес, время, услуги."
+
+#: prices/prices.php:22 prices/prices.php:32
+msgid "Line item"
+msgstr "Позиция"
+
+#: admin/abilities.php:763 src/catalog/products.js:323 src/editor-meta/index.js:108
+msgid "Line under the title"
+msgstr "Строка под названием"
+
+#: catalog/catalog-manager.php:353
+msgid "Line under title"
+msgstr "Строка под названием"
+
+#: blocks/home/home.php:77
+msgid "Link button"
+msgstr "Кнопка-ссылка"
+
+#: core/settings.php:71
+msgid "Link that starts the MAX app (advanced)"
+msgstr "Ссылка для запуска приложения MAX (для опытных)"
+
+#: blocks/content/inline-values.php:85
+msgid "Link to a document (privacy policy, consent, cookies)"
+msgstr "Ссылка на документ (политика, согласие, cookie)"
+
+#: reviews/reviews.php:27
+msgid "Link to your card in the service"
+msgstr "Ссылка на вашу карточку в сервисе"
+
+#: seo/metrika.php:24
+msgid "Links in the text: {cookies:text} — to the Cookie policy, {policy:text} — to the Personal data policy, {consent:text} — to the Consent (the pages are chosen in “Memorial → Documents”). Without the tags a link to the Cookie policy is added at the end automatically."
+msgstr "Ссылки в тексте: {cookies:текст} — на Политику cookie, {policy:текст} — на Политику обработки ПД, {consent:текст} — на Согласие (страницы выбираются в «Мемориал → Документы»). Без меток ссылка на Политику cookie добавится в конце сама."
+
+#: blocks/content/content-blocks.php:89
+msgid "Links to sub-sections"
+msgstr "Ссылки на подразделы"
+
+#: admin/abilities.php:149
+msgid "List call back requests"
+msgstr "Список заявок на звонок"
+
+#: blocks/content/content-blocks.php:118
+msgid "List of sub-sections of a catalog section with links and starting prices."
+msgstr "Список подразделов раздела каталога со ссылками и ценами «от»."
+
+#: admin/abilities.php:285
+msgid "List products"
+msgstr "Список товаров"
+
+#: reviews/rewio.php:462
+msgid "Load reviews now"
+msgstr "Загрузить отзывы сейчас"
+
+#: memorial-plugin.php:86
+msgid "Loading reviews on schedule, the Rewio reviews block."
+msgstr "Загрузка отзывов по расписанию, блок отзывов [mem_rewio]."
+
+#: reviews/rewio.php:527
+msgid "Loading reviews… usually it takes 10–30 seconds"
+msgstr "Загружаю отзывы… обычно это 10–30 секунд"
+
+#: core/settings.php:61
+msgid "MAX — profile link"
+msgstr "MAX — ссылка на профиль"
+
+#: catalog/catalog-front.php:130 src/editor-meta/index.js:92 templates/product-card.php:24 blocks/legacy/render/product.php:21
+msgid "Made to order"
+msgstr "Под заказ"
+
+#: blocks/content/inline-values.php:79
+msgid "Main address"
+msgstr "Основной адрес"
+
+#: blocks/content/inline-values.php:52
+msgid "Main phone (link)"
+msgstr "Основной телефон (ссылка)"
+
+#: blocks/content/inline-values.php:70
+msgid "Main phone (text)"
+msgstr "Основной телефон (текст)"
+
+#: seo/seo-registry.php:43
+msgid "Main phone number"
+msgstr "Основной номер телефона"
+
+#: blocks/legacy/legacy.php:20
+msgid "Main phone number, “Call me back” button and the call icon for phones."
+msgstr "Основной номер, кнопка «Перезвоните мне» и значок звонка для телефонов."
+
+#: blocks/legacy/render/contacts-page.php:68
+msgid "Map"
+msgstr "Карта"
+
+#: places/places.php:58 core/settings.php:53
+msgid "Map (optional)"
+msgstr "Карта (необязательно)"
+
+#: blocks/home/home.php:170
+msgid "Map for each address; loads on a click so the page stays fast."
+msgstr "Карта для каждого адреса; загружается по нажатию, чтобы страница оставалась быстрой."
+
+#: core/icons-api.php:24
+msgid "Map pin"
+msgstr "Метка на карте"
+
+#: core/settings.php:52
+msgid "Map tab label (optional)"
+msgstr "Надпись на вкладке карты (необязательно)"
+
+#: places/places.php:179
+msgid "Map: "
+msgstr "Карта: "
+
+#: blocks/home/home.php:169
+msgid "Maps"
+msgstr "Карты"
+
+#: admin/abilities.php:231
+msgid "Mark a request as called back"
+msgstr "Отметить заявку: перезвонили"
+
+#: src/collections/index.js:356
+msgid "Mark as called back"
+msgstr "Отметить: перезвонили"
+
+#: catalog/catalog.php:7
+msgid "Material"
+msgstr "Материал"
+
+#. Author of the plugin
+#: memorial-plugin.php admin/abilities.php:33 content/patterns.php:17 content/content.php:84 blocks/legacy/legacy.php:38 core/settings.php:587
+msgid "Memorial"
+msgstr "Мемориал"
+
+#. Plugin Name of the plugin
+#: memorial-plugin.php
+msgid "Memorial Plugin"
+msgstr "Memorial Plugin"
+
+#: core/switchover.php:42
+msgid "Memorial Plugin is paused because the old Memorial Core plugin is active. To switch over, deactivate Memorial Plugin and activate it again: it turns off Memorial Core and switches the theme. To roll back, just deactivate Memorial Plugin."
+msgstr "Memorial Plugin приостановлен: активен старый плагин Memorial Core. Чтобы перейти, отключите Memorial Plugin и включите снова — он выключит Memorial Core и переключит тему. Для отката просто отключите Memorial Plugin."
+
+#: blocks/home/home.php:44
+msgid "Memorial icon"
+msgstr "Значок «Мемориал»"
+
+#: blocks/content/content-blocks.php:167
+msgid "Memorial meal halls"
+msgstr "Залы для поминок"
+
+#: memorial-plugin.php:93
+msgid "Memorial meal halls and cemeteries"
+msgstr "Залы для поминок и кладбища"
+
+#: core/helpers.php:44
+msgid "Memorial → Contacts"
+msgstr "Мемориал → Контакты"
+
+#: core/helpers.php:44
+msgid "Memorial → Home page"
+msgstr "Мемориал → Главная страница"
+
+#. translators: %s: settings page title.
+#: admin/commands.php:40
+#, php-format
+msgid "Memorial: %s"
+msgstr "Мемориал: %s"
+
+#: blocks/legacy/legacy.php:23
+msgid "Menu in columns"
+msgstr "Меню колонками"
+
+#: src/catalog/products.js:202
+msgid "Merge"
+msgstr "Объединить"
+
+#: src/catalog/products.js:582
+msgid "Merge into one…"
+msgstr "Объединить в один…"
+
+#: core/icons-api.php:28
+msgid "Message"
+msgstr "Сообщение"
+
+#: core/settings.php:59
+msgid "Messengers"
+msgstr "Мессенджеры"
+
+#: seo/seo-registry.php:193
+msgid "Meta description (SEOPress)"
+msgstr "Мета-описание (SEOPress)"
+
+#: places/places.php:177
+msgid "More"
+msgstr "Подробнее"
+
+#: prices/packages.php:70
+msgid "More about cremation"
+msgstr "Подробнее о кремации"
+
+#: src/editor-meta/index.js:138
+msgid "More photos (after the featured image)"
+msgstr "Ещё фото (после изображения записи)"
+
+#. translators: %d: number of hidden topics
+#: core/assets.php:74
+#, php-format
+msgid "More topics: %d"
+msgstr "Ещё темы: %d"
+
+#. translators: %s: page title
+#: content/faq.php:91
+#, php-format
+msgid "More — on the page “%s” →"
+msgstr "Подробнее — на странице «%s» →"
+
+#: content/services.php:37 pages/cards.php:100
+msgid "More →"
+msgstr "Подробнее →"
+
+#: places/places.php:57
+msgid "More: how to arrange a burial, what to keep in mind"
+msgstr "Подробнее: как оформить захоронение, что учесть"
+
+#: catalog/catalog.php:88 catalog/catalog-front.php:201 works/works.php:93
+msgid "Most expensive first"
+msgstr "Сначала дороже"
+
+#: src/catalog/works.js:276 src/catalog/products.js:531 src/catalog/types.js:355 src/catalog/types.js:603 src/catalog/work-types.js:145
+msgid "Move down"
+msgstr "Ниже"
+
+#. translators: %d: photo number.
+#: src/shared/photos.js:58
+#, php-format
+msgid "Move photo %d earlier"
+msgstr "Переместить фото %d раньше"
+
+#. translators: %d: photo number.
+#: src/shared/photos.js:72
+#, php-format
+msgid "Move photo %d later"
+msgstr "Переместить фото %d позже"
+
+#. translators: %d: row number.
+#: src/settings/index.js:199
+#, php-format
+msgid "Move row %d down"
+msgstr "Переместить строку %d вниз"
+
+#. translators: %d: row number.
+#: src/settings/index.js:188
+#, php-format
+msgid "Move row %d up"
+msgstr "Переместить строку %d вверх"
+
+#: src/catalog/types.js:802
+msgid "Move the catalog from old pages"
+msgstr "Перенести каталог со старых страниц"
+
+#: catalog/catalog-import.php:194
+msgid "Move the ticked ones"
+msgstr "Перенести отмеченное"
+
+#: src/catalog/works.js:351 src/catalog/products.js:590 src/collections/index.js:346
+msgid "Move to trash"
+msgstr "Удалить в корзину"
+
+#: src/catalog/types.js:897
+msgid "Move type earlier"
+msgstr "Переместить тип выше"
+
+#: src/catalog/types.js:904
+msgid "Move type later"
+msgstr "Переместить тип ниже"
+
+#: src/catalog/works.js:271 src/catalog/products.js:526 src/catalog/types.js:346 src/catalog/types.js:598 src/catalog/work-types.js:140
+msgid "Move up"
+msgstr "Выше"
+
+#: catalog/catalog-import.php:11
+msgid "Moving from pages"
+msgstr "Перенос со страниц"
+
+#: catalog/catalog-import.php:165
+msgid "Moving the catalog from pages"
+msgstr "Перенос каталога со страниц"
+
+#: admin/collections.php:42 places/places.php:26 places/places.php:47 src/catalog/types.js:67 src/catalog/types.js:228 src/catalog/types.js:447
+msgid "Name"
+msgstr "Название"
+
+#: seo/metrika.php:57
+msgid "Name “Call”, identifier"
+msgstr "Название «Звонок», идентификатор"
+
+#: leads/callback.php:59
+msgid "Name:"
+msgstr "Имя:"
+
+#: catalog/catalog-front.php:20
+msgid "Narrow tall 3:5 (crosses), whole"
+msgstr "Узкие высокие 3:5 (кресты), целиком"
+
+#: catalog/catalog.php:88
+msgid "New arrivals"
+msgstr "Новинки"
+
+#: src/catalog/types.js:677
+msgid "New category"
+msgstr "Новая категория"
+
+#: reviews/bookreviews.php:13
+msgid "New guest book review"
+msgstr "Новый отзыв из книги"
+
+#: src/catalog/work-types.js:223
+msgid "New kind of work"
+msgstr "Новый вид работ"
+
+#: catalog/catalog.php:20 catalog/catalog-manager.php:253
+msgid "New product"
+msgstr "Новый товар"
+
+#: src/catalog/types.js:91
+msgid "New products show “from”"
+msgstr "Новые товары с «от»"
+
+#: src/catalog/types.js:799
+msgid "New type"
+msgstr "Новый тип"
+
+#: src/catalog/types.js:934
+msgid "New type of product"
+msgstr "Новый тип товаров"
+
+#: works/works-manager.php:196 works/works.php:28
+msgid "New work"
+msgstr "Новая работа"
+
+#: src/catalog/works.js:395
+msgid "New work from photos"
+msgstr "Новая работа из фото"
+
+#: reviews/rewio.php:35 works/works.php:92
+msgid "Newest first"
+msgstr "Сначала новые"
+
+#: core/assets.php:92
+msgid "Newest first — click for the oldest first"
+msgstr "Сначала новые — нажмите, чтобы сначала старые"
+
+#: catalog/catalog-front.php:248
+msgid "Next"
+msgstr "Следующее"
+
+#: catalog/catalog-front.php:135 works/works.php:117
+msgid "Next photo"
+msgstr "Следующее фото"
+
+#: blocks/home/home.php:116
+msgid "Night phone line"
+msgstr "Ночная линия"
+
+#: src/catalog/search-stats.js:113 src/catalog/works.js:164 src/catalog/products.js:309 src/collections/index.js:102 src/collections/index.js:112
+msgid "No"
+msgstr "Нет"
+
+#: legal/legal.php:109
+msgid "No access"
+msgstr "Нет доступа"
+
+#: seo/metrika.php:28
+msgid "No banner: Metrica works at once"
+msgstr "Без плашки: Метрика работает сразу"
+
+#: src/catalog/fields.js:33
+msgid "No photo"
+msgstr "Нет фото"
+
+#: src/convert/index.js:348
+msgid "No posts with shortcodes left."
+msgstr "Записей с шорткодами не осталось."
+
+#: catalog/catalog-manager.php:492
+msgid "No products selected."
+msgstr "Товары не выбраны."
+
+#: leads/callback.php:12
+msgid "No requests yet"
+msgstr "Заявок пока нет"
+
+#: catalog/catalog-import.php:170
+msgid "No suitable pages were found."
+msgstr "Подходящих страниц не нашлось."
+
+#: works/works-manager.php:224
+msgid "No works selected."
+msgstr "Работы не выбраны."
+
+#: places/places.php:47
+msgid "Northern cemetery"
+msgstr "Северное кладбище"
+
+#: catalog/catalog-import.php:219
+msgid "Not allowed"
+msgstr "Нет прав"
+
+#: reviews/rewio.php:601 reviews/rewio.php:623
+msgid "Not allowed."
+msgstr "Нет прав."
+
+#. translators: %d: number of requests.
+#: src/commands/index.js:118
+#, php-format
+msgid "Not called back yet: %d. Opening the list…"
+msgstr "Ещё не перезвонили: %d. Открываю список…"
+
+#: reviews/rewio.php:447
+msgid "Not connected — paste the API key below and save."
+msgstr "Не подключено — вставьте API-ключ ниже и сохраните."
+
+#: reviews/rewio.php:29
+msgid "Not older than, months (0 — all time)"
+msgstr "Не старше, месяцев (0 — за всё время)"
+
+#: reviews/rewio.php:531
+msgid "Not saved"
+msgstr "Не сохранилось"
+
+#: reviews/rewio.php:532
+msgid "Not saved — click “Save” at the bottom"
+msgstr "Не сохранилось — нажмите «Сохранить» внизу"
+
+#: admin/collections.php:65 content/content.php:16
+msgid "Note"
+msgstr "Примечание"
+
+#: core/settings.php:37
+msgid "Note (optional)"
+msgstr "Подпись (необязательно)"
+
+#: blocks/home/home.php:117
+msgid "Note about calls at night (Memorial → Contacts)."
+msgstr "Примечание о ночных звонках («Мемориал → Контакты»)."
+
+#: src/catalog/search-stats.js:107
+msgid "Nothing found"
+msgstr "Ничего не найдено"
+
+#: content/search.php:49
+msgid "Nothing found."
+msgstr "Ничего не нашли."
+
+#: src/convert/index.js:72
+msgid "Nothing to convert automatically in this post."
+msgstr "В этой записи нечего переводить автоматически."
+
+#: admin/convert.php:331
+msgid "Now"
+msgstr "Сейчас"
+
+#: src/catalog/types.js:174 blocks/home/home.php:130 core/settings.php:147
+msgid "Number"
+msgstr "Число"
+
+#: core/icons-fallback.php:11
+msgid "Number (01, 02…)"
+msgstr "Номер (01, 02…)"
+
+#: blocks/content/content-blocks.php:403
+msgid "Number of models"
+msgstr "Число моделей"
+
+#: blocks/content/inline-values.php:34
+msgid "Number of models in a catalog section"
+msgstr "Число моделей в разделе каталога"
+
+#: reviews/reviews.php:30
+msgid "Number of reviews (optional)"
+msgstr "Число отзывов (необязательно)"
+
+#: blocks/home/home.php:124
+msgid "Number with a caption in a laurel wreath; the number counts up when it scrolls into view."
+msgstr "Число с подписью в лавровом венке; число отсчитывается, когда появляется на экране."
+
+#: core/settings.php:146
+msgid "Numbers"
+msgstr "Цифры"
+
+#: core/settings.php:393
+msgid "OGRN "
+msgstr "ОГРН "
+
+#: core/settings.php:77
+msgid "OGRN / OGRNIP"
+msgstr "ОГРН / ОГРНИП"
+
+#: core/settings.php:393
+msgid "OGRNIP "
+msgstr "ОГРНИП "
+
+#: core/settings.php:104
+msgid "Off — the photo without a tint"
+msgstr "Выключить — фото без тонировки"
+
+#: seo/metrika.php:14
+msgid "Off: no Metrica code on the site — connect it through a tag manager if needed"
+msgstr "Выключено: кода Метрики на сайте нет — при необходимости подключите через менеджер тегов"
+
+#: blocks/home/home.php:184
+msgid "Official Yandex Maps reviews widget; loads after cookie consent or on a click."
+msgstr "Официальный виджет отзывов Яндекс Карт; загружается после согласия на cookie или по нажатию."
+
+#: src/editor-meta/index.js:67
+msgid "Old price, ₽"
+msgstr "Старая цена, ₽"
+
+#: core/settings.php:106
+msgid "On a phone"
+msgstr "На телефоне"
+
+#: core/settings.php:67
+msgid "On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email and are kept in “Memorial → Requests”."
+msgstr "На телефоне кнопка просто звонит. На компьютере сначала открывается MAX по ссылке выше; окно «Перезвоните мне» появляется, если MAX не открылся (браузер заблокировал вкладку или посетитель быстро вернулся на сайт). Заявки приходят на почту и сохраняются в «Мемориал → Заявки»."
+
+#: prices/prices.php:24 prices/prices.php:34
+msgid "On the card"
+msgstr "На карточке"
+
+#: admin/collections.php:108 admin/abilities.php:767 src/catalog/fields.js:119
+msgid "On the site"
+msgstr "На сайте"
+
+#: reviews/rewio.php:449
+msgid "On the site "
+msgstr "На сайте "
+
+#: reviews/rewio.php:48
+msgid "Once a day"
+msgstr "Раз в сутки"
+
+#: reviews/rewio.php:48
+msgid "Once a week"
+msgstr "Раз в неделю"
+
+#: src/editor-meta/index.js:126
+msgid "One per line, “Name: value”."
+msgstr "По одной в строке: «Название: значение»."
+
+#: reviews/rewio.php:26
+msgid "Only 5★"
+msgstr "Только 5★"
+
+#: places/places.php:74
+msgid "Only active ones: <code>[mem_cemeteries status=\"действующие\"]</code>, without the filter buttons: <code>filtr=\"нет\"</code>. "
+msgstr "Только действующие: <code>[mem_cemeteries status=\"действующие\"]</code>, без кнопок-фильтров: <code>filtr=\"нет\"</code>. "
+
+#: places/places.php:50
+msgid "Only burial in a family grave"
+msgstr "Только подзахоронение в родственную могилу"
+
+#: src/catalog/product-pages.js:35
+msgid "Only for products with a description (recommended): a product without one opens as a large photo in the catalog, and its old address leads to the catalog section. These addresses are not in the sitemap."
+msgstr "Только для товаров с описанием (рекомендуется): товар без описания открывается в каталоге крупным фото, а его старый адрес ведёт в раздел каталога. Этих адресов нет в карте сайта."
+
+#: src/convert/index.js:270
+msgid "Only manual edits left"
+msgstr "Остались только ручные правки"
+
+#: seo/metrika.php:27
+msgid "Only notify: “By continuing to use the site…” — Metrica works at once, the “Got it” button"
+msgstr "Только уведомлять: «Продолжая использовать сайт…» — Метрика работает сразу, кнопка «Понятно»"
+
+#: blocks/content/content-blocks.php:340
+msgid "Only these types (slugs or names, comma separated)"
+msgstr "Только эти типы (адреса или названия через запятую)"
+
+#: reviews/rewio.php:28
+msgid "Only with photos"
+msgstr "Только с фото"
+
+#: blocks/content/content-blocks.php:153
+msgid "Only with status, comma separated (действующие, подзахоронение…)"
+msgstr "Только с состоянием, через запятую (действующие, подзахоронение…)"
+
+#: reviews/rewio.php:27
+msgid "Only with text (not just stars)"
+msgstr "Только с текстом (без одних звёзд)"
+
+#: catalog/catalog-summary.php:77
+msgid "Only you see this"
+msgstr "Видно только вам"
+
+#: seo/metrika.php:312
+msgid "Open Analytics settings"
+msgstr "Открыть настройки аналитики"
+
+#: src/settings/index.js:477
+msgid "Open site"
+msgstr "Открыть сайт"
+
+#: core/settings.php:51
+msgid "Opening hours"
+msgstr "Время работы"
+
+#: places/places.php:56
+msgid "Opening hours (optional)"
+msgstr "Время работы (необязательно)"
+
+#: blocks/home/home.php:94
+msgid "Or address"
+msgstr "Или адрес"
+
+#: leads/callback.php:117
+msgid "Or call:"
+msgstr "Или позвоните:"
+
+#: blocks/content/content-blocks.php:269
+msgid "Or these pages (IDs, comma separated, in this order)"
+msgstr "Или эти страницы (ID через запятую, в этом порядке)"
+
+#: admin/collections.php:117 src/catalog/fields.js:143 src/catalog/types.js:546 src/catalog/work-types.js:103 templates/product-card.php:31 prices/packages.php:41
+msgid "Order"
+msgstr "Заказать"
+
+#: places/places.php:23 places/places.php:39 places/places.php:95
+msgid "Order a meal here"
+msgstr "Заказать обед здесь"
+
+#: core/settings.php:87
+msgid "Order of the blocks on the home page"
+msgstr "Порядок блоков на главной"
+
+#: places/places.php:75
+msgid "Order — with the ↑ ↓ arrows to the right of a cemetery."
+msgstr "Порядок — стрелками ↑ ↓ справа от кладбища."
+
+#: core/settings.php:163
+msgid "Organisation on Yandex Maps — number or link"
+msgstr "Организация на Яндекс Картах — номер или ссылка"
+
+#: core/icons-api.php:37
+msgid "Orthodox cross"
+msgstr "Православный крест"
+
+#: seo/metrika.php:32
+msgid "Other counters — start only after consent"
+msgstr "Другие счётчики — запускаются только после согласия"
+
+#: blocks/content/content-blocks.php:220 core/settings.php:211 core/settings.php:270
+msgid "Our services"
+msgstr "Наши услуги"
+
+#: admin/commands.php:21 src/catalog/works.js:370 works/works.php:27 blocks/content/content-blocks.php:321
+msgid "Our works"
+msgstr "Наши работы"
+
+#: content/patterns.php:41
+msgid "Our works (3 examples)"
+msgstr "Наши работы (3 примера)"
+
+#: src/catalog/product-pages.js:29
+msgid "Own page"
+msgstr "Своя страница"
+
+#: prices/prices.php:19
+msgid "Package name"
+msgstr "Название пакета"
+
+#: prices/prices.php:18
+msgid "Packages"
+msgstr "Пакеты"
+
+#: core/settings.php:118
+msgid "Page"
+msgstr "Страница"
+
+#: blocks/home/home.php:89
+msgid "Page ID (the link follows the page if it moves)"
+msgstr "ID страницы (ссылка последует за страницей, если её перенесут)"
+
+#: seo/seo.php:84 blocks/legacy/legacy.php:32 blocks/legacy/render/not-found.php:7
+msgid "Page not found"
+msgstr "Страница не найдена"
+
+#: src/catalog/types.js:871
+msgid "Page on the site"
+msgstr "Страница на сайте"
+
+#: reviews/bookreviews.php:78
+msgid "Page photo"
+msgstr "Фото страницы"
+
+#: blocks/legacy/legacy.php:28 blocks/legacy/legacy.php:104
+msgid "Page with products"
+msgstr "Страница с товарами"
+
+#: leads/callback.php:60
+msgid "Page:"
+msgstr "Страница:"
+
+#: pages/pages.php:222
+msgid "Pages"
+msgstr "Страницы"
+
+#: blocks/legacy/legacy.php:104
+msgid "Pages set to show catalog tiles or products."
+msgstr "Страницы, для которых включён показ плиток каталога или товаров."
+
+#: blocks/content/content-blocks.php:390
+msgid "Pages, comma separated paths (empty — sub-items in the menu or child pages)"
+msgstr "Страницы, адреса через запятую (пусто — подпункты меню или дочерние страницы)"
+
+#: blocks/content/content-blocks.php:263
+msgid "Parent page (ID or path; empty — this page)"
+msgstr "Родительская страница (ID или адрес; пусто — эта страница)"
+
+#: seo/metrika.php:33
+msgid "Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags. After moving them, remove them from the “Simple Custom CSS and JS” plugin."
+msgstr "Вставьте сюда целиком коды пикселя VK, подмены номеров (Gudok) и т.п. — вместе с тегами <script>. После переноса удалите их из плагина «Simple Custom CSS and JS»."
+
+#: reviews/rewio.php:68
+msgid "Paste the key and save, tick the branches — the reviews load by themselves. They are shown on a page by the “Rewio reviews” block (or the <code>[mem_rewio]</code> shortcode)."
+msgstr "Вставьте ключ и сохраните, отметьте филиалы — отзывы загрузятся сами. На страницу их выводит шорткод <code>[mem_rewio]</code> (блок «Шорткод»)."
+
+#: blocks/legacy/legacy.php:26
+msgid "Path to the current page; also adds BreadcrumbList structured data."
+msgstr "Путь к текущей странице; добавляет и разметку BreadcrumbList."
+
+#: src/catalog/products.js:83
+msgid "Percent"
+msgstr "Процент"
+
+#: legal/legal.php:19 blocks/legacy/render/footer-legal.php:11
+msgid "Personal data processing policy"
+msgstr "Политика обработки персональных данных"
+
+#: admin/collections.php:36 leads/callback.php:96 core/icons-api.php:23 core/icons-fallback.php:13
+msgid "Phone"
+msgstr "Телефон"
+
+#: blocks/legacy/legacy.php:25
+msgid "Phone bar on mobile"
+msgstr "Панель телефона на мобильных"
+
+#: blocks/home/home.php:58
+msgid "Phone button"
+msgstr "Кнопка телефона"
+
+#: core/settings.php:36
+msgid "Phone number"
+msgstr "Номер"
+
+#: leads/callback.php:59
+msgid "Phone:"
+msgstr "Телефон:"
+
+#: blocks/legacy/render/footer-contacts.php:15 core/settings.php:33
+msgid "Phones"
+msgstr "Телефоны"
+
+#: places/places.php:71
+msgid "Phones and websites of the restaurants are not shown on the site — a visitor orders through you with the “Call me back” button."
+msgstr "Телефоны и сайты ресторанов на сайт не выводятся — посетитель заказывает через вас кнопкой «Перезвоните мне»."
+
+#: core/settings.php:166
+msgid "Phones, email and addresses are taken from the “Memorial → Contacts” page."
+msgstr "Телефоны, почта и адреса берутся со страницы «Мемориал → Контакты»."
+
+#: core/settings.php:576
+msgid "Phones, email, addresses and opening hours. Changes appear at once in the header, the footer, on the home page and in the product cards."
+msgstr "Телефоны, почта, адреса и время работы. Изменения сразу появятся в шапке, подвале, на главной и в карточках товаров."
+
+#: blocks/legacy/legacy.php:29
+msgid "Phones, messengers, addresses with routes, maps and company details."
+msgstr "Телефоны, мессенджеры, адреса с маршрутами, карты и реквизиты."
+
+#: catalog/catalog-front.php:244 works/works.php:123 blocks/content/content-blocks.php:396
+msgid "Photo"
+msgstr "Фото"
+
+#: places/places.php:53 core/settings.php:120
+msgid "Photo (optional)"
+msgstr "Фото (необязательно)"
+
+#: catalog/catalog-front.php:18
+msgid "Photo 4:3 (coffins, examples of works)"
+msgstr "Фото 4:3 (гробы, примеры работ)"
+
+#: memorial-plugin.php:89
+msgid "Photo blocks of products and works — the photos are picked up automatically."
+msgstr "Блоки [mem_cat_photos] и [mem_works vid=\"фото\"] — фото подтягиваются сами."
+
+#: reviews/rewio.php:750
+msgid "Photo for the review"
+msgstr "Фото к отзыву"
+
+#: pages/photos.php:145
+msgid "Photo gallery:"
+msgstr "Фотогалерея:"
+
+#: memorial-plugin.php:89
+msgid "Photo gallery: photos of products and works"
+msgstr "Фотогалерея: фото товаров и работ"
+
+#: blocks/content/content-blocks.php:135
+msgid "Photo grid of products from catalog sections."
+msgstr "Сетка фото товаров из разделов каталога."
+
+#: core/settings.php:131
+msgid "Photo instead of the icon (optional)"
+msgstr "Фото вместо значка (необязательно)"
+
+#: reviews/bookreviews.php:77
+msgid "Photo of a guest book page: "
+msgstr "Фото страницы книги отзывов: "
+
+#: reviews/bookreviews.php:14
+msgid "Photo of the book page"
+msgstr "Фото страницы книги"
+
+#: places/places.php:27
+msgid "Photo of the hall"
+msgstr "Фото зала"
+
+#: admin/collections.php:103
+msgid "Photo of the page"
+msgstr "Фото страницы"
+
+#: core/settings.php:102
+msgid "Photo on the right (mourning hall — light, daylight)"
+msgstr "Фото справа (траурный зал — светлое, дневной свет)"
+
+#: catalog/catalog-admin.php:13
+msgid "Photo proportions"
+msgstr "Пропорции фото"
+
+#: core/settings.php:103
+msgid "Photo tint (not used in the light theme 4.0)"
+msgstr "Тонировка фото (в светлой теме 4.0 не используется)"
+
+#: src/catalog/products.js:280
+msgid "Photos"
+msgstr "Фото"
+
+#: reviews/rewio.php:43
+msgid "Photos from the reviews"
+msgstr "Фото из отзывов"
+
+#: src/catalog/types.js:103
+msgid "Photos in the cards"
+msgstr "Фото в карточках"
+
+#: src/catalog/works.js:93 src/editor-meta/index.js:234
+msgid "Photos — the first one is the main one"
+msgstr "Фото — первое главное"
+
+#: src/editor-meta/index.js:230
+msgid "Photos, size and prices"
+msgstr "Фото, размер и цены"
+
+#: src/catalog/works.js:371
+msgid "Photos, year, size and prices are changed right here; the description of a work — in the editor."
+msgstr "Фото, год, размер и цены меняются прямо здесь; описание работы — в редакторе."
+
+#: leads/callback.php:31
+msgid "Please try again."
+msgstr "Пожалуйста, попробуйте ещё раз."
+
+#: src/catalog/works.js:123 src/editor-meta/index.js:244
+msgid "Plot size"
+msgstr "Размер участка"
+
+#: works/works.php:133
+msgid "Plot size:"
+msgstr "Размер участка:"
+
+#: core/modules.php:13
+msgid "Plugin features"
+msgstr "Функции плагина"
+
+#: catalog/catalog-front.php:19
+msgid "Portrait 3:4 (wreaths, monuments)"
+msgstr "Вертикальные 3:4 (венки, памятники)"
+
+#: admin/abilities.php:543
+msgid "Post IDs (at most 10 per call)."
+msgstr "ID записей (не больше 10 за вызов)."
+
+#: src/convert/index.js:323
+msgid "Posts with [mem_…] shortcodes. Check the changes with “Preview”, then convert — one post or several at once. Before saving, the current text is kept as a revision, so “Roll back” returns it."
+msgstr "Записи с шорткодами [mem_…]. Проверьте изменения «Предпросмотром», затем переведите — одну запись или несколько сразу. Перед сохранением текущий текст сохраняется как редакция, и «Откатить» вернёт его."
+
+#: src/convert/index.js:285
+msgid "Preview and convert"
+msgstr "Предпросмотр и перевод"
+
+#: catalog/catalog-front.php:246
+msgid "Previous"
+msgstr "Предыдущее"
+
+#: catalog/catalog-front.php:134 works/works.php:116
+msgid "Previous photo"
+msgstr "Предыдущее фото"
+
+#: catalog/catalog-manager.php:351 admin/abilities.php:760 places/places.php:30 src/editor-meta/index.js:54 prices/prices.php:43
+msgid "Price"
+msgstr "Цена"
+
+#: core/settings.php:119
+msgid "Price (optional)"
+msgstr "Цена (необязательно)"
+
+#: blocks/content/inline-values.php:42
+msgid "Price code"
+msgstr "Код цены"
+
+#: blocks/content/inline-values.php:40
+msgid "Price from Memorial → Prices"
+msgstr "Цена из «Мемориал → Цены»"
+
+#: content/content.php:14
+msgid "Price list"
+msgstr "Прайс"
+
+#: src/catalog/types.js:82
+msgid "Price of a new product, ₽"
+msgstr "Цена нового товара, ₽"
+
+#: catalog/catalog.php:77
+msgid "Price on request"
+msgstr "Цена по запросу"
+
+#: content/patterns.php:37
+msgid "Price table"
+msgstr "Таблица цен"
+
+#: src/catalog/products.js:664
+msgid "Price, specifications and categories are changed right here; the description of a product — in the editor. Select several products to change prices or categories at once."
+msgstr "Цена, характеристики и категории меняются прямо здесь; описание товара — в редакторе. Выберите несколько товаров, чтобы изменить цены или категории сразу."
+
+#: src/catalog/products.js:290 src/catalog/fields.js:188 src/editor-meta/index.js:58 prices/prices.php:23 prices/prices.php:33
+msgid "Price, ₽"
+msgstr "Цена, ₽"
+
+#: prices/prices.php:41 prices/prices.php:93
+msgid "Prices"
+msgstr "Цены"
+
+#: prices/prices.php:94
+msgid "Prices from here are put into the pages automatically — change them only here.<br><b>Shortcodes for the text:</b> "
+msgstr "Цены отсюда подставляются на страницы автоматически — меняйте их только здесь.<br><b>Шорткоды для текста:</b> "
+
+#: prices/prices.php:40
+msgid "Prices mentioned in the texts of pages. A shortcode with the price code is put into the text, for example [mem_price id=\"lenta\"]. The price can be a number (500), a range (200–300) or words (free) — the theme adds the ₽ sign to numbers itself."
+msgstr "Цены, которые упоминаются в текстах страниц. В текст вставляется шорткод с кодом цены, например [mem_price id=\"lenta\"]. Цену можно писать числом (500), диапазоном (200–300) или словами (бесплатно) — знак ₽ к числам тема добавит сама."
+
+#. translators: %d: year
+#: works/works.php:142
+#, php-format
+msgid "Prices of %d."
+msgstr "Цены %d года."
+
+#: prices/prices.php:379
+msgid "Prices written into the text by hand — they do not change by themselves"
+msgstr "Цены, вписанные в текст вручную — сами не меняются"
+
+#: catalog/catalog.php:18 blocks/legacy/legacy.php:30 blocks/legacy/legacy.php:101
+msgid "Product"
+msgstr "Товар"
+
+#: admin/abilities.php:378
+msgid "Product IDs."
+msgstr "ID товаров."
+
+#: admin/abilities.php:419
+msgid "Product or work IDs."
+msgstr "ID товаров или работ."
+
+#: catalog/product-pages.php:88 src/catalog/product-pages.js:52
+msgid "Product pages"
+msgstr "Страницы товаров"
+
+#: blocks/legacy/legacy.php:30
+msgid "Product photo, price, specifications, call buttons and related products."
+msgstr "Фото товара, цена, характеристики, кнопки звонка и похожие товары."
+
+#: admin/abilities.php:295
+msgid "Product type (top catalog category) ID; 0 — all."
+msgstr "ID типа товаров (верхней категории каталога); 0 — все."
+
+#: catalog/catalog-manager.php:23 admin/commands.php:19 src/catalog/products.js:663 src/catalog/types.js:526 pages/pages.php:18
+msgid "Products"
+msgstr "Товары"
+
+#: blocks/content/content-blocks.php:110
+msgid "Products before “Show more” (number or “all”; empty — automatic)"
+msgstr "Товаров до «Показать ещё» (число или «все»; пусто — автоматически)"
+
+#: catalog/catalog-import.php:314
+#, php-format
+msgid "Products created: %d, works: %d. Skipped (already existed): %d. Pages updated: %d."
+msgstr "Создано товаров: %d, работ: %d. Пропущено (уже были): %d. Обновлено страниц: %d."
+
+#. translators: 1: products, 2: products with their own page.
+#: src/catalog/product-pages.js:57
+#, php-format
+msgid "Products now: %1$d, with their own page: %2$d. To give a product a page, write its description in the editor. Attachment pages always lead to the post with the image or to the file."
+msgstr "Товаров сейчас: %1$d, со своей страницей: %2$d. Чтобы у товара была страница, напишите его описание в редакторе. Страницы вложений всегда ведут на запись с изображением или на файл."
+
+#: blocks/content/content-blocks.php:82
+msgid "Products of a catalog section with section links and sorting."
+msgstr "Товары раздела каталога со ссылками на разделы и сортировкой."
+
+#: blocks/legacy/legacy.php:103
+msgid "Products of one catalog section."
+msgstr "Товары одного раздела каталога."
+
+#: admin/abilities.php:286
+msgid "Products of the catalog with price and visibility, optionally of one product type."
+msgstr "Товары каталога с ценой и видимостью, при желании одного типа."
+
+#: src/editor-meta/index.js:293
+msgid "Products on the page"
+msgstr "Товары на странице"
+
+#: pages/pages.php:195
+msgid "Products will appear soon. Call — we will find what you need and tell you about the prices."
+msgstr "Товары скоро появятся. Позвоните — подберём нужное и расскажем о ценах."
+
+#: src/catalog/products.js:91
+msgid "Products with the price “on request” stay as they are."
+msgstr "Товары с ценой «по запросу» не меняются."
+
+#. translators: 1: type, 2: number of products.
+#: src/catalog/types.js:849
+#, php-format
+msgid "Products “%1$s” (%2$d)"
+msgstr "Товары «%1$s» (%2$d)"
+
+#. translators: %d: number of products
+#: blocks/legacy/render/catalog-archive.php:24 pages/pages.php:202
+#, php-format
+msgid "Products: %d"
+msgstr "Товаров: %d"
+
+#: admin/abilities.php:638
+msgid "Queries of the site search (questions and answers, “Good to know”) with counts; queries that found nothing show which answers the site lacks."
+msgstr "Запросы поиска по сайту («Вопрос–ответ», «Полезно знать») с количеством; запросы без результатов показывают, каких ответов на сайте не хватает."
+
+#: src/catalog/search-stats.js:54
+msgid "Query"
+msgstr "Запрос"
+
+#: src/editor-meta/index.js:330
+msgid "Question the page answers"
+msgstr "Вопрос, на который отвечает страница"
+
+#: content/faq.php:78
+msgid "Question topics"
+msgstr "Темы вопросов"
+
+#: content/patterns.php:36
+msgid "Question?"
+msgstr "Вопрос?"
+
+#: src/catalog/search-stats.js:10 memorial-plugin.php:90
+msgid "Questions and answers"
+msgstr "Вопрос–ответ"
+
+#: blocks/content/content-blocks.php:235
+msgid "Questions from all pages (Details blocks) on one page, with search."
+msgstr "Вопросы со всех страниц (блоки «Подробности») на одной странице, с поиском."
+
+#: reviews/rewio.php:366
+msgid "Quickly:"
+msgstr "Быстро:"
+
+#: blocks/content/content-blocks.php:48
+msgid "Random order (different on every visit)"
+msgstr "Случайный порядок (при каждом открытии другой)"
+
+#: reviews/rewio.php:26
+msgid "Rating"
+msgstr "Оценка"
+
+#. translators: %s: rating, for example 4,8
+#: reviews/rewio.php:650
+#, php-format
+msgid "Rating %s out of 5"
+msgstr "Оценка %s из 5"
+
+#: reviews/reviews.php:29
+msgid "Rating (optional)"
+msgstr "Оценка (необязательно)"
+
+#: reviews/rewio.php:747 reviews/bookreviews.php:70 core/assets.php:91
+msgid "Read more"
+msgstr "Читать полностью"
+
+#: reviews/reviews.php:115
+msgid "Read reviews ↗"
+msgstr "Читать отзывы ↗"
+
+#: content/guide.php:97
+msgid "Read the answer"
+msgstr "Читать ответ"
+
+#: memorial-plugin.php:94
+msgid "Ready-made blocks in the editor"
+msgstr "Готовые блоки в редакторе"
+
+#: src/catalog/works.js:49 src/catalog/products.js:155 src/settings/index.js:79 src/collections/index.js:64
+msgid "Remove"
+msgstr "Убрать"
+
+#: src/catalog/works.js:294
+msgid "Remove a kind of work…"
+msgstr "Убрать вид работ…"
+
+#: seo/metrika.php:21
+msgid "Remove ad tags from the address bar (utm_…, yclid, gclid…): a visitor sees and copies a clean address. Metrica still gets the address with the tags — the sources in the reports are not lost"
+msgstr "Убирать рекламные метки из адресной строки (utm_…, yclid, gclid…): посетитель видит и копирует чистый адрес. Метрика всё равно получает адрес с метками — источники в отчётах не теряются"
+
+#: src/catalog/products.js:615
+msgid "Remove from categories…"
+msgstr "Убрать из категорий…"
+
+#: src/catalog/search-stats.js:147
+msgid "Remove from the list"
+msgstr "Убрать из списка"
+
+#. translators: %d: photo number.
+#: src/shared/photos.js:87
+#, php-format
+msgid "Remove photo %d"
+msgstr "Убрать фото %d"
+
+#: src/catalog/fields.js:204 src/editor-meta/index.js:198
+msgid "Remove row"
+msgstr "Убрать строку"
+
+#. translators: %d: row number.
+#: src/settings/index.js:211
+#, php-format
+msgid "Remove row %d"
+msgstr "Убрать строку %d"
+
+#: src/catalog/types.js:365
+msgid "Remove specification"
+msgstr "Убрать характеристику"
+
+#: reviews/bookreviews.php:15
+msgid "Remove the photo"
+msgstr "Убрать фото"
+
+#: src/catalog/work-types.js:123 src/catalog/work-types.js:129
+msgid "Rename"
+msgstr "Переименовать"
+
+#: src/settings/index.js:68 src/collections/index.js:53
+msgid "Replace photo"
+msgstr "Заменить фото"
+
+#: catalog/catalog-import.php:191
+msgid "Replace the galleries on the page with the catalog from the admin (the old version stays in the page’s “Revisions”)"
+msgstr "Заменить на странице галереи каталогом из админки (старый вариант останется в «Редакциях» страницы)"
+
+#: admin/abilities.php:538
+msgid "Replaces the [mem_…] shortcodes of posts with blocks and site values, and SEOPress shortcodes with variables. The text before the conversion is saved as a revision."
+msgstr "Заменяет шорткоды [mem_…] в записях блоками и значениями сайта, а шорткоды в SEOPress — переменными. Текст до перевода сохраняется как редакция."
+
+#: seo/metrika.php:59
+msgid "Reports → Content → Visit parameters"
+msgstr "Отчёты → Содержание → Параметры визитов"
+
+#: seo/metrika.php:58
+msgid "Reports → Sources → Summary"
+msgstr "Отчёты → Источники → Сводка"
+
+#: leads/callback.php:11 leads/callback.php:12
+msgid "Request"
+msgstr "Заявка"
+
+#: reviews/reviews.php:36
+msgid "Request to leave a review (under the reviews)"
+msgstr "Просьба оставить отзыв (под отзывами)"
+
+#: leads/callback.php:11
+msgid "Requests"
+msgstr "Заявки"
+
+#: admin/abilities.php:150
+msgid "Requests from the “Call me back” form: phone, name, page, time and whether someone has called back. Newest first."
+msgstr "Заявки из формы «Перезвоните мне»: телефон, имя, страница, время и перезвонили ли. Сначала новые."
+
+#: admin/collections.php:31
+msgid "Requests from the “Call me back” window. Each one also comes by email; here they are kept even if the email is lost."
+msgstr "Заявки из окна «Перезвоните мне». Каждая приходит и на почту; здесь они хранятся, даже если письмо потеряется."
+
+#: admin/abilities.php:591
+msgid "Restores the text and SEO fields of a post from before its conversion to blocks."
+msgstr "Возвращает текст и SEO-поля записи, какими они были до перевода в блоки."
+
+#: admin/collections.php:85
+msgid "Review"
+msgstr "Отзыв"
+
+#: reviews/rewio.php:45
+msgid "Review date"
+msgstr "Дата отзыва"
+
+#: reviews/reviews.php:58
+msgid "Review services for the “Reviews” page. Put the “Reviews” block (or the <code>[mem_reviews]</code> shortcode) on the page. "
+msgstr "Сервисы отзывов для страницы «Отзывы». На странице поставьте шорткод <code>[mem_reviews]</code> (блок «Шорткод»). "
+
+#: blocks/content/content-blocks.php:178
+msgid "Review widgets and links to review sites (Memorial → Reviews)."
+msgstr "Виджеты отзывов и ссылки на сервисы отзывов («Мемориал → Отзывы»)."
+
+#: reviews/rewio.php:66 reviews/reviews.php:56 reviews/reviews.php:97 core/settings.php:212 core/settings.php:321
+msgid "Reviews"
+msgstr "Отзывы"
+
+#: reviews/rewio.php:47
+msgid "Reviews are loaded in the background and kept on the site. If Rewio is temporarily unavailable, the last loaded reviews stay on the site."
+msgstr "Отзывы загружаются в фоне и хранятся на сайте. Если Rewio временно недоступен, на сайте остаются последние загруженные."
+
+#: reviews/rewio.php:693 reviews/reviews.php:131
+msgid "Reviews by branch"
+msgstr "Отзывы по филиалам"
+
+#: memorial-plugin.php:86
+msgid "Reviews from Yandex Maps (Rewio)"
+msgstr "Отзывы с Яндекс Карт (Rewio)"
+
+#: reviews/rewio.php:67
+msgid "Reviews from Yandex Maps, 2GIS, Zoon and other sites through the <a href=\"https://rewio.ru/\" target=\"_blank\" rel=\"noopener\">Rewio</a> service — as cards in the site’s design. "
+msgstr "Отзывы с Яндекс Карт, 2ГИС, Zoon и других площадок через сервис <a href=\"https://rewio.ru/\" target=\"_blank\" rel=\"noopener\">Rewio</a> — карточками в оформлении сайта. "
+
+#: blocks/content/content-blocks.php:177
+msgid "Reviews from review sites"
+msgstr "Отзывы с сервисов отзывов"
+
+#: admin/collections.php:73
+msgid "Reviews from the guest book"
+msgstr "Отзывы из книги отзывов"
+
+#: content/patterns.php:39
+msgid "Reviews from the guest book (3 latest)"
+msgstr "Отзывы из книги (3 последних)"
+
+#: memorial-plugin.php:87
+msgid "Reviews left on the site, the guest book block."
+msgstr "Отзывы, оставленные на сайте, [mem_bookreviews]."
+
+#: blocks/content/content-blocks.php:185
+msgid "Reviews left on this site."
+msgstr "Отзывы, оставленные на этом сайте."
+
+#: blocks/content/content-blocks.php:200
+msgid "Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews)."
+msgstr "Отзывы с Яндекс Карт, загруженные через Rewio («Мемориал → Отзывы Rewio»)."
+
+#: content/patterns.php:40
+msgid "Reviews of our customers"
+msgstr "Отзывы наших клиентов"
+
+#: admin/collections.php:74
+msgid "Reviews retyped from the paper guest book, with a photo of the page. Before uploading a photo, cover the surname, phone and signature of the author unless they agreed to publication."
+msgstr "Отзывы, перепечатанные из бумажной книги отзывов, с фото страницы. Перед загрузкой фото закройте фамилию, телефон и подпись автора, если он не согласился на публикацию."
+
+#: reviews/bookreviews.php:60
+msgid "Reviews that customers left in the paper guest book in our office. Reprinted without changes, with the photo of the page next to them."
+msgstr "Отзывы, которые клиенты оставили в бумажной книге отзывов в нашем офисе. Перепечатаны без изменений, рядом — фото страницы."
+
+#: reviews/rewio.php:241
+msgid "Reviews were received ("
+msgstr "Отзывы получены ("
+
+#. translators: %s: review site
+#: core/assets.php:97
+#, php-format
+msgid "Reviews: %s"
+msgstr "Отзывы: %s"
+
+#: reviews/rewio.php:100
+msgid "Rewio does not respond ("
+msgstr "Rewio не отвечает ("
+
+#: src/settings/rewio-scope.js:71
+msgid "Rewio example"
+msgstr "Пример Rewio"
+
+#: reviews/rewio.php:386
+msgid "Rewio is still collecting reviews"
+msgstr "Rewio ещё собирает отзывы"
+
+#: reviews/rewio.php:111
+msgid "Rewio returned an unclear response."
+msgstr "Rewio вернул непонятный ответ."
+
+#: reviews/rewio.php:66 reviews/reviews.php:163
+msgid "Rewio reviews"
+msgstr "Отзывы Rewio"
+
+#: reviews/rewio.php:299
+msgid "Rewio: every "
+msgstr "Rewio: каждые "
+
+#: prices/prices.php:30
+msgid "Right column title"
+msgstr "Заголовок правой колонки"
+
+#: src/convert/index.js:307
+msgid "Roll back"
+msgstr "Откатить"
+
+#: admin/abilities.php:590
+msgid "Roll back a conversion"
+msgstr "Откатить перевод"
+
+#: src/catalog/products.js:84
+msgid "Roubles"
+msgstr "Рубли"
+
+#: admin/abilities.php:344
+msgid "Roubles; 0 — “price on request”."
+msgstr "Рубли; 0 — «цена по запросу»."
+
+#: src/catalog/products.js:100
+msgid "Round to"
+msgstr "Округлить до"
+
+#: core/icons-api.php:36
+msgid "Ruble"
+msgstr "Рубль"
+
+#: core/icons-fallback.php:13
+msgid "Ruble — prices"
+msgstr "Рубль — цены"
+
+#: seo/seo-registry.php:192
+msgid "SEO title (SEOPress)"
+msgstr "SEO-заголовок (SEOPress)"
+
+#: src/catalog/product-pages.js:125 src/catalog/types.js:164 src/catalog/types.js:483 src/catalog/list-screen.js:105 src/settings/index.js:485 src/settings/index.js:576
+msgid "Save"
+msgstr "Сохранить"
+
+#: src/catalog/types.js:431
+msgid "Save specifications"
+msgstr "Сохранить характеристики"
+
+#: src/commands/index.js:168
+msgid "Save the page first."
+msgstr "Сначала сохраните страницу."
+
+#: reviews/rewio.php:530
+msgid "Saved ✓ The reviews will update within a minute"
+msgstr "Сохранено ✓ Отзывы обновятся в течение минуты"
+
+#: src/catalog/works.js:237 src/catalog/product-pages.js:111 src/catalog/products.js:481 src/catalog/types.js:752 src/catalog/work-types.js:71 src/collections/index.js:448
+msgid "Saved."
+msgstr "Сохранено."
+
+#: src/settings/index.js:453
+msgid "Saved. The changes are already on the site."
+msgstr "Сохранено. Изменения уже на сайте."
+
+#: reviews/rewio.php:529
+msgid "Saving…"
+msgstr "Сохраняю…"
+
+#: core/assets.php:99
+msgid "Scroll left"
+msgstr "Прокрутить влево"
+
+#: core/assets.php:100
+msgid "Scroll right"
+msgstr "Прокрутить вправо"
+
+#: content/search.php:36 content/search.php:38
+msgid "Search"
+msgstr "Поиск"
+
+#: blocks/content/content-blocks.php:247
+msgid "Search field"
+msgstr "Поле поиска"
+
+#: memorial-plugin.php:92
+msgid "Search statistics"
+msgstr "Статистика поиска"
+
+#: content/guide.php:113
+msgid "Search the articles"
+msgstr "Поиск по статьям"
+
+#: content/faq.php:71
+msgid "Search the questions"
+msgstr "Поиск по вопросам"
+
+#. translators: 1: number of searches, 2: number of different queries.
+#: src/catalog/search-stats.js:179
+#, php-format
+msgid "Searches on the “Questions and answers” and “Good to know” pages: %1$d, different queries: %2$d. Only the query and counters are kept — nothing about visitors; phone numbers, emails and links are not saved. A query that found nothing tells which answer to add: put the question into a “Details” block in the “Frequent questions” section of a page."
+msgstr "Поисков на страницах «Вопрос–ответ» и «Полезно знать»: %1$d, разных запросов: %2$d. Хранятся только запрос и счётчики — ничего о посетителях; номера телефонов, почта и ссылки не сохраняются. Запрос, по которому ничего не нашлось, подсказывает, какой ответ добавить: поставьте вопрос блоком «Подробности» в раздел «Частые вопросы» на странице."
+
+#: content/content.php:92
+msgid "Second step"
+msgstr "Второй шаг"
+
+#: catalog/catalog-import.php:243
+msgid "Section "
+msgstr "Раздел "
+
+#: catalog/catalog-admin.php:18
+msgid "Section anchor"
+msgstr "Якорь раздела"
+
+#: blocks/content/content-blocks.php:383
+msgid "Section cards"
+msgstr "Карточки разделов"
+
+#: catalog/catalog-admin.php:17
+msgid "Section order"
+msgstr "Порядок раздела"
+
+#: src/catalog/types.js:660
+msgid "Sections inside the type — on the site these are the buttons above the catalog."
+msgstr "Разделы внутри типа — на сайте это кнопки над каталогом."
+
+#: catalog/catalog-admin.php:17
+msgid "Sections on the page go in ascending order of this number."
+msgstr "Разделы на странице идут по возрастанию этого числа."
+
+#: catalog/catalog-manager.php:515
+msgid "Select at least two products."
+msgstr "Выберите хотя бы два товара."
+
+#: prices/prices.php:40
+msgid "Separate prices"
+msgstr "Отдельные цены"
+
+#: reviews/reviews.php:24
+msgid "Service"
+msgstr "Сервис"
+
+#: blocks/home/home.php:149
+msgid "Service cards of the home page (Memorial → Home page → Services), full width."
+msgstr "Карточки услуг главной («Мемориал → Главная страница → Услуги»), на всю ширину."
+
+#: core/settings.php:572
+msgid "Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited right on it: “Appearance → Editor → Templates → Home”."
+msgstr "Карточки услуг с фото и ценами — на главной и в блоке «Наши услуги» на других страницах. Тексты главной правятся прямо на ней: «Внешний вид → Редактор → Шаблоны → Главная»."
+
+#: blocks/content/content-blocks.php:221
+msgid "Service cards with photos and starting prices (Memorial → Home page → Services)."
+msgstr "Карточки услуг с фото и ценами «от» («Мемориал → Главная страница → Услуги»)."
+
+#: reviews/reviews.php:25
+msgid "Service name (only for “Another service”)"
+msgstr "Название сервиса (только для «Другой сервис»)"
+
+#: core/settings.php:211
+msgid "Service packages"
+msgstr "Пакеты услуг"
+
+#: core/settings.php:115 core/settings.php:566 core/settings.php:571
+msgid "Services"
+msgstr "Услуги"
+
+#: reviews/reviews.php:162
+msgid "Services and widgets"
+msgstr "Сервисы и виджеты"
+
+#: blocks/home/home.php:148
+msgid "Services grid"
+msgstr "Сетка услуг"
+
+#: src/catalog/products.js:73
+msgid "Set the same price"
+msgstr "Поставить одну цену"
+
+#: admin/abilities.php:232
+msgid "Sets or clears “Called back” of a call back request."
+msgstr "Ставит или снимает «Перезвонили» у заявки на звонок."
+
+#: catalog/catalog.php:10 blocks/home/home.php:38
+msgid "Shape"
+msgstr "Форма"
+
+#: core/icons-api.php:33
+msgid "Shield with a check mark"
+msgstr "Щит с галочкой"
+
+#: core/icons-fallback.php:12
+msgid "Shield with a tick — reliability"
+msgstr "Щит с галочкой — надёжность"
+
+#: src/editor-meta/index.js:343
+msgid "Short answer — 1–2 sentences"
+msgstr "Короткий ответ — 1–2 предложения"
+
+#: core/settings.php:117
+msgid "Short description"
+msgstr "Короткое описание"
+
+#: src/convert/index.js:250
+msgid "Shortcodes"
+msgstr "Шорткоды"
+
+#. translators: 1: how many more, 2: how many are left
+#: core/assets.php:104
+#, php-format
+msgid "Show %1$d more of %2$d"
+msgstr "Показать ещё %1$d из %2$d"
+
+#. translators: %d: how many more
+#: core/assets.php:102
+#, php-format
+msgid "Show %d more"
+msgstr "Показать ещё %d"
+
+#: core/assets.php:82
+msgid "Show all"
+msgstr "Показать все"
+
+#: src/editor-meta/index.js:274
+msgid "Show in examples"
+msgstr "Показывать в примерах"
+
+#: reviews/rewio.php:764
+msgid "Show more reviews"
+msgstr "Показать ещё отзывы"
+
+#: src/catalog/works.js:307 src/catalog/products.js:552
+msgid "Show on the site"
+msgstr "Показать на сайте"
+
+#: reviews/rewio.php:718
+msgid "Show only the reviews of: "
+msgstr "Показать только отзывы: "
+
+#: admin/abilities.php:409
+msgid "Show or hide on the site"
+msgstr "Показать или скрыть на сайте"
+
+#: blocks/content/content-blocks.php:360
+msgid "Show plot size"
+msgstr "Показывать размер участка"
+
+#: blocks/content/content-blocks.php:55 blocks/content/content-blocks.php:125
+msgid "Show prices"
+msgstr "Показывать цены"
+
+#: reviews/reviews.php:142 reviews/reviews.php:147 blocks/home/home.php:444 blocks/legacy/render/parts/reviews.php:26
+msgid "Show reviews"
+msgstr "Показать отзывы"
+
+#: blocks/legacy/render/parts/maps.php:25
+msgid "Show the map"
+msgstr "Показать карту"
+
+#: reviews/rewio.php:713
+msgid "Show the reviews of a site"
+msgstr "Показать отзывы площадки"
+
+#: reviews/rewio.php:17
+msgid "Show the reviews on the site (where the [mem_rewio] shortcode or the block is)"
+msgstr "Показывать отзывы на сайте (там, где стоит шорткод [mem_rewio])"
+
+#: core/settings.php:84
+msgid "Show this block"
+msgstr "Показывать этот блок"
+
+#: src/catalog/products.js:305 src/editor-meta/index.js:84
+msgid "Show “from”"
+msgstr "Показывать «от»"
+
+#: admin/collections.php:112 src/catalog/fields.js:122 src/catalog/fields.js:129
+msgid "Shown"
+msgstr "Показано"
+
+#: core/settings.php:102
+msgid "Shown in a rounded frame next to the text, without darkening."
+msgstr "Показывается в рамке со скруглением рядом с текстом, без затемнения."
+
+#: core/settings.php:60
+msgid "Shown in the call-back window and in the “Contacts” block. Empty field — no button."
+msgstr "Показываются в окне обратного звонка и в блоке «Контакты». Пустое поле — кнопки нет."
+
+#: core/settings.php:58
+msgid "Shown in the top bar, on the first screen, in “Contacts” and in the footer. Empty — not shown."
+msgstr "Показывается в верхней строке, на первом экране, в «Контактах» и в подвале. Пусто — не показывать."
+
+#: src/catalog/works.js:157
+msgid "Shown in the “Examples of our works” cards on other pages."
+msgstr "Показывается в карточках «Примеры наших работ» на других страницах."
+
+#: prices/prices.php:15
+msgid "Shown on the home page (the “Service packages” block — its title and visibility are set in “Home page”) and by the “Funeral packages” block (or the [mem_packages] shortcode) on any page."
+msgstr "Выводятся на главной (блок «Пакеты услуг» — его заголовок и показ настраиваются в «Главная страница») и шорткодом [mem_packages] на любой странице."
+
+#: src/editor-meta/index.js:347
+msgid "Shown on the page card in “Good to know” and in search. Empty — the page title and first paragraph."
+msgstr "Показывается на карточке страницы в «Полезно знать» и в поиске. Пусто — название страницы и первый абзац."
+
+#: core/settings.php:74
+msgid "Shown on the “Contacts” page and in the footer. Empty fields are not shown."
+msgstr "Показываются на странице «Контакты» и в подвале. Пустые поля не выводятся."
+
+#: admin/abilities.php:410
+msgid "Shows (publishes) or hides (makes drafts of) products or works."
+msgstr "Показывает (публикует) или скрывает (делает черновиками) товары или работы."
+
+#: blocks/legacy/render/product.php:43
+msgid "Similar products"
+msgstr "Похожие товары"
+
+#: reviews/rewio.php:359
+msgid "Site"
+msgstr "Площадка"
+
+#: reviews/rewio.php:143
+msgid "Site "
+msgstr "Площадка "
+
+#. Description of the plugin
+#: memorial-plugin.php
+msgid "Site features for Memorial funeral services: catalog, prices, reviews, works, leads, settings, SEO, analytics. Design lives in the Memorial Modern theme."
+msgstr "Функции сайта ритуальной службы «Мемориал»: каталог, цены, отзывы, работы, заявки, настройки, SEO, аналитика. Оформление — в теме Memorial Modern."
+
+#: reviews/rewio.php:44
+msgid "Site name with a link to the review"
+msgstr "Название площадки со ссылкой на отзыв"
+
+#: core/settings.php:587
+msgid "Site settings"
+msgstr "Настройки сайта"
+
+#: src/inline-value/index.js:104 src/inline-value/index.js:120
+msgid "Site value"
+msgstr "Значение сайта"
+
+#: catalog/catalog.php:9
+msgid "Size"
+msgstr "Размер"
+
+#: blocks/content/content-blocks.php:241
+msgid "Skip pages (IDs, comma separated)"
+msgstr "Пропустить страницы (ID через запятую)"
+
+#: src/catalog/fields.js:145
+msgid "Smaller first. The arrows in the row menu move the item one place."
+msgstr "Меньшие — первыми. Стрелки в меню строки сдвигают пункт на одно место."
+
+#: admin/collections.php:120
+msgid "Smaller first; equal — newer first."
+msgstr "Меньшие — первыми; при равных — сначала новые."
+
+#: content/content.php:18
+msgid "Soft card"
+msgstr "Мягкая карточка"
+
+#: reviews/rewio.php:730 core/assets.php:93
+msgid "Sort by date"
+msgstr "Сортировать по дате"
+
+#: reviews/rewio.php:731 core/assets.php:95
+msgid "Sort by rating"
+msgstr "Сортировать по оценке"
+
+#: reviews/rewio.php:35
+msgid "Sort order"
+msgstr "Порядок"
+
+#: reviews/rewio.php:729 blocks/content/content-blocks.php:96 blocks/legacy/render/catalog-archive.php:27 pages/pages.php:206
+msgid "Sorting"
+msgstr "Сортировка"
+
+#: reviews/rewio.php:40
+msgid "Sorting for visitors: by date and by rating (on the right above the reviews)"
+msgstr "Сортировка для посетителей: по дате и по оценке (справа над отзывами)"
+
+#: catalog/catalog-front.php:200 reviews/rewio.php:729 works/works.php:90
+msgid "Sorting:"
+msgstr "Сортировка:"
+
+#. translators: %d: number.
+#: src/catalog/types.js:219
+#, php-format
+msgid "Specification %d"
+msgstr "Характеристика %d"
+
+#: src/catalog/types.js:201 src/editor-meta/index.js:125
+msgid "Specifications"
+msgstr "Характеристики"
+
+#: catalog/catalog-front.php:22
+msgid "Square"
+msgstr "Квадрат"
+
+#: core/assets.php:77
+msgid "Start typing — we will suggest."
+msgstr "Начните вводить — подскажем."
+
+#: blocks/content/inline-values.php:28
+msgid "Starting price of a catalog section"
+msgstr "Цена «от» раздела каталога"
+
+#: seo/seo-registry.php:58
+msgid "Starting price: fences"
+msgstr "Цена «от»: оградки"
+
+#: src/convert/index.js:257
+msgid "State"
+msgstr "Состояние"
+
+#: blocks/content/content-blocks.php:159
+msgid "Status filter buttons"
+msgstr "Кнопки фильтра по состоянию"
+
+#: content/content.php:15
+msgid "Steps"
+msgstr "Шаги"
+
+#: content/content.php:90
+msgid "Steps in order. The icon of a step is set in “Additional CSS class(es)” of the step’s group: ico-phone, ico-doc, ico-car and so on."
+msgstr "Порядок действий по шагам. Иконка шага задаётся в «Дополнительные CSS-класс(ы)» у группы шага: ico-phone, ico-doc, ico-car и т.д."
+
+#: content/content.php:89
+msgid "Steps with icons"
+msgstr "Шаги с иконками"
+
+#: blocks/home/home.php:66 blocks/home/home.php:100
+msgid "Style"
+msgstr "Стиль"
+
+#: blocks/content/content-blocks.php:104
+msgid "Sub-section heading level"
+msgstr "Уровень заголовков подразделов"
+
+#: content/search.php:41
+msgid "Suggestions"
+msgstr "Подсказки"
+
+#: prices/prices.php:373
+msgid "Switch the prices in the texts to automatic ones"
+msgstr "Перевести цены в текстах на автоматические"
+
+#: prices/prices.php:370
+msgid "Switched to automatic prices:"
+msgstr "Переведены на автоматические цены:"
+
+#: core/settings.php:392
+msgid "TIN "
+msgstr "ИНН "
+
+#: core/settings.php:76
+msgid "TIN (INN)"
+msgstr "ИНН"
+
+#: blocks/legacy/legacy.php:21
+msgid "Tagline with years in business"
+msgstr "Подпись с годами работы"
+
+#: content/patterns.php:33
+msgid "Tell in 2–3 sentences how and who does it, how long it takes. Choose a photo of the craftsman at work on the left."
+msgstr "Расскажите в 2–3 предложениях, как и кто это делает, сколько времени занимает. Слева выберите фото мастера за работой."
+
+#: src/catalog/works.js:109 src/editor-meta/index.js:257
+msgid "Tells the visitor that the prices are as of that year. Empty — the year is not shown."
+msgstr "Говорит посетителю, что цены указаны на тот год. Пусто — год не показывается."
+
+#: legal/legal.php:102
+msgid "Templates are a sample under 152-FZ; check them for your business before publishing (better with a lawyer)."
+msgstr "Шаблоны — образец по 152-ФЗ; перед публикацией проверьте их под вашу работу (лучше с юристом)."
+
+#: src/catalog/types.js:173 blocks/home/home.php:84 core/settings.php:96 core/settings.php:129 core/settings.php:155
+msgid "Text"
+msgstr "Текст"
+
+#: blocks/content/content-blocks.php:68
+msgid "Text (empty — from settings)"
+msgstr "Текст (пусто — из настроек)"
+
+#: blocks/content/content-blocks.php:289
+msgid "Text (empty — standard text)"
+msgstr "Текст (пусто — стандартный текст)"
+
+#: reviews/reviews.php:35
+msgid "Text above the reviews"
+msgstr "Текст над отзывами"
+
+#: core/settings.php:107
+msgid "Text and the call button first, the photo below (recommended)"
+msgstr "Сначала текст и кнопка звонка, под ними фото (рекомендуется)"
+
+#: core/settings.php:162
+msgid "Text next to the reviews"
+msgstr "Текст рядом с отзывами"
+
+#: core/settings.php:100
+msgid "Text of the “what to do” link"
+msgstr "Текст ссылки «что делать»"
+
+#: places/places.php:22 core/settings.php:69 core/settings.php:94
+msgid "Text under the title"
+msgstr "Текст под заголовком"
+
+#: core/settings.php:578
+msgid "Texts and items of the home page blocks. Items can be dragged by ⋮⋮, removed with the cross and added with the button under the list. Empty items are not saved.<br>"
+msgstr "Тексты и пункты блоков главной. Пункты можно перетаскивать за ⋮⋮, удалять крестиком и добавлять кнопкой под списком. Пустые пункты не сохраняются.<br>"
+
+#: reviews/reviews.php:34
+msgid "Texts on the page"
+msgstr "Тексты на странице"
+
+#: leads/callback.php:114
+msgid "Thank you! The request is accepted — we will call you back soon."
+msgstr "Спасибо! Заявка принята — скоро перезвоним."
+
+#: reviews/rewio.php:92
+msgid "The API key is not set."
+msgstr "Не указан API-ключ."
+
+#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:200 admin/convert.php:557
+msgid "The JavaScript build is missing. Run npm run build."
+msgstr "Нет сборки JavaScript. Выполните npm run build."
+
+#: reviews/rewio.php:398
+msgid "The Rewio account has no branches yet — add them in the app.rewio.ru account and click “Update the list”."
+msgstr "В аккаунте Rewio пока нет филиалов — добавьте их в кабинете app.rewio.ru и нажмите «Обновить список»."
+
+#: reviews/rewio.php:187
+msgid "The Rewio account has no branches — add them in the app.rewio.ru account."
+msgstr "В аккаунте Rewio нет филиалов — добавьте их в кабинете app.rewio.ru."
+
+#: src/catalog/work-types.js:200
+msgid "The buttons above the list of works on the site go in this order."
+msgstr "Кнопки над списком работ на сайте идут в этом порядке."
+
+#: catalog/catalog-front.php:181
+msgid "The catalog will appear soon. Call — we will tell you about the models and prices."
+msgstr "Каталог скоро появится. Позвоните — расскажем о моделях и ценах."
+
+#: legal/legal.php:103
+msgid "The cookie banner mode (ask for consent or only notify) — in “Memorial → Analytics”."
+msgstr "Режим плашки cookie (спрашивать согласие или только уведомлять) — в «Мемориал → Аналитика»."
+
+#: memorial-plugin.php:84
+msgid "The counter, goals, cleaning the address of UTM tags, the cookie banner."
+msgstr "Счётчик, цели, очистка адреса от UTM-меток, плашка о cookie."
+
+#: core/settings.php:48
+msgid "The first address is shown in the top bar of the site. Every address gets a tab with a map on the home page."
+msgstr "Первый адрес показывается в верхней строке сайта. Для каждого адреса на главной появится вкладка с картой."
+
+#: core/settings.php:34
+msgid "The first number is the main one: it is in the header and on the “Call” and “Order” buttons."
+msgstr "Первый номер — основной: он в шапке, на кнопках «Позвонить» и «Заказать»."
+
+#: prices/packages.php:33 prices/packages.php:66
+msgid "The full contents and prices"
+msgstr "Весь состав и цены"
+
+#: memorial-plugin.php:93
+msgid "The halls and cemeteries blocks and their settings."
+msgstr "Блоки [mem_restaurants] и [mem_cemeteries], их настройки."
+
+#: reviews/rewio.php:15
+msgid "The key is in the app.rewio.ru account (it starts with hrev_). A read-only key is enough. The key is kept on the site’s server, visitors do not see it."
+msgstr "Ключ — в личном кабинете app.rewio.ru (начинается с hrev_). Хватает ключа «только чтение». Ключ хранится на сервере сайта, посетителям он не виден."
+
+#: blocks/legacy/render/not-found.php:8
+msgid "The link may be out of date or there is a typo in the address. If you need help right now — call, we will tell you what to do."
+msgstr "Возможно, ссылка устарела или в адресе опечатка. Если вам нужна помощь прямо сейчас — позвоните, мы подскажем."
+
+#: places/places.php:73
+msgid "The list of cemeteries is the “Cemeteries” block (or the <code>[mem_cemeteries]</code> shortcode) on any page (for example, “Cemeteries of Belgorod and the district”). "
+msgstr "Список кладбищ выводится шорткодом <code>[mem_cemeteries]</code> на любой странице (например, «Кладбища Белгорода и района»). "
+
+#: catalog/catalog-types-admin.php:154 catalog/catalog-types-admin.php:284 works/works-manager.php:297
+msgid "The name is empty."
+msgstr "Название пустое."
+
+#: core/settings.php:139
+msgid "The packages themselves, their contents and prices — in “Memorial → Prices”."
+msgstr "Сами пакеты, их состав и цены — в «Мемориал → Цены»."
+
+#: src/editor-meta/index.js:315
+msgid "The products appear below the page text. To keep part of the text above them, put a “More” block in the text."
+msgstr "Товары выводятся под текстом страницы. Чтобы часть текста была над ними, поставьте в текст блок «Далее»."
+
+#. translators: %s: product title.
+#: src/catalog/products.js:179
+#, php-format
+msgid "The products become one: “%s” gets the photos of all of them, the missing fields and all categories; the others go to the trash and their addresses lead to it."
+msgstr "Товары станут одним: «%s» получит фото всех, недостающие поля и все категории; остальные уйдут в корзину, а их адреса будут вести на него."
+
+#: reviews/rewio.php:450
+msgid "The reviews are not loaded yet — click “Load reviews now”."
+msgstr "Отзывы ещё не загружены — нажмите «Загрузить отзывы сейчас»."
+
+#: reviews/reviews.php:59
+msgid "The reviews block on the home page is set up separately: “Home page → “Reviews” block”."
+msgstr "Блок отзывов на главной настраивается отдельно: «Главная страница → Блок «Отзывы»»."
+
+#: memorial-plugin.php:88
+msgid "The section of works with photos and prices, the works manager, the works blocks."
+msgstr "Раздел работ с фото и ценами, менеджер работ, блоки [mem_works]."
+
+#: reviews/rewio.php:523
+msgid "The site did not respond"
+msgstr "Сайт не ответил"
+
+#: prices/prices.php:28
+msgid "The table on the cremation page — the “Cremation” block ([mem_cremation]). The total is counted automatically; on other pages it is shown by [mem_price id=\"kremaciya\"]."
+msgstr "Таблица на странице кремации — шорткод [mem_cremation]. Итог считается сам; на других страницах его выводит [mem_price id=\"kremaciya\"]."
+
+#: core/settings.php:134
+msgid "The tiles are the sub-items of the “Funeral goods” menu item (Appearance → Menus): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category."
+msgstr "Плитки — это подпункты пункта «Ритуальные товары» в меню (Внешний вид → Меню): названия и порядок берутся оттуда. Фото плитки — «Изображение записи» страницы, на которую ведёт пункт; если его нет — фото первого товара этой категории."
+
+#: catalog/catalog-types-admin.php:320
+msgid "The type has products — move or delete them first."
+msgstr "В типе есть товары — сначала перенесите или удалите их."
+
+#: blocks/legacy/render/not-found.php:21
+msgid "The whole catalog"
+msgstr "Весь каталог"
+
+#: memorial-plugin.php:83
+msgid "The window with the call-back form and notifications about requests. Off — the “Call me back” buttons simply call the phone."
+msgstr "Окно с формой обратного звонка и уведомления о заявках. Выключено — кнопки «Перезвоните мне» просто звонят по телефону."
+
+#: seo/metrika.php:60
+msgid "The “Call” goal is sent when the number is tapped on a mobile phone; on a computer MAX or the request window opens instead of a call, they are counted by the goals"
+msgstr "Цель «Звонок» отправляется при нажатии на номер с мобильного телефона; на компьютере вместо звонка открывается MAX или окно заявки, их считают цели"
+
+#: prices/prices.php:37
+msgid "The “Cremation” card next to the funeral packages on the “Prices” page (where the packages block is; on other pages — [mem_packages cremation=\"1\"])"
+msgstr "Карточка «Кремация» рядом с пакетами похорон на странице «Цены» (там, где стоит [mem_packages]; на других страницах — [mem_packages cremation=\"1\"])"
+
+#: core/settings.php:79
+msgid "The “more than N years” on the site is counted from it."
+msgstr "Из него считается «более N лет» на сайте."
+
+#: src/catalog/products.js:736
+msgid "There are no product types yet. Add one in “Types and categories”, for example “Wreaths”."
+msgstr "Типов товаров пока нет. Добавьте тип в «Типах и категориях», например «Венки»."
+
+#: src/catalog/types.js:825
+msgid "There are no product types yet. Add one, for example “Wreaths”."
+msgstr "Типов товаров пока нет. Добавьте тип, например «Венки»."
+
+#: blocks/legacy/render/catalog-archive.php:45
+msgid "There are no products in this section yet. Call — we will find what you need."
+msgstr "В этом разделе пока нет товаров. Позвоните — подберём нужное."
+
+#: src/settings/index.js:564
+msgid "There are unsaved changes"
+msgstr "Есть несохранённые изменения"
+
+#: content/guide.php:114
+msgid "There is no answer to such a question on the site yet. Call or leave your number — we will help."
+msgstr "Ответа на такой вопрос пока нет на сайте. Позвоните или оставьте номер — подскажем."
+
+#: content/faq.php:74
+msgid "There is no such question on the site yet. Call or leave your number — we will answer."
+msgstr "Такого вопроса пока нет на сайте. Позвоните или оставьте номер — ответим."
+
+#: content/content.php:92
+msgid "Third step"
+msgstr "Третий шаг"
+
+#: admin/abilities.php:435
+msgid "This part of the site is switched off in Memorial → Features."
+msgstr "Эта часть сайта выключена в «Мемориал → Функции»."
+
+#: src/inline-value/index.js:43
+msgid "This value is empty — check the parameter."
+msgstr "Это значение пустое — проверьте параметр."
+
+#: content/patterns.php:39
+msgid "Three reviews from the guest book with the photo of the page."
+msgstr "Три отзыва из книги отзывов с фото страницы."
+
+#: content/patterns.php:41
+msgid "Three works with photos, year and prices."
+msgstr "Три работы с фото, годом и ценами."
+
+#: reviews/rewio.php:416
+msgid "Tick the branches whose reviews to show (nothing ticked — all of them), and the sites of each branch."
+msgstr "Отметьте филиалы, чьи отзывы показывать (ничего не отмечено — все), и площадки у каждого."
+
+#: reviews/rewio.php:364
+msgid "Tick the branches whose reviews to show (nothing ticked — all of them). Unneeded sites can be unticked for every branch."
+msgstr "Отметьте филиалы, чьи отзывы показывать (ничего не отмечено — все). У каждого филиала можно снять ненужные площадки."
+
+#: content/content.php:15
+msgid "Ticks"
+msgstr "Галочки"
+
+#: leads/callback.php:61
+msgid "Time:"
+msgstr "Время:"
+
+#: src/catalog/search-stats.js:78
+msgid "Times"
+msgstr "Раз"
+
+#: core/settings.php:105
+msgid "Tint colour (not used in the light theme 4.0)"
+msgstr "Цвет тонировки (в светлой теме 4.0 не используется)"
+
+#: core/settings.php:109
+msgid "Tint strength, % (not used in the light theme 4.0)"
+msgstr "Сила тонировки, % (в светлой теме 4.0 не используется)"
+
+#: admin/abilities.php:759 places/places.php:21 src/catalog/works.js:100 src/catalog/products.js:283 src/convert/index.js:228 core/settings.php:114
+msgid "Title"
+msgstr "Заголовок"
+
+#: core/settings.php:92
+msgid "Title — first line"
+msgstr "Заголовок — первая строка"
+
+#: core/settings.php:93
+msgid "Title — second line (italic, accent colour)"
+msgstr "Заголовок — вторая строка (курсивом, цветом акцента)"
+
+#: blocks/legacy/render/not-found.php:14
+msgid "To the home page"
+msgstr "На главную"
+
+#: works/works.php:142
+msgid "Today the cost may differ — we will calculate it by phone for free."
+msgstr "Сейчас стоимость может отличаться — посчитаем по телефону бесплатно."
+
+#: leads/callback.php:41
+msgid "Too many requests. Please call us."
+msgstr "Слишком много заявок. Позвоните нам, пожалуйста."
+
+#: blocks/legacy/legacy.php:19
+msgid "Top bar: address and hours"
+msgstr "Верхняя строка: адрес и время работы"
+
+#: src/catalog/works.js:142 prices/prices.php:148 works/works.php:140
+msgid "Total"
+msgstr "Итого"
+
+#. translators: %s: total price.
+#: src/catalog/fields.js:222
+#, php-format
+msgid "Total: %s"
+msgstr "Итого: %s"
+
+#. translators: %s: total price.
+#: src/editor-meta/index.js:216
+#, php-format
+msgid "Total: %s ₽"
+msgstr "Итого: %s ₽"
+
+#: src/catalog/works.js:414 src/catalog/products.js:728
+msgid "Trash"
+msgstr "Корзина"
+
+#: reviews/rewio.php:352
+msgid "Try again"
+msgstr "Попробовать ещё раз"
+
+#: reviews/rewio.php:526
+msgid "Try again in a minute."
+msgstr "Попробуйте ещё раз через минуту."
+
+#: reviews/rewio.php:48
+msgid "Twice a day"
+msgstr "Дважды в день"
+
+#: content/patterns.php:37
+msgid "Two columns “Service — Price”. Prices and “₽” do not break, the table stays neat on a phone."
+msgstr "Две колонки «Услуга — Цена». Цены и «₽» не разрываются, на телефоне таблица остаётся аккуратной."
+
+#: catalog/catalog.php:11 admin/abilities.php:758 src/convert/index.js:239
+msgid "Type"
+msgstr "Тип"
+
+#: src/catalog/types.js:125
+msgid "Type of product"
+msgstr "Тип товара"
+
+#: catalog/catalog-types-admin.php:19 catalog/catalog-manager.php:63 catalog/catalog-manager.php:64 admin/commands.php:20 src/catalog/products.js:714 src/catalog/types.js:788
+msgid "Types and categories"
+msgstr "Типы и категории"
+
+#: src/catalog/types.js:461
+msgid "Under the section title on the site; the catalog itself adds “47 models, from 800 ₽”."
+msgstr "Под названием раздела на сайте; каталог сам добавит «47 моделей, от 800 ₽»."
+
+#: src/catalog/types.js:73
+msgid "Under the title of the catalog on the site (optional)."
+msgstr "Под названием каталога на сайте (необязательно)."
+
+#: catalog/catalog-manager.php:352 admin/abilities.php:762 src/catalog/products.js:316 src/catalog/types.js:256
+msgid "Unit"
+msgstr "Единица"
+
+#: src/editor-meta/index.js:74
+msgid "Unit (optional)"
+msgstr "Единица (необязательно)"
+
+#: src/catalog/types.js:97
+msgid "Unit of a new product"
+msgstr "Единица нового товара"
+
+#: catalog/catalog-manager.php:572
+msgid "Unknown action."
+msgstr "Неизвестное действие."
+
+#: admin/collections.php:259
+msgid "Unknown list."
+msgstr "Неизвестный список."
+
+#: catalog/catalog-manager.php:619 admin/abilities.php:481
+msgid "Unknown product type."
+msgstr "Неизвестный тип товаров."
+
+#: admin/settings-form.php:133 admin/settings-form.php:179
+msgid "Unknown settings page."
+msgstr "Неизвестная страница настроек."
+
+#: core/modules.php:13
+msgid "Untick a feature and it turns off: its menu items disappear, its blocks on pages show nothing. The data is not deleted. The catalog, prices, contacts, documents and SEO are the base of the site, they always work."
+msgstr "Снимите галочку — функция выключится: её пункты пропадут из меню, блоки на страницах ничего не покажут. Данные не удаляются. Каталог, цены, контакты, документы и SEO — основа сайта, они работают всегда."
+
+#: catalog/catalog-import.php:182 catalog/catalog-manager.php:293
+msgid "Untitled"
+msgstr "Без заголовка"
+
+#: works/works-manager.php:135
+msgid "Untitled work"
+msgstr "Работа без названия"
+
+#: src/settings/index.js:120
+msgid "Up"
+msgstr "Вверх"
+
+#: admin/abilities.php:330
+msgid "Update a product"
+msgstr "Изменить товар"
+
+#: reviews/rewio.php:402
+msgid "Update the list of branches"
+msgstr "Обновить список филиалов"
+
+#: reviews/rewio.php:458
+msgid "Updated:"
+msgstr "Обновлено:"
+
+#: reviews/bookreviews.php:15
+msgid "Use as the page photo"
+msgstr "Использовать как фото страницы"
+
+#: blocks/content/content-blocks.php:256
+msgid "Useful to know"
+msgstr "Полезно знать"
+
+#: src/catalog/types.js:106
+msgid "Usual 4:3"
+msgstr "Обычные 4:3"
+
+#: core/settings.php:72
+msgid "Usually leave it empty — the MAX profile link is used. If you know a link that starts the installed app right away, enter it."
+msgstr "Обычно оставляйте пустым — используется ссылка на профиль MAX. Если знаете ссылку, которая сразу запускает установленное приложение, впишите её."
+
+#: src/inline-value/index.js:64
+msgid "Value"
+msgstr "Значение"
+
+#: blocks/content/content-blocks.php:329
+msgid "View"
+msgstr "Посмотреть"
+
+#: src/catalog/products.js:519
+msgid "View on the site"
+msgstr "Посмотреть на сайте"
+
+#: reviews/rewio.php:467
+msgid "View the loaded reviews and hide unneeded ones"
+msgstr "Посмотреть загруженные отзывы и скрыть ненужные"
+
+#: pages/pages.php:148
+msgid "View →"
+msgstr "Смотреть →"
+
+#: leads/callback.php:111
+msgid "Waiting for the call"
+msgstr "Жду звонка"
+
+#: blocks/home/home.php:427 blocks/legacy/render/parts/reviews.php:19
+msgid "We are on Yandex Maps"
+msgstr "Мы на Яндекс Картах"
+
+#: content/patterns.php:32
+msgid "We make it ourselves"
+msgstr "Делаем сами"
+
+#: content/patterns.php:30
+msgid "We make it ourselves (photo + text)"
+msgstr "Делаем сами (фото + текст)"
+
+#: core/settings.php:57 core/settings.php:202
+msgid "We take calls round the clock"
+msgstr "Звонки принимаем круглосуточно"
+
+#: content/content.php:30
+msgid "We will answer your questions and help with the documents and the cost."
+msgstr "Ответим на вопросы, подскажем по документам и стоимости."
+
+#: leads/callback.php:93
+msgid "We will call you back"
+msgstr "Перезвоним вам"
+
+#: seo/metrika.php:19
+msgid "Webvisor — recording how visitors view the site"
+msgstr "Вебвизор — запись того, как посетители смотрят сайт"
+
+#: prices/prices.php:62 prices/prices.php:144
+msgid "What is included"
+msgstr "Что входит"
+
+#: prices/prices.php:31
+msgid "What is included. “On the card” — the items visible on the cremation card without opening the list"
+msgstr "Что входит. «На карточке» — позиции, видные на карточке кремации без раскрытия списка"
+
+#: core/modules.php:22
+msgid "What of the “Memorial” plugin works on the site."
+msgstr "Что из плагина «Мемориал» работает на сайте."
+
+#: admin/commands.php:23 src/catalog/search-stats.js:173 content/search-stats.php:84
+msgid "What people search for on the site"
+msgstr "Что ищут на сайте"
+
+#: admin/editor-meta.php:177
+msgid "What the customers wanted and what was done…"
+msgstr "Что хотели заказчики и что было сделано…"
+
+#: core/settings.php:100 core/settings.php:232 core/settings.php:265
+msgid "What to do when someone dies"
+msgstr "Что делать, если умер человек"
+
+#: content/content.php:92
+msgid "What to do."
+msgstr "Что сделать."
+
+#: admin/abilities.php:637
+msgid "What visitors search for"
+msgstr "Что ищут посетители"
+
+#: works/works.php:137
+msgid "What was done"
+msgstr "Что сделано"
+
+#: src/catalog/works.js:130 src/editor-meta/index.js:171
+msgid "What was done and the price"
+msgstr "Что сделано и цена"
+
+#: blocks/content/inline-values.php:60
+msgid "What: empty — name and details; адрес (address), почта (email), телефон (phone), сайт (site)"
+msgstr "Что: пусто — название и реквизиты; адрес, почта, телефон, сайт"
+
+#: core/settings.php:64
+msgid "WhatsApp — number"
+msgstr "WhatsApp — номер"
+
+#: admin/collections.php:54
+msgid "When"
+msgstr "Когда"
+
+#: src/catalog/search-stats.js:119
+msgid "Where"
+msgstr "Где"
+
+#: legal/legal.php:36
+msgid "Where it is used: "
+msgstr "Где используется: "
+
+#: reviews/reviews.php:21
+msgid "Where people write reviews about us"
+msgstr "Где о нас пишут отзывы"
+
+#: admin/collections.php:97
+msgid "Where the book is kept"
+msgstr "Где хранится книга"
+
+#: core/settings.php:70
+msgid "Where to send requests"
+msgstr "Куда присылать заявки"
+
+#: places/places.php:152
+msgid "Which cemeteries to show"
+msgstr "Какие кладбища показать"
+
+#: src/commands/index.js:100
+msgid "Who to call back"
+msgstr "Кому перезвонить"
+
+#: src/commands/index.js:101
+msgid "Who to call back new call back requests leads"
+msgstr "Кому перезвонить новые заявки на звонок"
+
+#: core/settings.php:211 core/settings.php:281
+msgid "Why people trust us"
+msgstr "Почему нам доверяют"
+
+#: catalog/catalog-front.php:21
+msgid "Wide 5:3 (fences, drawings), whole"
+msgstr "Широкие 5:3 (оградки, чертежи), целиком"
+
+#: reviews/reviews.php:31
+msgid "Widget code (optional)"
+msgstr "Код виджета (необязательно)"
+
+#. translators: %s: list of shortcodes.
+#: src/convert/index.js:82
+#, php-format
+msgid "Will stay as shortcodes (inside other text): %s. Edit them in the post."
+msgstr "Останутся шорткодами (внутри другого текста): %s. Поправьте их в записи."
+
+#: core/settings.php:68
+msgid "Window title"
+msgstr "Заголовок окна"
+
+#: reviews/rewio.php:35
+msgid "With photos first, then newest"
+msgstr "Сначала с фото, затем новые"
+
+#: src/catalog/products.js:254
+msgid "Without type"
+msgstr "Без типа"
+
+#: works/works.php:27
+msgid "Work"
+msgstr "Работа"
+
+#. translators: %d: row number.
+#: src/catalog/fields.js:169 src/editor-meta/index.js:181
+#, php-format
+msgid "Work %d"
+msgstr "Работа %d"
+
+#: src/catalog/work-types.js:97 works/works-manager.php:24
+msgid "Works"
+msgstr "Работы"
+
+#: blocks/legacy/render/contacts-page.php:42
+msgid "Write"
+msgstr "Написать"
+
+#. translators: %s: messenger
+#: leads/callback.php:121
+#, php-format
+msgid "Write in %s"
+msgstr "Написать в %s"
+
+#: blocks/legacy/render/mobile-bar.php:10
+msgid "Write in MAX"
+msgstr "Написать в MAX"
+
+#: reviews/reviews.php:11 reviews/reviews.php:143
+msgid "Yandex Maps"
+msgstr "Яндекс Карты"
+
+#: blocks/content/content-blocks.php:199
+msgid "Yandex Maps reviews"
+msgstr "Отзывы Яндекс Карт"
+
+#: memorial-plugin.php:84
+msgid "Yandex Metrica and the cookie notice"
+msgstr "Яндекс Метрика и уведомление о cookie"
+
+#: seo/metrika.php:17
+msgid "Yandex Metrica counter number"
+msgstr "Номер счётчика Яндекс.Метрики"
+
+#. translators: %s: current Yandex Metrica load mode.
+#: seo/metrika.php:308
+#, php-format
+msgid "Yandex Metrica now has a load mode setting. It was set to “%s” to match how the site worked before the update. Please confirm or change it."
+msgstr "У Яндекс Метрики появилась настройка загрузки. Выбрано «%s» — как сайт работал до обновления. Подтвердите или измените её."
+
+#: blocks/home/home.php:176
+msgid "Yandex review buttons"
+msgstr "Кнопки отзывов Яндекса"
+
+#: blocks/home/home.php:183
+msgid "Yandex reviews widget"
+msgstr "Виджет отзывов Яндекса"
+
+#: src/catalog/works.js:107 src/editor-meta/index.js:256
+msgid "Year"
+msgstr "Год"
+
+#: core/settings.php:79
+msgid "Year founded"
+msgstr "Год основания"
+
+#: seo/seo-registry.php:50 blocks/content/inline-values.php:46
+msgid "Years in business"
+msgstr "Лет работы"
+
+#: src/catalog/search-stats.js:112 src/catalog/works.js:163 src/catalog/products.js:308 src/collections/index.js:101 src/collections/index.js:108
+msgid "Yes"
+msgstr "Да"
+
+#: blocks/legacy/render/product.php:30
+msgid "You can check the availability, sizes and terms by phone — we will help you choose."
+msgstr "Уточнить наличие, размеры и сроки можно по телефону — подскажем и подберём."
+
+#: blocks/legacy/render/contacts-page.php:53
+msgid "You can send a photo, the text for a wreath ribbon or questions about documents — we will answer during working hours."
+msgstr "Можно прислать фото, текст для ленты на венке или вопросы о документах — ответим в рабочее время."
+
+#: pages/cards.php:59
+msgid "[mem_cards]: no pages for the cards — add sub-items to this page in the main menu or set pages=\"page-slug, …\"."
+msgstr "[mem_cards]: нет страниц для карточек — добавьте этой странице подпункты в главном меню или укажите pages=\"адрес-страницы, …\"."
+
+#: catalog/catalog-front.php:168
+msgid "[mem_catalog]: the category was not found. Set it like this: [mem_catalog cat=\"category-slug\"]."
+msgstr "[mem_catalog]: категория не найдена. Укажите её так: [mem_catalog cat=\"адрес-категории\"]."
+
+#: places/places.php:145
+msgid "[mem_cemeteries]: no cemeteries added — “Memorial → Cemeteries”. Visitors do not see this block."
+msgstr "[mem_cemeteries]: кладбища не добавлены — «Мемориал → Кладбища». Посетители этот блок не видят."
+
+#: content/faq.php:65
+msgid "[mem_faq]: there are no questions on the pages yet (“Details” blocks)."
+msgstr "[mem_faq]: на страницах пока нет вопросов (блоков «Подробности»)."
+
+#: content/guide.php:78
+msgid "[mem_guide]: there are no published pages inside this page yet. Open the page you need → “Page Attributes” → “Parent” → choose this page."
+msgstr "[mem_guide]: внутри этой страницы пока нет опубликованных страниц. Откройте нужную страницу → «Атрибуты страницы» → «Родительская» → выберите эту страницу."
+
+#: places/places.php:94
+msgid "[mem_restaurants]: no halls added — “Memorial → Halls for the memorial meal”. Visitors do not see this block."
+msgstr "[mem_restaurants]: залы не добавлены — «Мемориал → Залы для поминок». Посетители этот блок не видят."
+
+#: reviews/reviews.php:94
+msgid "[mem_reviews]: add the review services in “Memorial → Reviews”."
+msgstr "[mem_reviews]: добавьте сервисы отзывов в «Мемориал → Отзывы»."
+
+#: reviews/rewio.php:659
+msgid "[mem_rewio]: showing the reviews is off — the tick in “Memorial → Rewio reviews → 1. Connection”. Only you see this message."
+msgstr "[mem_rewio]: показ отзывов выключен — галочка в «Мемориал → Отзывы Rewio → 1. Подключение». Это сообщение видно только вам."
+
+#: reviews/rewio.php:667
+msgid "[mem_rewio]: the reviews are not loaded yet — “Memorial → Rewio reviews” → “Load reviews now”. Only you see this message."
+msgstr "[mem_rewio]: отзывы ещё не загружены — «Мемориал → Отзывы Rewio» → «Загрузить отзывы сейчас». Это сообщение видно только вам."
+
+#: works/works.php:203
+msgid "[mem_works vid=\"карточки\"]: no suitable works with photos — add them in “Our works”."
+msgstr "[mem_works vid=\"карточки\"]: нет подходящих работ с фото — добавьте их в «Наши работы»."
+
+#: pages/photos.php:48
+msgid "[mem_works vid=\"фото\"]: there are no photos in “Our works” yet."
+msgstr "[mem_works vid=\"фото\"]: в «Наших работах» пока нет фото."
+
+#: memorial-plugin.php:85
+msgid "[mem_…] shortcodes in the titles and descriptions of AIOSEO, Yoast, Rank Math, SEOPress."
+msgstr "Шорткоды [mem_…] в заголовках и описаниях AIOSEO, Yoast, Rank Math, SEOPress."
+
+#: places/places.php:235
+msgid "a draft with text; check the terms and publish it"
+msgstr "черновик с текстом; проверьте условия и опубликуйте"
+
+#: places/places.php:254
+msgid "a draft; add the cemeteries in “Memorial → Cemeteries” and publish it"
+msgstr "черновик; добавьте кладбища в «Мемориал → Кладбища» и опубликуйте"
+
+#: seo/metrika.php:300
+msgid "after cookie consent"
+msgstr "после согласия на cookie"
+
+#: catalog/catalog-import.php:177
+msgid "already moved"
+msgstr "уже переносилась"
+
+#: seo/metrika.php:301
+msgid "always"
+msgstr "всегда"
+
+#: seo/metrika.php:60 core/assets.php:87 core/helpers.php:44
+msgid "and"
+msgstr "и"
+
+#: seo/metrika.php:55
+msgid "and paste its number below. Save."
+msgstr "и вставьте его номер ниже. Сохраните."
+
+#: reviews/rewio.php:730
+msgid "by date"
+msgstr "по дате"
+
+#: reviews/rewio.php:731
+msgid "by rating"
+msgstr "по оценке"
+
+#: admin/commands.php:19
+msgid "catalog prices"
+msgstr "каталог цены"
+
+#: admin/commands.php:20
+msgid "catalog specifications"
+msgstr "каталог характеристики"
+
+#: src/catalog/types.js:260
+msgid "cm, mm, kg"
+msgstr "см, мм, кг"
+
+#: reviews/rewio.php:387
+msgid "collection error in Rewio"
+msgstr "ошибка сбора в Rewio"
+
+#: reviews/rewio.php:385
+msgid "collection is off"
+msgstr "сбор выключен"
+
+#: leads/callback.php:106
+msgid "consent to personal data processing"
+msgstr "согласие на обработку персональных данных"
+
+#: src/convert/index.js:21
+msgid "converted"
+msgstr "переведено"
+
+#: admin/abilities.php:556
+msgid "converted, unchanged, no-revision, not-found or an error message."
+msgstr "converted, unchanged, no-revision, not-found или текст ошибки."
+
+#: legal/legal.php:91
+msgid "create from the template"
+msgstr "создать по шаблону"
+
+#: legal/legal.php:87
+msgid "draft — check the text and publish it"
+msgstr "черновик — проверьте текст и опубликуйте"
+
+#: legal/legal.php:88
+msgid "edit"
+msgstr "редактировать"
+
+#: reviews/rewio.php:524
+msgid "error"
+msgstr "ошибка"
+
+#: reviews/rewio.php:108
+msgid "error "
+msgstr "ошибка "
+
+#: reviews/rewio.php:384
+msgid "example from Rewio"
+msgstr "пример от Rewio"
+
+#: core/settings.php:71
+msgid "for example max://…"
+msgstr "например max://…"
+
+#: catalog/catalog-import.php:183
+msgid "for example:"
+msgstr "например:"
+
+#: src/catalog/works.js:125 src/editor-meta/index.js:245
+msgid "for example: 2.5 × 2 m"
+msgstr "например: 2,5 × 2 м"
+
+#: reviews/reviews.php:26
+msgid "for example: 40 Studencheskaya St."
+msgstr "например: ул. Студенческая, 40"
+
+#: reviews/rewio.php:30
+msgid "for example: an employee’s surname"
+msgstr "например: фамилия сотрудника"
+
+#: core/settings.php:119
+msgid "for example: from 58,000 ₽"
+msgstr "например: от 58 000 ₽"
+
+#: src/editor-meta/index.js:116
+msgid "for example: height 90 cm · 700 × 2050 mm"
+msgstr "например: высота 90 см · 700 × 2050 мм"
+
+#: catalog/catalog-admin.php:18
+msgid "for example: korziny"
+msgstr "например: korziny"
+
+#: src/catalog/products.js:318 src/editor-meta/index.js:75
+msgid "for example: per metre"
+msgstr "например: за метр"
+
+#: src/catalog/products.js:297
+msgid "from"
+msgstr "от"
+
+#: catalog/catalog-import.php:183 catalog/catalog.php:79
+msgid "from "
+msgstr "от "
+
+#. translators: %s: price
+#: catalog/catalog-summary.php:56 pages/cards.php:71
+#, php-format
+msgid "from %s"
+msgstr "от %s"
+
+#: places/places.php:30
+msgid "from 900 ₽ per person"
+msgstr "от 900 ₽ на человека"
+
+#: admin/abilities.php:788
+msgid "hidden"
+msgstr "скрыто"
+
+#: reviews/rewio.php:473
+msgid "hide"
+msgstr "скрыть"
+
+#: core/settings.php:247
+msgid "items with ticks"
+msgstr "пункты с галочками"
+
+#: admin/commands.php:18
+msgid "leads calls phone"
+msgstr "заявки звонки телефон"
+
+#. translators: %s: when the list was received
+#: reviews/rewio.php:405
+#, php-format
+msgid "list from Rewio: %s"
+msgstr "список из Rewio: %s"
+
+#: core/settings.php:63
+msgid "memorialbel or https://t.me/…"
+msgstr "memorialbel или https://t.me/…"
+
+#: catalog/catalog-front.php:215 catalog/catalog-summary.php:42 pages/cards.php:70
+msgid "model"
+msgid_plural "models"
+msgstr[0] "модель"
+msgstr[1] "модели"
+msgstr[2] "моделей"
+
+#: reviews/rewio.php:525
+msgid "most likely, the server ran out of time"
+msgstr "скорее всего, превышено время ожидания на сервере"
+
+#: admin/abilities.php:160
+msgid "new — nobody has called back yet."
+msgstr "новые — ещё никто не перезвонил."
+
+#: legal/legal.php:85
+msgid "not chosen"
+msgstr "не выбрана"
+
+#: src/convert/index.js:23
+msgid "not converted: could not save a revision"
+msgstr "не переведено: не удалось сохранить редакцию"
+
+#: src/convert/index.js:27
+msgid "not converted: no permission"
+msgstr "не переведено: нет прав"
+
+#: src/convert/index.js:28 reviews/rewio.php:108
+msgid "not found"
+msgstr "не найдено"
+
+#: src/catalog/works.js:116
+msgid "not set"
+msgstr "не задан"
+
+#: src/catalog/search-stats.js:101
+msgid "nothing"
+msgstr "ничего"
+
+#: src/convert/index.js:22
+msgid "nothing to convert"
+msgstr "нечего переводить"
+
+#: seo/metrika.php:302
+msgid "off"
+msgstr "выключено"
+
+#: catalog/catalog-summary.php:52 src/catalog/products.js:301
+msgid "on request"
+msgstr "по запросу"
+
+#: pages/photos.php:145
+msgid "on the page “"
+msgstr "на странице «"
+
+#: legal/legal.php:88
+msgid "open"
+msgstr "открыть"
+
+#: prices/prices.php:383
+msgid "page"
+msgstr "страница"
+
+#: places/places.php:31
+msgid "parking, a separate hall, a lenten menu"
+msgstr "парковка, отдельный зал, постное меню"
+
+#: src/catalog/types.js:98
+msgid "per piece"
+msgstr "за штуку"
+
+#: reviews/rewio.php:475
+msgid "photos:"
+msgstr "фото: "
+
+#: works/works.php:220
+msgid "plot"
+msgstr "участок"
+
+#: admin/commands.php:21
+msgid "portfolio photos examples"
+msgstr "портфолио фото примеры"
+
+#: content/guide.php:98
+msgid "question"
+msgid_plural "questions"
+msgstr[0] "вопрос"
+msgstr[1] "вопроса"
+msgstr[2] "вопросов"
+
+#: reviews/rewio.php:383 reviews/rewio.php:449 reviews/rewio.php:627 reviews/rewio.php:706 reviews/reviews.php:86
+msgid "review"
+msgid_plural "reviews"
+msgstr[0] "отзыв"
+msgstr[1] "отзыва"
+msgstr[2] "отзывов"
+
+#: admin/commands.php:25
+msgid "reviews book"
+msgstr "отзывы книга"
+
+#: blocks/legacy/render/header-contacts.php:8
+msgid "round the clock"
+msgstr "круглосуточно"
+
+#: admin/commands.php:23
+msgid "search statistics queries"
+msgstr "статистика поиска запросы"
+
+#: core/settings.php:243
+msgid "second line of the title"
+msgstr "вторая строка заголовка"
+
+#: prices/prices.php:383
+msgid "section description"
+msgstr "описание раздела"
+
+#: catalog/catalog-summary.php:77
+msgid "section “"
+msgstr "раздел «"
+
+#: admin/commands.php:41
+msgid "settings"
+msgstr "настройки"
+
+#: admin/commands.php:24
+msgid "shortcodes migration"
+msgstr "шорткоды перевод"
+
+#: core/assets.php:98
+msgid "show all"
+msgstr "показать все"
+
+#: admin/abilities.php:788
+msgid "shown"
+msgstr "показано"
+
+#: seo/metrika.php:59
+msgid "shows which button is clicked more often: the header, the first screen, a product card and so on."
+msgstr "видно, на какой кнопке нажимают чаще: шапка, первый экран, карточка товара и т.д."
+
+#: core/settings.php:245
+msgid "text under the title"
+msgstr "текст под заголовком"
+
+#: reviews/rewio.php:108
+msgid "the API did not accept the request parameters"
+msgstr "API не принял параметры запроса"
+
+#: works/works.php:256
+msgid "the cards on the pages “"
+msgstr "карточки на страницах «"
+
+#: reviews/rewio.php:108
+msgid "the key did not fit"
+msgstr "ключ не подошёл"
+
+#: reviews/rewio.php:108
+msgid "the key has no access"
+msgstr "у ключа нет доступа"
+
+#: legal/legal.php:20
+msgid "the link at the consent tick in the “Call me back” window"
+msgstr "ссылка у галочки согласия в окне «Перезвоните мне»"
+
+#: legal/legal.php:21
+msgid "the link in the cookie banner and in the footer"
+msgstr "ссылка в плашке cookie и в подвале"
+
+#: legal/legal.php:19
+msgid "the link in the footer and in the “Call me back” window; it is also the WordPress privacy policy page"
+msgstr "ссылка в подвале и в окне «Перезвоните мне»; она же — страница политики конфиденциальности WordPress"
+
+#: catalog/catalog-summary.php:77
+msgid "the page has no catalog section — add cat=\"Section name\""
+msgstr "у страницы нет раздела каталога — добавьте cat=\"Название раздела\""
+
+#: leads/callback.php:107
+msgid "the personal data processing policy"
+msgstr "Политикой обработки персональных данных"
+
+#: core/settings.php:244
+msgid "title"
+msgstr "заголовок"
+
+#: reviews/rewio.php:332
+msgid "today"
+msgstr "сегодня"
+
+#: reviews/rewio.php:332
+msgid "tomorrow"
+msgstr "завтра"
+
+#: reviews/rewio.php:108
+msgid "too many requests, we will try later"
+msgstr "слишком много запросов, попробуем позже"
+
+#: reviews/rewio.php:372
+msgid "untick all"
+msgstr "снять все"
+
+#. translators: %d: number of guests
+#: places/places.php:106
+#, php-format
+msgid "up to %d guest"
+msgid_plural "up to %d guests"
+msgstr[0] "до %d гостя"
+msgstr[1] "до %d гостей"
+msgstr[2] "до %d гостей"
+
+#. translators: %s: price
+#: catalog/catalog-summary.php:56
+#, php-format
+msgid "up to %s"
+msgstr "до %s"
+
+#: content/guide.php:98
+msgid "with answers"
+msgstr "с ответами"
+
+#. translators: %d: year
+#: works/works.php:102 works/works.php:132
+#, php-format
+msgctxt "year"
+msgid "%d"
+msgstr "%d г."
+
+#: reviews/rewio.php:332
+msgid "yesterday"
+msgstr "вчера"
+
+#: reviews/rewio.php:211
+msgid "»: loaded "
+msgstr "»: загружено "
+
+#: catalog/catalog-migrate.php:115
+msgid "»: specifications and prices of "
+msgstr "»: характеристики и цены "
+
+#: places/places.php:228
+msgid "»</a> — the halls block was added (the halls themselves — “Memorial → Halls for the memorial meal”)"
+msgstr "»</a> — добавлен блок залов (сами залы — «Мемориал → Залы для поминок»)"
+
+#: content/guide.php:159
+msgid "— a draft with the search. For an article to appear on it: open the article → “Page Attributes” → “Parent” → “Good to know”."
+msgstr "— черновик с поиском. Чтобы статья появилась на ней: откройте статью → «Атрибуты страницы» → «Родительская» → «Полезно знать»."
+
+#: src/editor-meta/index.js:303
+msgid "— do not show —"
+msgstr "— не показывать —"
+
+#: legal/legal.php:96
+msgid "— drafts with text templates will appear; the company details (sole proprietor, TIN, OGRNIP, address, email) are filled in from “Contacts” automatically."
+msgstr "— появятся черновики с шаблонами текстов; реквизиты (ИП, ИНН, ОГРНИП, адрес, почта) подставятся из «Контактов» сами."
+
+#: src/catalog/types.js:306
+msgid "— none —"
+msgstr "— нет —"
+
+#: legal/legal.php:26
+msgid "— not chosen —"
+msgstr "— не выбрана —"
+
+#: src/settings/index.js:312
+msgid "— not selected —"
+msgstr "— не выбрано —"
+
+#: admin/collections.php:100
+msgid "— not specified —"
+msgstr "— не указано —"
+
+#: prices/prices.php:374
+msgid "— the theme will replace the cremation total, the ribbon, the delivery and the catalog prices that match the current ones in the texts of pages with shortcodes."
+msgstr "— тема заменит в текстах страниц итог кремации, ленту, доставку и цены каталога, которые совпадают с текущими, на шорткоды."
+
+#. translators: %s: post title.
+#: src/convert/index.js:203
+#, php-format
+msgid "“%s” is back as it was before converting."
+msgstr "«%s» возвращена к виду до перевода."
+
+#: core/settings.php:151
+msgid "“About the company” block"
+msgstr "Блок «О компании»"
+
+#: core/settings.php:248
+msgid "“About the company” text"
+msgstr "текст «О компании»"
+
+#: seo/metrika.php:16
+msgid "“After cookie consent” and “Always” also set how the cookie bar works. With “Off” the bar follows the setting below."
+msgstr "«После согласия на cookie» и «Всегда» задают и работу плашки cookie. При «Выключено» плашка работает по настройке ниже."
+
+#: blocks/content/content-blocks.php:275
+msgid "“All articles” link"
+msgstr "Ссылка «Все статьи»"
+
+#: memorial-plugin.php:83
+msgid "“Call me back” request"
+msgstr "Заявка «Перезвоните мне»"
+
+#: seo/metrika.php:57
+msgid "“Call request”,"
+msgstr "«Заявка на звонок»,"
+
+#: core/settings.php:66
+msgid "“Call” button on a computer"
+msgstr "Кнопка «Позвонить» на компьютере"
+
+#: core/settings.php:134
+msgid "“Catalog” block"
+msgstr "Блок «Каталог»"
+
+#: places/places.php:254
+msgid "“Cemeteries of Belgorod and the district”"
+msgstr "«Кладбища Белгорода и района»"
+
+#: core/settings.php:166
+msgid "“Contacts” block"
+msgstr "Блок «Контакты»"
+
+#: seo/metrika.php:57
+msgid "“Email”."
+msgstr "«Письмо»."
+
+#: blocks/legacy/legacy.php:21
+msgid "“Funeral company in business for over N years” — or the site tagline if the founding year is not set."
+msgstr "«Ритуальная компания, которая на рынке больше N лет» — или описание сайта, если год основания не задан."
+
+#: seo/metrika.php:57
+msgid "“Going to MAX”,"
+msgstr "«Переход в MAX»,"
+
+#: content/guide.php:159
+msgid "“Good to know”"
+msgstr "«Полезно знать»"
+
+#: seo/metrika.php:56
+msgid "“JavaScript event”"
+msgstr "«JavaScript-событие»"
+
+#: blocks/home/home.php:177
+msgid "“Leave a review” and “We are on Yandex Maps” buttons."
+msgstr "Кнопки «Оставить отзыв» и «Мы на Яндекс Картах»."
+
+#: memorial-plugin.php:94
+msgid "“Memorial” patterns in the block inserter of the editor."
+msgstr "Шаблоны блоков «Мемориал» во вставке блоков редактора."
+
+#: blocks/content/content-blocks.php:74
+msgid "“Often searched” words, comma separated (empty — from search statistics)"
+msgstr "Слова «Часто ищут» через запятую (пусто — из статистики поиска)"
+
+#: core/settings.php:111
+msgid "“Our services” block"
+msgstr "Блок «Наши услуги»"
+
+#: catalog/catalog-import.php:188 memorial-plugin.php:88
+msgid "“Our works”"
+msgstr "«Наши работы»"
+
+#: places/places.php:235
+msgid "“Pre-need funeral contract”"
+msgstr "«Прижизненный договор на ритуальные услуги»"
+
+#: core/settings.php:158
+msgid "“Reviews” block (from Yandex Maps)"
+msgstr "Блок «Отзывы» (с Яндекс Карт)"
+
+#: core/settings.php:139
+msgid "“Service packages” block"
+msgstr "Блок «Пакеты услуг»"
+
+#: memorial-plugin.php:92
+msgid "“What people search for on the site” and the automatic “Frequent searches”."
+msgstr "«Что ищут на сайте» и автоматические «Часто ищут»."
+
+#: core/settings.php:98
+msgid "“What to do” link under the buttons"
+msgstr "Ссылка «что делать» под кнопками"
+
+#: core/settings.php:123
+msgid "“Why people trust us” block"
+msgstr "Блок «Почему нам доверяют»"
+
+#: works/works.php:257
+msgid "” are now built automatically from “Our works” (the [mem_works vid=\"карточки\"] shortcode). Which works to show — tick “In examples” in “Our works” (the “⋯” menu of a work); without ticks random ones of all are shown. The previous version is in the page’s “Revisions”."
+msgstr "» теперь собираются сами из «Наших работ» (шорткод [mem_works vid=\"карточки\"]). Какие работы показывать — отметьте «Показывать в примерах» в «Наши работы» (меню «⋯» у работы); без отметок показываются случайные из всех. Прежний вариант — в «Редакциях» страницы."
+
+#: catalog/catalog-summary.php:77
+msgid "” not found"
+msgstr "» не найден"
+
+#: pages/photos.php:146
+msgid "” the photos of “Our works” and of the products are now picked up automatically (the [mem_works vid=\"фото\"] and [mem_cat_photos] shortcodes). The previous version is in the page’s “Revisions”."
+msgstr "» фото «Наших работ» и товаров теперь подтягиваются сами (шорткоды [mem_works vid=\"фото\"] и [mem_cat_photos]). Прежний вариант — в «Редакциях» страницы."
+
+#: places/places.php:28
+msgid "… St., near the … cemetery"
+msgstr "ул. …, рядом с кладбищем …"
+
+#: src/editor-meta/index.js:190
+msgid "₽"
+msgstr "₽"
+
+#: seo/metrika.php:56
+msgid "→ type"
+msgstr "→ тип"
+
+#: core/settings.php:637
+msgid "✎ Texts and contacts"
+msgstr "✎ Тексты и контакты"
+
+#: prices/prices.php:375
+msgid "✔ Done."
+msgstr "✔ Готово."
+
+#: prices/prices.php:377
+msgid "✔ No prices written into the texts by hand were found."
+msgstr "✔ Цен, вписанных в тексты вручную, не найдено."
+
+#: legal/legal.php:86
+msgid "✔ published"
+msgstr "✔ опубликована"

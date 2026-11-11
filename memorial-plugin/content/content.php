@@ -11,12 +11,12 @@ defined('ABSPATH') || exit;
 
 add_action('init', function () {
     $styles = [
-        'core/table'     => [['price', 'Прайс']],
-        'core/list'      => [['steps', 'Шаги'], ['checks', 'Галочки']],
-        'core/paragraph' => [['lead', 'Вводный текст'], ['note', 'Примечание']],
-        'core/group'     => [['card', 'Карточка']],
-        'core/media-text'=> [['soft', 'Мягкая карточка']],
-        'core/gallery'   => [['cards', 'Карточки с подписью']],
+        'core/table'     => [['price', __( 'Price list', 'memorial-plugin' )]],
+        'core/list'      => [['steps', __( 'Steps', 'memorial-plugin' )], ['checks', __( 'Ticks', 'memorial-plugin' )]],
+        'core/paragraph' => [['lead', __( 'Lead text', 'memorial-plugin' )], ['note', __( 'Note', 'memorial-plugin' )]],
+        'core/group'     => [['card', __( 'Card', 'memorial-plugin' )]],
+        'core/media-text'=> [['soft', __( 'Soft card', 'memorial-plugin' )]],
+        'core/gallery'   => [['cards', __( 'Cards with captions', 'memorial-plugin' )]],
     ];
     foreach ($styles as $block => $list) {
         foreach ($list as [$name, $label]) register_block_style($block, ['name' => $name, 'label' => $label]);
@@ -26,8 +26,8 @@ add_action('init', function () {
 /* ---------- Блок-призыв ---------- */
 add_shortcode('mem_cta', function ($atts) {
     $a = shortcode_atts([
-        'title' => 'Позвоните — расскажем, с чего начать',
-        'text'  => 'Ответим на вопросы, подскажем по документам и стоимости.',
+        'title' => __( 'Call — we will tell you where to start', 'memorial-plugin' ),
+        'text'  => __( 'We will answer your questions and help with the documents and the cost.', 'memorial-plugin' ),
     ], $atts, 'mem_cta');
     $tel = memorial_plugin_tel();
     ob_start(); ?>
@@ -38,7 +38,7 @@ add_shortcode('mem_cta', function ($atts) {
       </div>
       <div class="mem-cta__btns">
         <?php if ($tel) : ?><a class="btn btn--gold" href="tel:<?php echo esc_attr($tel); ?>"><?php echo memorial_plugin_icon('phone'); ?><span class="nowrap"><?php echo esc_html(memorial_plugin_opt('phone')); ?></span></a><?php endif; ?>
-        <button class="btn btn--ghost" type="button" data-callback>Перезвоните мне</button>
+        <button class="btn btn--ghost" type="button" data-callback><?php esc_html_e( 'Call me back', 'memorial-plugin' ); ?></button>
       </div>
     </aside>
     <?php
@@ -81,15 +81,15 @@ add_action('wp_head', function () {
 /* Готовый узор «Шаги с иконками»: «+» → «Паттерны» → «Мемориал» */
 add_action('init', function () {
     if (!function_exists('register_block_pattern')) return;
-    register_block_pattern_category('memorial', ['label' => 'Мемориал']);
+    register_block_pattern_category('memorial', ['label' => __( 'Memorial', 'memorial-plugin' )]);
     $step = fn($ico, $t, $p) => '<!-- wp:group {"className":"mem-step ' . $ico . '","layout":{"type":"default"}} --><div class="wp-block-group mem-step ' . $ico . '">'
         . '<!-- wp:heading {"level":3} --><h3 class="wp-block-heading">' . $t . '</h3><!-- /wp:heading -->'
         . '<!-- wp:paragraph --><p>' . $p . '</p><!-- /wp:paragraph --></div><!-- /wp:group -->';
     register_block_pattern('memorial/steps', [
-        'title' => 'Шаги с иконками', 'categories' => ['memorial'],
-        'description' => 'Порядок действий по шагам. Иконка шага задаётся в «Дополнительные CSS-класс(ы)» у группы шага: ico-phone, ico-doc, ico-car и т.д.',
+        'title' => __( 'Steps with icons', 'memorial-plugin' ), 'categories' => ['memorial'],
+        'description' => __( 'Steps in order. The icon of a step is set in “Additional CSS class(es)” of the step’s group: ico-phone, ico-doc, ico-car and so on.', 'memorial-plugin' ),
         'content' => '<!-- wp:group {"className":"mem-steps","layout":{"type":"default"}} --><div class="wp-block-group mem-steps">'
-            . $step('ico-phone', 'Первый шаг', 'Что сделать.') . $step('ico-doc', 'Второй шаг', 'Что сделать.') . $step('ico-check', 'Третий шаг', 'Что сделать.')
+            . $step('ico-phone', __( 'First step', 'memorial-plugin' ), __( 'What to do.', 'memorial-plugin' )) . $step('ico-doc', __( 'Second step', 'memorial-plugin' ), __( 'What to do.', 'memorial-plugin' )) . $step('ico-check', __( 'Third step', 'memorial-plugin' ), __( 'What to do.', 'memorial-plugin' ))
             . '</div><!-- /wp:group -->',
     ]);
 });

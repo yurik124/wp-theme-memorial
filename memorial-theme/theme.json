@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/theme.json",
 	"version": 3,
-	"title": "Светлая память — лавр",
+	"title": "Bright memory — laurel",
 	"settings": {
 		"appearanceTools": true,
 		"color": {
@@ -12,57 +12,57 @@
 			"palette": [
 				{
 					"slug": "base",
-					"name": "Фон страницы (тёплая бумага)",
+					"name": "Page background (warm paper)",
 					"color": "#fbfaf6"
 				},
 				{
 					"slug": "base-2",
-					"name": "Фон чередующихся разделов (слоновая кость)",
+					"name": "Background of alternating sections (ivory)",
 					"color": "#f2efe6"
 				},
 				{
 					"slug": "surface",
-					"name": "Шалфейная подложка",
+					"name": "Sage backing",
 					"color": "#e6ebdf"
 				},
 				{
 					"slug": "primary",
-					"name": "Акцент: кнопки, иконки, лавр",
+					"name": "Accent: buttons, icons, laurel",
 					"color": "#5e7052"
 				},
 				{
 					"slug": "on-primary",
-					"name": "Текст на кнопке с заливкой",
+					"name": "Text on a filled button",
 					"color": "#ffffff"
 				},
 				{
 					"slug": "secondary",
-					"name": "Тёмный лавр: ссылки, надзаголовки",
+					"name": "Dark laurel: links, eyebrows",
 					"color": "#3f4d36"
 				},
 				{
 					"slug": "tertiary",
-					"name": "Светлый лавр: орнамент, разделители",
+					"name": "Light laurel: ornament, dividers",
 					"color": "#a9b796"
 				},
 				{
 					"slug": "accent",
-					"name": "Бронза: тонкие линии (в малых дозах)",
+					"name": "Bronze: thin lines (in small doses)",
 					"color": "#a88a5a"
 				},
 				{
 					"slug": "contrast",
-					"name": "Основной текст",
+					"name": "Main text",
 					"color": "#2a2c28"
 				},
 				{
 					"slug": "contrast-2",
-					"name": "Второстепенный текст",
+					"name": "Secondary text",
 					"color": "#66675e"
 				},
 				{
 					"slug": "line",
-					"name": "Рамки и разделители",
+					"name": "Borders and dividers",
 					"color": "#e2ded2"
 				}
 			]
@@ -147,25 +147,25 @@
 				},
 				{
 					"slug": "georgia",
-					"name": "Georgia (системный с засечками)",
+					"name": "Georgia (system serif)",
 					"fontFamily": "Georgia, \"Times New Roman\", serif"
 				},
 				{
 					"slug": "system-sans",
-					"name": "Системный без засечек",
+					"name": "System sans-serif",
 					"fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Arial, sans-serif"
 				}
 			],
 			"fontSizes": [
 				{
 					"slug": "small",
-					"name": "Мелкий",
+					"name": "Small",
 					"size": "0.9375rem",
 					"fluid": false
 				},
 				{
 					"slug": "medium",
-					"name": "Основной",
+					"name": "Regular",
 					"size": "1.125rem",
 					"fluid": {
 						"min": "1.0625rem",
@@ -174,7 +174,7 @@
 				},
 				{
 					"slug": "large",
-					"name": "Заголовок карточки (H3)",
+					"name": "Card heading (H3)",
 					"size": "1.375rem",
 					"fluid": {
 						"min": "1.1875rem",
@@ -183,7 +183,7 @@
 				},
 				{
 					"slug": "x-large",
-					"name": "Заголовок раздела (H2)",
+					"name": "Section heading (H2)",
 					"size": "2.5rem",
 					"fluid": {
 						"min": "1.75rem",
@@ -192,7 +192,7 @@
 				},
 				{
 					"slug": "xx-large",
-					"name": "Заголовок страницы (H1)",
+					"name": "Page heading (H1)",
 					"size": "3.5rem",
 					"fluid": {
 						"min": "2.125rem",
@@ -245,12 +245,12 @@
 			"presets": [
 				{
 					"slug": "soft",
-					"name": "Мягкая",
+					"name": "Soft",
 					"shadow": "0 1px 2px rgba(42,44,40,.04), 0 6px 20px rgba(42,44,40,.045)"
 				},
 				{
 					"slug": "raised",
-					"name": "Приподнятая",
+					"name": "Raised",
 					"shadow": "0 1px 2px rgba(42,44,40,.05), 0 12px 32px rgba(42,44,40,.08)"
 				}
 			]
@@ -280,12 +280,12 @@
 	"templateParts": [
 		{
 			"name": "header",
-			"title": "Шапка",
+			"title": "Header",
 			"area": "header"
 		},
 		{
 			"name": "footer",
-			"title": "Подвал",
+			"title": "Footer",
 			"area": "footer"
 		}
 	],

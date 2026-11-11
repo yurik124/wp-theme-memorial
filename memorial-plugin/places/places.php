@@ -17,45 +17,45 @@ defined('ABSPATH') || exit;
 
 function memorial_plugin_rest_schema() {
     return [
-        'block' => ['type' => 'group', 'label' => 'Блок на странице', 'fields' => [
-            'title' => ['type' => 'text', 'label' => 'Заголовок'],
-            'text'  => ['type' => 'textarea', 'label' => 'Текст под заголовком', 'rows' => 2],
-            'btn'   => ['type' => 'text', 'label' => 'Надпись на кнопке у зала', 'placeholder' => 'Заказать обед здесь'],
+        'block' => ['type' => 'group', 'label' => __( 'Block on the page', 'memorial-plugin' ), 'fields' => [
+            'title' => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
+            'text'  => ['type' => 'textarea', 'label' => __( 'Text under the title', 'memorial-plugin' ), 'rows' => 2],
+            'btn'   => ['type' => 'text', 'label' => __( 'Button label at a hall', 'memorial-plugin' ), 'placeholder' => __( 'Order a meal here', 'memorial-plugin' )],
         ]],
-        'items' => ['type' => 'repeater', 'label' => 'Залы и рестораны', 'add' => 'Добавить зал', 'collapse' => 'name', 'fields' => [
-            'name'  => ['type' => 'text', 'label' => 'Название', 'placeholder' => 'Кафе «…»'],
-            'img'   => ['type' => 'image', 'label' => 'Фото зала'],
-            'addr'  => ['type' => 'text', 'label' => 'Адрес или район', 'placeholder' => 'ул. …, рядом с кладбищем …'],
-            'seats' => ['type' => 'number', 'label' => 'Сколько гостей вмещает (до)', 'placeholder' => '60'],
-            'price' => ['type' => 'text', 'label' => 'Цена', 'placeholder' => 'от 900 ₽ на человека'],
-            'feats' => ['type' => 'text', 'label' => 'Особенности — через запятую', 'placeholder' => 'парковка, отдельный зал, постное меню'],
-            'text'  => ['type' => 'textarea', 'label' => 'Коротко о зале (необязательно)', 'rows' => 2],
+        'items' => ['type' => 'repeater', 'label' => __( 'Halls and restaurants', 'memorial-plugin' ), 'add' => __( 'Add a hall', 'memorial-plugin' ), 'collapse' => 'name', 'fields' => [
+            'name'  => ['type' => 'text', 'label' => __( 'Name', 'memorial-plugin' ), 'placeholder' => __( 'Cafe “…”', 'memorial-plugin' )],
+            'img'   => ['type' => 'image', 'label' => __( 'Photo of the hall', 'memorial-plugin' )],
+            'addr'  => ['type' => 'text', 'label' => __( 'Address or area', 'memorial-plugin' ), 'placeholder' => __( '… St., near the … cemetery', 'memorial-plugin' )],
+            'seats' => ['type' => 'number', 'label' => __( 'How many guests it holds (up to)', 'memorial-plugin' ), 'placeholder' => '60'],
+            'price' => ['type' => 'text', 'label' => __( 'Price', 'memorial-plugin' ), 'placeholder' => __( 'from 900 ₽ per person', 'memorial-plugin' )],
+            'feats' => ['type' => 'text', 'label' => __( 'Features — comma-separated', 'memorial-plugin' ), 'placeholder' => __( 'parking, a separate hall, a lenten menu', 'memorial-plugin' )],
+            'text'  => ['type' => 'textarea', 'label' => __( 'About the hall in short (optional)', 'memorial-plugin' ), 'rows' => 2],
         ]],
     ];
 }
 function memorial_plugin_rest_defaults() {
     return [
         'block' => ['title' => 'Где провести поминальный обед', 'text' => 'Залы, с которыми мы работаем. Договоримся о дате, меню и числе гостей за вас — стоимость та же, что в самом зале.',
-                    'btn' => 'Заказать обед здесь'],
+                    'btn' => __( 'Order a meal here', 'memorial-plugin' )],
         'items' => [],
     ];
 }
 
 function memorial_plugin_cem_schema() {
     return [
-        'items' => ['type' => 'repeater', 'label' => 'Кладбища', 'add' => 'Добавить кладбище', 'collapse' => 'name', 'fields' => [
-            'name'   => ['type' => 'text', 'label' => 'Название', 'placeholder' => 'Северное кладбище'],
-            'status' => ['type' => 'select', 'label' => 'Захоронения', 'options' => [
-                'open'   => 'Действующее — новые захоронения',
-                'family' => 'Только подзахоронение в родственную могилу',
-                'closed' => 'Закрыто для захоронений',
+        'items' => ['type' => 'repeater', 'label' => __( 'Cemeteries', 'memorial-plugin' ), 'add' => __( 'Add a cemetery', 'memorial-plugin' ), 'collapse' => 'name', 'fields' => [
+            'name'   => ['type' => 'text', 'label' => __( 'Name', 'memorial-plugin' ), 'placeholder' => __( 'Northern cemetery', 'memorial-plugin' )],
+            'status' => ['type' => 'select', 'label' => __( 'Burials', 'memorial-plugin' ), 'options' => [
+                'open'   => __( 'Active — new burials', 'memorial-plugin' ),
+                'family' => __( 'Only burial in a family grave', 'memorial-plugin' ),
+                'closed' => __( 'Closed for burials', 'memorial-plugin' ),
             ]],
-            'img'    => ['type' => 'image', 'label' => 'Фото (необязательно)'],
-            'addr'   => ['type' => 'text', 'label' => 'Адрес', 'placeholder' => 'Белгородский район, с. …'],
-            'dist'   => ['type' => 'text', 'label' => 'Как далеко (необязательно)', 'placeholder' => '12 км от центра Белгорода'],
-            'hours'  => ['type' => 'text', 'label' => 'Время работы (необязательно)', 'placeholder' => 'Ежедневно с 8:00 до 17:00'],
-            'text'   => ['type' => 'textarea', 'label' => 'Подробнее: как оформить захоронение, что учесть', 'rows' => 4, 'html' => true],
-            'map'    => ['type' => 'map', 'label' => 'Карта (необязательно)', 'help' => 'Ссылка с Яндекс Карт. Пусто — карта по адресу.'],
+            'img'    => ['type' => 'image', 'label' => __( 'Photo (optional)', 'memorial-plugin' )],
+            'addr'   => ['type' => 'text', 'label' => __( 'Address', 'memorial-plugin' ), 'placeholder' => __( 'Belgorod district, village of …', 'memorial-plugin' )],
+            'dist'   => ['type' => 'text', 'label' => __( 'How far (optional)', 'memorial-plugin' ), 'placeholder' => __( '12 km from the centre of Belgorod', 'memorial-plugin' )],
+            'hours'  => ['type' => 'text', 'label' => __( 'Opening hours (optional)', 'memorial-plugin' ), 'placeholder' => __( 'Daily from 8:00 to 17:00', 'memorial-plugin' )],
+            'text'   => ['type' => 'textarea', 'label' => __( 'More: how to arrange a burial, what to keep in mind', 'memorial-plugin' ), 'rows' => 4, 'html' => true],
+            'map'    => ['type' => 'map', 'label' => __( 'Map (optional)', 'memorial-plugin' ), 'help' => __( 'A link from Yandex Maps. Empty — a map by the address.', 'memorial-plugin' )],
         ]],
     ];
 }
@@ -66,13 +66,13 @@ function memorial_plugin_cem_defaults() {
 }
 
 add_filter('memorial_plugin_admin_pages', function ($pages) {
-    $pages['mem_rest'] = ['slug' => 'mem-rest', 'title' => 'Залы для поминок', 'schema' => 'memorial_plugin_rest_schema',
-        'intro' => 'Залы и рестораны для поминального обеда. Блок выводится шорткодом <code>[mem_restaurants]</code> (он уже стоит на странице «Поминальный обед»). '
-                 . 'Телефоны и сайты ресторанов на сайт не выводятся — посетитель заказывает через вас кнопкой «Перезвоните мне».'];
-    $pages['mem_cem'] = ['slug' => 'mem-cem', 'title' => 'Кладбища', 'schema' => 'memorial_plugin_cem_schema',
-        'intro' => 'Список кладбищ выводится шорткодом <code>[mem_cemeteries]</code> на любой странице (например, «Кладбища Белгорода и района»). '
-                 . 'Только действующие: <code>[mem_cemeteries status="действующие"]</code>, без кнопок-фильтров: <code>filtr="нет"</code>. '
-                 . 'Порядок — стрелками ↑ ↓ справа от кладбища.'];
+    $pages['mem_rest'] = ['slug' => 'mem-rest', 'title' => __( 'Halls for the memorial meal', 'memorial-plugin' ), 'schema' => 'memorial_plugin_rest_schema',
+        'intro' => __( 'Halls and restaurants for the memorial meal. The block is the “Memorial meal halls” block (or the <code>[mem_restaurants]</code> shortcode, already on the “Memorial meal” page). ', 'memorial-plugin' )
+                 . __( 'Phones and websites of the restaurants are not shown on the site — a visitor orders through you with the “Call me back” button.', 'memorial-plugin' )];
+    $pages['mem_cem'] = ['slug' => 'mem-cem', 'title' => __( 'Cemeteries', 'memorial-plugin' ), 'schema' => 'memorial_plugin_cem_schema',
+        'intro' => __( 'The list of cemeteries is the “Cemeteries” block (or the <code>[mem_cemeteries]</code> shortcode) on any page (for example, “Cemeteries of Belgorod and the district”). ', 'memorial-plugin' )
+                 . __( 'Only active ones: <code>[mem_cemeteries status="действующие"]</code>, without the filter buttons: <code>filtr="нет"</code>. ', 'memorial-plugin' )
+                 . __( 'Order — with the ↑ ↓ arrows to the right of a cemetery.', 'memorial-plugin' )];
     return $pages;
 });
 
@@ -91,8 +91,8 @@ add_shortcode('mem_restaurants', function ($atts) {
     $o = memorial_plugin_settings('mem_rest');
     $a = shortcode_atts(['title' => $o['block']['title'], 'text' => $o['block']['text']], $atts, 'mem_restaurants');
     $items = array_values(array_filter((array) $o['items'], fn($r) => trim($r['name'] ?? '') !== ''));
-    if (!$items) return current_user_can('edit_pages') ? '<p class="is-style-note">[mem_restaurants]: залы не добавлены — «Мемориал → Залы для поминок». Посетители этот блок не видят.</p>' : '';
-    $btn = trim($o['block']['btn'] ?? '') ?: 'Заказать обед здесь';
+    if (!$items) return current_user_can('edit_pages') ? ( '<p class="is-style-note">' . esc_html__( '[mem_restaurants]: no halls added — “Memorial → Halls for the memorial meal”. Visitors do not see this block.', 'memorial-plugin' ) . '</p>' ) : '';
+    $btn = trim($o['block']['btn'] ?? '') ?: __( 'Order a meal here', 'memorial-plugin' );
     $h = '<section class="mem-places mem-rest" id="zaly">';
     if ($a['title']) $h .= '<h2>' . esc_html($a['title']) . '</h2>';
     if ($a['text'])  $h .= '<p class="mem-places__lead">' . esc_html($a['text']) . '</p>';
@@ -101,7 +101,11 @@ add_shortcode('mem_restaurants', function ($atts) {
         $name = trim($r['name']);
         $img = memorial_plugin_place_img($r['img'] ?? '', $name, '(max-width:600px) 100vw, 33vw');
         $meta = [];
-        if (!empty($r['seats'])) $meta[] = '<span>до ' . (int) $r['seats'] . ' ' . memorial_plugin_word((int) $r['seats'], 'гостя', 'гостей', 'гостей') . '</span>';
+        if (!empty($r['seats'])) $meta[] = '<span>' . esc_html(sprintf(
+            /* translators: %d: number of guests */
+            _n( 'up to %d guest', 'up to %d guests', (int) $r['seats'], 'memorial-plugin' ),
+            (int) $r['seats']
+        )) . '</span>';
         if (trim($r['price'] ?? '')) $meta[] = '<span class="mem-place__price">' . esc_html(trim($r['price'])) . '</span>';
         $feats = array_filter(array_map('trim', explode(',', (string) ($r['feats'] ?? ''))));
         $h .= '<article class="mem-place">'
@@ -121,7 +125,7 @@ add_shortcode('mem_restaurants', function ($atts) {
  * [mem_cemeteries]
  * ======================================================= */
 function memorial_plugin_cem_status_names() {
-    return ['open' => 'Действующее', 'family' => 'Подзахоронение', 'closed' => 'Закрыто'];
+    return ['open' => __( 'Active', 'memorial-plugin' ), 'family' => __( 'Family grave', 'memorial-plugin' ), 'closed' => __( 'Closed', 'memorial-plugin' )];
 }
 
 function memorial_plugin_cem_items() {
@@ -138,15 +142,15 @@ add_shortcode('mem_cemeteries', function ($atts) {
         elseif (preg_match('~^(закр|closed)~u', $w)) $want[] = 'closed';
     }
     if ($want) $items = array_values(array_filter($items, fn($r) => in_array($r['status'] ?? 'open', $want, true)));
-    if (!$items) return current_user_can('edit_pages') ? '<p class="is-style-note">[mem_cemeteries]: кладбища не добавлены — «Мемориал → Кладбища». Посетители этот блок не видят.</p>' : '';
+    if (!$items) return current_user_can('edit_pages') ? ( '<p class="is-style-note">' . esc_html__( '[mem_cemeteries]: no cemeteries added — “Memorial → Cemeteries”. Visitors do not see this block.', 'memorial-plugin' ) . '</p>' ) : '';
     $names = memorial_plugin_cem_status_names();
     $cnt = array_count_values(array_map(fn($r) => $r['status'] ?? 'open', $items));
     // Interactivity API: filter and map (assets/js/view/cemeteries.js)
     wp_enqueue_script_module('memorial-plugin-cemeteries');
     $h = '<div class="mem-cem" data-wp-interactive="memorial-plugin/cemeteries" data-wp-context=\'{"filter":""}\'>';
     if (count($cnt) > 1 && !memorial_plugin_sc_no($a['filtr'])) {
-        $h .= '<div class="srow"><div class="srow__in" role="group" aria-label="Какие кладбища показать">'
-            . '<button type="button" class="chip is-on" data-wp-context=\'{"value":""}\' data-wp-on--click="actions.select" data-wp-class--is-on="state.isSelected" data-wp-bind--aria-pressed="state.isSelected" aria-pressed="true">Все <small>' . count($items) . '</small></button>';
+        $h .= ( '<div class="srow"><div class="srow__in" role="group" aria-label="' . esc_attr__( 'Which cemeteries to show', 'memorial-plugin' ) . '">' )
+            . ( '<button type="button" class="chip is-on" data-wp-context=\'{"value":""}\' data-wp-on--click="actions.select" data-wp-class--is-on="state.isSelected" data-wp-bind--aria-pressed="state.isSelected" aria-pressed="true">' . esc_html__( 'All', 'memorial-plugin' ) . ' <small>' ) . count($items) . '</small></button>';
         foreach ($names as $k => $n) if (!empty($cnt[$k])) $h .= '<button type="button" class="chip" data-wp-context=\'' . esc_attr(wp_json_encode(['value' => (string) $k])) . '\' data-wp-on--click="actions.select" data-wp-class--is-on="state.isSelected" data-wp-bind--aria-pressed="state.isSelected" aria-pressed="false">' . esc_html($n) . ' <small>' . (int) $cnt[$k] . '</small></button>';
         $h .= '</div></div>';
     }
@@ -170,9 +174,9 @@ add_shortcode('mem_cemeteries', function ($atts) {
             . (trim($r['dist'] ?? '') ? '<p class="mem-place__meta"><span>' . esc_html(trim($r['dist'])) . '</span></p>' : '')
             . (trim($r['hours'] ?? '') ? '<p class="mem-place__meta"><span>' . memorial_plugin_icon('clock') . esc_html(trim($r['hours'])) . '</span></p>' : '');
         if (trim(wp_strip_all_tags($r['text'] ?? '')) !== '' || $map) {
-            $h .= '<details class="mem-cem__more"><summary>Подробнее' . ($map ? ' и карта' : '') . '</summary>'
+            $h .= ( '<details class="mem-cem__more"><summary>' . esc_html__( 'More', 'memorial-plugin' ) ) . ($map ? __( ' and the map', 'memorial-plugin' ) : '') . '</summary>'
                 . (trim($r['text'] ?? '') ? '<div class="mem-cem__text">' . wpautop(wp_kses_post($r['text'])) . '</div>' : '')
-                . ($map ? '<div class="mem-cem__map" data-map-src="' . esc_url($map) . '" data-map-title="' . esc_attr('Карта: ' . $name) . '"></div>' : '')
+                . ($map ? '<div class="mem-cem__map" data-map-src="' . esc_url($map) . '" data-map-title="' . esc_attr(__( 'Map: ', 'memorial-plugin' ) . $name) . '"></div>' : '')
                 . '</details>';
         }
         $h .= '</div></article>';
@@ -221,14 +225,14 @@ add_action('admin_init', function () {
         }
         $c = $pos === false ? $c . "\n\n" . $sc : substr($c, 0, $pos) . $sc . substr($c, $pos);
         wp_update_post(['ID' => $pom->ID, 'post_content' => $c]);
-        $made[] = '<a href="' . esc_url(get_edit_post_link($pom->ID)) . '">«' . esc_html($pom->post_title) . '»</a> — добавлен блок залов (сами залы — «Мемориал → Залы для поминок»)';
+        $made[] = '<a href="' . esc_url(get_edit_post_link($pom->ID)) . '">«' . esc_html($pom->post_title) . __( '»</a> — the halls block was added (the halls themselves — “Memorial → Halls for the memorial meal”)', 'memorial-plugin' );
     }
 
     // 3) Страница «Прижизненный договор»
     if (!$find(['прижизненн', 'prizhiznenn'])) {
         $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Прижизненный договор на ритуальные услуги', 'post_name' => 'prizhiznennyj-dogovor',
                               'post_content' => memorial_plugin_places_tpl('dogovor')]);
-        if ($id && !is_wp_error($id)) $made[] = '<a href="' . esc_url(get_edit_post_link($id)) . '">«Прижизненный договор на ритуальные услуги»</a> — черновик с текстом; проверьте условия и опубликуйте';
+        if ($id && !is_wp_error($id)) $made[] = '<a href="' . esc_url(get_edit_post_link($id)) . '">' . esc_html__( '“Pre-need funeral contract”', 'memorial-plugin' ) . '</a> — ' . esc_html__( 'a draft with text; check the terms and publish it', 'memorial-plugin' );
     }
     if ($made) set_transient('mem_places_report', $made, DAY_IN_SECONDS);
 });
@@ -247,7 +251,7 @@ add_action('admin_init', function () {
                           'post_content' => memorial_plugin_places_tpl('cem')]);
     if ($id && !is_wp_error($id)) {
         $r = (array) get_transient('mem_places_report');
-        $r[] = '<a href="' . esc_url(get_edit_post_link($id)) . '">«Кладбища Белгорода и района»</a> — черновик; добавьте кладбища в «Мемориал → Кладбища» и опубликуйте';
+        $r[] = '<a href="' . esc_url(get_edit_post_link($id)) . '">' . esc_html__( '“Cemeteries of Belgorod and the district”', 'memorial-plugin' ) . '</a> — ' . esc_html__( 'a draft; add the cemeteries in “Memorial → Cemeteries” and publish it', 'memorial-plugin' );
         set_transient('mem_places_report', array_filter($r), DAY_IN_SECONDS);
     }
 });

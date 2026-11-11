@@ -1,63 +1,63 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/theme.json",
 	"version": 3,
-	"title": "Тёмная",
+	"title": "Dark",
 	"settings": {
 		"color": {
 			"palette": [
 				{
 					"slug": "base",
-					"name": "Фон страницы (тёплая бумага)",
+					"name": "Page background (warm paper)",
 					"color": "#1c1e1a"
 				},
 				{
 					"slug": "base-2",
-					"name": "Фон чередующихся разделов (слоновая кость)",
+					"name": "Background of alternating sections (ivory)",
 					"color": "#23261f"
 				},
 				{
 					"slug": "surface",
-					"name": "Шалфейная подложка",
+					"name": "Sage backing",
 					"color": "#2a3125"
 				},
 				{
 					"slug": "primary",
-					"name": "Акцент: кнопки, иконки, лавр",
+					"name": "Accent: buttons, icons, laurel",
 					"color": "#b5c4a0"
 				},
 				{
 					"slug": "on-primary",
-					"name": "Текст на кнопке с заливкой",
+					"name": "Text on a filled button",
 					"color": "#1c1e1a"
 				},
 				{
 					"slug": "secondary",
-					"name": "Тёмный лавр: ссылки, надзаголовки",
+					"name": "Dark laurel: links, eyebrows",
 					"color": "#cfdbbd"
 				},
 				{
 					"slug": "tertiary",
-					"name": "Светлый лавр: орнамент, разделители",
+					"name": "Light laurel: ornament, dividers",
 					"color": "#5e7052"
 				},
 				{
 					"slug": "accent",
-					"name": "Бронза: тонкие линии (в малых дозах)",
+					"name": "Bronze: thin lines (in small doses)",
 					"color": "#c9a978"
 				},
 				{
 					"slug": "contrast",
-					"name": "Основной текст",
+					"name": "Main text",
 					"color": "#ecebe4"
 				},
 				{
 					"slug": "contrast-2",
-					"name": "Второстепенный текст",
+					"name": "Secondary text",
 					"color": "#b9b8ae"
 				},
 				{
 					"slug": "line",
-					"name": "Рамки и разделители",
+					"name": "Borders and dividers",
 					"color": "#3a3e35"
 				}
 			]
@@ -66,12 +66,12 @@
 			"presets": [
 				{
 					"slug": "soft",
-					"name": "Мягкая",
+					"name": "Soft",
 					"shadow": "0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25)"
 				},
 				{
 					"slug": "raised",
-					"name": "Приподнятая",
+					"name": "Raised",
 					"shadow": "0 1px 2px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.35)"
 				}
 			]

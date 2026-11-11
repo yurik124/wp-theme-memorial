@@ -38,14 +38,14 @@ for ( const slug of PAGES ) {
 test( 'Контакты: изменение сохраняется', async ( { page } ) => {
 	await login( page );
 	await page.goto( '/wp-admin/admin.php?page=mem-contacts' );
-	const field = page.getByLabel( 'Звонки в нерабочее время' );
+	const field = page.getByLabel( 'Calls outside working hours' );
 	await field.fill( 'Звоните круглосуточно — проверка e2e' );
 	await page.getByRole( 'button', { name: 'Save' } ).first().click();
 	await expect(
 		page.locator( '.components-notice.is-success' )
 	).toBeVisible();
 	await page.reload();
-	await expect( page.getByLabel( 'Звонки в нерабочее время' ) ).toHaveValue(
+	await expect( page.getByLabel( 'Calls outside working hours' ) ).toHaveValue(
 		'Звоните круглосуточно — проверка e2e'
 	);
 } );

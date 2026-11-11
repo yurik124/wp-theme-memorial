@@ -8,7 +8,7 @@
 defined('ABSPATH') || exit;
 
 add_action('admin_menu', function () {
-    add_submenu_page('options.php', 'Перенос со страниц', 'Перенос со страниц', 'manage_options', 'mem-import', 'memorial_plugin_import_page');
+    add_submenu_page('options.php', __( 'Moving from pages', 'memorial-plugin' ), __( 'Moving from pages', 'memorial-plugin' ), 'manage_options', 'mem-import', 'memorial_plugin_import_page');
 });
 
 /* ---------- Разбор ---------- */
@@ -162,38 +162,36 @@ function memorial_plugin_import_candidates() {
 function memorial_plugin_import_page() {
     $c = memorial_plugin_import_candidates(); ?>
     <div class="wrap">
-      <h1>Перенос каталога со страниц</h1>
+      <h1><?php esc_html_e( 'Moving the catalog from pages', 'memorial-plugin' ); ?></h1>
       <?php if (!empty($_GET['mem_report'])) : ?>
-        <div class="notice notice-success"><p><?php echo esc_html(get_transient('mem_import_report') ?: 'Готово.'); ?></p></div>
+        <div class="notice notice-success"><p><?php echo esc_html(get_transient('mem_import_report') ?: __( 'Done.', 'memorial-plugin' )); ?></p></div>
       <?php endif; ?>
-      <p>Здесь видны страницы, где каталог сделан галереями «Карточки с подписью» или примерами работ с таблицами цен.
-         Отмеченные разделы превратятся в товары (название, цена, подпись и фото берутся из подписей) или в «Наши работы».
-         Повторный перенос не создаёт дублей.</p>
-      <?php if (!$c) : ?><p><b>Подходящих страниц не нашлось.</b></p></div><?php return; endif; ?>
+      <p><?php esc_html_e( 'Here are the pages where the catalog is made of “Cards with captions” galleries or examples of works with price tables. The ticked sections become products (the name, price, caption and photo are taken from the captions) or “Our works”. Moving again does not create duplicates.', 'memorial-plugin' ); ?></p>
+      <?php if (!$c) : ?><p><b><?php esc_html_e( 'No suitable pages were found.', 'memorial-plugin' ); ?></b></p></div><?php return; endif; ?>
       <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <input type="hidden" name="action" value="mem_import">
         <?php wp_nonce_field('mem_import'); ?>
         <?php foreach ($c as $pid => $x) : $p = $x['page']; ?>
           <div class="card" style="max-width:900px;padding:12px 18px;margin:14px 0">
             <h2 style="margin:.3em 0"><a href="<?php echo esc_url(get_permalink($p)); ?>" target="_blank"><?php echo esc_html($p->post_title); ?></a>
-              <?php if (get_post_meta($pid, '_mem_cat', true) || get_post_meta($pid, '_mem_works_done', true)) echo ' <span style="color:#2271b1;font-size:13px">уже переносилась</span>'; ?></h2>
+              <?php if (get_post_meta($pid, '_mem_cat', true) || get_post_meta($pid, '_mem_works_done', true)) echo ( ' <span style="color:#2271b1;font-size:13px">' . esc_html__( 'already moved', 'memorial-plugin' ) . '</span>' ); ?></h2>
             <?php if ($x['gal']) : ?>
-              <p><label>Категория каталога: <input type="text" name="cat[<?php echo $pid; ?>]" value="<?php echo esc_attr($p->post_title); ?>" class="regular-text"></label></p>
+              <p><label><?php esc_html_e( 'Catalog category:', 'memorial-plugin' ); ?> <input type="text" name="cat[<?php echo $pid; ?>]" value="<?php echo esc_attr($p->post_title); ?>" class="regular-text"></label></p>
               <?php foreach ($x['gal'] as $i => $g) : $s = $g['items'][0]['cap']; ?>
                 <label style="display:block;margin:4px 0"><input type="checkbox" name="gal[<?php echo $pid; ?>][]" value="<?php echo $i; ?>" <?php checked($g['checked']); ?>>
-                  <b><?php echo esc_html($g['heading'] ?: 'Без заголовка'); ?></b> — <?php echo count($g['items']); ?> шт.
-                  <span style="color:#646970">например: <?php echo esc_html(trim($s['name'] . ($s['sub'] ? ' · ' . $s['sub'] : '') . ($s['price'] ? ' · ' . ($s['from'] ? 'от ' : '') . $s['price'] . ' ₽' . ($s['unit'] ? ' ' . $s['unit'] : '') : ''))); ?></span></label>
+                  <b><?php echo esc_html($g['heading'] ?: __( 'Untitled', 'memorial-plugin' )); ?></b> — <?php echo esc_html(sprintf( /* translators: %d: number of items */ __( '%d pcs.', 'memorial-plugin' ), count($g['items']) )); ?>
+                  <span style="color:#646970"><?php esc_html_e( 'for example:', 'memorial-plugin' ); ?> <?php echo esc_html(trim($s['name'] . ($s['sub'] ? ' · ' . $s['sub'] : '') . ($s['price'] ? ' · ' . ($s['from'] ? __( 'from ', 'memorial-plugin' ) : '') . $s['price'] . ' ₽' . ($s['unit'] ? ' ' . $s['unit'] : '') : ''))); ?></span></label>
               <?php endforeach; ?>
             <?php endif; ?>
             <?php if ($x['works']) : ?>
               <label style="display:block;margin:8px 0 4px"><input type="checkbox" name="works[]" value="<?php echo $pid; ?>" checked>
-                <b>Примеры работ</b> — <?php echo count($x['works']); ?> шт. → «Наши работы»</label>
+                <b><?php esc_html_e( 'Examples of works', 'memorial-plugin' ); ?></b> — <?php echo esc_html(sprintf( /* translators: %d: number of items */ __( '%d pcs.', 'memorial-plugin' ), count($x['works']) )); ?> → <?php esc_html_e( '“Our works”', 'memorial-plugin' ); ?></label>
             <?php endif; ?>
             <label style="display:block;margin:10px 0 4px;color:#1d2327"><input type="checkbox" name="replace[]" value="<?php echo $pid; ?>" checked>
-              Заменить на странице галереи каталогом из админки (старый вариант останется в «Редакциях» страницы)</label>
+              <?php esc_html_e( 'Replace the galleries on the page with the catalog from the admin (the old version stays in the page’s “Revisions”)', 'memorial-plugin' ); ?></label>
           </div>
         <?php endforeach; ?>
-        <?php submit_button('Перенести отмеченное'); ?>
+        <?php submit_button(__( 'Move the ticked ones', 'memorial-plugin' )); ?>
       </form>
     </div>
     <?php
@@ -218,7 +216,7 @@ function memorial_plugin_shortcode_block($code) {
 
 add_action('admin_post_mem_import', function () {
     check_admin_referer('mem_import');
-    if (!current_user_can('manage_options')) wp_die('Нет прав');
+    if (!current_user_can('manage_options')) wp_die(__( 'Not allowed', 'memorial-plugin' ));
     @set_time_limit(300);
     $cands = memorial_plugin_import_candidates();
     $made = 0; $skipped = 0; $works_made = 0; $pages = 0;
@@ -242,7 +240,7 @@ add_action('admin_post_mem_import', function () {
             foreach ($gals as $n => $g) {
                 $term = $root;
                 if ($multi) {
-                    $term = memorial_plugin_import_term($g['heading'] ?: 'Раздел ' . ($n + 1), $root);
+                    $term = memorial_plugin_import_term($g['heading'] ?: __( 'Section ', 'memorial-plugin' ) . ($n + 1), $root);
                     update_term_meta($term, 'mem_order', $n + 1);
                     update_term_meta($term, 'mem_ratio', $g['ratio']);
                     update_term_meta($term, 'mem_cols', $g['cols']);
@@ -313,7 +311,7 @@ add_action('admin_post_mem_import', function () {
             $pages++;
         }
     }
-    set_transient('mem_import_report', sprintf('Создано товаров: %d, работ: %d. Пропущено (уже были): %d. Обновлено страниц: %d.', $made, $works_made, $skipped, $pages), 300);
+    set_transient('mem_import_report', sprintf(__( 'Products created: %d, works: %d. Skipped (already existed): %d. Pages updated: %d.', 'memorial-plugin' ), $made, $works_made, $skipped, $pages), 300);
     wp_safe_redirect(admin_url('admin.php?page=mem-import&mem_report=1'));
     exit;
 });

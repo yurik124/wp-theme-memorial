@@ -39,9 +39,9 @@ function memorial_plugin_years() {
 /* Старый раздел «Контакты Мемориал» в «Настроить» больше не нужен — ведём туда, где теперь всё редактируется */
 add_action('customize_register', function ($c) {
     $c->add_section('mem_moved', [
-        'title'       => 'Контакты и тексты',
+        'title'       => __( 'Contacts and texts', 'memorial-plugin' ),
         'priority'    => 30,
-        'description' => 'Контакты, адреса и тексты главной теперь редактируются в админке: <a href="' . esc_url(admin_url('admin.php?page=mem-contacts')) . '" target="_top">Мемориал → Контакты</a> и <a href="' . esc_url(admin_url('admin.php?page=mem-home')) . '" target="_top">Мемориал → Главная страница</a>.',
+        'description' => ( esc_html__( 'Contacts, addresses and the texts of the home page are now edited in the admin:', 'memorial-plugin' ) . ' <a href="' ) . esc_url(admin_url('admin.php?page=mem-contacts')) . ( '" target="_top">' . esc_html__( 'Memorial → Contacts', 'memorial-plugin' ) . '</a> ' . esc_html__( 'and', 'memorial-plugin' ) . ' <a href="' ) . esc_url(admin_url('admin.php?page=mem-home')) . ( '" target="_top">' . esc_html__( 'Memorial → Home page', 'memorial-plugin' ) . '</a>.' ),
     ]);
     $c->add_setting('mem_moved_note', ['sanitize_callback' => '__return_empty_string']);
     $c->add_control('mem_moved_note', ['section' => 'mem_moved', 'type' => 'hidden']);

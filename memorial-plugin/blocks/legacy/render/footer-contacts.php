@@ -4,7 +4,7 @@ defined('ABSPATH') || exit;
 ?>
 <?php if (memorial_plugin_addrs()) : ?>
 <div class="footer__col">
-  <p class="fnav__title">Адреса</p>
+  <p class="fnav__title"><?php esc_html_e( 'Addresses', 'memorial-plugin' ); ?></p>
   <?php foreach (memorial_plugin_addrs() as $a) : ?>
     <p class="footer__addr"><?php echo esc_html(memorial_plugin_addr($a['addr'])); ?><?php if (!empty($a['hours'])) echo '<br><small>' . esc_html($a['hours']) . '</small>'; ?></p>
   <?php endforeach; ?>
@@ -12,7 +12,7 @@ defined('ABSPATH') || exit;
 <?php endif; ?>
 <?php if (memorial_plugin_phones() || memorial_plugin_emails()) : ?>
 <div class="footer__col">
-  <p class="fnav__title">Телефоны</p>
+  <p class="fnav__title"><?php esc_html_e( 'Phones', 'memorial-plugin' ); ?></p>
   <?php foreach (memorial_plugin_phones() as $i => $p) : ?>
     <p class="footer__line"><a class="footer__tel<?php echo $i ? '' : ' footer__tel--main'; ?>" href="tel:<?php echo esc_attr(memorial_plugin_tel_of($p['num'])); ?>"><?php echo esc_html($p['num']); ?></a><?php if (!empty($p['note'])) echo ' <small>' . esc_html($p['note']) . '</small>'; ?></p>
   <?php endforeach; ?>
