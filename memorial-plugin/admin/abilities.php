@@ -151,6 +151,7 @@ function memorial_plugin_abilities_leads( $edit, $lead ) {
 			'category'            => 'memorial',
 			'input_schema'        => array(
 				'type'                 => 'object',
+				'default'              => array(),
 				'properties'           => array(
 					'status' => array(
 						'type'        => 'string',
@@ -286,6 +287,7 @@ function memorial_plugin_abilities_catalog( $edit, $meta_public ) {
 			'category'            => 'memorial',
 			'input_schema'        => array(
 				'type'                 => 'object',
+				'default'              => array(),
 				'properties'           => array(
 					'type'   => array(
 						'type'        => 'integer',
@@ -500,6 +502,7 @@ function memorial_plugin_abilities_catalog( $edit, $meta_public ) {
 			'category'            => 'memorial',
 			'input_schema'        => array(
 				'type'                 => 'object',
+				'default'              => array(),
 				'properties'           => array(
 					'type' => array(
 						'type'    => 'integer',
@@ -636,6 +639,7 @@ function memorial_plugin_abilities_search( $admin, $meta_public ) {
 			'category'            => 'memorial',
 			'input_schema'        => array(
 				'type'                 => 'object',
+				'default'              => array(),
 				'properties'           => array(
 					'nothing_found' => array(
 						'type'    => 'boolean',
@@ -686,6 +690,7 @@ function memorial_plugin_abilities_search( $admin, $meta_public ) {
 			'category'            => 'memorial',
 			'input_schema'        => array(
 				'type'                 => 'object',
+				'default'              => array(),
 				'properties'           => array(
 					'queries' => array(
 						'type'    => 'array',

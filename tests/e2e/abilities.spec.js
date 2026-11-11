@@ -4,8 +4,15 @@
 const { test, expect } = require( '@playwright/test' );
 const { login, collectJsErrors } = require( './helpers' );
 
+// errors of apiFetch come back as their message (otherwise Playwright shows only “Object”)
 const api = ( page, options ) =>
-	page.evaluate( ( o ) => window.wp.apiFetch( o ), options );
+	page.evaluate(
+		( o ) =>
+			window.wp.apiFetch( o ).catch( ( e ) => {
+				throw new Error( JSON.stringify( e ) );
+			} ),
+		options
+	);
 
 test( 'способности плагина зарегистрированы и выполняются', async ( {
 	page,
@@ -69,10 +76,11 @@ test( 'способности плагина зарегистрированы и
 test( 'способности проверяют права: без входа — отказ', async ( {
 	request,
 } ) => {
-	const res = await request.get(
-		'/wp-json/wp-abilities/v1/abilities/memorial-plugin/list-leads/run'
+	const res = await request.post(
+		'/wp-json/wp-abilities/v1/abilities/memorial-plugin/update-product/run',
+		{ data: { input: { id: 1, price: 1 } } }
 	);
-	expect( res.status() ).toBeGreaterThanOrEqual( 401 );
+	expect( [ 401, 403 ] ).toContain( res.status() );
 } );
 
 test( 'палитра команд: экран плагина открывается по Ctrl+K', async ( {
