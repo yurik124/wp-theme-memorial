@@ -44,20 +44,19 @@ body:has(.memorial-plugin-admin) {
 		margin-right: 10px;
 	}
 
-	// Page of @wordpress/admin-ui: a calm header, no grey strip.
-	.admin-ui-page {
+	// Page of @wordpress/admin-ui (its classes are hashed: “<hash>__page”, “<hash>__header-title”…):
+	// header on the paper background, a larger title, the text under it in a readable width.
+	.admin-ui-navigable-region {
 		background: transparent;
 	}
 
-	.admin-ui-page__header {
-		padding: 20px 0 16px;
+	.admin-ui-navigable-region > [class*="__header"]:first-child {
+		padding: 16px 0 20px;
 		border-bottom: 0;
 		background: transparent;
 	}
 
-	.admin-ui-page__header h1,
-	.admin-ui-page__header-title,
-	.admin-ui-page__title {
+	[class*="__header-title"] {
 		color: $mp-ink;
 		font-size: 26px;
 		font-weight: 600;
@@ -65,9 +64,7 @@ body:has(.memorial-plugin-admin) {
 		letter-spacing: -0.01em;
 	}
 
-	.admin-ui-page__header p,
-	.admin-ui-page__sub-title,
-	.admin-ui-page__subtitle {
+	[class*="__header-subtitle"] {
 		max-width: 760px;
 		margin-top: 6px;
 		color: $mp-mute;
@@ -75,10 +72,18 @@ body:has(.memorial-plugin-admin) {
 		line-height: 1.55;
 	}
 
-	.admin-ui-page__content,
-	.admin-ui-page__body {
-		padding: 0;
-		background: transparent;
+	// Labels of fields: normal case, readable size (WordPress makes them small capitals).
+	.components-base-control__label,
+	.components-input-control__label,
+	.components-checkbox-control__label {
+		font-size: 13px;
+		font-weight: 600;
+		text-transform: none;
+	}
+
+	.components-base-control__help {
+		color: $mp-mute;
+		font-size: 13px;
 	}
 
 	// Cards: settings sections, list containers, side panels.
@@ -125,14 +130,23 @@ body:has(.memorial-plugin-admin) {
 	}
 
 	.dataviews-view-table {
+		width: 100%;
 
 		thead th {
 			background: #fbfaf7;
 			color: $mp-mute;
-			font-size: 11px;
+			font-size: 12px;
 			font-weight: 600;
-			letter-spacing: 0.06em;
-			text-transform: uppercase;
+			text-transform: none;
+		}
+
+		thead .components-button {
+			color: $mp-mute;
+			font-weight: 600;
+		}
+
+		td {
+			vertical-align: middle;
 		}
 
 		tbody tr {
