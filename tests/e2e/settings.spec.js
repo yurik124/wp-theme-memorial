@@ -26,9 +26,7 @@ for ( const slug of PAGES ) {
 			page.locator( '.memorial-plugin-settings' )
 		).toBeVisible();
 		await expect(
-			page
-				.locator( '.memorial-plugin-settings .components-card' )
-				.first()
+			page.locator( '.memorial-plugin-settings .components-card' ).first()
 		).toBeVisible();
 		await expect(
 			page.getByRole( 'button', { name: 'Save' } ).first()
