@@ -37,8 +37,7 @@ add_action('init', function () {
     ]);
 });
 
-/* Классический редактор для работ: текст короткий, а поля ниже */
-add_filter('use_block_editor_for_post_type', fn($use, $type) => $type === 'mem_work' ? false : $use, 10, 2);
+/* Работы — в блочном редакторе: текст в редакторе, фото, размер и цены — в боковой панели (admin/editor-meta.php) */
 
 function memorial_plugin_work_data($id) {
     $rows = get_post_meta($id, '_mem_rows', true);
@@ -51,104 +50,6 @@ function memorial_plugin_work_data($id) {
         'total'  => array_sum(array_map(fn($r) => (int) ($r[1] ?? 0), $rows)),
     ];
 }
-
-add_action('add_meta_boxes_mem_work', function () {
-    add_meta_box('mem_work', 'Фото, размер и цены', 'memorial_plugin_work_box', 'mem_work', 'normal', 'high');
-});
-
-function memorial_plugin_work_box($post) {
-    $d = memorial_plugin_work_data($post->ID);
-    wp_nonce_field('mem_work', 'mem_work_nonce'); ?>
-    <p><strong>Фото</strong> — первое главное, остальные показываются маленькими под ним. Порядок меняется перетаскиванием.</p>
-    <input type="hidden" name="mem_photos" id="mem-photos" value="<?php echo esc_attr(implode(',', $d['photos'])); ?>">
-    <ul id="mem-photos-list" class="mem-photos">
-      <?php foreach ($d['photos'] as $a) : ?>
-        <li data-id="<?php echo (int) $a; ?>"><?php echo wp_get_attachment_image($a, 'thumbnail'); ?><button type="button" aria-label="Убрать">×</button></li>
-      <?php endforeach; ?>
-    </ul>
-    <p><button type="button" class="button" id="mem-photos-add">Добавить фото</button></p>
-
-    <p style="display:flex;gap:1.5em;flex-wrap:wrap">
-      <label><strong>Размер участка</strong><br>
-      <input type="text" name="mem_size" value="<?php echo esc_attr($d['size']); ?>" class="regular-text" placeholder="например: 2,5 × 2 м"></label>
-      <label><strong>Год выполнения</strong><br>
-      <input type="number" name="mem_year" value="<?php echo esc_attr($d['year']); ?>" min="1990" max="<?php echo (int) gmdate('Y') + 1; ?>" style="width:110px" placeholder="<?php echo esc_attr(gmdate('Y')); ?>"></label></p>
-    <p class="description" style="margin-top:-.5em">По году посетитель понимает, что цены — на момент выполнения. Пусто — год не показывается.</p>
-
-    <p><strong>Что сделано и стоимость</strong> — итог считается сам.</p>
-    <table class="widefat striped mem-rows" id="mem-rows">
-      <thead><tr><th>Что сделано</th><th style="width:140px">Цена, ₽</th><th style="width:30px"></th></tr></thead>
-      <tbody>
-        <?php foreach (array_merge($d['rows'], [['', '']]) as $r) : ?>
-          <tr><td><input type="text" name="mem_rows_name[]" value="<?php echo esc_attr($r[0] ?? ''); ?>" style="width:100%"></td>
-              <td><input type="number" min="0" name="mem_rows_price[]" value="<?php echo esc_attr($r[1] ?? ''); ?>" style="width:100%"></td>
-              <td><button type="button" class="button-link mem-row-del" aria-label="Удалить">×</button></td></tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
-    <p><button type="button" class="button" id="mem-row-add">+ Строка</button>
-       <span style="margin-left:1em">Итого: <b id="mem-rows-total"><?php echo esc_html(memorial_plugin_rub($d['total'])); ?></b></span></p>
-    <p class="description">Текст в редакторе выше — короткое описание работы: что хотели заказчики, что сделали.</p>
-    <p><label><input type="checkbox" name="mem_example" value="1"<?php checked((bool) get_post_meta($post->ID, '_mem_example', true)); ?>>
-       <strong>Показывать в примерах</strong> — в карточках «Примеры наших работ» ([mem_works vid="карточки"]) на других страницах</label></p>
-    <?php
-}
-
-add_action('save_post_mem_work', function ($id) {
-    if (!isset($_POST['mem_work_nonce']) || !wp_verify_nonce($_POST['mem_work_nonce'], 'mem_work')) return;
-    if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || !current_user_can('edit_post', $id)) return;
-    $photos = array_filter(array_map('absint', explode(',', (string) ($_POST['mem_photos'] ?? ''))));
-    update_post_meta($id, '_mem_photos', implode(',', $photos));
-    $photos ? set_post_thumbnail($id, reset($photos)) : delete_post_thumbnail($id);
-    update_post_meta($id, '_mem_size', sanitize_text_field(wp_unslash($_POST['mem_size'] ?? '')));
-    $y = absint($_POST['mem_year'] ?? 0);
-    $y >= 1990 && $y <= (int) gmdate('Y') + 1 ? update_post_meta($id, '_mem_year', $y) : delete_post_meta($id, '_mem_year');
-    $rows = [];
-    foreach ((array) ($_POST['mem_rows_name'] ?? []) as $i => $n) {
-        $n = sanitize_text_field(wp_unslash($n));
-        $p = absint($_POST['mem_rows_price'][$i] ?? 0);
-        if ($n !== '' || $p) $rows[] = [$n, $p];
-    }
-    update_post_meta($id, '_mem_rows', $rows);
-    !empty($_POST['mem_example']) ? update_post_meta($id, '_mem_example', 1) : delete_post_meta($id, '_mem_example');
-});
-
-/* Колонки списка */
-add_filter('manage_mem_work_posts_columns', function ($c) {
-    $n = [];
-    foreach ($c as $k => $v) {
-        if ($k === 'title') $n['mem_thumb'] = 'Фото';
-        $n[$k] = $v;
-        if ($k === 'title') { $n['mem_year'] = 'Год'; $n['mem_size'] = 'Размер'; $n['mem_total'] = 'Итого'; }
-    }
-    unset($n['date']);
-    return $n;
-});
-add_action('manage_mem_work_posts_custom_column', function ($col, $id) {
-    $d = memorial_plugin_work_data($id);
-    if ($col === 'mem_thumb' && $d['photos']) echo wp_get_attachment_image($d['photos'][0], [50, 50]);
-    if ($col === 'mem_size') echo esc_html($d['size']);
-    if ($col === 'mem_year') echo $d['year'] ? (int) $d['year'] : '<span style="color:#b32d2e">не указан</span>';
-    if ($col === 'mem_total' && $d['total']) echo esc_html(memorial_plugin_rub($d['total']));
-}, 10, 2);
-
-add_action('pre_get_posts', function ($q) {
-    if (is_admin() && $q->is_main_query() && $q->get('post_type') === 'mem_work' && empty($_GET['orderby'])) {
-        $q->set('orderby', ['menu_order' => 'ASC', 'date' => 'ASC']);
-    }
-});
-
-add_action('admin_enqueue_scripts', function () {
-    $s = get_current_screen();
-    if (!$s || $s->post_type !== 'mem_work') return;
-    $dir = MEMORIAL_PLUGIN_DIR; $uri = MEMORIAL_PLUGIN_URL;
-    if ($s->base === 'post') wp_enqueue_media();
-    wp_enqueue_script('mem-catalog-admin', $uri . '/assets/js/catalog-admin.js', ['jquery', 'jquery-ui-sortable'], filemtime($dir . '/assets/js/catalog-admin.js'), true);
-    wp_localize_script('mem-catalog-admin', 'memCat', ['nonce' => wp_create_nonce('mem_sort'), 'offset' => 0, 'sortable' => $s->base === 'edit' && empty($_GET['orderby'])]);
-    wp_add_inline_style('wp-admin', '.mem-photos{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.mem-photos li{position:relative;margin:0;cursor:move}.mem-photos img{width:90px;height:90px;object-fit:cover;border-radius:4px;display:block}'
-        . '.mem-photos li:first-child img{outline:3px solid #b89b5e}.mem-photos button{position:absolute;top:2px;right:2px;border:0;border-radius:50%;width:22px;height:22px;background:#000a;color:#fff;cursor:pointer;line-height:1}'
-        . '.column-mem_thumb{width:60px}.column-mem_year{width:80px}.column-mem_thumb img{width:50px;height:50px;object-fit:cover;border-radius:4px}.mem-sortable #the-list tr{cursor:move}');
-});
 
 /* ---------- Вывод: [mem_works] ---------- */
 add_shortcode('mem_works', function ($atts) {
@@ -231,7 +132,7 @@ add_shortcode('mem_works', function ($atts) {
         if ($d['year']) $facts[] = '<span><strong>Выполнено:</strong> ' . (int) $d['year'] . ' г.</span>';
         if ($d['size']) $facts[] = '<span><strong>Размер участка:</strong> ' . esc_html($d['size']) . '</span>';
         if ($facts) echo '<p class="work__size">' . implode('', $facts) . '</p>';
-        if (trim($w->post_content) !== '') echo '<div class="work__text">' . wp_kses_post(wpautop($w->post_content)) . '</div>';
+        if (trim(wp_strip_all_tags($w->post_content)) !== '') echo '<div class="work__text">' . wp_kses_post(has_blocks($w->post_content) ? do_blocks($w->post_content) : wpautop($w->post_content)) . '</div>';
         if ($d['rows']) {
             echo '<figure class="wp-block-table is-style-price"><table><thead><tr><th>Что сделано</th><th>Стоимость</th></tr></thead><tbody>';
             foreach ($d['rows'] as $r) echo '<tr><td>' . esc_html($r[0]) . '</td><td>' . ($r[1] ? esc_html(memorial_plugin_rub($r[1])) : '—') . '</td></tr>';

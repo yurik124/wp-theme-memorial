@@ -19,8 +19,6 @@ add_action('init', function () {
     ]);
 });
 
-add_filter('use_block_editor_for_post_type', fn($use, $type) => $type === 'mem_bookrev' ? false : $use, 10, 2);
-add_filter('enter_title_here', fn($t, $post) => $post->post_type === 'mem_bookrev' ? 'Имя автора, например: Елена В.' : $t, 10, 2);
 
 /** Филиалы для выбора: адреса из «Мемориал → Контакты» */
 function memorial_plugin_branch_options() {
@@ -32,52 +30,7 @@ function memorial_plugin_branch_options() {
     return $out;
 }
 
-add_action('add_meta_boxes_mem_bookrev', function () {
-    add_meta_box('mem_bookrev', 'Дата и филиал', 'memorial_plugin_bookrev_box', 'mem_bookrev', 'side', 'high');
-});
-
-function memorial_plugin_bookrev_box($post) {
-    wp_nonce_field('mem_bookrev', 'mem_bookrev_nonce');
-    $date = get_post_meta($post->ID, '_mem_bdate', true);
-    $branch = get_post_meta($post->ID, '_mem_branch', true);
-    $opts = memorial_plugin_branch_options();
-    if ($branch && !isset($opts[$branch])) $opts[$branch] = $branch; ?>
-    <p><label><strong>Дата отзыва в книге</strong><br>
-      <input type="date" name="mem_bdate" value="<?php echo esc_attr($date); ?>" style="width:100%"></label>
-      <span class="description">Если число не разобрать — поставьте 1-е число месяца: на сайте показываются только месяц и год.</span></p>
-    <p><label><strong>Где хранится книга</strong><br>
-      <select name="mem_branch" style="width:100%">
-        <option value="">— не указывать —</option>
-        <?php foreach ($opts as $v => $l) echo '<option value="' . esc_attr($v) . '"' . selected($branch, $v, false) . '>' . esc_html($l) . '</option>'; ?>
-      </select></label></p>
-    <p class="description">Текст отзыва — в поле редактора, как написано в книге. Фото страницы — справа, «Фото страницы книги».<br>
-      Перед загрузкой фото закрасьте на нём фамилию, телефон и подпись автора, если у вас нет его согласия на публикацию.</p>
-    <?php
-}
-
-add_action('save_post_mem_bookrev', function ($id) {
-    if (!isset($_POST['mem_bookrev_nonce']) || !wp_verify_nonce($_POST['mem_bookrev_nonce'], 'mem_bookrev')) return;
-    if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || !current_user_can('edit_post', $id)) return;
-    $d = sanitize_text_field(wp_unslash($_POST['mem_bdate'] ?? ''));
-    preg_match('/^\d{4}-\d{2}-\d{2}$/', $d) ? update_post_meta($id, '_mem_bdate', $d) : delete_post_meta($id, '_mem_bdate');
-    $b = sanitize_text_field(wp_unslash($_POST['mem_branch'] ?? ''));
-    $b !== '' ? update_post_meta($id, '_mem_branch', $b) : delete_post_meta($id, '_mem_branch');
-});
-
-/* Колонки списка */
-add_filter('manage_mem_bookrev_posts_columns', function ($c) {
-    return ['cb' => $c['cb'], 'mem_photo' => 'Фото', 'title' => 'Автор', 'mem_text' => 'Отзыв', 'mem_bdate' => 'Дата', 'mem_branch' => 'Филиал'];
-});
-add_action('manage_mem_bookrev_posts_custom_column', function ($col, $id) {
-    if ($col === 'mem_photo' && has_post_thumbnail($id)) echo get_the_post_thumbnail($id, [50, 50]);
-    if ($col === 'mem_text') echo esc_html(wp_trim_words(get_post_field('post_content', $id), 18));
-    if ($col === 'mem_bdate') echo esc_html(memorial_plugin_bookrev_month($id));
-    if ($col === 'mem_branch') echo esc_html(get_post_meta($id, '_mem_branch', true));
-}, 10, 2);
-add_action('admin_head', function () {
-    $s = get_current_screen();
-    if ($s && $s->post_type === 'mem_bookrev') echo '<style>.column-mem_photo{width:60px}.column-mem_photo img{width:50px;height:50px;object-fit:cover;border-radius:4px}.column-mem_bdate{width:110px}</style>';
-});
+/* Список и форма отзывов — DataViews + DataForm (admin/collections.php). */
 
 /** «март 2024» */
 function memorial_plugin_bookrev_month($id) {

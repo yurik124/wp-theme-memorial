@@ -161,7 +161,7 @@ function memorial_plugin_reviews_tabs() {
     return [
         'services' => ['Сервисы и виджеты', admin_url('admin.php?page=mem-reviews')],
         'rewio'    => ['Отзывы Rewio', admin_url('admin.php?page=mem-rewio')],
-        'book'     => ['Из книги отзывов', admin_url('edit.php?post_type=mem_bookrev')],
+        'book'     => ['Из книги отзывов', admin_url('admin.php?page=memorial-plugin-bookrev')],
     ];
 }
 add_action('memorial_plugin_admin_tabs', function ($opt) {
@@ -171,7 +171,7 @@ add_action('memorial_plugin_admin_tabs', function ($opt) {
 // список и правка отзывов из книги: те же вкладки, в меню подсвечен пункт «Отзывы»
 add_action('all_admin_notices', function () {
     $sc = get_current_screen();
-    if ($sc && $sc->id === 'edit-mem_bookrev') memorial_plugin_admin_tabs(memorial_plugin_reviews_tabs(), 'book');
+    if ($sc && in_array($sc->id, ['edit-mem_bookrev', 'admin_page_memorial-plugin-bookrev'], true)) memorial_plugin_admin_tabs(memorial_plugin_reviews_tabs(), 'book');
 });
 add_filter('parent_file', function ($f) {
     $sc = get_current_screen();

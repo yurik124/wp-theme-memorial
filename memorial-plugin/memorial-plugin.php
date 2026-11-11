@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Memorial Plugin
  * Description: Site features for Memorial funeral services: catalog, prices, reviews, works, leads, settings, SEO, analytics. Design lives in the Memorial Modern theme.
- * Version: 2.0.0-alpha.3
+ * Version: 2.0.0-alpha.4
  * Requires at least: 7.1
  * Requires PHP: 8.1
  * Author: Memorial
@@ -21,7 +21,7 @@ if (memorial_plugin_legacy_active()) {
 }
 add_action('wp_loaded', 'memorial_plugin_after_switch');
 
-define('MEMORIAL_PLUGIN_VER', '2.0.0-alpha.3');
+define('MEMORIAL_PLUGIN_VER', '2.0.0-alpha.4');
 define('MEMORIAL_PLUGIN_FILE', __FILE__);
 define('MEMORIAL_PLUGIN_DIR', __DIR__);                          // без «/» в конце: MEMORIAL_PLUGIN_DIR . '/assets/…'
 define('MEMORIAL_PLUGIN_URL', untrailingslashit(plugins_url('', __FILE__)));
@@ -113,6 +113,7 @@ $memorial_plugin_modules = [
     'catalog/catalog-types.php',
     'catalog/catalog-manager.php',
     'catalog/catalog-summary.php',
+    'catalog/catalog-type-page.php',
     'catalog/catalog-types-admin.php',
     // «Наши работы»
     'works/works.php',
@@ -160,9 +161,6 @@ unset($memorial_plugin_modules, $memorial_plugin_off, $memorial_plugin_module);
 /* Классы плагина (includes/) — автозагрузка Composer classmap; vendor/ собирается при выгрузке (composer dump-autoload) */
 if (is_readable(MEMORIAL_PLUGIN_DIR . '/vendor/autoload.php')) require MEMORIAL_PLUGIN_DIR . '/vendor/autoload.php';
 
-/* Проверка сборки DataViews / admin-ui — только при WP_DEBUG (этап 1, удаляется на этапе 4) */
-if (is_admin() && defined('WP_DEBUG') && WP_DEBUG) require MEMORIAL_PLUGIN_DIR . '/admin/dataviews-check.php';
-
 /* Иконки: memorial_plugin_icon() спрашивает тему (фильтр memorial_plugin_icon_html), без неё — запасной набор плагина */
 require MEMORIAL_PLUGIN_DIR . '/core/icons-api.php';
 require MEMORIAL_PLUGIN_DIR . '/core/icons-fallback.php';
@@ -173,6 +171,9 @@ require MEMORIAL_PLUGIN_DIR . '/blocks/content/content-blocks.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/content/inline-values.php';
 require MEMORIAL_PLUGIN_DIR . '/seo/seo-registry.php';
 require MEMORIAL_PLUGIN_DIR . '/admin/convert.php';
+require MEMORIAL_PLUGIN_DIR . '/admin/settings-form.php';
+require MEMORIAL_PLUGIN_DIR . '/admin/collections.php';
+require MEMORIAL_PLUGIN_DIR . '/admin/editor-meta.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/floating/floating.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/home.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/home-template.php';

@@ -18,8 +18,11 @@ const ADMIN_PAGES = [
 	'admin.php?page=mem-help-m',
 	'edit.php?post_type=mem_product&page=mem-products',
 	'edit.php?post_type=mem_product&page=mem-types',
+	'edit.php?post_type=mem_product&page=mem-product-pages',
 	'edit.php?post_type=mem_product',
 	'edit.php?post_type=mem_work',
+	'edit.php?post_type=mem_work&page=mem-works',
+	'edit.php?post_type=mem_work&page=mem-work-types',
 ];
 
 for ( const path of ADMIN_PAGES ) {

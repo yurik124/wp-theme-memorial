@@ -555,11 +555,26 @@ function memorial_plugin_row_empty($r, $fields) {
  * Страницы в админке
  * ======================================================= */
 
+/** Главная перенесена в блоки (blocks/home): на экране остаётся только список услуг */
+function memorial_plugin_home_migrated() {
+    $log = get_option('memorial_plugin_home_migrated');
+    return is_array($log) && ($log['result'] ?? '') === 'migrated';
+}
+
+function memorial_plugin_home_services_schema() {
+    $s = memorial_plugin_home_schema()['services'];
+    return ['services' => ['type' => 'group', 'label' => 'Услуги', 'help' => $s['help'] ?? '', 'fields' => ['items' => $s['fields']['items']]]];
+}
+
 function memorial_plugin_admin_pages() {
+    $home = memorial_plugin_home_migrated()
+        ? ['slug' => 'mem-home', 'title' => 'Услуги', 'schema' => 'memorial_plugin_home_services_schema',
+           'intro' => 'Карточки услуг с фото и ценами — на главной и в блоке «Наши услуги» на других страницах. Тексты главной правятся прямо на ней: «Внешний вид → Редактор → Шаблоны → Главная».']
+        : null;
     return apply_filters('memorial_plugin_admin_pages', [
         'mem_contacts' => ['slug' => 'mem-contacts', 'title' => 'Контакты', 'schema' => 'memorial_plugin_contacts_schema',
                            'intro' => 'Телефоны, почта, адреса и время работы. Изменения сразу появятся в шапке, подвале, на главной и в карточках товаров.'],
-        'mem_home'     => ['slug' => 'mem-home', 'title' => 'Главная страница', 'schema' => 'memorial_plugin_home_schema',
+        'mem_home'     => $home ?? ['slug' => 'mem-home', 'title' => 'Главная страница', 'schema' => 'memorial_plugin_home_schema',
                            'intro' => 'Тексты и пункты блоков главной. Пункты можно перетаскивать за ⋮⋮, удалять крестиком и добавлять кнопкой под списком. Пустые пункты не сохраняются.<br>'
                                     . 'В тексте можно писать <code>{years}</code> — сколько лет компании, <code>{founded}</code> — год основания, <code>{addr}</code> — первый адрес, <code>{phone}</code> — основной телефон.'],
     ]);
@@ -572,9 +587,11 @@ add_action('admin_menu', function () {
     add_menu_page('Настройки сайта', 'Мемориал', 'manage_options', 'mem-contacts', '__return_null', 'dashicons-admin-home', 3);
     foreach ($pages as $opt => $p) {
         // 'hidden' — страница без своего пункта меню (открывается вкладкой другой страницы)
+        // страница настроек — приложение на DataForm (admin/settings-form.php, src/settings)
         $hook = add_submenu_page(empty($p['hidden']) ? 'mem-contacts' : '', $p['title'], $p['title'], 'manage_options', $p['slug'],
-            fn() => memorial_plugin_admin_render($opt));
+            fn() => memorial_plugin_settings_container($opt));
         $memorial_plugin_admin_hooks[] = $hook;
+        if ($hook) add_action('load-' . $hook, fn() => add_action('admin_enqueue_scripts', 'memorial_plugin_settings_assets'));
         // у страницы без пункта меню WordPress не знает заголовок окна — задаём сами
         if (!empty($p['hidden']) && $hook) add_action('load-' . $hook, function () use ($p) { $GLOBALS['title'] = $p['h1'] ?? $p['title']; });
     }
@@ -584,7 +601,7 @@ add_action('admin_menu', function () {
 add_action('admin_menu', function () {
     global $submenu;
     if (empty($submenu['mem-contacts'])) return;
-    $order = ['edit.php?post_type=mem_lead', 'mem-contacts', 'mem-prices', 'mem-reviews', 'mem-home', 'mem-rest', 'mem-cem', 'mem-design', 'mem-metrika', 'mem-legal', 'mem-sq', 'mem-modules', 'mem-help-m'];
+    $order = ['memorial-plugin-leads', 'mem-contacts', 'mem-prices', 'mem-reviews', 'mem-home', 'mem-rest', 'mem-cem', 'mem-design', 'mem-metrika', 'mem-legal', 'mem-sq', 'mem-modules', 'mem-help-m'];
     $items = $submenu['mem-contacts'];
     usort($items, function ($a, $b) use ($order) {
         $ia = array_search($a[2], $order, true); $ib = array_search($b[2], $order, true);
@@ -612,203 +629,7 @@ add_action('admin_init', function () {
     }
 });
 
-add_action('admin_enqueue_scripts', function ($hook) {
-    global $memorial_plugin_admin_hooks;
-    if (!in_array($hook, (array) $memorial_plugin_admin_hooks, true)) return;
-    $dir = MEMORIAL_PLUGIN_DIR;
-    $uri = MEMORIAL_PLUGIN_URL;
-    wp_enqueue_media();
-    wp_enqueue_style('mem-admin', $uri . '/assets/css/admin.css', [], filemtime($dir . '/assets/css/admin.css'));
-    wp_enqueue_style('wp-color-picker');
-    wp_enqueue_script('mem-admin', $uri . '/assets/js/admin.js', ['jquery', 'jquery-ui-sortable', 'wp-color-picker'], filemtime($dir . '/assets/js/admin.js'), true);
-});
-
-function memorial_plugin_admin_render($opt) {
-    $p = memorial_plugin_admin_pages()[$opt];
-    $val = memorial_plugin_settings($opt);
-    ?>
-    <div class="wrap mem-admin">
-      <h1><?php echo esc_html($p['h1'] ?? $p['title']); ?></h1>
-      <?php do_action('memorial_plugin_admin_tabs', $opt); ?>
-      <p class="mem-admin__intro"><?php echo wp_kses_post($p['intro']); ?></p>
-      <?php settings_errors(); do_action('memorial_plugin_admin_after_intro', $opt); ?>
-      <form method="post" action="options.php">
-        <?php settings_fields($opt);
-        $schema = call_user_func($p['schema']);
-        // «Главная страница»: карточки блоков идут в порядке блоков на сайте, их можно перетаскивать (порядок сохраняется в «layout»)
-        $movable = [];
-        if ($opt === 'mem_home' && function_exists('memorial_plugin_home_blocks')) {
-            $all = array_values(array_intersect(array_keys(memorial_plugin_home_blocks()), array_keys($schema)));
-            $movable = array_values(array_unique(array_merge(array_intersect((array) ($val['layout'] ?? []), $all), $all)));
-        }
-        $card = function ($k, $f, $move) use ($opt, $val) {
-            $title = $f['label'];
-            if ($f['type'] !== 'group') $f['label'] = '';
-            echo '<section class="mem-card' . (!empty($f['class']) ? ' ' . esc_attr($f['class']) : '') . '" data-card="' . esc_attr($opt . '.' . $k) . '"' . ($move ? ' data-block="' . esc_attr($k) . '"' : '') . '>';
-            echo '<h2 class="mem-card__head">';
-            if ($move) echo '<span class="mem-card__drag" title="Перетащите, чтобы поменять блок местами на главной" aria-hidden="true">⋮⋮</span>';
-            echo '<button type="button" class="mem-card__toggle" aria-expanded="true">' . esc_html($title) . '</button>';
-            if ($move) echo '<span class="mem-card__mv"><button type="button" class="button-link" data-cmv="-1" aria-label="Блок выше">↑</button><button type="button" class="button-link" data-cmv="1" aria-label="Блок ниже">↓</button></span>';
-            echo '</h2><div class="mem-card__body">';
-            if (!empty($f['help']) && $f['type'] === 'group') echo '<p class="description">' . esc_html($f['help']) . '</p>';
-            // группа со своим видом (например, выбор филиалов кнопками) — рисует себя сама, сохраняется по полям схемы
-            if (!empty($f['render'])) call_user_func($f['render'], $opt . '[' . $k . ']', $val[$k] ?? null);
-            else memorial_plugin_field($opt . '[' . $k . ']', $f, $val[$k] ?? null, 1, true);
-            echo '</div></section>';
-        };
-        echo '<p class="mem-cards__tools"><button type="button" class="button" data-cards="collapse">Свернуть все</button> <button type="button" class="button" data-cards="expand">Развернуть все</button></p>';
-        $printed = false;
-        foreach ($schema as $k => $f) {
-            if (in_array($k, $movable, true)) {
-                if (!$printed) {
-                    echo '<div class="mem-blocks">';
-                    foreach ($movable as $mk) $card($mk, $schema[$mk], true);
-                    echo '</div>';
-                    $printed = true;
-                }
-                continue;
-            }
-            $card($k, $f, false);
-        }
-        ?>
-        <div class="mem-admin__bar">
-          <?php submit_button('Сохранить', 'primary large', 'submit', false); ?>
-          <a class="button button-large" href="<?php echo esc_url(home_url('/')); ?>" target="_blank">Открыть сайт ↗</a>
-        </div>
-      </form>
-    </div>
-    <?php
-}
-
-/** Одно поле формы по схеме. */
-function memorial_plugin_field($name, $f, $v, $depth = 1, $top = false) {
-    $id    = 'f' . substr(md5($name), 0, 10);
-    $label = $f['label'] ?? '';
-    $help  = !empty($f['help']) && $f['type'] !== 'group' ? '<span class="description">' . esc_html($f['help']) . '</span>' : '';
-    $ph    = !empty($f['placeholder']) ? ' placeholder="' . esc_attr($f['placeholder']) . '"' : '';
-
-    switch ($f['type']) {
-        case 'group':
-            foreach ($f['fields'] as $k => $sub) memorial_plugin_field($name . '[' . $k . ']', $sub, $v[$k] ?? null, $depth);
-            return;
-
-        case 'repeater':
-            $key = '__i' . $depth . '__';
-            $cls = 'rep' . (!empty($f['inline']) ? ' rep--inline' : '');
-            echo '<div class="fld fld--rep">';
-            if ($label) echo '<span class="fld__label">' . esc_html($label) . '</span>';
-            if ($help) echo $help;
-            echo '<div class="' . esc_attr($cls) . '" data-key="' . esc_attr($key) . '">';
-            echo '<div class="rep__rows">';
-            foreach (is_array($v) ? array_values($v) : [] as $i => $row) memorial_plugin_rep_row($name, $f, $i, $row, $depth);
-            echo '</div>';
-            echo '<template>';
-            memorial_plugin_rep_row($name, $f, $key, [], $depth, true);
-            echo '</template>';
-            echo '<button type="button" class="button rep__add">+ ' . esc_html($f['add'] ?? 'Добавить') . '</button>';
-            echo '</div></div>';
-            return;
-
-        case 'page':
-            echo '<label class="fld" for="' . $id . '"><span class="fld__label">' . esc_html($label) . '</span>'
-               . wp_dropdown_pages(['name' => $name, 'id' => $id, 'selected' => (int) $v, 'echo' => 0,
-                                    'show_option_none' => '— не выбрана —', 'option_none_value' => '', 'post_status' => ['publish', 'draft']])
-               . $help . '</label>';
-            return;
-
-        case 'order':
-            $v = is_array($v) ? $v : [];
-            $keys = array_values(array_unique(array_merge(array_intersect($v, array_keys($f['options'])), array_keys($f['options']))));
-            if ($help) echo '<p class="description">' . wp_strip_all_tags($help) . '</p>';
-            // какие блоки сейчас скрыты (галочка «Показывать этот блок» снята) — чтобы было понятно, почему перестановка их не видна
-            $home = strpos($name, 'mem_home') === 0 && function_exists('memorial_plugin_settings') ? memorial_plugin_settings('mem_home') : [];
-            echo '<ol class="mem-order" aria-label="' . esc_attr($label ?: 'Порядок') . '">';
-            foreach ($keys as $key) {
-                $off = $home && isset($home[$key]) && is_array($home[$key]) && array_key_exists('show', $home[$key]) && empty($home[$key]['show']);
-                echo '<li' . ($off ? ' class="is-off"' : '') . '><span class="rep__handle" aria-hidden="true">⋮⋮</span><input type="hidden" name="' . esc_attr($name) . '[]" value="' . esc_attr($key) . '">'
-                   . '<span class="mem-order__name">' . esc_html($f['options'][$key]) . ($off ? ' <small class="mem-order__off">скрыт</small>' : '') . '</span>'
-                   . '<span class="mem-order__btns"><button type="button" class="button-link" data-mv="-1" aria-label="Выше">↑</button><button type="button" class="button-link" data-mv="1" aria-label="Ниже">↓</button></span></li>';
-            }
-            echo '</ol>';
-            echo '<p class="mem-order__save"><button type="submit" class="button button-primary">Сохранить порядок</button> '
-               . '<span class="mem-order__note" hidden>Порядок изменён — сохраните, чтобы он появился на сайте.</span></p>';
-            return;
-
-        case 'color':
-            $sc = !empty($f['scheme']) ? (string) apply_filters('memorial_plugin_scheme_color', '', $f['scheme'], !empty($f['effective'])) : '';
-            echo '<div class="fld fld--color"><span class="fld__label">' . esc_html($label) . '</span>'
-               . '<span class="mem-color__row"><input type="text" class="mem-color" name="' . esc_attr($name) . '" value="' . esc_attr((string) $v) . '"'
-               . ($sc ? ' data-scheme-color="' . esc_attr($sc) . '"' . (empty($f['effective']) ? ' data-scheme="' . esc_attr($f['scheme']) . '"' : '') : '') . '>'
-               . ($sc ? '<span class="mem-color__from">из схемы</span>' : '') . '</span>' . $help . '</div>';
-            return;
-
-        case 'file':
-            echo '<div class="fld fld--file"><span class="fld__label">' . esc_html($label) . '</span><span class="file-pick">'
-               . '<input type="text" name="' . esc_attr($name) . '" value="' . esc_attr((string) $v) . '" placeholder="Ссылка на файл .woff2 / .woff / .ttf">'
-               . ' <button type="button" class="button file-pick__choose">Загрузить / выбрать</button></span>' . $help . '</div>';
-            return;
-
-        case 'fontsel':
-        case 'select':
-            echo '<label class="fld" for="' . $id . '"><span class="fld__label">' . esc_html($label) . '</span><select id="' . $id . '" name="' . esc_attr($name) . '"'
-               . (!empty($f['data']) ? ' data-presets="' . esc_attr(wp_json_encode($f['data'])) . '"' : '') . '>';
-            foreach ($f['options'] as $ov => $ol) echo '<option value="' . esc_attr($ov) . '"' . selected((string) $v, (string) $ov, false) . '>' . esc_html($ol) . '</option>';
-            echo '</select>' . $help . '</label>';
-            return;
-
-        case 'checkbox':
-            echo '<label class="fld fld--check"><input type="checkbox" name="' . esc_attr($name) . '" value="1"' . checked(!empty($v), true, false) . '> ' . esc_html($label) . '</label>';
-            return;
-
-        case 'textarea':
-        case 'code':
-        case 'map':
-            $rows = $f['rows'] ?? ($f['type'] === 'map' ? 2 : 3);
-            echo '<label class="fld" for="' . $id . '"><span class="fld__label">' . esc_html($label) . '</span>'
-               . '<textarea id="' . $id . '" name="' . esc_attr($name) . '" rows="' . (int) $rows . '"' . $ph . ($f['type'] === 'code' ? ' class="code" spellcheck="false"' : '') . '>' . esc_textarea((string) $v) . '</textarea>' . $help . '</label>';
-            return;
-
-        case 'image':
-            echo '<div class="fld fld--img"><span class="fld__label">' . esc_html($label) . '</span>'
-               . '<div class="img-pick"><span class="img-pick__prev"' . ($v ? ' style="background-image:url(' . esc_url($v) . ')"' : '') . '></span>'
-               . '<input type="hidden" name="' . esc_attr($name) . '" value="' . esc_attr((string) $v) . '">'
-               . '<button type="button" class="button img-pick__choose">Выбрать фото</button> '
-               . '<button type="button" class="button-link img-pick__clear"' . ($v ? '' : ' hidden') . '>Убрать</button></div>' . $help . '</div>';
-            return;
-
-        default:
-            $type = ['number' => 'number', 'email' => 'email'][$f['type']] ?? 'text';
-            $extra = $type === 'number' ? ' min="0" step="1" inputmode="numeric"' : '';
-            echo '<label class="fld fld--' . $type . '" for="' . $id . '"><span class="fld__label">' . esc_html($label) . '</span>'
-               . '<input id="' . $id . '" type="' . $type . '" name="' . esc_attr($name) . '" value="' . esc_attr((string) $v) . '"' . $ph . $extra . '>' . $help . '</label>';
-    }
-}
-
-function memorial_plugin_rep_row($name, $f, $i, $row, $depth, $tpl = false) {
-    $base = $name . '[' . $i . ']';
-    $collapse = $f['collapse'] ?? '';
-    $tag = $collapse ? 'details' : 'div';
-    echo '<' . $tag . ' class="rep__row"' . ($collapse && ($tpl || !empty($f['open'])) ? ' open' : '') . '>';
-    if ($collapse) {
-        $t = trim((string) ($row[$collapse] ?? ''));
-        echo '<summary><span class="rep__handle" title="Перетащите, чтобы поменять порядок">⋮⋮</span>'
-           . '<span class="rep__title" data-from="' . esc_attr($collapse) . '">' . esc_html($t !== '' ? $t : 'Новый пункт') . '</span>'
-           . '<button type="button" class="rep__del" aria-label="Удалить" title="Удалить">×</button></summary>';
-    } else {
-        echo '<span class="rep__handle" title="Перетащите, чтобы поменять порядок">⋮⋮</span>';
-    }
-    echo '<div class="rep__fields">';
-    foreach ($f['fields'] as $k => $sub) {
-        $sub_name = $base . '[' . $k . ']';
-        $sub_val = $row[$k] ?? ($sub['type'] === 'repeater' ? [] : '');
-        echo $collapse === $k ? '<div data-title-src>' : '';
-        memorial_plugin_field($sub_name, $sub, $sub_val, $depth + 1);
-        echo $collapse === $k ? '</div>' : '';
-    }
-    echo '</div>';
-    if (!$collapse) echo '<button type="button" class="rep__del" aria-label="Удалить" title="Удалить">×</button>';
-    echo '</' . $tag . '>';
-}
+/* Форма страниц настроек строится приложением на DataForm (admin/settings-form.php); классические формы удалены на этапе 4. */
 
 /* Ссылки в верхней панели: быстрое редактирование с сайта */
 add_action('admin_bar_menu', function ($bar) {

@@ -10,8 +10,13 @@
 	<file>blocks/floating</file>
 	<file>blocks/home</file>
 	<file>admin/convert.php</file>
+	<file>admin/settings-form.php</file>
+	<file>admin/collections.php</file>
+	<file>admin/editor-meta.php</file>
+	<file>catalog/catalog-manager.php</file>
+	<file>catalog/catalog-types-admin.php</file>
+	<file>works/works-manager.php</file>
 	<file>seo/seo-registry.php</file>
-	<file>admin/dataviews-check.php</file>
 	<file>includes</file>
 
 	<exclude-pattern>*/vendor/*</exclude-pattern>

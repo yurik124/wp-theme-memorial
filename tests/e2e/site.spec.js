@@ -1,22 +1,8 @@
 /**
- * Сборка DataViews + admin-ui работает на WordPress 7.1.x,
- * главная открывается на новой теме без ошибок PHP и JS.
+ * Главная открывается на новой теме без ошибок PHP и JS.
  */
 const { test, expect } = require( '@playwright/test' );
 const { PHP_ERROR, login, collectJsErrors } = require( './helpers' );
-
-test( 'DataViews и admin-ui собираются и работают', async ( { page } ) => {
-	await login( page );
-	const errors = collectJsErrors( page );
-	await page.goto(
-		'/wp-admin/tools.php?page=memorial-plugin-dataviews-check'
-	);
-	const table = page.locator( '#memorial-plugin-dataviews-check table' );
-	await expect( table ).toBeVisible();
-	await expect( table ).toContainText( 'Wreath' );
-	await expect( table.locator( 'tbody tr' ) ).toHaveCount( 3 );
-	expect( errors, 'ошибки JS на странице проверки' ).toEqual( [] );
-} );
 
 test( 'сайт открывается на новой теме', async ( { page } ) => {
 	const errors = collectJsErrors( page );

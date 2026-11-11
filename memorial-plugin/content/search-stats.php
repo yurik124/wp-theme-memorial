@@ -79,65 +79,53 @@ function memorial_plugin_sq_popular(array $fallback, $limit = 6, $min = 4) {
     return count($out) >= $min ? $out : $fallback;
 }
 
-/* ---------- Админка: «Мемориал → Что ищут на сайте» ---------- */
+/* ---------- Админка: «Мемориал → Что ищут на сайте» — список на DataViews (src/catalog, экран search-stats) ---------- */
 add_action('admin_menu', function () {
-    add_submenu_page('mem-contacts', 'Что ищут на сайте', 'Что ищут на сайте', 'edit_pages', 'mem-sq', 'memorial_plugin_sq_page');
+    $hook = add_submenu_page('mem-contacts', 'Что ищут на сайте', 'Что ищут на сайте', 'edit_pages', 'mem-sq', function () {
+        echo '<div id="memorial-plugin-catalog" class="wrap" data-screen="search-stats"></div>';
+    });
+    if ($hook && function_exists('memorial_plugin_catalog_views_assets')) add_action('load-' . $hook, 'memorial_plugin_catalog_views_assets');
 }, 20);
 
-add_action('admin_post_mem_sq_clear', function () {
-    if (!current_user_can('manage_options') || !check_admin_referer('mem_sq_clear')) wp_die('Нет доступа');
-    $q = isset($_POST['q']) ? (string) wp_unslash($_POST['q']) : '';
-    if ($q !== '') { $s = memorial_plugin_sq_stats(); unset($s[$q]); update_option(MEMORIAL_PLUGIN_SQ_OPT, $s, false); }
-    else delete_option(MEMORIAL_PLUGIN_SQ_OPT);
-    wp_safe_redirect(admin_url('admin.php?page=mem-sq&cleared=1'));
-    exit;
-});
-
-function memorial_plugin_sq_page() {
-    $s = memorial_plugin_sq_stats();
-    $total = array_sum(array_column($s, 'c'));
-    $ok = array_filter($s, fn($r) => $r['n'] > 0);
-    $none = array_filter($s, fn($r) => $r['n'] === 0);
-    $sort = fn($a, $b) => $b['c'] <=> $a['c'] ?: $b['t'] <=> $a['t'];
-    uasort($ok, $sort);
-    uasort($none, $sort);
-    $faq = '';
-    foreach (get_pages() as $p) {
-        if (has_shortcode($p->post_content, 'mem_faq')) { $faq = get_permalink($p); break; }
+/** Запросы для списка: запрос, сколько раз, сколько нашлось, где искали, когда последний раз */
+function memorial_plugin_sq_items() {
+    $out = [];
+    foreach (memorial_plugin_sq_stats() as $q => $r) {
+        $out[] = ['id' => (string) $q, 'query' => (string) $q, 'count' => (int) $r['c'], 'found' => (int) $r['n'],
+                  'where' => array_values(array_filter(str_split((string) ($r['w'] ?: 'f')))), 'last' => gmdate('c', (int) $r['t'])];
     }
-    $where = ['f' => 'Вопрос–ответ', 'g' => 'Полезно знать'];
-
-    $table = function ($rows, $title, $note) use ($faq, $where) {
-        echo '<h2 style="margin-top:2em">' . esc_html($title) . ' <span style="font-weight:400;color:#777">(' . count($rows) . ')</span></h2><p class="description">' . esc_html($note) . '</p>';
-        if (!$rows) { echo '<p><i>Пока пусто.</i></p>'; return; }
-        echo '<table class="widefat striped" style="max-width:900px"><thead><tr><th>Запрос</th><th style="width:90px">Сколько раз</th><th style="width:110px">Нашлось</th><th style="width:130px">Где искали</th><th style="width:120px">Последний раз</th><th style="width:40px"></th></tr></thead><tbody>';
-        foreach (array_slice($rows, 0, 100, true) as $q => $r) {
-            $w = implode(', ', array_map(fn($c) => $where[$c] ?? '', str_split($r['w'] ?: 'f')));
-            echo '<tr><td>' . ($faq ? '<a href="' . esc_url(add_query_arg('q', $q, $faq)) . '" target="_blank">' . esc_html($q) . '</a>' : esc_html($q)) . '</td>'
-               . '<td>' . (int) $r['c'] . '</td><td>' . ($r['n'] ? (int) $r['n'] . ' ' . memorial_plugin_word($r['n'], 'ответ', 'ответа', 'ответов') : '<b style="color:#b32d2e">ничего</b>') . '</td>'
-               . '<td>' . esc_html($w) . '</td><td>' . esc_html(date_i18n('j M Y', $r['t'])) . '</td><td>';
-            if (current_user_can('manage_options')) {
-                echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '" style="margin:0">';
-                wp_nonce_field('mem_sq_clear');
-                echo '<input type="hidden" name="action" value="mem_sq_clear"><input type="hidden" name="q" value="' . esc_attr($q) . '">'
-                   . '<button class="button-link" title="Удалить запрос из списка" aria-label="Удалить">✕</button></form>';
-            }
-            echo '</td></tr>';
-        }
-        echo '</tbody></table>';
-    };
-
-    echo '<div class="wrap"><h1>Что ищут на сайте</h1>';
-    if (!empty($_GET['cleared'])) echo '<div class="notice notice-success is-dismissible"><p>Готово.</p></div>';
-    echo '<p style="max-width:900px">Запросы в поиске на страницах «Вопрос–ответ» и «Полезно знать». Сохраняется только текст запроса и счётчики — без данных о посетителях; '
-       . 'номера телефонов, почта и ссылки не сохраняются. Всего запросов: <b>' . (int) $total . '</b>, разных: <b>' . count($s) . '</b>.</p>'
-       . '<p style="max-width:900px">Под полем поиска «Часто ищут» собирается сам из частых запросов, по которым есть ответы (как наберётся хотя бы 4 таких запроса за полгода).</p>';
-    $table($none, 'Ничего не нашли', 'Подсказка, каких ответов не хватает: добавьте вопрос в текст подходящей страницы (блок «Подробности» в разделе «Частые вопросы») — он сам появится в «Вопрос–ответ».');
-    $table($ok, 'Частые запросы', 'Нажмите на запрос — откроется поиск с ним на сайте.');
-    if ($s && current_user_can('manage_options')) {
-        echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '" style="margin-top:2em" onsubmit="return confirm(\'Удалить всю статистику поиска?\')">';
-        wp_nonce_field('mem_sq_clear');
-        echo '<input type="hidden" name="action" value="mem_sq_clear"><button class="button">Очистить статистику</button></form>';
-    }
-    echo '</div>';
+    return $out;
 }
+
+add_action('rest_api_init', function () {
+    register_rest_route('memorial-plugin/v1', '/search-stats', [
+        [
+            'methods' => WP_REST_Server::READABLE,
+            'permission_callback' => fn() => current_user_can('edit_pages'),
+            'callback' => function () {
+                $faq = '';
+                foreach (get_pages() as $p) {
+                    if (has_shortcode($p->post_content, 'mem_faq') || has_block('memorial-plugin/faq', $p)) { $faq = get_permalink($p); break; }
+                }
+                return rest_ensure_response(['items' => memorial_plugin_sq_items(), 'faqUrl' => $faq, 'canClear' => current_user_can('manage_options')]);
+            },
+        ],
+        [
+            // Удалить запросы из статистики (пустой список — всю статистику)
+            'methods' => WP_REST_Server::DELETABLE,
+            'permission_callback' => fn() => current_user_can('manage_options'),
+            'args' => ['queries' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => []]],
+            'callback' => function (WP_REST_Request $request) {
+                $queries = array_map('strval', (array) $request['queries']);
+                if ($queries) {
+                    $s = memorial_plugin_sq_stats();
+                    foreach ($queries as $q) unset($s[$q]);
+                    update_option(MEMORIAL_PLUGIN_SQ_OPT, $s, false);
+                } else {
+                    delete_option(MEMORIAL_PLUGIN_SQ_OPT);
+                }
+                return rest_ensure_response(['items' => memorial_plugin_sq_items()]);
+            },
+        ],
+    ]);
+});

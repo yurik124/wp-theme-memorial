@@ -401,6 +401,30 @@ function memorial_plugin_rewio_picker($name, $val) {
     <?php
 }
 
+/* Экран настроек на DataForm: «2. Какие филиалы и площадки» — галочки по списку филиалов из Rewio */
+add_filter('memorial_plugin_settings_describe_field', function ($field, $f) {
+    if (($f['render'] ?? '') !== 'memorial_plugin_rewio_picker') return $field;
+    $field['type'] = 'rewio-scope';
+    $field['help'] = 'Отметьте филиалы, чьи отзывы показывать (ничего не отмечено — все), и площадки у каждого.';
+    if (trim(memorial_plugin_rewio()['api']['key']) === '') {
+        $field['error'] = 'Сначала вставьте API-ключ в «1. Подключение» и сохраните — здесь появятся ваши филиалы.';
+        return $field;
+    }
+    $cat = get_option('mem_rewio_catalog');
+    if (!is_array($cat) || empty($cat['time'])) $cat = memorial_plugin_rewio_catalog_fetch();
+    if (is_wp_error($cat)) {
+        $field['error'] = 'Не удалось получить список филиалов: ' . $cat->get_error_message();
+        return $field;
+    }
+    $field['catalog'] = [
+        'objects' => array_map(fn($ob) => ['id' => (int) $ob['id'], 'name' => (string) $ob['name'], 'count' => $ob['count'], 'demo' => !empty($ob['demo']),
+                                          'sources' => array_map('intval', (array) $ob['sources'])], (array) $cat['objects']),
+        'sources' => array_map('strval', (array) ($cat['all_sources'] ?? []) + (array) ($cat['sources'] ?? [])),
+        'time'    => memorial_plugin_rewio_when($cat['time']),
+    ];
+    return $field;
+}, 10, 2);
+
 /* Состояние и предпросмотр — над настройками */
 add_action('memorial_plugin_admin_after_intro', function ($opt) {
     if ($opt !== 'mem_rewio') return;

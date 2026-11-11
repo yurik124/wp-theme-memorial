@@ -16,9 +16,12 @@ const base = Array.isArray( defaultConfig ) ? defaultConfig[ 0 ] : defaultConfig
 module.exports = {
 	...base,
 	entry: {
-		'dataviews-check/index': path.resolve( __dirname, 'memorial-plugin/src/dataviews-check/index.js' ),
 		'convert/index': path.resolve( __dirname, 'memorial-plugin/src/convert/index.js' ),
 		'inline-value/index': path.resolve( __dirname, 'memorial-plugin/src/inline-value/index.js' ),
+		'settings/index': path.resolve( __dirname, 'memorial-plugin/src/settings/index.js' ),
+		'collections/index': path.resolve( __dirname, 'memorial-plugin/src/collections/index.js' ),
+		'catalog/index': path.resolve( __dirname, 'memorial-plugin/src/catalog/index.js' ),
+		'editor-meta/index': path.resolve( __dirname, 'memorial-plugin/src/editor-meta/index.js' ),
 	},
 	output: {
 		...base.output,
