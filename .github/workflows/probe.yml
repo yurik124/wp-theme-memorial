@@ -139,7 +139,7 @@ jobs:
           cp ../data/pages.json ../pages.json
 
       - name: Браузер
-        run: cd after && npx playwright install --with-deps chromium
+        run: cd after && npx playwright install --with-deps chromium || npx playwright install chromium  # зеркала apt бывают недоступны: в образе раннера библиотеки браузера уже есть
 
       - name: Снимки — старое
         run: cd after && PHASE=classic PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js || true
