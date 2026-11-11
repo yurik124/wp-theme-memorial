@@ -170,6 +170,11 @@ test.describe( 'админка', () => {
 		}
 		log( 'editor', editorErrs );
 		const screens = [
+			'admin.php?page=mem-cem',
+			'admin.php?page=mem-rest',
+			'admin.php?page=mem-legal',
+			'admin.php?page=mem-metrika',
+			'admin.php?page=mem-home',
 			'admin.php?page=mem-contacts',
 			'admin.php?page=mem-prices',
 			'admin.php?page=mem-reviews',
