@@ -149,3 +149,19 @@ test( 'типы и категории: новый тип, характерист
 	);
 	expect( errors ).toEqual( [] );
 } );
+
+test( 'что ищут на сайте: запрос из поиска виден в списке', async ( {
+	page,
+	request,
+} ) => {
+	const q = 'проверка поиска e2e';
+	const res = await request.post( '/wp-admin/admin-ajax.php', {
+		form: { action: 'mem_sq', q, n: '0', w: 'faq' },
+	} );
+	expect( res.status() ).toBeLessThan( 400 );
+	const errors = collectJsErrors( page );
+	await login( page );
+	await page.goto( '/wp-admin/admin.php?page=mem-sq' );
+	await expect( page.getByRole( 'row' ).filter( { hasText: q } ) ).toBeVisible();
+	expect( errors ).toEqual( [] );
+} );
