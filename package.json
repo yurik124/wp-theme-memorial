@@ -21,8 +21,10 @@
 	"devDependencies": {
 		"@playwright/test": "latest",
 		"@wordpress/admin-ui": "latest",
+		"@wordpress/a11y": "latest",
 		"@wordpress/api-fetch": "latest",
 		"@wordpress/block-editor": "latest",
+		"@wordpress/commands": "latest",
 		"@wordpress/components": "latest",
 		"@wordpress/core-data": "latest",
 		"@wordpress/data": "latest",
@@ -32,8 +34,10 @@
 		"@wordpress/element": "latest",
 		"@wordpress/env": "latest",
 		"@wordpress/i18n": "latest",
+		"@wordpress/icons": "latest",
 		"@wordpress/media-utils": "latest",
 		"@wordpress/plugins": "latest",
+		"@wordpress/url": "latest",
 		"@wordpress/rich-text": "latest",
 		"@wordpress/scripts": "latest",
 		"ajv": "^8.17.1"

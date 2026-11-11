@@ -1,0 +1,32 @@
+.memorial-plugin-toast {
+	position: fixed;
+	bottom: 24px;
+	left: 50%;
+	z-index: 1000001;
+	max-width: min(560px, calc(100vw - 32px));
+	padding: 12px 20px;
+	border-radius: 12px;
+	background: #1f211c;
+	color: #fff;
+	font-size: 14px;
+	line-height: 1.45;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	transform: translateX(-50%);
+	transition: opacity 0.4s;
+
+	&.is-error {
+		background: #8a1f1f;
+	}
+
+	&.is-warning {
+		background: #6b4500;
+	}
+
+	&.is-gone {
+		opacity: 0;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
