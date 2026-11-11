@@ -25,8 +25,16 @@ test( 'кладбища: фильтр по статусу работает бе�
 		data: {
 			value: {
 				items: [
-					{ name: 'Открытое e2e', status: 'open', addr: 'ул. Первая, 1' },
-					{ name: 'Закрытое e2e', status: 'closed', addr: 'ул. Вторая, 2' },
+					{
+						name: 'Открытое e2e',
+						status: 'open',
+						addr: 'ул. Первая, 1',
+					},
+					{
+						name: 'Закрытое e2e',
+						status: 'closed',
+						addr: 'ул. Вторая, 2',
+					},
 				],
 			},
 		},
@@ -41,8 +49,12 @@ test( 'кладбища: фильтр по статусу работает бе�
 		},
 	} );
 	await page.goto( pageObj.link );
-	const open = page.locator( '.mem-cem__item' ).filter( { hasText: 'Открытое e2e' } );
-	const closed = page.locator( '.mem-cem__item' ).filter( { hasText: 'Закрытое e2e' } );
+	const open = page
+		.locator( '.mem-cem__item' )
+		.filter( { hasText: 'Открытое e2e' } );
+	const closed = page
+		.locator( '.mem-cem__item' )
+		.filter( { hasText: 'Закрытое e2e' } );
 	await expect( open ).toBeVisible();
 	await expect( closed ).toBeVisible();
 	const chips = page.locator( '.mem-cem .chip' );
@@ -52,7 +64,9 @@ test( 'кладбища: фильтр по статусу работает бе�
 	await expect( page.locator( '.mem-cem__item:visible' ) ).toHaveCount( 1 );
 	await chips.nth( 0 ).click();
 	await expect( page.locator( '.mem-cem__item:visible' ) ).toHaveCount( 2 );
-	expect( errors.filter( ( e ) => ! /404|Failed to load resource/.test( e ) ) ).toEqual( [] );
+	expect(
+		errors.filter( ( e ) => ! /404|Failed to load resource/.test( e ) )
+	).toEqual( [] );
 } );
 
 test( 'стили плагина подключаются вместе с блоком', async ( { page } ) => {
@@ -65,7 +79,9 @@ test( 'стили плагина подключаются вместе с бло
 		[ ...document.styleSheets ].some( ( s ) => {
 			try {
 				return (
-					/memorial-plugin\/assets\/css\/blocks/.test( s.href || '' ) &&
+					/memorial-plugin\/assets\/css\/blocks/.test(
+						s.href || ''
+					) &&
 					[ ...s.cssRules ].some( ( r ) =>
 						r.cssText.includes( '--wp--preset--color--primary' )
 					)
