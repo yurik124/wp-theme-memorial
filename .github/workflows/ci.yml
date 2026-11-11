@@ -57,6 +57,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: php tools/check-prefixes.php
 
+      - name: Переводы (tools/i18n.php check)
+        if: ${{ !cancelled() }}
+        run: php tools/i18n.php check
+
       - name: Дымовые тесты без WordPress
         if: ${{ !cancelled() }}
         run: |
@@ -200,6 +204,15 @@ jobs:
           npx wp-env run cli wp plugin list
           npx wp-env run cli wp core version
 
+      - name: Переводы — сверка с WP-CLI (wp i18n make-pot)
+        if: ${{ matrix.shard == 1 }}
+        run: |
+          npx wp-env run cli wp i18n make-pot wp-content/plugins/memorial-plugin wp-content/plugins/memorial-plugin/cli.pot --domain=memorial-plugin --exclude=vendor,build,tests,node_modules,languages
+          npx wp-env run cli wp i18n make-pot wp-content/themes/memorial-theme wp-content/themes/memorial-theme/cli.pot --domain=memorial-theme --exclude=languages
+          php tools/i18n.php compare memorial-plugin memorial-plugin/cli.pot
+          php tools/i18n.php compare memorial-theme memorial-theme/cli.pot
+          rm -f memorial-plugin/cli.pot memorial-theme/cli.pot
+
       - name: PHPUnit
         if: ${{ matrix.shard == 1 }}
         run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/memorial-plugin vendor/bin/phpunit
@@ -222,7 +235,10 @@ jobs:
             echo "::error::В debug.log есть фатальные ошибки PHP"; exit 1
           fi
           if grep -E "PHP (Warning|Notice|Deprecated)" artifacts-debug.log | grep -E "memorial-(plugin|theme)" ; then
-            echo "::warning::Предупреждения PHP в коде темы/плагина — см. журнал выше (исправляются по этапам)"
+            echo "::error::Предупреждения PHP в коде темы/плагина — см. журнал выше"; exit 1
+          fi
+          if grep -E "_load_textdomain_just_in_time|memorial-(plugin|theme)</code> domain was triggered too early" artifacts-debug.log ; then
+            echo "::error::Переводы плагина или темы загружаются слишком рано (до init)"; exit 1
           fi
 
       - uses: actions/upload-artifact@v5

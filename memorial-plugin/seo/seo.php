@@ -42,9 +42,9 @@ function memorial_plugin_page_crumbs($page_id) {
 /** Список крошек: [[название, ссылка], ...] */
 function memorial_plugin_crumbs() {
     if (is_front_page()) return [];
-    $c = [['Главная', home_url('/')]];
+    $c = [[__( 'Home', 'memorial-plugin' ), home_url('/')]];
     $root    = memorial_plugin_catalog_page();
-    $catalog = [$root ? get_the_title($root) : 'Каталог', memorial_plugin_catalog_url()];
+    $catalog = [$root ? get_the_title($root) : __( 'Catalog', 'memorial-plugin' ), memorial_plugin_catalog_url()];
 
     if (is_post_type_archive('mem_product')) {
         $c[] = $catalog;
@@ -81,7 +81,7 @@ function memorial_plugin_crumbs() {
         foreach (array_reverse($anc) as $a) $c[] = [get_the_title($a), get_permalink($a)];
         $c[] = [get_the_title($id), get_permalink($id)];
     } elseif (is_404()) {
-        $c[] = ['Страница не найдена', ''];
+        $c[] = [__( 'Page not found', 'memorial-plugin' ), ''];
     } elseif (is_singular()) {
         $c[] = [get_the_title(), get_permalink()];
     } else {
@@ -93,7 +93,7 @@ function memorial_plugin_crumbs() {
 function memorial_plugin_crumbs_html() {
     $c = memorial_plugin_crumbs();
     if (count($c) < 2) return;
-    echo '<nav class="crumbs" aria-label="Навигация">';
+    echo ( '<nav class="crumbs" aria-label="' . esc_html__( 'Breadcrumbs', 'memorial-plugin' ) . '">' );
     $last = count($c) - 1;
     foreach ($c as $i => $item) {
         if ($i === $last) {

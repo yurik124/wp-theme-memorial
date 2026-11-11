@@ -2,11 +2,15 @@
 /**
  * Plugin Name: Memorial Plugin
  * Description: Site features for Memorial funeral services: catalog, prices, reviews, works, leads, settings, SEO, analytics. Design lives in the Memorial Modern theme.
- * Version: 2.0.0-alpha.7
+ * Version: 2.0.0
  * Requires at least: 7.1
+ * Tested up to: 7.1
  * Requires PHP: 8.1
  * Author: Memorial
+ * License: GPL-2.0-or-later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: memorial-plugin
+ * Domain Path: /languages
  *
  * Где что лежит — см. README.md рядом с этим файлом.
  */
@@ -21,10 +25,15 @@ if (memorial_plugin_legacy_active()) {
 }
 add_action('wp_loaded', 'memorial_plugin_after_switch');
 
-define('MEMORIAL_PLUGIN_VER', '2.0.0-alpha.7');
+define('MEMORIAL_PLUGIN_VER', '2.0.0');
 define('MEMORIAL_PLUGIN_FILE', __FILE__);
 define('MEMORIAL_PLUGIN_DIR', __DIR__);                          // без «/» в конце: MEMORIAL_PLUGIN_DIR . '/assets/…'
 define('MEMORIAL_PLUGIN_URL', untrailingslashit(plugins_url('', __FILE__)));
+
+/* Translations bundled with the plugin (languages/memorial-plugin-<locale>.mo / .l10n.php, JSON for the scripts) */
+add_action('init', static function () {
+    load_plugin_textdomain('memorial-plugin', false, dirname(plugin_basename(MEMORIAL_PLUGIN_FILE)) . '/languages');
+}, 0);
 
 /** Файл плагина по относительному пути */
 function memorial_plugin_path($rel) {
@@ -53,30 +62,40 @@ function memorial_plugin_part($name, $args = []) {
  */
 function memorial_plugin_optional() {
     return [
-        'callback'  => ['Заявка «Перезвоните мне»', 'Окно с формой обратного звонка и уведомления о заявках. Выключено — кнопки «Перезвоните мне» просто звонят по телефону.',
-                        ['leads/callback.php'], []],
-        'metrika'   => ['Яндекс Метрика и уведомление о cookie', 'Счётчик, цели, очистка адреса от UTM-меток, плашка о cookie.',
-                        ['seo/metrika.php'], []],
-        'seoplug'   => ['Совместимость с SEO-плагинами', 'Шорткоды [mem_…] в заголовках и описаниях AIOSEO, Yoast, Rank Math, SEOPress.',
-                        ['seo/seo-plugins.php'], []],
-        'rewio'     => ['Отзывы с Яндекс Карт (Rewio)', 'Загрузка отзывов по расписанию, блок отзывов [mem_rewio].',
-                        ['reviews/rewio.php'], ['mem_rewio']],
-        'book'      => ['Книга отзывов', 'Отзывы, оставленные на сайте, [mem_bookreviews].',
-                        ['reviews/bookreviews.php'], ['mem_bookreviews']],
-        'works'     => ['«Наши работы»', 'Раздел работ с фото и ценами, менеджер работ, блоки [mem_works].',
-                        ['works/works.php', 'works/works-manager.php'], ['mem_works']],
-        'photos'    => ['Фотогалерея: фото товаров и работ', 'Блоки [mem_cat_photos] и [mem_works vid="фото"] — фото подтягиваются сами.',
-                        ['pages/photos.php'], ['mem_cat_photos']],
-        'faq'       => ['Вопрос–ответ', 'Все вопросы сайта на одной странице с поиском [mem_faq].',
-                        ['content/faq.php'], ['mem_faq']],
-        'guide'     => ['Полезно знать', 'Статьи-карточки с поиском [mem_guide], поле «Полезно знать» у страниц.',
-                        ['content/guide.php'], ['mem_guide']],
-        'sq'        => ['Статистика поиска', '«Что ищут на сайте» и автоматические «Часто ищут».',
-                        ['content/search-stats.php'], []],
-        'places'    => ['Залы для поминок и кладбища', 'Блоки [mem_restaurants] и [mem_cemeteries], их настройки.',
-                        ['places/places.php'], ['mem_restaurants', 'mem_cemeteries']],
-        'patterns'  => ['Готовые блоки в редакторе', 'Шаблоны блоков «Мемориал» во вставке блоков редактора.',
-                        ['content/patterns.php'], []],
+        'callback' => ['callback', '', ['leads/callback.php'], []],
+        'metrika' => ['metrika', '', ['seo/metrika.php'], []],
+        'seoplug' => ['seoplug', '', ['seo/seo-plugins.php'], []],
+        'rewio' => ['rewio', '', ['reviews/rewio.php'], ['mem_rewio']],
+        'book' => ['book', '', ['reviews/bookreviews.php'], ['mem_bookreviews']],
+        'works' => ['works', '', ['works/works.php', 'works/works-manager.php'], ['mem_works']],
+        'photos' => ['photos', '', ['pages/photos.php'], ['mem_cat_photos']],
+        'faq' => ['faq', '', ['content/faq.php'], ['mem_faq']],
+        'guide' => ['guide', '', ['content/guide.php'], ['mem_guide']],
+        'sq' => ['sq', '', ['content/search-stats.php'], []],
+        'places' => ['places', '', ['places/places.php'], ['mem_restaurants', 'mem_cemeteries']],
+        'patterns' => ['patterns', '', ['content/patterns.php'], []],
+    ];
+}
+
+/**
+ * Names and descriptions of the optional features (for «Memorial → Features»; translated, so only after init).
+ *
+ * @return array<string,array{0:string,1:string}>
+ */
+function memorial_plugin_optional_labels() {
+    return [
+        'callback' => [__( '“Call me back” request', 'memorial-plugin' ), __( 'The window with the call-back form and notifications about requests. Off — the “Call me back” buttons simply call the phone.', 'memorial-plugin' )],
+        'metrika' => [__( 'Yandex Metrica and the cookie notice', 'memorial-plugin' ), __( 'The counter, goals, cleaning the address of UTM tags, the cookie banner.', 'memorial-plugin' )],
+        'seoplug' => [__( 'Compatibility with SEO plugins', 'memorial-plugin' ), __( '[mem_…] shortcodes in the titles and descriptions of AIOSEO, Yoast, Rank Math, SEOPress.', 'memorial-plugin' )],
+        'rewio' => [__( 'Reviews from Yandex Maps (Rewio)', 'memorial-plugin' ), __( 'Loading reviews on schedule, the Rewio reviews block.', 'memorial-plugin' )],
+        'book' => [__( 'Guest book', 'memorial-plugin' ), __( 'Reviews left on the site, the guest book block.', 'memorial-plugin' )],
+        'works' => [__( '“Our works”', 'memorial-plugin' ), __( 'The section of works with photos and prices, the works manager, the works blocks.', 'memorial-plugin' )],
+        'photos' => [__( 'Photo gallery: photos of products and works', 'memorial-plugin' ), __( 'Photo blocks of products and works — the photos are picked up automatically.', 'memorial-plugin' )],
+        'faq' => [__( 'Questions and answers', 'memorial-plugin' ), __( 'All questions of the site on one page with a search.', 'memorial-plugin' )],
+        'guide' => [__( 'Good to know', 'memorial-plugin' ), __( 'Article cards with a search, the “Good to know” field of pages.', 'memorial-plugin' )],
+        'sq' => [__( 'Search statistics', 'memorial-plugin' ), __( '“What people search for on the site” and the automatic “Frequent searches”.', 'memorial-plugin' )],
+        'places' => [__( 'Memorial meal halls and cemeteries', 'memorial-plugin' ), __( 'The halls and cemeteries blocks and their settings.', 'memorial-plugin' )],
+        'patterns' => [__( 'Ready-made blocks in the editor', 'memorial-plugin' ), __( '“Memorial” patterns in the block inserter of the editor.', 'memorial-plugin' )],
     ];
 }
 
@@ -146,7 +165,6 @@ $memorial_plugin_modules = [
     'pages/photos.php',
     'places/places.php',
     // справка в админке
-    'admin/help.php',
     // уборка после удалённых модулей скорости (этап 3)
     'core/speed-removed.php',
     // стили и скрипты блоков на сайте

@@ -45,7 +45,7 @@ function memorial_plugin_works_photos($a) {
         $cap = get_the_title($w) . ($d['total'] && !memorial_plugin_sc_no($a['cena']) ? ' — ' . memorial_plugin_rub($d['total']) : '');
         foreach ($d['photos'] as $pid) $items[] = ['id' => (int) $pid, 'cap' => html_entity_decode($cap, ENT_QUOTES, 'UTF-8')];
     }
-    if (!$items) return current_user_can('edit_posts') ? '<p class="is-style-note">[mem_works vid="фото"]: в «Наших работах» пока нет фото.</p>' : '';
+    if (!$items) return current_user_can('edit_posts') ? ( '<p class="is-style-note">' . esc_html__( '[mem_works vid="фото"]: there are no photos in “Our works” yet.', 'memorial-plugin' ) . '</p>' ) : '';
     $rand = in_array(mb_strtolower(trim($a['poryadok'])), ['случайно', 'случайные', 'random'], true);
     return memorial_plugin_photos_grid($items, $n, $rand, 3);
 }
@@ -142,6 +142,6 @@ add_action('admin_init', function () {
 add_action('admin_notices', function () {
     if (!($done = get_transient('mem_photos_report')) || !current_user_can('edit_pages')) return;
     delete_transient('mem_photos_report');
-    echo '<div class="notice notice-success is-dismissible"><p><b>Фотогалерея:</b> на странице «' . esc_html(implode('», «', $done))
-       . '» фото «Наших работ» и товаров теперь подтягиваются сами (шорткоды [mem_works vid="фото"] и [mem_cat_photos]). Прежний вариант — в «Редакциях» страницы.</p></div>';
+    echo ( '<div class="notice notice-success is-dismissible"><p><b>' . esc_html__( 'Photo gallery:', 'memorial-plugin' ) . '</b> ' . esc_html__( 'on the page “', 'memorial-plugin' ) ) . esc_html(implode('», «', $done))
+       . ( esc_html__( '” the photos of “Our works” and of the products are now picked up automatically (the [mem_works vid="фото"] and [mem_cat_photos] shortcodes). The previous version is in the page’s “Revisions”.', 'memorial-plugin' ) . '</p></div>' );
 });

@@ -4,20 +4,20 @@ defined('ABSPATH') || exit;
 /* Характеристики товаров (выводятся на странице товара). Новая характеристика — одна строка здесь. */
 function memorial_plugin_attrs() {
     return apply_filters('memorial_plugin_attrs', [
-        'material' => 'Материал',
-        'color'    => 'Цвет',
-        'size'     => 'Размер',
-        'shape'    => 'Форма',
-        'type'     => 'Тип',
+        'material' => __( 'Material', 'memorial-plugin' ),
+        'color'    => __( 'Colour', 'memorial-plugin' ),
+        'size'     => __( 'Size', 'memorial-plugin' ),
+        'shape'    => __( 'Shape', 'memorial-plugin' ),
+        'type'     => __( 'Type', 'memorial-plugin' ),
     ]);
 }
 
 add_action('init', function () {
     register_post_type('mem_product', [
         'labels' => [
-            'name' => 'Каталог', 'singular_name' => 'Товар', 'menu_name' => 'Каталог',
-            'all_items' => 'Все товары', 'add_new' => 'Добавить товар',
-            'add_new_item' => 'Новый товар', 'edit_item' => 'Редактировать товар',
+            'name' => __( 'Catalog', 'memorial-plugin' ), 'singular_name' => __( 'Product', 'memorial-plugin' ), 'menu_name' => __( 'Catalog', 'memorial-plugin' ),
+            'all_items' => __( 'All products', 'memorial-plugin' ), 'add_new' => __( 'Add a product', 'memorial-plugin' ),
+            'add_new_item' => __( 'New product', 'memorial-plugin' ), 'edit_item' => __( 'Edit product', 'memorial-plugin' ),
         ],
         'public'       => true,
         'has_archive'  => 'catalog',
@@ -29,7 +29,7 @@ add_action('init', function () {
     ]);
 
     register_taxonomy('mem_cat', 'mem_product', [
-        'labels' => ['name' => 'Категории', 'singular_name' => 'Категория', 'add_new_item' => 'Добавить категорию'],
+        'labels' => ['name' => __( 'Categories', 'memorial-plugin' ), 'singular_name' => __( 'Category', 'memorial-plugin' ), 'add_new_item' => __( 'Add a category', 'memorial-plugin' )],
         'hierarchical'      => true,
         'show_admin_column' => true,
         'show_in_rest'      => true,
@@ -38,7 +38,7 @@ add_action('init', function () {
 
     foreach (memorial_plugin_attrs() as $key => $label) {
         register_taxonomy('mem_' . $key, 'mem_product', [
-            'labels'       => ['name' => $label, 'singular_name' => $label, 'add_new_item' => 'Добавить значение'],
+            'labels'       => ['name' => $label, 'singular_name' => $label, 'add_new_item' => __( 'Add a value', 'memorial-plugin' )],
             'hierarchical' => true,   // галочки в редакторе
             'public'       => false,
             'show_ui'      => false, // старые свойства; теперь характеристики настраиваются у типа товара
@@ -74,9 +74,9 @@ add_action('save_post_mem_product', function ($id) {
 /* ---------- Цена ---------- */
 function memorial_plugin_price_html($id) {
     $p = (int) get_post_meta($id, '_mem_price', true);
-    if (!$p) return '<span class="price price--ask">Цена по запросу</span>';
+    if (!$p) return ( '<span class="price price--ask">' . esc_html__( 'Price on request', 'memorial-plugin' ) . '</span>' );
     $old  = (int) get_post_meta($id, '_mem_price_old', true);
-    $from = get_post_meta($id, '_mem_price_from', true) ? 'от ' : '';
+    $from = get_post_meta($id, '_mem_price_from', true) ? __( 'from ', 'memorial-plugin' ) : '';
     $unit = get_post_meta($id, '_mem_unit', true);
     $h = '<span class="price">' . $from . esc_html(memorial_plugin_rub($p)) . ($unit ? ' <small>' . esc_html($unit) . '</small>' : '') . '</span>';
     if ($old > $p) $h .= ' <s class="price-old">' . esc_html(memorial_plugin_rub($old)) . '</s>';
@@ -85,7 +85,7 @@ function memorial_plugin_price_html($id) {
 
 /* ---------- Сортировка ---------- */
 function memorial_plugin_sorts() {
-    return ['' => 'По умолчанию', 'price_asc' => 'Сначала дешевле', 'price_desc' => 'Сначала дороже', 'new' => 'Новинки'];
+    return ['' => __( 'Default', 'memorial-plugin' ), 'price_asc' => __( 'Cheapest first', 'memorial-plugin' ), 'price_desc' => __( 'Most expensive first', 'memorial-plugin' ), 'new' => __( 'New arrivals', 'memorial-plugin' )];
 }
 
 /** Порядок товаров по параметру ?sort= — для любого запроса товаров */

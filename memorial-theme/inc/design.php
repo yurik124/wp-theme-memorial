@@ -14,18 +14,18 @@ defined('ABSPATH') || exit;
 /** Цвета, которыми окрашен сайт. Ключ = CSS-переменная. */
 function memorial_theme_color_keys() {
     return [
-        'dark'   => ['Фон шапки-плашек и подвала (в светлой схеме — светлый)', '#f2efe6'],
-        'dark2'  => ['Фон плашек — второй оттенок', '#e6ebdf'],
-        'gold'   => ['Акцент: кнопки, иконки, лавр', '#5e7052'],
-        'gold2'  => ['Светлый акцент: орнамент, разделители', '#a9b796'],
-        'gold3'  => ['Тёмный акцент: ссылки, надзаголовки, наведение', '#3f4d36'],
-        'bg'     => ['Фон страницы', '#fbfaf6'],
-        'bg2'    => ['Фон чередующихся блоков', '#f2efe6'],
-        'ink'    => ['Основной текст', '#2a2c28'],
-        'mute'   => ['Второстепенный текст', '#66675e'],
-        'line'   => ['Рамки и разделители', '#e2ded2'],
-        'sage'   => ['Шалфейная подложка: «Что делать», цифры, подвал', '#e6ebdf'],
-        'bronze' => ['Бронза: тонкие линии, ягоды лавра (в малых дозах)', '#a88a5a'],
+        'dark'   => [__( 'Background of the header bars and the footer (light in the light scheme)', 'memorial-theme' ), '#f2efe6'],
+        'dark2'  => [__( 'Background of the bars — second shade', 'memorial-theme' ), '#e6ebdf'],
+        'gold'   => [__( 'Accent: buttons, icons, laurel', 'memorial-theme' ), '#5e7052'],
+        'gold2'  => [__( 'Light accent: ornament, dividers', 'memorial-theme' ), '#a9b796'],
+        'gold3'  => [__( 'Dark accent: links, eyebrows, hover', 'memorial-theme' ), '#3f4d36'],
+        'bg'     => [__( 'Page background', 'memorial-theme' ), '#fbfaf6'],
+        'bg2'    => [__( 'Background of alternating blocks', 'memorial-theme' ), '#f2efe6'],
+        'ink'    => [__( 'Main text', 'memorial-theme' ), '#2a2c28'],
+        'mute'   => [__( 'Secondary text', 'memorial-theme' ), '#66675e'],
+        'line'   => [__( 'Borders and dividers', 'memorial-theme' ), '#e2ded2'],
+        'sage'   => [__( 'Sage backing: “What to do”, numbers, footer', 'memorial-theme' ), '#e6ebdf'],
+        'bronze' => [__( 'Bronze: thin lines, laurel berries (in small doses)', 'memorial-theme' ), '#a88a5a'],
     ];
 }
 
@@ -35,9 +35,9 @@ function memorial_theme_color_presets() {
     $p = fn($name, ...$c) => ['name' => $name, 'c' => array_combine($k, $c)];
     //                                                  dark       dark2      gold       gold2      gold3      bg         bg2        ink        mute       line       sage       bronze
     return [
-        'laurel'        => $p('Светлая память — лавр (основная)', '#f2efe6', '#e6ebdf', '#5e7052', '#a9b796', '#3f4d36', '#fbfaf6', '#f2efe6', '#2a2c28', '#66675e', '#e2ded2', '#e6ebdf', '#a88a5a'),
-        'laurel_bronze' => $p('Светлая память — бронза',          '#f2efe6', '#ece6da', '#8c6f45', '#cdbb98', '#5c4628', '#fbfaf6', '#f2efe6', '#2a2c28', '#66675e', '#e2ded2', '#ede7db', '#a88a5a'),
-        'stone'         => $p('Светлый камень (серо-голубой)',    '#f0f0ec', '#e5e9ec', '#56687a', '#aebac6', '#3a4a5a', '#fafaf8', '#f0f0ec', '#2a2c2e', '#62666b', '#e0e0da', '#e5e9ec', '#a88a5a'),
+        'laurel'        => $p(__( 'Bright memory — laurel (main)', 'memorial-theme' ), '#f2efe6', '#e6ebdf', '#5e7052', '#a9b796', '#3f4d36', '#fbfaf6', '#f2efe6', '#2a2c28', '#66675e', '#e2ded2', '#e6ebdf', '#a88a5a'),
+        'laurel_bronze' => $p(__( 'Bright memory — bronze', 'memorial-theme' ),          '#f2efe6', '#ece6da', '#8c6f45', '#cdbb98', '#5c4628', '#fbfaf6', '#f2efe6', '#2a2c28', '#66675e', '#e2ded2', '#ede7db', '#a88a5a'),
+        'stone'         => $p(__( 'Light stone (grey-blue)', 'memorial-theme' ),    '#f0f0ec', '#e5e9ec', '#56687a', '#aebac6', '#3a4a5a', '#fafaf8', '#f0f0ec', '#2a2c2e', '#62666b', '#e0e0da', '#e5e9ec', '#a88a5a'),
     ];
 }
 
@@ -49,8 +49,8 @@ function memorial_theme_builtin_fonts() {
     return [
         'lora'      => ['Lora', '"Lora",Georgia,"Times New Roman",serif'],
         'cormorant' => ['Cormorant Garamond', '"Cormorant Garamond",Georgia,"Times New Roman",serif'],
-        'georgia'   => ['Georgia (системный с засечками)', 'Georgia,"Times New Roman",serif'],
-        'system'    => ['Системный без засечек (как в Windows/телефоне)', 'system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif'],
+        'georgia'   => [__( 'Georgia (system serif)', 'memorial-theme' ), 'Georgia,"Times New Roman",serif'],
+        'system'    => [__( 'System sans-serif (as in Windows/phone)', 'memorial-theme' ), 'system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif'],
     ];
 }
 
@@ -60,7 +60,7 @@ function memorial_theme_all_fonts() {
     foreach ((array) (get_option('mem_design')['fonts']['custom'] ?? []) as $f) {
         $name = trim($f['name'] ?? '');
         if ($name === '' || empty($f['r'])) continue;
-        $out['c_' . sanitize_key(sanitize_title($name))] = [$name . ' (свой)', '"' . str_replace('"', '', $name) . '",' . (!empty($f['serif']) ? 'Georgia,serif' : 'system-ui,Arial,sans-serif'), $f];
+        $out['c_' . sanitize_key(sanitize_title($name))] = [$name . __( ' (custom)', 'memorial-theme' ), '"' . str_replace('"', '', $name) . '",' . (!empty($f['serif']) ? 'Georgia,serif' : 'system-ui,Arial,sans-serif'), $f];
     }
     return $out;
 }

@@ -12,14 +12,19 @@
 
 defined('ABSPATH') || exit;
 
-define('MEMORIAL_THEME_VER', '5.0.0-alpha.6');
+define('MEMORIAL_THEME_VER', '5.0.0');
+
+/* Translations of the theme (languages/memorial-theme-<locale>.mo / .l10n.php) — before anything translatable */
+add_action('after_setup_theme', function () {
+    load_theme_textdomain('memorial-theme', get_template_directory() . '/languages');
+}, 0);
 
 add_action('after_setup_theme', function () {
     add_theme_support('post-thumbnails');
     add_theme_support('custom-logo', ['height' => 60, 'width' => 200, 'flex-width' => true]);
     add_theme_support('responsive-embeds');
     // классические меню — источник для колонок меню в подвале (блок плагина) до этапа 3
-    register_nav_menus(['primary' => 'Главное меню', 'footer' => 'Меню в подвале']);
+    register_nav_menus(['primary' => __( 'Main menu', 'memorial-theme' ), 'footer' => __( 'Footer menu', 'memorial-theme' )]);
     add_theme_support('editor-styles');
     // В редакторе страница выглядит как на сайте: общие стили темы (шапка, подвал, разделы) и оформление текста
     add_editor_style(['assets/css/main.css', 'assets/css/content.css']);
@@ -44,7 +49,33 @@ add_action('wp_enqueue_scripts', function () {
     $f = memorial_theme_asset('/assets/css/content.css');
     wp_enqueue_style('memorial-theme-content', $uri . $f, ['memorial-theme'], filemtime($dir . $f));
     wp_enqueue_script('memorial-theme', $uri . $js, [], filemtime($dir . $js), ['strategy' => 'defer', 'in_footer' => true]);
+    wp_add_inline_script('memorial-theme', 'window.memorialThemeI18n = ' . wp_json_encode(memorial_theme_js_i18n()) . ';', 'before');
 }, 20);
+
+/**
+ * Texts of assets/js/main.js, translated here (the script has no dependency on wp-i18n).
+ *
+ * @return array<string,string>
+ */
+function memorial_theme_js_i18n() {
+    return [
+        /* translators: %s: menu item */
+        'expand'       => __( 'Expand: %s', 'memorial-theme' ),
+        'submenu'      => __( 'submenu', 'memorial-theme' ),
+        'fullNumber'   => __( 'Enter the full number: +7 and 10 digits.', 'memorial-theme' ),
+        'consent'      => __( 'Tick the consent to the data processing.', 'memorial-theme' ),
+        'notSent'      => __( 'Could not send.', 'memorial-theme' ),
+        'callUs'       => __( 'Please call us.', 'memorial-theme' ),
+        'maxFailed'    => __( 'Could not open MAX. Leave your number — we will call you back.', 'memorial-theme' ),
+        'maxBack'      => __( 'Could not write in MAX? Leave your number — we will call you back.', 'memorial-theme' ),
+        'reviewsFrame' => __( 'Reviews on Yandex Maps', 'memorial-theme' ),
+        'mapFrame'     => __( 'Directions map', 'memorial-theme' ),
+        'scrollLeft'   => __( 'Scroll left', 'memorial-theme' ),
+        'scrollRight'  => __( 'Scroll right', 'memorial-theme' ),
+        /* translators: 1: number of the photo, 2: number of photos */
+        'photoOf'      => __( 'photo %1$d of %2$d', 'memorial-theme' ),
+    ];
+}
 
 /* Предзагрузка: шрифт заголовков (без «прыжка» на первом экране) и фото первого экрана главной (LCP) */
 add_action('wp_head', function () {
@@ -86,12 +117,12 @@ add_filter('render_block_core/site-logo', function ($html, $block) {
     $size  = (int) ($block['attrs']['width'] ?? 44);
     $class = trim('wp-block-site-logo ' . ($block['attrs']['className'] ?? ''));
     return '<div class="' . esc_attr($class) . '"><a href="' . esc_url(home_url('/')) . '" class="custom-logo-link" rel="home" aria-label="'
-         . esc_attr(get_bloginfo('name') . ' — на главную') . '">' . memorial_theme_logo_mark($size) . '</a></div>';
+         . esc_attr(get_bloginfo('name') . __( ' — to the home page', 'memorial-theme' )) . '">' . memorial_theme_logo_mark($size) . '</a></div>';
 }, 10, 2);
 
 /* Паттерны темы — категория «Мемориал» */
 add_action('init', function () {
-    register_block_pattern_category('memorial-theme', ['label' => 'Мемориал: оформление']);
+    register_block_pattern_category('memorial-theme', ['label' => __( 'Memorial: design', 'memorial-theme' )]);
 });
 
 require get_template_directory() . '/inc/design.php';

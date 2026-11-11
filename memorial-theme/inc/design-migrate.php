@@ -82,7 +82,8 @@ function memorial_theme_design_migration_plan( $design ) {
 	}
 	foreach ( array( 'dark', 'dark2' ) as $old ) {
 		if ( ! empty( $design['colors'][ $old ] ) ) {
-			$notes[] = "Свой цвет «{$old}» (бывшие тёмные плашки) не переносится: в светлых схемах он совпадает с фоном разделов.";
+			/* translators: %s: colour key */
+			$notes[] = sprintf( __( 'The custom colour “%s” (the former dark bars) is not moved: in the light schemes it matches the section background.', 'memorial-theme' ), $old );
 		}
 	}
 	// Текст на кнопке с заливкой: белый, если читается, иначе основной цвет текста (как считало «Оформление»).

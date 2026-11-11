@@ -13,7 +13,31 @@
  *  - focus      — the chosen point of a photo in the middle of a tile.
  * The cemeteries block has its own module (cemeteries.js).
  */
-import { store, getElement } from '@wordpress/interactivity';
+import { store, getElement, getConfig } from '@wordpress/interactivity';
+
+// Texts of the blocks, translated on the server (core/assets.php, memorial_plugin_view_i18n).
+const cfg = getConfig( 'memorial-plugin' ) || {};
+const T = cfg.i18n || {};
+const txt = ( key, ...args ) => {
+	let i = 0;
+	return String( T[ key ] || key )
+		.replace( /%(\d)\$[sd]/g, ( m, n ) => args[ n - 1 ] )
+		.replace( /%[sd]/g, () => args[ i++ ] );
+};
+// Plural forms by category of Intl.PluralRules (one, few, many, other…) — prepared on the server with _n().
+let plurals;
+const tn = ( key, n ) => {
+	try {
+		plurals ||= new Intl.PluralRules( cfg.locale || 'en' );
+	} catch {
+		plurals = new Intl.PluralRules( 'en' );
+	}
+	const forms = T[ key ] || {};
+	return String( forms[ plurals.select( n ) ] || forms.other || n ).replace(
+		'%d',
+		n
+	);
+};
 
 const d = document;
 // smooth scrolling only for those who have not switched animations off
@@ -82,17 +106,6 @@ const sMark = ( text, words ) => {
 		'gi'
 	);
 	return sHtml( text ).replace( re, '<mark>$1</mark>' );
-};
-const sWord = ( n, a, b, c ) => {
-	const m = n % 100;
-	const k = n % 10;
-	if ( m > 10 && m < 20 ) {
-		return c;
-	}
-	if ( k === 1 ) {
-		return a;
-	}
-	return k > 1 && k < 5 ? b : c;
 };
 const sFlash = ( el ) => {
 	el.classList.remove( 'is-flash' );
@@ -466,7 +479,7 @@ store( 'memorial-plugin/faq', {
 				const more = d.createElement( 'button' );
 				more.type = 'button';
 				more.className = 'chip mfaq__more-t';
-				more.textContent = 'Ещё темы: ' + ( chips.length - 6 );
+				more.textContent = txt( 'moreTopics', chips.length - 6 );
 				more.addEventListener( 'click', () => {
 					toc.classList.remove( 'is-cut' );
 					more.remove();
@@ -515,30 +528,22 @@ store( 'memorial-plugin/faq', {
 				status: ( found, words, val ) => {
 					if ( ! words.length ) {
 						return (
-							items.length +
-							' ' +
-							sWord(
-								items.length,
-								'вопрос',
-								'вопроса',
-								'вопросов'
-							) +
-							' с ответами. Начните вводить — подскажем.'
+							tn( 'questionsWithAnswers', items.length ) +
+							'. ' +
+							txt( 'startTyping' )
 						);
 					}
 					return found.length
-						? 'По запросу «' +
-								sHtml( val ) +
-								'» — ' +
-								found.length +
-								' ' +
-								sWord(
-									found.length,
-									'вопрос',
-									'вопроса',
-									'вопросов'
-								) +
-								' ниже. <button type="button" class="msearch__reset">Показать все</button>'
+						? sHtml(
+								txt(
+									'foundBelow',
+									val,
+									tn( 'questions', found.length )
+								)
+							) +
+								' <button type="button" class="msearch__reset">' +
+								sHtml( txt( 'showAll' ) ) +
+								'</button>'
 						: '';
 				},
 				pick: ( it ) => {
@@ -596,23 +601,17 @@ store( 'memorial-plugin/guide', {
 							.map( ( it ) => it.c )
 					).size;
 					const other = found.filter( ( it ) => it.c < 0 ).length;
+					const what = [
+						arts ? tn( 'articles', arts ) : '',
+						other ? tn( 'answersElsewhere', other ) : '',
+					]
+						.filter( Boolean )
+						.join( ' ' + txt( 'and' ) + ' ' );
 					return (
-						'По запросу «' +
-						sHtml( val ) +
-						'»: ' +
-						( arts
-							? arts +
-								' ' +
-								sWord( arts, 'статья', 'статьи', 'статей' )
-							: '' ) +
-						( arts && other ? ' и ' : '' ) +
-						( other
-							? other +
-								' ' +
-								sWord( other, 'ответ', 'ответа', 'ответов' ) +
-								' на других страницах'
-							: '' ) +
-						'. Нажмите на подсказку, чтобы открыть нужное место. <button type="button" class="msearch__reset">Показать все</button>'
+						sHtml( txt( 'guideFound', val, what ) ) +
+						' <button type="button" class="msearch__reset">' +
+						sHtml( txt( 'showAll' ) ) +
+						'</button>'
 					);
 				},
 				pick: ( it ) => {
@@ -661,7 +660,7 @@ function tabs( box, onSelect ) {
 function toggleMore( button ) {
 	const open = button.previousElementSibling.classList.toggle( 'is-open' );
 	button.setAttribute( 'aria-expanded', String( open ) );
-	button.textContent = open ? 'Свернуть' : 'Читать полностью';
+	button.textContent = open ? txt( 'collapse' ) : txt( 'readMore' );
 }
 
 /* ---------- Reviews: branch tabs and third-party widgets ---------- */
@@ -779,12 +778,12 @@ store( 'memorial-plugin/rewio', {
 									me && st.dir === 'asc' ? '↑' : '↓';
 								if ( b.dataset.rwoSort === 'd' ) {
 									b.title = desc
-										? 'Сначала новые — нажмите, чтобы сначала старые'
-										: 'Сортировать по дате';
+										? txt( 'newestFirst' )
+										: txt( 'sortByDate' );
 								} else {
 									b.title = desc
-										? 'Сначала высокие оценки — нажмите, чтобы наоборот'
-										: 'Сортировать по оценке';
+										? txt( 'highestFirst' )
+										: txt( 'sortByRating' );
 								}
 							} );
 						apply();
@@ -807,12 +806,17 @@ store( 'memorial-plugin/rewio', {
 						const note = panel.querySelector( '.rwo__shown' );
 						if ( note ) {
 							note.innerHTML = st.src
-								? 'Отзывы: ' +
-									sHtml(
-										p.querySelector( 'span:not(.rw-ico)' )
-											.textContent
+								? sHtml(
+										txt(
+											'reviewsOf',
+											p.querySelector(
+												'span:not(.rw-ico)'
+											).textContent
+										)
 									) +
-									' · <button type="button" class="rwo__all">показать все</button>'
+									' · <button type="button" class="rwo__all">' +
+									sHtml( txt( 'showAllLower' ) ) +
+									'</button>'
 								: '';
 						}
 						apply();
@@ -922,7 +926,7 @@ function sectionBar( bar ) {
 		b.tabIndex = -1;
 		b.setAttribute(
 			'aria-label',
-			s === 'l' ? 'Прокрутить влево' : 'Прокрутить вправо'
+			s === 'l' ? txt( 'scrollLeft' ) : txt( 'scrollRight' )
 		);
 		b.textContent = s === 'l' ? '‹' : '›';
 		b.addEventListener( 'click', () =>
@@ -1067,9 +1071,9 @@ function showMore( g ) {
 		const rest = li.length - shown;
 		btn.hidden = rest <= 0;
 		btn.textContent =
-			'Показать ещё ' +
-			Math.min( step, rest ) +
-			( rest > step ? ' из ' + rest : '' );
+			rest > step
+				? txt( 'showMoreOf', Math.min( step, rest ), rest )
+				: txt( 'showMore', Math.min( step, rest ) );
 	};
 	btn.addEventListener( 'click', () => {
 		const firstNew = g.children[ shown ];

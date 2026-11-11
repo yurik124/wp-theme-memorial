@@ -3,6 +3,7 @@
 	<description>WordPress Coding Standards for Memorial Plugin. Covers code written or rewritten since stage 1; legacy modules are added here as they are rewritten (stages 3–4). Legacy code is checked by phpcs-compat.xml.dist and tools/check-prefixes.php.</description>
 
 	<!-- Новый код. Пополняется по мере переписывания модулей. -->
+	<file>uninstall.php</file>
 	<file>core/switchover.php</file>
 	<file>core/speed-removed.php</file>
 	<file>core/icons-api.php</file>

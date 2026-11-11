@@ -62,20 +62,20 @@ add_shortcode('mem_faq', function ($atts) {
     $a = shortcode_atts(['exclude' => '', 'search' => '1', 'chasto' => ''], $atts, 'mem_faq');
     $skip = array_map('intval', array_filter(explode(',', $a['exclude'])));
     $groups = array_values(array_filter(memorial_plugin_faq_all(), fn($g) => !in_array($g['id'], $skip, true) && $g['id'] !== get_the_ID()));
-    if (!$groups) return current_user_can('edit_pages') ? '<p class="is-style-note">[mem_faq]: на страницах пока нет вопросов (блоков «Подробности»).</p>' : '';
+    if (!$groups) return current_user_can('edit_pages') ? ( '<p class="is-style-note">' . esc_html__( '[mem_faq]: there are no questions on the pages yet (“Details” blocks).', 'memorial-plugin' ) . '</p>' ) : '';
 
     $total = array_sum(array_map(fn($g) => count($g['qs']), $groups));
     ob_start();
     echo '<div class="mfaq" data-faq data-wp-interactive="memorial-plugin/faq" data-wp-init="callbacks.init">';
     if ($a['search'] !== '0') {
-        echo memorial_plugin_search_box(['id' => 'mfaq-q', 'label' => 'Поиск по вопросам', 'placeholder' => 'Например: документы',
+        echo memorial_plugin_search_box(['id' => 'mfaq-q', 'label' => __( 'Search the questions', 'memorial-plugin' ), 'placeholder' => __( 'For example: documents', 'memorial-plugin' ),
             // «Часто ищут»: заданные в шорткоде слова, иначе — из статистики поиска (content/search-stats.php)
             'popular' => trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : (function_exists('memorial_plugin_sq_popular') ? memorial_plugin_sq_popular(['документы', 'стоимость', 'пособие', 'кремация', 'морг', 'памятник']) : ['документы', 'стоимость', 'пособие', 'кремация', 'морг', 'памятник']),
-            'none' => 'Такого вопроса пока нет на сайте. Позвоните или оставьте номер — ответим.']);
+            'none' => __( 'There is no such question on the site yet. Call or leave your number — we will answer.', 'memorial-plugin' )]);
     }
     if (count($groups) > 1) {
         // Темы — фильтр: показывают вопросы одной темы на этой же странице
-        echo '<div class="srow"><div class="mfaq__toc srow__in" role="group" aria-label="Темы вопросов"><button type="button" class="chip is-on" data-faq-group="" aria-pressed="true">Все <small>' . $total . '</small></button>';
+        echo ( '<div class="srow"><div class="mfaq__toc srow__in" role="group" aria-label="' . esc_attr__( 'Question topics', 'memorial-plugin' ) . '"><button type="button" class="chip is-on" data-faq-group="" aria-pressed="true">' . esc_html__( 'All', 'memorial-plugin' ) . ' <small>' ) . $total . '</small></button>';
         foreach ($groups as $g) echo '<button type="button" class="chip" data-faq-group="faq-' . (int) $g['id'] . '" aria-pressed="false">' . esc_html($g['title']) . ' <small>' . count($g['qs']) . '</small></button>';
         echo '</div></div>';
     }
@@ -88,7 +88,7 @@ add_shortcode('mem_faq', function ($atts) {
             if ($used[$id] > 1) $id .= '-' . $used[$id];
             echo '<details class="wp-block-details"' . ($id ? ' id="' . esc_attr($id) . '"' : '') . ' data-g="' . esc_attr($g['title']) . '"><summary>' . esc_html($q) . '</summary>' . $ans . '</details>';
         }
-        echo '<p class="mfaq__more"><a href="' . esc_url($g['url']) . '">Подробнее — на странице «' . esc_html($g['title']) . '» →</a></p></section>';
+        echo '<p class="mfaq__more"><a href="' . esc_url($g['url']) . '">' . esc_html(sprintf( /* translators: %s: page title */ __( 'More — on the page “%s” →', 'memorial-plugin' ), $g['title'] )) . '</a></p></section>';
     }
     echo '</div>';
     return ob_get_clean();

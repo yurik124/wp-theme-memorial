@@ -12,40 +12,40 @@ const MEMORIAL_PLUGIN_REWIO_API = 'https://api.rewio.ru/v3';
 /* ---------- Настройки ---------- */
 function memorial_plugin_rewio_schema() {
     return [
-        'api' => ['type' => 'group', 'label' => '1. Подключение', 'help' => 'Ключ — в личном кабинете app.rewio.ru (начинается с hrev_). Хватает ключа «только чтение». Ключ хранится на сервере сайта, посетителям он не виден.', 'fields' => [
-            'key' => ['type' => 'text', 'label' => 'API-ключ', 'placeholder' => 'hrev_…'],
-            'on'  => ['type' => 'checkbox', 'label' => 'Показывать отзывы на сайте (там, где стоит шорткод [mem_rewio])'],
+        'api' => ['type' => 'group', 'label' => __( '1. Connection', 'memorial-plugin' ), 'help' => __( 'The key is in the app.rewio.ru account (it starts with hrev_). A read-only key is enough. The key is kept on the site’s server, visitors do not see it.', 'memorial-plugin' ), 'fields' => [
+            'key' => ['type' => 'text', 'label' => __( 'API key', 'memorial-plugin' ), 'placeholder' => 'hrev_…'],
+            'on'  => ['type' => 'checkbox', 'label' => __( 'Show the reviews on the site (where the [mem_rewio] shortcode or the block is)', 'memorial-plugin' )],
         ]],
-        'scope' => ['type' => 'group', 'label' => '2. Какие филиалы и площадки', 'render' => 'memorial_plugin_rewio_picker', 'class' => 'mrw-card', 'fields' => [
+        'scope' => ['type' => 'group', 'label' => __( '2. Which branches and sites', 'memorial-plugin' ), 'render' => 'memorial_plugin_rewio_picker', 'class' => 'mrw-card', 'fields' => [
             'objects' => ['type' => 'text', 'label' => ''],
             'sources' => ['type' => 'text', 'label' => ''],
             'per'     => ['type' => 'text', 'label' => ''],
             'tabs'    => ['type' => 'checkbox', 'label' => ''],
         ]],
-        'filter' => ['type' => 'group', 'label' => '3. Какие отзывы показывать', 'fields' => [
-            'min'     => ['type' => 'select', 'label' => 'Оценка', 'options' => ['1' => 'Все оценки', '3' => '3★ и выше', '4' => '4★ и выше', '5' => 'Только 5★']],
-            'text'    => ['type' => 'checkbox', 'label' => 'Только с текстом (без одних звёзд)'],
-            'photos'  => ['type' => 'checkbox', 'label' => 'Только с фото'],
-            'months'  => ['type' => 'number', 'label' => 'Не старше, месяцев (0 — за всё время)'],
-            'stop'    => ['type' => 'textarea', 'label' => 'Скрывать отзывы со словами (через запятую)', 'rows' => 2, 'placeholder' => 'например: фамилия сотрудника'],
-            'fetch'   => ['type' => 'number', 'label' => 'Сколько последних отзывов загружать с каждого филиала (до 1000)'],
+        'filter' => ['type' => 'group', 'label' => __( '3. Which reviews to show', 'memorial-plugin' ), 'fields' => [
+            'min'     => ['type' => 'select', 'label' => __( 'Rating', 'memorial-plugin' ), 'options' => ['1' => __( 'All ratings', 'memorial-plugin' ), '3' => __( '3★ and higher', 'memorial-plugin' ), '4' => __( '4★ and higher', 'memorial-plugin' ), '5' => __( 'Only 5★', 'memorial-plugin' )]],
+            'text'    => ['type' => 'checkbox', 'label' => __( 'Only with text (not just stars)', 'memorial-plugin' )],
+            'photos'  => ['type' => 'checkbox', 'label' => __( 'Only with photos', 'memorial-plugin' )],
+            'months'  => ['type' => 'number', 'label' => __( 'Not older than, months (0 — all time)', 'memorial-plugin' )],
+            'stop'    => ['type' => 'textarea', 'label' => __( 'Hide reviews with the words (comma-separated)', 'memorial-plugin' ), 'rows' => 2, 'placeholder' => __( 'for example: an employee’s surname', 'memorial-plugin' )],
+            'fetch'   => ['type' => 'number', 'label' => __( 'How many latest reviews to load from every branch (up to 1000)', 'memorial-plugin' )],
         ]],
-        'view' => ['type' => 'group', 'label' => '4. Как выглядит на сайте', 'fields' => [
-            'title'   => ['type' => 'text', 'label' => 'Заголовок блока', 'placeholder' => 'Отзывы клиентов'],
-            'sort'    => ['type' => 'select', 'label' => 'Порядок', 'options' => ['new' => 'Сначала новые', 'best' => 'Сначала лучшие', 'photos' => 'Сначала с фото, затем новые']],
-            'count'   => ['type' => 'number', 'label' => 'Сколько показывать сразу (остальные — кнопкой «Показать ещё»)'],
-            'cols'    => ['type' => 'select', 'label' => 'Колонок на компьютере', 'options' => ['3' => '3', '2' => '2', '1' => '1 (лентой на всю ширину)']],
-            'clip'    => ['type' => 'number', 'label' => 'Сворачивать длинный текст после, символов'],
-            'summary' => ['type' => 'checkbox', 'label' => 'Средняя оценка и число отзывов сверху'],
-            'controls'=> ['type' => 'checkbox', 'label' => 'Сортировка для посетителей: по дате и по оценке (справа над отзывами)'],
-            'pfilter' => ['type' => 'checkbox', 'label' => 'Фильтр по площадкам: нажатие на площадку в сводке оценок показывает только её отзывы'],
-            'reply'   => ['type' => 'checkbox', 'label' => 'Ответ компании'],
-            'photo'   => ['type' => 'checkbox', 'label' => 'Фото из отзывов'],
-            'source'  => ['type' => 'checkbox', 'label' => 'Название площадки со ссылкой на отзыв'],
-            'date'    => ['type' => 'checkbox', 'label' => 'Дата отзыва'],
+        'view' => ['type' => 'group', 'label' => __( '4. How it looks on the site', 'memorial-plugin' ), 'fields' => [
+            'title'   => ['type' => 'text', 'label' => __( 'Block title', 'memorial-plugin' ), 'placeholder' => __( 'Customer reviews', 'memorial-plugin' )],
+            'sort'    => ['type' => 'select', 'label' => __( 'Sort order', 'memorial-plugin' ), 'options' => ['new' => __( 'Newest first', 'memorial-plugin' ), 'best' => __( 'Best first', 'memorial-plugin' ), 'photos' => __( 'With photos first, then newest', 'memorial-plugin' )]],
+            'count'   => ['type' => 'number', 'label' => __( 'How many to show at once (the rest — with the “Show more” button)', 'memorial-plugin' )],
+            'cols'    => ['type' => 'select', 'label' => __( 'Columns on a computer', 'memorial-plugin' ), 'options' => ['3' => '3', '2' => '2', '1' => __( '1 (a full-width feed)', 'memorial-plugin' )]],
+            'clip'    => ['type' => 'number', 'label' => __( 'Collapse long text after, characters', 'memorial-plugin' )],
+            'summary' => ['type' => 'checkbox', 'label' => __( 'Average rating and the number of reviews at the top', 'memorial-plugin' )],
+            'controls'=> ['type' => 'checkbox', 'label' => __( 'Sorting for visitors: by date and by rating (on the right above the reviews)', 'memorial-plugin' )],
+            'pfilter' => ['type' => 'checkbox', 'label' => __( 'Filter by site: clicking a site in the rating summary shows only its reviews', 'memorial-plugin' )],
+            'reply'   => ['type' => 'checkbox', 'label' => __( 'Company’s reply', 'memorial-plugin' )],
+            'photo'   => ['type' => 'checkbox', 'label' => __( 'Photos from the reviews', 'memorial-plugin' )],
+            'source'  => ['type' => 'checkbox', 'label' => __( 'Site name with a link to the review', 'memorial-plugin' )],
+            'date'    => ['type' => 'checkbox', 'label' => __( 'Review date', 'memorial-plugin' )],
         ]],
-        'cache' => ['type' => 'group', 'label' => '5. Обновление', 'help' => 'Отзывы загружаются в фоне и хранятся на сайте. Если Rewio временно недоступен, на сайте остаются последние загруженные.', 'fields' => [
-            'every' => ['type' => 'select', 'label' => 'Как часто проверять новые отзывы', 'options' => ['1' => 'Каждый час', '3' => 'Каждые 3 часа', '6' => 'Каждые 6 часов', '12' => 'Дважды в день', '24' => 'Раз в сутки', '168' => 'Раз в неделю']],
+        'cache' => ['type' => 'group', 'label' => __( '5. Updating', 'memorial-plugin' ), 'help' => __( 'Reviews are loaded in the background and kept on the site. If Rewio is temporarily unavailable, the last loaded reviews stay on the site.', 'memorial-plugin' ), 'fields' => [
+            'every' => ['type' => 'select', 'label' => __( 'How often to check for new reviews', 'memorial-plugin' ), 'options' => ['1' => __( 'Every hour', 'memorial-plugin' ), '3' => __( 'Every 3 hours', 'memorial-plugin' ), '6' => __( 'Every 6 hours', 'memorial-plugin' ), '12' => __( 'Twice a day', 'memorial-plugin' ), '24' => __( 'Once a day', 'memorial-plugin' ), '168' => __( 'Once a week', 'memorial-plugin' )]],
         ]],
     ];
 }
@@ -55,7 +55,7 @@ function memorial_plugin_rewio_defaults() {
         'api'    => ['key' => '', 'on' => 0],
         'scope'  => ['objects' => '', 'sources' => '', 'per' => '', 'tabs' => 1],
         'filter' => ['min' => '4', 'text' => 1, 'photos' => 0, 'months' => 0, 'stop' => '', 'fetch' => 100],
-        'view'   => ['title' => 'Отзывы клиентов', 'sort' => 'new', 'count' => 6, 'cols' => '3', 'clip' => 320,
+        'view'   => ['title' => __( 'Customer reviews', 'memorial-plugin' ), 'sort' => 'new', 'count' => 6, 'cols' => '3', 'clip' => 320,
                      'summary' => 1, 'controls' => 1, 'pfilter' => 1, 'reply' => 1, 'photo' => 1, 'source' => 1, 'date' => 1],
         'cache'  => ['every' => '6'],
     ];
@@ -63,9 +63,9 @@ function memorial_plugin_rewio_defaults() {
 
 add_filter('memorial_plugin_admin_pages', function ($pages) {
     $pages['mem_rewio'] = [
-        'slug' => 'mem-rewio', 'title' => 'Отзывы Rewio', 'h1' => 'Отзывы', 'hidden' => true, 'schema' => 'memorial_plugin_rewio_schema',
-        'intro' => 'Отзывы с Яндекс Карт, 2ГИС, Zoon и других площадок через сервис <a href="https://rewio.ru/" target="_blank" rel="noopener">Rewio</a> — карточками в оформлении сайта. '
-                 . 'Вставьте ключ и сохраните, отметьте филиалы — отзывы загрузятся сами. На страницу их выводит шорткод <code>[mem_rewio]</code> (блок «Шорткод»).',
+        'slug' => 'mem-rewio', 'title' => __( 'Rewio reviews', 'memorial-plugin' ), 'h1' => __( 'Reviews', 'memorial-plugin' ), 'hidden' => true, 'schema' => 'memorial_plugin_rewio_schema',
+        'intro' => __( 'Reviews from Yandex Maps, 2GIS, Zoon and other sites through the <a href="https://rewio.ru/" target="_blank" rel="noopener">Rewio</a> service — as cards in the site’s design. ', 'memorial-plugin' )
+                 . __( 'Paste the key and save, tick the branches — the reviews load by themselves. They are shown on a page by the “Rewio reviews” block (or the <code>[mem_rewio]</code> shortcode).', 'memorial-plugin' ),
     ];
     return $pages;
 });
@@ -89,7 +89,7 @@ function memorial_plugin_rewio_ids($s) { return array_values(array_filter(array_
 /* ---------- Запросы к API ---------- */
 function memorial_plugin_rewio_get($path, $args = [], $key = null) {
     $key = $key ?? trim((string) (memorial_plugin_rewio()['api']['key'] ?? ''));
-    if ($key === '') return new WP_Error('nokey', 'Не указан API-ключ.');
+    if ($key === '') return new WP_Error('nokey', __( 'The API key is not set.', 'memorial-plugin' ));
     $q = [];
     foreach ($args as $k => $v) {
         if ($v === null || $v === '' || $v === []) continue;
@@ -97,7 +97,7 @@ function memorial_plugin_rewio_get($path, $args = [], $key = null) {
     }
     $url = MEMORIAL_PLUGIN_REWIO_API . $path . ($q ? '?' . implode('&', $q) : '');
     $r = wp_remote_get($url, ['timeout' => 30, 'headers' => ['X-API-Key' => $key, 'Accept' => 'application/json']]);
-    if (is_wp_error($r)) return new WP_Error('net', 'Rewio не отвечает (' . $r->get_error_message() . ').');
+    if (is_wp_error($r)) return new WP_Error('net', __( 'Rewio does not respond (', 'memorial-plugin' ) . $r->get_error_message() . ').');
     $code = (int) wp_remote_retrieve_response_code($r);
     $raw  = wp_remote_retrieve_body($r);
     $body = json_decode($raw, true);
@@ -105,10 +105,10 @@ function memorial_plugin_rewio_get($path, $args = [], $key = null) {
         $d = is_array($body) ? ($body['detail'] ?? $body['message'] ?? $body['error'] ?? '') : '';
         if (is_array($d)) $d = $d['message'] ?? (isset($d[0]['msg']) ? implode('; ', array_map(fn($e) => ($e['loc'] ? implode('.', (array) $e['loc']) . ': ' : '') . ($e['msg'] ?? ''), $d)) : wp_json_encode($d, JSON_UNESCAPED_UNICODE));
         if ($d === '' && $raw !== '') $d = mb_substr(wp_strip_all_tags($raw), 0, 160);
-        $hint = [401 => 'ключ не подошёл', 403 => 'у ключа нет доступа', 404 => 'не найдено', 422 => 'API не принял параметры запроса', 429 => 'слишком много запросов, попробуем позже'][$code] ?? 'ошибка ' . $code;
+        $hint = [401 => __( 'the key did not fit', 'memorial-plugin' ), 403 => __( 'the key has no access', 'memorial-plugin' ), 404 => __( 'not found', 'memorial-plugin' ), 422 => __( 'the API did not accept the request parameters', 'memorial-plugin' ), 429 => __( 'too many requests, we will try later', 'memorial-plugin' )][$code] ?? __( 'error ', 'memorial-plugin' ) . $code;
         return new WP_Error('http', 'Rewio: ' . $hint . ($d ? ' — ' . $d : '') . '.');
     }
-    return is_array($body) ? $body : new WP_Error('json', 'Rewio вернул непонятный ответ.');
+    return is_array($body) ? $body : new WP_Error('json', __( 'Rewio returned an unclear response.', 'memorial-plugin' ));
 }
 
 /* ---------- Список филиалов, папок и площадок аккаунта (по названиям) ---------- */
@@ -140,7 +140,7 @@ function memorial_plugin_rewio_catalog_fetch($key = null) {
         foreach ($fo['data'] ?? [] as $f) $walk($f, '');
     }
     $sources = [];
-    foreach (array_keys($used) as $sid) $sources[$sid] = $names[$sid] ?? 'Площадка ' . $sid;
+    foreach (array_keys($used) as $sid) $sources[$sid] = $names[$sid] ?? __( 'Site ', 'memorial-plugin' ) . $sid;
     asort($sources);
     $cat = ['time' => time(), 'objects' => $objects, 'folders' => $folders, 'sources' => $sources, 'all_sources' => $names, 'slugs' => $slugs, 'urls' => $urls];
     foreach ($sources as $sid => $nm) memorial_plugin_logo_fetch(memorial_plugin_logo_key($slugs[$sid] ?? '', $nm), $urls[$sid] ?? '');
@@ -184,7 +184,7 @@ function memorial_plugin_rewio_refresh() {
         // выбранные филиалы; ничего не выбрано — все, кроме демо-примера Rewio
         $ids = array_values(array_filter(memorial_plugin_rewio_ids($sc['objects']), fn($id) => isset($byId[$id])));
         if (!$ids) $ids = array_map(fn($ob) => $ob['id'], array_filter($cat['objects'], fn($ob) => !$ob['demo']));
-        if (!$ids) throw new Exception('В аккаунте Rewio нет филиалов — добавьте их в кабинете app.rewio.ru.');
+        if (!$ids) throw new Exception(__( 'The Rewio account has no branches — add them in the app.rewio.ru account.', 'memorial-plugin' ));
         $tabs = !empty($sc['tabs']) && count($ids) > 1;
 
         $common = [
@@ -208,7 +208,7 @@ function memorial_plugin_rewio_refresh() {
             if (is_wp_error($r)) throw new Exception('«' . $name . '»: ' . $r->get_error_message());
             $reviews = array_map('memorial_plugin_rewio_norm', $r['data'] ?? []);
             $note = $r['collecting']['message'] ?? ($r['access']['message'] ?? '');
-            $log[] = '«' . $name . '»: загружено ' . count($reviews) . ' из ' . (int) ($r['total'] ?? count($reviews)) . ($note ? ' (' . $note . ')' : '');
+            $log[] = '«' . $name . __( '»: loaded ', 'memorial-plugin' ) . count($reviews) . __( ' of ', 'memorial-plugin' ) . (int) ($r['total'] ?? count($reviews)) . ($note ? ' (' . $note . ')' : '');
             $an = memorial_plugin_rewio_get('/analytics', ['object_id' => $id, 'source_ids' => $common['source_ids']]);
             $sum = is_wp_error($an) ? null : [
                 'avg'   => $an['summary']['average_rating'] ?? null,
@@ -238,7 +238,7 @@ function memorial_plugin_rewio_refresh() {
         foreach ($cat['all_sources'] ?? $cat['sources'] as $sid => $nm) $sources[(int) $sid] = ['name' => $nm, 'slug' => $cat['slugs'][$sid] ?? ''];
         $n = 0; foreach ($groups as $g) $n += count($g['reviews']);
         if (!memorial_plugin_rewio_cache_set(['time' => time(), 'sources' => $sources, 'groups' => $groups])) {
-            throw new Exception('Отзывы получены (' . $n . '), но не сохранились в базе сайта. Сообщите разработчику темы.');
+            throw new Exception(__( 'Reviews were received (', 'memorial-plugin' ) . $n . __( '), but were not saved in the site’s database. Tell the theme developer.', 'memorial-plugin' ));
         }
         memorial_plugin_rewio_status(['ok' => true, 'error' => '', 'log' => $log]);
         return true;
@@ -281,7 +281,7 @@ function memorial_plugin_rewio_norm($r) {
     }
     return [
         'id'     => (int) ($r['id'] ?? 0),
-        'author' => trim((string) ($r['author'] ?? '')) ?: 'Гость',
+        'author' => trim((string) ($r['author'] ?? '')) ?: __( 'Guest', 'memorial-plugin' ),
         'text'   => trim((string) ($r['text'] ?? '')),
         'date'   => (string) ($r['review_date'] ?? ''),
         'rating' => isset($r['rating']) ? (float) $r['rating'] : null,
@@ -296,7 +296,7 @@ function memorial_plugin_rewio_norm($r) {
 
 /* ---------- Расписание ---------- */
 add_filter('cron_schedules', function ($s) {
-    foreach ([1, 3, 6, 12, 24, 168] as $h) $s['mem_rewio_' . $h] = ['interval' => $h * HOUR_IN_SECONDS, 'display' => 'Rewio: каждые ' . $h . ' ч'];
+    foreach ([1, 3, 6, 12, 24, 168] as $h) $s['mem_rewio_' . $h] = ['interval' => $h * HOUR_IN_SECONDS, 'display' => __( 'Rewio: every ', 'memorial-plugin' ) . $h . __( ' h', 'memorial-plugin' )];
     return $s;
 });
 add_action('memorial_plugin_rewio_cron', 'memorial_plugin_rewio_refresh');
@@ -329,8 +329,8 @@ add_action('init', function () { // расписание потерялось (�
 function memorial_plugin_rewio_when($t) {
     if (!$t) return '—';
     $d = wp_date('Y-m-d', $t);
-    $day = $d === wp_date('Y-m-d') ? 'сегодня' : ($d === wp_date('Y-m-d', time() - DAY_IN_SECONDS) ? 'вчера' : ($d === wp_date('Y-m-d', time() + DAY_IN_SECONDS) ? 'завтра' : wp_date('j F', $t)));
-    return $day . ' в ' . wp_date('H:i', $t);
+    $day = $d === wp_date('Y-m-d') ? __( 'today', 'memorial-plugin' ) : ($d === wp_date('Y-m-d', time() - DAY_IN_SECONDS) ? __( 'yesterday', 'memorial-plugin' ) : ($d === wp_date('Y-m-d', time() + DAY_IN_SECONDS) ? __( 'tomorrow', 'memorial-plugin' ) : wp_date('j F', $t)));
+    return $day . __( ' at ', 'memorial-plugin' ) . wp_date('H:i', $t);
 }
 
 function memorial_plugin_rewio_picker($name, $val) {
@@ -341,31 +341,35 @@ function memorial_plugin_rewio_picker($name, $val) {
     echo '<input type="hidden" name="' . esc_attr($name) . '[objects]" value="' . esc_attr($val['objects'] ?? '') . '" data-rw-field="objects">';
     echo '<input type="hidden" name="' . esc_attr($name) . '[sources]" value="' . esc_attr($val['sources'] ?? '') . '" data-rw-field="sources">';
     if ($key === '') {
-        echo '<p class="mrw__empty">Сначала вставьте API-ключ в «1. Подключение» и нажмите «Сохранить» — здесь появятся ваши филиалы.</p>';
+        echo ( '<p class="mrw__empty">' . esc_html__( 'First paste the API key into “1. Connection” and click “Save” — your branches will appear here.', 'memorial-plugin' ) . '</p>' );
         echo '<input type="hidden" name="' . esc_attr($name) . '[tabs]" value="' . (!empty($val['tabs']) ? 1 : 0) . '">';
         return;
     }
     $cat = get_option('mem_rewio_catalog');
     if (!is_array($cat) || empty($cat['time'])) { $cat = memorial_plugin_rewio_catalog_fetch(); }
     if (is_wp_error($cat)) {
-        echo '<p class="mrw__bad">Не удалось получить список филиалов: ' . esc_html($cat->get_error_message()) . '</p>';
-        echo '<p><button type="button" class="button" data-rw="catalog">Попробовать ещё раз</button></p>';
+        echo ( '<p class="mrw__bad">' . esc_html__( 'Could not get the list of branches:', 'memorial-plugin' ) . ' ' ) . esc_html($cat->get_error_message()) . '</p>';
+        echo ( '<p><button type="button" class="button" data-rw="catalog">' . esc_html__( 'Try again', 'memorial-plugin' ) . '</button></p>' );
         echo '<input type="hidden" name="' . esc_attr($name) . '[tabs]" value="' . (!empty($val['tabs']) ? 1 : 0) . '">';
         return;
     }
     $selO = memorial_plugin_rewio_ids($val['objects'] ?? '');
     $per = memorial_plugin_rewio_per($val['per'] ?? '');
     $global = memorial_plugin_rewio_ids($val['sources'] ?? '');
-    $sname = fn($sid) => $cat['all_sources'][$sid] ?? $cat['sources'][$sid] ?? 'Площадка';
+    $sname = fn($sid) => $cat['all_sources'][$sid] ?? $cat['sources'][$sid] ?? __( 'Site', 'memorial-plugin' );
     $sslug = fn($sid) => $cat['slugs'][$sid] ?? '';
     echo '<input type="hidden" name="' . esc_attr($name) . '[per]" value="' . esc_attr($val['per'] ?? '') . '" data-rw-field="per">';
     ?>
     <div class="mrw" data-rw-box>
-      <p class="mrw__h">Филиалы и их площадки <span class="mrw__hint">Отметьте филиалы, чьи отзывы показывать (ничего не отмечено — все). У каждого филиала можно снять ненужные площадки.</span></p>
+      <p class="mrw__h"><?php esc_html_e( 'Branches and their sites', 'memorial-plugin' ); ?> <span class="mrw__hint"><?php esc_html_e( 'Tick the branches whose reviews to show (nothing ticked — all of them). Unneeded sites can be unticked for every branch.', 'memorial-plugin' ); ?></span></p>
       <?php if ($cat['folders']) : ?>
-        <p class="mrw__quick">Быстро:
-          <?php foreach ($cat['folders'] as $fd) if (!$fd['demo']) echo '<button type="button" class="button button-small" data-rw-folder="' . esc_attr(implode(',', $fd['objects'])) . '">Все из папки «' . esc_html($fd['name']) . '»</button> '; ?>
-          <button type="button" class="button-link" data-rw-folder="">снять все</button>
+        <p class="mrw__quick"><?php esc_html_e( 'Quickly:', 'memorial-plugin' ); ?>
+          <?php foreach ($cat['folders'] as $fd) if (!$fd['demo']) echo '<button type="button" class="button button-small" data-rw-folder="' . esc_attr(implode(',', $fd['objects'])) . '">' . esc_html(sprintf(
+              /* translators: %s: folder name */
+              __( 'All from the folder “%s”', 'memorial-plugin' ),
+              $fd['name']
+          )) . '</button> '; ?>
+          <button type="button" class="button-link" data-rw-folder=""><?php esc_html_e( 'untick all', 'memorial-plugin' ); ?></button>
         </p>
       <?php endif; ?>
       <div class="mrw__objs">
@@ -376,11 +380,11 @@ function memorial_plugin_rewio_picker($name, $val) {
             <label class="mrw__objhead">
               <input type="checkbox" data-rw-obj="<?php echo (int) $ob['id']; ?>"<?php checked(in_array($ob['id'], $selO, true)); ?>>
               <b><?php echo esc_html($ob['name']); ?></b>
-              <?php if ($ob['count'] !== null) echo '<span class="mrw__cnt">' . (int) $ob['count'] . ' ' . esc_html(memorial_plugin_word((int) $ob['count'], 'отзыв', 'отзыва', 'отзывов')) . '</span>'; ?>
-              <?php if ($ob['demo']) echo '<em class="mrw__tag">пример от Rewio</em>'; ?>
-              <?php if (!$ob['active']) echo '<em class="mrw__tag">сбор выключен</em>'; ?>
-              <?php if (in_array($ob['status'], ['pending', 'in_progress'], true)) echo '<em class="mrw__tag is-wait">Rewio ещё собирает отзывы</em>'; ?>
-              <?php if ($ob['status'] === 'failed') echo '<em class="mrw__tag is-bad">ошибка сбора в Rewio</em>'; ?>
+              <?php if ($ob['count'] !== null) echo '<span class="mrw__cnt">' . (int) $ob['count'] . ' ' . esc_html(_n( 'review', 'reviews', (int) $ob['count'], 'memorial-plugin' )) . '</span>'; ?>
+              <?php if ($ob['demo']) echo ( '<em class="mrw__tag">' . esc_html__( 'example from Rewio', 'memorial-plugin' ) . '</em>' ); ?>
+              <?php if (!$ob['active']) echo ( '<em class="mrw__tag">' . esc_html__( 'collection is off', 'memorial-plugin' ) . '</em>' ); ?>
+              <?php if (in_array($ob['status'], ['pending', 'in_progress'], true)) echo ( '<em class="mrw__tag is-wait">' . esc_html__( 'Rewio is still collecting reviews', 'memorial-plugin' ) . '</em>' ); ?>
+              <?php if ($ob['status'] === 'failed') echo ( '<em class="mrw__tag is-bad">' . esc_html__( 'collection error in Rewio', 'memorial-plugin' ) . '</em>' ); ?>
             </label>
             <?php if ($ob['sources']) : ?>
             <div class="mrw__srcs">
@@ -391,12 +395,16 @@ function memorial_plugin_rewio_picker($name, $val) {
             <?php endif; ?>
           </div>
         <?php endforeach; ?>
-        <?php if (!$cat['objects']) echo '<p class="mrw__empty">В аккаунте Rewio пока нет филиалов — добавьте их в кабинете app.rewio.ru и нажмите «Обновить список».</p>'; ?>
+        <?php if (!$cat['objects']) echo ( '<p class="mrw__empty">' . esc_html__( 'The Rewio account has no branches yet — add them in the app.rewio.ru account and click “Update the list”.', 'memorial-plugin' ) . '</p>' ); ?>
       </div>
-      <label class="mrw__tabs"><input type="checkbox" name="<?php echo esc_attr($name); ?>[tabs]" value="1"<?php checked(!empty($val['tabs'])); ?> data-rw-tabs> Каждый филиал — отдельной вкладкой (иначе все отзывы одной лентой)</label>
+      <label class="mrw__tabs"><input type="checkbox" name="<?php echo esc_attr($name); ?>[tabs]" value="1"<?php checked(!empty($val['tabs'])); ?> data-rw-tabs> <?php esc_html_e( 'Every branch in its own tab (otherwise all reviews in one feed)', 'memorial-plugin' ); ?></label>
       <p class="mrw__foot"><span class="mrw__saved" aria-live="polite"></span>
-        <button type="button" class="button-link" data-rw="catalog">Обновить список филиалов</button>
-        <span class="mrw__hint">(список из Rewio: <?php echo esc_html(memorial_plugin_rewio_when($cat['time'])); ?>)</span></p>
+        <button type="button" class="button-link" data-rw="catalog"><?php esc_html_e( 'Update the list of branches', 'memorial-plugin' ); ?></button>
+        <span class="mrw__hint">(<?php echo esc_html(sprintf(
+            /* translators: %s: when the list was received */
+            __( 'list from Rewio: %s', 'memorial-plugin' ),
+            memorial_plugin_rewio_when($cat['time'])
+        )); ?>)</span></p>
     </div>
     <?php
 }
@@ -405,15 +413,15 @@ function memorial_plugin_rewio_picker($name, $val) {
 add_filter('memorial_plugin_settings_describe_field', function ($field, $f) {
     if (($f['render'] ?? '') !== 'memorial_plugin_rewio_picker') return $field;
     $field['type'] = 'rewio-scope';
-    $field['help'] = 'Отметьте филиалы, чьи отзывы показывать (ничего не отмечено — все), и площадки у каждого.';
+    $field['help'] = __( 'Tick the branches whose reviews to show (nothing ticked — all of them), and the sites of each branch.', 'memorial-plugin' );
     if (trim(memorial_plugin_rewio()['api']['key']) === '') {
-        $field['error'] = 'Сначала вставьте API-ключ в «1. Подключение» и сохраните — здесь появятся ваши филиалы.';
+        $field['error'] = __( 'First paste the API key into “1. Connection” and save — your branches will appear here.', 'memorial-plugin' );
         return $field;
     }
     $cat = get_option('mem_rewio_catalog');
     if (!is_array($cat) || empty($cat['time'])) $cat = memorial_plugin_rewio_catalog_fetch();
     if (is_wp_error($cat)) {
-        $field['error'] = 'Не удалось получить список филиалов: ' . $cat->get_error_message();
+        $field['error'] = __( 'Could not get the list of branches: ', 'memorial-plugin' ) . $cat->get_error_message();
         return $field;
     }
     $field['catalog'] = [
@@ -436,10 +444,10 @@ add_action('memorial_plugin_admin_after_intro', function ($opt) {
     $once = wp_next_scheduled('memorial_plugin_rewio_cron_once');
     $next = $once && $once > time() ? $once : wp_next_scheduled('memorial_plugin_rewio_cron');
     $key = trim($o['api']['key']) !== '';
-    $state = !$key ? ['wait', 'Не подключено — вставьте API-ключ ниже и сохраните.']
-        : (!empty($st) && empty($st['ok']) ? ['bad', 'Не удалось загрузить отзывы: ' . $st['error']]
-        : ($n ? ['ok', 'На сайте ' . $n . ' ' . memorial_plugin_word($n, 'отзыв', 'отзыва', 'отзывов') . (empty($o['api']['on']) ? ' — но показ выключен (галочка в «1. Подключение»)' : '')]
-        : ['wait', 'Отзывы ещё не загружены — нажмите «Загрузить отзывы сейчас».']));
+    $state = !$key ? ['wait', __( 'Not connected — paste the API key below and save.', 'memorial-plugin' )]
+        : (!empty($st) && empty($st['ok']) ? ['bad', __( 'Could not load the reviews: ', 'memorial-plugin' ) . $st['error']]
+        : ($n ? ['ok', __( 'On the site ', 'memorial-plugin' ) . $n . ' ' . _n( 'review', 'reviews', $n, 'memorial-plugin' ) . (empty($o['api']['on']) ? __( ' — but showing is off (the tick in “1. Connection”)', 'memorial-plugin' ) : '')]
+        : ['wait', __( 'The reviews are not loaded yet — click “Load reviews now”.', 'memorial-plugin' )]));
     ?>
     <section class="mem-card mrw-state is-<?php echo esc_attr($state[0]); ?>">
       <div class="mrw-state__row">
@@ -447,24 +455,24 @@ add_action('memorial_plugin_admin_after_intro', function ($opt) {
         <div class="mrw-state__txt">
           <b><?php echo esc_html($state[1]); ?></b>
           <?php if ($key) : ?>
-          <span>Обновлено: <?php echo esc_html(memorial_plugin_rewio_when($c['time'] ?? 0)); ?><?php if ($next) echo ' · следующая проверка: ' . esc_html(memorial_plugin_rewio_when($next)); ?></span>
+          <span><?php esc_html_e( 'Updated:', 'memorial-plugin' ); ?> <?php echo esc_html(memorial_plugin_rewio_when($c['time'] ?? 0)); ?><?php if ($next) echo __( ' · next check: ', 'memorial-plugin' ) . esc_html(memorial_plugin_rewio_when($next)); ?></span>
           <?php if (!empty($st['log'])) echo '<span class="mrw-state__log">' . esc_html(implode(' · ', $st['log'])) . '</span>'; ?>
           <?php endif; ?>
         </div>
-        <?php if ($key) : ?><button type="button" class="button button-primary" data-rw="refresh">Загрузить отзывы сейчас</button><?php endif; ?>
+        <?php if ($key) : ?><button type="button" class="button button-primary" data-rw="refresh"><?php esc_html_e( 'Load reviews now', 'memorial-plugin' ); ?></button><?php endif; ?>
       </div>
       <p class="mrw-state__msg" aria-live="polite"></p>
       <?php if ($n) : ?>
       <details class="mrw__prev">
-        <summary>Посмотреть загруженные отзывы и скрыть ненужные<?php echo $hidden ? ' (скрыто: ' . count($hidden) . ')' : ''; ?></summary>
+        <summary><?php esc_html_e( 'View the loaded reviews and hide unneeded ones', 'memorial-plugin' ); ?><?php echo $hidden ? __( ' (hidden: ', 'memorial-plugin' ) . count($hidden) . ')' : ''; ?></summary>
         <?php foreach ($c['groups'] as $g) :
             if ($g['name']) echo '<h3>' . esc_html($g['name']) . '</h3>'; ?>
           <table class="widefat striped"><tbody>
           <?php foreach ($g['reviews'] as $r) : ?>
             <tr<?php echo in_array($r['id'], $hidden, true) ? ' class="is-hid"' : ''; ?>>
-              <td style="width:110px"><label><input type="checkbox" data-rw-hide="<?php echo (int) $r['id']; ?>"<?php checked(in_array($r['id'], $hidden, true)); ?>> скрыть</label></td>
+              <td style="width:110px"><label><input type="checkbox" data-rw-hide="<?php echo (int) $r['id']; ?>"<?php checked(in_array($r['id'], $hidden, true)); ?>> <?php esc_html_e( 'hide', 'memorial-plugin' ); ?></label></td>
               <td style="width:190px"><b><?php echo esc_html($r['author']); ?></b><br><span style="color:#f5b301"><?php echo esc_html(str_repeat('★', (int) round((float) $r['rating']))); ?></span><br><small><?php echo esc_html(($c['sources'][$r['src']]['name'] ?? $r['slug']) . ' · ' . memorial_plugin_rewio_date($r['date'])); ?></small></td>
-              <td><?php echo esc_html(wp_trim_words($r['text'], 40, '…')); ?><?php if ($r['imgs']) echo ' <small>· фото: ' . count($r['imgs']) . '</small>'; ?></td>
+              <td><?php echo esc_html(wp_trim_words($r['text'], 40, '…')); ?><?php if ($r['imgs']) echo ' <small>· ' . esc_html__( 'photos:', 'memorial-plugin' ) . ' ' . count($r['imgs']) . '</small>'; ?></td>
             </tr>
           <?php endforeach; ?>
           </tbody></table>
@@ -511,19 +519,32 @@ add_action('memorial_plugin_admin_after_intro', function ($opt) {
     </style>
     <script>
     jQuery(function ($) {
-      const A = <?php echo wp_json_encode(['url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('mem_rewio')]); ?>;
+      const A = <?php echo wp_json_encode(['url' => admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('mem_rewio'), 't' => [
+        'noAnswer' => __( 'The site did not respond', 'memorial-plugin' ),
+        'error' => __( 'error', 'memorial-plugin' ),
+        'timeout' => __( 'most likely, the server ran out of time', 'memorial-plugin' ),
+        'retry' => __( 'Try again in a minute.', 'memorial-plugin' ),
+        'loading' => __( 'Loading reviews… usually it takes 10–30 seconds', 'memorial-plugin' ),
+        'failed' => __( 'Error', 'memorial-plugin' ),
+        'saving' => __( 'Saving…', 'memorial-plugin' ),
+        'saved' => __( 'Saved ✓ The reviews will update within a minute', 'memorial-plugin' ),
+        'notSaved' => __( 'Not saved', 'memorial-plugin' ),
+        'notSavedSave' => __( 'Not saved — click “Save” at the bottom', 'memorial-plugin' ),
+        'oneSite' => __( 'At least one site must stay — otherwise untick the branch itself', 'memorial-plugin' ),
+      ]]); ?>;
+      const T = A.t;
       const msg = document.querySelector('.mrw-state__msg');
       const say = (t, cls) => { if (!msg) return; msg.textContent = t; msg.className = 'mrw-state__msg ' + (cls || ''); };
-      const failText = x => 'Сайт не ответил' + (x && x.status ? ' (ошибка ' + x.status + (x.status >= 500 ? ' — скорее всего, превышено время ожидания на сервере' : '') + ')' : '') + '. Попробуйте ещё раз через минуту.';
+      const failText = x => T.noAnswer + (x && x.status ? ' (' + T.error + ' ' + x.status + (x.status >= 500 ? ' — ' + T.timeout : '') + ')' : '') + '. ' + T.retry;
       // загрузить сейчас / обновить список
       document.addEventListener('click', e => {
         const b = e.target.closest('[data-rw]'); if (!b) return;
         const act = b.dataset.rw;
         b.disabled = true;
-        if (act === 'refresh') say('Загружаю отзывы… обычно это 10–30 секунд');
+        if (act === 'refresh') say(T.loading);
         $.post(A.url, { action: 'mem_rewio_' + act, _ajax_nonce: A.nonce }).done(r => {
           b.disabled = false;
-          if (!r || !r.success) { say((r && r.data) || 'Ошибка', 'is-err'); if (act === 'catalog') alert((r && r.data) || 'Ошибка'); return; }
+          if (!r || !r.success) { say((r && r.data) || T.failed, 'is-err'); if (act === 'catalog') say((r && r.data) || T.failed, 'is-err'); return; }
           if (act === 'refresh') say(r.data, 'is-ok');
           setTimeout(() => location.reload(), act === 'refresh' ? 800 : 0);
         }).fail(x => { b.disabled = false; say(failText(x), 'is-err'); });
@@ -543,16 +564,16 @@ add_action('memorial_plugin_admin_after_intro', function ($opt) {
           const tabs = box.querySelector('[data-rw-tabs]')?.checked ? 1 : 0;
           box.querySelectorAll('[data-rw-objbox]').forEach(ob => ob.classList.toggle('is-on', ob.querySelector('[data-rw-obj]').checked));
           setField('objects', objs); setField('sources', ''); setField('per', per);
-          saved.textContent = 'Сохраняю…';
+          saved.textContent = T.saving;
           $.post(A.url, { action: 'mem_rewio_scope', _ajax_nonce: A.nonce, objects: objs, sources: '', per, tabs })
-            .done(r => { saved.textContent = r && r.success ? 'Сохранено ✓ Отзывы обновятся в течение минуты' : 'Не сохранилось'; })
-            .fail(() => { saved.textContent = 'Не сохранилось — нажмите «Сохранить» внизу'; });
+            .done(r => { saved.textContent = r && r.success ? T.saved : T.notSaved; })
+            .fail(() => { saved.textContent = T.notSavedSave; });
         };
         box.addEventListener('change', e => {
           const t = e.target;
           if (t.matches('[data-rw-src]')) {
             const ob = t.closest('[data-rw-objbox]');
-            if (!ob.querySelector('[data-rw-src]:checked')) { t.checked = true; saved.textContent = 'Хотя бы одна площадка должна остаться — иначе снимите галочку у самого филиала'; return; }
+            if (!ob.querySelector('[data-rw-src]:checked')) { t.checked = true; saved.textContent = T.oneSite; return; }
             ob.querySelector('[data-rw-obj]').checked = true; // настроили площадки — значит, филиал нужен
           }
           if (t.matches('[data-rw-obj],[data-rw-src],[data-rw-tabs]')) collect();
@@ -577,7 +598,7 @@ add_action('memorial_plugin_admin_after_intro', function ($opt) {
 
 add_action('wp_ajax_mem_rewio_catalog', function () {
     check_ajax_referer('mem_rewio');
-    if (!current_user_can('manage_options')) wp_send_json_error('Нет прав.');
+    if (!current_user_can('manage_options')) wp_send_json_error(__( 'Not allowed.', 'memorial-plugin' ));
     $c = memorial_plugin_rewio_catalog_fetch();
     is_wp_error($c) ? wp_send_json_error($c->get_error_message()) : wp_send_json_success();
 });
@@ -599,11 +620,11 @@ add_action('wp_ajax_mem_rewio_scope', function () {
 
 add_action('wp_ajax_mem_rewio_refresh', function () {
     check_ajax_referer('mem_rewio');
-    if (!current_user_can('manage_options')) wp_send_json_error('Нет прав.');
+    if (!current_user_can('manage_options')) wp_send_json_error(__( 'Not allowed.', 'memorial-plugin' ));
     $r = memorial_plugin_rewio_refresh();
     if (is_wp_error($r)) wp_send_json_error($r->get_error_message());
     $n = 0; foreach (memorial_plugin_rewio_cache_get()['groups'] ?? [] as $g) $n += count($g['reviews']);
-    wp_send_json_success('Готово: загружено ' . $n . ' ' . memorial_plugin_word($n, 'отзыв', 'отзыва', 'отзывов') . '.');
+    wp_send_json_success(__( 'Done: loaded ', 'memorial-plugin' ) . $n . ' ' . _n( 'review', 'reviews', $n, 'memorial-plugin' ) . '.');
 });
 
 add_action('wp_ajax_mem_rewio_hide', function () {
@@ -624,14 +645,18 @@ function memorial_plugin_rewio_date($iso) {
 
 function memorial_plugin_rewio_stars($r, $cls = 'rwo__stars') {
     $r = max(0, min(5, (float) $r));
-    return '<span class="' . $cls . '" style="--r:' . round($r / 5 * 100, 1) . '%" role="img" aria-label="Оценка ' . esc_attr(rtrim(rtrim(number_format($r, 1, ',', ''), '0'), ',')) . ' из 5"></span>';
+    return '<span class="' . $cls . '" style="--r:' . round($r / 5 * 100, 1) . '%" role="img" aria-label="' . esc_attr(sprintf(
+        /* translators: %s: rating, for example 4,8 */
+        __( 'Rating %s out of 5', 'memorial-plugin' ),
+        rtrim(rtrim(number_format($r, 1, ',', ''), '0'), ',')
+    )) . '"></span>';
 }
 
 function memorial_plugin_rewio_html($atts = []) {
     $o = memorial_plugin_rewio();
     $v = $o['view'];
     $a = shortcode_atts(['count' => $v['count'], 'title' => $v['title'], 'cols' => $v['cols']], $atts, 'mem_rewio');
-    if (empty($o['api']['on'])) return current_user_can('manage_options') ? '<p class="is-style-note">[mem_rewio]: показ отзывов выключен — галочка в «Мемориал → Отзывы Rewio → 1. Подключение». Это сообщение видно только вам.</p>' : '';
+    if (empty($o['api']['on'])) return current_user_can('manage_options') ? ( '<p class="is-style-note">' . esc_html__( '[mem_rewio]: showing the reviews is off — the tick in “Memorial → Rewio reviews → 1. Connection”. Only you see this message.', 'memorial-plugin' ) . '</p>' ) : '';
     $c = memorial_plugin_rewio_cache_get();
     // давно не обновлялось (например, отключён WP-Cron) — обновим в фоне, страница не ждёт
     $every = ((int) $o['cache']['every'] ?: 6) * HOUR_IN_SECONDS;
@@ -639,7 +664,7 @@ function memorial_plugin_rewio_html($atts = []) {
     if (!$tried || time() - $tried > $every * 2) {
         if (!wp_next_scheduled('memorial_plugin_rewio_cron_once')) wp_schedule_single_event(time(), 'memorial_plugin_rewio_cron_once');
     }
-    if (empty($c['groups'])) return current_user_can('manage_options') ? '<p class="is-style-note">[mem_rewio]: отзывы ещё не загружены — «Мемориал → Отзывы Rewio» → «Загрузить отзывы сейчас». Это сообщение видно только вам.</p>' : '';
+    if (empty($c['groups'])) return current_user_can('manage_options') ? ( '<p class="is-style-note">' . esc_html__( '[mem_rewio]: the reviews are not loaded yet — “Memorial → Rewio reviews” → “Load reviews now”. Only you see this message.', 'memorial-plugin' ) . '</p>' ) : '';
 
     $hidden = array_map('intval', (array) get_option('mem_rewio_hidden', []));
     $stop = array_filter(array_map(fn($w) => mb_strtolower(trim($w)), explode(',', (string) $o['filter']['stop'])));
@@ -665,10 +690,10 @@ function memorial_plugin_rewio_html($atts = []) {
     $h = '<section class="rwo rwo--c' . (int) $a['cols'] . '" data-rwo data-wp-interactive="memorial-plugin/rewio" data-wp-init="callbacks.init" data-step="' . $count . '">';
     if (trim($a['title']) !== '') $h .= '<h2 class="rwo__title">' . esc_html($a['title']) . '</h2>';
     if (count($groups) > 1) {
-        $h .= '<div class="rwo__tabs srow"><div class="srow__in" role="tablist" aria-label="Отзывы по филиалам">';
+        $h .= ( '<div class="rwo__tabs srow"><div class="srow__in" role="tablist" aria-label="' . esc_attr__( 'Reviews by branch', 'memorial-plugin' ) . '">' );
         foreach ($groups as $n => $g) {
             $h .= '<button type="button" role="tab" class="chip rwo__tab" id="' . $uid . 't' . $n . '" aria-controls="' . $uid . 'p' . $n . '" aria-selected="' . ($n ? 'false' : 'true') . '"' . ($n ? ' tabindex="-1"' : '') . '>'
-                . esc_html($g['name'] ?: 'Филиал ' . ($n + 1)) . (isset($g['summary']['avg']) && $g['summary']['avg'] ? ' <small>★ ' . esc_html(number_format((float) $g['summary']['avg'], 1, ',', '')) . '</small>' : '') . '</button>';
+                . esc_html($g['name'] ?: __( 'Branch ', 'memorial-plugin' ) . ($n + 1)) . (isset($g['summary']['avg']) && $g['summary']['avg'] ? ' <small>★ ' . esc_html(number_format((float) $g['summary']['avg'], 1, ',', '')) . '</small>' : '') . '</button>';
         }
         $h .= '</div></div>';
     }
@@ -678,19 +703,19 @@ function memorial_plugin_rewio_html($atts = []) {
         $s = $g['summary'] ?? null;
         if (!empty($v['summary']) && $s && $s['avg']) {
             $h .= '<div class="rwo__sum"><div class="rwo__avg"><b>' . esc_html(number_format((float) $s['avg'], 1, ',', '')) . '</b>' . memorial_plugin_rewio_stars($s['avg'], 'rwo__stars rwo__stars--lg')
-                . '<span>' . (int) $s['count'] . ' ' . esc_html(memorial_plugin_word((int) $s['count'], 'отзыв', 'отзыва', 'отзывов')) . '</span></div>';
+                . '<span>' . (int) $s['count'] . ' ' . esc_html(_n( 'review', 'reviews', (int) $s['count'], 'memorial-plugin' )) . '</span></div>';
             // площадки: оценка и число отзывов; при включённом фильтре — нажатие показывает отзывы только этой площадки
             $loaded = [];
             foreach ($g['list'] as $r) if ($r['src']) $loaded[$r['src']] = ($loaded[$r['src']] ?? 0) + 1;
             $filter = !empty($v['pfilter']) && count($loaded) > 1;
             $by = array_values(array_filter($s['by'], fn($b) => $b['count']));
             if ($by && (count($by) > 1 || count($groups) === 1)) {
-                $h .= '<div class="rwo__by"' . ($filter ? ' role="group" aria-label="Показать отзывы площадки"' : '') . '>';
+                $h .= '<div class="rwo__by"' . ($filter ? ( ' role="group" aria-label="' . esc_attr__( 'Show the reviews of a site', 'memorial-plugin' ) . '"' ) : '') . '>';
                 foreach ($by as $b) {
                     $nm = $b['name'];
                     $inner = memorial_plugin_rewio_icon($src[$b['id']]['slug'] ?? '', $nm) . '<span>' . esc_html($nm) . '</span> <b>' . esc_html($b['avg'] ? number_format((float) $b['avg'], 1, ',', '') : '—') . '</b><i aria-hidden="true">★</i> <small>' . (int) $b['count'] . '</small>';
                     $h .= $filter && isset($loaded[$b['id']])
-                        ? '<button type="button" class="rwo__pl" data-rwo-src="' . (int) $b['id'] . '" aria-pressed="false" title="Показать только отзывы: ' . esc_attr($nm) . '">' . $inner . '</button>'
+                        ? '<button type="button" class="rwo__pl" data-rwo-src="' . (int) $b['id'] . ( '" aria-pressed="false" title="' . esc_attr__( 'Show only the reviews of: ', 'memorial-plugin' ) ) . esc_attr($nm) . '">' . $inner . '</button>'
                         : '<span class="rwo__pl">' . $inner . '</span>';
                 }
                 $h .= '</div>';
@@ -701,9 +726,9 @@ function memorial_plugin_rewio_html($atts = []) {
         $note = '';
         if (!empty($v['controls'])) {
             $init = $v['sort'] === 'best' ? 'r' : ($v['sort'] === 'new' ? 'd' : '');
-            $h .= '<div class="rwo__ctl"><p class="rwo__shown" aria-live="polite"></p><div class="rwo__sort" role="group" aria-label="Сортировка"><span>Сортировка:</span>'
-                . '<button type="button" data-rwo-sort="d" aria-pressed="' . ($init === 'd' ? 'true' : 'false') . '" title="Сортировать по дате">по дате <i aria-hidden="true">↓</i></button>'
-                . '<button type="button" data-rwo-sort="r" aria-pressed="' . ($init === 'r' ? 'true' : 'false') . '" title="Сортировать по оценке">по оценке <i aria-hidden="true">↓</i></button></div></div>';
+            $h .= ( '<div class="rwo__ctl"><p class="rwo__shown" aria-live="polite"></p><div class="rwo__sort" role="group" aria-label="' . esc_attr__( 'Sorting', 'memorial-plugin' ) . '"><span>' . esc_html__( 'Sorting:', 'memorial-plugin' ) . '</span>' )
+                . '<button type="button" data-rwo-sort="d" aria-pressed="' . ($init === 'd' ? 'true' : 'false') . ( '" title="' . esc_attr__( 'Sort by date', 'memorial-plugin' ) . '">' . esc_html__( 'by date', 'memorial-plugin' ) . ' <i aria-hidden="true">↓</i></button>' )
+                . '<button type="button" data-rwo-sort="r" aria-pressed="' . ($init === 'r' ? 'true' : 'false') . ( '" title="' . esc_attr__( 'Sort by rating', 'memorial-plugin' ) . '">' . esc_html__( 'by rating', 'memorial-plugin' ) . ' <i aria-hidden="true">↓</i></button></div></div>' );
         } elseif (!empty($v['pfilter'])) {
             $h .= '<div class="rwo__ctl"><p class="rwo__shown" aria-live="polite"></p></div>';
         }
@@ -719,14 +744,14 @@ function memorial_plugin_rewio_html($atts = []) {
                 . ($r['rating'] ? memorial_plugin_rewio_stars($r['rating']) : '')
                 . (!empty($v['date']) && $r['date'] ? '<time datetime="' . esc_attr(substr($r['date'], 0, 10)) . '">' . esc_html(memorial_plugin_rewio_date($r['date'])) . '</time>' : '') . '</span></span></header>';
             if ($r['text'] !== '') $h .= '<div class="rwo__text' . ($long ? ' is-clip' : '') . '">' . wpautop(esc_html($r['text'])) . '</div>'
-                . ($long ? '<button type="button" class="rwo__more" aria-expanded="false">Читать полностью</button>' : '');
+                . ($long ? ( '<button type="button" class="rwo__more" aria-expanded="false">' . esc_html__( 'Read more', 'memorial-plugin' ) . '</button>' ) : '');
             if (!empty($v['photo']) && $r['imgs']) {
                 $h .= '<div class="rwo__imgs">';
-                foreach ($r['imgs'] as $im) $h .= '<a href="' . esc_url($im['b']) . '" data-lb><img src="' . esc_url($im['s']) . '" alt="Фото к отзыву" loading="lazy" decoding="async" referrerpolicy="no-referrer"></a>';
+                foreach ($r['imgs'] as $im) $h .= '<a href="' . esc_url($im['b']) . '" data-lb><img src="' . esc_url($im['s']) . ( '" alt="' . esc_attr__( 'Photo for the review', 'memorial-plugin' ) . '" loading="lazy" decoding="async" referrerpolicy="no-referrer"></a>' );
                 $h .= '</div>';
             }
             if (!empty($v['reply']) && $r['reply'] !== '') {
-                $h .= '<details class="rwo__reply"><summary>Ответ компании</summary>' . wpautop(esc_html($r['reply'])) . '</details>';
+                $h .= ( '<details class="rwo__reply"><summary>' . esc_html__( 'Company’s reply', 'memorial-plugin' ) . '</summary>' ) . wpautop(esc_html($r['reply'])) . '</details>';
             }
             if (!empty($v['source']) && $name) {
                 $ico = memorial_plugin_rewio_icon($r['slug'] ?: ($src[$r['src']]['slug'] ?? ''), $name);
@@ -736,7 +761,7 @@ function memorial_plugin_rewio_html($atts = []) {
             $h .= '</article>';
         }
         $h .= '</div>';
-        if (count($g['list']) > $count) $h .= '<p class="rwo__morewrap"><button type="button" class="btn btn--line rwo__showmore">Показать ещё отзывы</button></p>';
+        if (count($g['list']) > $count) $h .= ( '<p class="rwo__morewrap"><button type="button" class="btn btn--line rwo__showmore">' . esc_html__( 'Show more reviews', 'memorial-plugin' ) . '</button></p>' );
         $h .= '</div>';
     }
     return $h . '</section>';

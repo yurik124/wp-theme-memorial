@@ -30,143 +30,143 @@ add_action('init', function () {
 function memorial_plugin_contacts_schema() {
     return [
         'phones' => [
-            'type' => 'repeater', 'label' => 'Телефоны', 'add' => 'Добавить телефон',
-            'help' => 'Первый номер — основной: он в шапке, на кнопках «Позвонить» и «Заказать».',
+            'type' => 'repeater', 'label' => __( 'Phones', 'memorial-plugin' ), 'add' => __( 'Add a phone', 'memorial-plugin' ),
+            'help' => __( 'The first number is the main one: it is in the header and on the “Call” and “Order” buttons.', 'memorial-plugin' ),
             'fields' => [
-                'num'  => ['type' => 'text', 'label' => 'Номер', 'placeholder' => '+7 (900) 000-00-00'],
-                'note' => ['type' => 'text', 'label' => 'Подпись (необязательно)', 'placeholder' => 'Например: круглосуточно'],
+                'num'  => ['type' => 'text', 'label' => __( 'Phone number', 'memorial-plugin' ), 'placeholder' => '+7 (900) 000-00-00'],
+                'note' => ['type' => 'text', 'label' => __( 'Note (optional)', 'memorial-plugin' ), 'placeholder' => __( 'For example: round the clock', 'memorial-plugin' )],
             ],
         ],
         'emails' => [
-            'type' => 'repeater', 'label' => 'Электронная почта', 'add' => 'Добавить почту',
+            'type' => 'repeater', 'label' => __( 'Email', 'memorial-plugin' ), 'add' => __( 'Add an email', 'memorial-plugin' ),
             'fields' => [
                 'email' => ['type' => 'email', 'label' => 'E-mail', 'placeholder' => 'name@mail.ru'],
             ],
         ],
         'addrs' => [
-            'type' => 'repeater', 'label' => 'Адреса и время работы', 'add' => 'Добавить адрес', 'collapse' => 'addr', 'open' => true,
-            'help' => 'Первый адрес показывается в верхней строке сайта. Для каждого адреса на главной появится вкладка с картой.',
+            'type' => 'repeater', 'label' => __( 'Addresses and opening hours', 'memorial-plugin' ), 'add' => __( 'Add an address', 'memorial-plugin' ), 'collapse' => 'addr', 'open' => true,
+            'help' => __( 'The first address is shown in the top bar of the site. Every address gets a tab with a map on the home page.', 'memorial-plugin' ),
             'fields' => [
-                'addr'  => ['type' => 'text', 'label' => 'Адрес', 'placeholder' => '308000, г. Белгород, ул. Студенческая, 40'],
-                'hours' => ['type' => 'text', 'label' => 'Время работы', 'placeholder' => 'Ежедневно с 9:00 до 18:00'],
-                'title' => ['type' => 'text', 'label' => 'Надпись на вкладке карты (необязательно)', 'placeholder' => 'По умолчанию — улица и дом'],
-                'map'   => ['type' => 'map', 'label' => 'Карта (необязательно)',
-                            'help' => 'Оставьте пустым — карта сама найдёт адрес. Чтобы поставить точную метку, вставьте ссылку из Яндекс.Карт или код из «Конструктора карт».'],
+                'addr'  => ['type' => 'text', 'label' => __( 'Address', 'memorial-plugin' ), 'placeholder' => __( '308000, Belgorod, 40 Studencheskaya St.', 'memorial-plugin' )],
+                'hours' => ['type' => 'text', 'label' => __( 'Opening hours', 'memorial-plugin' ), 'placeholder' => __( 'Daily from 9:00 to 18:00', 'memorial-plugin' )],
+                'title' => ['type' => 'text', 'label' => __( 'Map tab label (optional)', 'memorial-plugin' ), 'placeholder' => __( 'By default — the street and the house', 'memorial-plugin' )],
+                'map'   => ['type' => 'map', 'label' => __( 'Map (optional)', 'memorial-plugin' ),
+                            'help' => __( 'Leave empty — the map finds the address itself. To set an exact marker, paste a link from Yandex Maps or the code from the “Map Constructor”.', 'memorial-plugin' )],
             ],
         ],
-        'night' => ['type' => 'text', 'label' => 'Звонки в нерабочее время', 'placeholder' => 'Звонки принимаем круглосуточно',
-            'help' => 'Показывается в верхней строке, на первом экране, в «Контактах» и в подвале. Пусто — не показывать.'],
-        'messengers' => ['type' => 'group', 'label' => 'Мессенджеры',
-            'help' => 'Показываются в окне обратного звонка и в блоке «Контакты». Пустое поле — кнопки нет.', 'fields' => [
-            'max'      => ['type' => 'text', 'label' => 'MAX — ссылка на профиль', 'placeholder' => 'https://max.ru/u/…',
-                           'help' => 'В приложении MAX: Профиль → Поделиться профилем → Скопировать ссылку.'],
-            'telegram' => ['type' => 'text', 'label' => 'Telegram', 'placeholder' => '@memorialbel или https://t.me/…'],
-            'whatsapp' => ['type' => 'text', 'label' => 'WhatsApp — номер', 'placeholder' => '+7 900 000-00-00'],
+        'night' => ['type' => 'text', 'label' => __( 'Calls outside working hours', 'memorial-plugin' ), 'placeholder' => __( 'We take calls round the clock', 'memorial-plugin' ),
+            'help' => __( 'Shown in the top bar, on the first screen, in “Contacts” and in the footer. Empty — not shown.', 'memorial-plugin' )],
+        'messengers' => ['type' => 'group', 'label' => __( 'Messengers', 'memorial-plugin' ),
+            'help' => __( 'Shown in the call-back window and in the “Contacts” block. Empty field — no button.', 'memorial-plugin' ), 'fields' => [
+            'max'      => ['type' => 'text', 'label' => __( 'MAX — profile link', 'memorial-plugin' ), 'placeholder' => 'https://max.ru/u/…',
+                           'help' => __( 'In the MAX app: Profile → Share profile → Copy link.', 'memorial-plugin' )],
+            'telegram' => ['type' => 'text', 'label' => 'Telegram', 'placeholder' => __( 'memorialbel or https://t.me/…', 'memorial-plugin' )],
+            'whatsapp' => ['type' => 'text', 'label' => __( 'WhatsApp — number', 'memorial-plugin' ), 'placeholder' => '+7 900 000-00-00'],
         ]],
-        'call' => ['type' => 'group', 'label' => 'Кнопка «Позвонить» на компьютере',
-            'help' => 'На телефоне кнопка просто звонит. На компьютере сначала открывается MAX по ссылке выше; окно «Перезвоните мне» появляется, если MAX не открылся (браузер заблокировал вкладку или посетитель быстро вернулся на сайт). Заявки приходят на почту и сохраняются в «Мемориал → Заявки».', 'fields' => [
-            'title'   => ['type' => 'text', 'label' => 'Заголовок окна'],
-            'note'    => ['type' => 'text', 'label' => 'Текст под заголовком'],
-            'email'   => ['type' => 'email', 'label' => 'Куда присылать заявки', 'placeholder' => 'Пусто — на первую почту из списка выше'],
-            'max_app' => ['type' => 'text', 'label' => 'Ссылка для запуска приложения MAX (для опытных)', 'placeholder' => 'например max://…',
-                          'help' => 'Обычно оставляйте пустым — используется ссылка на профиль MAX. Если знаете ссылку, которая сразу запускает установленное приложение, впишите её.'],
+        'call' => ['type' => 'group', 'label' => __( '“Call” button on a computer', 'memorial-plugin' ),
+            'help' => __( 'On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email and are kept in “Memorial → Requests”.', 'memorial-plugin' ), 'fields' => [
+            'title'   => ['type' => 'text', 'label' => __( 'Window title', 'memorial-plugin' )],
+            'note'    => ['type' => 'text', 'label' => __( 'Text under the title', 'memorial-plugin' )],
+            'email'   => ['type' => 'email', 'label' => __( 'Where to send requests', 'memorial-plugin' ), 'placeholder' => __( 'Empty — to the first email of the list above', 'memorial-plugin' )],
+            'max_app' => ['type' => 'text', 'label' => __( 'Link that starts the MAX app (advanced)', 'memorial-plugin' ), 'placeholder' => __( 'for example max://…', 'memorial-plugin' ),
+                          'help' => __( 'Usually leave it empty — the MAX profile link is used. If you know a link that starts the installed app right away, enter it.', 'memorial-plugin' )],
         ]],
-        'legal' => ['type' => 'group', 'label' => 'Реквизиты', 'help' => 'Показываются на странице «Контакты» и в подвале. Пустые поля не выводятся.', 'fields' => [
-            'name' => ['type' => 'text', 'label' => 'Название', 'placeholder' => 'Например: ИП Иванов Иван Иванович'],
-            'inn'  => ['type' => 'text', 'label' => 'ИНН'],
-            'ogrn' => ['type' => 'text', 'label' => 'ОГРН / ОГРНИП'],
+        'legal' => ['type' => 'group', 'label' => __( 'Company details', 'memorial-plugin' ), 'help' => __( 'Shown on the “Contacts” page and in the footer. Empty fields are not shown.', 'memorial-plugin' ), 'fields' => [
+            'name' => ['type' => 'text', 'label' => __( 'Name', 'memorial-plugin' ), 'placeholder' => __( 'For example: Sole proprietor Ivan Ivanov', 'memorial-plugin' )],
+            'inn'  => ['type' => 'text', 'label' => __( 'TIN (INN)', 'memorial-plugin' )],
+            'ogrn' => ['type' => 'text', 'label' => __( 'OGRN / OGRNIP', 'memorial-plugin' )],
         ]],
-        'founded' => ['type' => 'number', 'label' => 'Год основания', 'help' => 'Из него считается «более N лет» на сайте.'],
+        'founded' => ['type' => 'number', 'label' => __( 'Year founded', 'memorial-plugin' ), 'help' => __( 'The “more than N years” on the site is counted from it.', 'memorial-plugin' )],
     ];
 }
 
 function memorial_plugin_home_schema() {
-    $show = ['type' => 'checkbox', 'label' => 'Показывать этот блок'];
-    $eyebrow = ['type' => 'text', 'label' => 'Надзаголовок (мелкие буквы над заголовком)'];
+    $show = ['type' => 'checkbox', 'label' => __( 'Show this block', 'memorial-plugin' )];
+    $eyebrow = ['type' => 'text', 'label' => __( 'Eyebrow (small letters above the title)', 'memorial-plugin' )];
     return [
-        'layout' => ['type' => 'order', 'label' => 'Порядок блоков на главной',
-            'help' => 'Перетащите строку (или карточку блока ниже за ⋮⋮) мышью или пальцем либо нажмите ↑ ↓, затем «Сохранить порядок». Первый экран всегда наверху. Блоки с пометкой «скрыт» на сайте не видны — включите «Показывать этот блок» в их настройках ниже.',
+        'layout' => ['type' => 'order', 'label' => __( 'Order of the blocks on the home page', 'memorial-plugin' ),
+            'help' => __( 'Drag a row (or a block card below by ⋮⋮) with the mouse or a finger, or press ↑ ↓, then “Save order”. The first screen is always at the top. Blocks marked “hidden” are not visible on the site — turn on “Show this block” in their settings below.', 'memorial-plugin' ),
             'options' => memorial_plugin_home_blocks()],
-        'hero' => ['type' => 'group', 'label' => 'Первый экран', 'fields' => [
+        'hero' => ['type' => 'group', 'label' => __( 'First screen', 'memorial-plugin' ), 'fields' => [
             'eyebrow'  => $eyebrow,
-            'title'    => ['type' => 'text', 'label' => 'Заголовок — первая строка'],
-            'title_em' => ['type' => 'text', 'label' => 'Заголовок — вторая строка (курсивом, цветом акцента)'],
-            'lead'     => ['type' => 'textarea', 'label' => 'Текст под заголовком', 'rows' => 3],
-            'trust'    => ['type' => 'repeater', 'label' => 'Преимущества (с лавровыми листками)', 'add' => 'Добавить пункт', 'fields' => [
-                'text' => ['type' => 'text', 'label' => 'Текст'],
+            'title'    => ['type' => 'text', 'label' => __( 'Title — first line', 'memorial-plugin' )],
+            'title_em' => ['type' => 'text', 'label' => __( 'Title — second line (italic, accent colour)', 'memorial-plugin' )],
+            'lead'     => ['type' => 'textarea', 'label' => __( 'Text under the title', 'memorial-plugin' ), 'rows' => 3],
+            'trust'    => ['type' => 'repeater', 'label' => __( 'Advantages (with laurel leaves)', 'memorial-plugin' ), 'add' => __( 'Add an item', 'memorial-plugin' ), 'fields' => [
+                'text' => ['type' => 'text', 'label' => __( 'Text', 'memorial-plugin' )],
             ]],
-            'help_page' => ['type' => 'page', 'label' => 'Ссылка «что делать» под кнопками',
-                            'help' => 'Ссылка под кнопками «Позвонить» и «Перезвоните мне»: человек сразу видит, куда нажать, если только что умер близкий. Пусто — страница «Что делать, если умер человек» (находится сама).'],
-            'help_text' => ['type' => 'text', 'label' => 'Текст ссылки «что делать»', 'placeholder' => 'Что делать, если умер человек'],
-            'help_off'  => ['type' => 'checkbox', 'label' => 'Не показывать ссылку «что делать»'],
-            'img'      => ['type' => 'image', 'label' => 'Фото справа (траурный зал — светлое, дневной свет)', 'help' => 'Показывается в рамке со скруглением рядом с текстом, без затемнения.'],
-            'tint'     => ['type' => 'select', 'label' => 'Тонировка фото (в светлой теме 4.0 не используется)', 'options' => [
-                              'grad' => 'Плавная: сверху светлее, внизу темнее', 'flat' => 'Ровная по всему фото', 'off' => 'Выключить — фото без тонировки']],
-            'tint_color' => ['type' => 'color', 'label' => 'Цвет тонировки (в светлой теме 4.0 не используется)', 'scheme' => 'dark', 'effective' => true],
-            'mobile'   => ['type' => 'select', 'label' => 'На телефоне', 'options' => [
-                              'bg'  => 'Сначала текст и кнопка звонка, под ними фото (рекомендуется)',
-                              'top' => 'Сначала фото невысокой полосой, под ним текст']],
-            'tint_op'  => ['type' => 'number', 'label' => 'Сила тонировки, % (в светлой теме 4.0 не используется)', 'placeholder' => '75'],
+            'help_page' => ['type' => 'page', 'label' => __( '“What to do” link under the buttons', 'memorial-plugin' ),
+                            'help' => __( 'A link under the “Call” and “Call me back” buttons: a person immediately sees where to click if someone close has just died. Empty — the page “What to do when someone dies” (found automatically).', 'memorial-plugin' )],
+            'help_text' => ['type' => 'text', 'label' => __( 'Text of the “what to do” link', 'memorial-plugin' ), 'placeholder' => __( 'What to do when someone dies', 'memorial-plugin' )],
+            'help_off'  => ['type' => 'checkbox', 'label' => __( 'Do not show the “what to do” link', 'memorial-plugin' )],
+            'img'      => ['type' => 'image', 'label' => __( 'Photo on the right (mourning hall — light, daylight)', 'memorial-plugin' ), 'help' => __( 'Shown in a rounded frame next to the text, without darkening.', 'memorial-plugin' )],
+            'tint'     => ['type' => 'select', 'label' => __( 'Photo tint (not used in the light theme 4.0)', 'memorial-plugin' ), 'options' => [
+                              'grad' => __( 'Gradient: lighter at the top, darker at the bottom', 'memorial-plugin' ), 'flat' => __( 'Even over the whole photo', 'memorial-plugin' ), 'off' => __( 'Off — the photo without a tint', 'memorial-plugin' )]],
+            'tint_color' => ['type' => 'color', 'label' => __( 'Tint colour (not used in the light theme 4.0)', 'memorial-plugin' ), 'scheme' => 'dark', 'effective' => true],
+            'mobile'   => ['type' => 'select', 'label' => __( 'On a phone', 'memorial-plugin' ), 'options' => [
+                              'bg'  => __( 'Text and the call button first, the photo below (recommended)', 'memorial-plugin' ),
+                              'top' => __( 'A low strip of the photo first, the text below', 'memorial-plugin' )]],
+            'tint_op'  => ['type' => 'number', 'label' => __( 'Tint strength, % (not used in the light theme 4.0)', 'memorial-plugin' ), 'placeholder' => '75'],
         ]],
-        'services' => ['type' => 'group', 'label' => 'Блок «Наши услуги»', 'help' => 'Карточки со ссылками на страницы услуг. Фото необязательно: если не выбрано, берётся изображение записи у страницы.', 'fields' => [
+        'services' => ['type' => 'group', 'label' => __( '“Our services” block', 'memorial-plugin' ), 'help' => __( 'Cards with links to the service pages. The photo is optional: when it is not chosen, the featured image of the page is used.', 'memorial-plugin' ), 'fields' => [
             'show'    => $show,
             'eyebrow' => $eyebrow,
-            'title'   => ['type' => 'text', 'label' => 'Заголовок'],
-            'items'   => ['type' => 'repeater', 'label' => 'Услуги', 'add' => 'Добавить услугу', 'collapse' => 'title', 'fields' => [
-                'title' => ['type' => 'text', 'label' => 'Название'],
-                'text'  => ['type' => 'textarea', 'label' => 'Короткое описание', 'rows' => 2],
-                'page'  => ['type' => 'page', 'label' => 'Страница'],
-                'price' => ['type' => 'text', 'label' => 'Цена (необязательно)', 'placeholder' => 'например: от 58 000 ₽'],
-                'img'   => ['type' => 'image', 'label' => 'Фото (необязательно)'],
-            ]],
-        ]],
-        'feats' => ['type' => 'group', 'label' => 'Блок «Почему нам доверяют»', 'fields' => [
-            'show'    => $show,
-            'eyebrow' => $eyebrow,
-            'title'   => ['type' => 'text', 'label' => 'Заголовок'],
-            'items'   => ['type' => 'repeater', 'label' => 'Пункты', 'add' => 'Добавить пункт', 'collapse' => 'title', 'fields' => [
-                'title' => ['type' => 'text', 'label' => 'Заголовок'],
-                'text'  => ['type' => 'textarea', 'label' => 'Текст', 'rows' => 3],
-                'icon'  => ['type' => 'select', 'label' => 'Значок', 'options' => ['auto' => 'Подобрать по заголовку'] + memorial_plugin_feat_icons()],
-                'img'   => ['type' => 'image', 'label' => 'Фото вместо значка (необязательно)'],
+            'title'   => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
+            'items'   => ['type' => 'repeater', 'label' => __( 'Services', 'memorial-plugin' ), 'add' => __( 'Add a service', 'memorial-plugin' ), 'collapse' => 'title', 'fields' => [
+                'title' => ['type' => 'text', 'label' => __( 'Name', 'memorial-plugin' )],
+                'text'  => ['type' => 'textarea', 'label' => __( 'Short description', 'memorial-plugin' ), 'rows' => 2],
+                'page'  => ['type' => 'page', 'label' => __( 'Page', 'memorial-plugin' )],
+                'price' => ['type' => 'text', 'label' => __( 'Price (optional)', 'memorial-plugin' ), 'placeholder' => __( 'for example: from 58,000 ₽', 'memorial-plugin' )],
+                'img'   => ['type' => 'image', 'label' => __( 'Photo (optional)', 'memorial-plugin' )],
             ]],
         ]],
-        'catalog' => ['type' => 'group', 'label' => 'Блок «Каталог»', 'help' => 'Плитки — это подпункты пункта «Ритуальные товары» в меню (Внешний вид → Меню): названия и порядок берутся оттуда. Фото плитки — «Изображение записи» страницы, на которую ведёт пункт; если его нет — фото первого товара этой категории.', 'fields' => [
+        'feats' => ['type' => 'group', 'label' => __( '“Why people trust us” block', 'memorial-plugin' ), 'fields' => [
             'show'    => $show,
             'eyebrow' => $eyebrow,
-            'title'   => ['type' => 'text', 'label' => 'Заголовок'],
+            'title'   => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
+            'items'   => ['type' => 'repeater', 'label' => __( 'Items', 'memorial-plugin' ), 'add' => __( 'Add an item', 'memorial-plugin' ), 'collapse' => 'title', 'fields' => [
+                'title' => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
+                'text'  => ['type' => 'textarea', 'label' => __( 'Text', 'memorial-plugin' ), 'rows' => 3],
+                'icon'  => ['type' => 'select', 'label' => __( 'Icon', 'memorial-plugin' ), 'options' => ['auto' => __( 'Choose by the title', 'memorial-plugin' )] + memorial_plugin_feat_icons()],
+                'img'   => ['type' => 'image', 'label' => __( 'Photo instead of the icon (optional)', 'memorial-plugin' )],
+            ]],
         ]],
-        'prices' => ['type' => 'group', 'label' => 'Блок «Пакеты услуг»', 'help' => 'Сами пакеты, их состав и цены — в «Мемориал → Цены».', 'fields' => [
+        'catalog' => ['type' => 'group', 'label' => __( '“Catalog” block', 'memorial-plugin' ), 'help' => __( 'The tiles are the sub-items of the “Funeral goods” menu item (Appearance → Menus): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category.', 'memorial-plugin' ), 'fields' => [
             'show'    => $show,
             'eyebrow' => $eyebrow,
-            'title'   => ['type' => 'text', 'label' => 'Заголовок'],
+            'title'   => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
         ]],
-        'stats' => ['type' => 'group', 'label' => 'Блок с цифрами', 'fields' => [
+        'prices' => ['type' => 'group', 'label' => __( '“Service packages” block', 'memorial-plugin' ), 'help' => __( 'The packages themselves, their contents and prices — in “Memorial → Prices”.', 'memorial-plugin' ), 'fields' => [
+            'show'    => $show,
+            'eyebrow' => $eyebrow,
+            'title'   => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
+        ]],
+        'stats' => ['type' => 'group', 'label' => __( 'Block with numbers', 'memorial-plugin' ), 'fields' => [
             'show'  => $show,
-            'items' => ['type' => 'repeater', 'label' => 'Цифры', 'add' => 'Добавить цифру', 'inline' => true, 'fields' => [
-                'num'   => ['type' => 'number', 'label' => 'Число'],
-                'label' => ['type' => 'text', 'label' => 'Подпись'],
+            'items' => ['type' => 'repeater', 'label' => __( 'Numbers', 'memorial-plugin' ), 'add' => __( 'Add a number', 'memorial-plugin' ), 'inline' => true, 'fields' => [
+                'num'   => ['type' => 'number', 'label' => __( 'Number', 'memorial-plugin' )],
+                'label' => ['type' => 'text', 'label' => __( 'Caption', 'memorial-plugin' )],
             ]],
         ]],
-        'about' => ['type' => 'group', 'label' => 'Блок «О компании»', 'fields' => [
+        'about' => ['type' => 'group', 'label' => __( '“About the company” block', 'memorial-plugin' ), 'fields' => [
             'show'    => $show,
             'eyebrow' => $eyebrow,
-            'title'   => ['type' => 'text', 'label' => 'Заголовок'],
-            'text'    => ['type' => 'textarea', 'label' => 'Текст', 'rows' => 6, 'html' => true,
-                          'help' => 'Пустая строка — новый абзац. Можно использовать <b>, <a> и другую простую разметку.'],
+            'title'   => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
+            'text'    => ['type' => 'textarea', 'label' => __( 'Text', 'memorial-plugin' ), 'rows' => 6, 'html' => true,
+                          'help' => __( 'An empty line — a new paragraph. You can use <b>, <a> and other simple markup.', 'memorial-plugin' )],
         ]],
-        'reviews' => ['type' => 'group', 'label' => 'Блок «Отзывы» (с Яндекс Карт)', 'fields' => [
+        'reviews' => ['type' => 'group', 'label' => __( '“Reviews” block (from Yandex Maps)', 'memorial-plugin' ), 'fields' => [
             'show'    => $show,
             'eyebrow' => $eyebrow,
-            'title'   => ['type' => 'text', 'label' => 'Заголовок'],
-            'text'    => ['type' => 'textarea', 'label' => 'Текст рядом с отзывами', 'rows' => 3],
-            'org'     => ['type' => 'text', 'label' => 'Организация на Яндекс Картах — номер или ссылка',
-                          'help' => 'Например 75717068753 или ссылка вида https://yandex.ru/maps/org/…/75717068753/'],
+            'title'   => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
+            'text'    => ['type' => 'textarea', 'label' => __( 'Text next to the reviews', 'memorial-plugin' ), 'rows' => 3],
+            'org'     => ['type' => 'text', 'label' => __( 'Organisation on Yandex Maps — number or link', 'memorial-plugin' ),
+                          'help' => __( 'For example 75717068753 or a link like https://yandex.ru/maps/org/…/75717068753/', 'memorial-plugin' )],
         ]],
-        'contacts' => ['type' => 'group', 'label' => 'Блок «Контакты»', 'help' => 'Телефоны, почта и адреса берутся со страницы «Мемориал → Контакты».', 'fields' => [
+        'contacts' => ['type' => 'group', 'label' => __( '“Contacts” block', 'memorial-plugin' ), 'help' => __( 'Phones, email and addresses are taken from the “Memorial → Contacts” page.', 'memorial-plugin' ), 'fields' => [
             'show'    => $show,
             'eyebrow' => $eyebrow,
-            'title'   => ['type' => 'text', 'label' => 'Заголовок'],
+            'title'   => ['type' => 'text', 'label' => __( 'Title', 'memorial-plugin' )],
         ]],
     ];
 }
@@ -179,13 +179,13 @@ function memorial_plugin_contacts_defaults() {
     // Если раньше контакты меняли в «Настроить», берём их оттуда
     $m = fn($k, $d) => get_theme_mod('mem_' . $k, $d);
     $addrs = [];
-    foreach ([1 => '308000, г. Белгород, ул. Студенческая, 40', 2 => '308024, г. Белгород, ул. Щорса, 21'] as $n => $addr) {
+    foreach ([1 => __( '308000, Belgorod, 40 Studencheskaya St.', 'memorial-plugin' ), 2 => '308024, г. Белгород, ул. Щорса, 21'] as $n => $addr) {
         $a = $m('addr' . $n, $addr);
         if (!$a) continue;
         $map = $m('map' . $n, '');
         $addrs[] = [
             'addr'  => $a,
-            'hours' => $m('hours', 'Ежедневно с 9:00 до 18:00'),
+            'hours' => $m('hours', __( 'Daily from 9:00 to 18:00', 'memorial-plugin' )),
             'title' => '',
             'map'   => strpos($map, 'text=') !== false ? '' : $map, // карту по тексту адреса строим сами
         ];
@@ -199,7 +199,7 @@ function memorial_plugin_contacts_defaults() {
         'legal'   => ['name' => '', 'inn' => '312311885837', 'ogrn' => '306312324200048'],
         'emails'  => [['email' => $m('email', 'memorialbel@mail.ru')]],
         'addrs'   => $addrs,
-        'night'   => 'Звонки принимаем круглосуточно',
+        'night'   => __( 'We take calls round the clock', 'memorial-plugin' ),
         'messengers' => ['max' => MEMORIAL_PLUGIN_MAX_URL, 'telegram' => '', 'whatsapp' => ''],
         'call'       => ['title' => 'Перезвоним вам', 'note' => 'Оставьте номер — перезвоним в ближайшее время.', 'email' => '', 'max_app' => ''],
         'founded' => (int) $m('founded', 2003),
@@ -208,8 +208,8 @@ function memorial_plugin_contacts_defaults() {
 
 /** Блоки главной, которые можно переставлять */
 function memorial_plugin_home_blocks() {
-    return ['services' => 'Наши услуги', 'feats' => 'Почему нам доверяют', 'catalog' => 'Каталог', 'prices' => 'Пакеты услуг',
-            'stats' => 'Блок с цифрами', 'about' => 'О компании', 'reviews' => 'Отзывы', 'contacts' => 'Контакты'];
+    return ['services' => __( 'Our services', 'memorial-plugin' ), 'feats' => __( 'Why people trust us', 'memorial-plugin' ), 'catalog' => __( 'Catalog', 'memorial-plugin' ), 'prices' => __( 'Service packages', 'memorial-plugin' ),
+            'stats' => __( 'Block with numbers', 'memorial-plugin' ), 'about' => __( 'About the company', 'memorial-plugin' ), 'reviews' => __( 'Reviews', 'memorial-plugin' ), 'contacts' => __( 'Contacts', 'memorial-plugin' )];
 }
 
 /* Тексты главной по умолчанию — спокойные и конкретные: что делать и чем поможем, без «качественных услуг» и «не фирма-однодневка» */
@@ -229,7 +229,7 @@ function memorial_plugin_home_help_link() {
         }
     }
     if (!$id) return null;
-    return [get_permalink($id), trim($h['help_text'] ?? '') ?: 'Что делать, если умер человек'];
+    return [get_permalink($id), trim($h['help_text'] ?? '') ?: __( 'What to do when someone dies', 'memorial-plugin' )];
 }
 
 /* Разово: старые «продающие» тексты главной, если их не меняли, заменяем на новые (прежние — в истории не нужны, они из шаблона) */
@@ -240,16 +240,16 @@ add_action('admin_init', function () {
     if (!is_array($o)) return;
     $ch = [];
     $old_em = ['Свой траурный зал, венки собственного производства', 'для прощания и панихиды'];
-    if (in_array(trim($o['hero']['title_em'] ?? ''), $old_em, true)) { $o['hero']['title_em'] = 'Поможем на каждом шаге'; $ch[] = 'вторая строка заголовка'; }
-    if (trim($o['hero']['title'] ?? '') === 'Собственный траурный зал') { $o['hero']['title'] = 'Ритуальные услуги в Белгороде'; $ch[] = 'заголовок'; }
-    if (trim($o['hero']['lead'] ?? '') === 'Возьмём на себя все хлопоты: организация похорон, документы, транспорт, венки собственного производства.') { $o['hero']['lead'] = MEMORIAL_PLUGIN_HERO_LEAD; $ch[] = 'текст под заголовком'; }
+    if (in_array(trim($o['hero']['title_em'] ?? ''), $old_em, true)) { $o['hero']['title_em'] = 'Поможем на каждом шаге'; $ch[] = __( 'second line of the title', 'memorial-plugin' ); }
+    if (trim($o['hero']['title'] ?? '') === 'Собственный траурный зал') { $o['hero']['title'] = 'Ритуальные услуги в Белгороде'; $ch[] = __( 'title', 'memorial-plugin' ); }
+    if (trim($o['hero']['lead'] ?? '') === 'Возьмём на себя все хлопоты: организация похорон, документы, транспорт, венки собственного производства.') { $o['hero']['lead'] = MEMORIAL_PLUGIN_HERO_LEAD; $ch[] = __( 'text under the title', 'memorial-plugin' ); }
     $tr = array_map(fn($t) => trim($t['text'] ?? ''), (array) ($o['hero']['trust'] ?? []));
-    if (in_array('Собственное здание — не фирма-однодневка', $tr, true)) { $o['hero']['trust'] = MEMORIAL_PLUGIN_HERO_TRUST; $ch[] = 'пункты с галочками'; }
-    if (strpos((string) ($o['about']['text'] ?? ''), 'предлагает качественные ритуальные услуги') !== false) { $o['about']['text'] = MEMORIAL_PLUGIN_ABOUT_TEXT; $ch[] = 'текст «О компании»'; }
+    if (in_array('Собственное здание — не фирма-однодневка', $tr, true)) { $o['hero']['trust'] = MEMORIAL_PLUGIN_HERO_TRUST; $ch[] = __( 'items with ticks', 'memorial-plugin' ); }
+    if (strpos((string) ($o['about']['text'] ?? ''), 'предлагает качественные ритуальные услуги') !== false) { $o['about']['text'] = MEMORIAL_PLUGIN_ABOUT_TEXT; $ch[] = __( '“About the company” text', 'memorial-plugin' ); }
     if (!$ch) return;
     update_option('mem_home', $o);
     set_transient('mem_places_report', array_merge(array_filter((array) get_transient('mem_places_report')), [
-        'Главная: обновлены ' . implode(', ', $ch) . ' — спокойнее и конкретнее. Поменять можно в «Мемориал → Главная страница».']), DAY_IN_SECONDS);
+        __( 'Home page: updated ', 'memorial-plugin' ) . implode(', ', $ch) . __( ' — calmer and more specific. You can change it in “Memorial → Home page”.', 'memorial-plugin' )]), DAY_IN_SECONDS);
 });
 
 function memorial_plugin_home_defaults() {
@@ -262,12 +262,12 @@ function memorial_plugin_home_defaults() {
             'title_em' => 'Поможем на каждом шаге',
             'lead'     => MEMORIAL_PLUGIN_HERO_LEAD,
             'trust'    => MEMORIAL_PLUGIN_HERO_TRUST,
-            'help_page' => '', 'help_text' => 'Что делать, если умер человек', 'help_off' => 0,
+            'help_page' => '', 'help_text' => __( 'What to do when someone dies', 'memorial-plugin' ), 'help_off' => 0,
             'img'      => get_theme_mod('mem_hero_img', ''),
             'tint'     => 'grad', 'tint_color' => '', 'tint_op' => 75, 'mobile' => 'bg',
         ],
         'services' => [
-            'show' => 1, 'eyebrow' => 'Чем мы поможем', 'title' => 'Наши услуги',
+            'show' => 1, 'eyebrow' => 'Чем мы поможем', 'title' => __( 'Our services', 'memorial-plugin' ),
             'items' => [
                 ['title' => 'Организация похорон', 'text' => 'Возьмём на себя документы, морг, транспорт и проведение похорон.', 'page' => memorial_plugin_guess_page(['organizaciya-pohoron', 'organizacziya-pohoron', 'pomoshh-v-organizacii-pohoron']), 'price' => '', 'img' => ''],
                 ['title' => 'Кремация', 'text' => 'Доставим в крематорий Тулы или Воронежа, выдадим прах в урне в день кремирования.', 'page' => memorial_plugin_guess_page(['kremacziya', 'kremaciya']), 'price' => 'от 58 000 ₽', 'img' => ''],
@@ -278,7 +278,7 @@ function memorial_plugin_home_defaults() {
             ],
         ],
         'feats' => [
-            'show' => 1, 'eyebrow' => 'Почему нам доверяют', 'title' => 'Своё, а не через посредников',
+            'show' => 1, 'eyebrow' => __( 'Why people trust us', 'memorial-plugin' ), 'title' => 'Своё, а не через посредников',
             'items' => [
                 ['title' => 'Собственный траурный зал', 'text' => 'Предоставляем зал для прощания и панихиды бесплатно — в спокойной и достойной обстановке.', 'icon' => 'candle', 'img' => ''],
                 ['title' => 'Собственное производство венков', 'text' => 'Изготавливаем венки и композиции сами: любой размер и цвет, качество под контролем, без наценок посредников.', 'icon' => 'flower', 'img' => ''],
@@ -286,7 +286,7 @@ function memorial_plugin_home_defaults() {
                 ['title' => 'Документы для компенсации', 'text' => 'Заключаем официальный договор и выдаём полный пакет документов для получения компенсации через военкомат.', 'icon' => 'doc', 'img' => ''],
             ],
         ],
-        'catalog' => ['show' => 1, 'eyebrow' => 'Каталог', 'title' => 'Ритуальные товары'],
+        'catalog' => ['show' => 1, 'eyebrow' => __( 'Catalog', 'memorial-plugin' ), 'title' => 'Ритуальные товары'],
         'prices' => [
             'show' => 1, 'eyebrow' => 'Стоимость', 'title' => 'Пакеты ритуальных услуг',
             'badge' => 'Чаще выбирают', 'btn' => 'Заказать',
@@ -314,15 +314,15 @@ function memorial_plugin_home_defaults() {
             ['num' => 1250, 'label' => 'благоустроенных захоронений'],
         ]],
         'about' => [
-            'show' => 1, 'eyebrow' => 'О компании', 'title' => 'Более {years} лет рядом в трудную минуту',
+            'show' => 1, 'eyebrow' => __( 'About the company', 'memorial-plugin' ), 'title' => 'Более {years} лет рядом в трудную минуту',
             'text' => MEMORIAL_PLUGIN_ABOUT_TEXT,
         ],
         'reviews' => [
-            'show' => 1, 'eyebrow' => 'Отзывы', 'title' => 'Что о нас пишут',
+            'show' => 1, 'eyebrow' => __( 'Reviews', 'memorial-plugin' ), 'title' => 'Что о нас пишут',
             'text' => 'Это настоящие отзывы наших клиентов на Яндекс Картах — мы не можем их редактировать или удалять. Будем благодарны, если вы тоже поделитесь впечатлением.',
             'org'  => '75717068753',
         ],
-        'contacts' => ['show' => 1, 'eyebrow' => 'Контакты', 'title' => 'Мы на связи'],
+        'contacts' => ['show' => 1, 'eyebrow' => __( 'Contacts', 'memorial-plugin' ), 'title' => 'Мы на связи'],
     ];
 }
 
@@ -389,8 +389,8 @@ function memorial_plugin_legal_parts() {
     $l = memorial_plugin_contacts()['legal'] ?? [];
     $out = [];
     if (trim($l['name'] ?? '')) $out[] = trim($l['name']);
-    if ($inn = preg_replace('/\D/', '', $l['inn'] ?? '')) $out[] = 'ИНН ' . $inn;
-    if ($ogrn = preg_replace('/\D/', '', $l['ogrn'] ?? '')) $out[] = (strlen($ogrn) === 15 ? 'ОГРНИП ' : 'ОГРН ') . $ogrn;
+    if ($inn = preg_replace('/\D/', '', $l['inn'] ?? '')) $out[] = __( 'TIN ', 'memorial-plugin' ) . $inn;
+    if ($ogrn = preg_replace('/\D/', '', $l['ogrn'] ?? '')) $out[] = (strlen($ogrn) === 15 ? __( 'OGRNIP ', 'memorial-plugin' ) : __( 'OGRN ', 'memorial-plugin' )) . $ogrn;
     return $out;
 }
 
@@ -563,20 +563,20 @@ function memorial_plugin_home_migrated() {
 
 function memorial_plugin_home_services_schema() {
     $s = memorial_plugin_home_schema()['services'];
-    return ['services' => ['type' => 'group', 'label' => 'Услуги', 'help' => $s['help'] ?? '', 'fields' => ['items' => $s['fields']['items']]]];
+    return ['services' => ['type' => 'group', 'label' => __( 'Services', 'memorial-plugin' ), 'help' => $s['help'] ?? '', 'fields' => ['items' => $s['fields']['items']]]];
 }
 
 function memorial_plugin_admin_pages() {
     $home = memorial_plugin_home_migrated()
-        ? ['slug' => 'mem-home', 'title' => 'Услуги', 'schema' => 'memorial_plugin_home_services_schema',
-           'intro' => 'Карточки услуг с фото и ценами — на главной и в блоке «Наши услуги» на других страницах. Тексты главной правятся прямо на ней: «Внешний вид → Редактор → Шаблоны → Главная».']
+        ? ['slug' => 'mem-home', 'title' => __( 'Services', 'memorial-plugin' ), 'schema' => 'memorial_plugin_home_services_schema',
+           'intro' => __( 'Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited right on it: “Appearance → Editor → Templates → Home”.', 'memorial-plugin' )]
         : null;
     return apply_filters('memorial_plugin_admin_pages', [
-        'mem_contacts' => ['slug' => 'mem-contacts', 'title' => 'Контакты', 'schema' => 'memorial_plugin_contacts_schema',
-                           'intro' => 'Телефоны, почта, адреса и время работы. Изменения сразу появятся в шапке, подвале, на главной и в карточках товаров.'],
-        'mem_home'     => $home ?? ['slug' => 'mem-home', 'title' => 'Главная страница', 'schema' => 'memorial_plugin_home_schema',
-                           'intro' => 'Тексты и пункты блоков главной. Пункты можно перетаскивать за ⋮⋮, удалять крестиком и добавлять кнопкой под списком. Пустые пункты не сохраняются.<br>'
-                                    . 'В тексте можно писать <code>{years}</code> — сколько лет компании, <code>{founded}</code> — год основания, <code>{addr}</code> — первый адрес, <code>{phone}</code> — основной телефон.'],
+        'mem_contacts' => ['slug' => 'mem-contacts', 'title' => __( 'Contacts', 'memorial-plugin' ), 'schema' => 'memorial_plugin_contacts_schema',
+                           'intro' => __( 'Phones, email, addresses and opening hours. Changes appear at once in the header, the footer, on the home page and in the product cards.', 'memorial-plugin' )],
+        'mem_home'     => $home ?? ['slug' => 'mem-home', 'title' => __( 'Home page', 'memorial-plugin' ), 'schema' => 'memorial_plugin_home_schema',
+                           'intro' => __( 'Texts and items of the home page blocks. Items can be dragged by ⋮⋮, removed with the cross and added with the button under the list. Empty items are not saved.<br>', 'memorial-plugin' )
+                                    . __( 'In the text you can write <code>{years}</code> — how many years the company has worked, <code>{founded}</code> — the year it was founded, <code>{addr}</code> — the first address, <code>{phone}</code> — the main phone.', 'memorial-plugin' )],
     ]);
 }
 
@@ -584,7 +584,7 @@ add_action('admin_menu', function () {
     global $memorial_plugin_admin_hooks;
     $memorial_plugin_admin_hooks = [];
     $pages = memorial_plugin_admin_pages();
-    add_menu_page('Настройки сайта', 'Мемориал', 'manage_options', 'mem-contacts', '__return_null', 'dashicons-admin-home', 3);
+    add_menu_page(__( 'Site settings', 'memorial-plugin' ), __( 'Memorial', 'memorial-plugin' ), 'manage_options', 'mem-contacts', '__return_null', 'dashicons-admin-home', 3);
     foreach ($pages as $opt => $p) {
         // 'hidden' — страница без своего пункта меню (открывается вкладкой другой страницы)
         // страница настроек — приложение на DataForm (admin/settings-form.php, src/settings)
@@ -601,7 +601,7 @@ add_action('admin_menu', function () {
 add_action('admin_menu', function () {
     global $submenu;
     if (empty($submenu['mem-contacts'])) return;
-    $order = ['memorial-plugin-leads', 'mem-contacts', 'mem-prices', 'mem-reviews', 'mem-home', 'mem-rest', 'mem-cem', 'mem-design', 'mem-metrika', 'mem-legal', 'mem-sq', 'mem-modules', 'mem-help-m'];
+    $order = ['memorial-plugin-leads', 'mem-contacts', 'mem-prices', 'mem-reviews', 'mem-home', 'mem-rest', 'mem-cem', 'mem-design', 'mem-metrika', 'mem-legal', 'mem-sq', 'mem-modules'];
     $items = $submenu['mem-contacts'];
     usort($items, function ($a, $b) use ($order) {
         $ia = array_search($a[2], $order, true); $ib = array_search($b[2], $order, true);
@@ -634,5 +634,5 @@ add_action('admin_init', function () {
 /* Ссылки в верхней панели: быстрое редактирование с сайта */
 add_action('admin_bar_menu', function ($bar) {
     if (is_admin() || !current_user_can('manage_options')) return;
-    $bar->add_node(['id' => 'mem-settings', 'title' => '✎ Тексты и контакты', 'href' => admin_url('admin.php?page=' . (is_front_page() ? 'mem-home' : 'mem-contacts'))]);
+    $bar->add_node(['id' => 'mem-settings', 'title' => __( '✎ Texts and contacts', 'memorial-plugin' ), 'href' => admin_url('admin.php?page=' . (is_front_page() ? 'mem-home' : 'mem-contacts'))]);
 }, 80);

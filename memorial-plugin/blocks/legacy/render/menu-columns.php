@@ -29,5 +29,5 @@ foreach ($top as $it) {
         $single .= '<li>' . $link($it) . '</li>';
     }
 }
-if ($single) $cols .= '<div class="fnav__col"><p class="fnav__title">Информация</p><ul>' . $single . '</ul></div>';
-echo '<nav class="wrap fnav" aria-label="Меню в подвале">' . $cols . '</nav>';
+if ($single) $cols .= '<div class="fnav__col"><p class="fnav__title">' . esc_html__( 'Information', 'memorial-plugin' ) . '</p><ul>' . $single . '</ul></div>';
+echo '<nav class="wrap fnav" aria-label="' . esc_attr__( 'Footer menu', 'memorial-plugin' ) . '">' . $cols . '</nav>';

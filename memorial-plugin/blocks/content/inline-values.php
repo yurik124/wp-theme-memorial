@@ -57,7 +57,7 @@ function memorial_plugin_inline_values() {
 			'tag'         => 'mem_operator',
 			'label'       => __( 'Company details (personal data operator)', 'memorial-plugin' ),
 			'param'       => 'chto',
-			'param_label' => __( 'What: empty — name and details; адрес, почта, телефон, сайт', 'memorial-plugin' ),
+			'param_label' => __( 'What: empty — name and details; адрес (address), почта (email), телефон (phone), сайт (site)', 'memorial-plugin' ),
 		),
 		'founded'    => array(
 			'callback'    => static fn() => (string) (int) ( memorial_plugin_contacts()['founded'] ?? 0 ),

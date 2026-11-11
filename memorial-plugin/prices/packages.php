@@ -30,7 +30,7 @@ function memorial_plugin_packages_html() {
             <?php foreach ($keys as $it) : ?><li><?php echo $mark; ?><span><?php echo esc_html($it[0]); ?></span></li><?php endforeach; ?>
           </ul>
           <details class="pkg__list">
-            <summary>Весь состав и цены (<?php echo count($p['items']); ?>)</summary>
+            <summary><?php esc_html_e( 'The full contents and prices', 'memorial-plugin' ); ?> (<?php echo count($p['items']); ?>)</summary>
             <ul>
               <?php foreach ($p['items'] as $it) : ?>
                 <li><span><?php echo esc_html($it[0]); ?></span><?php if ($it[1]) : ?><b><?php echo esc_html(memorial_plugin_rub($it[1])); ?></b><?php endif; ?></li>
@@ -38,7 +38,7 @@ function memorial_plugin_packages_html() {
             </ul>
           </details>
           <?php endif; ?>
-          <?php if ($tel) : ?><a class="btn <?php echo $feat ? 'btn--gold' : 'btn--line'; ?>" href="tel:<?php echo $tel; ?>"><?php echo $e($s['btn'] ?: 'Заказать'); ?></a><?php endif; ?>
+          <?php if ($tel) : ?><a class="btn <?php echo $feat ? 'btn--gold' : 'btn--line'; ?>" href="tel:<?php echo $tel; ?>"><?php echo $e($s['btn'] ?: __( 'Order', 'memorial-plugin' )); ?></a><?php endif; ?>
         </article>
       <?php endforeach; ?>
     </div>
@@ -58,17 +58,17 @@ function memorial_plugin_cremation_card_html() {
     $page = function_exists('memorial_plugin_guess_page') ? (int) memorial_plugin_guess_page(['ritualnye-uslugi/kremacziya', 'kremacziya', 'kremaciya', 'kremaciya-v-belgorode']) : 0;
     $page = $page && get_post_status($page) === 'publish' && $page !== get_the_ID() ? get_permalink($page) : '';
     $btn = memorial_plugin_prices('packages')['btn'] ?? '';
-    $h = '<article class="pkg pkg--crem reveal"><h3>' . esc_html(trim($c['card_title'] ?? '') ?: 'Кремация') . '</h3>';
+    $h = '<article class="pkg pkg--crem reveal"><h3>' . esc_html(trim($c['card_title'] ?? '') ?: __( 'Cremation', 'memorial-plugin' )) . '</h3>';
     if ($total) $h .= '<p class="pkg__total">' . esc_html(memorial_plugin_rub($total)) . '</p>';
     if ($div = memorial_plugin_laurel('divider')) $h .= '<span class="pkg__div" aria-hidden="true">' . $div . '</span>';
     $h .= '<ul class="pkg__key">';
     foreach ($keys as $r) $h .= '<li>' . $mark . '<span>' . esc_html($r['name']) . '</span></li>';
-    $h .= '</ul><details class="pkg__list"><summary>' . 'Весь состав и цены' . ' (' . count($rows) . ')</summary><ul>';
+    $h .= '</ul><details class="pkg__list"><summary>' . __( 'The full contents and prices', 'memorial-plugin' ) . ' (' . count($rows) . ')</summary><ul>';
     foreach ($rows as $r) $h .= '<li><span>' . esc_html($r['name']) . '</span>' . (!empty($r['price']) ? '<b>' . esc_html(memorial_plugin_rub((int) $r['price'])) . '</b>' : '') . '</li>';
     $h .= '</ul></details>';
     if (!empty($c['total'])) $h .= '<p class="pkg__note">' . esc_html($c['total']) . '</p>';
-    if ($page) $h .= '<a class="link-more pkg__more" href="' . esc_url($page) . '">Подробнее о кремации <span aria-hidden="true">→</span></a>';
-    if ($tel) $h .= '<a class="btn btn--line" href="tel:' . esc_attr($tel) . '">' . esc_html(memorial_plugin_t($btn ?: 'Заказать')) . '</a>';
+    if ($page) $h .= '<a class="link-more pkg__more" href="' . esc_url($page) . '">' . esc_html__( 'More about cremation', 'memorial-plugin' ) . ' <span aria-hidden="true">→</span></a>';
+    if ($tel) $h .= '<a class="btn btn--line" href="tel:' . esc_attr($tel) . '">' . esc_html(memorial_plugin_t($btn ?: __( 'Order', 'memorial-plugin' ))) . '</a>';
     return $h . '</article>';
 }
 

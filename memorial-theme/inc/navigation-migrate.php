@@ -94,6 +94,10 @@ function memorial_theme_nav_list_classes( $html, $block ) {
 		return $html;
 	}
 	$p = new WP_HTML_Tag_Processor( $html );
+	// The main menu of the header gets a translated name for screen readers (the pattern has no fixed ariaLabel).
+	if ( empty( $block['attrs']['ariaLabel'] ) && preg_match( '/(^|\s)nav(\s|$)/', (string) ( $block['attrs']['className'] ?? '' ) ) && $p->next_tag( array( 'tag_name' => 'NAV' ) ) ) {
+		$p->set_attribute( 'aria-label', __( 'Main menu', 'memorial-theme' ) );
+	}
 	while ( $p->next_tag( array( 'tag_name' => 'UL' ) ) ) {
 		if ( $p->has_class( 'wp-block-navigation__container' ) ) {
 			$p->remove_class( 'nav' );

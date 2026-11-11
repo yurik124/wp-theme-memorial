@@ -21,13 +21,13 @@ $memorial_plugin_bg = $memorial_plugin_thumb && function_exists('memorial_plugin
         echo '<span class="card__noimg">' . (memorial_plugin_laurel('wreath') ?: '✝') . '</span>';
     }
     if (get_post_meta($memorial_plugin_id, '_mem_on_order', true)) {
-        echo '<span class="card__tag">Под заказ</span>';
+        echo '<span class="card__tag">' . esc_html__( 'Made to order', 'memorial-plugin' ) . '</span>';
     }
     ?>
   <?php echo $memorial_plugin_href ? '</a>' : '</span>'; ?>
   <div class="card__body">
     <h3 class="card__title"><?php if ($memorial_plugin_page) : ?><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a><?php else : the_title(); endif; ?></h3>
     <div class="card__price"><?php echo function_exists('memorial_plugin_price_html') ? wp_kses_post(memorial_plugin_price_html($memorial_plugin_id)) : ''; ?></div>
-    <?php if (function_exists('memorial_plugin_tel') && memorial_plugin_tel()) : ?><a class="btn btn--line btn--sm" href="tel:<?php echo esc_attr(memorial_plugin_tel()); ?>">Заказать</a><?php endif; ?>
+    <?php if (function_exists('memorial_plugin_tel') && memorial_plugin_tel()) : ?><a class="btn btn--line btn--sm" href="tel:<?php echo esc_attr(memorial_plugin_tel()); ?>"><?php esc_html_e( 'Order', 'memorial-plugin' ); ?></a><?php endif; ?>
   </div>
 </article>

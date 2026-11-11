@@ -1,63 +1,63 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/theme.json",
 	"version": 3,
-	"title": "Светлый камень",
+	"title": "Light stone",
 	"settings": {
 		"color": {
 			"palette": [
 				{
 					"slug": "base",
-					"name": "Фон страницы (тёплая бумага)",
+					"name": "Page background (warm paper)",
 					"color": "#fafaf8"
 				},
 				{
 					"slug": "base-2",
-					"name": "Фон чередующихся разделов (слоновая кость)",
+					"name": "Background of alternating sections (ivory)",
 					"color": "#f0f0ec"
 				},
 				{
 					"slug": "surface",
-					"name": "Шалфейная подложка",
+					"name": "Sage backing",
 					"color": "#e5e9ec"
 				},
 				{
 					"slug": "primary",
-					"name": "Акцент: кнопки, иконки, лавр",
+					"name": "Accent: buttons, icons, laurel",
 					"color": "#56687a"
 				},
 				{
 					"slug": "on-primary",
-					"name": "Текст на кнопке с заливкой",
+					"name": "Text on a filled button",
 					"color": "#ffffff"
 				},
 				{
 					"slug": "secondary",
-					"name": "Тёмный лавр: ссылки, надзаголовки",
+					"name": "Dark laurel: links, eyebrows",
 					"color": "#3a4a5a"
 				},
 				{
 					"slug": "tertiary",
-					"name": "Светлый лавр: орнамент, разделители",
+					"name": "Light laurel: ornament, dividers",
 					"color": "#aebac6"
 				},
 				{
 					"slug": "accent",
-					"name": "Бронза: тонкие линии (в малых дозах)",
+					"name": "Bronze: thin lines (in small doses)",
 					"color": "#a88a5a"
 				},
 				{
 					"slug": "contrast",
-					"name": "Основной текст",
+					"name": "Main text",
 					"color": "#2a2c2e"
 				},
 				{
 					"slug": "contrast-2",
-					"name": "Второстепенный текст",
+					"name": "Secondary text",
 					"color": "#62666b"
 				},
 				{
 					"slug": "line",
-					"name": "Рамки и разделители",
+					"name": "Borders and dividers",
 					"color": "#e0e0da"
 				}
 			]

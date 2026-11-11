@@ -1,0 +1,522 @@
+# Translation of memorial-theme.
+# This file is distributed under the same license as the memorial-theme package.
+msgid ""
+msgstr ""
+"Project-Id-Version: memorial-theme\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: memorial-theme\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: inc/design.php:63
+msgid " (custom)"
+msgstr ""
+
+#: functions.php:120
+msgid " — to the home page"
+msgstr ""
+
+#: patterns/steps-list.php:24
+msgid "<strong>Call.</strong> We will check the availability, terms and cost."
+msgstr ""
+
+#: patterns/steps-list.php:20
+msgid "<strong>Choose</strong> a model in the catalog — or tell us by phone what you need."
+msgstr ""
+
+#: patterns/steps-list.php:28
+msgid "<strong>Get the order</strong> — in the office or with delivery."
+msgstr ""
+
+#: patterns/note.php:19
+msgid "A short explanation: terms, conditions or what to bring."
+msgstr ""
+
+#: inc/design.php:19
+msgid "Accent: buttons, icons, laurel"
+msgstr ""
+
+#: patterns/footer.php:34
+msgid "Back to top"
+msgstr ""
+
+#: inc/design.php:23
+msgid "Background of alternating blocks"
+msgstr ""
+
+#: inc/design.php:18
+msgid "Background of the bars — second shade"
+msgstr ""
+
+#: inc/design.php:17
+msgid "Background of the header bars and the footer (light in the light scheme)"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "Block theme for the Memorial funeral services site (Belgorod), \"Bright Memory\": light header and footer, laurel graphics, warm paper and sage green; style variations Laurel, Bronze, Stone and Dark. Site data (contacts, catalog, prices) comes from blocks of the Memorial Plugin."
+msgstr ""
+
+#: inc/design.php:26
+msgid "Borders and dividers"
+msgstr ""
+
+#: inc/design.php:39
+msgid "Bright memory — bronze"
+msgstr ""
+
+#: inc/design.php:38
+msgid "Bright memory — laurel (main)"
+msgstr ""
+
+#: inc/design.php:28
+msgid "Bronze: thin lines, laurel berries (in small doses)"
+msgstr ""
+
+#: patterns/steps-icons.php:17
+msgid "Call us"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Accent: buttons, icons, laurel"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Background of alternating sections (ivory)"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Borders and dividers"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Bronze: thin lines (in small doses)"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Dark laurel: links, eyebrows"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Light laurel: ornament, dividers"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Main text"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Page background (warm paper)"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Sage backing"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Secondary text"
+msgstr ""
+
+#: styles/bronze.json styles/dark.json styles/stone.json theme.json
+msgctxt "Color name"
+msgid "Text on a filled button"
+msgstr ""
+
+#: functions.php:69
+msgid "Could not open MAX. Leave your number — we will call you back."
+msgstr ""
+
+#: functions.php:67
+msgid "Could not send."
+msgstr ""
+
+#: functions.php:70
+msgid "Could not write in MAX? Leave your number — we will call you back."
+msgstr ""
+
+#: inc/design.php:21
+msgid "Dark accent: links, eyebrows, hover"
+msgstr ""
+
+#: functions.php:72
+msgid "Directions map"
+msgstr ""
+
+#: patterns/steps-icons.php:27
+msgid "Documents"
+msgstr ""
+
+#: functions.php:65
+msgid "Enter the full number: +7 and 10 digits."
+msgstr ""
+
+#. translators: %s: menu item
+#: functions.php:63
+#, php-format
+msgid "Expand: %s"
+msgstr ""
+
+#: patterns/steps-icons.php:37
+msgid "Farewell"
+msgstr ""
+
+#: patterns/note.php:24
+msgid "First item"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Cormorant Garamond"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Georgia (system serif)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Lora"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "System sans-serif"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Card heading (H3)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Page heading (H1)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Regular"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Section heading (H2)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: functions.php:27
+msgid "Footer menu"
+msgstr ""
+
+#: inc/design.php:52
+msgid "Georgia (system serif)"
+msgstr ""
+
+#: patterns/note.php:15
+msgid "Good to know"
+msgstr ""
+
+#: patterns/steps-list.php:15
+msgid "Introduction: one or two sentences — what we offer, from what price, how we differ."
+msgstr ""
+
+#: inc/design.php:20
+msgid "Light accent: ornament, dividers"
+msgstr ""
+
+#: inc/design.php:40
+msgid "Light stone (grey-blue)"
+msgstr ""
+
+#: functions.php:27 inc/navigation-migrate.php:99
+msgid "Main menu"
+msgstr ""
+
+#: inc/design.php:24
+msgid "Main text"
+msgstr ""
+
+#. Theme Name of the theme
+#: style.css
+msgid "Memorial Modern"
+msgstr ""
+
+#: functions.php:125
+msgid "Memorial: design"
+msgstr ""
+
+#: patterns/header.php:34
+msgid "Menu"
+msgstr ""
+
+#: patterns/no-results.php:14
+msgid "Nothing found."
+msgstr ""
+
+#: inc/design.php:22
+msgid "Page background"
+msgstr ""
+
+#: patterns/note.php
+msgctxt "Pattern description"
+msgid "A heading and a short note on a light backing; a list with ticks."
+msgstr ""
+
+#: patterns/steps-list.php
+msgctxt "Pattern description"
+msgid "An introduction and a short list of steps with numbers in circles."
+msgstr ""
+
+#: patterns/steps-icons.php
+msgctxt "Pattern description"
+msgid "Numbered steps with round icons. The icon of a step is set by the group’s class: ico-phone, ico-doc, ico-car, ico-candle and others."
+msgstr ""
+
+#: patterns/home.php
+msgctxt "Pattern description"
+msgid "The first screen and the sections of the home page. The texts come from “Memorial → Home page” at the moment the theme is activated; after that they are edited right in the template."
+msgstr ""
+
+#: patterns/footer.php
+msgctxt "Pattern description"
+msgid "The footer of the site: about, contacts, menu columns, documents and the “Back to top” button."
+msgstr ""
+
+#: patterns/header.php
+msgctxt "Pattern description"
+msgid "The header of the site: logo, menu, contacts and the burger."
+msgstr ""
+
+#: patterns/no-results.php
+msgctxt "Pattern description"
+msgid "The text when nothing was found."
+msgstr ""
+
+#: patterns/note.php
+msgctxt "Pattern keyword"
+msgid "important"
+msgstr ""
+
+#: patterns/steps-icons.php
+msgctxt "Pattern keyword"
+msgid "instructions"
+msgstr ""
+
+#: patterns/steps-list.php
+msgctxt "Pattern keyword"
+msgid "list"
+msgstr ""
+
+#: patterns/note.php
+msgctxt "Pattern keyword"
+msgid "note"
+msgstr ""
+
+#: patterns/steps-list.php
+msgctxt "Pattern keyword"
+msgid "order"
+msgstr ""
+
+#: patterns/note.php
+msgctxt "Pattern keyword"
+msgid "remark"
+msgstr ""
+
+#: patterns/steps-icons.php
+msgctxt "Pattern keyword"
+msgid "sequence"
+msgstr ""
+
+#: patterns/steps-list.php patterns/steps-icons.php
+msgctxt "Pattern keyword"
+msgid "steps"
+msgstr ""
+
+#: patterns/footer.php
+msgctxt "Pattern title"
+msgid "Footer"
+msgstr ""
+
+#: patterns/note.php
+msgctxt "Pattern title"
+msgid "Good to know (note)"
+msgstr ""
+
+#: patterns/header.php
+msgctxt "Pattern title"
+msgid "Header"
+msgstr ""
+
+#: patterns/home.php
+msgctxt "Pattern title"
+msgid "Home page"
+msgstr ""
+
+#: patterns/steps-list.php
+msgctxt "Pattern title"
+msgid "How to order (numbered list)"
+msgstr ""
+
+#: patterns/no-results.php
+msgctxt "Pattern title"
+msgid "No results"
+msgstr ""
+
+#: patterns/steps-icons.php
+msgctxt "Pattern title"
+msgid "Steps with icons"
+msgstr ""
+
+#: functions.php:68
+msgid "Please call us."
+msgstr ""
+
+#: functions.php:71
+msgid "Reviews on Yandex Maps"
+msgstr ""
+
+#: inc/design.php:27
+msgid "Sage backing: “What to do”, numbers, footer"
+msgstr ""
+
+#: functions.php:73
+msgid "Scroll left"
+msgstr ""
+
+#: functions.php:74
+msgid "Scroll right"
+msgstr ""
+
+#: patterns/note.php:28
+msgid "Second item"
+msgstr ""
+
+#: inc/design.php:25
+msgid "Secondary text"
+msgstr ""
+
+#: styles/dark.json theme.json
+msgctxt "Shadow name"
+msgid "Raised"
+msgstr ""
+
+#: styles/dark.json theme.json
+msgctxt "Shadow name"
+msgid "Soft"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "L"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "M"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "S"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "XL"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "XS"
+msgstr ""
+
+#: styles/bronze.json
+msgctxt "Style variation name"
+msgid "Bright memory — bronze"
+msgstr ""
+
+#: theme.json
+msgctxt "Style variation name"
+msgid "Bright memory — laurel"
+msgstr ""
+
+#: styles/dark.json
+msgctxt "Style variation name"
+msgid "Dark"
+msgstr ""
+
+#: styles/stone.json
+msgctxt "Style variation name"
+msgid "Light stone"
+msgstr ""
+
+#: inc/design.php:53
+msgid "System sans-serif (as in Windows/phone)"
+msgstr ""
+
+#: patterns/steps-icons.php:21
+msgid "Tell us what happened — we will tell you what to do right now."
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr ""
+
+#. translators: %s: colour key
+#: inc/design-migrate.php:86
+#, php-format
+msgid "The custom colour “%s” (the former dark bars) is not moved: in the light schemes it matches the section background."
+msgstr ""
+
+#: functions.php:66
+msgid "Tick the consent to the data processing."
+msgstr ""
+
+#: patterns/steps-icons.php:41
+msgid "We will arrange the farewell and the last journey."
+msgstr ""
+
+#: patterns/steps-icons.php:31
+msgid "We will help to get the certificates and arrange the documents."
+msgstr ""
+
+#: patterns/header.php:24
+msgid "funeral company"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://memorialbel.ru/"
+msgstr ""
+
+#. translators: 1: number of the photo, 2: number of photos
+#: functions.php:76
+#, php-format
+msgid "photo %1$d of %2$d"
+msgstr ""
+
+#: functions.php:64
+msgid "submenu"
+msgstr ""

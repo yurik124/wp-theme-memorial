@@ -8,32 +8,32 @@ defined('ABSPATH') || exit;
 
 function memorial_plugin_review_services() {
     return [
-        'yandex' => 'Яндекс Карты',
-        '2gis'   => '2ГИС',
-        'google' => 'Google Карты',
-        'avito'  => 'Авито',
-        'other'  => 'Другой сервис',
+        'yandex' => __( 'Yandex Maps', 'memorial-plugin' ),
+        '2gis'   => __( '2GIS', 'memorial-plugin' ),
+        'google' => __( 'Google Maps', 'memorial-plugin' ),
+        'avito'  => __( 'Avito', 'memorial-plugin' ),
+        'other'  => __( 'Another service', 'memorial-plugin' ),
     ];
 }
 
 function memorial_plugin_reviews_schema() {
     return [
-        'sources' => ['type' => 'repeater', 'label' => 'Где о нас пишут отзывы', 'add' => 'Добавить сервис или филиал', 'collapse' => 'branch', 'open' => true,
-            'help' => 'По строке на каждый сервис и филиал. Порядок меняется стрелками ↑ ↓ справа от строки. Оценку и число отзывов пишите как в самом сервисе — их видно посетителям.',
+        'sources' => ['type' => 'repeater', 'label' => __( 'Where people write reviews about us', 'memorial-plugin' ), 'add' => __( 'Add a service or a branch', 'memorial-plugin' ), 'collapse' => 'branch', 'open' => true,
+            'help' => __( 'A row for every service and branch. The order is changed with the ↑ ↓ arrows to the right of a row. Write the rating and the number of reviews as in the service itself — visitors see them.', 'memorial-plugin' ),
             'fields' => [
-                'service' => ['type' => 'select', 'label' => 'Сервис', 'options' => memorial_plugin_review_services()],
-                'name'    => ['type' => 'text', 'label' => 'Название сервиса (только для «Другой сервис»)'],
-                'branch'  => ['type' => 'text', 'label' => 'Филиал', 'placeholder' => 'например: ул. Студенческая, 40'],
-                'link'    => ['type' => 'text', 'label' => 'Ссылка на вашу карточку в сервисе', 'placeholder' => 'https://yandex.ru/maps/org/…/1234567890/',
-                              'help' => 'Для Яндекс Карт по ссылке тема сама покажет ленту отзывов. Для 2ГИС и других — кнопки «Читать отзывы» и «Оставить отзыв».'],
-                'rating'  => ['type' => 'text', 'label' => 'Оценка (необязательно)', 'placeholder' => '4,9'],
-                'count'   => ['type' => 'text', 'label' => 'Число отзывов (необязательно)', 'placeholder' => '120'],
-                'embed'   => ['type' => 'code', 'label' => 'Код виджета (необязательно)', 'rows' => 4,
-                              'help' => 'Если у сервиса или стороннего агрегатора отзывов есть код для сайта — вставьте его сюда целиком. Он покажется на вкладке этого филиала.'],
+                'service' => ['type' => 'select', 'label' => __( 'Service', 'memorial-plugin' ), 'options' => memorial_plugin_review_services()],
+                'name'    => ['type' => 'text', 'label' => __( 'Service name (only for “Another service”)', 'memorial-plugin' )],
+                'branch'  => ['type' => 'text', 'label' => __( 'Branch', 'memorial-plugin' ), 'placeholder' => __( 'for example: 40 Studencheskaya St.', 'memorial-plugin' )],
+                'link'    => ['type' => 'text', 'label' => __( 'Link to your card in the service', 'memorial-plugin' ), 'placeholder' => 'https://yandex.ru/maps/org/…/1234567890/',
+                              'help' => __( 'For Yandex Maps the theme shows the review feed by the link itself. For 2GIS and others — the “Read reviews” and “Leave a review” buttons.', 'memorial-plugin' )],
+                'rating'  => ['type' => 'text', 'label' => __( 'Rating (optional)', 'memorial-plugin' ), 'placeholder' => '4,9'],
+                'count'   => ['type' => 'text', 'label' => __( 'Number of reviews (optional)', 'memorial-plugin' ), 'placeholder' => '120'],
+                'embed'   => ['type' => 'code', 'label' => __( 'Widget code (optional)', 'memorial-plugin' ), 'rows' => 4,
+                              'help' => __( 'If the service or a third-party review aggregator has a code for websites — paste it here whole. It is shown on the tab of this branch.', 'memorial-plugin' )],
             ]],
-        'texts' => ['type' => 'group', 'label' => 'Тексты на странице', 'fields' => [
-            'lead' => ['type' => 'textarea', 'label' => 'Текст над отзывами', 'rows' => 2],
-            'ask'  => ['type' => 'textarea', 'label' => 'Просьба оставить отзыв (под отзывами)', 'rows' => 2],
+        'texts' => ['type' => 'group', 'label' => __( 'Texts on the page', 'memorial-plugin' ), 'fields' => [
+            'lead' => ['type' => 'textarea', 'label' => __( 'Text above the reviews', 'memorial-plugin' ), 'rows' => 2],
+            'ask'  => ['type' => 'textarea', 'label' => __( 'Request to leave a review (under the reviews)', 'memorial-plugin' ), 'rows' => 2],
         ]],
     ];
 }
@@ -53,10 +53,10 @@ function memorial_plugin_reviews_defaults() {
 
 add_filter('memorial_plugin_admin_pages', function ($pages) {
     $pages['mem_reviews'] = [
-        'slug' => 'mem-reviews', 'title' => 'Отзывы', 'schema' => 'memorial_plugin_reviews_schema',
+        'slug' => 'mem-reviews', 'title' => __( 'Reviews', 'memorial-plugin' ), 'schema' => 'memorial_plugin_reviews_schema',
         'intro_tab' => true,
-        'intro' => 'Сервисы отзывов для страницы «Отзывы». На странице поставьте шорткод <code>[mem_reviews]</code> (блок «Шорткод»). '
-                 . 'Блок отзывов на главной настраивается отдельно: «Главная страница → Блок «Отзывы»».',
+        'intro' => __( 'Review services for the “Reviews” page. Put the “Reviews” block (or the <code>[mem_reviews]</code> shortcode) on the page. ', 'memorial-plugin' )
+                 . __( 'The reviews block on the home page is set up separately: “Home page → “Reviews” block”.', 'memorial-plugin' ),
     ];
     return $pages;
 });
@@ -83,7 +83,7 @@ function memorial_plugin_review_rating_html($s) {
     if ($r <= 0) return '';
     $n = (int) preg_replace('/\D/', '', (string) ($s['count'] ?? ''));
     return '<span class="mrev__rate"><b>' . esc_html(number_format(min(5, $r), 1, ',', '')) . '</b>' . (function_exists('memorial_plugin_rewio_stars') ? memorial_plugin_rewio_stars(min(5, $r)) : '')
-        . ($n ? '<small>' . $n . ' ' . esc_html(memorial_plugin_word($n, 'отзыв', 'отзыва', 'отзывов')) . '</small>' : '') . '</span>';
+        . ($n ? '<small>' . $n . ' ' . esc_html(_n( 'review', 'reviews', $n, 'memorial-plugin' )) . '</small>' : '') . '</span>';
 }
 
 add_shortcode('mem_reviews', function () {
@@ -91,10 +91,10 @@ add_shortcode('mem_reviews', function () {
     $src = array_values(array_filter($o['sources'] ?? [], fn($s) => trim($s['link'] ?? '') !== '' || trim($s['embed'] ?? '') !== ''));
     $book = function_exists('memorial_plugin_bookreviews_html') ? memorial_plugin_bookreviews_html() : '';
     if (!$src) {
-        return $book ?: (current_user_can('manage_options') ? '<p class="is-style-note">[mem_reviews]: добавьте сервисы отзывов в «Мемориал → Отзывы».</p>' : '');
+        return $book ?: (current_user_can('manage_options') ? ( '<p class="is-style-note">' . esc_html__( '[mem_reviews]: add the review services in “Memorial → Reviews”.', 'memorial-plugin' ) . '</p>' ) : '');
     }
     $names = memorial_plugin_review_services();
-    $label = fn($s) => $s['service'] === 'other' && trim($s['name'] ?? '') !== '' ? trim($s['name']) : ($names[$s['service']] ?? 'Отзывы');
+    $label = fn($s) => $s['service'] === 'other' && trim($s['name'] ?? '') !== '' ? trim($s['name']) : ($names[$s['service']] ?? __( 'Reviews', 'memorial-plugin' ));
     // заглушка до загрузки виджета — одинаковая у всех сервисов: значок, название, филиал, оценка звёздами
     $ph = fn($s) => '<p class="mrev__phsvc">' . memorial_plugin_logo_html($s['service'], $label($s)) . '<span>' . esc_html($label($s)) . (trim($s['branch'] ?? '') !== '' ? ' · ' . esc_html($s['branch']) : '') . '</span></p>'
         . memorial_plugin_review_rating_html($s);
@@ -112,8 +112,8 @@ add_shortcode('mem_reviews', function () {
         if (trim($s['branch'] ?? '') !== '') echo '<span class="mrev__branch">' . esc_html($s['branch']) . '</span>';
         echo memorial_plugin_review_rating_html($s);
         echo '<span class="mrev__btns">';
-        if (trim($s['link'] ?? '') !== '') echo '<a href="' . esc_url($s['link']) . '" target="_blank" rel="noopener">Читать отзывы ↗</a>';
-        if ($add && $add !== $s['link']) echo '<a href="' . esc_url($add) . '" target="_blank" rel="noopener">Оставить отзыв ↗</a>';
+        if (trim($s['link'] ?? '') !== '') echo '<a href="' . esc_url($s['link']) . ( '" target="_blank" rel="noopener">' . esc_html__( 'Read reviews ↗', 'memorial-plugin' ) . '</a>' );
+        if ($add && $add !== $s['link']) echo '<a href="' . esc_url($add) . ( '" target="_blank" rel="noopener">' . esc_html__( 'Leave a review ↗', 'memorial-plugin' ) . '</a>' );
         echo '</span></li>';
     }
     echo '</ul>';
@@ -128,7 +128,7 @@ add_shortcode('mem_reviews', function () {
         $uid = 'mrev' . wp_rand(100, 999);
         echo '<div class="mrev__feeds" data-tabs data-wp-interactive="memorial-plugin/reviews" data-wp-init="callbacks.tabs">';
         if (count($feeds) > 1) {
-            echo '<div class="mrev__tabs" role="tablist" aria-label="Отзывы по филиалам">';
+            echo ( '<div class="mrev__tabs" role="tablist" aria-label="' . esc_html__( 'Reviews by branch', 'memorial-plugin' ) . '">' );
             foreach ($feeds as $n => $s) {
                 $t = $label($s) . (trim($s['branch'] ?? '') !== '' ? ' · ' . $s['branch'] : '');
                 echo '<button type="button" role="tab" class="maps__tab" id="' . $uid . 't' . $n . '" aria-controls="' . $uid . 'p' . $n . '" aria-selected="' . ($n ? 'false' : 'true') . '" tabindex="' . ($n ? '-1' : '0') . '">' . memorial_plugin_logo_html($s['service'], $label($s)) . esc_html($t) . '</button>';
@@ -139,12 +139,12 @@ add_shortcode('mem_reviews', function () {
             echo '<div class="mrev__feed" id="' . $uid . 'p' . $n . '"' . (count($feeds) > 1 ? ' role="tabpanel" aria-labelledby="' . $uid . 't' . $n . '"' : '') . ($n ? ' hidden' : '') . '>';
             if ($s['yid']) {
                 echo '<div class="reviews__widget" data-reviews="' . esc_url('https://yandex.ru/maps-reviews-widget/' . $s['yid'] . '?comments') . '">'
-                   . '<div class="reviews__ph">' . $ph($s) . '<button class="btn btn--line" type="button" data-reviews-load>Показать отзывы</button></div>'
-                   . '<a class="reviews__credit" href="' . esc_url('https://yandex.ru/maps/org/' . $s['yid'] . '/') . '" target="_blank" rel="noopener">' . esc_html(get_bloginfo('name')) . ' — Яндекс Карты</a></div>';
+                   . '<div class="reviews__ph">' . $ph($s) . ( '<button class="btn btn--line" type="button" data-reviews-load>' . esc_html__( 'Show reviews', 'memorial-plugin' ) . '</button></div>' )
+                   . '<a class="reviews__credit" href="' . esc_url('https://yandex.ru/maps/org/' . $s['yid'] . '/') . '" target="_blank" rel="noopener">' . esc_html(get_bloginfo('name')) . ( ' — ' . esc_html__( 'Yandex Maps', 'memorial-plugin' ) . '</a></div>' );
             } else {
                 // код виджета: вставляется только после согласия на cookie или по кнопке
                 echo '<div class="mrev__embed" data-embed-code data-wp-interactive="memorial-plugin/reviews" data-wp-init="callbacks.embed"><template>' . $s['embed'] . '</template>'
-                   . '<div class="reviews__ph">' . $ph($s) . '<button class="btn btn--line" type="button" data-embed-code-load>Показать отзывы</button></div></div>';
+                   . '<div class="reviews__ph">' . $ph($s) . ( '<button class="btn btn--line" type="button" data-embed-code-load>' . esc_html__( 'Show reviews', 'memorial-plugin' ) . '</button></div></div>' );
             }
             echo '</div>';
         }
@@ -159,9 +159,9 @@ add_shortcode('mem_reviews', function () {
 /* ---------- Один пункт меню «Отзывы» с вкладками ---------- */
 function memorial_plugin_reviews_tabs() {
     return [
-        'services' => ['Сервисы и виджеты', admin_url('admin.php?page=mem-reviews')],
-        'rewio'    => ['Отзывы Rewio', admin_url('admin.php?page=mem-rewio')],
-        'book'     => ['Из книги отзывов', admin_url('admin.php?page=memorial-plugin-bookrev')],
+        'services' => [__( 'Services and widgets', 'memorial-plugin' ), admin_url('admin.php?page=mem-reviews')],
+        'rewio'    => [__( 'Rewio reviews', 'memorial-plugin' ), admin_url('admin.php?page=mem-rewio')],
+        'book'     => [__( 'From the guest book', 'memorial-plugin' ), admin_url('admin.php?page=memorial-plugin-bookrev')],
     ];
 }
 add_action('memorial_plugin_admin_tabs', function ($opt) {

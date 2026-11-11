@@ -85,7 +85,7 @@ add_filter('aioseo_sitemap_exclude_posts', function ($ids, $type = '') {
 
 /* Настройка: «Каталог → Страницы товаров» — форма DataForm (src/catalog, экран product-pages) */
 add_action('admin_menu', function () {
-    $hook = add_submenu_page('edit.php?post_type=mem_product', 'Страницы товаров', 'Страницы товаров', 'manage_options', 'mem-product-pages', function () {
+    $hook = add_submenu_page('edit.php?post_type=mem_product', __( 'Product pages', 'memorial-plugin' ), __( 'Product pages', 'memorial-plugin' ), 'manage_options', 'mem-product-pages', function () {
         echo '<div id="memorial-plugin-catalog" class="wrap memorial-plugin-admin" data-screen="product-pages"></div>';
     });
     if ($hook && function_exists('memorial_plugin_catalog_views_assets')) add_action('load-' . $hook, 'memorial_plugin_catalog_views_assets');

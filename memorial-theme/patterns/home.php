@@ -1,10 +1,10 @@
 <?php
 /**
- * Title: Главная страница
+ * Title: Home page
  * Slug: memorial-theme/home
  * Categories: memorial-theme
  * Inserter: no
- * Description: Первый экран и разделы главной. Тексты — из «Мемориал → Главная страница» на момент включения темы; дальше редактируются прямо в шаблоне.
+ * Description: The first screen and the sections of the home page. The texts come from “Memorial → Home page” at the moment the theme is activated; after that they are edited right in the template.
  *
  * Разделы строит плагин Memorial Plugin (memorial_plugin_home_markup()): тексты — блоками ядра,
  * данные сайта (услуги, каталог, цены, контакты, карты, отзывы) — его блоками. При первом входе в админку

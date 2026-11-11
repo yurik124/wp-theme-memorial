@@ -56,7 +56,7 @@ add_shortcode('mem_cards', function ($atts) {
     ], $atts, 'mem_cards');
     $pages = memorial_plugin_cards_pages($a['pages'], (int) get_the_ID());
     if (!$pages) {
-        return current_user_can('edit_pages') ? '<p class="is-style-note">[mem_cards]: нет страниц для карточек — добавьте этой странице подпункты в главном меню или укажите pages="адрес-страницы, …".</p>' : '';
+        return current_user_can('edit_pages') ? ( '<p class="is-style-note">' . esc_html__( '[mem_cards]: no pages for the cards — add sub-items to this page in the main menu or set pages="page-slug, …".', 'memorial-plugin' ) . '</p>' ) : '';
     }
     $show = fn($k) => !memorial_plugin_sc_no($a[$k]);
     $h = '<div class="mem-cards">';
@@ -67,8 +67,8 @@ add_shortcode('mem_cards', function ($atts) {
         if ($term) {
             [$n, $min] = memorial_plugin_cat_stats($term);
             $bits = [];
-            if ($show('chislo') && $n) $bits[] = $n . "\u{00A0}" . memorial_plugin_word($n, 'модель', 'модели', 'моделей');
-            if ($show('cena') && $min) $bits[] = "от\u{00A0}" . memorial_plugin_rub($min) . (($u = memorial_plugin_cat_unit($term)) ? ' ' . $u : '');
+            if ($show('chislo') && $n) $bits[] = $n . "\u{00A0}" . _n( 'model', 'models', $n, 'memorial-plugin' );
+            if ($show('cena') && $min) $bits[] = sprintf( /* translators: %s: price */ __( 'from %s', 'memorial-plugin' ), memorial_plugin_rub($min) ) . (($u = memorial_plugin_cat_unit($term)) ? ' ' . $u : '');
             if ($bits) $lines[] = implode(', ', $bits);
         }
         if ($show('podpis')) {
@@ -97,7 +97,7 @@ add_shortcode('mem_cards', function ($atts) {
             . ($img ? '<span class="mem-card__ph">' . $img . '</span>' : '')
             . '<span class="mem-card__body"><strong class="mem-card__title">' . esc_html($title) . '</strong>'
             . ($lines ? '<span class="mem-card__sub">' . implode('<br>', array_map(fn($l) => wp_kses($l, ['br' => [], 'b' => [], 'strong' => [], 'em' => []]), $lines)) . '</span>' : '')
-            . ($show('strelka') ? '<span class="mem-card__go" aria-hidden="true">Подробнее →</span>' : '')
+            . ($show('strelka') ? '<span class="mem-card__go" aria-hidden="true">' . esc_html__( 'More →', 'memorial-plugin' ) . '</span>' : '')
             . '</span></a>';
     }
     return $h . '</div>';

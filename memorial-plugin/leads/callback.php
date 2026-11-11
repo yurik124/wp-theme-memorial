@@ -8,8 +8,8 @@ defined('ABSPATH') || exit;
 /* ---------- Заявки в админке ---------- */
 add_action('init', function () {
     register_post_type('mem_lead', [
-        'labels' => ['name' => 'Заявки на звонок', 'singular_name' => 'Заявка', 'menu_name' => 'Заявки', 'all_items' => 'Заявки',
-                     'edit_item' => 'Заявка', 'not_found' => 'Заявок пока нет'],
+        'labels' => ['name' => __( 'Call requests', 'memorial-plugin' ), 'singular_name' => __( 'Request', 'memorial-plugin' ), 'menu_name' => __( 'Requests', 'memorial-plugin' ), 'all_items' => __( 'Requests', 'memorial-plugin' ),
+                     'edit_item' => __( 'Request', 'memorial-plugin' ), 'not_found' => __( 'No requests yet', 'memorial-plugin' )],
         'public' => false, 'show_ui' => true, 'show_in_menu' => 'mem-contacts',
         'supports' => ['title'], 'capability_type' => 'post',
         'capabilities' => ['create_posts' => 'do_not_allow'], 'map_meta_cap' => true,
@@ -28,17 +28,17 @@ add_action('rest_api_init', function () {
 function memorial_plugin_callback_receive(WP_REST_Request $r) {
     // защита от ботов: скрытое поле и слишком быстрая отправка
     if ($r->get_param('website') !== '' && $r->get_param('website') !== null) return ['ok' => true];
-    if ((int) $r->get_param('elapsed') < 2) return new WP_Error('fast', 'Пожалуйста, попробуйте ещё раз.', ['status' => 400]);
+    if ((int) $r->get_param('elapsed') < 2) return new WP_Error('fast', __( 'Please try again.', 'memorial-plugin' ), ['status' => 400]);
 
     $phone = sanitize_text_field((string) $r->get_param('phone'));
     $digits = preg_replace('/\D/', '', $phone);
-    if (strlen($digits) < 10 || strlen($digits) > 15) return new WP_Error('phone', 'Проверьте номер телефона.', ['status' => 400]);
-    if (!$r->get_param('consent')) return new WP_Error('consent', 'Нужно согласие на обработку данных.', ['status' => 400]);
+    if (strlen($digits) < 10 || strlen($digits) > 15) return new WP_Error('phone', __( 'Check the phone number.', 'memorial-plugin' ), ['status' => 400]);
+    if (!$r->get_param('consent')) return new WP_Error('consent', __( 'Consent to the data processing is needed.', 'memorial-plugin' ), ['status' => 400]);
 
     $ip = sanitize_text_field($_SERVER['REMOTE_ADDR'] ?? '');
     $key = 'mem_cb_' . md5($ip);
     $n = (int) get_transient($key);
-    if ($n >= 5) return new WP_Error('limit', 'Слишком много заявок. Позвоните нам, пожалуйста.', ['status' => 429]);
+    if ($n >= 5) return new WP_Error('limit', __( 'Too many requests. Please call us.', 'memorial-plugin' ), ['status' => 429]);
     set_transient($key, $n + 1, 15 * MINUTE_IN_SECONDS);
 
     $name = mb_substr(sanitize_text_field((string) $r->get_param('name')), 0, 80);
@@ -54,11 +54,12 @@ function memorial_plugin_callback_receive(WP_REST_Request $r) {
 
     $to = memorial_plugin_contacts()['call']['email'] ?? '';
     $to = $to ?: (memorial_plugin_emails()[0] ?? get_option('admin_email'));
-    $body = "Заявка на обратный звонок с сайта " . home_url('/') . "\n\n"
-          . "Телефон: $phone\n" . ($name ? "Имя: $name\n" : '')
-          . ($page ? "Страница: " . urldecode($page) . "\n" : '')
-          . "Время: " . wp_date('d.m.Y H:i') . "\n\nВсе заявки: " . admin_url('admin.php?page=memorial-plugin-leads');
-    wp_mail($to, 'Перезвоните: ' . $phone . ($name ? " ($name)" : ''), $body);
+    /* translators: %s: site address */
+    $body = sprintf(__( 'Call-back request from the site %s', 'memorial-plugin' ), home_url('/')) . "\n\n"
+          . __( 'Phone:', 'memorial-plugin' ) . " $phone\n" . ($name ? __( 'Name:', 'memorial-plugin' ) . " $name\n" : '')
+          . ($page ? __( 'Page:', 'memorial-plugin' ) . ' ' . urldecode($page) . "\n" : '')
+          . __( 'Time:', 'memorial-plugin' ) . ' ' . wp_date('d.m.Y H:i') . "\n\n" . __( 'All requests:', 'memorial-plugin' ) . ' ' . admin_url('admin.php?page=memorial-plugin-leads');
+    wp_mail($to, __( 'Call back: ', 'memorial-plugin' ) . $phone . ($name ? " ($name)" : ''), $body);
 
     return ['ok' => true];
 }
@@ -86,32 +87,38 @@ function memorial_plugin_callback_html() {
     $names = ['max' => 'MAX', 'telegram' => 'Telegram', 'whatsapp' => 'WhatsApp'];
     ?>
 <dialog class="cb" id="callback" aria-labelledby="cb-title">
-  <button class="cb__x" type="button" data-cb-close aria-label="Закрыть">×</button>
+  <button class="cb__x" type="button" data-cb-close aria-label="<?php esc_attr_e( 'Close', 'memorial-plugin' ); ?>">×</button>
   <div class="cb__body">
     <p class="cb__status" data-cb-status hidden></p>
-    <h2 id="cb-title"><?php echo esc_html($c['title'] ?? 'Перезвоним вам'); ?></h2>
+    <h2 id="cb-title"><?php echo esc_html($c['title'] ?? __( 'We will call you back', 'memorial-plugin' )); ?></h2>
     <p class="cb__note"><?php echo esc_html($c['note'] ?? ''); ?></p>
     <form class="cb__form" novalidate>
-      <label class="cb__f"><span>Телефон</span>
+      <label class="cb__f"><span><?php esc_html_e( 'Phone', 'memorial-plugin' ); ?></span>
         <input type="tel" name="phone" required autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__"></label>
-      <label class="cb__f"><span>Как к вам обращаться <small>(необязательно)</small></span>
+      <label class="cb__f"><span><?php esc_html_e( 'How should we address you', 'memorial-plugin' ); ?> <small><?php esc_html_e( '(optional)', 'memorial-plugin' ); ?></small></span>
         <input type="text" name="name" autocomplete="name" maxlength="80"></label>
-      <label class="cb__hp" aria-hidden="true">Не заполняйте<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      <label class="cb__hp" aria-hidden="true"><?php esc_html_e( 'Do not fill in', 'memorial-plugin' ); ?><input type="text" name="website" tabindex="-1" autocomplete="off"></label>
       <label class="cb__consent"><input type="checkbox" name="consent" value="1" required>
-        <span>Даю <?php echo memorial_plugin_legal_link('consent', 'согласие на обработку персональных данных', ' target="_blank"'); ?>
-          в соответствии с <?php echo memorial_plugin_legal_link('policy', 'Политикой обработки персональных данных', ' target="_blank"'); ?></span></label>
+        <span><?php
+          printf(
+              /* translators: 1: link “consent to personal data processing”, 2: link “the personal data processing policy” */
+              esc_html__( 'I give my %1$s in accordance with %2$s', 'memorial-plugin' ),
+              memorial_plugin_legal_link('consent', __( 'consent to personal data processing', 'memorial-plugin' ), ' target="_blank"'), // phpcs:ignore WordPress.Security.EscapeOutput -- the link is escaped.
+              memorial_plugin_legal_link('policy', __( 'the personal data processing policy', 'memorial-plugin' ), ' target="_blank"') // phpcs:ignore WordPress.Security.EscapeOutput -- the link is escaped.
+          );
+        ?></span></label>
       <p class="cb__err" role="alert" hidden></p>
-      <button class="btn btn--gold btn--lg cb__submit" type="submit">Жду звонка</button>
+      <button class="btn btn--gold btn--lg cb__submit" type="submit"><?php esc_html_e( 'Waiting for the call', 'memorial-plugin' ); ?></button>
     </form>
     <div class="cb__done" hidden>
-      <p class="cb__ok">Спасибо! Заявка принята — скоро перезвоним.</p>
+      <p class="cb__ok"><?php esc_html_e( 'Thank you! The request is accepted — we will call you back soon.', 'memorial-plugin' ); ?></p>
     </div>
     <div class="cb__alt">
-      <?php if (memorial_plugin_opt('phone')) : ?><p>Или позвоните: <b class="nowrap"><?php echo esc_html(memorial_plugin_opt('phone')); ?></b></p><?php endif; ?>
+      <?php if (memorial_plugin_opt('phone')) : ?><p><?php esc_html_e( 'Or call:', 'memorial-plugin' ); ?> <b class="nowrap"><?php echo esc_html(memorial_plugin_opt('phone')); ?></b></p><?php endif; ?>
       <?php if ($msg) : ?>
         <p class="cb__msg">
           <?php foreach ($msg as $k => $url) : ?>
-            <a class="cb__m cb__m--<?php echo esc_attr($k); ?>" href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener">Написать в <?php echo esc_html($names[$k]); ?></a>
+            <a class="cb__m cb__m--<?php echo esc_attr($k); ?>" href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener"><?php echo esc_html(sprintf( /* translators: %s: messenger */ __( 'Write in %s', 'memorial-plugin' ), $names[$k] )); ?></a>
           <?php endforeach; ?>
         </p>
       <?php endif; ?>

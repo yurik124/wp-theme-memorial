@@ -7,7 +7,7 @@ $one = count($places) === 1;
 ?>
 <div class="maps">
   <?php if (!$one) : ?>
-  <div class="maps__tabs" role="tablist" aria-label="Адреса">
+  <div class="maps__tabs" role="tablist" aria-label="<?php esc_attr_e( 'Addresses', 'memorial-plugin' ); ?>">
     <?php foreach ($places as $n => $p) : $on = $n === 0; ?>
       <button class="maps__tab" type="button" role="tab" id="mt-<?php echo $n; ?>"
               aria-controls="mp-<?php echo $n; ?>" aria-selected="<?php echo $on ? 'true' : 'false'; ?>"
@@ -22,7 +22,7 @@ $one = count($places) === 1;
          data-src="<?php echo esc_url(memorial_plugin_map_src($p['map'] ?? '', $p['addr'])); ?>"<?php echo $n === 0 ? '' : ' hidden'; ?>>
       <p class="map__addr"><?php echo esc_html(memorial_plugin_addr($p['addr'])); ?></p>
       <?php if (!empty($p['hours'])) : ?><p class="map__hours"><?php echo esc_html($p['hours']); ?></p><?php endif; ?>
-      <button class="btn btn--gold map__load" type="button">Показать карту</button>
+      <button class="btn btn--gold map__load" type="button"><?php esc_html_e( 'Show the map', 'memorial-plugin' ); ?></button>
     </div>
   <?php endforeach; ?>
 </div>

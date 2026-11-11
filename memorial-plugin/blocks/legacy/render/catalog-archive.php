@@ -4,7 +4,7 @@ defined('ABSPATH') || exit;
 global $wp_query;
 $is_cat = is_tax('mem_cat');
 $term   = $is_cat ? get_queried_object() : null;
-$title  = $is_cat ? single_term_title('', false) : 'Каталог';
+$title  = $is_cat ? single_term_title('', false) : __( 'Catalog', 'memorial-plugin' );
 $base   = $is_cat ? get_term_link($term) : get_post_type_archive_link('mem_product');
 $sort   = sanitize_key($_GET['sort'] ?? '');
 $subs   = get_terms(['taxonomy' => 'mem_cat', 'parent' => $is_cat ? $term->term_id : 0, 'hide_empty' => true]);
@@ -21,10 +21,10 @@ $subs   = get_terms(['taxonomy' => 'mem_cat', 'parent' => $is_cat ? $term->term_
     <?php endif; ?>
 
     <div class="toolbar">
-      <span class="toolbar__count">Товаров: <?php echo (int) $wp_query->found_posts; ?></span>
+      <span class="toolbar__count"><?php echo esc_html(sprintf( /* translators: %d: number of products */ __( 'Products: %d', 'memorial-plugin' ), (int) $wp_query->found_posts )); ?></span>
       <form class="sort" method="get" action="<?php echo esc_url($base); ?>" data-sort>
         <label>
-          <span class="screen-reader-text">Сортировка</span>
+          <span class="screen-reader-text"><?php esc_html_e( 'Sorting', 'memorial-plugin' ); ?></span>
           <select name="sort">
             <?php foreach (memorial_plugin_sorts() as $v => $l) : ?>
               <option value="<?php echo esc_attr($v); ?>" <?php selected($sort, $v); ?>><?php echo esc_html($l); ?></option>
@@ -42,7 +42,7 @@ $subs   = get_terms(['taxonomy' => 'mem_cat', 'parent' => $is_cat ? $term->term_
       <?php the_posts_pagination(['mid_size' => 1, 'prev_text' => '←', 'next_text' => '→']); ?>
     <?php else : ?>
       <div class="empty">
-        <p>В этом разделе пока нет товаров. Позвоните — подберём нужное.</p>
+        <p><?php esc_html_e( 'There are no products in this section yet. Call — we will find what you need.', 'memorial-plugin' ); ?></p>
         <?php if (memorial_plugin_tel()) : ?><a class="btn btn--gold" href="tel:<?php echo esc_attr(memorial_plugin_tel()); ?>"><?php echo memorial_plugin_icon('phone'); ?><span class="nowrap"><?php echo esc_html(memorial_plugin_opt('phone')); ?></span></a><?php endif; ?>
       </div>
     <?php endif; ?>

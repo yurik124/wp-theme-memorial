@@ -33,22 +33,22 @@ function memorial_plugin_search_box(array $o) {
     $pop = array_filter(array_map('trim', (array) ($o['popular'] ?? [])));
     $h = '<div class="msearch" data-msearch data-log="' . esc_url(admin_url('admin-ajax.php')) . '" data-w="' . esc_attr($o['where'] ?? 'f') . '">'
         . '<div class="msearch__bar">'
-        . '<label class="screen-reader-text" for="' . esc_attr($id) . '">' . esc_html($o['label'] ?? 'Поиск') . '</label>'
+        . '<label class="screen-reader-text" for="' . esc_attr($id) . '">' . esc_html($o['label'] ?? __( 'Search', 'memorial-plugin' )) . '</label>'
         . '<svg class="msearch__ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
-        . '<input id="' . esc_attr($id) . '" type="search" placeholder="' . esc_attr($o['placeholder'] ?? 'Поиск') . '" autocomplete="off" enterkeyhint="search"'
+        . '<input id="' . esc_attr($id) . '" type="search" placeholder="' . esc_attr($o['placeholder'] ?? __( 'Search', 'memorial-plugin' )) . '" autocomplete="off" enterkeyhint="search"'
         . ' role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="' . esc_attr($id) . '-list" data-msearch-q>'
-        . '<button type="button" class="msearch__x" data-msearch-clear hidden aria-label="Очистить поиск">×</button>'
-        . '<ul class="msearch__list" id="' . esc_attr($id) . '-list" role="listbox" aria-label="Подсказки" hidden></ul>'
+        . ( '<button type="button" class="msearch__x" data-msearch-clear hidden aria-label="' . esc_html__( 'Clear the search', 'memorial-plugin' ) . '">×</button>' )
+        . '<ul class="msearch__list" id="' . esc_attr($id) . ( '-list" role="listbox" aria-label="' . esc_attr__( 'Suggestions', 'memorial-plugin' ) . '" hidden></ul>' )
         . '</div>';
     if ($pop) {
-        $h .= '<p class="msearch__pop" data-msearch-pop><span>Часто ищут:</span>';
+        $h .= ( '<p class="msearch__pop" data-msearch-pop><span>' . esc_html__( 'Frequent searches:', 'memorial-plugin' ) . '</span>' );
         foreach ($pop as $w) $h .= '<button type="button" class="msearch__tag" data-q="' . esc_attr($w) . '">' . esc_html($w) . '</button>';
         $h .= '</p>';
     }
     $h .= '<p class="msearch__status" aria-live="polite" data-msearch-status></p>'
-        . '<div class="msearch__none" data-msearch-none hidden><p>' . esc_html($o['none'] ?? 'Ничего не нашли.') . '</p>'
+        . '<div class="msearch__none" data-msearch-none hidden><p>' . esc_html($o['none'] ?? __( 'Nothing found.', 'memorial-plugin' )) . '</p>'
         . '<p class="msearch__none-btns">' . (function_exists('memorial_plugin_tel') && memorial_plugin_tel() ? '<a class="btn btn--gold" href="tel:' . esc_attr(memorial_plugin_tel()) . '">' . esc_html(memorial_plugin_opt('phone')) . '</a>' : '')
-        . '<button class="btn btn--ghost" type="button" data-callback>Перезвоните мне</button></p></div>'
+        . ( '<button class="btn btn--ghost" type="button" data-callback>' . esc_html__( 'Call me back', 'memorial-plugin' ) . '</button></p></div>' )
         . '</div>';
     return $h;
 }

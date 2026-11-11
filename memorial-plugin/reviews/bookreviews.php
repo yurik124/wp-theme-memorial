@@ -9,10 +9,10 @@ defined('ABSPATH') || exit;
 add_action('init', function () {
     register_post_type('mem_bookrev', [
         'labels' => [
-            'name' => 'Отзывы из книги', 'singular_name' => 'Отзыв из книги', 'menu_name' => 'Отзывы из книги',
-            'all_items' => 'Отзывы из книги', 'add_new' => 'Добавить отзыв', 'add_new_item' => 'Новый отзыв из книги',
-            'edit_item' => 'Редактировать отзыв', 'featured_image' => 'Фото страницы книги', 'set_featured_image' => 'Выбрать фото страницы',
-            'remove_featured_image' => 'Убрать фото', 'use_featured_image' => 'Использовать как фото страницы',
+            'name' => __( 'Guest book reviews', 'memorial-plugin' ), 'singular_name' => __( 'Guest book review', 'memorial-plugin' ), 'menu_name' => __( 'Guest book reviews', 'memorial-plugin' ),
+            'all_items' => __( 'Guest book reviews', 'memorial-plugin' ), 'add_new' => __( 'Add a review', 'memorial-plugin' ), 'add_new_item' => __( 'New guest book review', 'memorial-plugin' ),
+            'edit_item' => __( 'Edit review', 'memorial-plugin' ), 'featured_image' => __( 'Photo of the book page', 'memorial-plugin' ), 'set_featured_image' => __( 'Choose the page photo', 'memorial-plugin' ),
+            'remove_featured_image' => __( 'Remove the photo', 'memorial-plugin' ), 'use_featured_image' => __( 'Use as the page photo', 'memorial-plugin' ),
         ],
         'public' => false, 'show_ui' => true, 'show_in_menu' => false, 'show_in_rest' => false,
         'supports' => ['title', 'editor', 'thumbnail', 'page-attributes'],
@@ -36,8 +36,8 @@ function memorial_plugin_branch_options() {
 function memorial_plugin_bookrev_month($id) {
     $d = get_post_meta($id, '_mem_bdate', true);
     if (!$d || !($ts = strtotime($d))) return '';
-    $m = [1 => 'январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
-    return $m[(int) gmdate('n', $ts)] . ' ' . gmdate('Y', $ts);
+    /* translators: date format of a guest book review: month and year, see https://www.php.net/manual/datetime.format.php */
+    return wp_date(__( 'F Y', 'memorial-plugin' ), $ts, new DateTimeZone('UTC'));
 }
 
 /** Отзывы из книги: сначала по порядку из админки, затем новые сверху */
@@ -51,30 +51,31 @@ function memorial_plugin_bookrevs($limit = -1) {
     return $limit > 0 ? array_slice($list, 0, $limit) : $list;
 }
 
-function memorial_plugin_bookreviews_html($limit = -1, $heading = 'Из книги отзывов') {
+function memorial_plugin_bookreviews_html($limit = -1, $heading = null) {
+    $heading ??= __( 'From the guest book', 'memorial-plugin' );
     $list = memorial_plugin_bookrevs($limit);
     if (!$list) return '';
     $h = '<section class="brev">';
     if ($heading !== '') $h .= '<h2 class="brev__title">' . esc_html($heading) . '</h2>'
-        . '<p class="brev__lead">Отзывы, которые клиенты оставили в бумажной книге отзывов в нашем офисе. Перепечатаны без изменений, рядом — фото страницы.</p>';
+        . ( '<p class="brev__lead">' . esc_html__( 'Reviews that customers left in the paper guest book in our office. Reprinted without changes, with the photo of the page next to them.', 'memorial-plugin' ) . '</p>' );
     $h .= '<div class="brev__list">';
     foreach ($list as $r) {
         $text = trim($r->post_content);
         if ($text === '') continue;
-        $meta = array_filter(['Книга отзывов', get_post_meta($r->ID, '_mem_branch', true), memorial_plugin_bookrev_month($r->ID)]);
+        $meta = array_filter([__( 'Guest book', 'memorial-plugin' ), get_post_meta($r->ID, '_mem_branch', true), memorial_plugin_bookrev_month($r->ID)]);
         $long = mb_strlen(wp_strip_all_tags($text)) > 420;
         $h .= '<article class="brev__item">';
         $h .= '<div class="brev__body">';
         $h .= '<blockquote class="brev__text' . ($long ? ' is-long' : '') . '">' . wpautop(esc_html(wp_strip_all_tags($text))) . '</blockquote>';
-        if ($long) $h .= '<button type="button" class="brev__more" aria-expanded="false" data-wp-interactive="memorial-plugin/book" data-wp-on--click="actions.more">Читать полностью</button>';
+        if ($long) $h .= ( '<button type="button" class="brev__more" aria-expanded="false" data-wp-interactive="memorial-plugin/book" data-wp-on--click="actions.more">' . esc_html__( 'Read more', 'memorial-plugin' ) . '</button>' );
         $h .= '<p class="brev__author">' . esc_html(get_the_title($r)) . '</p>';
         $h .= '<p class="brev__meta">' . esc_html(implode(' · ', $meta)) . '</p>';
         $h .= '</div>';
         if (has_post_thumbnail($r)) {
             $tid = get_post_thumbnail_id($r);
             $h .= '<a class="brev__photo" href="' . esc_url(wp_get_attachment_image_url($tid, 'large')) . '" data-lb data-cap="' . esc_attr(get_the_title($r) . ' · ' . implode(' · ', $meta)) . '">'
-                . wp_get_attachment_image($tid, 'medium', false, ['loading' => 'lazy', 'alt' => 'Фото страницы книги отзывов: ' . get_the_title($r)])
-                . '<span>Фото страницы</span></a>';
+                . wp_get_attachment_image($tid, 'medium', false, ['loading' => 'lazy', 'alt' => __( 'Photo of a guest book page: ', 'memorial-plugin' ) . get_the_title($r)])
+                . ( '<span>' . esc_html__( 'Page photo', 'memorial-plugin' ) . '</span></a>' );
         }
         $h .= '</article>';
     }
@@ -82,6 +83,6 @@ function memorial_plugin_bookreviews_html($limit = -1, $heading = 'Из книг
 }
 
 add_shortcode('mem_bookreviews', function ($atts) {
-    $a = shortcode_atts(['limit' => -1, 'title' => 'Из книги отзывов'], $atts, 'mem_bookreviews');
+    $a = shortcode_atts(['limit' => -1, 'title' => __( 'From the guest book', 'memorial-plugin' )], $atts, 'mem_bookreviews');
     return memorial_plugin_bookreviews_html((int) $a['limit'], $a['title']);
 });

@@ -15,11 +15,11 @@ defined('ABSPATH') || exit;
 /** Пропорции фото в карточках */
 function memorial_plugin_ratios() {
     return [
-        'photo'    => 'Фото 4:3 (гробы, примеры работ)',
-        'portrait' => 'Вертикальные 3:4 (венки, памятники)',
-        'tall'     => 'Узкие высокие 3:5 (кресты), целиком',
-        'land'     => 'Широкие 5:3 (оградки, чертежи), целиком',
-        'square'   => 'Квадрат',
+        'photo'    => __( 'Photo 4:3 (coffins, examples of works)', 'memorial-plugin' ),
+        'portrait' => __( 'Portrait 3:4 (wreaths, monuments)', 'memorial-plugin' ),
+        'tall'     => __( 'Narrow tall 3:5 (crosses), whole', 'memorial-plugin' ),
+        'land'     => __( 'Wide 5:3 (fences, drawings), whole', 'memorial-plugin' ),
+        'square'   => __( 'Square', 'memorial-plugin' ),
     ];
 }
 
@@ -121,18 +121,18 @@ function memorial_plugin_catalog_card($p, $i) {
     $mbg = $thumb && memorial_plugin_card_ratio_differs($thumb) ? memorial_plugin_blur_bg_url($thumb) : '';
     echo '<span class="mcard__media" data-wp-interactive="memorial-plugin/card" data-wp-init="callbacks.init"><span class="mcard__img' . ($mbg ? ' has-bg" style="--mbg:url(&quot;' . esc_url($mbg) . '&quot;)' : '') . '">';
     $imgattr = fn($p, $k) => ['loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width:600px) 50vw, 260px',
-                              'alt' => get_post_meta($p, '_wp_attachment_image_alt', true) ?: $title . ($k ? ', фото ' . ($k + 1) : ''),
+                              'alt' => get_post_meta($p, '_wp_attachment_image_alt', true) ?: $title . ($k ? __( ', photo ', 'memorial-plugin' ) . ($k + 1) : ''),
                               'class' => 'mcard__ph' . ($k ? '' : ' is-on'), 'data-big' => wp_get_attachment_image_url($p, 'large'),
                               'data-bg' => $k && memorial_plugin_card_ratio_differs($p) ? memorial_plugin_blur_bg_url($p) : ''];
     if (!$thumb) echo '<span class="mcard__noimg" aria-hidden="true">' . (memorial_plugin_laurel('wreath') ?: '✝') . '</span>';
     // несколько фото: остальные лежат рядом скрытыми (грузятся, только когда до них долистают), стрелки и точки — assets/js/view/blocks.js (store memorial-plugin/card)
     foreach ($photos as $k => $p) echo wp_get_attachment_image($p, 'medium_large', false, $imgattr($p, $k));
-    if (get_post_meta($id, '_mem_on_order', true)) echo '<span class="mcard__tag">Под заказ</span>';
+    if (get_post_meta($id, '_mem_on_order', true)) echo ( '<span class="mcard__tag">' . esc_html__( 'Made to order', 'memorial-plugin' ) . '</span>' );
     echo '</span>';
     // стрелки — снаружи фото (центр круга на краю фото), поэтому почти не закрывают снимок
     if (count($photos) > 1) {
-        echo '<span class="mcard__arr mcard__arr--l" role="button" tabindex="0" aria-label="Предыдущее фото" data-dir="-1" data-wp-on--click="actions.step" data-wp-on--keydown="actions.key">' . memorial_plugin_chevron('l') . '</span>'
-           . '<span class="mcard__arr mcard__arr--r" role="button" tabindex="0" aria-label="Следующее фото" data-dir="1" data-wp-on--click="actions.step" data-wp-on--keydown="actions.key">' . memorial_plugin_chevron('r') . '</span>';
+        echo ( '<span class="mcard__arr mcard__arr--l" role="button" tabindex="0" aria-label="' . esc_html__( 'Previous photo', 'memorial-plugin' ) . '" data-dir="-1" data-wp-on--click="actions.step" data-wp-on--keydown="actions.key">' ) . memorial_plugin_chevron('l') . '</span>'
+           . ( '<span class="mcard__arr mcard__arr--r" role="button" tabindex="0" aria-label="' . esc_html__( 'Next photo', 'memorial-plugin' ) . '" data-dir="1" data-wp-on--click="actions.step" data-wp-on--keydown="actions.key">' ) . memorial_plugin_chevron('r') . '</span>';
     }
     echo '</span>';
     if (count($photos) > 1) {
@@ -165,7 +165,7 @@ add_shortcode('mem_catalog', function ($atts) {
     $root = memorial_plugin_resolve_cat($a['cat'], get_the_ID());
     if (!$root) {
         return current_user_can('edit_posts')
-            ? '<p class="is-style-note">[mem_catalog]: категория не найдена. Укажите её так: [mem_catalog cat="адрес-категории"].</p>' : '';
+            ? ( '<p class="is-style-note">' . esc_html__( '[mem_catalog]: the category was not found. Set it like this: [mem_catalog cat="category-slug"].', 'memorial-plugin' ) . '</p>' ) : '';
     }
 
     // Разделы: товары самой категории (без заголовка) + подкатегории
@@ -178,7 +178,7 @@ add_shortcode('mem_catalog', function ($atts) {
         if ($items) $sections[] = [$k, $items, true];
     }
     if (!$sections) {
-        return '<div class="mcat__empty"><p>Каталог скоро появится. Позвоните — расскажем о моделях и ценах.</p></div>';
+        return ( '<div class="mcat__empty"><p>' . esc_html__( 'The catalog will appear soon. Call — we will tell you about the models and prices.', 'memorial-plugin' ) . '</p></div>' );
     }
 
     $h = in_array($a['heading'], ['h2', 'h3'], true) ? $a['heading'] : 'h2';
@@ -190,15 +190,15 @@ add_shortcode('mem_catalog', function ($atts) {
     if ($a['nav'] !== '0' || ($a['sort'] !== '0' && $total > 1)) {
         echo '<span class="mcat__pin" aria-hidden="true"></span><div class="mcat__bar">';
         if ($a['nav'] !== '0' && count($titled) > 1) {
-            echo '<div class="mcat__navwrap"><nav class="mcat__nav" aria-label="Разделы каталога">';
+            echo ( '<div class="mcat__navwrap"><nav class="mcat__nav" aria-label="' . esc_attr__( 'Catalog sections', 'memorial-plugin' ) . '">' );
             foreach ($titled as [$t, $items]) {
                 echo '<a class="chip" href="#' . esc_attr(memorial_plugin_term_anchor($t)) . '">' . esc_html($t->name) . ' <small>' . count($items) . '</small></a>';
             }
             echo '</nav></div>';
         }
         if ($a['sort'] !== '0' && $total > 1) {
-            echo '<label class="mcat__sort"><span class="mcat__sortlbl">Сортировка:</span><select data-mcat-sort data-wp-on--change="actions.sort">'
-               . '<option value="">По умолчанию</option><option value="asc">Сначала дешевле</option><option value="desc">Сначала дороже</option>'
+            echo ( '<label class="mcat__sort"><span class="mcat__sortlbl">' . esc_html__( 'Sorting:', 'memorial-plugin' ) . '</span><select data-mcat-sort data-wp-on--change="actions.sort">' )
+               . ( '<option value="">' . esc_html__( 'Default', 'memorial-plugin' ) . '</option><option value="asc">' . esc_html__( 'Cheapest first', 'memorial-plugin' ) . '</option><option value="desc">' . esc_html__( 'Most expensive first', 'memorial-plugin' ) . '</option>' )
                . '</select></label>';
         }
         echo '</div>';
@@ -212,8 +212,8 @@ add_shortcode('mem_catalog', function ($atts) {
             echo '<' . $h . ' class="mcat__title">' . esc_html($t->name) . '</' . $h . '>';
             $prices = array_filter(array_map(fn($p) => (int) get_post_meta($p->ID, '_mem_price', true), $items));
             $n = count($items);
-            echo '<p class="mcat__meta">' . $n . ' ' . memorial_plugin_word($n, 'модель', 'модели', 'моделей')
-               . ($prices ? ', от ' . esc_html(memorial_plugin_rub(min($prices))) : '') . '</p>';
+            echo '<p class="mcat__meta">' . $n . ' ' . _n( 'model', 'models', $n, 'memorial-plugin' )
+               . ($prices ? __( ', from ', 'memorial-plugin' ) . esc_html(memorial_plugin_rub(min($prices))) : '') . '</p>';
         }
         if (trim($t->description) !== '' && $with_head) {
             // в описании раздела можно писать [mem_cat_count], [mem_cat_price] — они считают этот раздел
@@ -241,11 +241,11 @@ function memorial_plugin_term_anchor($t) {
 
 /* Окно для крупного фото — одно на страницу */
 add_action('wp_footer', function () {
-    echo '<dialog class="lb" id="lb" aria-label="Фото"><button class="lb__x" type="button" aria-label="Закрыть">'
+    echo ( '<dialog class="lb" id="lb" aria-label="' . esc_html__( 'Photo', 'memorial-plugin' ) . '"><button class="lb__x" type="button" aria-label="' . esc_attr__( 'Close', 'memorial-plugin' ) . '">' )
        . '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>'
-       . '<button class="lb__nav lb__prev" type="button" aria-label="Предыдущее">' . memorial_plugin_chevron('l') . '</button>'
+       . ( '<button class="lb__nav lb__prev" type="button" aria-label="' . esc_html__( 'Previous', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron('l') . '</button>'
        . '<figure><div class="lb__stage"><img alt=""></div><figcaption></figcaption><p class="lb__count" aria-live="polite"></p></figure>'
-       . '<button class="lb__nav lb__next" type="button" aria-label="Следующее">' . memorial_plugin_chevron('r') . '</button></dialog>';
+       . ( '<button class="lb__nav lb__next" type="button" aria-label="' . esc_html__( 'Next', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron('r') . '</button></dialog>';
 }, 20);
 
 /* Страница с шорткодом = страница своей категории: ссылки на категорию ведут на неё */

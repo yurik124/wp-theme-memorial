@@ -12,36 +12,36 @@ defined('ABSPATH') || exit;
 
 function memorial_plugin_prices_schema() {
     return [
-        'packages' => ['type' => 'group', 'label' => 'Пакеты похорон', 'help' => 'Выводятся на главной (блок «Пакеты услуг» — его заголовок и показ настраиваются в «Главная страница») и шорткодом [mem_packages] на любой странице.', 'fields' => [
-            'badge' => ['type' => 'text', 'label' => 'Надпись на выделенном пакете'],
-            'btn'   => ['type' => 'text', 'label' => 'Текст кнопки'],
-            'items' => ['type' => 'repeater', 'label' => 'Пакеты', 'add' => 'Добавить пакет', 'collapse' => 'name', 'fields' => [
-                'name'     => ['type' => 'text', 'label' => 'Название пакета'],
-                'featured' => ['type' => 'checkbox', 'label' => 'Выделить (рамка акцентом и надпись)'],
-                'rows'     => ['type' => 'repeater', 'label' => 'Состав пакета — итог считается сам. «На карточке» — 3–5 главных позиций, видны без раскрытия списка', 'add' => 'Добавить позицию', 'inline' => true, 'fields' => [
-                    'name'  => ['type' => 'text', 'label' => 'Позиция'],
-                    'price' => ['type' => 'number', 'label' => 'Цена, ₽'],
-                    'key'   => ['type' => 'checkbox', 'label' => 'На карточке'],
+        'packages' => ['type' => 'group', 'label' => __( 'Funeral packages', 'memorial-plugin' ), 'help' => __( 'Shown on the home page (the “Service packages” block — its title and visibility are set in “Home page”) and by the “Funeral packages” block (or the [mem_packages] shortcode) on any page.', 'memorial-plugin' ), 'fields' => [
+            'badge' => ['type' => 'text', 'label' => __( 'Label on the highlighted package', 'memorial-plugin' )],
+            'btn'   => ['type' => 'text', 'label' => __( 'Button text', 'memorial-plugin' )],
+            'items' => ['type' => 'repeater', 'label' => __( 'Packages', 'memorial-plugin' ), 'add' => __( 'Add a package', 'memorial-plugin' ), 'collapse' => 'name', 'fields' => [
+                'name'     => ['type' => 'text', 'label' => __( 'Package name', 'memorial-plugin' )],
+                'featured' => ['type' => 'checkbox', 'label' => __( 'Highlight (accent frame and the label)', 'memorial-plugin' )],
+                'rows'     => ['type' => 'repeater', 'label' => __( 'Contents of the package — the total is counted automatically. “On the card” — 3–5 main items, visible without opening the list', 'memorial-plugin' ), 'add' => __( 'Add a line item', 'memorial-plugin' ), 'inline' => true, 'fields' => [
+                    'name'  => ['type' => 'text', 'label' => __( 'Line item', 'memorial-plugin' )],
+                    'price' => ['type' => 'number', 'label' => __( 'Price, ₽', 'memorial-plugin' )],
+                    'key'   => ['type' => 'checkbox', 'label' => __( 'On the card', 'memorial-plugin' )],
                 ]],
             ]],
         ]],
-        'cremation' => ['type' => 'group', 'label' => 'Пакет кремации', 'help' => 'Таблица на странице кремации — шорткод [mem_cremation]. Итог считается сам; на других страницах его выводит [mem_price id="kremaciya"].', 'fields' => [
-            'head_l' => ['type' => 'text', 'label' => 'Заголовок левой колонки'],
-            'head_r' => ['type' => 'text', 'label' => 'Заголовок правой колонки'],
-            'rows'   => ['type' => 'repeater', 'label' => 'Что входит. «На карточке» — позиции, видные на карточке кремации без раскрытия списка', 'add' => 'Добавить позицию', 'inline' => true, 'fields' => [
-                'name'  => ['type' => 'text', 'label' => 'Позиция'],
-                'price' => ['type' => 'number', 'label' => 'Цена, ₽'],
-                'key'   => ['type' => 'checkbox', 'label' => 'На карточке'],
+        'cremation' => ['type' => 'group', 'label' => __( 'Cremation package', 'memorial-plugin' ), 'help' => __( 'The table on the cremation page — the “Cremation” block ([mem_cremation]). The total is counted automatically; on other pages it is shown by [mem_price id="kremaciya"].', 'memorial-plugin' ), 'fields' => [
+            'head_l' => ['type' => 'text', 'label' => __( 'Left column title', 'memorial-plugin' )],
+            'head_r' => ['type' => 'text', 'label' => __( 'Right column title', 'memorial-plugin' )],
+            'rows'   => ['type' => 'repeater', 'label' => __( 'What is included. “On the card” — the items visible on the cremation card without opening the list', 'memorial-plugin' ), 'add' => __( 'Add a line item', 'memorial-plugin' ), 'inline' => true, 'fields' => [
+                'name'  => ['type' => 'text', 'label' => __( 'Line item', 'memorial-plugin' )],
+                'price' => ['type' => 'number', 'label' => __( 'Price, ₽', 'memorial-plugin' )],
+                'key'   => ['type' => 'checkbox', 'label' => __( 'On the card', 'memorial-plugin' )],
             ]],
-            'total' => ['type' => 'text', 'label' => 'Подпись итоговой строки'],
-            'card'  => ['type' => 'checkbox', 'label' => 'Карточка «Кремация» рядом с пакетами похорон на странице «Цены» (там, где стоит [mem_packages]; на других страницах — [mem_packages cremation="1"])'],
-            'card_title' => ['type' => 'text', 'label' => 'Название карточки', 'placeholder' => 'Кремация'],
+            'total' => ['type' => 'text', 'label' => __( 'Caption of the total row', 'memorial-plugin' )],
+            'card'  => ['type' => 'checkbox', 'label' => __( 'The “Cremation” card next to the funeral packages on the “Prices” page (where the packages block is; on other pages — [mem_packages cremation="1"])', 'memorial-plugin' )],
+            'card_title' => ['type' => 'text', 'label' => __( 'Card title', 'memorial-plugin' ), 'placeholder' => __( 'Cremation', 'memorial-plugin' )],
         ]],
-        'other' => ['type' => 'group', 'label' => 'Отдельные цены', 'help' => 'Цены, которые упоминаются в текстах страниц. В текст вставляется шорткод с кодом цены, например [mem_price id="lenta"]. Цену можно писать числом (500), диапазоном (200–300) или словами (бесплатно) — знак ₽ к числам тема добавит сама.', 'fields' => [
-            'items' => ['type' => 'repeater', 'label' => 'Цены', 'add' => 'Добавить цену', 'inline' => true, 'fields' => [
-                'name'  => ['type' => 'text', 'label' => 'Название'],
-                'price' => ['type' => 'text', 'label' => 'Цена'],
-                'code'  => ['type' => 'text', 'label' => 'Код (латиницей)'],
+        'other' => ['type' => 'group', 'label' => __( 'Separate prices', 'memorial-plugin' ), 'help' => __( 'Prices mentioned in the texts of pages. A shortcode with the price code is put into the text, for example [mem_price id="lenta"]. The price can be a number (500), a range (200–300) or words (free) — the theme adds the ₽ sign to numbers itself.', 'memorial-plugin' ), 'fields' => [
+            'items' => ['type' => 'repeater', 'label' => __( 'Prices', 'memorial-plugin' ), 'add' => __( 'Add a price', 'memorial-plugin' ), 'inline' => true, 'fields' => [
+                'name'  => ['type' => 'text', 'label' => __( 'Name', 'memorial-plugin' )],
+                'price' => ['type' => 'text', 'label' => __( 'Price', 'memorial-plugin' )],
+                'code'  => ['type' => 'text', 'label' => __( 'Code (Latin letters)', 'memorial-plugin' )],
             ]],
         ]],
     ];
@@ -59,7 +59,7 @@ function memorial_plugin_prices_defaults() {
             'items' => $src['items'] ?? $home['items'],
         ],
         'cremation' => [
-            'head_l' => 'Что входит', 'head_r' => 'Стоимость',
+            'head_l' => __( 'What is included', 'memorial-plugin' ), 'head_r' => __( 'Cost', 'memorial-plugin' ),
             'rows' => [
                 ['name' => 'Транспортировка тела до крематория', 'price' => 20000],
                 ['name' => 'Гроб в комплекте', 'price' => 7000],
@@ -90,9 +90,9 @@ add_filter('memorial_plugin_admin_pages', function ($pages) {
         $codes .= ' · <code>[mem_price paket="' . esc_html($p['name']) . '"]</code> — ' . esc_html(memorial_plugin_rub(array_sum(array_column($p['items'], 1))));
     }
     $pages['mem_prices'] = [
-        'slug' => 'mem-prices', 'title' => 'Цены', 'schema' => 'memorial_plugin_prices_schema',
-        'intro' => 'Цены отсюда подставляются на страницы автоматически — меняйте их только здесь.<br><b>Шорткоды для текста:</b> ' . $codes
-            . '<br>Цены каталога считаются из товаров: <code>[mem_cat_price]</code>, <code>[mem_cat_count]</code> (см. «Шорткоды и блоки»).'
+        'slug' => 'mem-prices', 'title' => __( 'Prices', 'memorial-plugin' ), 'schema' => 'memorial_plugin_prices_schema',
+        'intro' => __( 'Prices from here are put into the pages automatically — change them only here.<br><b>Shortcodes for the text:</b> ', 'memorial-plugin' ) . $codes
+            . __( '<br>Catalog prices are counted from the products: <code>[mem_cat_price]</code>, <code>[mem_cat_count]</code>.', 'memorial-plugin' )
             . memorial_plugin_prices_audit_html(),
     ];
     return $pages;
@@ -141,11 +141,11 @@ add_shortcode('mem_cremation', function () {
     $c = memorial_plugin_prices('cremation');
     $rows = array_filter($c['rows'] ?? [], fn($r) => trim($r['name'] ?? '') !== '');
     if (!$rows) return '';
-    $h = '<figure class="wp-block-table is-style-price mem-cremation"><table><thead><tr><th>' . esc_html($c['head_l'] ?: 'Что входит') . '</th><th>' . esc_html($c['head_r'] ?: 'Стоимость') . '</th></tr></thead><tbody>';
+    $h = '<figure class="wp-block-table is-style-price mem-cremation"><table><thead><tr><th>' . esc_html($c['head_l'] ?: __( 'What is included', 'memorial-plugin' )) . '</th><th>' . esc_html($c['head_r'] ?: __( 'Cost', 'memorial-plugin' )) . '</th></tr></thead><tbody>';
     foreach ($rows as $r) {
         $h .= '<tr><td>' . esc_html($r['name']) . '</td><td class="mem-nw">' . ((int) $r['price'] ? esc_html(memorial_plugin_rub((int) $r['price'])) : '') . '</td></tr>';
     }
-    $h .= '</tbody><tfoot><tr><td>' . esc_html($c['total'] ?: 'Итого') . '</td><td class="mem-nw">' . esc_html(memorial_plugin_rub(memorial_plugin_cremation_total())) . '</td></tr></tfoot></table></figure>';
+    $h .= '</tbody><tfoot><tr><td>' . esc_html($c['total'] ?: __( 'Total', 'memorial-plugin' )) . '</td><td class="mem-nw">' . esc_html(memorial_plugin_rub(memorial_plugin_cremation_total())) . '</td></tr></tfoot></table></figure>';
     return $h;
 });
 
@@ -367,20 +367,20 @@ function memorial_plugin_prices_audit_html() {
     $done = (array) get_option('mem_prices_migrated_pages', []);
     $h = '';
     if ($done) {
-        $h .= '<br><br><b>Переведены на автоматические цены:</b> ' . implode(', ', array_map(fn($id) => '<a href="' . esc_url(get_edit_post_link($id)) . '">' . esc_html(get_the_title($id)) . '</a>', $done))
-            . '. Прежний текст сохранён в «Редакциях» страницы.';
+        $h .= ( '<br><br><b>' . esc_html__( 'Switched to automatic prices:', 'memorial-plugin' ) . '</b> ' ) . implode(', ', array_map(fn($id) => '<a href="' . esc_url(get_edit_post_link($id)) . '">' . esc_html(get_the_title($id)) . '</a>', $done))
+            . __( '. The previous text is kept in the page’s “Revisions”.', 'memorial-plugin' );
     }
-    $btn = ' <a class="button" href="' . esc_url(wp_nonce_url(admin_url('admin.php?page=mem-prices'), 'mem_reprice', 'mem_reprice')) . '">Перевести цены в текстах на автоматические</a>'
-         . ' <span style="color:#666">— тема заменит в текстах страниц итог кремации, ленту, доставку и цены каталога, которые совпадают с текущими, на шорткоды.</span>';
-    if (!empty($_GET['repriced'])) $h .= '<br><br>✔ Готово.';
+    $btn = ' <a class="button" href="' . esc_url(wp_nonce_url(admin_url('admin.php?page=mem-prices'), 'mem_reprice', 'mem_reprice')) . ( '">' . esc_html__( 'Switch the prices in the texts to automatic ones', 'memorial-plugin' ) . '</a>' )
+         . ( ' <span style="color:#666">' . esc_html__( '— the theme will replace the cremation total, the ribbon, the delivery and the catalog prices that match the current ones in the texts of pages with shortcodes.', 'memorial-plugin' ) . '</span>' );
+    if (!empty($_GET['repriced'])) $h .= ( '<br><br>' . esc_html__( '✔ Done.', 'memorial-plugin' ) );
     $list = memorial_plugin_prices_audit();
-    if (!$list) return $h . '<br><br>✔ Цен, вписанных в тексты вручную, не найдено.';
+    if (!$list) return $h . ( '<br><br>' . esc_html__( '✔ No prices written into the texts by hand were found.', 'memorial-plugin' ) );
     $h .= '<br><br>' . $btn;
-    $h .= '<br><br><b>Цены, вписанные в текст вручную — сами не меняются</b> (проверьте, актуальны ли; при желании замените шорткодом):<ul style="list-style:disc;margin-left:1.5em">';
+    $h .= ( '<br><br><b>' . esc_html__( 'Prices written into the text by hand — they do not change by themselves', 'memorial-plugin' ) . '</b> ' . esc_html__( '(check whether they are up to date; replace them with a shortcode if you like):', 'memorial-plugin' ) . '<ul style="list-style:disc;margin-left:1.5em">' );
     foreach ($list as [$obj, $lines]) {
         $link = $obj instanceof WP_Term ? get_edit_term_link($obj) : get_edit_post_link($obj->ID);
-        $name = $obj instanceof WP_Term ? 'Раздел каталога «' . $obj->name . '»' : $obj->post_title;
-        $h .= '<li style="margin-bottom:.6em"><a href="' . esc_url($link) . '"><b>' . esc_html($name) . '</b></a> (' . ($obj instanceof WP_Term ? 'описание раздела' : 'страница') . ')<br>'
+        $name = $obj instanceof WP_Term ? sprintf( /* translators: %s: catalog section */ __( 'Catalog section “%s”', 'memorial-plugin' ), $obj->name ) : $obj->post_title;
+        $h .= '<li style="margin-bottom:.6em"><a href="' . esc_url($link) . '"><b>' . esc_html($name) . '</b></a> (' . ($obj instanceof WP_Term ? __( 'section description', 'memorial-plugin' ) : __( 'page', 'memorial-plugin' )) . ')<br>'
             . implode('<br>', array_map(fn($l) => '— <i>' . esc_html($l) . '</i>', $lines)) . '</li>';
     }
     return $h . '</ul>';
