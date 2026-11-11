@@ -219,7 +219,10 @@ function memorial_plugin_seo_convert( $text ) {
 			$atts = shortcode_parse_atts( $m[3] );
 			$atts = is_array( $atts ) ? array_map( 'trim', $atts ) : array();
 			foreach ( memorial_plugin_seo_registry() as $key => $def ) {
-				if ( $m[2] === ( $def['shortcode'][0] ?? '' ) && ( $def['shortcode'][1] ?? array() ) == $atts ) { // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual -- same keys and values in any order.
+				$tag  = (string) ( $def['shortcode'][0] ?? '' );
+				$want = (array) ( $def['shortcode'][1] ?? array() );
+				// Same tag, same attributes in any order.
+				if ( $tag === $m[2] && count( $want ) === count( $atts ) && ! array_diff_assoc( $want, $atts ) ) {
 					return memorial_plugin_seo_var( $key );
 				}
 			}

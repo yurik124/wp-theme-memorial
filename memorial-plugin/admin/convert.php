@@ -46,7 +46,9 @@ function memorial_plugin_convert_block_tags() {
 function memorial_plugin_convert_inline_tags() {
 	$tags = array();
 	foreach ( memorial_plugin_inline_values() as $key => $def ) {
-		$tags[ $def['tag'] ] = $key;
+		if ( ! empty( $def['tag'] ) ) {
+			$tags[ $def['tag'] ] = $key;
+		}
 	}
 	return $tags;
 }

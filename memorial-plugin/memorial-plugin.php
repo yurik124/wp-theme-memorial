@@ -174,6 +174,8 @@ require MEMORIAL_PLUGIN_DIR . '/blocks/content/inline-values.php';
 require MEMORIAL_PLUGIN_DIR . '/seo/seo-registry.php';
 require MEMORIAL_PLUGIN_DIR . '/admin/convert.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/floating/floating.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/home/home.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/home/home-template.php';
 
 /* Включение: адреса товаров/работ заработают после пересборки ссылок (на следующем запросе, когда типы записей уже есть) */
 register_activation_hook(__FILE__, function () {

@@ -17,49 +17,70 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Inline values: key => shortcode that computes it, label and the main parameter (for the editor).
+ * Inline values: key => shortcode that computes it (or a callback), label and the main parameter (for the editor).
  *
- * @return array<string,array{tag:string,label:string,param:string,param_label:string}>
+ * @return array<string,array{tag?:string,callback?:callable,label:string,param:string,param_label:string}>
  */
 function memorial_plugin_inline_values() {
 	return array(
-		'cat-price' => array(
+		'cat-price'  => array(
 			'tag'         => 'mem_cat_price',
 			'label'       => __( 'Starting price of a catalog section', 'memorial-plugin' ),
 			'param'       => 'cat',
 			'param_label' => __( 'Catalog section', 'memorial-plugin' ),
 		),
-		'cat-count' => array(
+		'cat-count'  => array(
 			'tag'         => 'mem_cat_count',
 			'label'       => __( 'Number of models in a catalog section', 'memorial-plugin' ),
 			'param'       => 'cat',
 			'param_label' => __( 'Catalog section', 'memorial-plugin' ),
 		),
-		'price'     => array(
+		'price'      => array(
 			'tag'         => 'mem_price',
 			'label'       => __( 'Price from Memorial → Prices', 'memorial-plugin' ),
 			'param'       => 'id',
 			'param_label' => __( 'Price code', 'memorial-plugin' ),
 		),
-		'years'     => array(
+		'years'      => array(
 			'tag'         => 'mem_years',
 			'label'       => __( 'Years in business', 'memorial-plugin' ),
 			'param'       => '',
 			'param_label' => '',
 		),
-		'phone'     => array(
+		'phone'      => array(
 			'tag'         => 'mem_phone',
 			'label'       => __( 'Main phone (link)', 'memorial-plugin' ),
 			'param'       => '',
 			'param_label' => '',
 		),
-		'operator'  => array(
+		'operator'   => array(
 			'tag'         => 'mem_operator',
 			'label'       => __( 'Company details (personal data operator)', 'memorial-plugin' ),
 			'param'       => 'chto',
 			'param_label' => __( 'What: empty — name and details; адрес, почта, телефон, сайт', 'memorial-plugin' ),
 		),
-		'doc'       => array(
+		'founded'    => array(
+			'callback'    => static fn() => (string) (int) ( memorial_plugin_contacts()['founded'] ?? 0 ),
+			'label'       => __( 'Founding year', 'memorial-plugin' ),
+			'param'       => '',
+			'param_label' => '',
+		),
+		'phone-text' => array(
+			'callback'    => static fn() => esc_html( (string) memorial_plugin_opt( 'phone' ) ),
+			'label'       => __( 'Main phone (text)', 'memorial-plugin' ),
+			'param'       => '',
+			'param_label' => '',
+		),
+		'address'    => array(
+			'callback'    => static function () {
+				$addrs = memorial_plugin_addrs();
+				return $addrs ? esc_html( (string) $addrs[0]['addr'] ) : '';
+			},
+			'label'       => __( 'Main address', 'memorial-plugin' ),
+			'param'       => '',
+			'param_label' => '',
+		),
+		'doc'        => array(
 			'tag'         => 'mem_doc',
 			'label'       => __( 'Link to a document (privacy policy, consent, cookies)', 'memorial-plugin' ),
 			'param'       => 'kto',
@@ -76,7 +97,7 @@ function memorial_plugin_inline_values() {
  */
 function memorial_plugin_inline_value_key( $tag ) {
 	foreach ( memorial_plugin_inline_values() as $key => $def ) {
-		if ( $def['tag'] === $tag ) {
+		if ( ( $def['tag'] ?? '' ) === $tag ) {
 			return $key;
 		}
 	}
@@ -93,7 +114,10 @@ function memorial_plugin_inline_value_key( $tag ) {
 function memorial_plugin_inline_value_html( $key, $atts ) {
 	global $shortcode_tags;
 	$def = memorial_plugin_inline_values()[ $key ] ?? null;
-	if ( ! $def || empty( $shortcode_tags[ $def['tag'] ] ) || ! is_callable( $shortcode_tags[ $def['tag'] ] ) ) {
+	if ( $def && isset( $def['callback'] ) && is_callable( $def['callback'] ) ) {
+		return (string) call_user_func( $def['callback'] );
+	}
+	if ( ! $def || empty( $def['tag'] ) || empty( $shortcode_tags[ $def['tag'] ] ) || ! is_callable( $shortcode_tags[ $def['tag'] ] ) ) {
 		return null;
 	}
 	$content = (string) ( $atts['content'] ?? '' );

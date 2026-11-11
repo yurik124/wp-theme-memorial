@@ -8,6 +8,7 @@
 	<file>core/icons-api.php</file>
 	<file>blocks/content</file>
 	<file>blocks/floating</file>
+	<file>blocks/home</file>
 	<file>admin/convert.php</file>
 	<file>seo/seo-registry.php</file>
 	<file>admin/dataviews-check.php</file>

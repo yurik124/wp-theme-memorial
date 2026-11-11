@@ -73,3 +73,25 @@ test( 'иконки — из реестра иконок WordPress (SVG Icon API
 	await expect( icon.locator( 'path[d]' ).first() ).toBeAttached();
 	await expect( page.locator( 'svg.ico use' ) ).toHaveCount( 0 );
 } );
+
+test( 'главная — разделы блоками, шаблон сохранён один раз', async ( {
+	page,
+} ) => {
+	await login( page );
+	// Перенос — при входе в админку; на этом экране есть wp.apiFetch.
+	await page.goto( '/wp-admin/admin.php?page=memorial-plugin-convert' );
+	const template = await page.evaluate( () =>
+		window.wp.apiFetch( {
+			path: '/wp/v2/templates/memorial-theme//front-page?context=edit',
+		} )
+	);
+	expect( template.source ).toBe( 'custom' );
+	expect( template.content.raw ).toContain( 'wp:memorial-plugin/phone-button' );
+	expect( template.content.raw ).not.toContain( 'memorial-theme/home' );
+
+	await page.goto( '/' );
+	await expect( page.locator( 'section.hero h1' ) ).toBeVisible();
+	await expect( page.locator( '.hero__cta .btn--tel' ) ).toBeAttached();
+	await expect( page.locator( 'section#uslugi .svc' ) ).toBeAttached();
+	expect( await page.content() ).not.toMatch( PHP_ERROR );
+} );

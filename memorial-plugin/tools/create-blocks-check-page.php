@@ -9,7 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $memorial_plugin_markup = '';
-foreach ( array_merge( array_keys( memorial_plugin_legacy_blocks() ), array_keys( memorial_plugin_content_blocks() ) ) as $memorial_plugin_slug ) {
+foreach ( array_merge( array_keys( memorial_plugin_legacy_blocks() ), array_keys( memorial_plugin_content_blocks() ), array_keys( memorial_plugin_home_blocks_list() ) ) as $memorial_plugin_slug ) {
 	$memorial_plugin_markup .= '<!-- wp:memorial-plugin/' . $memorial_plugin_slug . ' /-->' . "\n";
 }
 $memorial_plugin_markup .= '<!-- wp:paragraph --><p>Years: <span class="memorial-plugin-value" data-value="years">STALE</span>.</p><!-- /wp:paragraph -->' . "\n";
