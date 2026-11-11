@@ -13,6 +13,8 @@
 	<file>admin/settings-form.php</file>
 	<file>admin/collections.php</file>
 	<file>admin/editor-meta.php</file>
+	<file>admin/abilities.php</file>
+	<file>admin/commands.php</file>
 	<file>catalog/catalog-manager.php</file>
 	<file>catalog/catalog-types-admin.php</file>
 	<file>works/works-manager.php</file>

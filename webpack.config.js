@@ -21,6 +21,7 @@ module.exports = {
 		'settings/index': path.resolve( __dirname, 'memorial-plugin/src/settings/index.js' ),
 		'collections/index': path.resolve( __dirname, 'memorial-plugin/src/collections/index.js' ),
 		'catalog/index': path.resolve( __dirname, 'memorial-plugin/src/catalog/index.js' ),
+		'commands/index': path.resolve( __dirname, 'memorial-plugin/src/commands/index.js' ),
 		'editor-meta/index': path.resolve( __dirname, 'memorial-plugin/src/editor-meta/index.js' ),
 	},
 	output: {

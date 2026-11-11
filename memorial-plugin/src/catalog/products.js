@@ -15,6 +15,7 @@ import {
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
 import BooleanEdit from '../shared/boolean-edit';
+import { runAbility, download } from '../shared/abilities';
 import {
 	useListData,
 	moved,
@@ -128,7 +129,11 @@ function PriceModal( { items, closeModal, run } ) {
 				onCancel={ closeModal }
 				onOk={ async () => {
 					setBusy( true );
-					await run( items, { op: 'price', mode, value, round } );
+					await run( items, {
+						mode,
+						value: Number( String( value ).replace( ',', '.' ) ),
+						round: Number( round ),
+					} );
 					closeModal();
 				} }
 			/>
@@ -224,7 +229,7 @@ function MergeModal( { items, closeModal, run } ) {
 }
 
 export default function Products() {
-	const { data, error, merge } = useListData( API );
+	const { data, error, merge, reload } = useListData( API );
 	const [ notice, setNotice ] = useState( null );
 	const [ editing, setEditing ] = useState( null );
 	const [ busy, setBusy ] = useState( false );
@@ -386,6 +391,41 @@ export default function Products() {
 		[ merge ]
 	);
 
+	// Abilities (admin/abilities.php): the same actions as in the Command Palette and the REST API.
+	const ability = useCallback(
+		async ( name, input ) => {
+			setBusy( true );
+			try {
+				const res = await runAbility( name, input );
+				await reload();
+				setNotice( {
+					status: 'success',
+					text: __( 'Done.', 'memorial-plugin' ),
+				} );
+				return res;
+			} catch ( e ) {
+				setNotice( { status: 'error', text: e.message } );
+			} finally {
+				setBusy( false );
+			}
+		},
+		[ reload ]
+	);
+
+	const exportCsv = useCallback( async () => {
+		setBusy( true );
+		try {
+			const res = await runAbility( 'memorial-plugin/export-catalog', {
+				type: type?.id || 0,
+			} );
+			download( res.filename, res.csv );
+		} catch ( e ) {
+			setNotice( { status: 'error', text: e.message } );
+		} finally {
+			setBusy( false );
+		}
+	}, [ type ] );
+
 	const create = useCallback(
 		async ( photos = [] ) => {
 			setBusy( true );
@@ -504,7 +544,15 @@ export default function Products() {
 				label: __( 'Change prices…', 'memorial-plugin' ),
 				supportsBulk: true,
 				RenderModal: ( props ) => (
-					<PriceModal { ...props } run={ run } />
+					<PriceModal
+						{ ...props }
+						run={ ( list2, input ) =>
+							ability( 'memorial-plugin/change-prices', {
+								ids: list2.map( ( i ) => i.id ),
+								...input,
+							} )
+						}
+					/>
 				),
 			},
 			{
@@ -512,14 +560,24 @@ export default function Products() {
 				label: __( 'Show on the site', 'memorial-plugin' ),
 				supportsBulk: true,
 				isEligible: ( item ) => item.status !== 'publish',
-				callback: ( list2 ) => run( list2, { op: 'publish' } ),
+				callback: ( list2 ) =>
+					ability( 'memorial-plugin/set-visibility', {
+						kind: 'products',
+						ids: list2.map( ( i ) => i.id ),
+						visible: true,
+					} ),
 			},
 			{
 				id: 'draft',
 				label: __( 'Hide from the site', 'memorial-plugin' ),
 				supportsBulk: true,
 				isEligible: ( item ) => item.status === 'publish',
-				callback: ( list2 ) => run( list2, { op: 'draft' } ),
+				callback: ( list2 ) =>
+					ability( 'memorial-plugin/set-visibility', {
+						kind: 'products',
+						ids: list2.map( ( i ) => i.id ),
+						visible: false,
+					} ),
 			},
 			{
 				id: 'copy',
@@ -576,7 +634,7 @@ export default function Products() {
 			);
 		}
 		return list;
-	}, [ items, type, run ] );
+	}, [ items, type, run, ability ] );
 
 	if ( error ) {
 		return (
@@ -667,6 +725,13 @@ export default function Products() {
 									) }
 								</Button>
 							) }
+							<Button
+								variant="tertiary"
+								onClick={ exportCsv }
+								disabled={ busy }
+							>
+								{ __( 'Export to CSV', 'memorial-plugin' ) }
+							</Button>
 							<Button variant="tertiary" href={ data.trashUrl }>
 								{ __( 'Trash', 'memorial-plugin' ) }
 							</Button>

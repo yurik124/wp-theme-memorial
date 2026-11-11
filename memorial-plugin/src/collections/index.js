@@ -27,6 +27,7 @@ import {
 } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
 import BooleanEdit from '../shared/boolean-edit';
+import { runAbility } from '../shared/abilities';
 import './style.scss';
 
 const API = '/memorial-plugin/v1/collections/';
@@ -358,6 +359,26 @@ function App( { name } ) {
 			},
 		];
 		if ( name === 'leads' ) {
+			// Ability memorial-plugin/set-lead-done (admin/abilities.php), also in the Command Palette.
+			out.splice( 1, 0, {
+				id: 'done',
+				label: __( 'Mark as called back', 'memorial-plugin' ),
+				supportsBulk: true,
+				isEligible: ( item ) => ! item.done,
+				callback: async ( list ) => {
+					try {
+						for ( const item of list ) {
+							await runAbility( 'memorial-plugin/set-lead-done', {
+								id: item.id,
+								done: true,
+							} );
+						}
+						load();
+					} catch ( e ) {
+						setNotice( { status: 'error', text: e.message } );
+					}
+				},
+			} );
 			out.unshift( {
 				id: 'call',
 				label: __( 'Call', 'memorial-plugin' ),
@@ -369,7 +390,7 @@ function App( { name } ) {
 			} );
 		}
 		return out;
-	}, [ name, remove ] );
+	}, [ name, remove, load ] );
 
 	const { data, paginationInfo } = useMemo(
 		() =>
