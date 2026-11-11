@@ -24,7 +24,13 @@ import {
 	ListPage,
 	arrayFilters,
 } from './list-screen';
-import { photosField, termsField, statusField, orderField, rub } from './fields';
+import {
+	photosField,
+	termsField,
+	statusField,
+	orderField,
+	rub,
+} from './fields';
 
 const API = '/memorial-plugin/v1/catalog/products';
 const catsFilter = arrayFilters( [ 'cats' ] );
@@ -32,8 +38,8 @@ const catsFilter = arrayFilters( [ 'cats' ] );
 /**
  * Product → row: the specifications become spec0, spec1… by the order of the type’s fields.
  *
- * @param {Object}   p      Product from the server.
- * @param {Object[]} specs  Type fields.
+ * @param {Object}   p     Product from the server.
+ * @param {Object[]} specs Type fields.
  * @return {Object} Row.
  */
 function toRow( p, specs ) {
@@ -55,22 +61,44 @@ function PriceModal( { items, closeModal, run } ) {
 				label={ __( 'How to change', 'memorial-plugin' ) }
 				selected={ mode }
 				options={ [
-					{ value: 'pct', label: __( 'By percent (+10 or −5)', 'memorial-plugin' ) },
-					{ value: 'add', label: __( 'Add or subtract roubles', 'memorial-plugin' ) },
-					{ value: 'set', label: __( 'Set the same price', 'memorial-plugin' ) },
+					{
+						value: 'pct',
+						label: __(
+							'By percent (+10 or −5)',
+							'memorial-plugin'
+						),
+					},
+					{
+						value: 'add',
+						label: __(
+							'Add or subtract roubles',
+							'memorial-plugin'
+						),
+					},
+					{
+						value: 'set',
+						label: __( 'Set the same price', 'memorial-plugin' ),
+					},
 				] }
 				onChange={ setMode }
 			/>
 			<TextControl
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom
-				label={ mode === 'pct' ? __( 'Percent', 'memorial-plugin' ) : __( 'Roubles', 'memorial-plugin' ) }
+				label={
+					mode === 'pct'
+						? __( 'Percent', 'memorial-plugin' )
+						: __( 'Roubles', 'memorial-plugin' )
+				}
 				value={ value }
 				onChange={ setValue }
 				help={
 					mode === 'set'
 						? ''
-						: __( 'Products with the price “on request” stay as they are.', 'memorial-plugin' )
+						: __(
+								'Products with the price “on request” stay as they are.',
+								'memorial-plugin'
+							)
 				}
 			/>
 			<SelectControl
@@ -78,13 +106,21 @@ function PriceModal( { items, closeModal, run } ) {
 				__nextHasNoMarginBottom
 				label={ __( 'Round to', 'memorial-plugin' ) }
 				value={ round }
-				options={ [ '1', '10', '50', '100' ].map( ( r ) => ( { value: r, label: rub( r ) } ) ) }
+				options={ [ '1', '10', '50', '100' ].map( ( r ) => ( {
+					value: r,
+					label: rub( r ),
+				} ) ) }
 				onChange={ setRound }
 			/>
 			<ModalButtons
 				label={ sprintf(
 					/* translators: %d: number of products. */
-					_n( 'Change %d price', 'Change %d prices', items.length, 'memorial-plugin' ),
+					_n(
+						'Change %d price',
+						'Change %d prices',
+						items.length,
+						'memorial-plugin'
+					),
 					items.length
 				) }
 				busy={ busy }
@@ -103,7 +139,11 @@ function PriceModal( { items, closeModal, run } ) {
 function CatsModal( { items, closeModal, run, op, cats } ) {
 	const [ chosen, setChosen ] = useState( [] );
 	const [ busy, setBusy ] = useState( false );
-	const field = termsField( 'cats', __( 'Categories', 'memorial-plugin' ), cats );
+	const field = termsField(
+		'cats',
+		__( 'Categories', 'memorial-plugin' ),
+		cats
+	);
 	return (
 		<Flex direction="column" gap={ 4 }>
 			<field.Edit
@@ -112,7 +152,11 @@ function CatsModal( { items, closeModal, run, op, cats } ) {
 				onChange={ ( e ) => setChosen( e.cats ) }
 			/>
 			<ModalButtons
-				label={ op === 'cats_add' ? __( 'Add', 'memorial-plugin' ) : __( 'Remove', 'memorial-plugin' ) }
+				label={
+					op === 'cats_add'
+						? __( 'Add', 'memorial-plugin' )
+						: __( 'Remove', 'memorial-plugin' )
+				}
 				busy={ busy }
 				disabled={ ! chosen.length }
 				onCancel={ closeModal }
@@ -144,7 +188,12 @@ function MergeModal( { items, closeModal, run } ) {
 			</p>
 			{ conflicts && (
 				<Notice status="warning" isDismissible={ false }>
-					<p>{ __( 'Cannot merge: the values differ.', 'memorial-plugin' ) }</p>
+					<p>
+						{ __(
+							'Cannot merge: the values differ.',
+							'memorial-plugin'
+						) }
+					</p>
 					<ul>
 						{ conflicts.map( ( c ) => (
 							<li key={ c }>{ c }</li>
@@ -159,7 +208,9 @@ function MergeModal( { items, closeModal, run } ) {
 				onCancel={ closeModal }
 				onOk={ async () => {
 					setBusy( true );
-					const res = await run( bySiteOrder( items ), { op: 'merge' } );
+					const res = await run( bySiteOrder( items ), {
+						op: 'merge',
+					} );
 					if ( res?.conflicts ) {
 						setConflicts( res.conflicts );
 						setBusy( false );
@@ -178,7 +229,10 @@ export default function Products() {
 	const [ editing, setEditing ] = useState( null );
 	const [ busy, setBusy ] = useState( false );
 	const [ typeId, setTypeId ] = useState(
-		() => Number( new URLSearchParams( window.location.search ).get( 'type' ) ) || 0
+		() =>
+			Number(
+				new URLSearchParams( window.location.search ).get( 'type' )
+			) || 0
 	);
 	const [ view, setView ] = useState( {
 		type: 'table',
@@ -198,7 +252,12 @@ export default function Products() {
 		}
 		const list = [ ...data.types ];
 		if ( data.items.some( ( i ) => ! i.type ) ) {
-			list.push( { id: 0, name: __( 'Without type', 'memorial-plugin' ), fields: [], cats: [] } );
+			list.push( {
+				id: 0,
+				name: __( 'Without type', 'memorial-plugin' ),
+				fields: [],
+				cats: [],
+			} );
 		}
 		return list;
 	}, [ data ] );
@@ -208,13 +267,18 @@ export default function Products() {
 	const items = useMemo(
 		() =>
 			data && type
-				? data.items.filter( ( i ) => i.type === type.id ).map( ( i ) => toRow( i, specs ) )
+				? data.items
+						.filter( ( i ) => i.type === type.id )
+						.map( ( i ) => toRow( i, specs ) )
 				: [],
 		[ data, type, specs ]
 	);
 
 	const fields = useMemo( () => {
-		const cats = ( type?.cats || [] ).map( ( c ) => ( { value: c.id, label: c.name } ) );
+		const cats = ( type?.cats || [] ).map( ( c ) => ( {
+			value: c.id,
+			label: c.name,
+		} ) );
 		return [
 			photosField( __( 'Photos', 'memorial-plugin' ) ),
 			{
@@ -232,9 +296,11 @@ export default function Products() {
 				filterBy: false,
 				render: ( { item } ) =>
 					item.price
-						? ( item.from ? __( 'from', 'memorial-plugin' ) + ' ' : '' ) +
-						  rub( item.price ) +
-						  ( item.unit ? ' ' + item.unit : '' )
+						? ( item.from
+								? __( 'from', 'memorial-plugin' ) + ' '
+								: '' ) +
+							rub( item.price ) +
+							( item.unit ? ' ' + item.unit : '' )
 						: __( 'on request', 'memorial-plugin' ),
 			},
 			{
@@ -271,13 +337,24 @@ export default function Products() {
 					? {
 							elements: [
 								{ value: '', label: '—' },
-								...s.options.map( ( o ) => ( { value: o, label: o } ) ),
+								...s.options.map( ( o ) => ( {
+									value: o,
+									label: o,
+								} ) ),
 							],
 							filterBy: { operators: [ 'isAny' ] },
-					  }
+						}
 					: { filterBy: false } ),
 			} ) ),
-			...( cats.length ? [ termsField( 'cats', __( 'Categories', 'memorial-plugin' ), cats ) ] : [] ),
+			...( cats.length
+				? [
+						termsField(
+							'cats',
+							__( 'Categories', 'memorial-plugin' ),
+							cats
+						),
+					]
+				: [] ),
 			statusField(),
 			orderField(),
 		];
@@ -294,7 +371,10 @@ export default function Products() {
 				} );
 				if ( ! res.conflicts ) {
 					merge( res );
-					setNotice( { status: 'success', text: __( 'Done.', 'memorial-plugin' ) } );
+					setNotice( {
+						status: 'success',
+						text: __( 'Done.', 'memorial-plugin' ),
+					} );
 				}
 				return res;
 			} catch ( e ) {
@@ -358,22 +438,37 @@ export default function Products() {
 			if ( Object.keys( specValues ).length ) {
 				values.specs = specValues;
 			}
-			const res = await apiFetch( { path: API + '/' + item.id, method: 'PUT', data: { values } } );
+			const res = await apiFetch( {
+				path: API + '/' + item.id,
+				method: 'PUT',
+				data: { values },
+			} );
 			merge( { items: [ res ] } );
-			setNotice( { status: 'success', text: __( 'Saved.', 'memorial-plugin' ) } );
+			setNotice( {
+				status: 'success',
+				text: __( 'Saved.', 'memorial-plugin' ),
+			} );
 		},
 		[ specs, merge ]
 	);
 
 	const actions = useMemo( () => {
 		const sorted = bySiteOrder( items );
-		const move = ( dir ) => ( [ item ] ) => {
-			const ids = moved( sorted, item.id, dir );
-			if ( ids ) {
-				run( ids.map( ( id ) => ( { id } ) ), { op: 'order' } );
-			}
-		};
-		const cats = ( type?.cats || [] ).map( ( c ) => ( { value: c.id, label: c.name } ) );
+		const move =
+			( dir ) =>
+			( [ item ] ) => {
+				const ids = moved( sorted, item.id, dir );
+				if ( ids ) {
+					run(
+						ids.map( ( id ) => ( { id } ) ),
+						{ op: 'order' }
+					);
+				}
+			};
+		const cats = ( type?.cats || [] ).map( ( c ) => ( {
+			value: c.id,
+			label: c.name,
+		} ) );
 		const list = [
 			{
 				id: 'edit',
@@ -391,7 +486,8 @@ export default function Products() {
 				id: 'view',
 				label: __( 'View on the site', 'memorial-plugin' ),
 				isEligible: ( item ) => !! item.view,
-				callback: ( [ item ] ) => window.open( item.view, '_blank', 'noopener' ),
+				callback: ( [ item ] ) =>
+					window.open( item.view, '_blank', 'noopener' ),
 			},
 			{
 				id: 'up',
@@ -407,7 +503,9 @@ export default function Products() {
 				id: 'price',
 				label: __( 'Change prices…', 'memorial-plugin' ),
 				supportsBulk: true,
-				RenderModal: ( props ) => <PriceModal { ...props } run={ run } />,
+				RenderModal: ( props ) => (
+					<PriceModal { ...props } run={ run } />
+				),
 			},
 			{
 				id: 'publish',
@@ -433,7 +531,9 @@ export default function Products() {
 				id: 'merge',
 				label: __( 'Merge into one…', 'memorial-plugin' ),
 				supportsBulk: true,
-				RenderModal: ( props ) => <MergeModal { ...props } run={ run } />,
+				RenderModal: ( props ) => (
+					<MergeModal { ...props } run={ run } />
+				),
 			},
 			{
 				id: 'trash',
@@ -452,7 +552,12 @@ export default function Products() {
 					label: __( 'Add to categories…', 'memorial-plugin' ),
 					supportsBulk: true,
 					RenderModal: ( props ) => (
-						<CatsModal { ...props } run={ run } op="cats_add" cats={ cats } />
+						<CatsModal
+							{ ...props }
+							run={ run }
+							op="cats_add"
+							cats={ cats }
+						/>
 					),
 				},
 				{
@@ -460,7 +565,12 @@ export default function Products() {
 					label: __( 'Remove from categories…', 'memorial-plugin' ),
 					supportsBulk: true,
 					RenderModal: ( props ) => (
-						<CatsModal { ...props } run={ run } op="cats_remove" cats={ cats } />
+						<CatsModal
+							{ ...props }
+							run={ run }
+							op="cats_remove"
+							cats={ cats }
+						/>
 					),
 				}
 			);
@@ -514,22 +624,47 @@ export default function Products() {
 										allowedTypes={ [ 'image' ] }
 										multiple
 										onSelect={ ( media ) =>
-											create( ( Array.isArray( media ) ? media : [ media ] ).map( ( m ) => m.id ) )
+											create(
+												( Array.isArray( media )
+													? media
+													: [ media ]
+												).map( ( m ) => m.id )
+											)
 										}
 										render={ ( { open } ) => (
-											<Button variant="primary" onClick={ open } isBusy={ busy }>
-												{ __( 'Add from photos', 'memorial-plugin' ) }
+											<Button
+												variant="primary"
+												onClick={ open }
+												isBusy={ busy }
+											>
+												{ __(
+													'Add from photos',
+													'memorial-plugin'
+												) }
 											</Button>
 										) }
 									/>
-									<Button variant="secondary" onClick={ () => create() } disabled={ busy }>
-										{ __( 'Add product', 'memorial-plugin' ) }
+									<Button
+										variant="secondary"
+										onClick={ () => create() }
+										disabled={ busy }
+									>
+										{ __(
+											'Add product',
+											'memorial-plugin'
+										) }
 									</Button>
 								</>
 							) }
 							{ data.canManage && (
-								<Button variant="tertiary" href={ data.typesUrl }>
-									{ __( 'Types and categories', 'memorial-plugin' ) }
+								<Button
+									variant="tertiary"
+									href={ data.typesUrl }
+								>
+									{ __(
+										'Types and categories',
+										'memorial-plugin'
+									) }
 								</Button>
 							) }
 							<Button variant="tertiary" href={ data.trashUrl }>
@@ -570,7 +705,10 @@ export default function Products() {
 					extra={
 						<p>
 							<a href={ editing.edit }>
-								{ __( 'Description of the product — in the editor', 'memorial-plugin' ) }
+								{ __(
+									'Description of the product — in the editor',
+									'memorial-plugin'
+								) }
 							</a>
 						</p>
 					}

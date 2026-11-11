@@ -4,7 +4,13 @@
 import { useCallback, useMemo, useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
-import { Button, Flex, Modal, Notice, TextControl } from '@wordpress/components';
+import {
+	Button,
+	Flex,
+	Modal,
+	Notice,
+	TextControl,
+} from '@wordpress/components';
 import { useListData, moved, ModalButtons, ListPage } from './list-screen';
 
 const API = '/memorial-plugin/v1/catalog/work-types';
@@ -37,7 +43,9 @@ function NameForm( { value = '', label, onCancel, onOk } ) {
 
 export default function WorkTypes() {
 	// The list of works returns the kinds too.
-	const { data, error, setData } = useListData( '/memorial-plugin/v1/catalog/works' );
+	const { data, error, setData } = useListData(
+		'/memorial-plugin/v1/catalog/works'
+	);
 	const [ notice, setNotice ] = useState( null );
 	const [ adding, setAdding ] = useState( false );
 	const [ view, setView ] = useState( {
@@ -54,9 +62,16 @@ export default function WorkTypes() {
 	const change = useCallback(
 		async ( body ) => {
 			try {
-				const res = await apiFetch( { path: API, method: 'POST', data: body } );
+				const res = await apiFetch( {
+					path: API,
+					method: 'POST',
+					data: body,
+				} );
 				setData( ( d ) => ( { ...d, kinds: res.kinds } ) );
-				setNotice( { status: 'success', text: __( 'Saved.', 'memorial-plugin' ) } );
+				setNotice( {
+					status: 'success',
+					text: __( 'Saved.', 'memorial-plugin' ),
+				} );
 			} catch ( e ) {
 				setNotice( { status: 'error', text: e.message } );
 			}
@@ -65,7 +80,8 @@ export default function WorkTypes() {
 	);
 
 	const items = useMemo(
-		() => ( data?.kinds || [] ).map( ( k, i ) => ( { ...k, order: i + 1 } ) ),
+		() =>
+			( data?.kinds || [] ).map( ( k, i ) => ( { ...k, order: i + 1 } ) ),
 		[ data ]
 	);
 
@@ -95,12 +111,14 @@ export default function WorkTypes() {
 	);
 
 	const actions = useMemo( () => {
-		const move = ( dir ) => ( [ item ] ) => {
-			const ids = moved( items, item.id, dir );
-			if ( ids ) {
-				change( { op: 'order', ids } );
-			}
-		};
+		const move =
+			( dir ) =>
+			( [ item ] ) => {
+				const ids = moved( items, item.id, dir );
+				if ( ids ) {
+					change( { op: 'order', ids } );
+				}
+			};
 		return [
 			{
 				id: 'rename',
@@ -119,8 +137,16 @@ export default function WorkTypes() {
 					/>
 				),
 			},
-			{ id: 'up', label: __( 'Move up', 'memorial-plugin' ), callback: move( -1 ) },
-			{ id: 'down', label: __( 'Move down', 'memorial-plugin' ), callback: move( 1 ) },
+			{
+				id: 'up',
+				label: __( 'Move up', 'memorial-plugin' ),
+				callback: move( -1 ),
+			},
+			{
+				id: 'down',
+				label: __( 'Move down', 'memorial-plugin' ),
+				callback: move( 1 ),
+			},
 			{
 				id: 'delete',
 				label: __( 'Delete', 'memorial-plugin' ),
@@ -139,12 +165,12 @@ export default function WorkTypes() {
 										),
 										item.name,
 										item.count
-								  )
+									)
 								: sprintf(
 										/* translators: %s: kind name. */
 										__( 'Delete “%s”?', 'memorial-plugin' ),
 										item.name
-								  ) }
+									) }
 						</p>
 						<ModalButtons
 							label={ __( 'Delete', 'memorial-plugin' ) }
@@ -178,7 +204,10 @@ export default function WorkTypes() {
 					'memorial-plugin'
 				) }
 				actions={
-					<Button variant="primary" onClick={ () => setAdding( true ) }>
+					<Button
+						variant="primary"
+						onClick={ () => setAdding( true ) }
+					>
 						{ __( 'Add kind', 'memorial-plugin' ) }
 					</Button>
 				}

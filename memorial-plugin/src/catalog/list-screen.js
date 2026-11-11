@@ -5,7 +5,11 @@ import { useCallback, useEffect, useMemo, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { Button, Flex, Modal, Notice } from '@wordpress/components';
-import { DataViews, DataForm, filterSortAndPaginate } from '@wordpress/dataviews/wp';
+import {
+	DataViews,
+	DataForm,
+	filterSortAndPaginate,
+} from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
 
 /**
@@ -75,12 +79,12 @@ export function bySiteOrder( items ) {
  * Quick edit form in a modal.
  *
  * @param {Object}   props
- * @param {string}   props.title  Modal title.
- * @param {Object}   props.item   Item.
- * @param {Object[]} props.fields Editable fields.
- * @param {Function} props.onSave Gets the changed values; returns a promise.
+ * @param {string}   props.title   Modal title.
+ * @param {Object}   props.item    Item.
+ * @param {Object[]} props.fields  Editable fields.
+ * @param {Function} props.onSave  Gets the changed values; returns a promise.
  * @param {Function} props.onClose Close.
- * @param {*}        props.extra  Something to show above the form (links).
+ * @param {*}        props.extra   Something to show above the form (links).
  */
 export function EditModal( { title, item, fields, onSave, onClose, extra } ) {
 	const [ edits, setEdits ] = useState( {} );
@@ -114,7 +118,10 @@ export function EditModal( { title, item, fields, onSave, onClose, extra } ) {
 				} }
 				onChange={ ( e ) => setEdits( ( x ) => ( { ...x, ...e } ) ) }
 			/>
-			<Flex justify="flex-end" className="memorial-plugin-catalog__buttons">
+			<Flex
+				justify="flex-end"
+				className="memorial-plugin-catalog__buttons"
+			>
 				<Button variant="tertiary" onClick={ onClose }>
 					{ __( 'Cancel', 'memorial-plugin' ) }
 				</Button>
@@ -135,11 +142,11 @@ export function EditModal( { title, item, fields, onSave, onClose, extra } ) {
  * Footer of an action modal: Cancel + the main button.
  *
  * @param {Object}   props
- * @param {string}   props.label    Main button.
- * @param {boolean}  props.busy     Waiting for the server.
- * @param {boolean}  props.disabled Main button disabled.
- * @param {Function} props.onCancel Cancel.
- * @param {Function} props.onOk     Main button.
+ * @param {string}   props.label         Main button.
+ * @param {boolean}  props.busy          Waiting for the server.
+ * @param {boolean}  props.disabled      Main button disabled.
+ * @param {Function} props.onCancel      Cancel.
+ * @param {Function} props.onOk          Main button.
  * @param {boolean}  props.isDestructive Red main button.
  */
 export function ModalButtons( {

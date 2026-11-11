@@ -10,7 +10,9 @@ const api = ( page, options ) =>
 test( 'товары: новый товар, цена правится в списке', async ( { page } ) => {
 	const errors = collectJsErrors( page );
 	await login( page );
-	await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products' );
+	await page.goto(
+		'/wp-admin/edit.php?post_type=mem_product&page=mem-products'
+	);
 	const name = 'E2E тип ' + Date.now();
 	const type = await api( page, {
 		path: '/wp/v2/mem_cat',
@@ -18,9 +20,12 @@ test( 'товары: новый товар, цена правится в спи�
 		data: { name },
 	} );
 	await page.goto(
-		'/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' + type.id
+		'/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' +
+			type.id
 	);
-	await page.getByRole( 'button', { name: 'Add product', exact: true } ).click();
+	await page
+		.getByRole( 'button', { name: 'Add product', exact: true } )
+		.click();
 	const modal = page.getByRole( 'dialog' );
 	await expect( modal ).toBeVisible();
 	await modal.getByLabel( 'Title' ).fill( 'Венок e2e' );
@@ -32,7 +37,9 @@ test( 'товары: новый товар, цена правится в спи�
 	await expect( row ).toContainText( '1 500' );
 
 	// the same value in the block editor fields (REST meta)
-	const items = await api( page, { path: '/memorial-plugin/v1/catalog/products' } );
+	const items = await api( page, {
+		path: '/memorial-plugin/v1/catalog/products',
+	} );
 	const product = items.items.find( ( i ) => i.title === 'Венок e2e' );
 	const post = await api( page, {
 		path: '/wp/v2/mem_product/' + product.id + '?context=edit',
@@ -55,7 +62,9 @@ test( 'товар и работа открываются в блочном ре�
 	const work = res.items[ 0 ];
 	await page.goto( work.edit );
 	// no welcome guide over the editor
-	await page.waitForFunction( () => window.wp?.data?.select( 'core/preferences' ) );
+	await page.waitForFunction( () =>
+		window.wp?.data?.select( 'core/preferences' )
+	);
 	await page.evaluate( () =>
 		window.wp.data
 			.dispatch( 'core/preferences' )
@@ -86,7 +95,9 @@ test( 'работы: год и «в примерах» правятся в сп�
 		data: { values: { title: 'Работа e2e ' + id } },
 	} );
 	await page.reload();
-	const row = page.getByRole( 'row' ).filter( { hasText: 'Работа e2e ' + id } );
+	const row = page
+		.getByRole( 'row' )
+		.filter( { hasText: 'Работа e2e ' + id } );
 	await row.getByRole( 'button', { name: 'Edit' } ).click();
 	const modal = page.getByRole( 'dialog' );
 	await modal.getByLabel( 'Year' ).fill( '2024' );

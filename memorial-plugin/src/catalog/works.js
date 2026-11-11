@@ -91,7 +91,10 @@ export default function Works() {
 	const fields = useMemo(
 		() => [
 			photosField(
-				__( 'Photos — the first one is the main one', 'memorial-plugin' )
+				__(
+					'Photos — the first one is the main one',
+					'memorial-plugin'
+				)
 			),
 			{
 				id: 'title',
@@ -141,9 +144,14 @@ export default function Works() {
 				type: 'integer',
 				readOnly: true,
 				filterBy: false,
-				render: ( { item } ) => ( item.total ? rub( item.total ) : '—' ),
+				render: ( { item } ) =>
+					item.total ? rub( item.total ) : '—',
 			},
-			termsField( 'kinds', __( 'Kinds of works', 'memorial-plugin' ), kinds ),
+			termsField(
+				'kinds',
+				__( 'Kinds of works', 'memorial-plugin' ),
+				kinds
+			),
 			{
 				id: 'example',
 				label: __( 'In examples', 'memorial-plugin' ),
@@ -369,8 +377,14 @@ export default function Works() {
 								) }
 							/>
 							{ data.canManage && (
-								<Button variant="tertiary" href={ data.kindsUrl }>
-									{ __( 'Kinds of works', 'memorial-plugin' ) }
+								<Button
+									variant="tertiary"
+									href={ data.kindsUrl }
+								>
+									{ __(
+										'Kinds of works',
+										'memorial-plugin'
+									) }
 								</Button>
 							) }
 							<Button variant="tertiary" href={ data.trashUrl }>

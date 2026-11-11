@@ -66,7 +66,9 @@ export function photosField( label ) {
 				onChange={ ( v ) =>
 					onChange( {
 						photos: v
-							? v.split( ',' ).map( ( id ) => ( { id: Number( id ) } ) )
+							? v
+									.split( ',' )
+									.map( ( id ) => ( { id: Number( id ) } ) )
 							: [],
 					} )
 				}
@@ -116,7 +118,9 @@ export function termsField( id, label, elements ) {
 								onChange( {
 									[ id ]: on
 										? [ ...value, e.value ]
-										: value.filter( ( v ) => v !== e.value ),
+										: value.filter(
+												( v ) => v !== e.value
+											),
 								} )
 							}
 						/>
@@ -199,7 +203,11 @@ export function RowsEdit( { data, field, onChange } ) {
 							) }
 							value={ r[ 0 ] }
 							onChange={ ( v ) =>
-								set( rows.map( ( x, j ) => ( j === i ? [ v, x[ 1 ] ] : x ) ) )
+								set(
+									rows.map( ( x, j ) =>
+										j === i ? [ v, x[ 1 ] ] : x
+									)
+								)
 							}
 						/>
 					</FlexBlock>
@@ -214,7 +222,9 @@ export function RowsEdit( { data, field, onChange } ) {
 							onChange={ ( v ) =>
 								set(
 									rows.map( ( x, j ) =>
-										j === i ? [ x[ 0 ], parseInt( v, 10 ) || 0 ] : x
+										j === i
+											? [ x[ 0 ], parseInt( v, 10 ) || 0 ]
+											: x
 									)
 								)
 							}
@@ -224,13 +234,18 @@ export function RowsEdit( { data, field, onChange } ) {
 						<Button
 							icon="no-alt"
 							label={ __( 'Remove row', 'memorial-plugin' ) }
-							onClick={ () => set( rows.filter( ( x, j ) => j !== i ) ) }
+							onClick={ () =>
+								set( rows.filter( ( x, j ) => j !== i ) )
+							}
 						/>
 					</FlexItem>
 				</Flex>
 			) ) }
 			<Flex>
-				<Button variant="secondary" onClick={ () => set( [ ...rows, [ '', 0 ] ] ) }>
+				<Button
+					variant="secondary"
+					onClick={ () => set( [ ...rows, [ '', 0 ] ] ) }
+				>
 					{ __( 'Add row', 'memorial-plugin' ) }
 				</Button>
 				<span>

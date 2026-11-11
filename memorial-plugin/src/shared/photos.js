@@ -15,14 +15,18 @@ import { MediaUpload } from '@wordpress/media-utils';
  * @return {number[]} IDs.
  */
 export function photoIds( value ) {
-	const list = Array.isArray( value ) ? value : String( value || '' ).split( ',' );
+	const list = Array.isArray( value )
+		? value
+		: String( value || '' ).split( ',' );
 	return list.map( ( v ) => parseInt( v, 10 ) ).filter( ( v ) => v > 0 );
 }
 
 function Thumb( { id } ) {
 	const url = useSelect(
 		( select ) => {
-			const media = select( coreStore ).getMedia( id, { context: 'view' } );
+			const media = select( coreStore ).getMedia( id, {
+				context: 'view',
+			} );
 			return (
 				media?.media_details?.sizes?.thumbnail?.source_url ||
 				media?.source_url
@@ -64,7 +68,10 @@ export default function Photos( { label, value, onChange } ) {
 								icon="arrow-left-alt2"
 								label={ sprintf(
 									/* translators: %d: photo number. */
-									__( 'Move photo %d earlier', 'memorial-plugin' ),
+									__(
+										'Move photo %d earlier',
+										'memorial-plugin'
+									),
 									i + 1
 								) }
 								disabled={ i === 0 }
@@ -75,7 +82,10 @@ export default function Photos( { label, value, onChange } ) {
 								icon="arrow-right-alt2"
 								label={ sprintf(
 									/* translators: %d: photo number. */
-									__( 'Move photo %d later', 'memorial-plugin' ),
+									__(
+										'Move photo %d later',
+										'memorial-plugin'
+									),
 									i + 1
 								) }
 								disabled={ i === ids.length - 1 }

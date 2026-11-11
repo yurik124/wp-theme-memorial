@@ -3,7 +3,10 @@
  * The meta is registered for REST in admin/editor-meta.php and is saved together with the post.
  */
 import { registerPlugin } from '@wordpress/plugins';
-import { PluginDocumentSettingPanel, store as editorStore } from '@wordpress/editor';
+import {
+	PluginDocumentSettingPanel,
+	store as editorStore,
+} from '@wordpress/editor';
 import { useSelect } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import { __, sprintf } from '@wordpress/i18n';
@@ -61,7 +64,10 @@ function ProductPanel() {
 				<Flex direction="column" gap={ 4 }>
 					<Money
 						label={ __( 'Price, ₽', 'memorial-plugin' ) }
-						help={ __( '0 — “price on request”.', 'memorial-plugin' ) }
+						help={ __(
+							'0 — “price on request”.',
+							'memorial-plugin'
+						) }
 						value={ meta._mem_price }
 						onChange={ ( v ) => set( '_mem_price', v ) }
 					/>
@@ -74,7 +80,10 @@ function ProductPanel() {
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						label={ __( 'Unit (optional)', 'memorial-plugin' ) }
-						placeholder={ __( 'for example: per metre', 'memorial-plugin' ) }
+						placeholder={ __(
+							'for example: per metre',
+							'memorial-plugin'
+						) }
 						value={ meta._mem_unit || '' }
 						onChange={ ( v ) => set( '_mem_unit', v ) }
 					/>
@@ -82,13 +91,17 @@ function ProductPanel() {
 						__nextHasNoMarginBottom
 						label={ __( 'Show “from”', 'memorial-plugin' ) }
 						checked={ meta._mem_price_from === '1' }
-						onChange={ ( v ) => set( '_mem_price_from', v ? '1' : '' ) }
+						onChange={ ( v ) =>
+							set( '_mem_price_from', v ? '1' : '' )
+						}
 					/>
 					<ToggleControl
 						__nextHasNoMarginBottom
 						label={ __( 'Made to order', 'memorial-plugin' ) }
 						checked={ meta._mem_on_order === '1' }
-						onChange={ ( v ) => set( '_mem_on_order', v ? '1' : '' ) }
+						onChange={ ( v ) =>
+							set( '_mem_on_order', v ? '1' : '' )
+						}
 					/>
 				</Flex>
 			</PluginDocumentSettingPanel>
@@ -100,7 +113,10 @@ function ProductPanel() {
 					<TextControl
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
-						label={ __( 'Line under the title', 'memorial-plugin' ) }
+						label={ __(
+							'Line under the title',
+							'memorial-plugin'
+						) }
 						help={ __(
 							'A short line in the card: size, material, colour.',
 							'memorial-plugin'
@@ -142,7 +158,10 @@ function ProductPanel() {
 
 function Rows( { rows, onChange } ) {
 	const list = Array.isArray( rows ) ? rows : [];
-	const total = list.reduce( ( s, r ) => s + ( parseInt( r[ 1 ], 10 ) || 0 ), 0 );
+	const total = list.reduce(
+		( s, r ) => s + ( parseInt( r[ 1 ], 10 ) || 0 ),
+		0
+	);
 	const update = ( i, k, v ) =>
 		onChange(
 			list.map( ( r, j ) =>
@@ -151,7 +170,9 @@ function Rows( { rows, onChange } ) {
 		);
 	return (
 		<fieldset className="memorial-plugin-rows">
-			<legend>{ __( 'What was done and the price', 'memorial-plugin' ) }</legend>
+			<legend>
+				{ __( 'What was done and the price', 'memorial-plugin' ) }
+			</legend>
 			{ list.map( ( r, i ) => (
 				<Flex key={ i } align="flex-end">
 					<FlexBlock>
@@ -224,7 +245,10 @@ function WorkPanel() {
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
 					label={ __( 'Plot size', 'memorial-plugin' ) }
-					placeholder={ __( 'for example: 2.5 × 2 m', 'memorial-plugin' ) }
+					placeholder={ __(
+						'for example: 2.5 × 2 m',
+						'memorial-plugin'
+					) }
 					value={ meta._mem_size || '' }
 					onChange={ ( v ) => set( '_mem_size', v ) }
 				/>
@@ -240,7 +264,9 @@ function WorkPanel() {
 					min={ 1990 }
 					max={ settings.maxYear }
 					value={ meta._mem_year || '' }
-					onChange={ ( v ) => set( '_mem_year', parseInt( v, 10 ) || 0 ) }
+					onChange={ ( v ) =>
+						set( '_mem_year', parseInt( v, 10 ) || 0 )
+					}
 				/>
 				<Rows
 					rows={ meta._mem_rows }
@@ -275,10 +301,16 @@ function PagePanel() {
 					label={ __( 'Catalog category', 'memorial-plugin' ) }
 					value={ meta._mem_products || '' }
 					options={ [
-						{ value: '', label: __( '— do not show —', 'memorial-plugin' ) },
+						{
+							value: '',
+							label: __( '— do not show —', 'memorial-plugin' ),
+						},
 						{
 							value: 'all',
-							label: __( 'All categories (tiles)', 'memorial-plugin' ),
+							label: __(
+								'All categories (tiles)',
+								'memorial-plugin'
+							),
 						},
 						...( settings.cats || [] ),
 					] }
@@ -290,35 +322,41 @@ function PagePanel() {
 				/>
 			</PluginDocumentSettingPanel>
 			{ settings.guide && (
-			<PluginDocumentSettingPanel
-				name="memorial-plugin-page-guide"
-				title={ __( 'Good to know', 'memorial-plugin' ) }
-			>
-				<Flex direction="column" gap={ 4 }>
-					<TextControl
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
-						label={ __( 'Question the page answers', 'memorial-plugin' ) }
-						placeholder={ __(
-							'For example: How to get the funeral allowance?',
-							'memorial-plugin'
-						) }
-						value={ meta._mem_q || '' }
-						onChange={ ( v ) => set( '_mem_q', v ) }
-					/>
-					<TextareaControl
-						__nextHasNoMarginBottom
-						label={ __( 'Short answer — 1–2 sentences', 'memorial-plugin' ) }
-						help={ __(
-							'Shown on the page card in “Good to know” and in search. Empty — the page title and first paragraph.',
-							'memorial-plugin'
-						) }
-						rows={ 3 }
-						value={ meta._mem_qa || '' }
-						onChange={ ( v ) => set( '_mem_qa', v ) }
-					/>
-				</Flex>
-			</PluginDocumentSettingPanel>
+				<PluginDocumentSettingPanel
+					name="memorial-plugin-page-guide"
+					title={ __( 'Good to know', 'memorial-plugin' ) }
+				>
+					<Flex direction="column" gap={ 4 }>
+						<TextControl
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							label={ __(
+								'Question the page answers',
+								'memorial-plugin'
+							) }
+							placeholder={ __(
+								'For example: How to get the funeral allowance?',
+								'memorial-plugin'
+							) }
+							value={ meta._mem_q || '' }
+							onChange={ ( v ) => set( '_mem_q', v ) }
+						/>
+						<TextareaControl
+							__nextHasNoMarginBottom
+							label={ __(
+								'Short answer — 1–2 sentences',
+								'memorial-plugin'
+							) }
+							help={ __(
+								'Shown on the page card in “Good to know” and in search. Empty — the page title and first paragraph.',
+								'memorial-plugin'
+							) }
+							rows={ 3 }
+							value={ meta._mem_qa || '' }
+							onChange={ ( v ) => set( '_mem_qa', v ) }
+						/>
+					</Flex>
+				</PluginDocumentSettingPanel>
 			) }
 		</>
 	);
