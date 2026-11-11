@@ -124,6 +124,7 @@ body:has(.memorial-plugin-admin) {
 	}
 
 	.dataviews-view-table {
+
 		thead th {
 			background: #fbfaf7;
 			color: $mp-mute;
@@ -233,7 +234,7 @@ body:has(.memorial-plugin-admin) {
 		width: 6px;
 		height: 6px;
 		border-radius: 50%;
-		background: currentColor;
+		background: currentcolor;
 	}
 
 	&.is-muted {

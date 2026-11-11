@@ -25,7 +25,7 @@ env:
 jobs:
   probe:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - name: Старый код (main)
         uses: actions/checkout@v5
@@ -59,7 +59,7 @@ jobs:
           pip install -q paramiko
           mkdir -p data uploads
           python3 - <<'PY'
-          import os, stat, gzip, shutil, paramiko
+          import os, re, stat, gzip, shutil, paramiko
           t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
           t.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
           sf = paramiko.SFTPClient.from_transport(t)
@@ -68,17 +68,36 @@ jobs:
           sf.get(site + '/updraft/' + dbs[-1], 'data/db.sql.gz')
           with gzip.open('data/db.sql.gz', 'rb') as a, open('data/db.sql', 'wb') as b:
               shutil.copyfileobj(a, b)
-          def pull(remote, local):
+          # список файлов — одним соединением, скачивание — в 12 потоков (по своему соединению на поток)
+          files = []
+          def walk(remote, local):
               os.makedirs(local, exist_ok=True)
               for e in sf.listdir_attr(remote):
-                  if e.filename in ('cache',) or e.filename.startswith('updraft') or e.filename.endswith('.zip'):
+                  if e.filename == 'cache' or e.filename.startswith('updraft') or e.filename.endswith('.zip'):
                       continue
                   r, l = remote + '/' + e.filename, os.path.join(local, e.filename)
                   if stat.S_ISDIR(e.st_mode):
-                      pull(r, l)
+                      walk(r, l)
                   else:
-                      sf.get(r, l)
-          pull(site + '/uploads', 'uploads')
+                      files.append((r, l))
+          walk(site + '/uploads', 'uploads')
+          print(len(files), 'файлов')
+          import threading, queue
+          q = queue.Queue()
+          for f in files: q.put(f)
+          def worker():
+              tt = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+              tt.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
+              c = paramiko.SFTPClient.from_transport(tt)
+              while True:
+                  try: r, l = q.get_nowait()
+                  except queue.Empty: break
+                  try: c.get(r, l)
+                  except Exception as ex: print('пропуск', r, ex)
+              tt.close()
+          ts = [threading.Thread(target=worker) for _ in range(12)]
+          for t_ in ts: t_.start()
+          for t_ in ts: t_.join()
           PY
           du -sh data uploads
 
