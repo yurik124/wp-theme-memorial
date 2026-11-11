@@ -182,6 +182,13 @@ jobs:
       - name: Автозагрузка плагина
         run: composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
 
+      # PHPUnit (логика, REST, способности) — в части 1: окружение тестов wp-env и PHPUnit из composer плагина
+      - name: PHPUnit — подготовка
+        if: ${{ matrix.shard == 1 }}
+        run: |
+          echo '{"testsEnvironment": true}' > .wp-env.override.json
+          composer install --working-dir=memorial-plugin --no-interaction --no-progress
+
       - name: Запуск WordPress
         run: |
           npx wp-env start --debug
@@ -192,6 +199,10 @@ jobs:
           npx wp-env run cli wp eval-file wp-content/plugins/memorial-plugin/tools/create-blocks-check-page.php
           npx wp-env run cli wp plugin list
           npx wp-env run cli wp core version
+
+      - name: PHPUnit
+        if: ${{ matrix.shard == 1 }}
+        run: npx wp-env run tests-cli --env-cwd=wp-content/plugins/memorial-plugin vendor/bin/phpunit
 
       - name: Браузер для проверок
         run: npx playwright install --with-deps chromium || npx playwright install chromium  # зеркала apt бывают недоступны: в образе раннера библиотеки браузера уже есть

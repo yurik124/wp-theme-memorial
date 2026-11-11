@@ -255,6 +255,10 @@ function memorial_plugin_consent_banner_html() {
 add_action('rest_api_init', function () {
     register_rest_route('mem/v1', '/consent', ['methods' => 'POST', 'permission_callback' => '__return_true',
         'callback' => function (WP_REST_Request $r) {
+            // один голос в сутки с адреса (хранится только хэш адреса, на сутки) — журнал нельзя «накрутить»
+            $key = 'mem_cl_' . substr(md5((string) ($_SERVER['REMOTE_ADDR'] ?? '') . wp_salt('nonce')), 0, 16);
+            if (get_transient($key)) return ['ok' => true];
+            set_transient($key, 1, DAY_IN_SECONDS);
             $v = $r->get_param('choice') === 'yes' ? 'yes' : 'no';
             $log = get_option('mem_consent_log', []);
             $day = wp_date('Y-m-d');

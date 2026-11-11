@@ -49,7 +49,7 @@ function memorial_plugin_callback_receive(WP_REST_Request $r) {
     if ($id && !is_wp_error($id)) {
         update_post_meta($id, '_name', $name);
         update_post_meta($id, '_page', $page);
-        update_post_meta($id, '_ip', $ip);
+        // IP-адрес не сохраняется (минимум персональных данных): он нужен только для ограничения частоты выше
     }
 
     $to = memorial_plugin_contacts()['call']['email'] ?? '';
@@ -122,3 +122,12 @@ function memorial_plugin_callback_html() {
 <?php
     return (string) ob_get_clean();
 }
+
+/* Разовая чистка (2.0): IP-адреса из старых заявок удаляются — они больше не нужны и не хранятся */
+add_action('admin_init', function () {
+    if (get_option('memorial_plugin_lead_ip_removed')) return;
+    foreach (get_posts(['post_type' => 'mem_lead', 'post_status' => 'any', 'posts_per_page' => -1, 'fields' => 'ids', 'meta_key' => '_ip']) as $id) {
+        delete_post_meta($id, '_ip');
+    }
+    update_option('memorial_plugin_lead_ip_removed', time(), false);
+});

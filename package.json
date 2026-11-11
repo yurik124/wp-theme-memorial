@@ -11,7 +11,7 @@
 		"start": "wp-scripts start",
 		"lint:js": "wp-scripts lint-js memorial-plugin/src memorial-plugin/assets/js/view memorial-theme/src tests/e2e tests/visual tools --no-error-on-unmatched-pattern",
 		"lint:css": "wp-scripts lint-style \"memorial-plugin/src/**/*.{css,scss}\" \"memorial-theme/src/**/*.{css,scss}\" --allow-empty-input",
-		"lint:json": "node tools/validate-json.mjs",
+		"lint:json": "node tools/validate-json.mjs && node tools/check-contrast.mjs",
 		"lint:php:prefixes": "php tools/check-prefixes.php",
 		"test:smoke": "php tests/smoke/switch.php && php tests/smoke/metrika.php && php tests/smoke/settings.php && php tests/smoke/seo.php",
 		"env:start": "wp-env start",
@@ -19,6 +19,7 @@
 		"test:e2e": "playwright test --config tests/e2e/playwright.config.js"
 	},
 	"devDependencies": {
+		"@axe-core/playwright": "^4.10.0",
 		"@playwright/test": "latest",
 		"@wordpress/admin-ui": "latest",
 		"@wordpress/a11y": "latest",

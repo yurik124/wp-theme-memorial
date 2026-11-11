@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- PHPUnit: logic, REST and abilities of the plugin in WordPress (wp-env, tests environment). -->
+<phpunit
+	bootstrap="tests/phpunit/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+>
+	<testsuites>
+		<testsuite name="memorial-plugin">
+			<directory prefix="test-" suffix=".php">./tests/phpunit/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

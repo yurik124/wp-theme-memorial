@@ -400,7 +400,7 @@ figure.mem-fit > a::before{content:"";position:absolute;inset:-16px;z-index:-1;b
 .msearch__ico{position:absolute;left:1.5rem;width:1.25rem;height:1.25rem;color:var(--wp--preset--color--contrast-2,#66675e);pointer-events:none}
 .msearch input[type=search]{width:100%;padding:1rem 3rem 1rem 3rem;border:1.5px solid var(--wp--preset--color--line,#e2ded2);border-radius:14px;font:inherit;font-size:1.08rem;background:#fff;color:var(--wp--preset--color--contrast,#2a2c28);-webkit-appearance:none;appearance:none;box-shadow:0 4px 18px -12px rgba(0,0,0,.25)}
 .msearch input[type=search]::-webkit-search-cancel-button{display:none}
-.msearch input[type=search]:focus{outline:none;border-color:var(--wp--preset--color--primary,#5e7052);box-shadow:0 0 0 3px rgba(184,155,94,.22)}
+.msearch input[type=search]:focus{outline:2px solid var(--wp--preset--color--secondary,#3f4d36);outline-offset:1px;border-color:var(--wp--preset--color--primary,#5e7052)}
 .msearch__x{position:absolute;right:1rem;width:2.4rem;height:2.4rem;border:0;border-radius:50%;background:transparent;font-size:1.6rem;line-height:1;color:var(--wp--preset--color--contrast-2,#66675e);cursor:pointer}
 .msearch__x:hover{background:var(--wp--preset--color--base-2,#f1ede6)}
 .msearch__x[hidden]{display:none}
@@ -520,3 +520,8 @@ a.mcard__link:hover .mcard__img img.is-on{opacity:.93}
 .rwo__more:hover{color:var(--wp--preset--color--primary,#5e7052);text-decoration:underline}
 .mem-cta__txt{min-width:0;flex:1 1 15rem}
 .mem-cta__title,.mem-cta__sub{overflow-wrap:break-word}
+
+/* Доступность (WCAG 2.2): видимый фокус у всех кнопок и ссылок блоков (в том числе у кнопок без оформления — all:unset),
+   без анимаций для тех, кто их отключил */
+:where(.mcat,.mfaq,.mguide,.msearch,.rwo,.brev,.works,.mem-cem,.mem-places,.mem-wcards,.mem-photos,.mrev) :is(a,button,summary,select,[role=button],[tabindex]):focus-visible{outline:2px solid var(--wp--preset--color--secondary,#3f4d36);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){:where(.mcat,.mfaq,.mguide,.msearch,.rwo,.brev,.works,.mem-cem,.mem-wcards,.mrev) *,:where(.mcat,.mfaq,.mguide,.msearch,.rwo,.brev,.works,.mem-cem,.mem-wcards,.mrev) *::before,:where(.mcat,.mfaq,.mguide,.msearch,.rwo,.brev,.works,.mem-cem,.mem-wcards,.mrev) *::after{animation:none !important;transition:none !important;scroll-behavior:auto !important}}

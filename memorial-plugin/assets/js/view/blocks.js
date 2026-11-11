@@ -16,6 +16,11 @@
 import { store, getElement } from '@wordpress/interactivity';
 
 const d = document;
+// smooth scrolling only for those who have not switched animations off
+const smooth = () =>
+	window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches
+		? 'auto'
+		: 'smooth';
 
 /* ---------- Search with suggestions (questions and answers, “Good to know”) ----------
    Word endings are ignored (“похороны” = “похорон”), synonyms count (“стоимость” = “цена”), stop words do not. */
@@ -103,7 +108,7 @@ const sTo = ( el ) => {
 		12;
 	window.scrollTo( {
 		top: window.scrollY + el.getBoundingClientRect().top - hh,
-		behavior: 'smooth',
+		behavior: smooth(),
 	} );
 };
 const restart = ( box, cls ) => {
@@ -836,7 +841,7 @@ function sortBy( items, dir ) {
 // Is someone scrolling the row of section buttons by hand (the last 2.5 s)?
 const navBusy = ( nav ) => nav._touched && Date.now() - nav._touched < 2500;
 // Show a button of the row only when it is not fully visible.
-function chipIntoView( nav, a, smooth ) {
+function chipIntoView( nav, a, animate ) {
 	if ( nav.scrollWidth <= nav.clientWidth ) {
 		return;
 	}
@@ -847,7 +852,7 @@ function chipIntoView( nav, a, smooth ) {
 	}
 	nav.scrollTo( {
 		left: Math.max( 0, l - 40 ),
-		behavior: smooth ? 'smooth' : 'auto',
+		behavior: animate ? smooth() : 'auto',
 	} );
 }
 
@@ -942,16 +947,16 @@ function sectionBar( bar ) {
 		const l = a.offsetLeft - nav.offsetLeft;
 		nav.scrollTo( {
 			left: Math.max( 0, l - ( nav.clientWidth - a.offsetWidth ) / 2 ),
-			behavior: 'smooth',
+			behavior: smooth(),
 		} );
 		nav._chosen = Date.now();
-		t.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+		t.scrollIntoView( { behavior: smooth(), block: 'start' } );
 		// the bar sticks and may change its height — correct once more
 		setTimeout( () => {
 			const top = t.getBoundingClientRect().top;
 			const need = bar.getBoundingClientRect().bottom + 12;
 			if ( Math.abs( top - need ) > 6 ) {
-				window.scrollBy( { top: top - need, behavior: 'smooth' } );
+				window.scrollBy( { top: top - need, behavior: smooth() } );
 			}
 		}, 700 );
 	} );
