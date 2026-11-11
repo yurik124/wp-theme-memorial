@@ -622,7 +622,7 @@ body .svc__more,body .clist__note,body .map__hours,body .kaddr__hours,body .kcar
 body .kontakty__badge,body .hero__night,body .footer__addr small,body .footer__night,body .mcard__sub,body .mcat__meta,body .mcat__sortlbl,
 body .mguide__cnt,body .msearch__pop,body .msearch__pop span,body .msearch__tag,body .consent p,body .fnav a,body .content .mguide__in li,body .msearch__status,body .nf__links,body .maps__tab,body .cb__m{font-size:1rem}
 body .chip,body .mcat__nav .chip,body .mfaq__toc .chip{font-size:1rem}
-body .chip small{font-size:.85em}
+body .chip small{font-size:.85em;margin-left:.4em} /* число в плашке не прилипает к названию: пробел перед ним во flex-кнопке схлопывается */
 body .crumbs{font-size:.9375rem}
 body .chip,body .msearch__status,body .pkg li,body .pkg summary,body .pkg__list li{font-size:1rem!important}
 body .mfaq__more{font-size:1rem!important}

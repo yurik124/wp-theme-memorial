@@ -51,21 +51,36 @@ jobs:
       - name: Сборка
         run: cd after && npm ci --no-audit --no-fund && npm run build && composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
 
-      - name: Установить lftp
-        run: |
-          for i in 1 2 3 4 5; do sudo apt-get update -qq && sudo apt-get install -y -qq lftp && break; sleep 20; done
-          which lftp
-
       - name: Скачать базу и uploads (только чтение)
         env:
-          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
+          # paramiko из PyPI, а не lftp из apt: зеркала apt на раннерах бывают недоступны
+          pip install -q paramiko
           mkdir -p data uploads
-          open="set sftp:auto-confirm yes; set net:max-retries 3; set net:timeout 30; open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT"
-          db=$(lftp -c "$open; cls -1 $SITE_DIR/updraft/" | grep -E -- '-db\.gz$' | sort | tail -n 1)
-          lftp -c "$open; get $db -o data/db.sql.gz"
-          gunzip -f data/db.sql.gz
-          lftp -c "$open; mirror --parallel=8 --exclude-glob '*.zip' --exclude-glob 'cache/*' --exclude-glob 'updraft*' $SITE_DIR/uploads ./uploads" > /dev/null
+          python3 - <<'PY'
+          import os, stat, gzip, shutil, paramiko
+          t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+          t.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
+          sf = paramiko.SFTPClient.from_transport(t)
+          site = os.environ['SITE_DIR'].rstrip('/')
+          dbs = sorted(f for f in sf.listdir(site + '/updraft') if f.endswith('-db.gz'))
+          sf.get(site + '/updraft/' + dbs[-1], 'data/db.sql.gz')
+          with gzip.open('data/db.sql.gz', 'rb') as a, open('data/db.sql', 'wb') as b:
+              shutil.copyfileobj(a, b)
+          def pull(remote, local):
+              os.makedirs(local, exist_ok=True)
+              for e in sf.listdir_attr(remote):
+                  if e.filename in ('cache',) or e.filename.startswith('updraft') or e.filename.endswith('.zip'):
+                      continue
+                  r, l = remote + '/' + e.filename, os.path.join(local, e.filename)
+                  if stat.S_ISDIR(e.st_mode):
+                      pull(r, l)
+                  else:
+                      sf.get(r, l)
+          pull(site + '/uploads', 'uploads')
+          PY
+          du -sh data uploads
 
       - name: WordPress со старыми темой и плагином
         run: |
