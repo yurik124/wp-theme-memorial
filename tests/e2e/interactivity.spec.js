@@ -86,7 +86,7 @@ test( 'стили плагина подключаются вместе с бло
 						r.cssText.includes( '--wp--preset--color--primary' )
 					)
 				);
-			} catch ( e ) {
+			} catch {
 				return false;
 			}
 		} )
