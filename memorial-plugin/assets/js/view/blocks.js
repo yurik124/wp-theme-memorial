@@ -540,10 +540,10 @@ store( 'memorial-plugin/faq', {
 									val,
 									tn( 'questions', found.length )
 								)
-						  ) +
-						  ' <button type="button" class="msearch__reset">' +
-						  sHtml( t( 'showAll' ) ) +
-						  '</button>'
+							) +
+								' <button type="button" class="msearch__reset">' +
+								sHtml( t( 'showAll' ) ) +
+								'</button>'
 						: '';
 				},
 				pick: ( it ) => {
@@ -813,10 +813,10 @@ store( 'memorial-plugin/rewio', {
 												'span:not(.rw-ico)'
 											).textContent
 										)
-								  ) +
-								  ' · <button type="button" class="rwo__all">' +
-								  sHtml( t( 'showAllLower' ) ) +
-								  '</button>'
+									) +
+									' · <button type="button" class="rwo__all">' +
+									sHtml( t( 'showAllLower' ) ) +
+									'</button>'
 								: '';
 						}
 						apply();

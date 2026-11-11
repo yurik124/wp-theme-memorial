@@ -45,7 +45,7 @@ test( 'Контакты: изменение сохраняется', async ( { p
 		page.locator( '.components-notice.is-success' )
 	).toBeVisible();
 	await page.reload();
-	await expect( page.getByLabel( 'Calls outside working hours' ) ).toHaveValue(
-		'Звоните круглосуточно — проверка e2e'
-	);
+	await expect(
+		page.getByLabel( 'Calls outside working hours' )
+	).toHaveValue( 'Звоните круглосуточно — проверка e2e' );
 } );
