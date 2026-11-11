@@ -1,0 +1,130 @@
+name: Проверка на копии сайта
+
+# Диагностика жалоб на копии тестового сайта: сценарии из tests/probe снимаются дважды —
+# на старой теме и плагине (ветка main) и на блочных (ветка, из которой запущено).
+# База и uploads скачиваются только для чтения, в репозиторий не попадают.
+# Снимки и log.json — в ветку ci-probe одним коммитом. Запуск: push ветки probe/<что угодно>.
+
+on:
+  push:
+    branches: ['probe/**']
+
+concurrency:
+  group: probe
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  SFTP_HOST: ${{ secrets.SFTP_HOST }}
+  SFTP_PORT: ${{ secrets.SFTP_PORT }}
+  SFTP_USER: ${{ secrets.SFTP_USER }}
+  SITE_DIR: ${{ secrets.SITE_DIR }}
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Старый код (main)
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          path: classic
+
+      - name: Новый код
+        uses: actions/checkout@v5
+        with:
+          path: after
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: after/.nvmrc
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Сборка
+        run: cd after && npm ci --no-audit --no-fund && npm run build && composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
+
+      - name: Установить lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Скачать базу и uploads (только чтение)
+        env:
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          mkdir -p data uploads
+          open="set sftp:auto-confirm yes; set net:max-retries 3; set net:timeout 30; open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT"
+          db=$(lftp -c "$open; cls -1 $SITE_DIR/updraft/" | grep -E -- '-db\.gz$' | sort | tail -n 1)
+          lftp -c "$open; get $db -o data/db.sql.gz"
+          gunzip -f data/db.sql.gz
+          lftp -c "$open; mirror --parallel=8 --exclude-glob '*.zip' --exclude-glob 'cache/*' --exclude-glob 'updraft*' $SITE_DIR/uploads ./uploads" > /dev/null
+
+      - name: WordPress со старыми темой и плагином
+        run: |
+          mkdir -p env
+          cat > env/.wp-env.json <<'JSON'
+          {
+            "testsEnvironment": false,
+            "core": "https://wordpress.org/wordpress-7.1.4.zip",
+            "phpVersion": "8.4",
+            "plugins": [],
+            "themes": [],
+            "mappings": {
+              "wp-content/plugins/memorial-core": "../classic/memorial-core",
+              "wp-content/themes/memorial_speshu": "../classic/memorial_speshu",
+              "wp-content/plugins/memorial-plugin": "../after/memorial-plugin",
+              "wp-content/themes/memorial-theme": "../after/memorial-theme",
+              "wp-content/uploads": "../uploads",
+              "wp-content/ci-data": "../data"
+            },
+            "config": {
+              "WP_DEBUG": true, "WP_DEBUG_LOG": true, "WP_DEBUG_DISPLAY": false,
+              "MEMORIAL_PLUGIN_NO_PAGE_CACHE": true, "MEM_NO_PAGE_CACHE": true
+            }
+          }
+          JSON
+          cd env
+          WPENV=../after/node_modules/.bin/wp-env
+          $WPENV start
+          $WPENV run cli wp db import wp-content/ci-data/db.sql
+          $WPENV run cli sh -c 'wp db query "SELECT option_value FROM $(wp db prefix)options WHERE option_name=\"siteurl\"" --skip-column-names > wp-content/ci-data/siteurl.txt'
+          old=$(tr -d '\r\n' < ../data/siteurl.txt)
+          $WPENV run cli wp search-replace "$old" "http://localhost:8888" --all-tables --skip-columns=guid --quiet
+          $WPENV run cli wp search-replace "${old/https:/http:}" "http://localhost:8888" --all-tables --skip-columns=guid --quiet
+          $WPENV run cli sh -c 'wp plugin deactivate memorial-plugin --quiet 2>/dev/null; wp plugin activate memorial-core; wp theme activate memorial_speshu; wp rewrite flush; rm -rf wp-content/cache/memorial'
+          $WPENV run cli wp user create probe probe@example.com --role=administrator --user_pass=probe-pass-123
+          $WPENV run cli sh -c 'wp post list --post_type=page --post_status=publish --fields=ID,post_title,post_name,url --format=json > wp-content/ci-data/pages.json'
+          cp ../data/pages.json ../pages.json
+
+      - name: Браузер
+        run: cd after && npx playwright install --with-deps chromium
+
+      - name: Снимки — старое
+        run: cd after && PHASE=classic PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js || true
+
+      - name: Переключить на блочное
+        run: |
+          cd env
+          ../after/node_modules/.bin/wp-env run cli sh -c 'wp plugin deactivate memorial-core --quiet; wp plugin activate memorial-plugin; wp theme activate memorial-theme; wp rewrite flush; rm -rf wp-content/cache/memorial; wp eval "wp_set_current_user(1); do_action(\"admin_init\");" || true; echo "тема: $(wp option get stylesheet)"'
+
+      - name: Снимки — блочное
+        run: cd after && PHASE=block PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js || true
+
+      - name: В ветку ci-probe
+        if: always()
+        run: |
+          cd env && ../after/node_modules/.bin/wp-env run cli sh -c 'cat wp-content/debug.log 2>/dev/null || true' > ../probe/debug.log || true
+          cd ../probe
+          rm -rf results */results
+          git init -q -b ci-probe
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Проверка на копии сайта (прогон ${{ github.run_id }})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-probe
