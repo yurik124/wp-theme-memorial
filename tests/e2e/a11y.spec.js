@@ -31,7 +31,14 @@ for ( const path of PAGES ) {
 			( v ) =>
 				`${ v.impact }: ${ v.id } — ${ v.help } (${ v.nodes.length }): ${ v.nodes
 					.slice( 0, 3 )
-					.map( ( n ) => n.target.join( ' ' ) )
+					.map(
+						( n ) =>
+							n.target.join( ' ' ) +
+							' ' +
+							( n.html || '' ).slice( 0, 160 ) +
+							' ' +
+							( n.failureSummary || '' ).replace( /\s+/g, ' ' )
+					)
 					.join( ', ' ) }`
 		);
 		if ( report.length ) {

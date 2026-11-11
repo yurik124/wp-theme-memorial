@@ -100,6 +100,9 @@ function memorial_theme_nav_list_classes( $html, $block ) {
 			$p->remove_class( 'wp-block-navigation' );
 		}
 	}
-	return $p->get_updated_html();
+	$html = $p->get_updated_html();
+	// Меню по умолчанию (список страниц) вкладывает свой ul прямо в список пунктов: ul > ul — ошибка
+	// доступности (в списке — только li). Снимаем обёртку, пункты остаются li основного списка.
+	return (string) preg_replace( '#<ul class="wp-block-page-list">(.*)</ul>(\s*</ul>)#s', '$1$2', $html, 1 );
 }
 add_filter( 'render_block', 'memorial_theme_nav_list_classes', 10, 2 );
