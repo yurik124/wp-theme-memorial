@@ -488,12 +488,15 @@ function App( { option } ) {
 						{ page.extra }
 					</RawHTML>
 				) }
-					{ page.fields.map( ( def ) => (
-						<Card key={ def.id } className="memorial-plugin-settings__card">
-							<CardHeader>
-								<h2>{ def.label || def.id }</h2>
-							</CardHeader>
-							<CardBody>
+				{ page.fields.map( ( def ) => (
+					<Card
+						key={ def.id }
+						className="memorial-plugin-settings__card"
+					>
+						<CardHeader>
+							<h2>{ def.label || def.id }</h2>
+						</CardHeader>
+						<CardBody>
 							{ def.type === 'group' ? (
 								<>
 									<Help text={ def.help } />
@@ -525,18 +528,24 @@ function App( { option } ) {
 									} }
 								/>
 							) }
-							</CardBody>
-						</Card>
-					) ) }
+						</CardBody>
+					</Card>
+				) ) }
 				<div
 					className={
 						'memorial-plugin-settings__bar' +
 						( dirty ? ' is-dirty' : '' )
 					}
 				>
-					<span className="memorial-plugin-settings__state" role="status">
+					<span
+						className="memorial-plugin-settings__state"
+						role="status"
+					>
 						{ dirty
-							? __( 'There are unsaved changes', 'memorial-plugin' )
+							? __(
+									'There are unsaved changes',
+									'memorial-plugin'
+								)
 							: __( 'All changes are saved', 'memorial-plugin' ) }
 					</span>
 					<Button
