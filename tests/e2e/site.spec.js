@@ -86,7 +86,9 @@ test( 'главная — разделы блоками, шаблон сохра
 		} )
 	);
 	expect( template.source ).toBe( 'custom' );
-	expect( template.content.raw ).toContain( 'wp:memorial-plugin/phone-button' );
+	expect( template.content.raw ).toContain(
+		'wp:memorial-plugin/phone-button'
+	);
 	expect( template.content.raw ).not.toContain( 'memorial-theme/home' );
 
 	await page.goto( '/' );
