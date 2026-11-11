@@ -274,23 +274,7 @@
   addEventListener('hashchange', openHash);
 
 
-  // Кладбища [mem_cemeteries]: фильтр и карта при раскрытии «Подробнее»
-  d.querySelectorAll('[data-cem]').forEach(box => {
-    const chips = [...box.querySelectorAll('[data-cem-f]')];
-    const items = [...box.querySelectorAll('[data-cem-s]')];
-    chips.forEach(c => c.addEventListener('click', () => {
-      const f = c.dataset.cemF;
-      chips.forEach(x => { const on = x === c; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on)); });
-      items.forEach(it => { it.hidden = !!f && it.dataset.cemS !== f; });
-    }));
-    box.querySelectorAll('details').forEach(dt => dt.addEventListener('toggle', () => {
-      const m = dt.querySelector('[data-map-src]');
-      if (!dt.open || !m || m.firstChild) return;
-      const fr = d.createElement('iframe');
-      fr.src = m.dataset.mapSrc; fr.title = m.dataset.mapTitle || 'Карта'; fr.loading = 'lazy'; fr.allowFullscreen = true;
-      m.append(fr);
-    }));
-  });
+  // Кладбища — блок на Interactivity API (assets/js/view/cemeteries.js)
 
   // Отзывы Rewio: вкладки филиалов, «Читать полностью», «Показать ещё»
   d.querySelectorAll('[data-rwo]').forEach(box => {

@@ -141,11 +141,13 @@ add_shortcode('mem_cemeteries', function ($atts) {
     if (!$items) return current_user_can('edit_pages') ? '<p class="is-style-note">[mem_cemeteries]: кладбища не добавлены — «Мемориал → Кладбища». Посетители этот блок не видят.</p>' : '';
     $names = memorial_plugin_cem_status_names();
     $cnt = array_count_values(array_map(fn($r) => $r['status'] ?? 'open', $items));
-    $h = '<div class="mem-cem" data-cem>';
+    // Interactivity API: filter and map (assets/js/view/cemeteries.js)
+    wp_enqueue_script_module('memorial-plugin-cemeteries');
+    $h = '<div class="mem-cem" data-wp-interactive="memorial-plugin/cemeteries" data-wp-context=\'{"filter":""}\'>';
     if (count($cnt) > 1 && !memorial_plugin_sc_no($a['filtr'])) {
         $h .= '<div class="srow"><div class="srow__in" role="group" aria-label="Какие кладбища показать">'
-            . '<button type="button" class="chip is-on" data-cem-f="" aria-pressed="true">Все <small>' . count($items) . '</small></button>';
-        foreach ($names as $k => $n) if (!empty($cnt[$k])) $h .= '<button type="button" class="chip" data-cem-f="' . esc_attr($k) . '" aria-pressed="false">' . esc_html($n) . ' <small>' . (int) $cnt[$k] . '</small></button>';
+            . '<button type="button" class="chip is-on" data-wp-context=\'{"value":""}\' data-wp-on--click="actions.select" data-wp-class--is-on="state.isSelected" data-wp-bind--aria-pressed="state.isSelected" aria-pressed="true">Все <small>' . count($items) . '</small></button>';
+        foreach ($names as $k => $n) if (!empty($cnt[$k])) $h .= '<button type="button" class="chip" data-wp-context=\'' . esc_attr(wp_json_encode(['value' => (string) $k])) . '\' data-wp-on--click="actions.select" data-wp-class--is-on="state.isSelected" data-wp-bind--aria-pressed="state.isSelected" aria-pressed="false">' . esc_html($n) . ' <small>' . (int) $cnt[$k] . '</small></button>';
         $h .= '</div></div>';
     }
     $h .= '<div class="mem-places__grid">';
@@ -159,7 +161,7 @@ add_shortcode('mem_cemeteries', function ($atts) {
         $img = memorial_plugin_place_img($r['img'] ?? '', $name, '(max-width:600px) 100vw, 33vw');
         $addr = trim($r['addr'] ?? '');
         $map = ($r['map'] ?? '') || $addr ? memorial_plugin_map_src($r['map'] ?? '', $addr) : '';
-        $h .= '<article class="mem-place mem-cem__item" id="' . esc_attr($slug) . '" data-cem-s="' . esc_attr($st) . '">'
+        $h .= '<article class="mem-place mem-cem__item" id="' . esc_attr($slug) . '" data-wp-context=\'' . esc_attr(wp_json_encode(['status' => (string) $st])) . '\' data-wp-bind--hidden="state.isHidden">'
             . ($img ? '<div class="mem-place__img">' . $img . '</div>' : '')
             . '<div class="mem-place__body">'
             . '<p class="mem-cem__st mem-cem__st--' . esc_attr($st) . '">' . esc_html($names[$st] ?? '') . '</p>'
@@ -312,3 +314,19 @@ function memorial_plugin_places_tpl($k) {
     $content = memorial_plugin_places_tpl_raw($k);
     return function_exists('memorial_plugin_convert_content') ? memorial_plugin_convert_content($content) : $content;
 }
+
+/* Interactivity API: модуль фильтра и карты, производное состояние — и на сервере (первая отрисовка без «мигания») */
+add_action('init', function () {
+    $f = '/assets/js/view/cemeteries.js';
+    wp_register_script_module('memorial-plugin-cemeteries', MEMORIAL_PLUGIN_URL . $f, ['@wordpress/interactivity'], (string) filemtime(MEMORIAL_PLUGIN_DIR . $f));
+    wp_interactivity_state('memorial-plugin/cemeteries', [
+        'isSelected' => static function () {
+            $c = wp_interactivity_get_context();
+            return ($c['filter'] ?? '') === ($c['value'] ?? '');
+        },
+        'isHidden' => static function () {
+            $c = wp_interactivity_get_context();
+            return ($c['filter'] ?? '') !== '' && ($c['filter'] ?? '') !== ($c['status'] ?? '');
+        },
+    ]);
+});

@@ -631,9 +631,11 @@ function memorial_plugin_content_blocks_register() {
 				'example'         => array(),
 				'attributes'      => $attributes,
 				'supports'        => array(
-					'autoRegister' => true,
-					'html'         => false,
-					'spacing'      => array( 'margin' => true ),
+					'autoRegister'  => true,
+					'html'          => false,
+					'spacing'       => array( 'margin' => true ),
+					// Directives of the Interactivity API in the output are processed on the server (cemeteries).
+					'interactivity' => 'cemeteries' === $slug,
 				),
 				'render_callback' => static function ( $attributes ) use ( $slug ) {
 					return memorial_plugin_content_block_render( $slug, (array) $attributes );
