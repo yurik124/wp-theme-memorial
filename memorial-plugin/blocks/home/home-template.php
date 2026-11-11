@@ -92,6 +92,21 @@ function memorial_plugin_home_h( $html, $level = 2 ) {
 }
 
 /**
+ * Laurel decoration block.
+ *
+ * @param string $class Classes.
+ * @param string $kind  Shape.
+ * @return string
+ */
+function memorial_plugin_home_laurel( $class, $kind = 'divider' ) {
+	$attrs = array( 'className' => $class );
+	if ( 'divider' !== $kind ) {
+		$attrs = array_merge( array( 'kind' => $kind ), $attrs );
+	}
+	return memorial_plugin_home_block( 'memorial-plugin/laurel', $attrs );
+}
+
+/**
  * Section heading: eyebrow, laurel divider, H2 (as memorial_plugin_sec_head()).
  *
  * @param array $s Section settings.
@@ -105,7 +120,7 @@ function memorial_plugin_home_head( $s ) {
 	if ( ! empty( $s['eyebrow'] ) ) {
 		$inner .= memorial_plugin_home_p( memorial_plugin_home_text( $s['eyebrow'] ), 'eyebrow' );
 	}
-	$inner .= memorial_plugin_home_block( 'memorial-plugin/laurel', array( 'className' => 'sec-head__div' ) );
+	$inner .= memorial_plugin_home_laurel( 'sec-head__div' );
 	if ( ! empty( $s['title'] ) ) {
 		$inner .= memorial_plugin_home_h( memorial_plugin_home_text( $s['title'] ) );
 	}
@@ -208,7 +223,7 @@ function memorial_plugin_home_hero( $h ) {
 	$class = 'hero' . ( '' !== $img ? ' hero--img' : '' ) . ( '' !== $img && 'top' === ( $h['mobile'] ?? 'bg' ) ? ' hero--mtop' : '' );
 	return memorial_plugin_home_group(
 		$class,
-		memorial_plugin_home_block( 'memorial-plugin/laurel', array( 'kind' => 'branch_plain', 'className' => 'hero__branch' ) )
+		memorial_plugin_home_laurel( 'hero__branch', 'branch_plain' )
 		. memorial_plugin_home_group( 'wrap hero__in', $inner ),
 		array( 'tagName' => 'section' )
 	);
@@ -234,7 +249,11 @@ function memorial_plugin_home_sections( $o ) {
 				$icon  = function_exists( 'memorial_plugin_feat_icon' ) ? memorial_plugin_feat_icon( $f ) : '';
 				$inner = '';
 				if ( ! empty( $f['img'] ) ) {
-					$inner .= memorial_plugin_home_block( 'image', array( 'className' => 'feat__img', 'linkDestination' => 'none' ), '<figure class="wp-block-image feat__img"><img src="' . esc_url( $f['img'] ) . '" alt=""/></figure>' );
+					$attrs  = array(
+						'className'       => 'feat__img',
+						'linkDestination' => 'none',
+					);
+					$inner .= memorial_plugin_home_block( 'image', $attrs, '<figure class="wp-block-image feat__img"><img src="' . esc_url( $f['img'] ) . '" alt=""/></figure>' );
 				} elseif ( $icon ) {
 					$inner .= memorial_plugin_home_block( 'memorial-plugin/icon', array( 'name' => $icon ) );
 				} else {
@@ -284,7 +303,7 @@ function memorial_plugin_home_sections( $o ) {
 			if ( ! empty( $a['title'] ) ) {
 				$head .= memorial_plugin_home_h( memorial_plugin_home_text( $a['title'] ) );
 			}
-			$head .= memorial_plugin_home_block( 'memorial-plugin/laurel', array( 'className' => 'about__div' ) );
+			$head .= memorial_plugin_home_laurel( 'about__div' );
 			$text  = '';
 			foreach ( preg_split( "/\n\s*\n/", trim( (string) ( $a['text'] ?? '' ) ) ) as $para ) {
 				if ( '' !== trim( $para ) ) {
@@ -298,7 +317,7 @@ function memorial_plugin_home_sections( $o ) {
 				$alt,
 				memorial_plugin_home_group( '', $head ) . memorial_plugin_home_group( 'about__text', $text ),
 				'about',
-				memorial_plugin_home_block( 'memorial-plugin/laurel', array( 'kind' => 'branch_plain', 'className' => 'sec-branch' ) )
+				memorial_plugin_home_laurel( 'sec-branch', 'branch_plain' )
 			);
 		};
 	}
