@@ -11,7 +11,13 @@ test( 'заявки: новая заявка видна в списке и от�
 	const errors = collectJsErrors( page );
 	const phone = '+7 900 555-' + String( Date.now() ).slice( -2 ) + '-11';
 	const res = await request.post( '/wp-json/mem/v1/callback', {
-		data: { phone, name: 'Проверка e2e', consent: 1, elapsed: 5, page: '/' },
+		data: {
+			phone,
+			name: 'Проверка e2e',
+			consent: 1,
+			elapsed: 5,
+			page: '/',
+		},
 	} );
 	expect( res.ok() ).toBeTruthy();
 
@@ -25,7 +31,9 @@ test( 'заявки: новая заявка видна в списке и от�
 	const modal = page.getByRole( 'dialog' );
 	await modal.getByLabel( 'Called back' ).check();
 	await modal.getByRole( 'button', { name: 'Save' } ).click();
-	await expect( page.locator( '.components-notice.is-success' ) ).toBeVisible();
+	await expect(
+		page.locator( '.components-notice.is-success' )
+	).toBeVisible();
 	expect( errors ).toEqual( [] );
 } );
 
@@ -36,7 +44,9 @@ test( 'книга отзывов: добавить отзыв', async ( { page }
 	await page.getByRole( 'button', { name: 'Add' } ).first().click();
 	const modal = page.getByRole( 'dialog' );
 	await modal.getByLabel( 'Author' ).fill( 'Елена В. (e2e)' );
-	await modal.getByLabel( 'Review' ).fill( 'Спасибо за помощь. Проверка e2e.' );
+	await modal
+		.getByLabel( 'Review' )
+		.fill( 'Спасибо за помощь. Проверка e2e.' );
 	await modal.getByRole( 'button', { name: 'Save' } ).click();
 	await expect(
 		page.getByRole( 'row' ).filter( { hasText: 'Елена В. (e2e)' } )

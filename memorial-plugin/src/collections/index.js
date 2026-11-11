@@ -108,8 +108,7 @@ function toField( def ) {
 					{ value: false, label: __( 'No', 'memorial-plugin' ) },
 				],
 				filterBy: { operators: [ 'is' ] },
-				render: ( { item } ) =>
-					item[ def.id ] ? '✓' : '—',
+				render: ( { item } ) => ( item[ def.id ] ? '✓' : '—' ),
 			};
 		case 'select':
 			return {
@@ -137,7 +136,11 @@ function toField( def ) {
 				type: 'text',
 				render: ( { item } ) =>
 					item[ def.id ] ? (
-						<a href={ item[ def.id ] } target="_blank" rel="noreferrer">
+						<a
+							href={ item[ def.id ] }
+							target="_blank"
+							rel="noreferrer"
+						>
 							{ decodeURI( new URL( item[ def.id ] ).pathname ) }
 						</a>
 					) : (
@@ -220,7 +223,11 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 					{ fixed.map( ( f ) => (
 						<div key={ f.id }>
 							<dt>{ f.label }</dt>
-							<dd>{ f.render ? f.render( { item } ) : item[ f.id ] }</dd>
+							<dd>
+								{ f.render
+									? f.render( { item } )
+									: item[ f.id ] }
+							</dd>
 						</div>
 					) ) }
 				</dl>
@@ -232,7 +239,9 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 					layout: { type: 'regular' },
 					fields: editable.map( ( f ) => f.id ),
 				} }
-				onChange={ ( edits ) => setItem( ( i ) => ( { ...i, ...edits } ) ) }
+				onChange={ ( edits ) =>
+					setItem( ( i ) => ( { ...i, ...edits } ) )
+				}
 			/>
 			<Flex justify="flex-end">
 				<Button variant="tertiary" onClick={ onClose }>
@@ -265,16 +274,23 @@ function App( { name } ) {
 								type: 'table',
 								fields: res.fields
 									.map( ( f ) => f.id )
-									.filter( ( id ) => id !== res.fields[ 0 ].id ),
+									.filter(
+										( id ) => id !== res.fields[ 0 ].id
+									),
 								titleField: res.fields[ 0 ].id,
 								perPage: 25,
 								page: 1,
-								sort: { field: res.fields[ 0 ].id, direction: 'asc' },
+								sort: {
+									field: res.fields[ 0 ].id,
+									direction: 'asc',
+								},
 								filters: [],
 							}
 					);
 				} )
-				.catch( ( e ) => setNotice( { status: 'error', text: e.message } ) ),
+				.catch( ( e ) =>
+					setNotice( { status: 'error', text: e.message } )
+				),
 		[ name ]
 	);
 	useEffect( () => {
@@ -336,7 +352,8 @@ function App( { name } ) {
 				icon: 'phone',
 				callback: ( [ item ] ) =>
 					( window.location.href =
-						'tel:' + String( item.phone ).replace( /[^\d+]/g, '' ) ),
+						'tel:' +
+						String( item.phone ).replace( /[^\d+]/g, '' ) ),
 			} );
 		}
 		return out;
@@ -346,7 +363,10 @@ function App( { name } ) {
 		() =>
 			view
 				? filterSortAndPaginate( items || [], view, fields )
-				: { data: [], paginationInfo: { totalItems: 0, totalPages: 0 } },
+				: {
+						data: [],
+						paginationInfo: { totalItems: 0, totalPages: 0 },
+					},
 		[ items, view, fields ]
 	);
 
@@ -364,14 +384,20 @@ function App( { name } ) {
 			subTitle={ meta.intro }
 			actions={
 				meta.create ? (
-					<Button variant="primary" onClick={ () => setEditing( {} ) }>
+					<Button
+						variant="primary"
+						onClick={ () => setEditing( {} ) }
+					>
 						{ __( 'Add', 'memorial-plugin' ) }
 					</Button>
 				) : null
 			}
 		>
 			{ notice && (
-				<Notice status={ notice.status } onRemove={ () => setNotice( null ) }>
+				<Notice
+					status={ notice.status }
+					onRemove={ () => setNotice( null ) }
+				>
 					{ notice.text }
 				</Notice>
 			) }

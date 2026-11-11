@@ -321,9 +321,9 @@ function ControlFor( { def, value, onChange } ) {
 /**
  * DataForm for a list of schema fields; every field renders its own control.
  *
- * @param {Object}   props
- * @param {Array}    props.defs     Field descriptions from the server.
- * @param {Object}   props.data     Values of these fields.
+ * @param {Object}                  props
+ * @param {Array}                   props.defs     Field descriptions from the server.
+ * @param {Object}                  props.data     Values of these fields.
  * @param {(edits: Object) => void} props.onChange Receives changed values ({ id: value }).
  */
 function FieldsForm( { defs, data, onChange } ) {
@@ -448,7 +448,11 @@ function App( { option } ) {
 			subTitle={ page.intro ? <RawHTML>{ page.intro }</RawHTML> : null }
 			actions={ actions }
 		>
-			<Flex direction="column" gap={ 4 } className="memorial-plugin-settings">
+			<Flex
+				direction="column"
+				gap={ 4 }
+				className="memorial-plugin-settings"
+			>
 				{ notice && (
 					<Notice
 						status={ notice.status }

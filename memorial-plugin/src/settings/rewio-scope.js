@@ -3,11 +3,7 @@
  * Rewio catalog. Stored as in the classic form: objects "1,2", per "1:3.4;2:5", sources "" and tabs.
  */
 import { __ } from '@wordpress/i18n';
-import {
-	CheckboxControl,
-	Notice,
-	Flex,
-} from '@wordpress/components';
+import { CheckboxControl, Notice, Flex } from '@wordpress/components';
 
 const ids = ( s ) =>
 	String( s || '' )
@@ -60,7 +56,11 @@ export default function RewioScope( { def, value, onChange } ) {
 	const update = ( patch ) => onChange( { ...val, ...patch } );
 
 	return (
-		<Flex direction="column" gap={ 3 } className="memorial-plugin-settings__rewio">
+		<Flex
+			direction="column"
+			gap={ 3 }
+			className="memorial-plugin-settings__rewio"
+		>
 			<p className="memorial-plugin-settings__help">{ def.help }</p>
 			{ objects.map( ( ob ) => (
 				<div key={ ob.id } className="memorial-plugin-settings__row">
