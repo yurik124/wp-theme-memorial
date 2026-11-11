@@ -29,6 +29,7 @@
 		"@wordpress/element": "latest",
 		"@wordpress/env": "latest",
 		"@wordpress/i18n": "latest",
+		"@wordpress/media-utils": "latest",
 		"@wordpress/rich-text": "latest",
 		"@wordpress/scripts": "latest",
 		"ajv": "^8.17.1"

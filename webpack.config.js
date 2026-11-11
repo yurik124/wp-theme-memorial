@@ -19,6 +19,7 @@ module.exports = {
 		'dataviews-check/index': path.resolve( __dirname, 'memorial-plugin/src/dataviews-check/index.js' ),
 		'convert/index': path.resolve( __dirname, 'memorial-plugin/src/convert/index.js' ),
 		'inline-value/index': path.resolve( __dirname, 'memorial-plugin/src/inline-value/index.js' ),
+		'settings/index': path.resolve( __dirname, 'memorial-plugin/src/settings/index.js' ),
 	},
 	output: {
 		...base.output,
