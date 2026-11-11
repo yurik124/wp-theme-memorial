@@ -44,7 +44,8 @@ add_action('init', function () {
             $h('Примеры наших работ') . $sc('[mem_works vid="карточки" chislo="6" poryadok="случайно"]')],
     ];
     foreach ($pats as $slug => [$title, $desc, $content]) {
-        register_block_pattern('memorial/' . $slug, ['title' => $title, 'description' => $desc, 'categories' => ['memorial'], 'content' => $content]);
+        register_block_pattern('memorial/' . $slug, ['title' => $title, 'description' => $desc, 'categories' => ['memorial'],
+            'content' => function_exists('memorial_plugin_convert_content') ? memorial_plugin_convert_content($content, false) : $content]);
     }
 }, 20);
 

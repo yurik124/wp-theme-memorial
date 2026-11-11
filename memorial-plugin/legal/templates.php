@@ -13,7 +13,7 @@ add_shortcode('mem_doc', function ($atts, $content = '') {
     return memorial_plugin_legal_link($k, trim(wp_strip_all_tags((string) $content)));
 });
 
-function memorial_plugin_legal_template($key) {
+function memorial_plugin_legal_template_raw($key) {
     $h = fn($t) => "<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">$t</h2>\n<!-- /wp:heading -->\n\n";
     $p = fn($t) => "<!-- wp:paragraph -->\n<p>$t</p>\n<!-- /wp:paragraph -->\n\n";
     $ul = function (array $items) {
@@ -82,4 +82,10 @@ function memorial_plugin_legal_template($key) {
         . $p('Как мы обрабатываем персональные данные — в [mem_doc kto="policy"]Политике обработки персональных данных[/mem_doc]. Вопросы — на [mem_operator chto="почта"].');
     }
     return '';
+}
+
+/** Текст документа для новой страницы. Шорткоды [mem_…] в заготовке сразу становятся блоками и значениями сайта (admin/convert.php). */
+function memorial_plugin_legal_template($key) {
+    $content = memorial_plugin_legal_template_raw($key);
+    return function_exists('memorial_plugin_convert_content') ? memorial_plugin_convert_content($content) : $content;
 }

@@ -182,7 +182,7 @@ add_shortcode('mem_cemeteries', function ($atts) {
 add_action('wp_head', function () {
     if (!is_page() || !function_exists('memorial_plugin_ld')) return;
     $p = get_queried_object();
-    if (!$p || !has_shortcode((string) $p->post_content, 'mem_cemeteries')) return;
+    if (!$p || !memorial_plugin_has_content_block((string) $p->post_content, 'mem_cemeteries')) return;
     $list = [];
     foreach (memorial_plugin_cem_items() as $i => $r) {
         $c = ['@type' => 'Cemetery', 'name' => trim($r['name'])];
@@ -210,11 +210,11 @@ add_action('admin_init', function () {
 
     // 1) Блок залов на странице «Поминальный обед»
     $pom = $find(['поминальн', 'pominal']);
-    if ($pom && !has_shortcode($pom->post_content, 'mem_restaurants')) {
+    if ($pom && !memorial_plugin_has_content_block($pom->post_content, 'mem_restaurants')) {
         $c = $pom->post_content;
-        $sc = "<!-- wp:shortcode -->\n[mem_restaurants]\n<!-- /wp:shortcode -->\n\n";
+        $sc = "<!-- wp:memorial-plugin/restaurants /-->\n\n";
         $pos = false;
-        foreach (['~<!-- wp:heading[^>]*-->\s*<h2[^>]*>\s*Поминальные традиции~u', '~<!-- wp:heading[^>]*-->\s*<h2[^>]*>\s*Частые вопросы~u', '~<!-- wp:shortcode -->\s*\[mem_cta~u'] as $re) {
+        foreach (['~<!-- wp:heading[^>]*-->\s*<h2[^>]*>\s*Поминальные традиции~u', '~<!-- wp:heading[^>]*-->\s*<h2[^>]*>\s*Частые вопросы~u', '~<!-- wp:shortcode -->\s*\[mem_cta~u', '~<!-- wp:memorial-plugin/cta[ /]~u'] as $re) {
             if (preg_match($re, $c, $m, PREG_OFFSET_CAPTURE)) { $pos = $m[0][1]; break; }
         }
         $c = $pos === false ? $c . "\n\n" . $sc : substr($c, 0, $pos) . $sc . substr($c, $pos);
@@ -239,7 +239,7 @@ add_action('admin_init', function () {
     $o = get_option('mem_cem');
     if (is_array($o) && (isset($o['page']) || isset($o['links']))) { unset($o['page'], $o['links']); update_option('mem_cem', $o); }
     foreach (get_posts(['post_type' => 'page', 'post_status' => ['publish', 'draft', 'private', 'pending'], 'posts_per_page' => -1]) as $p) {
-        if (has_shortcode($p->post_content, 'mem_cemeteries')) return;
+        if (memorial_plugin_has_content_block($p->post_content, 'mem_cemeteries')) return;
     }
     $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Кладбища Белгорода и района', 'post_name' => 'kladbishha',
                           'post_content' => memorial_plugin_places_tpl('cem')]);
@@ -260,7 +260,7 @@ add_action('admin_notices', function () {
 });
 
 /** Шаблоны текстов новых страниц */
-function memorial_plugin_places_tpl($k) {
+function memorial_plugin_places_tpl_raw($k) {
     $p   = fn($t, $cls = '') => '<!-- wp:paragraph' . ($cls ? ' {"className":"' . $cls . '"}' : '') . " -->\n<p" . ($cls ? ' class="' . $cls . '"' : '') . ">$t</p>\n<!-- /wp:paragraph -->\n\n";
     $h2  = fn($t) => "<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">$t</h2>\n<!-- /wp:heading -->\n\n";
     $ul  = fn(array $li) => "<!-- wp:list -->\n<ul class=\"wp-block-list\">" . implode('', array_map(fn($x) => "<!-- wp:list-item -->\n<li>$x</li>\n<!-- /wp:list-item -->", $li)) . "</ul>\n<!-- /wp:list -->\n\n";
@@ -305,4 +305,10 @@ function memorial_plugin_places_tpl($k) {
         . $faq('Можно заключить договор за родственника?', 'Договор заключается с согласия того, чьи похороны в нём описаны. Обсудим ваш случай по телефону.')
         . $faq('Учитывается ли пособие на погребение?', 'Да, социальное пособие на погребение может получить родственник, и его можно направить на оплату услуг. Подробнее — на странице о пособии.')
         . $sc('[mem_cta title="Хотите обсудить договор?" text="Расскажем об условиях и ответим на вопросы — бесплатно и без обязательств."]');
+}
+
+/** Заготовка страницы «Кладбища» / «Прижизненный договор». Шорткоды [mem_…] в заготовке сразу становятся блоками и значениями сайта (admin/convert.php). */
+function memorial_plugin_places_tpl($k) {
+    $content = memorial_plugin_places_tpl_raw($k);
+    return function_exists('memorial_plugin_convert_content') ? memorial_plugin_convert_content($content) : $content;
 }

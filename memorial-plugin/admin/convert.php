@@ -130,14 +130,15 @@ function memorial_plugin_convert_block_text( $text ) {
 /**
  * Inline shortcodes in a piece of HTML → inline value spans.
  *
- * @param string $html HTML of a text block.
+ * @param string $html    HTML of a text block.
+ * @param bool   $compute Put the current value inside (false — the shortcode text; it is replaced on the page anyway).
  * @return string
  */
-function memorial_plugin_convert_inline( $html ) {
+function memorial_plugin_convert_inline( $html, $compute = true ) {
 	$map = memorial_plugin_convert_inline_tags();
 	return (string) preg_replace_callback(
 		memorial_plugin_convert_regex( array_keys( $map ) ),
-		static function ( $m ) use ( $map ) {
+		static function ( $m ) use ( $map, $compute ) {
 			if ( '[' === $m[1] && ']' === $m[6] ) {
 				return $m[0];
 			}
@@ -147,7 +148,7 @@ function memorial_plugin_convert_inline( $html ) {
 				$atts['content'] = wp_strip_all_tags( $m[5] );
 			}
 			$key  = $map[ $m[2] ];
-			$text = memorial_plugin_inline_value_html( $key, $atts );
+			$text = $compute ? memorial_plugin_inline_value_html( $key, $atts ) : null;
 			// The value for editors only (“section not found”) or nothing — keep the shortcode text visible.
 			if ( null === $text || '' === trim( wp_strip_all_tags( $text ) ) || false !== strpos( $text, '<mark' ) ) {
 				$text = esc_html( $m[0] );
@@ -162,9 +163,10 @@ function memorial_plugin_convert_inline( $html ) {
  * Convert post content. Only the changed parts differ from the original.
  *
  * @param string $content Post content.
+ * @param bool   $compute Inline values with their current text (false — faster, for patterns).
  * @return string
  */
-function memorial_plugin_convert_content( $content ) {
+function memorial_plugin_convert_content( $content, $compute = true ) {
 	// 1. Shortcode blocks and paragraphs that hold only block-level shortcodes.
 	$content = (string) preg_replace_callback(
 		'~<!-- wp:(shortcode|paragraph)(?:\s+\{.*?\})?\s*-->\s*(.*?)\s*<!-- /wp:\1 -->~s',
@@ -182,7 +184,7 @@ function memorial_plugin_convert_content( $content ) {
 		if ( 1 === $i % 2 || false === strpos( $part, '[mem_' ) ) {
 			continue;
 		}
-		$parts[ $i ] = memorial_plugin_convert_inline( $part );
+		$parts[ $i ] = memorial_plugin_convert_inline( $part, $compute );
 	}
 	return implode( '', $parts );
 }

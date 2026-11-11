@@ -250,8 +250,13 @@ add_action('wp_footer', function () {
 
 /* Страница с шорткодом = страница своей категории: ссылки на категорию ведут на неё */
 add_action('save_post_page', function ($id, $post) {
-    if (wp_is_post_revision($id) || !has_shortcode($post->post_content, 'mem_catalog')) return;
-    if (preg_match('/\[mem_catalog[^\]]*\bcat="([^"]+)"/', $post->post_content, $m) && ($t = memorial_plugin_resolve_cat($m[1]))) {
+    if (wp_is_post_revision($id) || !memorial_plugin_has_content_block($post->post_content, 'mem_catalog')) return;
+    $cat = '';
+    if (preg_match('/\[mem_catalog[^\]]*\bcat="([^"]+)"/', $post->post_content, $m)) $cat = $m[1];
+    foreach (parse_blocks($post->post_content) as $b) {   // блок «Каталог» с выбранным разделом
+        if ($cat === '' && ($b['blockName'] ?? '') === 'memorial-plugin/catalog' && !empty($b['attrs']['cat'])) $cat = (string) $b['attrs']['cat'];
+    }
+    if ($cat !== '' && ($t = memorial_plugin_resolve_cat($cat))) {
         update_post_meta($id, '_mem_cat', $t->term_id);
     }
 }, 10, 2);

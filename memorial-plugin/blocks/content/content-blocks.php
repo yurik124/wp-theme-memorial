@@ -587,6 +587,25 @@ function memorial_plugin_add_wrapper_attributes( $html ) {
 }
 
 /**
+ * Does the content have this shortcode or the block that replaced it (anywhere, including inside groups).
+ *
+ * @param string $content Post content.
+ * @param string $tag     Shortcode tag (mem_faq, mem_catalog…).
+ * @return bool
+ */
+function memorial_plugin_has_content_block( $content, $tag ) {
+	if ( has_shortcode( (string) $content, $tag ) ) {
+		return true;
+	}
+	foreach ( memorial_plugin_content_blocks() as $slug => $def ) {
+		if ( $def['tag'] === $tag ) {
+			return has_block( 'memorial-plugin/' . $slug, (string) $content );
+		}
+	}
+	return false;
+}
+
+/**
  * Register the content blocks (except for features switched off in Memorial → Features).
  */
 function memorial_plugin_content_blocks_register() {
