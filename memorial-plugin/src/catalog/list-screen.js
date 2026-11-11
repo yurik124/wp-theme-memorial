@@ -82,9 +82,9 @@ export function bySiteOrder( items ) {
  * @param {string}   props.title   Modal title.
  * @param {Object}   props.item    Item.
  * @param {Object[]} props.fields  Editable fields.
- * @param {Function} props.onSave  Gets the changed values; returns a promise.
- * @param {Function} props.onClose Close.
- * @param {*}        props.extra   Something to show above the form (links).
+ * @param {() => void} props.onSave  Gets the changed values; returns a promise.
+ * @param {() => void} props.onClose Close.
+ * @param {Element}        props.extra   Something to show above the form (links).
  */
 export function EditModal( { title, item, fields, onSave, onClose, extra } ) {
 	const [ edits, setEdits ] = useState( {} );
@@ -145,8 +145,8 @@ export function EditModal( { title, item, fields, onSave, onClose, extra } ) {
  * @param {string}   props.label         Main button.
  * @param {boolean}  props.busy          Waiting for the server.
  * @param {boolean}  props.disabled      Main button disabled.
- * @param {Function} props.onCancel      Cancel.
- * @param {Function} props.onOk          Main button.
+ * @param {() => void} props.onCancel      Cancel.
+ * @param {() => void} props.onOk          Main button.
  * @param {boolean}  props.isDestructive Red main button.
  */
 export function ModalButtons( {
@@ -181,16 +181,16 @@ export function ModalButtons( {
  * @param {Object}   props
  * @param {string}   props.title     Page title.
  * @param {string}   props.subTitle  Text under the title.
- * @param {*}        props.actions   Buttons at the top.
- * @param {*}        props.tabs      Tabs above the list.
+ * @param {Element}        props.actions   Buttons at the top.
+ * @param {Element}        props.tabs      Tabs above the list.
  * @param {Object}   props.notice    {status, text} or null.
- * @param {Function} props.onNotice  Clear the notice.
+ * @param {() => void} props.onNotice  Clear the notice.
  * @param {Object[]} props.items     Items.
  * @param {Object[]} props.fields    Fields.
  * @param {Object[]} props.actionsOf Item actions.
  * @param {Object}   props.view      View.
- * @param {Function} props.setView   Change the view.
- * @param {Function} props.prefilter Filters that DataViews cannot do itself (array fields): (items, view) → items.
+ * @param {() => void} props.setView   Change the view.
+ * @param {() => void} props.prefilter Filters that DataViews cannot do itself (array fields): (items, view) → items.
  * @param {boolean}  props.loading   Loading.
  */
 export function ListPage( {
@@ -246,7 +246,7 @@ export function ListPage( {
  * here and removed from the view passed on.
  *
  * @param {string[]} ids Array field IDs.
- * @return {Function} prefilter.
+ * @return {() => void} prefilter.
  */
 export function arrayFilters( ids ) {
 	return ( items, view ) => {

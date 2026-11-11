@@ -79,7 +79,10 @@ function memorial_plugin_wm_kinds() {
 	}
 	usort(
 		$t,
-		static fn( $a, $b ) => ( (int) get_term_meta( $a->term_id, 'mem_order', true ) <=> (int) get_term_meta( $b->term_id, 'mem_order', true ) ) ?: strcmp( $a->name, $b->name )
+		static function ( $a, $b ) {
+			$d = (int) get_term_meta( $a->term_id, 'mem_order', true ) <=> (int) get_term_meta( $b->term_id, 'mem_order', true );
+			return 0 !== $d ? $d : strcmp( $a->name, $b->name );
+		}
 	);
 	return array_map(
 		static fn( $k ) => array(
@@ -224,7 +227,7 @@ function memorial_plugin_works_bulk( WP_REST_Request $request ) {
 	$out     = array();
 	$trashed = array();
 	if ( 'order' === $op ) {
-		// The IDs in their new order (a whole type or the whole list): menu_order 1, 2, 3…
+		// The IDs in their new order (a whole type or the whole list) get menu_order 1, 2, 3 and so on.
 		foreach ( $ids as $i => $id ) {
 			wp_update_post(
 				array(

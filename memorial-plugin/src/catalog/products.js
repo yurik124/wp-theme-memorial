@@ -262,7 +262,7 @@ export default function Products() {
 		return list;
 	}, [ data ] );
 	const type = types.find( ( t ) => t.id === typeId ) || types[ 0 ];
-	const specs = type?.fields || [];
+	const specs = useMemo( () => type?.fields || [], [ type ] );
 
 	const items = useMemo(
 		() =>

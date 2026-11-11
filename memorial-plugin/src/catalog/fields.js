@@ -181,7 +181,7 @@ export function orderField() {
  * @param {Object}   props
  * @param {Object}   props.data     Item.
  * @param {Object}   props.field    Field.
- * @param {Function} props.onChange Change.
+ * @param {() => void} props.onChange Change.
  */
 export function RowsEdit( { data, field, onChange } ) {
 	const rows = data.rows || [];

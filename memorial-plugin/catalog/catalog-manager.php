@@ -87,7 +87,10 @@ function memorial_plugin_manager_types() {
 	}
 	usort(
 		$t,
-		static fn( $a, $b ) => ( (int) get_term_meta( $a->term_id, 'mem_order', true ) <=> (int) get_term_meta( $b->term_id, 'mem_order', true ) ) ?: strcmp( $a->name, $b->name )
+		static function ( $a, $b ) {
+			$d = (int) get_term_meta( $a->term_id, 'mem_order', true ) <=> (int) get_term_meta( $b->term_id, 'mem_order', true );
+			return 0 !== $d ? $d : strcmp( $a->name, $b->name );
+		}
 	);
 	return $t;
 }
@@ -345,7 +348,7 @@ function memorial_plugin_cm_merge_conflicts( array $ids ) {
 	$vals = array();
 	foreach ( $ids as $id ) {
 		$row = array(
-			__( 'Price', 'memorial-plugin' )      => (string) ( (int) get_post_meta( $id, '_mem_price', true ) ?: '' ),
+			__( 'Price', 'memorial-plugin' )      => (int) get_post_meta( $id, '_mem_price', true ) ? (string) (int) get_post_meta( $id, '_mem_price', true ) : '',
 			__( 'Unit', 'memorial-plugin' )       => trim( (string) get_post_meta( $id, '_mem_unit', true ) ),
 			__( 'Line under title', 'memorial-plugin' ) => trim( (string) get_post_meta( $id, '_mem_sub', true ) ),
 		);
@@ -491,7 +494,7 @@ function memorial_plugin_products_bulk( WP_REST_Request $request ) {
 	$out     = array();
 	$trashed = array();
 	if ( 'order' === $op ) {
-		// The IDs in their new order (a whole type or the whole list): menu_order 1, 2, 3…
+		// The IDs in their new order (a whole type or the whole list) get menu_order 1, 2, 3 and so on.
 		foreach ( $ids as $i => $id ) {
 			wp_update_post(
 				array(

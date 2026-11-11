@@ -164,9 +164,14 @@ function Rows( { rows, onChange } ) {
 	);
 	const update = ( i, k, v ) =>
 		onChange(
-			list.map( ( r, j ) =>
-				j === i ? ( k ? [ r[ 0 ], v ] : [ v, r[ 1 ] ] ) : r
-			)
+			list.map( ( r, j ) => {
+				if ( j !== i ) {
+					return r;
+				}
+				const row = [ ...r ];
+				row[ k ] = v;
+				return row;
+			} )
 		);
 	return (
 		<fieldset className="memorial-plugin-rows">
