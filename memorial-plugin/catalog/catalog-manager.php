@@ -687,7 +687,7 @@ function memorial_plugin_catalog_views_container() {
 		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
 		return;
 	}
-	echo '<div id="memorial-plugin-catalog" class="wrap" data-screen="' . esc_attr( $screens[ $page ] ?? 'products' ) . '"></div>';
+	echo '<div id="memorial-plugin-catalog" class="wrap memorial-plugin-admin" data-screen="' . esc_attr( $screens[ $page ] ?? 'products' ) . '"></div>';
 }
 
 /**

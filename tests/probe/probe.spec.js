@@ -157,11 +157,24 @@ test.describe( 'админка', () => {
 			'admin.php?page=mem-sq',
 			'index.php',
 		];
+		const DOM = {};
 		for ( const s of screens ) {
 			await page.goto( '/wp-admin/' + s ).catch( () => {} );
 			await page.waitForTimeout( 3000 );
 			const name = 'admin-' + s.replace( /[^a-z0-9]+/gi, '-' ).replace( /-+$/, '' );
 			await shot( page, name, { fullPage: true } );
+			// классы элементов приложения — для оформления
+			DOM[ name ] = await page.evaluate( () => {
+				const root = document.querySelector( '.memorial-plugin-admin, [id^="memorial-plugin-"]' );
+				if ( ! root ) return null;
+				const out = new Set();
+				root.querySelectorAll( '*' ).forEach( ( el ) => {
+					const c = typeof el.className === 'string' ? el.className.trim() : '';
+					if ( c ) out.add( el.tagName.toLowerCase() + '.' + c.split( /\s+/ ).join( '.' ) );
+				} );
+				return [ ...out ].slice( 0, 400 );
+			} ).catch( () => null );
 		}
+		fs.writeFileSync( DIR + '/dom.json', JSON.stringify( DOM, null, 1 ) );
 	} );
 } );

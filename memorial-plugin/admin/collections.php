@@ -388,7 +388,7 @@ function memorial_plugin_collections_menu() {
 			$col['cap'],
 			'memorial-plugin-' . $name,
 			static function () use ( $name ) {
-				echo '<div id="memorial-plugin-collection" class="wrap" data-name="' . esc_attr( $name ) . '"></div>';
+				echo '<div id="memorial-plugin-collection" class="wrap memorial-plugin-admin" data-name="' . esc_attr( $name ) . '"></div>';
 			}
 		);
 		if ( $hook ) {

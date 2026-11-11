@@ -554,5 +554,5 @@ function memorial_plugin_convert_page() {
 		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
 		return;
 	}
-	echo '<div id="memorial-plugin-convert" class="wrap"></div>';
+	echo '<div id="memorial-plugin-convert" class="wrap memorial-plugin-admin"></div>';
 }

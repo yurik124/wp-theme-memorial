@@ -52,7 +52,9 @@ jobs:
         run: cd after && npm ci --no-audit --no-fund && npm run build && composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative
 
       - name: Установить lftp
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+        run: |
+          for i in 1 2 3 4 5; do sudo apt-get update -qq && sudo apt-get install -y -qq lftp && break; sleep 20; done
+          which lftp
 
       - name: Скачать базу и uploads (только чтение)
         env:
