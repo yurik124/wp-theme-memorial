@@ -102,13 +102,15 @@ test( 'поведение блоков — модуль Interactivity API вме
 	await expect(
 		page.locator( 'script[type="module"][src*="assets/js/view/blocks.js"]' )
 	).toHaveCount( 1 );
-	await expect( page.locator( 'script[src*="assets/js/front"]' ) ).toHaveCount(
-		0
-	);
+	await expect(
+		page.locator( 'script[src*="assets/js/front"]' )
+	).toHaveCount( 0 );
 	const importMap = await page
 		.locator( 'script[type="importmap"]' )
 		.first()
 		.textContent();
 	expect( importMap ).toContain( '@wordpress/interactivity' );
-	expect( errors.filter( ( e ) => ! /404|Failed to load resource/.test( e ) ) ).toEqual( [] );
+	expect(
+		errors.filter( ( e ) => ! /404|Failed to load resource/.test( e ) )
+	).toEqual( [] );
 } );

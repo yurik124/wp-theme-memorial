@@ -66,7 +66,8 @@ const sEsc = ( s ) => s.replace( /[.*+?^${}()|[\]\\]/g, '\\$&' );
 const sHtml = ( s ) =>
 	s.replace(
 		/[&<>"]/g,
-		( c ) => ( { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' } )[ c ]
+		( c ) =>
+			( { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' } )[ c ]
 	);
 const sMark = ( text, words ) => {
 	const alts = words.flat().filter( ( x ) => x.length > 1 );
@@ -144,8 +145,9 @@ function memSearch( box, items, opts ) {
 			).length;
 			// found in the question itself — higher
 			it.k =
-				words.filter( ( alts ) => alts.some( ( w ) => it._q.includes( w ) ) )
-					.length *
+				words.filter( ( alts ) =>
+					alts.some( ( w ) => it._q.includes( w ) )
+				).length *
 					4 +
 				it.n * 2 +
 				( it.k0 || 0 ) * 0.5;
@@ -219,7 +221,9 @@ function memSearch( box, items, opts ) {
 					sMark( it.q, words ) +
 					'</span>' +
 					( it.g
-						? '<span class="msearch__og">' + sHtml( it.g ) + '</span>'
+						? '<span class="msearch__og">' +
+							sHtml( it.g ) +
+							'</span>'
 						: '' ) +
 					'</li>'
 			)
@@ -280,8 +284,8 @@ function memSearch( box, items, opts ) {
 			const bar = box.querySelector( '.msearch__bar' );
 			const lift = () => {
 				const hh =
-					d.querySelector( '.header' )?.getBoundingClientRect().bottom ||
-					0;
+					d.querySelector( '.header' )?.getBoundingClientRect()
+						.bottom || 0;
 				const top = bar.getBoundingClientRect().top;
 				if ( Math.abs( top - hh ) > 16 ) {
 					window.scrollTo( {
@@ -318,7 +322,9 @@ function memSearch( box, items, opts ) {
 			sel =
 				( sel + ( e.key === 'ArrowDown' ? 1 : -1 ) + options.length ) %
 				options.length;
-			options.forEach( ( o, i ) => o.classList.toggle( 'is-sel', i === sel ) );
+			options.forEach( ( o, i ) =>
+				o.classList.toggle( 'is-sel', i === sel )
+			);
 			q.setAttribute( 'aria-activedescendant', options[ sel ].id );
 			options[ sel ].scrollIntoView( { block: 'nearest' } );
 		} else if ( e.key === 'Enter' ) {
@@ -396,7 +402,9 @@ function memSearch( box, items, opts ) {
 const openHash = () => {
 	const el =
 		window.location.hash.length > 1 &&
-		d.getElementById( decodeURIComponent( window.location.hash.slice( 1 ) ) );
+		d.getElementById(
+			decodeURIComponent( window.location.hash.slice( 1 ) )
+		);
 	if ( ! el ) {
 		return;
 	}
@@ -490,7 +498,9 @@ store( 'memorial-plugin/faq', {
 						it.el.hidden = ! vis;
 						it.el.open = false;
 						it.s.innerHTML =
-							words.length && vis ? sMark( it.q, words ) : it.html;
+							words.length && vis
+								? sMark( it.q, words )
+								: it.html;
 					} );
 					if ( words.length && found.length && found.length <= 2 ) {
 						found.forEach( ( it ) => {
@@ -507,7 +517,12 @@ store( 'memorial-plugin/faq', {
 						return (
 							items.length +
 							' ' +
-							sWord( items.length, 'вопрос', 'вопроса', 'вопросов' ) +
+							sWord(
+								items.length,
+								'вопрос',
+								'вопроса',
+								'вопросов'
+							) +
 							' с ответами. Начните вводить — подскажем.'
 						);
 					}
@@ -517,7 +532,12 @@ store( 'memorial-plugin/faq', {
 								'» — ' +
 								found.length +
 								' ' +
-								sWord( found.length, 'вопрос', 'вопроса', 'вопросов' ) +
+								sWord(
+									found.length,
+									'вопрос',
+									'вопроса',
+									'вопросов'
+								) +
 								' ниже. <button type="button" class="msearch__reset">Показать все</button>'
 						: '';
 				},
@@ -561,7 +581,8 @@ store( 'memorial-plugin/guide', {
 				filter: ( words, found ) => {
 					const hit = new Set( found.map( ( it ) => it.c ) );
 					cards.forEach( ( c ) => {
-						c.hidden = !! words.length && ! hit.has( +c.dataset.card );
+						c.hidden =
+							!! words.length && ! hit.has( +c.dataset.card );
 					} );
 					restart( box, 'is-upd' );
 				},
@@ -570,7 +591,9 @@ store( 'memorial-plugin/guide', {
 						return '';
 					}
 					const arts = new Set(
-						found.filter( ( it ) => it.c >= 0 ).map( ( it ) => it.c )
+						found
+							.filter( ( it ) => it.c >= 0 )
+							.map( ( it ) => it.c )
 					).size;
 					const other = found.filter( ( it ) => it.c < 0 ).length;
 					return (
@@ -578,14 +601,16 @@ store( 'memorial-plugin/guide', {
 						sHtml( val ) +
 						'»: ' +
 						( arts
-							? arts + ' ' + sWord( arts, 'статья', 'статьи', 'статей' )
+							? arts +
+								' ' +
+								sWord( arts, 'статья', 'статьи', 'статей' )
 							: '' ) +
 						( arts && other ? ' и ' : '' ) +
 						( other
 							? other +
-							  ' ' +
-							  sWord( other, 'ответ', 'ответа', 'ответов' ) +
-							  ' на других страницах'
+								' ' +
+								sWord( other, 'ответ', 'ответа', 'ответов' ) +
+								' на других страницах'
 							: '' ) +
 						'. Нажмите на подсказку, чтобы открыть нужное место. <button type="button" class="msearch__reset">Показать все</button>'
 					);
@@ -652,7 +677,9 @@ store( 'memorial-plugin/reviews', {
 				if ( box.classList.contains( 'is-loaded' ) ) {
 					return;
 				}
-				const frag = box.querySelector( 'template' ).content.cloneNode( true );
+				const frag = box
+					.querySelector( 'template' )
+					.content.cloneNode( true );
 				// scripts of a template do not run by themselves — create them again
 				frag.querySelectorAll( 'script' ).forEach( ( old ) => {
 					const n = d.createElement( 'script' );
@@ -669,8 +696,8 @@ store( 'memorial-plugin/reviews', {
 			try {
 				ok = window.localStorage.getItem( 'mem_consent_v1' ) === 'yes';
 			} catch {
-			// no storage or no network — not important here
-		}
+				// no storage or no network — not important here
+			}
 			if ( ok || ! window.memTrack?.need ) {
 				const io = new window.IntersectionObserver(
 					( es ) => {
@@ -706,10 +733,15 @@ store( 'memorial-plugin/rewio', {
 				const st = { sort: '', dir: 'desc', src: '', shown: step };
 				const wrap = panel.querySelector( '.rwo__morewrap' );
 				const apply = () => {
-					const view = cards.filter( ( c ) => ! st.src || c.dataset.s === st.src );
+					const view = cards.filter(
+						( c ) => ! st.src || c.dataset.s === st.src
+					);
 					const k = st.dir === 'asc' ? -1 : 1;
 					if ( st.sort === 'd' ) {
-						view.sort( ( a, b ) => k * b.dataset.d.localeCompare( a.dataset.d ) );
+						view.sort(
+							( a, b ) =>
+								k * b.dataset.d.localeCompare( a.dataset.d )
+						);
 					}
 					if ( st.sort === 'r' ) {
 						view.sort(
@@ -737,22 +769,24 @@ store( 'memorial-plugin/rewio', {
 						st.dir = on && st.dir === 'desc' ? 'asc' : 'desc';
 						st.sort = s.dataset.rwoSort;
 						st.shown = step;
-						panel.querySelectorAll( '[data-rwo-sort]' ).forEach( ( b ) => {
-							const me = b === s;
-							const desc = me && st.dir === 'desc';
-							b.setAttribute( 'aria-pressed', String( me ) );
-							b.querySelector( 'i' ).textContent =
-								me && st.dir === 'asc' ? '↑' : '↓';
-							if ( b.dataset.rwoSort === 'd' ) {
-								b.title = desc
-									? 'Сначала новые — нажмите, чтобы сначала старые'
-									: 'Сортировать по дате';
-							} else {
-								b.title = desc
-									? 'Сначала высокие оценки — нажмите, чтобы наоборот'
-									: 'Сортировать по оценке';
-							}
-						} );
+						panel
+							.querySelectorAll( '[data-rwo-sort]' )
+							.forEach( ( b ) => {
+								const me = b === s;
+								const desc = me && st.dir === 'desc';
+								b.setAttribute( 'aria-pressed', String( me ) );
+								b.querySelector( 'i' ).textContent =
+									me && st.dir === 'asc' ? '↑' : '↓';
+								if ( b.dataset.rwoSort === 'd' ) {
+									b.title = desc
+										? 'Сначала новые — нажмите, чтобы сначала старые'
+										: 'Сортировать по дате';
+								} else {
+									b.title = desc
+										? 'Сначала высокие оценки — нажмите, чтобы наоборот'
+										: 'Сортировать по оценке';
+								}
+							} );
 						apply();
 						return;
 					}
@@ -765,16 +799,20 @@ store( 'memorial-plugin/rewio', {
 						panel
 							.querySelectorAll( '[data-rwo-src]' )
 							.forEach( ( b ) =>
-								b.setAttribute( 'aria-pressed', String( ! on && b === p ) )
+								b.setAttribute(
+									'aria-pressed',
+									String( ! on && b === p )
+								)
 							);
 						const note = panel.querySelector( '.rwo__shown' );
 						if ( note ) {
 							note.innerHTML = st.src
 								? 'Отзывы: ' +
-								  sHtml(
-										p.querySelector( 'span:not(.rw-ico)' ).textContent
-								  ) +
-								  ' · <button type="button" class="rwo__all">показать все</button>'
+									sHtml(
+										p.querySelector( 'span:not(.rw-ico)' )
+											.textContent
+									) +
+									' · <button type="button" class="rwo__all">показать все</button>'
 								: '';
 						}
 						apply();
@@ -782,7 +820,9 @@ store( 'memorial-plugin/rewio', {
 					}
 					if ( e.target.closest( '.rwo__all' ) ) {
 						panel
-							.querySelector( '[data-rwo-src][aria-pressed="true"]' )
+							.querySelector(
+								'[data-rwo-src][aria-pressed="true"]'
+							)
 							?.click();
 						return;
 					}
@@ -847,7 +887,10 @@ function chipIntoView( nav, a, animate ) {
 	}
 	const l = a.offsetLeft - nav.offsetLeft;
 	const r = l + a.offsetWidth;
-	if ( l >= nav.scrollLeft + 8 && r <= nav.scrollLeft + nav.clientWidth - 8 ) {
+	if (
+		l >= nav.scrollLeft + 8 &&
+		r <= nav.scrollLeft + nav.clientWidth - 8
+	) {
 		return;
 	}
 	nav.scrollTo( {
@@ -883,7 +926,9 @@ function sectionBar( bar ) {
 		);
 		b.textContent = s === 'l' ? '‹' : '›';
 		b.addEventListener( 'click', () =>
-			nav.scrollBy( { left: ( s === 'l' ? -1 : 1 ) * nav.clientWidth * 0.7 } )
+			nav.scrollBy( {
+				left: ( s === 'l' ? -1 : 1 ) * nav.clientWidth * 0.7,
+			} )
 		);
 		wrap.appendChild( b );
 	} );
@@ -933,7 +978,8 @@ function sectionBar( bar ) {
 	// reloading the page or “Back” jumps to this section by itself.
 	nav.addEventListener( 'click', ( e ) => {
 		const a = e.target.closest( 'a[href^="#"]' );
-		const t = a && d.getElementById( decodeURIComponent( a.hash.slice( 1 ) ) );
+		const t =
+			a && d.getElementById( decodeURIComponent( a.hash.slice( 1 ) ) );
 		if ( ! t ) {
 			return;
 		}
@@ -963,7 +1009,9 @@ function sectionBar( bar ) {
 	// Current section. The row scrolls to it only when it is not visible and nobody scrolls the row by hand.
 	const links = [ ...nav.querySelectorAll( 'a[href^="#"]' ) ];
 	const secs = links
-		.map( ( a ) => d.getElementById( decodeURIComponent( a.hash.slice( 1 ) ) ) )
+		.map( ( a ) =>
+			d.getElementById( decodeURIComponent( a.hash.slice( 1 ) ) )
+		)
 		.filter( Boolean );
 	if ( ! secs.length || ! window.IntersectionObserver ) {
 		return;
@@ -1052,8 +1100,8 @@ store( 'memorial-plugin/catalog', {
 		sort( event ) {
 			const box = event.target.closest( '[data-mcat]' );
 			box.querySelectorAll( '.mcat__grid' ).forEach( ( g ) => {
-				sortBy( [ ...g.children ], event.target.value ).forEach( ( li ) =>
-					g.appendChild( li )
+				sortBy( [ ...g.children ], event.target.value ).forEach(
+					( li ) => g.appendChild( li )
 				);
 				g.memMore?.();
 			} );
@@ -1062,7 +1110,9 @@ store( 'memorial-plugin/catalog', {
 	callbacks: {
 		init() {
 			const { ref: box } = getElement();
-			box.querySelectorAll( '.mcat__grid[data-more]' ).forEach( showMore );
+			box.querySelectorAll( '.mcat__grid[data-more]' ).forEach(
+				showMore
+			);
 			box.querySelectorAll( '.mcat__bar' ).forEach( sectionBar );
 		},
 	},
@@ -1211,7 +1261,10 @@ function workGo( work, t ) {
 	main.href = t.href;
 	if ( ti ) {
 		// the blurred background — from the new photo
-		main.style.setProperty( '--wbg', 'url("' + ( ti.currentSrc || ti.src ) + '")' );
+		main.style.setProperty(
+			'--wbg',
+			'url("' + ( ti.currentSrc || ti.src ) + '")'
+		);
 	}
 	thumbs.forEach( ( x ) => {
 		x.classList.toggle( 'is-on', x === t );
@@ -1275,7 +1328,11 @@ store( 'memorial-plugin/works', {
 			box.querySelectorAll( '.work__media' ).forEach( ( m ) => {
 				const main = m.querySelector( '.work__img' );
 				if ( main && m.querySelector( '.work__thumb' ) ) {
-					swipe( main, ( dir ) => workStep( m.closest( '.work' ), dir ), main );
+					swipe(
+						main,
+						( dir ) => workStep( m.closest( '.work' ), dir ),
+						main
+					);
 				}
 			} );
 			box.querySelectorAll( '.mcat__bar' ).forEach( sectionBar );
@@ -1319,11 +1376,17 @@ function focusPos( el, nw, nh ) {
 	const H = nh * k;
 	const px =
 		W - w > 1
-			? Math.min( 100, Math.max( 0, ( ( fx * W - w / 2 ) / ( W - w ) ) * 100 ) )
+			? Math.min(
+					100,
+					Math.max( 0, ( ( fx * W - w / 2 ) / ( W - w ) ) * 100 )
+				)
 			: 50;
 	const py =
 		H - h > 1
-			? Math.min( 100, Math.max( 0, ( ( fy * H - h / 2 ) / ( H - h ) ) * 100 ) )
+			? Math.min(
+					100,
+					Math.max( 0, ( ( fy * H - h / 2 ) / ( H - h ) ) * 100 )
+				)
 			: 50;
 	const v = px.toFixed( 1 ) + '% ' + py.toFixed( 1 ) + '%';
 	if ( el.tagName === 'IMG' ) {

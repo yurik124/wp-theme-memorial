@@ -5,13 +5,25 @@
 const { test, expect } = require( '@playwright/test' );
 const AxeBuilder = require( '@axe-core/playwright' ).default;
 
-const PAGES = [ '/', '/blocks-check/', '/?s=памятник', '/catalog/', '/no-such-page-404/' ];
+const PAGES = [
+	'/',
+	'/blocks-check/',
+	'/?s=памятник',
+	'/catalog/',
+	'/no-such-page-404/',
+];
 
 for ( const path of PAGES ) {
 	test( `axe: ${ path }`, async ( { page } ) => {
 		await page.goto( path );
 		const res = await new AxeBuilder( { page } )
-			.withTags( [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa' ] )
+			.withTags( [
+				'wcag2a',
+				'wcag2aa',
+				'wcag21a',
+				'wcag21aa',
+				'wcag22aa',
+			] )
 			// maps and widgets of other sites are not ours
 			.exclude( 'iframe' )
 			.analyze();
@@ -28,7 +40,9 @@ for ( const path of PAGES ) {
 		}
 		expect(
 			res.violations
-				.filter( ( v ) => [ 'serious', 'critical' ].includes( v.impact ) )
+				.filter( ( v ) =>
+					[ 'serious', 'critical' ].includes( v.impact )
+				)
 				.map( ( v ) => v.id )
 		).toEqual( [] );
 	} );
@@ -47,10 +61,16 @@ test( 'клавиатура: ссылка «к содержимому» и ме�
 	expect( first.href ).toMatch( /#/ ); // the skip link is the first stop
 	await page.locator( '#burger' ).focus();
 	await page.keyboard.press( 'Enter' );
-	await expect( page.locator( '#burger' ) ).toHaveAttribute( 'aria-expanded', 'true' );
+	await expect( page.locator( '#burger' ) ).toHaveAttribute(
+		'aria-expanded',
+		'true'
+	);
 	await expect(
 		page.locator( '#header .wp-block-navigation-item__content' ).first()
 	).toBeVisible();
 	await page.keyboard.press( 'Escape' );
-	await expect( page.locator( '#burger' ) ).toHaveAttribute( 'aria-expanded', 'false' );
+	await expect( page.locator( '#burger' ) ).toHaveAttribute(
+		'aria-expanded',
+		'false'
+	);
 } );

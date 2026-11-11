@@ -24,7 +24,9 @@ const hex = ( c ) => {
 	if ( h.length === 3 ) {
 		h = [ ...h ].map( ( x ) => x + x ).join( '' );
 	}
-	return [ 0, 2, 4 ].map( ( i ) => parseInt( h.slice( i, i + 2 ), 16 ) / 255 );
+	return [ 0, 2, 4 ].map(
+		( i ) => parseInt( h.slice( i, i + 2 ), 16 ) / 255
+	);
 };
 const lum = ( c ) => {
 	const [ r, g, b ] = hex( c ).map( ( v ) =>
@@ -51,7 +53,10 @@ const files = [
 	[ 'theme.json', base ],
 	...readdirSync( `${ DIR }/styles` )
 		.filter( ( f ) => f.endsWith( '.json' ) )
-		.map( ( f ) => [ `styles/${ f }`, { ...base, ...palette( `${ DIR }/styles/${ f }` ) } ] ),
+		.map( ( f ) => [
+			`styles/${ f }`,
+			{ ...base, ...palette( `${ DIR }/styles/${ f }` ) },
+		] ),
 ];
 
 let failed = 0;
@@ -72,5 +77,7 @@ for ( const [ name, colors ] of files ) {
 if ( failed ) {
 	process.exitCode = 1;
 } else {
-	process.stdout.write( `Contrast is fine: ${ files.length } palettes × ${ PAIRS.length } pairs.\n` );
+	process.stdout.write(
+		`Contrast is fine: ${ files.length } palettes × ${ PAIRS.length } pairs.\n`
+	);
 }
