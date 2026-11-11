@@ -91,7 +91,12 @@ export default function SearchStats() {
 					item.found ? (
 						sprintf(
 							/* translators: %d: number of answers. */
-							_n( '%d answer', '%d answers', item.found, 'memorial-plugin' ),
+							_n(
+								'%d answer',
+								'%d answers',
+								item.found,
+								'memorial-plugin'
+							),
 							item.found
 						)
 					) : (
@@ -142,13 +147,16 @@ export default function SearchStats() {
 				? [
 						{
 							id: 'delete',
-							label: __( 'Remove from the list', 'memorial-plugin' ),
+							label: __(
+								'Remove from the list',
+								'memorial-plugin'
+							),
 							isDestructive: true,
 							supportsBulk: true,
 							callback: ( list ) =>
 								remove( list.map( ( i ) => i.query ) ),
 						},
-				  ]
+					]
 				: [],
 		[ data, remove ]
 	);
@@ -165,7 +173,10 @@ export default function SearchStats() {
 	return (
 		<>
 			<ListPage
-				title={ __( 'What people search for on the site', 'memorial-plugin' ) }
+				title={ __(
+					'What people search for on the site',
+					'memorial-plugin'
+				) }
 				subTitle={ sprintf(
 					/* translators: 1: number of searches, 2: number of different queries. */
 					__(

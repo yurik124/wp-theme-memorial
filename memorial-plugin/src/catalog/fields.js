@@ -178,9 +178,9 @@ export function orderField() {
 /**
  * “What was done — price” rows of a work.
  *
- * @param {Object}   props
- * @param {Object}   props.data     Item.
- * @param {Object}   props.field    Field.
+ * @param {Object}     props
+ * @param {Object}     props.data     Item.
+ * @param {Object}     props.field    Field.
  * @param {() => void} props.onChange Change.
  */
 export function RowsEdit( { data, field, onChange } ) {

@@ -42,9 +42,9 @@ function Thumb( { id } ) {
 }
 
 /**
- * @param {Object}   props
- * @param {string}   props.label    Field label.
- * @param {string}   props.value    IDs separated by commas.
+ * @param {Object}     props
+ * @param {string}     props.label    Field label.
+ * @param {string}     props.value    IDs separated by commas.
  * @param {() => void} props.onChange Gets the new IDs string.
  */
 export default function Photos( { label, value, onChange } ) {

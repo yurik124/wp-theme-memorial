@@ -20,7 +20,11 @@ import {
 	TextControl,
 	TextareaControl,
 } from '@wordpress/components';
-import { DataViews, DataForm, filterSortAndPaginate } from '@wordpress/dataviews/wp';
+import {
+	DataViews,
+	DataForm,
+	filterSortAndPaginate,
+} from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
 import BooleanEdit from '../shared/boolean-edit';
 import { ModalButtons, moved } from './list-screen';
@@ -66,7 +70,11 @@ function TypeSettings( { type, ratios, save } ) {
 	}, [ type ] );
 	const fields = useMemo(
 		() => [
-			{ id: 'name', label: __( 'Name', 'memorial-plugin' ), type: 'text' },
+			{
+				id: 'name',
+				label: __( 'Name', 'memorial-plugin' ),
+				type: 'text',
+			},
 			{
 				id: 'desc',
 				label: __( 'Description', 'memorial-plugin' ),
@@ -80,7 +88,10 @@ function TypeSettings( { type, ratios, save } ) {
 			{
 				id: 'price',
 				label: __( 'Price of a new product, ₽', 'memorial-plugin' ),
-				description: __( 'Empty — “price on request”.', 'memorial-plugin' ),
+				description: __(
+					'Empty — “price on request”.',
+					'memorial-plugin'
+				),
 				type: 'integer',
 			},
 			{
@@ -107,7 +118,10 @@ function TypeSettings( { type, ratios, save } ) {
 			{
 				id: 'cols',
 				label: __( 'Columns on a computer', 'memorial-plugin' ),
-				description: __( '2–6; empty — 4. On a phone always 2.', 'memorial-plugin' ),
+				description: __(
+					'2–6; empty — 4. On a phone always 2.',
+					'memorial-plugin'
+				),
 				type: 'integer',
 			},
 		],
@@ -131,7 +145,10 @@ function TypeSettings( { type, ratios, save } ) {
 						setDirty( true );
 					} }
 				/>
-				<Flex justify="flex-end" className="memorial-plugin-catalog__buttons">
+				<Flex
+					justify="flex-end"
+					className="memorial-plugin-catalog__buttons"
+				>
 					<Button
 						variant="primary"
 						isBusy={ busy }
@@ -199,7 +216,10 @@ function Specs( { type, save } ) {
 					) }
 				</p>
 				{ rows.map( ( r, i ) => (
-					<fieldset key={ i } className="memorial-plugin-catalog__spec">
+					<fieldset
+						key={ i }
+						className="memorial-plugin-catalog__spec"
+					>
 						<legend className="screen-reader-text">
 							{ r.label ||
 								sprintf(
@@ -214,9 +234,14 @@ function Specs( { type, save } ) {
 									__next40pxDefaultSize
 									__nextHasNoMarginBottom
 									label={ __( 'Name', 'memorial-plugin' ) }
-									placeholder={ __( 'For example: Height', 'memorial-plugin' ) }
+									placeholder={ __(
+										'For example: Height',
+										'memorial-plugin'
+									) }
 									value={ r.label }
-									onChange={ ( v ) => update( i, { label: v } ) }
+									onChange={ ( v ) =>
+										update( i, { label: v } )
+									}
 								/>
 							</FlexBlock>
 							<FlexItem>
@@ -226,7 +251,9 @@ function Specs( { type, save } ) {
 									label={ __( 'Kind', 'memorial-plugin' ) }
 									value={ r.type }
 									options={ SPEC_TYPES() }
-									onChange={ ( v ) => update( i, { type: v } ) }
+									onChange={ ( v ) =>
+										update( i, { type: v } )
+									}
 								/>
 							</FlexItem>
 							{ r.type === 'number' && (
@@ -234,10 +261,18 @@ function Specs( { type, save } ) {
 									<TextControl
 										__next40pxDefaultSize
 										__nextHasNoMarginBottom
-										label={ __( 'Unit', 'memorial-plugin' ) }
-										placeholder={ __( 'cm, mm, kg', 'memorial-plugin' ) }
+										label={ __(
+											'Unit',
+											'memorial-plugin'
+										) }
+										placeholder={ __(
+											'cm, mm, kg',
+											'memorial-plugin'
+										) }
 										value={ r.unit }
-										onChange={ ( v ) => update( i, { unit: v } ) }
+										onChange={ ( v ) =>
+											update( i, { unit: v } )
+										}
 									/>
 								</FlexItem>
 							) }
@@ -246,11 +281,18 @@ function Specs( { type, save } ) {
 									<TextControl
 										__next40pxDefaultSize
 										__nextHasNoMarginBottom
-										label={ __( 'Choices, separated by commas', 'memorial-plugin' ) }
-										value={ ( r.options || [] ).join( ', ' ) }
+										label={ __(
+											'Choices, separated by commas',
+											'memorial-plugin'
+										) }
+										value={ ( r.options || [] ).join(
+											', '
+										) }
 										onChange={ ( v ) =>
 											update( i, {
-												options: v.split( ',' ).map( ( s ) => s.trim() ),
+												options: v
+													.split( ',' )
+													.map( ( s ) => s.trim() ),
 											} )
 										}
 									/>
@@ -261,24 +303,47 @@ function Specs( { type, save } ) {
 									<SelectControl
 										__next40pxDefaultSize
 										__nextHasNoMarginBottom
-										label={ __( 'Default', 'memorial-plugin' ) }
+										label={ __(
+											'Default',
+											'memorial-plugin'
+										) }
 										value={ r.default }
 										options={ [
-											{ value: '', label: __( '— none —', 'memorial-plugin' ) },
+											{
+												value: '',
+												label: __(
+													'— none —',
+													'memorial-plugin'
+												),
+											},
 											...( r.options || [] )
 												.filter( Boolean )
-												.map( ( o ) => ( { value: o, label: o } ) ),
+												.map( ( o ) => ( {
+													value: o,
+													label: o,
+												} ) ),
 										] }
-										onChange={ ( v ) => update( i, { default: v } ) }
+										onChange={ ( v ) =>
+											update( i, { default: v } )
+										}
 									/>
 								) : (
 									<TextControl
 										__next40pxDefaultSize
 										__nextHasNoMarginBottom
-										type={ r.type === 'number' ? 'number' : 'text' }
-										label={ __( 'Default', 'memorial-plugin' ) }
+										type={
+											r.type === 'number'
+												? 'number'
+												: 'text'
+										}
+										label={ __(
+											'Default',
+											'memorial-plugin'
+										) }
 										value={ r.default }
-										onChange={ ( v ) => update( i, { default: v } ) }
+										onChange={ ( v ) =>
+											update( i, { default: v } )
+										}
 									/>
 								) }
 							</FlexItem>
@@ -286,32 +351,59 @@ function Specs( { type, save } ) {
 								<Flex gap={ 0 }>
 									<Button
 										icon="arrow-up-alt2"
-										label={ __( 'Move up', 'memorial-plugin' ) }
+										label={ __(
+											'Move up',
+											'memorial-plugin'
+										) }
 										disabled={ i === 0 }
 										onClick={ () => move( i, -1 ) }
 									/>
 									<Button
 										icon="arrow-down-alt2"
-										label={ __( 'Move down', 'memorial-plugin' ) }
+										label={ __(
+											'Move down',
+											'memorial-plugin'
+										) }
 										disabled={ i === rows.length - 1 }
 										onClick={ () => move( i, 1 ) }
 									/>
 									<Button
 										icon="no-alt"
 										isDestructive
-										label={ __( 'Remove specification', 'memorial-plugin' ) }
-										onClick={ () => set( rows.filter( ( x, j ) => j !== i ) ) }
+										label={ __(
+											'Remove specification',
+											'memorial-plugin'
+										) }
+										onClick={ () =>
+											set(
+												rows.filter(
+													( x, j ) => j !== i
+												)
+											)
+										}
 									/>
 								</Flex>
 							</FlexItem>
 						</Flex>
 					</fieldset>
 				) ) }
-				<Flex justify="space-between" className="memorial-plugin-catalog__buttons">
+				<Flex
+					justify="space-between"
+					className="memorial-plugin-catalog__buttons"
+				>
 					<Button
 						variant="secondary"
 						onClick={ () =>
-							set( [ ...rows, { label: '', type: 'text', unit: '', options: [], default: '' } ] )
+							set( [
+								...rows,
+								{
+									label: '',
+									type: 'text',
+									unit: '',
+									options: [],
+									default: '',
+								},
+							] )
 						}
 					>
 						{ __( 'Add specification', 'memorial-plugin' ) }
@@ -322,7 +414,9 @@ function Specs( { type, save } ) {
 						disabled={ ! dirty || busy }
 						onClick={ async () => {
 							setBusy( true );
-							const clean = rows.filter( ( r ) => r.label.trim() );
+							const clean = rows.filter( ( r ) =>
+								r.label.trim()
+							);
 							const renames = {};
 							clean.forEach( ( r ) => {
 								if ( r.orig && r.orig !== r.label.trim() ) {
@@ -333,7 +427,9 @@ function Specs( { type, save } ) {
 								fields: clean.map( ( { orig, ...f } ) => ( {
 									...f,
 									label: f.label.trim(),
-									options: ( f.options || [] ).filter( Boolean ),
+									options: ( f.options || [] ).filter(
+										Boolean
+									),
 								} ) ),
 								renames,
 							} );
@@ -366,7 +462,7 @@ function CatForm( { cat, parents, onCancel, onOk } ) {
 						type: 'integer',
 						elements: parents,
 					},
-			  ] ),
+				] ),
 		{
 			id: 'desc',
 			label: __( 'Description', 'memorial-plugin' ),
@@ -383,11 +479,18 @@ function CatForm( { cat, parents, onCancel, onOk } ) {
 			<DataForm
 				data={ data }
 				fields={ fields }
-				form={ { layout: { type: 'regular' }, fields: fields.map( ( f ) => f.id ) } }
+				form={ {
+					layout: { type: 'regular' },
+					fields: fields.map( ( f ) => f.id ),
+				} }
 				onChange={ ( e ) => setData( ( d ) => ( { ...d, ...e } ) ) }
 			/>
 			<ModalButtons
-				label={ cat ? __( 'Save', 'memorial-plugin' ) : __( 'Add', 'memorial-plugin' ) }
+				label={
+					cat
+						? __( 'Save', 'memorial-plugin' )
+						: __( 'Add', 'memorial-plugin' )
+				}
 				busy={ busy }
 				disabled={ ! data.name.trim() }
 				onCancel={ onCancel }
@@ -412,7 +515,10 @@ function Cats( { type, call } ) {
 		filters: [],
 		search: '',
 	} );
-	const items = useMemo( () => type.cats.map( ( c, i ) => ( { ...c, row: i } ) ), [ type ] );
+	const items = useMemo(
+		() => type.cats.map( ( c, i ) => ( { ...c, row: i } ) ),
+		[ type ]
+	);
 	const fields = useMemo(
 		() => [
 			{
@@ -428,7 +534,9 @@ function Cats( { type, call } ) {
 				label: __( 'Products', 'memorial-plugin' ),
 				type: 'integer',
 				filterBy: false,
-				render: ( { item } ) => <a href={ type.products }>{ item.count }</a>,
+				render: ( { item } ) => (
+					<a href={ type.products }>{ item.count }</a>
+				),
 			},
 			{
 				id: 'desc',
@@ -437,9 +545,16 @@ function Cats( { type, call } ) {
 				filterBy: false,
 				enableSorting: false,
 				render: ( { item } ) =>
-					item.desc.length > 100 ? item.desc.slice( 0, 100 ) + '…' : item.desc,
+					item.desc.length > 100
+						? item.desc.slice( 0, 100 ) + '…'
+						: item.desc,
 			},
-			{ id: 'row', label: __( 'Order', 'memorial-plugin' ), type: 'integer', filterBy: false },
+			{
+				id: 'row',
+				label: __( 'Order', 'memorial-plugin' ),
+				type: 'integer',
+				filterBy: false,
+			},
 		],
 		[ type ]
 	);
@@ -454,13 +569,17 @@ function Cats( { type, call } ) {
 		[ type ]
 	);
 	const actions = useMemo( () => {
-		const move = ( dir ) => ( [ item ] ) => {
-			const siblings = type.cats.filter( ( c ) => c.parent === item.parent );
-			const ids = moved( siblings, item.id, dir );
-			if ( ids ) {
-				call( 'order', 'POST', { ids } );
-			}
-		};
+		const move =
+			( dir ) =>
+			( [ item ] ) => {
+				const siblings = type.cats.filter(
+					( c ) => c.parent === item.parent
+				);
+				const ids = moved( siblings, item.id, dir );
+				if ( ids ) {
+					call( 'order', 'POST', { ids } );
+				}
+			};
 		return [
 			{
 				id: 'edit',
@@ -473,14 +592,25 @@ function Cats( { type, call } ) {
 						parents={ parents }
 						onCancel={ closeModal }
 						onOk={ async ( d ) => {
-							await call( 'cats/' + item.id, 'PUT', { name: d.name, desc: d.desc } );
+							await call( 'cats/' + item.id, 'PUT', {
+								name: d.name,
+								desc: d.desc,
+							} );
 							closeModal();
 						} }
 					/>
 				),
 			},
-			{ id: 'up', label: __( 'Move up', 'memorial-plugin' ), callback: move( -1 ) },
-			{ id: 'down', label: __( 'Move down', 'memorial-plugin' ), callback: move( 1 ) },
+			{
+				id: 'up',
+				label: __( 'Move up', 'memorial-plugin' ),
+				callback: move( -1 ),
+			},
+			{
+				id: 'down',
+				label: __( 'Move down', 'memorial-plugin' ),
+				callback: move( 1 ),
+			},
 			{
 				id: 'delete',
 				label: __( 'Delete', 'memorial-plugin' ),
@@ -500,12 +630,12 @@ function Cats( { type, call } ) {
 										item.name,
 										item.count,
 										type.name
-								  )
+									)
 								: sprintf(
 										/* translators: %s: category. */
 										__( 'Delete “%s”?', 'memorial-plugin' ),
 										item.name
-								  ) }
+									) }
 						</p>
 						<ModalButtons
 							label={ __( 'Delete', 'memorial-plugin' ) }
@@ -559,7 +689,11 @@ function Cats( { type, call } ) {
 							parents={ parents }
 							onCancel={ () => setAdding( false ) }
 							onOk={ async ( d ) => {
-								await call( 'cats', 'POST', { name: d.name, parent: d.parent, desc: d.desc } );
+								await call( 'cats', 'POST', {
+									name: d.name,
+									parent: d.parent,
+									desc: d.desc,
+								} );
 								setAdding( false );
 							} }
 						/>
@@ -604,17 +738,27 @@ export default function Types() {
 	const [ data, setData ] = useState( null );
 	const [ notice, setNotice ] = useState( null );
 	const [ typeId, setTypeId ] = useState(
-		() => Number( new URLSearchParams( window.location.search ).get( 'type' ) ) || 0
+		() =>
+			Number(
+				new URLSearchParams( window.location.search ).get( 'type' )
+			) || 0
 	);
 	const [ adding, setAdding ] = useState( false );
 	const [ deleting, setDeleting ] = useState( false );
 
 	const call = useCallback( async ( path, method = 'GET', body ) => {
 		try {
-			const res = await apiFetch( { path: API + path, method, data: body } );
+			const res = await apiFetch( {
+				path: API + path,
+				method,
+				data: body,
+			} );
 			setData( res );
 			if ( method !== 'GET' ) {
-				setNotice( { status: 'success', text: __( 'Saved.', 'memorial-plugin' ) } );
+				setNotice( {
+					status: 'success',
+					text: __( 'Saved.', 'memorial-plugin' ),
+				} );
 			}
 			return res;
 		} catch ( e ) {
@@ -656,24 +800,40 @@ export default function Types() {
 			) }
 			actions={
 				<Flex gap={ 2 }>
-					<Button variant="primary" onClick={ () => setAdding( true ) }>
+					<Button
+						variant="primary"
+						onClick={ () => setAdding( true ) }
+					>
 						{ __( 'New type', 'memorial-plugin' ) }
 					</Button>
 					<Button variant="tertiary" href={ data.import }>
-						{ __( 'Move the catalog from old pages', 'memorial-plugin' ) }
+						{ __(
+							'Move the catalog from old pages',
+							'memorial-plugin'
+						) }
 					</Button>
 				</Flex>
 			}
 		>
-			<Flex direction="column" gap={ 4 } className="memorial-plugin-catalog">
+			<Flex
+				direction="column"
+				gap={ 4 }
+				className="memorial-plugin-catalog"
+			>
 				{ notice && (
-					<Notice status={ notice.status } onRemove={ () => setNotice( null ) }>
+					<Notice
+						status={ notice.status }
+						onRemove={ () => setNotice( null ) }
+					>
 						{ notice.text }
 					</Notice>
 				) }
 				{ ! type && (
 					<Notice status="info" isDismissible={ false }>
-						{ __( 'There are no product types yet. Add one, for example “Wreaths”.', 'memorial-plugin' ) }
+						{ __(
+							'There are no product types yet. Add one, for example “Wreaths”.',
+							'memorial-plugin'
+						) }
 					</Notice>
 				) }
 				{ type && (
@@ -694,7 +854,10 @@ export default function Types() {
 							<Button variant="primary" href={ type.products }>
 								{ sprintf(
 									/* translators: 1: type, 2: number of products. */
-									__( 'Products “%1$s” (%2$d)', 'memorial-plugin' ),
+									__(
+										'Products “%1$s” (%2$d)',
+										'memorial-plugin'
+									),
 									type.name,
 									type.count
 								) }
@@ -702,18 +865,36 @@ export default function Types() {
 							{ type.page ? (
 								<Button
 									variant="secondary"
-									href={ type.page.draft ? type.page.edit : type.page.url }
+									href={
+										type.page.draft
+											? type.page.edit
+											: type.page.url
+									}
 								>
 									{ type.page.draft
-										? __( 'Finish the page (draft)', 'memorial-plugin' )
-										: __( 'Page on the site', 'memorial-plugin' ) }
+										? __(
+												'Finish the page (draft)',
+												'memorial-plugin'
+											)
+										: __(
+												'Page on the site',
+												'memorial-plugin'
+											) }
 								</Button>
 							) : (
 								<Button
 									variant="secondary"
-									onClick={ () => call( 'types/' + type.id + '/page', 'POST' ) }
+									onClick={ () =>
+										call(
+											'types/' + type.id + '/page',
+											'POST'
+										)
+									}
 								>
-									{ __( 'Create a page for this type', 'memorial-plugin' ) }
+									{ __(
+										'Create a page for this type',
+										'memorial-plugin'
+									) }
 								</Button>
 							) }
 							<Button
@@ -742,12 +923,16 @@ export default function Types() {
 						<TypeSettings
 							type={ type }
 							ratios={ data.ratios }
-							save={ ( values ) => call( 'types/' + type.id, 'PUT', { values } ) }
+							save={ ( values ) =>
+								call( 'types/' + type.id, 'PUT', { values } )
+							}
 						/>
 						<Cats type={ type } call={ call } />
 						<Specs
 							type={ type }
-							save={ ( values ) => call( 'types/' + type.id, 'PUT', { values } ) }
+							save={ ( values ) =>
+								call( 'types/' + type.id, 'PUT', { values } )
+							}
 						/>
 					</>
 				) }
@@ -777,7 +962,10 @@ export default function Types() {
 					<p>
 						{ sprintf(
 							/* translators: %s: type. */
-							__( 'Delete “%s” with its categories?', 'memorial-plugin' ),
+							__(
+								'Delete “%s” with its categories?',
+								'memorial-plugin'
+							),
 							type.name
 						) }
 					</p>

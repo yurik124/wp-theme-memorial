@@ -118,35 +118,43 @@ test( 'типы и категории: новый тип, характерист
 } ) => {
 	const errors = collectJsErrors( page );
 	await login( page );
-	await page.goto( '/wp-admin/edit-tags.php?taxonomy=mem_cat&post_type=mem_product' );
+	await page.goto(
+		'/wp-admin/edit-tags.php?taxonomy=mem_cat&post_type=mem_product'
+	);
 	await expect( page ).toHaveURL( /page=mem-types/ );
 	const name = 'Тип e2e ' + Date.now();
 	await page.getByRole( 'button', { name: 'New type' } ).click();
 	let modal = page.getByRole( 'dialog' );
 	await modal.getByLabel( 'Name' ).fill( name );
 	await modal.getByRole( 'button', { name: 'Add' } ).click();
-	await expect( page.getByRole( 'tab', { name: new RegExp( name ) } ) ).toHaveAttribute(
-		'aria-selected',
-		'true'
-	);
+	await expect(
+		page.getByRole( 'tab', { name: new RegExp( name ) } )
+	).toHaveAttribute( 'aria-selected', 'true' );
 
 	await page.getByRole( 'button', { name: 'Add specification' } ).click();
-	await page.locator( '.memorial-plugin-catalog__spec' ).last().getByLabel( 'Name' ).fill( 'Высота' );
+	await page
+		.locator( '.memorial-plugin-catalog__spec' )
+		.last()
+		.getByLabel( 'Name' )
+		.fill( 'Высота' );
 	await page.getByRole( 'button', { name: 'Save specifications' } ).click();
-	await expect( page.locator( '.components-notice.is-success' ) ).toBeVisible();
+	await expect(
+		page.locator( '.components-notice.is-success' )
+	).toBeVisible();
 
 	await page.getByRole( 'button', { name: 'Add category' } ).click();
 	modal = page.getByRole( 'dialog' );
 	await modal.getByLabel( 'Name' ).fill( 'Категория e2e' );
 	await modal.getByRole( 'button', { name: 'Add' } ).click();
-	await expect( page.getByRole( 'row' ).filter( { hasText: 'Категория e2e' } ) ).toBeVisible();
+	await expect(
+		page.getByRole( 'row' ).filter( { hasText: 'Категория e2e' } )
+	).toBeVisible();
 
 	// the new specification is a column of the products of the type
 	await page.getByRole( 'link', { name: /^Products “/ } ).click();
-	await expect( page.getByRole( 'tab', { name: new RegExp( name ) } ) ).toHaveAttribute(
-		'aria-selected',
-		'true'
-	);
+	await expect(
+		page.getByRole( 'tab', { name: new RegExp( name ) } )
+	).toHaveAttribute( 'aria-selected', 'true' );
 	expect( errors ).toEqual( [] );
 } );
 
@@ -162,6 +170,8 @@ test( 'что ищут на сайте: запрос из поиска виде�
 	const errors = collectJsErrors( page );
 	await login( page );
 	await page.goto( '/wp-admin/admin.php?page=mem-sq' );
-	await expect( page.getByRole( 'row' ).filter( { hasText: q } ) ).toBeVisible();
+	await expect(
+		page.getByRole( 'row' ).filter( { hasText: q } )
+	).toBeVisible();
 	expect( errors ).toEqual( [] );
 } );
