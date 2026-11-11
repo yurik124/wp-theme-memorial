@@ -4,7 +4,8 @@
  *
  *   assets/css/blocks.css — look of the blocks; colours and fonts are the presets of the theme (theme.json)
  *                           with fallbacks: var(--wp--preset--color--primary, #5e7052) and so on;
- *   assets/js/front.js    — behaviour of the blocks (reviews, questions and answers, catalog, works).
+ *   assets/js/view/blocks.js — behaviour of the blocks on the Interactivity API (script module
+ *                           “memorial-plugin-view”; the cemeteries block has its own, view/cemeteries.js).
  *
  * Loaded only where they are needed: they are the style and view script of every block of the plugin
  * (WordPress adds them when such a block is on the page) and of the old [mem_…] shortcodes while they work.
@@ -24,7 +25,6 @@ function memorial_plugin_register_front_assets() {
 		return;
 	}
 	$css  = memorial_plugin_asset( '/assets/css/blocks.css' );
-	$js   = memorial_plugin_asset( '/assets/js/front.js' );
 	$deps = array();
 	// After the global styles and the theme’s styles, so that the order of the rules stays as it was.
 	foreach ( array( 'global-styles', 'memorial-theme', 'memorial-theme-content' ) as $theme_handle ) {
@@ -37,17 +37,16 @@ function memorial_plugin_register_front_assets() {
 	if ( '' !== $bridge ) {
 		wp_add_inline_style( 'memorial-plugin', $bridge );
 	}
-	wp_register_script(
-		'memorial-plugin',
-		MEMORIAL_PLUGIN_URL . $js,
-		array(),
-		(string) filemtime( MEMORIAL_PLUGIN_DIR . $js ),
-		array(
-			'strategy'  => 'defer',
-			'in_footer' => true,
-		)
-	);
 }
+
+/**
+ * Script module of the blocks (Interactivity API).
+ */
+function memorial_plugin_register_view_module() {
+	$js = '/assets/js/view/blocks.js';
+	wp_register_script_module( 'memorial-plugin-view', MEMORIAL_PLUGIN_URL . $js, array( '@wordpress/interactivity' ), (string) filemtime( MEMORIAL_PLUGIN_DIR . $js ) );
+}
+add_action( 'init', 'memorial_plugin_register_view_module', 5 );
 add_action( 'wp_enqueue_scripts', 'memorial_plugin_register_front_assets', 21 );
 add_action(
 	'enqueue_block_assets',
@@ -74,7 +73,7 @@ function memorial_plugin_block_assets_args( $args, $name ) {
 	if ( apply_filters( 'memorial_plugin_blocks_css', true ) ) {
 		$args['style_handles'] = array_values( array_unique( array_merge( (array) ( $args['style_handles'] ?? array() ), array( 'memorial-plugin' ) ) ) );
 	}
-	$args['view_script_handles'] = array_values( array_unique( array_merge( (array) ( $args['view_script_handles'] ?? array() ), array( 'memorial-plugin' ) ) ) );
+	$args['view_script_module_ids'] = array_values( array_unique( array_merge( (array) ( $args['view_script_module_ids'] ?? array() ), array( 'memorial-plugin-view' ) ) ) );
 	return $args;
 }
 add_filter( 'register_block_type_args', 'memorial_plugin_block_assets_args', 10, 2 );
@@ -91,7 +90,7 @@ function memorial_plugin_shortcode_assets( $output, $tag ) {
 		if ( apply_filters( 'memorial_plugin_blocks_css', true ) ) {
 			wp_enqueue_style( 'memorial-plugin' );
 		}
-		wp_enqueue_script( 'memorial-plugin' );
+		wp_enqueue_script_module( 'memorial-plugin-view' );
 	}
 	return $output;
 }

@@ -129,7 +129,7 @@ function memorial_plugin_tile_style($page_id) {
     if (preg_match('/^(\d{1,3}(?:\.\d+)?)% (\d{1,3}(?:\.\d+)?)%$/', $pos, $m)) $st .= ';--pos:' . round((float) $m[1]) . '% ' . round((float) $m[2]) . '%';
     if (get_post_meta($page_id, '_mem_tile_fit', true)) $st .= ';--fit:contain';
     if ($bg = sanitize_hex_color((string) get_post_meta($page_id, '_mem_tile_bg', true))) $st .= ';--tbg:' . $bg;
-    if ($st !== '' && strpos($st, '--pos') !== false && strpos($st, '--fit') === false) $st .= '" data-focus="' . round((float) $m[1]) . ' ' . round((float) $m[2]);
+    if ($st !== '' && strpos($st, '--pos') !== false && strpos($st, '--fit') === false) $st .= '" data-wp-interactive="memorial-plugin/focus" data-wp-init="callbacks.init" data-focus="' . round((float) $m[1]) . ' ' . round((float) $m[2]);
     return $st;
 }
 

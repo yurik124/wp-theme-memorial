@@ -662,7 +662,7 @@ function memorial_plugin_rewio_html($atts = []) {
     if (!$groups) return '';
 
     $uid = 'rwo' . wp_rand(100, 999);
-    $h = '<section class="rwo rwo--c' . (int) $a['cols'] . '" data-rwo data-step="' . $count . '">';
+    $h = '<section class="rwo rwo--c' . (int) $a['cols'] . '" data-rwo data-wp-interactive="memorial-plugin/rewio" data-wp-init="callbacks.init" data-step="' . $count . '">';
     if (trim($a['title']) !== '') $h .= '<h2 class="rwo__title">' . esc_html($a['title']) . '</h2>';
     if (count($groups) > 1) {
         $h .= '<div class="rwo__tabs srow"><div class="srow__in" role="tablist" aria-label="Отзывы по филиалам">';

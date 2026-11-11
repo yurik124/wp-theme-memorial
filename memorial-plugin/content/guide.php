@@ -109,7 +109,7 @@ add_shortcode('mem_guide', function ($atts) {
         }
     }
     $pop = trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : (function_exists('memorial_plugin_sq_popular') ? memorial_plugin_sq_popular(['документы', 'пособие', 'кладбище', 'стоимость', 'морг'], 5) : ['документы', 'пособие', 'кладбище', 'стоимость', 'морг']);
-    return '<div class="mguide" data-guide>'
+    return '<div class="mguide" data-guide data-wp-interactive="memorial-plugin/guide" data-wp-init="callbacks.init">'
         . memorial_plugin_search_box(['id' => 'mguide-q', 'where' => 'g', 'label' => 'Поиск по статьям', 'placeholder' => 'Например: справка о смерти', 'popular' => $pop,
                           'none' => 'Ответа на такой вопрос пока нет на сайте. Позвоните или оставьте номер — подскажем.'])
         . '<script type="application/json" data-guide-idx>' . wp_json_encode($idx, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) . '</script>'

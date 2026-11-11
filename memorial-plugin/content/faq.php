@@ -66,7 +66,7 @@ add_shortcode('mem_faq', function ($atts) {
 
     $total = array_sum(array_map(fn($g) => count($g['qs']), $groups));
     ob_start();
-    echo '<div class="mfaq" data-faq>';
+    echo '<div class="mfaq" data-faq data-wp-interactive="memorial-plugin/faq" data-wp-init="callbacks.init">';
     if ($a['search'] !== '0') {
         echo memorial_plugin_search_box(['id' => 'mfaq-q', 'label' => 'Поиск по вопросам', 'placeholder' => 'Например: документы',
             // «Часто ищут»: заданные в шорткоде слова, иначе — из статистики поиска (content/search-stats.php)

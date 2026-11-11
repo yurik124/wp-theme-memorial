@@ -153,7 +153,7 @@ function memorial_plugin_hub_tile_photos($html) {
         $focus = '';
         if (preg_match('/^(\d{1,3}(?:\.\d+)?)% (\d{1,3}(?:\.\d+)?)%$/', $pos, $pm)) {
             $st[] = 'object-position:' . round((float) $pm[1]) . '% ' . round((float) $pm[2]) . '%';
-            if (!$fit) $focus = ' data-focus="' . round((float) $pm[1]) . ' ' . round((float) $pm[2]) . '"';
+            if (!$fit) $focus = ' data-wp-interactive="memorial-plugin/focus" data-wp-init="callbacks.init" data-focus="' . round((float) $pm[1]) . ' ' . round((float) $pm[2]) . '"';
         }
         $st[] = 'object-fit:' . ($fit ? 'contain' : 'cover'); // как в плитке: заполняет карточку, края обрезаются
         if ($bg) $st[] = 'background-color:' . $bg;

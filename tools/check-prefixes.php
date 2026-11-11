@@ -25,7 +25,7 @@ foreach ($parts as $dir => $prefix) {
     $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator("$root/$dir", FilesystemIterator::SKIP_DOTS));
     foreach ($it as $file) {
         $path = (string) $file;
-        if (substr($path, -4) !== '.php' || preg_match('~/(vendor|node_modules|build)/~', $path)) continue;
+        if (substr($path, -4) !== '.php' || preg_match('~/(vendor|node_modules|build|tests)/~', $path)) continue;
         $rel = substr($path, strlen($root) + 1);
         $t = token_get_all(file_get_contents($path)); $n = count($t);
         $depth = 0;
@@ -73,7 +73,7 @@ foreach ($parts as $dir => $prefix) {
     $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator("$root/$dir", FilesystemIterator::SKIP_DOTS));
     foreach ($it as $file) {
         $path = (string) $file; $rel = substr($path, strlen($root) + 1);
-        if (substr($path, -4) !== '.php' || preg_match('~/(vendor|node_modules|build)/~', $path)) continue;
+        if (substr($path, -4) !== '.php' || preg_match('~/(vendor|node_modules|build|tests)/~', $path)) continue;
         // Шаблоны вывода блоков подключаются внутри функции (memorial_plugin_legacy_render, render.php в block.json):
         // их переменные локальные, не глобальные.
         if (preg_match('~/blocks/.+/render(/|\.php$)~', $rel)) continue;

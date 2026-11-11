@@ -66,7 +66,7 @@ function memorial_plugin_bookreviews_html($limit = -1, $heading = 'Из книг
         $h .= '<article class="brev__item">';
         $h .= '<div class="brev__body">';
         $h .= '<blockquote class="brev__text' . ($long ? ' is-long' : '') . '">' . wpautop(esc_html(wp_strip_all_tags($text))) . '</blockquote>';
-        if ($long) $h .= '<button type="button" class="brev__more" aria-expanded="false">Читать полностью</button>';
+        if ($long) $h .= '<button type="button" class="brev__more" aria-expanded="false" data-wp-interactive="memorial-plugin/book" data-wp-on--click="actions.more">Читать полностью</button>';
         $h .= '<p class="brev__author">' . esc_html(get_the_title($r)) . '</p>';
         $h .= '<p class="brev__meta">' . esc_html(implode(' · ', $meta)) . '</p>';
         $h .= '</div>';
