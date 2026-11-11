@@ -21,7 +21,9 @@ export default function ProductPages() {
 				setData( res );
 				setMode( res.mode );
 			} )
-			.catch( ( e ) => setNotice( { status: 'error', text: e.message } ) );
+			.catch( ( e ) =>
+				setNotice( { status: 'error', text: e.message } )
+			);
 	}, [] );
 	const fields = [
 		{
@@ -39,7 +41,10 @@ export default function ProductPages() {
 				},
 				{
 					value: 'all',
-					label: __( 'For every product — as before.', 'memorial-plugin' ),
+					label: __(
+						'For every product — as before.',
+						'memorial-plugin'
+					),
 				},
 			],
 		},
@@ -60,9 +65,16 @@ export default function ProductPages() {
 				)
 			}
 		>
-			<Flex direction="column" gap={ 4 } className="memorial-plugin-catalog">
+			<Flex
+				direction="column"
+				gap={ 4 }
+				className="memorial-plugin-catalog"
+			>
 				{ notice && (
-					<Notice status={ notice.status } onRemove={ () => setNotice( null ) }>
+					<Notice
+						status={ notice.status }
+						onRemove={ () => setNotice( null ) }
+					>
 						{ notice.text }
 					</Notice>
 				) }
@@ -72,10 +84,16 @@ export default function ProductPages() {
 							<DataForm
 								data={ { mode } }
 								fields={ fields }
-								form={ { layout: { type: 'regular' }, fields: [ 'mode' ] } }
+								form={ {
+									layout: { type: 'regular' },
+									fields: [ 'mode' ],
+								} }
 								onChange={ ( e ) => setMode( e.mode ) }
 							/>
-							<Flex justify="flex-end" className="memorial-plugin-catalog__buttons">
+							<Flex
+								justify="flex-end"
+								className="memorial-plugin-catalog__buttons"
+							>
 								<Button
 									variant="primary"
 									isBusy={ busy }
@@ -84,14 +102,24 @@ export default function ProductPages() {
 										setBusy( true );
 										try {
 											setData(
-												await apiFetch( { path: API, method: 'POST', data: { mode } } )
+												await apiFetch( {
+													path: API,
+													method: 'POST',
+													data: { mode },
+												} )
 											);
 											setNotice( {
 												status: 'success',
-												text: __( 'Saved.', 'memorial-plugin' ),
+												text: __(
+													'Saved.',
+													'memorial-plugin'
+												),
 											} );
 										} catch ( e ) {
-											setNotice( { status: 'error', text: e.message } );
+											setNotice( {
+												status: 'error',
+												text: e.message,
+											} );
 										}
 										setBusy( false );
 									} }
