@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 import {
 	CheckboxControl,
 	Notice,
-	__experimentalVStack as VStack,
+	Flex,
 } from '@wordpress/components';
 
 const ids = ( s ) =>
@@ -60,7 +60,7 @@ export default function RewioScope( { def, value, onChange } ) {
 	const update = ( patch ) => onChange( { ...val, ...patch } );
 
 	return (
-		<VStack spacing={ 3 } className="memorial-plugin-settings__rewio">
+		<Flex direction="column" gap={ 3 } className="memorial-plugin-settings__rewio">
 			<p className="memorial-plugin-settings__help">{ def.help }</p>
 			{ objects.map( ( ob ) => (
 				<div key={ ob.id } className="memorial-plugin-settings__row">
@@ -118,6 +118,6 @@ export default function RewioScope( { def, value, onChange } ) {
 			<p className="memorial-plugin-settings__help">
 				{ __( 'Branch list from Rewio:', 'memorial-plugin' ) } { time }
 			</p>
-		</VStack>
+		</Flex>
 	);
 }

@@ -17,7 +17,7 @@ import {
 	Modal,
 	Notice,
 	TextareaControl,
-	__experimentalHStack as HStack,
+	Flex,
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
 import {
@@ -34,7 +34,7 @@ function ImageEdit( { data, field, onChange } ) {
 	return (
 		<div>
 			<p>{ field.label }</p>
-			<HStack justify="flex-start">
+			<Flex justify="flex-start">
 				{ value?.url && (
 					<img src={ value.url } alt="" width="64" height="64" />
 				) }
@@ -65,7 +65,7 @@ function ImageEdit( { data, field, onChange } ) {
 						{ __( 'Remove', 'memorial-plugin' ) }
 					</Button>
 				) }
-			</HStack>
+			</Flex>
 		</div>
 	);
 }
@@ -234,14 +234,14 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 				} }
 				onChange={ ( edits ) => setItem( ( i ) => ( { ...i, ...edits } ) ) }
 			/>
-			<HStack justify="flex-end">
+			<Flex justify="flex-end">
 				<Button variant="tertiary" onClick={ onClose }>
 					{ __( 'Cancel', 'memorial-plugin' ) }
 				</Button>
 				<Button variant="primary" isBusy={ busy } onClick={ save }>
 					{ __( 'Save', 'memorial-plugin' ) }
 				</Button>
-			</HStack>
+			</Flex>
 		</Modal>
 	);
 }

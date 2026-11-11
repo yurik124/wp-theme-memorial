@@ -3,7 +3,7 @@
  * field schema of the page (REST memorial-plugin/v1/settings/<option>, admin/settings-form.php).
  *
  * Each top-level field is a collapsible panel; inside it a DataForm with the fields of that group.
- * Field types of the schema get their controls from @wordpress/components; lists (repeater) are
+ * Field types of the schema get their controls from `@wordpress/components`; lists (repeater) are
  * rows with a DataForm each; images use the media library.
  */
 import {
@@ -26,8 +26,7 @@ import {
 	Spinner,
 	TextareaControl,
 	TextControl,
-	__experimentalVStack as VStack,
-	__experimentalHStack as HStack,
+	Flex,
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
 import { DataForm } from '@wordpress/dataviews/wp';
@@ -52,7 +51,7 @@ function ImageEdit( { def, value, onChange } ) {
 			<span className="memorial-plugin-settings__label">
 				{ def.label }
 			</span>
-			<HStack justify="flex-start" alignment="center">
+			<Flex justify="flex-start" align="center">
 				{ value && (
 					<img
 						src={ value }
@@ -80,7 +79,7 @@ function ImageEdit( { def, value, onChange } ) {
 						{ __( 'Remove', 'memorial-plugin' ) }
 					</Button>
 				) }
-			</HStack>
+			</Flex>
 			<Help text={ def.help } />
 		</div>
 	);
@@ -148,7 +147,7 @@ function RepeaterEdit( { def, value, onChange } ) {
 			<Help text={ def.help } />
 			{ rows.map( ( row, i ) => (
 				<div className="memorial-plugin-settings__row" key={ i }>
-					<HStack justify="space-between">
+					<Flex justify="space-between">
 						<strong>
 							{ ( def.collapse && row[ def.collapse ] ) ||
 								sprintf(
@@ -157,7 +156,7 @@ function RepeaterEdit( { def, value, onChange } ) {
 									i + 1
 								) }
 						</strong>
-						<HStack justify="flex-end" expanded={ false }>
+						<Flex justify="flex-end">
 							<Button
 								size="small"
 								icon="arrow-up-alt2"
@@ -183,8 +182,8 @@ function RepeaterEdit( { def, value, onChange } ) {
 									)
 								}
 							/>
-						</HStack>
-					</HStack>
+						</Flex>
+					</Flex>
 					<FieldsForm
 						defs={ def.fields || [] }
 						data={ row || {} }
@@ -325,7 +324,7 @@ function ControlFor( { def, value, onChange } ) {
  * @param {Object}   props
  * @param {Array}    props.defs     Field descriptions from the server.
  * @param {Object}   props.data     Values of these fields.
- * @param {Function} props.onChange Receives changed values ({ id: value }).
+ * @param {(edits: Object) => void} props.onChange Receives changed values ({ id: value }).
  */
 function FieldsForm( { defs, data, onChange } ) {
 	const fields = useMemo(
@@ -428,7 +427,7 @@ function App( { option } ) {
 	}
 
 	const actions = (
-		<HStack expanded={ false }>
+		<Flex>
 			<Button variant="secondary" href={ SITE } target="_blank">
 				{ __( 'Open site', 'memorial-plugin' ) }
 			</Button>
@@ -440,7 +439,7 @@ function App( { option } ) {
 			>
 				{ __( 'Save', 'memorial-plugin' ) }
 			</Button>
-		</HStack>
+		</Flex>
 	);
 
 	return (
@@ -449,7 +448,7 @@ function App( { option } ) {
 			subTitle={ page.intro ? <RawHTML>{ page.intro }</RawHTML> : null }
 			actions={ actions }
 		>
-			<VStack spacing={ 4 } className="memorial-plugin-settings">
+			<Flex direction="column" gap={ 4 } className="memorial-plugin-settings">
 				{ notice && (
 					<Notice
 						status={ notice.status }
@@ -504,8 +503,8 @@ function App( { option } ) {
 						</PanelBody>
 					) ) }
 				</Panel>
-				<HStack justify="flex-end">{ actions }</HStack>
-			</VStack>
+				<Flex justify="flex-end">{ actions }</Flex>
+			</Flex>
 		</Page>
 	);
 }
