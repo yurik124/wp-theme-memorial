@@ -16,7 +16,8 @@ const MASK = [ '.reviews__widget', '.map', 'iframe' ];
 const STYLE =
 	'.header,.mcat__bar,.msearch__bar,.reviews__intro{position:relative !important;top:0 !important;transform:none !important}' +
 	'#totop,.totop,.consent,.mbar{display:none !important}' +
-	'*,*::before,*::after{transition:none !important;animation:none !important}';
+	'*,*::before,*::after{transition:none !important;animation:none !important}' +
+	'.reveal,.stat b[data-count]{opacity:1 !important;transform:none !important}';
 
 for ( const { name, path } of urls ) {
 	test( name, async ( { page } ) => {
@@ -53,6 +54,8 @@ for ( const { name, path } of urls ) {
 		expect( text.length, 'почти нет текста' ).toBeGreaterThan( 200 );
 		await expect( page ).toHaveScreenshot( name + '.png', {
 			fullPage: true,
+			// страница должна дать два одинаковых снимка подряд: счётчики, слайдеры и картинки успевают встать
+			timeout: 20000,
 			style: STYLE,
 			mask: MASK.map( ( s ) => page.locator( s ) ),
 		} );
