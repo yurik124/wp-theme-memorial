@@ -543,3 +543,39 @@ test.describe( 'аудит блоков', () => {
 		fs.writeFileSync( `${ DIR }/blocks-audit.json`, JSON.stringify( report, null, 1 ) );
 	} );
 } );
+
+// Ширина шапки и подвала в редакторе сайта: цепочка предков с классами и шириной.
+test.describe( 'аудит подвала', () => {
+	test.use( { viewport: { width: 1440, height: 1000 } } );
+	test( 'аудит подвала', async ( { page } ) => {
+		test.setTimeout( 300_000 );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		const out = {};
+		for ( const part of [ 'footer', 'header' ] ) {
+			await page.goto( `/wp-admin/site-editor.php?p=%2Fwp_template_part%2Fmemorial-theme%2F%2F${ part }&canvas=edit` );
+			await page.waitForTimeout( 12000 );
+			await page.evaluate( () => {
+				const pr = window.wp?.data?.dispatch( 'core/preferences' );
+				pr?.set( 'core/edit-site', 'welcomeGuide', false );
+				pr?.set( 'core/edit-site', 'welcomeGuideTemplate', false );
+			} ).catch( () => {} );
+			await page.keyboard.press( 'Escape' );
+			await page.waitForTimeout( 1500 );
+			const fr = page.frameLocator( 'iframe[name="editor-canvas"]' );
+			out[ part ] = await fr.locator( `.${ part }` ).first().evaluate( ( el ) => {
+				const chain = [];
+				for ( let e = el; e && e !== document.documentElement; e = e.parentElement ) {
+					const s = getComputedStyle( e );
+					chain.push( `${ e.tagName.toLowerCase() }.${ [ ...e.classList ].join( '.' ) } w=${ Math.round( e.getBoundingClientRect().width ) } max=${ s.maxWidth } ml=${ s.marginLeft }` );
+				}
+				return { chain, root: getComputedStyle( document.body ).getPropertyValue( '--wp--style--global--content-size' ) };
+			}, null, { timeout: 10000 } ).catch( ( e ) => e.message.slice( 0, 300 ) );
+			await page.screenshot( { path: `${ DIR }/part-${ part }.png` } );
+		}
+		fs.writeFileSync( `${ DIR }/parts.json`, JSON.stringify( out, null, 1 ) );
+	} );
+} );
