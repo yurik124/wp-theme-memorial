@@ -60,26 +60,44 @@ test( 'иконки — из реестра иконок WordPress (SVG Icon API
 	await expect( page.locator( 'svg.ico use' ) ).toHaveCount( 0 );
 } );
 
-test( 'главная — разделы блоками, шаблон сохранён один раз', async ( {
+test( 'главная и «Контакты» — разделы в содержимом страниц', async ( {
 	page,
 } ) => {
 	await login( page );
 	// Перенос — при входе в админку; на этом экране есть wp.apiFetch.
 	await page.goto( '/wp-admin/admin.php?page=memorial-plugin-convert' );
-	const template = await page.evaluate( () =>
-		window.wp.apiFetch( {
+	const data = await page.evaluate( async () => {
+		const settings = await window.wp.apiFetch( { path: '/wp/v2/settings' } );
+		const front = await window.wp.apiFetch( {
+			path: '/wp/v2/pages/' + settings.page_on_front + '?context=edit',
+		} );
+		const template = await window.wp.apiFetch( {
 			path: '/wp/v2/templates/memorial-theme//front-page?context=edit',
-		} )
-	);
-	expect( template.source ).toBe( 'custom' );
-	expect( template.content.raw ).toContain(
-		'wp:memorial-plugin/phone-button'
-	);
-	expect( template.content.raw ).not.toContain( 'memorial-theme/home' );
+		} );
+		return {
+			showOnFront: settings.show_on_front,
+			content: front.content.raw,
+			template: template.content.raw,
+		};
+	} );
+	expect( data.showOnFront ).toBe( 'page' );
+	// Разделы — в содержимом главной, шаблон только обрамляет его.
+	expect( data.content ).toContain( 'wp:memorial-plugin/phone-button' );
+	expect( data.content ).not.toContain( 'wp:post-content' );
+	expect( data.template ).toContain( 'wp:post-content' );
+	expect( data.template ).not.toContain( 'memorial-plugin/phone-button' );
 
 	await page.goto( '/' );
 	await expect( page.locator( 'section.hero h1' ) ).toBeVisible();
 	await expect( page.locator( '.hero__cta .btn--tel' ) ).toBeAttached();
 	await expect( page.locator( 'section#uslugi .svc' ) ).toBeAttached();
+	expect( await page.content() ).not.toMatch( PHP_ERROR );
+
+	await page.goto( '/kontakty/' );
+	await expect( page.locator( '.kontakty__head h1' ) ).toBeVisible();
+	await expect( page.locator( '.kgrid .kcard' ).first() ).toBeAttached();
+	await expect( page.locator( '.kontakty__text' ) ).toContainText(
+		'Contacts check text.'
+	);
 	expect( await page.content() ).not.toMatch( PHP_ERROR );
 } );

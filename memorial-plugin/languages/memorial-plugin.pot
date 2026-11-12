@@ -500,7 +500,7 @@ msgstr ""
 msgid "All categories (tiles)"
 msgstr ""
 
-#: src/settings/index.js:578
+#: src/settings/index.js:575
 msgid "All changes are saved"
 msgstr ""
 
@@ -1097,7 +1097,7 @@ msgstr ""
 msgid "Contacts list"
 msgstr ""
 
-#: blocks/home/pages-to-content.php:302 blocks/legacy/legacy.php:29
+#: blocks/home/pages-to-content.php:329 blocks/legacy/legacy.php:29
 msgid "Contacts page"
 msgstr ""
 
@@ -1801,11 +1801,11 @@ msgstr ""
 msgid "Highlight (accent frame and the label)"
 msgstr ""
 
-#: seo/seo.php:68
+#: seo/seo.php:68 blocks/home/pages-to-content.php:202
 msgid "Home"
 msgstr ""
 
-#: blocks/home/pages-to-content.php:295 core/settings.php:1241
+#: blocks/home/pages-to-content.php:322 core/settings.php:1241
 msgid "Home page"
 msgstr ""
 
@@ -3195,7 +3195,7 @@ msgstr ""
 msgid "Restores the text and SEO fields of a post from before its conversion to blocks."
 msgstr ""
 
-#: blocks/home/pages-to-content.php:319
+#: blocks/home/pages-to-content.php:346
 msgid "Return the home page and contacts to the templates"
 msgstr ""
 
@@ -3353,7 +3353,7 @@ msgstr ""
 msgid "SEO title (SEOPress)"
 msgstr ""
 
-#: src/catalog/product-pages.js:125 src/catalog/types.js:164 src/catalog/types.js:483 src/catalog/list-screen.js:105 src/settings/index.js:489 src/settings/index.js:586
+#: src/catalog/product-pages.js:125 src/catalog/types.js:164 src/catalog/types.js:483 src/catalog/list-screen.js:105 src/settings/index.js:489 src/settings/index.js:583
 msgid "Save"
 msgstr ""
 
@@ -3968,7 +3968,7 @@ msgstr ""
 msgid "There are no products in this section yet. Call — we will find what you need."
 msgstr ""
 
-#: src/settings/index.js:574
+#: src/settings/index.js:571
 msgid "There are unsaved changes"
 msgstr ""
 
@@ -4112,7 +4112,7 @@ msgstr ""
 msgid "Under the title of the catalog on the site (optional)."
 msgstr ""
 
-#: blocks/home/pages-to-content.php:320
+#: blocks/home/pages-to-content.php:347
 msgid "Undoes the move of the home page and the “Contacts” page into the page content: the pages get their previous content and the templates show the sections again."
 msgstr ""
 

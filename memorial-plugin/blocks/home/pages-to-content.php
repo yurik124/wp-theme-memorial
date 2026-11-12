@@ -193,6 +193,28 @@ function memorial_plugin_pages_to_content() {
 	);
 
 	$front = 'page' === get_option( 'show_on_front' ) ? get_post( (int) get_option( 'page_on_front' ) ) : null;
+	if ( ! $front instanceof WP_Post ) {
+		// The home page shows the latest posts: give it a page of its own (the sections need one).
+		$id = wp_insert_post(
+			array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+				'post_title'  => __( 'Home', 'memorial-plugin' ),
+				'post_name'   => 'glavnaya',
+			),
+			true
+		);
+		if ( ! is_wp_error( $id ) ) {
+			$log['front'] = array(
+				'created'       => (int) $id,
+				'show_on_front' => (string) get_option( 'show_on_front' ),
+				'page_on_front' => (int) get_option( 'page_on_front' ),
+			);
+			update_option( 'show_on_front', 'page' );
+			update_option( 'page_on_front', (int) $id );
+			$front = get_post( (int) $id );
+		}
+	}
 	if ( $front instanceof WP_Post && false === strpos( $front->post_content, '<!-- wp:memorial-plugin/' ) ) {
 		$entry = memorial_plugin_page_set_content( $front, memorial_plugin_home_content( $front ) );
 		if ( is_array( $entry ) ) {
@@ -249,6 +271,11 @@ function memorial_plugin_pages_to_content_rollback() {
 			);
 			++$done['pages'];
 		}
+	}
+	if ( ! empty( $log['front']['created'] ) ) {
+		update_option( 'show_on_front', $log['front']['show_on_front'] );
+		update_option( 'page_on_front', $log['front']['page_on_front'] );
+		wp_trash_post( (int) $log['front']['created'] );
 	}
 	$templates = (array) ( $log['templates'] ?? array() );
 	if ( ! $templates ) {

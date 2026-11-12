@@ -37,3 +37,17 @@ $memorial_plugin_id = wp_insert_post(
 	)
 );
 echo is_wp_error( $memorial_plugin_id ) ? 'error: ' . esc_html( $memorial_plugin_id->get_error_message() ) : 'page ' . (int) $memorial_plugin_id . "\n";
+
+// The “Contacts” page with its own text: it moves into blocks on the first admin visit (blocks/home/pages-to-content.php).
+if ( ! get_page_by_path( 'kontakty' ) ) {
+	$memorial_plugin_id = wp_insert_post(
+		array(
+			'post_type'    => 'page',
+			'post_status'  => 'publish',
+			'post_title'   => 'Контакты',
+			'post_name'    => 'kontakty',
+			'post_content' => "<!-- wp:paragraph -->\n<p>Contacts check text.</p>\n<!-- /wp:paragraph -->",
+		)
+	);
+	echo is_wp_error( $memorial_plugin_id ) ? 'error: ' . esc_html( $memorial_plugin_id->get_error_message() ) : 'page ' . (int) $memorial_plugin_id . "\n";
+}
