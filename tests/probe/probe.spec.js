@@ -576,6 +576,20 @@ test.describe( 'аудит подвала', () => {
 			}, null, { timeout: 10000 } ).catch( ( e ) => e.message.slice( 0, 300 ) );
 			await page.screenshot( { path: `${ DIR }/part-${ part }.png` } );
 		}
+		const frontId = await page.evaluate( () => window.wp?.apiFetch?.( { path: '/wp/v2/settings' } ).then( ( r ) => r.page_on_front ) ).catch( () => 0 );
+		const contacts = PAGES.find( ( x ) => /контакт/i.test( x.post_title ) );
+		for ( const [ name, id ] of [ [ 'front', frontId ], [ 'contacts', contacts?.ID ] ] ) {
+			if ( ! id ) {
+				continue;
+			}
+			await page.goto( '/wp-admin/post.php?action=edit&post=' + id );
+			await page.waitForTimeout( 20000 );
+			await page.screenshot( { path: `${ DIR }/part-page-${ name }.png` } );
+			out[ name ] = await page.frameLocator( 'iframe[name="editor-canvas"]' ).locator( '.is-root-container' ).first().evaluate( ( el ) => ( {
+				parts: [ ...el.querySelectorAll( ':scope > .wp-block-template-part' ) ].map( ( x ) => getComputedStyle( x ).display ),
+				width: Math.round( el.getBoundingClientRect().width ),
+			} ), null, { timeout: 10000 } ).catch( ( e ) => e.message.slice( 0, 200 ) );
+		}
 		fs.writeFileSync( `${ DIR }/parts.json`, JSON.stringify( out, null, 1 ) );
 	} );
 } );

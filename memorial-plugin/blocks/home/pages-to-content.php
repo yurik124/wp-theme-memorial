@@ -371,10 +371,10 @@ function memorial_plugin_pages_to_content_ability() {
 add_action( 'wp_abilities_api_init', 'memorial_plugin_pages_to_content_ability' );
 
 /**
- * The home page and “Contacts” open in the page editor without the template — only their own blocks, no
- * header and footer (those are edited in Appearance → Editor).
- * The title of these pages is a block inside the content, so the separate title field of the editor is
- * hidden (memorial_plugin_pages_hide_title()) and nothing is duplicated.
+ * The home page and “Contacts” open in the page editor with their template, so the sections have the same
+ * width and look as on the site, but the header and footer of the template are hidden there
+ * (memorial_plugin_pages_hide_title(); they are edited in Appearance → Editor). The title of these pages is
+ * a block inside the content, so the separate title field is not shown either.
  *
  * @param array                   $settings Editor settings.
  * @param WP_Block_Editor_Context $context  Editor context.
@@ -386,14 +386,15 @@ function memorial_plugin_pages_rendering_mode( $settings, $context ) {
 		return $settings;
 	}
 	if ( memorial_plugin_pages_own_layout( $post ) ) {
-		$settings['defaultRenderingMode'] = 'post-only';
+		$settings['defaultRenderingMode'] = 'template-locked';
 	}
 	return $settings;
 }
 add_filter( 'block_editor_settings_all', 'memorial_plugin_pages_rendering_mode', 10, 2 );
 
 /**
- * The home page and “Contacts” in the editor without the template: no separate title field (the H1 is a block of the content).
+ * The home page and “Contacts” in the editor: no header and footer of the template, no separate title field
+ * (the H1 is a block of the content).
  */
 function memorial_plugin_pages_hide_title() {
 	if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
@@ -406,7 +407,7 @@ function memorial_plugin_pages_hide_title() {
 	}
 	wp_register_style( 'memorial-plugin-home-editor', false, array(), MEMORIAL_PLUGIN_VER );
 	wp_enqueue_style( 'memorial-plugin-home-editor' );
-	wp_add_inline_style( 'memorial-plugin-home-editor', '.editor-visual-editor__post-title-wrapper{display:none}' );
+	wp_add_inline_style( 'memorial-plugin-home-editor', '.editor-visual-editor__post-title-wrapper,.editor-styles-wrapper .is-root-container>.wp-block-template-part,.editor-styles-wrapper .is-root-container>.wp-block-memorial-plugin-mobile-bar{display:none}' );
 }
 add_action( 'enqueue_block_assets', 'memorial_plugin_pages_hide_title' );
 
