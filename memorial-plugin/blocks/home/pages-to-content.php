@@ -369,3 +369,25 @@ function memorial_plugin_pages_to_content_ability() {
 	);
 }
 add_action( 'wp_abilities_api_init', 'memorial_plugin_pages_to_content_ability' );
+
+/**
+ * The home page and “Contacts” open in the page editor together with their template (header, footer,
+ * the frame of the content), as on the site: the title of these pages is a block inside the content, so
+ * the separate title field of the editor is not shown and nothing is duplicated.
+ *
+ * @param array                   $settings Editor settings.
+ * @param WP_Block_Editor_Context $context  Editor context.
+ * @return array
+ */
+function memorial_plugin_pages_rendering_mode( $settings, $context ) {
+	$post = $context->post ?? null;
+	if ( ! $post instanceof WP_Post || 'page' !== $post->post_type ) {
+		return $settings;
+	}
+	$contacts = memorial_plugin_contacts_page();
+	if ( (int) get_option( 'page_on_front' ) === (int) $post->ID || ( $contacts && $contacts->ID === $post->ID ) ) {
+		$settings['defaultRenderingMode'] = 'template-locked';
+	}
+	return $settings;
+}
+add_filter( 'block_editor_settings_all', 'memorial_plugin_pages_rendering_mode', 10, 2 );

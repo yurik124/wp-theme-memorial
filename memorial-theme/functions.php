@@ -97,8 +97,8 @@ add_action(
 function memorial_theme_js_i18n() {
 	return array(
 		/* translators: %s: menu item */
-		'expand'       => __( 'Expand: %s', 'memorial-theme' ),
-		'submenu'      => __( 'submenu', 'memorial-theme' ),
+		'expand'  => __( 'Expand: %s', 'memorial-theme' ),
+		'submenu' => __( 'submenu', 'memorial-theme' ),
 	);
 }
 
@@ -154,7 +154,7 @@ add_action(
 add_filter(
 	'render_block_core/site-logo',
 	function ( $html, $block ) {
-		if ( trim( $html ) !== '' ) {
+		if ( trim( $html ) !== '' && ! memorial_theme_logo_is_fallback() ) {
 			return $html;
 		}
 		$size  = (int) ( $block['attrs']['width'] ?? 44 );
@@ -177,6 +177,7 @@ add_action(
 require get_template_directory() . '/inc/design.php';
 require get_template_directory() . '/inc/design-migrate.php';
 require get_template_directory() . '/inc/laurel.php';
+require get_template_directory() . '/inc/logo-sync.php';
 require get_template_directory() . '/inc/navigation-migrate.php';
 require get_template_directory() . '/inc/tagline-migrate.php';
 

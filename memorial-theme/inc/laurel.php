@@ -81,7 +81,9 @@ add_action(
  * @param int $size Size.
  */
 function memorial_theme_logo_mark( $size = 44 ) {
-	$logo = (int) get_option( 'site_logo' ); // the Site Logo block (Site Editor) keeps the logo here.
+	// The Site Logo block (Site Editor) keeps the logo here; the picture the theme put there itself
+	// (inc/logo-sync.php) is not a chosen logo.
+	$logo = memorial_theme_logo_is_fallback() ? 0 : (int) get_option( 'site_logo' );
 	$u    = $logo ? wp_get_attachment_image_url( $logo, 'full' ) : '';
 	if ( $u ) {
 		return '<img class="logo__img" src="' . esc_url( $u ) . '" alt="" decoding="async">';
