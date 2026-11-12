@@ -2,7 +2,7 @@
  * Behaviour of the plugin markup on every page (works in any theme): catalog sorting, Metrika goals,
  * the “Call me back” window, MAX, phone and e-mail clicks, Yandex reviews and maps loaded on demand,
  * counters, rows of buttons, embedded frames, the photo viewer, anchors, rows dragged with the mouse.
- * Script module (like view/blocks.js); texts — getConfig( 'memorial-plugin' ).site (core/assets.php).
+ * Script module (like view/blocks.js); texts — `getConfig( 'memorial-plugin' ).site` (core/assets.php).
  */
 import { getConfig } from '@wordpress/interactivity';
 
@@ -10,8 +10,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 
 ( () => {
 	const T = ( k ) => SITE_TEXTS[ k ] || k;
-	const d = document,
-		body = d.body;
+	const d = document;
 	// Сортировка каталога: применяется сразу при выборе
 	d.querySelectorAll( '[data-sort] select' ).forEach( ( sel ) =>
 		sel.addEventListener( 'change', () => {
@@ -19,7 +18,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			if ( sel.value ) {
 				u.searchParams.set( 'sort', sel.value );
 			}
-			location.href = u;
+			window.location.href = u;
 		} )
 	);
 
@@ -59,7 +58,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 	};
 	const where = ( a ) => ( {
 		'Где нажали': place( a ),
-		Страница: decodeURI( location.pathname ),
+		Страница: decodeURI( window.location.pathname ),
 	} );
 
 	// Звонить умеет только телефон. Планшет без SIM и компьютер — нет.
@@ -67,8 +66,8 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		/Android.+Mobile|iPhone|iPod|Windows Phone|Mobile.+Firefox|Opera Mini/i.test(
 			navigator.userAgent
 		) ||
-		( matchMedia( '(pointer: coarse)' ).matches &&
-			Math.min( screen.width, screen.height ) < 600 );
+		( window.matchMedia( '(pointer: coarse)' ).matches &&
+			Math.min( window.screen.width, window.screen.height ) < 600 );
 
 	/* ---------- Окно «Перезвоните мне» ---------- */
 	const cfg = window.memCall || {};
@@ -159,7 +158,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 						name: form.elements.name.value,
 						website: form.elements.website.value,
 						consent: 1,
-						page: location.href,
+						page: window.location.href,
 						elapsed: Math.round( ( Date.now() - openedAt ) / 1000 ),
 					} ),
 				} );
@@ -174,7 +173,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				goal( 'callback_sent', {
 					'Заявка на звонок': {
 						Откуда: from,
-						Страница: decodeURI( location.pathname ),
+						Страница: decodeURI( window.location.pathname ),
 					},
 				} );
 			} catch ( x ) {
@@ -196,7 +195,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		} else {
 			const t = d.querySelector( 'a[href^="tel:"]' );
 			if ( t ) {
-				location.href = t.href;
+				window.location.href = t.href;
 			}
 		} // заявки выключены в плагине — кнопка звонит
 	} );
@@ -208,7 +207,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			const mark = () => {
 				left = true;
 			};
-			addEventListener( 'blur', mark, { once: true } ); // браузер ушёл в приложение или спросил «Открыть MAX?»
+			window.addEventListener( 'blur', mark, { once: true } ); // браузер ушёл в приложение или спросил «Открыть MAX?»
 			d.addEventListener( 'visibilitychange', mark, { once: true } );
 			if ( /Firefox/i.test( navigator.userAgent ) ) {
 				// Firefox показывает ошибку на всю страницу — пробуем в скрытом фрейме
@@ -218,10 +217,10 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				d.body.append( f );
 				setTimeout( () => f.remove(), 2500 );
 			} else {
-				location.href = url;
+				window.location.href = url;
 			}
 			setTimeout( () => {
-				removeEventListener( 'blur', mark );
+				window.removeEventListener( 'blur', mark );
 				d.removeEventListener( 'visibilitychange', mark );
 				resolve( left );
 			}, 1500 );
@@ -264,7 +263,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			}
 			try {
 				w.opener = null;
-			} catch ( x ) {}
+			} catch {}
 			// Посетитель быстро вернулся на сайт — значит, в MAX написать не вышло: предлагаем звонок
 			const t0 = Date.now();
 			const back = () => {
@@ -272,7 +271,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					return;
 				}
 				d.removeEventListener( 'visibilitychange', back );
-				removeEventListener( 'focus', back );
+				window.removeEventListener( 'focus', back );
 				if ( Date.now() - t0 < 60000 ) {
 					openCallback( T( 'maxBack' ), src );
 				}
@@ -283,7 +282,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					back();
 				} else {
 					d.addEventListener( 'visibilitychange', back );
-					addEventListener( 'focus', back );
+					window.addEventListener( 'focus', back );
 				}
 			}, 1200 );
 		} else {
@@ -307,10 +306,10 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		let ok = false;
 		try {
 			ok = localStorage.getItem( 'mem_consent_v1' ) === 'yes';
-		} catch ( x ) {}
+		} catch {}
 		const auto = ok || ! ( window.memTrack && window.memTrack.need );
 		if ( auto ) {
-			const io = new IntersectionObserver(
+			const io = new window.IntersectionObserver(
 				( es ) => {
 					if ( es.some( ( e ) => e.isIntersecting ) ) {
 						io.disconnect();
@@ -329,7 +328,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 	} );
 
 	// Появление блоков и цифр (цифры не «пересчитываются» — сразу верные и плавно проявляются, см. .stat в main.css)
-	const io = new IntersectionObserver(
+	const io = new window.IntersectionObserver(
 		( entries ) => {
 			entries.forEach( ( en ) => {
 				if ( ! en.isIntersecting ) {
@@ -378,8 +377,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		tabs.forEach( ( t, i ) => {
 			t.addEventListener( 'click', () => select( t ) );
 			t.addEventListener( 'keydown', ( e ) => {
-				const dir =
-					e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+				const dir = { ArrowRight: 1, ArrowLeft: -1 }[ e.key ] || 0;
 				if ( ! dir ) {
 					return;
 				}
@@ -426,7 +424,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			);
 		};
 		sc.addEventListener( 'scroll', upd, { passive: true } );
-		addEventListener( 'resize', upd );
+		window.addEventListener( 'resize', upd );
 		upd();
 		// выбранная кнопка — в зону видимости
 		sc.addEventListener( 'click', ( e ) => {
@@ -483,7 +481,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			if ( ! it || loaded.has( it.href ) || loading.has( it.href ) ) {
 				return;
 			}
-			const im = new Image();
+			const im = new window.Image();
 			loading.set( it.href, im );
 			im.onload = () => {
 				loaded.add( it.href );
@@ -535,8 +533,8 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			let set = null;
 			try {
 				set = a.dataset.lbSet ? JSON.parse( a.dataset.lbSet ) : null;
-			} catch ( e ) {}
-			const cap =
+			} catch {}
+			const caption =
 				a.dataset.cap ||
 				a
 					.closest( 'figure' )
@@ -553,17 +551,17 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 								?.currentSrc ||
 							phs[ 0 ]?.currentSrc ||
 							'',
-						cap,
+						cap: caption,
 						alt: phs[ 0 ]?.alt || '',
 						a,
 					},
 				];
 			}
 			return set.map( ( h, k ) => ( {
-				href: new URL( h, location.href ).href,
+				href: new URL( h, window.location.href ).href,
 				low: phs[ k ]?.currentSrc || '',
 				cap:
-					cap +
+					caption +
 					( set.length > 1
 						? ' · ' +
 							T( 'photoOf' )
@@ -687,13 +685,13 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 	).type;
 	// при обновлении страницы и «назад» браузер сам возвращает на прежнее место — не перебиваем его
 	if (
-		location.hash.length > 1 &&
+		window.location.hash.length > 1 &&
 		navType !== 'reload' &&
 		navType !== 'back_forward'
 	) {
 		let user = false;
 		[ 'wheel', 'touchstart', 'keydown' ].forEach( ( ev ) =>
-			addEventListener(
+			window.addEventListener(
 				ev,
 				() => {
 					user = true;
@@ -707,8 +705,8 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			}
 			let id;
 			try {
-				id = decodeURIComponent( location.hash.slice( 1 ) );
-			} catch ( x ) {
+				id = decodeURIComponent( window.location.hash.slice( 1 ) );
+			} catch {
 				return;
 			}
 			// нет такого раздела (заголовок переименовали или заменили каталогом) — ведём к каталогу на странице
@@ -718,7 +716,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				t.scrollIntoView( { block: 'start' } );
 			}
 		};
-		addEventListener( 'load', () => {
+		window.addEventListener( 'load', () => {
 			go();
 			setTimeout( go, 500 );
 			setTimeout( go, 1500 );
@@ -752,7 +750,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				x0 = e.clientX;
 				s0 = el.scrollLeft;
 			} );
-			addEventListener( 'pointermove', function ( e ) {
+			window.addEventListener( 'pointermove', function ( e ) {
 				if ( ! down ) {
 					return;
 				}
@@ -767,7 +765,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					el._touched = Date.now();
 				}
 			} );
-			addEventListener( 'pointerup', function () {
+			window.addEventListener( 'pointerup', function () {
 				if ( ! down ) {
 					return;
 				}
