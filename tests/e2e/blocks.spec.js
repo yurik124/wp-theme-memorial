@@ -17,7 +17,6 @@ test( 'все блоки плагина выводятся', async ( { page } ) 
 		'.footer__col',
 		'.footer__copy',
 		'.mbar',
-		'section.hero',
 		'.kgrid',
 		'.product',
 		'.nf__in',

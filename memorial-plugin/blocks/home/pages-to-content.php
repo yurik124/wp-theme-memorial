@@ -10,9 +10,9 @@
  *    text, which the template showed in the “About” section, takes the place of the Post Content block;
  *  - contacts: the contacts block of the page-kontakty template is split into editable blocks
  *    (title, lead text, opening hours, contact cards, maps, the page text, company details).
- * Before saving, the page content is stored as a revision; a site template saved in the Site Editor is
- * removed and its content kept in the log. Rollback: the ability memorial-plugin/rollback-pages-to-content
- * (REST: POST /wp-json/wp-abilities/v1/abilities/memorial-plugin/rollback-pages-to-content/run).
+ * Before saving, the page content is stored as a revision (the way back: “Revisions” of the page); a site
+ * template saved in the Site Editor is removed and its content kept in the log. The automatic rollback to
+ * the old layout (Memorial → Home page) was removed by the decision of 12.11.2026.
  *
  * The log is the memorial_plugin_pages_to_content option.
  *
@@ -244,131 +244,6 @@ function memorial_plugin_pages_to_content() {
 	update_option( MEMORIAL_PLUGIN_PAGES_TO_CONTENT, $log, false );
 }
 add_action( 'admin_init', 'memorial_plugin_pages_to_content', 20 );
-
-/**
- * Rollback: the pages get their previous content and the removed site templates come back.
- *
- * @return array{pages:int,templates:int}
- */
-function memorial_plugin_pages_to_content_rollback() {
-	$log  = get_option( MEMORIAL_PLUGIN_PAGES_TO_CONTENT );
-	$done = array(
-		'pages'     => 0,
-		'templates' => 0,
-	);
-	if ( ! is_array( $log ) ) {
-		return $done;
-	}
-	foreach ( (array) ( $log['pages'] ?? array() ) as $entry ) {
-		$page = get_post( (int) $entry['page'] );
-		if ( $page ) {
-			_wp_put_post_revision( $page );
-			wp_update_post(
-				array(
-					'ID'           => $page->ID,
-					'post_content' => wp_slash( (string) $entry['old'] ),
-				)
-			);
-			++$done['pages'];
-		}
-	}
-	if ( ! empty( $log['front']['created'] ) ) {
-		update_option( 'show_on_front', $log['front']['show_on_front'] );
-		update_option( 'page_on_front', $log['front']['page_on_front'] );
-		wp_trash_post( (int) $log['front']['created'] );
-	}
-	$templates = (array) ( $log['templates'] ?? array() );
-	if ( ! $templates ) {
-		// The theme’s templates no longer hold the sections: give the pages templates that do.
-		$templates = memorial_plugin_pages_to_content_old_templates( $log );
-	}
-	foreach ( $templates as $t ) {
-		$id = wp_insert_post(
-			array(
-				'post_type'    => 'wp_template',
-				'post_status'  => 'publish',
-				'post_name'    => $t['slug'],
-				'post_title'   => $t['title'],
-				'post_content' => wp_slash( $t['content'] ),
-			),
-			true
-		);
-		if ( ! is_wp_error( $id ) ) {
-			wp_set_object_terms( $id, array( get_stylesheet() ), 'wp_theme' );
-			++$done['templates'];
-		}
-	}
-	// The move does not run again by itself; it is a fresh start only when the log is removed by hand.
-	update_option( MEMORIAL_PLUGIN_PAGES_TO_CONTENT, array_merge( $log, array( 'rolled_back' => time() ) ), false );
-	return $done;
-}
-
-/**
- * Templates that frame the old content of the pages (for a rollback when the site had no own templates):
- * the sections of the home page around the page text, the contacts block for the contacts page.
- *
- * @param array $log Move log.
- * @return array
- */
-function memorial_plugin_pages_to_content_old_templates( $log ) {
-	$frame = static fn( $inner ) => "<!-- wp:template-part {\"slug\":\"header\",\"area\":\"header\"} /-->\n\n"
-		. '<!-- wp:group {"tagName":"main","anchor":"main","layout":{"type":"default"},"style":{"spacing":{"blockGap":"0"}}} -->' . "\n"
-		. '<main id="main" class="wp-block-group">' . $inner . "</main>\n<!-- /wp:group -->\n\n"
-		. "<!-- wp:template-part {\"slug\":\"footer\",\"area\":\"footer\"} /-->\n";
-	$out   = array();
-	if ( isset( $log['pages']['home'] ) ) {
-		$out[] = array(
-			'slug'    => 'front-page',
-			'title'   => __( 'Home page', 'memorial-plugin' ),
-			'content' => $frame( memorial_plugin_home_markup() ),
-		);
-	}
-	if ( isset( $log['pages']['contacts'] ) ) {
-		$out[] = array(
-			'slug'    => 'page-kontakty',
-			'title'   => __( 'Contacts page', 'memorial-plugin' ),
-			'content' => $frame( '<!-- wp:group {"className":"wrap section kontakty","layout":{"type":"default"}} --><div class="wp-block-group wrap section kontakty"><!-- wp:memorial-plugin/breadcrumbs /--><!-- wp:memorial-plugin/contacts-page /--></div><!-- /wp:group -->' ),
-		);
-	}
-	return $out;
-}
-
-/**
- * Ability memorial-plugin/rollback-pages-to-content.
- */
-function memorial_plugin_pages_to_content_ability() {
-	if ( ! function_exists( 'wp_register_ability' ) ) {
-		return;
-	}
-	wp_register_ability(
-		'memorial-plugin/rollback-pages-to-content',
-		array(
-			'label'               => __( 'Return the home page and contacts to the templates', 'memorial-plugin' ),
-			'description'         => __( 'Undoes the move of the home page and the “Contacts” page into the page content: the pages get their previous content and the templates show the sections again.', 'memorial-plugin' ),
-			'category'            => 'memorial',
-			'input_schema'        => array(
-				'type'                 => 'object',
-				'default'              => array(),
-				'properties'           => array(),
-				'additionalProperties' => false,
-			),
-			'output_schema'       => array(
-				'type'       => 'object',
-				'properties' => array(
-					'pages'     => array( 'type' => 'integer' ),
-					'templates' => array( 'type' => 'integer' ),
-				),
-			),
-			'permission_callback' => static fn() => current_user_can( 'edit_theme_options' ),
-			'execute_callback'    => static fn() => memorial_plugin_pages_to_content_rollback(),
-			'meta'                => array(
-				'show_in_rest' => true,
-				'annotations'  => array( 'destructive' => true ),
-			),
-		)
-	);
-}
-add_action( 'wp_abilities_api_init', 'memorial_plugin_pages_to_content_ability' );
 
 /**
  * The home page and “Contacts” open in the page editor with their template, so the sections have the same

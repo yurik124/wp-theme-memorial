@@ -87,7 +87,7 @@ function memorial_plugin_block_category( $slug ) {
 		'memorial-reviews'  => array( 'reviews', 'book-reviews', 'rewio-reviews', 'review-buttons', 'review-widget' ),
 		'memorial-design'   => array( 'laurel', 'icon', 'stat', 'link-button' ),
 		'memorial-layout'   => array( 'topbar', 'header-contacts', 'tagline', 'footer-contacts', 'menu-columns', 'footer-legal', 'mobile-bar', 'breadcrumbs', 'callback-dialog', 'cookie-banner' ),
-		'memorial-pages'    => array( 'home', 'page-products', 'contacts-page', 'product', 'catalog-archive', 'not-found' ),
+		'memorial-pages'    => array( 'page-products', 'contacts-page', 'product', 'catalog-archive', 'not-found' ),
 	);
 	foreach ( $groups as $category => $slugs ) {
 		if ( in_array( $slug, $slugs, true ) ) {
@@ -172,7 +172,6 @@ function memorial_plugin_block_keywords() {
 		'footer-legal'    => array( __( 'footer', 'memorial-plugin' ), __( 'copyright', 'memorial-plugin' ), __( 'privacy', 'memorial-plugin' ) ),
 		'mobile-bar'      => array( __( 'mobile', 'memorial-plugin' ), __( 'phone', 'memorial-plugin' ) ),
 		'breadcrumbs'     => array( __( 'breadcrumbs', 'memorial-plugin' ), __( 'navigation', 'memorial-plugin' ) ),
-		'home'            => array( __( 'home page', 'memorial-plugin' ), __( 'sections', 'memorial-plugin' ) ),
 		'page-products'   => array( __( 'products', 'memorial-plugin' ), __( 'catalog', 'memorial-plugin' ) ),
 		'contacts-page'   => array( __( 'contacts', 'memorial-plugin' ), __( 'map', 'memorial-plugin' ) ),
 		'product'         => array( __( 'product', 'memorial-plugin' ), __( 'catalog', 'memorial-plugin' ) ),

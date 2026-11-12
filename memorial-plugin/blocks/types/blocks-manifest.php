@@ -1326,36 +1326,6 @@ return array (
       'viewportWidth' => 1200,
     ),
   ),
-  'home' => 
-  array (
-    '$schema' => 'https://schemas.wp.org/trunk/block.json',
-    'apiVersion' => 3,
-    'name' => 'memorial-plugin/home',
-    'title' => 'Home page: all sections (old layout)',
-    'category' => 'memorial-pages',
-    'icon' => 'admin-home',
-    'description' => 'The whole home page built from Memorial → Home page, as before the move to blocks. Today the home page is built from separate blocks.',
-    'keywords' => 
-    array (
-      0 => 'home page',
-      1 => 'sections',
-      2 => 'memorial',
-    ),
-    'textdomain' => 'memorial-plugin',
-    'supports' => 
-    array (
-      'autoRegister' => true,
-      'html' => false,
-      'reusable' => false,
-    ),
-    'example' => 
-    array (
-      'attributes' => 
-      array (
-      ),
-      'viewportWidth' => 1200,
-    ),
-  ),
   'icon' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',
