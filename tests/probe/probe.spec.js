@@ -477,6 +477,18 @@ test.describe( 'аудит блоков', () => {
 			fs.writeFileSync( `${ DIR }/blocks-audit.json`, JSON.stringify( report, null, 1 ) );
 			report.blocks[ name ] = info;
 		}
+		// настройки «Что показывать» у выбранного блока
+		for ( const name of [ 'memorial-plugin/topbar', 'memorial-plugin/cards', 'memorial-plugin/catalog', 'memorial-plugin/product' ] ) {
+			await tab.evaluate( ( n ) => {
+				const b = window.wp.data.select( 'core/block-editor' ).getBlocks().find( ( x ) => x.name === n );
+				if ( b ) {
+					window.wp.data.dispatch( 'core/block-editor' ).selectBlock( b.clientId );
+				}
+			}, name ).catch( () => {} );
+			await tab.waitForTimeout( 2500 );
+			await canvas.locator( `[data-type="${ name }"]` ).first().scrollIntoViewIfNeeded( { timeout: 5000 } ).catch( () => {} );
+			await tab.screenshot( { path: `${ DIR }/blk-selected-${ name.split( '/' )[ 1 ] }.png` } ).catch( () => {} );
+		}
 		// вставка: категории плагина
 		await tab.keyboard.press( 'Escape' );
 		await tab.locator( 'button.editor-document-tools__inserter-toggle' ).click( { timeout: 5000 } ).catch( () => {} );
@@ -518,6 +530,13 @@ test.describe( 'аудит блоков', () => {
 			await t.waitForTimeout( 2000 );
 			await t.screenshot( { path: `${ DIR }/blk-page-${ p.post_name }-bottom.png` } );
 			report[ 'mode-' + p.post_name ] = await t.evaluate( () => window.wp.data.select( 'core/editor' ).getRenderingMode?.() ).catch( () => null );
+			await t.close();
+		}
+		for ( const scr of [ 'mem-prices', 'mem-values' ] ) {
+			const t = await page.context().newPage();
+			await t.goto( '/wp-admin/admin.php?page=' + scr );
+			await t.waitForTimeout( 6000 );
+			await t.screenshot( { path: `${ DIR }/blk-admin-${ scr }.png`, fullPage: true } ).catch( () => {} );
 			await t.close();
 		}
 		report.errors = errs;
