@@ -50,6 +50,13 @@ Deactivate Memorial Plugin, activate Memorial Core 1.15 and the theme from the `
 
 == Changelog ==
 
+= Unreleased =
+* Fix: “Error loading block” in the editor for plugin blocks with an extra CSS class or style (blocks are registered before the block supports).
+* The [mem_…] shortcodes report a deprecation and name the block that replaces them; the dashboard shows how many posts still use them.
+* All blocks: colour, typography, spacing and border supports, keywords and previews.
+* Moving from pages: DataViews screen and the ability memorial-plugin/import-from-pages; no jQuery in the Rewio panel; inline scripts through the WordPress API.
+* WordPress Coding Standards for all the code.
+
 = 2.0.0 =
 * Block architecture for WordPress 7.1: blocks instead of shortcodes, admin on DataViews / DataForm, Abilities API and Command Palette, Interactivity API, theme presets with fallbacks, Block Hooks.
 * Renamed from Memorial Core (`memorial-core`) to Memorial Plugin (`memorial-plugin`), prefix `memorial_plugin_`; the data in the database is unchanged.
