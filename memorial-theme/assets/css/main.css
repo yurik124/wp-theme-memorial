@@ -259,7 +259,6 @@ select{min-height:44px}
 
 /* старая круглая кнопка звонка больше не нужна */.fab{display:none!important}
 
-.reveal{opacity:0;transition:opacity .4s var(--ease)}   /* только мягкое проявление, без движения */.reveal.is-in{opacity:1}
 @media (max-width:480px){
   .logo b{font-size:1.3rem}
   .logo__mark{width:36px;height:36px}
@@ -341,8 +340,7 @@ body .kontakty__legal p,body .kontakty__badge,body .footer__addr small,body .foo
 /* Фото другой формы в карточке товара: поля — размытая копия того же фото */
 
 @media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .reveal{opacity:1}}
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 
 /* ---------- Наведение: заметно, но спокойно (затемнение до тёмного лавра, без «прыжков») ---------- */.btn--line:hover,.btn--ghost:hover,.btn--light:hover,.nav__cb:hover,.header__cb:hover{background:color-mix(in srgb,var(--gold) 14%,transparent);border-color:var(--gold3);color:var(--gold3)}

@@ -8,6 +8,8 @@
  * theme puts that same picture into the site_logo option: the site icon, or an SVG file of the laurel mark
  * added to the media library. On the site the picture is still drawn by the theme (the laurel stays inline
  * and takes the colour of the design), so nothing changes there; a logo chosen later replaces it.
+ * A site_logo that points to a deleted file counts as no logo. If the owner removes the logo afterwards,
+ * the theme does not put its picture back.
  *
  * Log: the memorial_theme_logo_sync option (which attachment was put in).
  *
@@ -55,7 +57,21 @@ function memorial_theme_logo_svg() {
  * Put the picture of the theme into site_logo once (admin, by a user who may change the design).
  */
 function memorial_theme_logo_sync() {
-	if ( get_option( 'site_logo' ) || get_option( MEMORIAL_THEME_LOGO_SYNC ) || ! current_user_can( 'edit_theme_options' ) ) {
+	if ( ! current_user_can( 'edit_theme_options' ) ) {
+		return;
+	}
+	$current = (int) get_option( 'site_logo' );
+	// A logo is chosen and its picture exists — nothing to do. A number of a deleted file counts as no logo
+	// (the Site Logo block showed an empty placeholder then, while the theme drew its laurel on the site).
+	if ( $current && wp_attachment_is_image( $current ) ) {
+		return;
+	}
+	$sync = (array) get_option( MEMORIAL_THEME_LOGO_SYNC, array() );
+	if ( ! $current && $sync ) {
+		return; // The owner removed the logo after the theme had put its picture in — respect that.
+	}
+	if ( ! empty( $sync['attachment'] ) && wp_attachment_is_image( (int) $sync['attachment'] ) ) {
+		update_option( 'site_logo', (int) $sync['attachment'] ); // The picture put in earlier still exists.
 		return;
 	}
 	$icon = (int) get_option( 'site_icon' );

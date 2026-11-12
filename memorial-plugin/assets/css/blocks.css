@@ -933,3 +933,15 @@ a.svc__item:hover h3,.cat:hover h3{color:var(--memorial-plugin-gold3)}
 .btn--line:active,.btn--ghost:active{background:color-mix(in srgb,var(--memorial-plugin-gold) 24%,transparent)}
 .btn.btn--gold:active{background:color-mix(in srgb,var(--memorial-plugin-gold3) 85%,#000)}
 .btn{max-width:100%}
+
+/* Плавное проявление блоков при прокрутке (класс is-in ставит assets/js/view/site.js). В редакторе скрипта нет —
+   там блоки видны сразу; при «уменьшить движение» — тоже. */
+.reveal{opacity:0;transition:opacity .4s var(--memorial-plugin-ease)}
+.reveal.is-in,.editor-styles-wrapper .reveal,.editor-styles-wrapper .stat b[data-count]{opacity:1}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transition:none}}
+
+/* Редактор: каждый блок там получает position:relative (.block-editor-block-list__block, стили WordPress идут
+   после стилей блоков) — лавровые ветви остаются фоном раздела, а не встают в поток. */
+.editor-styles-wrapper .hero__branch,.editor-styles-wrapper .sec-branch{position:absolute;margin:0}
+/* Пункт списка в редакторе — поле ввода-блок: листик (::before) оставляем в одной строке с текстом. */
+.editor-styles-wrapper .hero__trust.wp-block-list li>.rich-text{display:inline}

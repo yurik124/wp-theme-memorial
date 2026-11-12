@@ -379,8 +379,24 @@ test.describe( 'аудит админки', () => {
 		{
 			const tab = await page.context().newPage();
 			const st = watch( tab );
+			st.notFound = [];
+			tab.on( 'response', ( r ) => {
+				if ( r.status() >= 400 ) {
+					st.notFound.push( r.status() + ' ' + r.url().slice( 0, 200 ) );
+				}
+			} );
 			await tab.goto( '/wp-admin/site-editor.php?p=%2Fwp_template_part%2Fmemorial-theme%2F%2Fheader&canvas=edit' );
 			await tab.waitForTimeout( 12000 );
+			st.logo = await tab.evaluate( async () => {
+				const s = await window.wp.apiFetch( { path: '/wp/v2/settings' } ).catch( ( e ) => ( { error: String( e && e.message ) } ) );
+				return { site_logo: s.site_logo, site_icon: s.site_icon, error: s.error };
+			} );
+			for ( const fr of tab.frames() ) {
+				const html = await fr.evaluate( () => document.querySelector( '[data-type="core/site-logo"]' )?.innerHTML.slice( 0, 300 ) ).catch( () => null );
+				if ( html ) {
+					st.logoBlock = html;
+				}
+			}
 			await tab.screenshot( { path: `${ DIR }/audit-site-editor-header.png` } );
 			editor[ 'site-editor header' ] = st;
 			await tab.close();
