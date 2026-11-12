@@ -176,8 +176,9 @@ function rowSummary( def, row ) {
 		.map( ( f ) => {
 			const v = row?.[ f.id ];
 			if ( f.type === 'select' ) {
-				return ( f.options || [] ).find( ( o ) => o.value === String( v ?? '' ) )
-					?.label;
+				return ( f.options || [] ).find(
+					( o ) => o.value === String( v ?? '' )
+				)?.label;
 			}
 			if ( f.type === 'checkbox' ) {
 				return Number( v ) ? f.short || f.label : '';
@@ -574,7 +575,12 @@ function ControlFor( { def, value, onChange } ) {
 			);
 		case 'secret':
 			return (
-				<SecretEdit common={ common } def={ def } value={ value } onChange={ onChange } />
+				<SecretEdit
+					common={ common }
+					def={ def }
+					value={ value }
+					onChange={ onChange }
+				/>
 			);
 		default:
 			return (

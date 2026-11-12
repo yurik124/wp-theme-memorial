@@ -573,7 +573,10 @@ const withPluginControls = createHigherOrderComponent(
 					{ pickers && (
 						<ToolbarButton
 							icon="admin-settings"
-							label={ __( 'Change what the block shows', 'memorial-plugin' ) }
+							label={ __(
+								'Change what the block shows',
+								'memorial-plugin'
+							) }
 							isPressed={ choosing }
 							onClick={ () => setChoosing( ! choosing ) }
 						/>
