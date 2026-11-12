@@ -506,10 +506,7 @@ function App( { option } ) {
 	);
 
 	return (
-		<Page
-			title={ page.title }
-			actions={ actions }
-		>
+		<Page title={ page.title } actions={ actions }>
 			<Flex
 				direction="column"
 				align="stretch"
