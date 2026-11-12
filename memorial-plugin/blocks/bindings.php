@@ -459,18 +459,55 @@ function memorial_plugin_texts_editor_assets() {
 add_action( 'enqueue_block_editor_assets', 'memorial_plugin_texts_editor_assets' );
 
 /**
- * Once: every row of every settings list gets its id (saving the setting through its sanitizer adds them).
+ * Ids for the rows of the lists of a stored setting, nothing else changed (keys the screen does not show,
+ * missing checkboxes, old values all stay as they are).
+ *
+ * @param mixed $data   Stored value (or a part of it).
+ * @param array $fields Schema fields for it.
+ * @return mixed
+ */
+function memorial_plugin_rows_add_ids( $data, $fields ) {
+	if ( ! is_array( $data ) ) {
+		return $data;
+	}
+	foreach ( $fields as $name => $f ) {
+		if ( ! isset( $data[ $name ] ) || ! is_array( $data[ $name ] ) ) {
+			continue;
+		}
+		if ( 'group' === ( $f['type'] ?? '' ) ) {
+			$data[ $name ] = memorial_plugin_rows_add_ids( $data[ $name ], $f['fields'] );
+		} elseif ( 'repeater' === ( $f['type'] ?? '' ) ) {
+			foreach ( $data[ $name ] as $n => $row ) {
+				if ( is_array( $row ) ) {
+					$row = memorial_plugin_rows_add_ids( $row, $f['fields'] );
+					if ( empty( $row['_id'] ) ) {
+						$row['_id'] = memorial_plugin_row_id();
+					}
+					$data[ $name ][ $n ] = $row;
+				}
+			}
+		}
+	}
+	return $data;
+}
+
+/**
+ * Once: every row of every saved settings list gets its id. On init, before the settings screens register
+ * their sanitizers (admin_init) — the stored value is written back exactly as it is, plus the ids.
  */
 function memorial_plugin_texts_ids_migrate() {
-	if ( get_option( 'memorial_plugin_row_ids' ) || ! current_user_can( 'manage_options' ) ) {
+	if ( ! is_admin() || get_option( 'memorial_plugin_row_ids' ) || ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 	update_option( 'memorial_plugin_row_ids', time(), false );
-	foreach ( array_keys( memorial_plugin_admin_pages() ) as $option ) {
+	foreach ( memorial_plugin_admin_pages() as $option => $page ) {
 		$value = get_option( $option, null );
 		if ( is_array( $value ) ) {
-			update_option( $option, $value );
+			$new = memorial_plugin_rows_add_ids( $value, call_user_func( $page['schema'] ) );
+			if ( $new !== $value ) {
+				update_option( $option, $new );
+			}
 		}
 	}
 }
-add_action( 'admin_init', 'memorial_plugin_texts_ids_migrate', 20 ); // After register_setting(): the sanitizer adds the ids.
+add_action( 'init', 'memorial_plugin_texts_ids_migrate', 99 );
