@@ -151,7 +151,11 @@ test( 'общий текст: правка в редакторе сохраня�
 	const p = await api( page, {
 		path: '/wp/v2/pages',
 		method: 'POST',
-		data: { title: 'Bindings editor', status: 'publish', content: bound( key ) },
+		data: {
+			title: 'Bindings editor',
+			status: 'publish',
+			content: bound( key ),
+		},
 	} );
 	await page.goto( `/wp-admin/post.php?post=${ p.id }&action=edit` );
 	await page.evaluate( () => {
