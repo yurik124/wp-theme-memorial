@@ -673,3 +673,57 @@ test.describe( 'аудит привязок', () => {
 		fs.writeFileSync( `${ DIR }/bindings.json`, JSON.stringify( out, null, 1 ) );
 	} );
 } );
+
+/*
+ * Слепки страниц для проверки правок CSS без сайта: готовый HTML каждой страницы (после скриптов) со всеми
+ * таблицами стилей внутри, для ПК и телефона. По ним tools/css-check сравнивает вычисленные стили
+ * каждого элемента до и после правки. Картинки и шрифты в слепок не входят.
+ */
+test.describe( 'слепки страниц', () => {
+	test( 'слепки страниц', async ( { browser } ) => {
+		test.setTimeout( 1_500_000 );
+		fs.mkdirSync( `${ DIR }/snap`, { recursive: true } );
+		const list = [ { name: 'home', path: '/' } ];
+		PAGES.forEach( ( p ) => list.push( { name: 'page-' + ( p.post_name || p.ID ), path: p.url.replace( /^https?:\/\/[^/]+/, '' ) } ) );
+		list.push( { name: 'catalog', path: '/catalog/' }, { name: '404', path: '/no-such-page-404/' }, { name: 'search', path: '/?s=памятник' } );
+		const seen = new Set( list.map( ( x ) => x.path ) );
+		for ( const [ screen, viewport ] of [ [ 'pc', { width: 1280, height: 900 } ], [ 'phone', { width: 390, height: 800 } ] ] ) {
+			const context = await browser.newContext( { viewport } );
+			const page = await context.newPage();
+			if ( screen === 'pc' ) {
+				// разделы каталога и товары — по ссылкам со страницы каталога
+				await page.goto( '/catalog/', { waitUntil: 'load' } ).catch( () => {} );
+				const links = await page.evaluate( () => [ ...document.querySelectorAll( 'main a[href]' ) ].map( ( a ) => new URL( a.href ).pathname ) ).catch( () => [] );
+				const cats = [ ...new Set( links.filter( ( l ) => /\/catalog\/.+/.test( l ) ) ) ].slice( 0, 3 );
+				const products = [ ...new Set( links.filter( ( l ) => /\/tovar\/.+/.test( l ) ) ) ].slice( 0, 3 );
+				cats.forEach( ( l, i ) => ! seen.has( l ) && list.push( { name: 'cat-' + i, path: l } ) );
+				products.forEach( ( l, i ) => ! seen.has( l ) && list.push( { name: 'product-' + i, path: l } ) );
+			}
+			for ( const item of list ) {
+				await page.goto( item.path, { waitUntil: 'load' } ).catch( () => {} );
+				await page.waitForTimeout( 1200 );
+				const html = await page.evaluate( async () => {
+					for ( const link of [ ...document.querySelectorAll( 'link[rel="stylesheet"]' ) ] ) {
+						let text = '';
+						try {
+							text = await ( await fetch( link.href ) ).text();
+						} catch ( e ) {}
+						text = text.replace( /url\((['"]?)(?!data:|https?:|\/\/|#)([^'")]+)\1\)/g, ( m, q, u ) => `url(${ q }${ new URL( u, link.href ).href }${ q })` );
+						const style = document.createElement( 'style' );
+						style.setAttribute( 'data-href', link.href );
+						if ( link.media && link.media !== 'all' ) {
+							style.media = link.media;
+						}
+						style.textContent = text;
+						link.replaceWith( style );
+					}
+					document.querySelectorAll( 'script, noscript, iframe' ).forEach( ( el ) => el.remove() );
+					return '<!doctype html>' + document.documentElement.outerHTML;
+				} ).catch( ( e ) => '<!-- ' + e.message + ' -->' );
+				fs.writeFileSync( `${ DIR }/snap/${ item.name }.${ screen }.html`, html );
+			}
+			await context.close();
+		}
+		fs.writeFileSync( `${ DIR }/snap/list.json`, JSON.stringify( list, null, 1 ) );
+	} );
+} );
