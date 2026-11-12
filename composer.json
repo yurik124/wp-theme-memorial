@@ -18,6 +18,7 @@
 	},
 	"scripts": {
 		"lint:plugin": "phpcs --standard=memorial-plugin/phpcs.xml.dist",
+		"lint:theme": "phpcs --standard=memorial-theme/phpcs.xml.dist",
 		"lint:compat": "phpcs --standard=phpcs-compat.xml.dist"
 	}
 }

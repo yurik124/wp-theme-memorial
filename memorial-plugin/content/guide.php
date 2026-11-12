@@ -12,152 +12,315 @@
  *
  * Вопрос и короткий ответ задаются у каждой страницы в редакторе — поле «Полезно знать» справа/внизу.
  * Пусто — берутся название страницы и её первый абзац.
+ *
+ * @package memorial-plugin
  */
-defined('ABSPATH') || exit;
+
+defined( 'ABSPATH' ) || exit;
 
 /* Вопрос и короткий ответ (_mem_q, _mem_qa) — в боковой панели редактора страницы (admin/editor-meta.php) */
 
 /* ---------- Данные страницы для карточки ---------- */
 
-/** Текст без шорткодов [mem_…] (в поиске не нужны; иначе в коде страницы видно «[mem_price …]») */
-function memorial_plugin_guide_nosc($s) {
-    return preg_replace('~\[/?[a-z_]+[^\]]*\]~u', '', (string) $s);
+/** Текст без шорткодов [mem_…] (в поиске не нужны; иначе в коде страницы видно «[mem_price …]»)
+ *
+ * @param array $s Section data.
+ */
+function memorial_plugin_guide_nosc( $s ) {
+	return preg_replace( '~\[/?[a-z_]+[^\]]*\]~u', '', (string) $s );
 }
 
-/** Первый абзац (лучше — «вводный» is-style-lead) обычным текстом */
-function memorial_plugin_guide_lead($content) {
-    $p = '';
-    if (preg_match('~<p class="[^"]*is-style-lead[^"]*">(.*?)</p>~su', $content, $m)) $p = $m[1];
-    elseif (preg_match('~<p\b[^>]*>(.*?)</p>~su', $content, $m)) $p = $m[1];
-    $p = trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags(strip_shortcodes($p))));
-    return mb_strlen($p) > 200 ? rtrim(mb_substr($p, 0, mb_strrpos(mb_substr($p, 0, 200), ' ') ?: 200), ' ,.;:—') . '…' : $p;
+/** Первый абзац (лучше — «вводный» is-style-lead) обычным текстом
+ *
+ * @param string $content Content.
+ */
+function memorial_plugin_guide_lead( $content ) {
+	$p = '';
+	if ( preg_match( '~<p class="[^"]*is-style-lead[^"]*">(.*?)</p>~su', $content, $m ) ) {
+		$p = $m[1];
+	} elseif ( preg_match( '~<p\b[^>]*>(.*?)</p>~su', $content, $m ) ) {
+		$p = $m[1];
+	}
+	$p = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( strip_shortcodes( $p ) ) ) );
+	return mb_strlen( $p ) > 200 ? rtrim( mb_substr( $p, 0, ( mb_strrpos( mb_substr( $p, 0, 200 ), ' ' ) ? mb_strrpos( mb_substr( $p, 0, 200 ), ' ' ) : 200 ) ), ' ,.;:—' ) . '…' : $p;
 }
 
-/** Разделы (заголовки h2) и вопросы (блоки «Подробности») страницы: [[текст, якорь, тип, ответ]] */
-function memorial_plugin_guide_parts($blocks, array &$out) {
-    foreach ($blocks as $b) {
-        if ($b['blockName'] === 'core/heading' && (int) ($b['attrs']['level'] ?? 2) === 2) {
-            $t = trim(html_entity_decode(wp_strip_all_tags(do_shortcode($b['innerHTML'])), ENT_QUOTES, 'UTF-8'));
-            $anchor = $b['attrs']['anchor'] ?? '';
-            if (!$anchor && preg_match('/\sid="([^"]+)"/', $b['innerHTML'], $m)) $anchor = $m[1];
-            if (!$anchor) $anchor = substr(memorial_plugin_slug($t), 0, 70);
-            if ($t !== '' && !preg_match('~^(частые вопросы|вопросы и ответы|остались вопросы)~ui', $t)) $out[] = [$t, $anchor, 'h', ''];
-        } elseif ($b['blockName'] === 'core/details' && preg_match('~<summary[^>]*>(.*?)</summary>~s', $b['innerHTML'], $m)) {
-            $q = trim(html_entity_decode(wp_strip_all_tags(do_shortcode($m[1])), ENT_QUOTES, 'UTF-8'));
-            $a = '';
-            foreach ($b['innerBlocks'] as $ib) $a .= ' ' . wp_strip_all_tags(memorial_plugin_guide_nosc($ib['innerHTML']));
-            if ($q !== '') $out[] = [$q, memorial_plugin_q_anchor($q), 'q', trim(preg_replace('/\s+/u', ' ', $a))];
-        } elseif (!empty($b['innerBlocks'])) {
-            memorial_plugin_guide_parts($b['innerBlocks'], $out);
-        }
-    }
+/** Разделы (заголовки h2) и вопросы (блоки «Подробности») страницы: [[текст, якорь, тип, ответ]]
+ *
+ * @param mixed $blocks Blocks.
+ * @param array $out Out.
+ */
+function memorial_plugin_guide_parts( $blocks, array &$out ) {
+	foreach ( $blocks as $b ) {
+		if ( 'core/heading' === $b['blockName'] && (int) ( $b['attrs']['level'] ?? 2 ) === 2 ) {
+			$t      = trim( html_entity_decode( wp_strip_all_tags( do_shortcode( $b['innerHTML'] ) ), ENT_QUOTES, 'UTF-8' ) );
+			$anchor = $b['attrs']['anchor'] ?? '';
+			if ( ! $anchor && preg_match( '/\sid="([^"]+)"/', $b['innerHTML'], $m ) ) {
+				$anchor = $m[1];
+			}
+			if ( ! $anchor ) {
+				$anchor = substr( memorial_plugin_slug( $t ), 0, 70 );
+			}
+			if ( '' !== $t && ! preg_match( '~^(частые вопросы|вопросы и ответы|остались вопросы)~ui', $t ) ) {
+				$out[] = array( $t, $anchor, 'h', '' );
+			}
+		} elseif ( 'core/details' === $b['blockName'] && preg_match( '~<summary[^>]*>(.*?)</summary>~s', $b['innerHTML'], $m ) ) {
+			$q = trim( html_entity_decode( wp_strip_all_tags( do_shortcode( $m[1] ) ), ENT_QUOTES, 'UTF-8' ) );
+			$a = '';
+			foreach ( $b['innerBlocks'] as $ib ) {
+				$a .= ' ' . wp_strip_all_tags( memorial_plugin_guide_nosc( $ib['innerHTML'] ) );
+			}
+			if ( '' !== $q ) {
+				$out[] = array( $q, memorial_plugin_q_anchor( $q ), 'q', trim( preg_replace( '/\s+/u', ' ', $a ) ) );
+			}
+		} elseif ( ! empty( $b['innerBlocks'] ) ) {
+			memorial_plugin_guide_parts( $b['innerBlocks'], $out );
+		}
+	}
 }
 
-function memorial_plugin_guide_page_data($p) {
-    $parts = [];
-    memorial_plugin_guide_parts(parse_blocks($p->post_content), $parts);
-    $q = trim((string) get_post_meta($p->ID, '_mem_q', true)) ?: get_the_title($p);
-    $qa = trim((string) get_post_meta($p->ID, '_mem_qa', true)) ?: memorial_plugin_guide_lead($p->post_content);
-    return ['id' => $p->ID, 'title' => get_the_title($p), 'q' => $q, 'qa' => $qa, 'url' => get_permalink($p), 'parts' => $parts,
-            'img' => (int) get_post_thumbnail_id($p)];
+/**
+ * Guide page data.
+ *
+ * @param mixed $p Post or page.
+ */
+function memorial_plugin_guide_page_data( $p ) {
+	$parts = array();
+	memorial_plugin_guide_parts( parse_blocks( $p->post_content ), $parts );
+	$q  = trim( (string) get_post_meta( $p->ID, '_mem_q', true ) );
+	$q  = '' !== $q ? $q : get_the_title( $p );
+	$qa = trim( (string) get_post_meta( $p->ID, '_mem_qa', true ) );
+	$qa = '' !== $qa ? $qa : memorial_plugin_guide_lead( $p->post_content );
+	return array(
+		'id'    => $p->ID,
+		'title' => get_the_title( $p ),
+		'q'     => $q,
+		'qa'    => $qa,
+		'url'   => get_permalink( $p ),
+		'parts' => $parts,
+		'img'   => (int) get_post_thumbnail_id( $p ),
+	);
 }
 
 /* ---------- [mem_guide] ---------- */
-add_shortcode('mem_guide', function ($atts) {
-    $a = shortcode_atts(['roditel' => '', 'stranicy' => '', 'vse' => 'да', 'chasto' => ''], $atts, 'mem_guide');
-    if (trim($a['stranicy']) !== '') {
-        $ids = array_filter(array_map('absint', explode(',', $a['stranicy'])));
-        $pages = $ids ? get_posts(['post_type' => 'page', 'post_status' => 'publish', 'post__in' => $ids, 'orderby' => 'post__in', 'posts_per_page' => -1]) : [];
-    } else {
-        $parent = $a['roditel'] !== '' ? (ctype_digit(trim($a['roditel'])) ? (int) $a['roditel'] : (int) (get_page_by_path(trim($a['roditel']))->ID ?? 0)) : (int) get_the_ID();
-        $pages = $parent ? get_posts(['post_type' => 'page', 'post_status' => 'publish', 'post_parent' => $parent, 'posts_per_page' => -1,
-                                      'orderby' => ['menu_order' => 'ASC', 'title' => 'ASC']]) : [];
-    }
-    $pages = array_filter($pages, fn($p) => !post_password_required($p));
-    if (!$pages) return current_user_can('edit_pages')
-        ? ( '<p class="is-style-note">' . esc_html__( '[mem_guide]: there are no published pages inside this page yet. Open the page you need → “Page Attributes” → “Parent” → choose this page.', 'memorial-plugin' ) . '</p>' ) : '';
+add_shortcode(
+	'mem_guide',
+	function ( $atts ) {
+		$a = shortcode_atts(
+			array(
+				'roditel'  => '',
+				'stranicy' => '',
+				'vse'      => 'да',
+				'chasto'   => '',
+			),
+			$atts,
+			'mem_guide'
+		);
+		if ( trim( $a['stranicy'] ) !== '' ) {
+			$ids   = array_filter( array_map( 'absint', explode( ',', $a['stranicy'] ) ) );
+			$pages = $ids ? get_posts(
+				array(
+					'post_type'      => 'page',
+					'post_status'    => 'publish',
+					'post__in'       => $ids,
+					'orderby'        => 'post__in',
+					'posts_per_page' => -1,
+				)
+			) : array();
+		} else {
+			$parent = '' !== $a['roditel'] ? ( ctype_digit( trim( $a['roditel'] ) ) ? (int) $a['roditel'] : (int) ( get_page_by_path( trim( $a['roditel'] ) )->ID ?? 0 ) ) : (int) get_the_ID();
+			$pages  = $parent ? get_posts(
+				array(
+					'post_type'      => 'page',
+					'post_status'    => 'publish',
+					'post_parent'    => $parent,
+					'posts_per_page' => -1,
+					'orderby'        => array(
+						'menu_order' => 'ASC',
+						'title'      => 'ASC',
+					),
+				)
+			) : array();
+		}
+		$pages = array_filter( $pages, fn( $p ) => ! post_password_required( $p ) );
+		if ( ! $pages ) {
+			return current_user_can( 'edit_pages' )
+			? ( '<p class="is-style-note">' . esc_html__( '[mem_guide]: there are no published pages inside this page yet. Open the page you need → “Page Attributes” → “Parent” → choose this page.', 'memorial-plugin' ) . '</p>' ) : '';
+		}
 
-    $cards = '';
-    $idx = [];          // поиск: q — что показать, t — где искать, u — ссылка, c — номер карточки, g — подпись
-    $seen = [];
-    foreach (array_values($pages) as $i => $p) {
-        $d = memorial_plugin_guide_page_data($p);
-        $seen[$p->ID] = true;
-        $idx[] = ['q' => $d['q'], 't' => $d['q'] . ' ' . $d['title'] . ' ' . $d['qa'], 'u' => $d['url'], 'c' => $i, 'g' => __( 'Article', 'memorial-plugin' ), 'k' => 'p'];
-        $heads = array_values(array_filter($d['parts'], fn($x) => $x[2] === 'h'));
-        $qs = array_values(array_filter($d['parts'], fn($x) => $x[2] === 'q'));
-        foreach ($d['parts'] as [$t, $anc, $k, $ans]) {
-            $idx[] = ['q' => $t, 't' => $t . ' ' . mb_substr($ans, 0, 300), 'u' => $d['url'] . ($anc ? '#' . $anc : ''), 'c' => $i, 'g' => $d['title'], 'k' => $k];
-        }
-        $in = array_slice($heads, 0, 4);
-        $cards .= '<article class="mguide__card" data-card="' . $i . '">'
-            . '<h2 class="mguide__q"><a href="' . esc_url($d['url']) . '">' . esc_html($d['q']) . '</a></h2>'
-            . ($d['qa'] ? '<p class="mguide__a">' . esc_html($d['qa']) . '</p>' : '')
-            . ($in ? ( '<p class="mguide__in-t">' . esc_html__( 'In the article:', 'memorial-plugin' ) . '</p><ul class="mguide__in">' ) . implode('', array_map(fn($h) => '<li><a href="' . esc_url($d['url'] . '#' . $h[1]) . '">' . esc_html($h[0]) . '</a></li>', $in)) . '</ul>' : '')
-            . '<p class="mguide__foot"><a class="mguide__go" href="' . esc_url($d['url']) . ( '">' . esc_html__( 'Read the answer', 'memorial-plugin' ) . ' <span aria-hidden="true">→</span></a>' )
-            . ($qs ? '<span class="mguide__cnt">' . count($qs) . ' ' . _n( 'question', 'questions', count($qs), 'memorial-plugin' ) . ( ' ' . esc_html__( 'with answers', 'memorial-plugin' ) . '</span>' ) : '') . '</p>'
-            . '</article>';
-    }
-    // вопросы с остальных страниц сайта — тоже находятся поиском
-    if (!memorial_plugin_sc_no($a['vse']) && function_exists('memorial_plugin_faq_all')) {
-        foreach (memorial_plugin_faq_all() as $g) {
-            if (isset($seen[$g['id']]) || $g['id'] === get_the_ID()) continue;
-            foreach ($g['qs'] as [$q, $ans]) {
-                $idx[] = ['q' => $q, 't' => $q . ' ' . mb_substr(trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags(memorial_plugin_guide_nosc($ans)))), 0, 300),
-                          'u' => $g['url'] . '#' . memorial_plugin_q_anchor($q), 'c' => -1, 'g' => $g['title'], 'k' => 'q'];
-            }
-        }
-    }
-    $pop = trim($a['chasto']) !== '' ? explode(',', $a['chasto']) : (function_exists('memorial_plugin_sq_popular') ? memorial_plugin_sq_popular(['документы', 'пособие', 'кладбище', 'стоимость', 'морг'], 5) : ['документы', 'пособие', 'кладбище', 'стоимость', 'морг']);
-    return '<div class="mguide" data-guide data-wp-interactive="memorial-plugin/guide" data-wp-init="callbacks.init">'
-        . memorial_plugin_search_box(['id' => 'mguide-q', 'where' => 'g', 'label' => __( 'Search the articles', 'memorial-plugin' ), 'placeholder' => __( 'For example: death certificate', 'memorial-plugin' ), 'popular' => $pop,
-                          'none' => __( 'There is no answer to such a question on the site yet. Call or leave your number — we will help.', 'memorial-plugin' )])
-        . '<script type="application/json" data-guide-idx>' . wp_json_encode($idx, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) . '</script>'
-        . '<div class="mguide__grid">' . $cards . '</div></div>';
-});
+		$cards = '';
+		$idx   = array();          // поиск: q — что показать, t — где искать, u — ссылка, c — номер карточки, g — подпись.
+		$seen  = array();
+		foreach ( array_values( $pages ) as $i => $p ) {
+			$d              = memorial_plugin_guide_page_data( $p );
+			$seen[ $p->ID ] = true;
+			$idx[]          = array(
+				'q' => $d['q'],
+				't' => $d['q'] . ' ' . $d['title'] . ' ' . $d['qa'],
+				'u' => $d['url'],
+				'c' => $i,
+				'g' => __( 'Article', 'memorial-plugin' ),
+				'k' => 'p',
+			);
+			$heads          = array_values( array_filter( $d['parts'], fn( $x ) => 'h' === $x[2] ) );
+			$qs             = array_values( array_filter( $d['parts'], fn( $x ) => 'q' === $x[2] ) );
+			foreach ( $d['parts'] as [$t, $anc, $k, $ans] ) {
+				$idx[] = array(
+					'q' => $t,
+					't' => $t . ' ' . mb_substr( $ans, 0, 300 ),
+					'u' => $d['url'] . ( $anc ? '#' . $anc : '' ),
+					'c' => $i,
+					'g' => $d['title'],
+					'k' => $k,
+				);
+			}
+			$in     = array_slice( $heads, 0, 4 );
+			$cards .= '<article class="mguide__card" data-card="' . $i . '">'
+			. '<h2 class="mguide__q"><a href="' . esc_url( $d['url'] ) . '">' . esc_html( $d['q'] ) . '</a></h2>'
+			. ( $d['qa'] ? '<p class="mguide__a">' . esc_html( $d['qa'] ) . '</p>' : '' )
+			. ( $in ? ( '<p class="mguide__in-t">' . esc_html__( 'In the article:', 'memorial-plugin' ) . '</p><ul class="mguide__in">' ) . implode( '', array_map( fn( $h ) => '<li><a href="' . esc_url( $d['url'] . '#' . $h[1] ) . '">' . esc_html( $h[0] ) . '</a></li>', $in ) ) . '</ul>' : '' )
+			. '<p class="mguide__foot"><a class="mguide__go" href="' . esc_url( $d['url'] ) . ( '">' . esc_html__( 'Read the answer', 'memorial-plugin' ) . ' <span aria-hidden="true">→</span></a>' )
+			. ( $qs ? '<span class="mguide__cnt">' . count( $qs ) . ' ' . _n( 'question', 'questions', count( $qs ), 'memorial-plugin' ) . ( ' ' . esc_html__( 'with answers', 'memorial-plugin' ) . '</span>' ) : '' ) . '</p>'
+			. '</article>';
+		}
+		// вопросы с остальных страниц сайта — тоже находятся поиском.
+		if ( ! memorial_plugin_sc_no( $a['vse'] ) && function_exists( 'memorial_plugin_faq_all' ) ) {
+			foreach ( memorial_plugin_faq_all() as $g ) {
+				if ( isset( $seen[ $g['id'] ] ) || get_the_ID() === $g['id'] ) {
+					continue;
+				}
+				foreach ( $g['qs'] as [$q, $ans] ) {
+					$idx[] = array(
+						'q' => $q,
+						't' => $q . ' ' . mb_substr( trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( memorial_plugin_guide_nosc( $ans ) ) ) ), 0, 300 ),
+						'u' => $g['url'] . '#' . memorial_plugin_q_anchor( $q ),
+						'c' => -1,
+						'g' => $g['title'],
+						'k' => 'q',
+					);
+				}
+			}
+		}
+		$pop = trim( $a['chasto'] ) !== '' ? explode( ',', $a['chasto'] ) : ( function_exists( 'memorial_plugin_sq_popular' ) ? memorial_plugin_sq_popular( array( 'документы', 'пособие', 'кладбище', 'стоимость', 'морг' ), 5 ) : array( 'документы', 'пособие', 'кладбище', 'стоимость', 'морг' ) );
+		return '<div class="mguide" data-guide data-wp-interactive="memorial-plugin/guide" data-wp-init="callbacks.init">'
+		. memorial_plugin_search_box(
+			array(
+				'id'          => 'mguide-q',
+				'where'       => 'g',
+				'label'       => __( 'Search the articles', 'memorial-plugin' ),
+				'placeholder' => __( 'For example: death certificate', 'memorial-plugin' ),
+				'popular'     => $pop,
+				'none'        => __(
+					'There is no answer to such a question on the site yet. Call or leave your number — we will help.',
+					'memorial-plugin'
+				),
+			)
+		)
+		. '<script type="application/json" data-guide-idx>' . wp_json_encode( $idx, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP ) . '</script>'
+		. '<div class="mguide__grid">' . $cards . '</div></div>';
+	}
+);
 
 /* Разметка для поисковиков: список статей */
-add_action('wp_head', function () {
-    if (!is_page() || !function_exists('memorial_plugin_ld')) return;
-    $p = get_queried_object();
-    if (!$p || !has_shortcode((string) $p->post_content, 'mem_guide')) return;
-    $kids = get_posts(['post_type' => 'page', 'post_status' => 'publish', 'post_parent' => $p->ID, 'posts_per_page' => -1, 'orderby' => ['menu_order' => 'ASC', 'title' => 'ASC']]);
-    if (!$kids) return;
-    $list = [];
-    foreach ($kids as $i => $k) $list[] = ['@type' => 'ListItem', 'position' => $i + 1, 'url' => get_permalink($k), 'name' => get_the_title($k)];
-    memorial_plugin_ld(['@context' => 'https://schema.org', '@type' => 'ItemList', 'name' => get_the_title($p), 'itemListElement' => $list]);
-}, 7);
+add_action(
+	'wp_head',
+	function () {
+		if ( ! is_page() || ! function_exists( 'memorial_plugin_ld' ) ) {
+			return;
+		}
+		$p = get_queried_object();
+		if ( ! $p || ! has_shortcode( (string) $p->post_content, 'mem_guide' ) ) {
+			return;
+		}
+		$kids = get_posts(
+			array(
+				'post_type'      => 'page',
+				'post_status'    => 'publish',
+				'post_parent'    => $p->ID,
+				'posts_per_page' => -1,
+				'orderby'        => array(
+					'menu_order' => 'ASC',
+					'title'      => 'ASC',
+				),
+			)
+		);
+		if ( ! $kids ) {
+			return;
+		}
+		$list = array();
+		foreach ( $kids as $i => $k ) {
+			$list[] = array(
+				'@type'    => 'ListItem',
+				'position' => $i + 1,
+				'url'      => get_permalink( $k ),
+				'name'     => get_the_title( $k ),
+			);
+		}
+		memorial_plugin_ld(
+			array(
+				'@context'        => 'https://schema.org',
+				'@type'           => 'ItemList',
+				'name'            => get_the_title( $p ),
+				'itemListElement' => $list,
+			)
+		);
+	},
+	7
+);
 
 /* ---------- Разово: страница «Полезно знать» (черновик) и вопросы у известных страниц ---------- */
-add_action('admin_init', function () {
-    if (get_option('mem_guide_setup') || !current_user_can('edit_pages')) return;
-    update_option('mem_guide_setup', 1, false);
-    $known = [
-        '~что делать~ui'           => ['Что делать, если умер близкий человек?', 'Куда звонить в первые часы, какие документы получить и в каком порядке — по шагам.'],
-        '~пособ~ui'                => ['Как получить пособие на погребение?', 'Кто может получить пособие, какие документы нужны и куда обращаться.'],
-        '~кладбищ~ui'              => ['На каком кладбище можно похоронить?', 'Кладбища Белгорода и района: где есть места, где только подзахоронение, как оформить.'],
-        '~вопрос~ui'               => ['Ответы на частые вопросы о похоронах', 'Документы, стоимость, сроки, кремация — собрали ответы со всего сайта.'],
-        '~прижизн~ui'              => ['Как заранее договориться о своих похоронах?', 'Что такое прижизненный договор, что в него входит и как его заключить.'],
-    ];
-    foreach (get_pages(['post_status' => 'publish,draft,private']) as $p) {
-        if (trim((string) get_post_meta($p->ID, '_mem_q', true)) !== '') continue;
-        foreach ($known as $re => [$q, $qa]) {
-            if (!preg_match($re, $p->post_title)) continue;
-            if ($re === '~кладбищ~ui' && !has_shortcode($p->post_content, 'mem_cemeteries')) continue;   // не «Укладка плитки… на кладбище»
-            update_post_meta($p->ID, '_mem_q', $q);
-            update_post_meta($p->ID, '_mem_qa', $qa);
-            break;
-        }
-    }
-    foreach (get_pages(['post_status' => 'publish,draft,private']) as $p) if (has_shortcode($p->post_content, 'mem_guide')) return;
-    $c = "<!-- wp:paragraph {\"className\":\"is-style-lead\"} -->\n<p class=\"is-style-lead\">Ответы на вопросы, которые возникают, когда умирает близкий человек: что делать в первые часы, какие нужны документы, какие выплаты положены, где можно похоронить. Начните вводить вопрос — поиск подскажет нужную статью.</p>\n<!-- /wp:paragraph -->\n\n"
-       . "<!-- wp:shortcode -->\n[mem_guide]\n<!-- /wp:shortcode -->\n\n"
-       . "<!-- wp:shortcode -->\n[mem_cta title=\"Не нашли ответ?\" text=\"Позвоните — подскажем, что делать, в любое время.\"]\n<!-- /wp:shortcode -->";
-    $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Полезно знать', 'post_name' => 'poleznoe', 'post_content' => $c]);
-    if ($id && !is_wp_error($id)) {
-        $r = (array) get_transient('mem_places_report');
-        $r[] = '<a href="' . esc_url(get_edit_post_link($id)) . ( '">' . esc_html__( '“Good to know”', 'memorial-plugin' ) . '</a> ' . esc_html__( '— a draft with the search. For an article to appear on it: open the article → “Page Attributes” → “Parent” → “Good to know”.', 'memorial-plugin' ) . ' ' )
-             . __( 'A question and a short answer on the card — the “Good to know” field under the text of the article.', 'memorial-plugin' );
-        set_transient('mem_places_report', array_filter($r), DAY_IN_SECONDS);
-    }
-});
+add_action(
+	'admin_init',
+	function () {
+		if ( get_option( 'mem_guide_setup' ) || ! current_user_can( 'edit_pages' ) ) {
+			return;
+		}
+		update_option( 'mem_guide_setup', 1, false );
+		$known = array(
+			'~что делать~ui' => array( 'Что делать, если умер близкий человек?', 'Куда звонить в первые часы, какие документы получить и в каком порядке — по шагам.' ),
+			'~пособ~ui'      => array( 'Как получить пособие на погребение?', 'Кто может получить пособие, какие документы нужны и куда обращаться.' ),
+			'~кладбищ~ui'    => array( 'На каком кладбище можно похоронить?', 'Кладбища Белгорода и района: где есть места, где только подзахоронение, как оформить.' ),
+			'~вопрос~ui'     => array( 'Ответы на частые вопросы о похоронах', 'Документы, стоимость, сроки, кремация — собрали ответы со всего сайта.' ),
+			'~прижизн~ui'    => array( 'Как заранее договориться о своих похоронах?', 'Что такое прижизненный договор, что в него входит и как его заключить.' ),
+		);
+		foreach ( get_pages( array( 'post_status' => 'publish,draft,private' ) ) as $p ) {
+			if ( trim( (string) get_post_meta( $p->ID, '_mem_q', true ) ) !== '' ) {
+				continue;
+			}
+			foreach ( $known as $re => [$q, $qa] ) {
+				if ( ! preg_match( $re, $p->post_title ) ) {
+					continue;
+				}
+				if ( '~кладбищ~ui' === $re && ! has_shortcode( $p->post_content, 'mem_cemeteries' ) ) {
+					continue;   // не «Укладка плитки… на кладбище».
+				}
+				update_post_meta( $p->ID, '_mem_q', $q );
+				update_post_meta( $p->ID, '_mem_qa', $qa );
+				break;
+			}
+		}
+		foreach ( get_pages( array( 'post_status' => 'publish,draft,private' ) ) as $p ) {
+			if ( has_shortcode( $p->post_content, 'mem_guide' ) ) {
+				return;
+			}
+		}
+		$c  = "<!-- wp:paragraph {\"className\":\"is-style-lead\"} -->\n<p class=\"is-style-lead\">Ответы на вопросы, которые возникают, когда умирает близкий человек: что делать в первые часы, какие нужны документы, какие выплаты положены, где можно похоронить. Начните вводить вопрос — поиск подскажет нужную статью.</p>\n<!-- /wp:paragraph -->\n\n"
+		. "<!-- wp:shortcode -->\n[mem_guide]\n<!-- /wp:shortcode -->\n\n"
+		. "<!-- wp:shortcode -->\n[mem_cta title=\"Не нашли ответ?\" text=\"Позвоните — подскажем, что делать, в любое время.\"]\n<!-- /wp:shortcode -->";
+		$id = wp_insert_post(
+			array(
+				'post_type'    => 'page',
+				'post_status'  => 'draft',
+				'post_title'   => 'Полезно знать',
+				'post_name'    => 'poleznoe',
+				'post_content' => $c,
+			)
+		);
+		if ( $id && ! is_wp_error( $id ) ) {
+			$r   = (array) get_transient( 'mem_places_report' );
+			$r[] = '<a href="' . esc_url( get_edit_post_link( $id ) ) . ( '">' . esc_html__( '“Good to know”', 'memorial-plugin' ) . '</a> ' . esc_html__( '— a draft with the search. For an article to appear on it: open the article → “Page Attributes” → “Parent” → “Good to know”.', 'memorial-plugin' ) . ' ' )
+			. __( 'A question and a short answer on the card — the “Good to know” field under the text of the article.', 'memorial-plugin' );
+			set_transient( 'mem_places_report', array_filter( $r ), DAY_IN_SECONDS );
+		}
+	}
+);

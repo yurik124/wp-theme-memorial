@@ -179,8 +179,8 @@ function memorial_plugin_collection_item( $post, $col ) {
  * @return int|WP_Error Post ID.
  */
 function memorial_plugin_collection_save( $id, $col, $values ) {
-	$post = array( 'post_type' => $col['post_type'] );
-	$meta = array();
+	$post  = array( 'post_type' => $col['post_type'] );
+	$meta  = array();
 	$thumb = null;
 	foreach ( $col['fields'] as $key => $field ) {
 		if ( ! empty( $field['readonly'] ) || ! array_key_exists( $key, $values ) ) {

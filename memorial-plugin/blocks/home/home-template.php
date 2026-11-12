@@ -386,7 +386,7 @@ function memorial_plugin_home_migrate() {
 	if ( get_option( 'memorial_plugin_home_migrated' ) || ! current_user_can( 'edit_theme_options' ) || ! wp_is_block_theme() ) {
 		return;
 	}
-	$log = array(
+	$log   = array(
 		'time'   => time(),
 		'theme'  => get_stylesheet(),
 		'result' => 'no-template',

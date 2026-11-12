@@ -3019,8 +3019,8 @@ msgstr "Товаров до «Показать ещё» (число или «в�
 
 #: catalog/catalog-import.php:314
 #, php-format
-msgid "Products created: %d, works: %d. Skipped (already existed): %d. Pages updated: %d."
-msgstr "Создано товаров: %d, работ: %d. Пропущено (уже были): %d. Обновлено страниц: %d."
+msgid "Products created: %1$d, works: %2$d. Skipped (already existed): %3$d. Pages updated: %4$d."
+msgstr "Создано товаров: %1$d, работ: %2$d. Пропущено (уже были): %3$d. Обновлено страниц: %4$d."
 
 #. translators: 1: products, 2: products with their own page.
 #: src/catalog/product-pages.js:57

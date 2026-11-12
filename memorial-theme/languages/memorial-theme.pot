@@ -9,11 +9,11 @@ msgstr ""
 "X-Domain: memorial-theme\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: inc/design.php:63
+#: inc/design.php:72
 msgid " (custom)"
 msgstr ""
 
-#: functions.php:120
+#: functions.php:175
 msgid " — to the home page"
 msgstr ""
 
@@ -33,7 +33,7 @@ msgstr ""
 msgid "A short explanation: terms, conditions or what to bring."
 msgstr ""
 
-#: inc/design.php:19
+#: inc/design.php:22
 msgid "Accent: buttons, icons, laurel"
 msgstr ""
 
@@ -41,15 +41,15 @@ msgstr ""
 msgid "Back to top"
 msgstr ""
 
-#: inc/design.php:23
+#: inc/design.php:26
 msgid "Background of alternating blocks"
 msgstr ""
 
-#: inc/design.php:18
+#: inc/design.php:21
 msgid "Background of the bars — second shade"
 msgstr ""
 
-#: inc/design.php:17
+#: inc/design.php:20
 msgid "Background of the header bars and the footer (light in the light scheme)"
 msgstr ""
 
@@ -58,19 +58,19 @@ msgstr ""
 msgid "Block theme for the Memorial funeral services site (Belgorod), \"Bright Memory\": light header and footer, laurel graphics, warm paper and sage green; style variations Laurel, Bronze, Stone and Dark. Site data (contacts, catalog, prices) comes from blocks of the Memorial Plugin."
 msgstr ""
 
-#: inc/design.php:26
+#: inc/design.php:29
 msgid "Borders and dividers"
 msgstr ""
 
-#: inc/design.php:39
+#: inc/design.php:45
 msgid "Bright memory — bronze"
 msgstr ""
 
-#: inc/design.php:38
+#: inc/design.php:44
 msgid "Bright memory — laurel (main)"
 msgstr ""
 
-#: inc/design.php:28
+#: inc/design.php:31
 msgid "Bronze: thin lines, laurel berries (in small doses)"
 msgstr ""
 
@@ -133,23 +133,23 @@ msgctxt "Color name"
 msgid "Text on a filled button"
 msgstr ""
 
-#: functions.php:69
+#: functions.php:106
 msgid "Could not open MAX. Leave your number — we will call you back."
 msgstr ""
 
-#: functions.php:67
+#: functions.php:104
 msgid "Could not send."
 msgstr ""
 
-#: functions.php:70
+#: functions.php:107
 msgid "Could not write in MAX? Leave your number — we will call you back."
 msgstr ""
 
-#: inc/design.php:21
+#: inc/design.php:24
 msgid "Dark accent: links, eyebrows, hover"
 msgstr ""
 
-#: functions.php:72
+#: functions.php:109
 msgid "Directions map"
 msgstr ""
 
@@ -157,12 +157,12 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: functions.php:65
+#: functions.php:102
 msgid "Enter the full number: +7 and 10 digits."
 msgstr ""
 
 #. translators: %s: menu item
-#: functions.php:63
+#: functions.php:100
 #, php-format
 msgid "Expand: %s"
 msgstr ""
@@ -220,11 +220,11 @@ msgctxt "Font size name"
 msgid "Small"
 msgstr ""
 
-#: functions.php:27
+#: functions.php:43
 msgid "Footer menu"
 msgstr ""
 
-#: inc/design.php:52
+#: inc/design.php:59
 msgid "Georgia (system serif)"
 msgstr ""
 
@@ -236,19 +236,19 @@ msgstr ""
 msgid "Introduction: one or two sentences — what we offer, from what price, how we differ."
 msgstr ""
 
-#: inc/design.php:20
+#: inc/design.php:23
 msgid "Light accent: ornament, dividers"
 msgstr ""
 
-#: inc/design.php:40
+#: inc/design.php:46
 msgid "Light stone (grey-blue)"
 msgstr ""
 
-#: functions.php:27 inc/navigation-migrate.php:99
+#: functions.php:42 inc/navigation-migrate.php:99
 msgid "Main menu"
 msgstr ""
 
-#: inc/design.php:24
+#: inc/design.php:27
 msgid "Main text"
 msgstr ""
 
@@ -257,7 +257,7 @@ msgstr ""
 msgid "Memorial Modern"
 msgstr ""
 
-#: functions.php:125
+#: functions.php:185
 msgid "Memorial: design"
 msgstr ""
 
@@ -269,7 +269,7 @@ msgstr ""
 msgid "Nothing found."
 msgstr ""
 
-#: inc/design.php:22
+#: inc/design.php:25
 msgid "Page background"
 msgstr ""
 
@@ -383,23 +383,23 @@ msgctxt "Pattern title"
 msgid "Steps with icons"
 msgstr ""
 
-#: functions.php:68
+#: functions.php:105
 msgid "Please call us."
 msgstr ""
 
-#: functions.php:71
+#: functions.php:108
 msgid "Reviews on Yandex Maps"
 msgstr ""
 
-#: inc/design.php:27
+#: inc/design.php:30
 msgid "Sage backing: “What to do”, numbers, footer"
 msgstr ""
 
-#: functions.php:73
+#: functions.php:110
 msgid "Scroll left"
 msgstr ""
 
-#: functions.php:74
+#: functions.php:111
 msgid "Scroll right"
 msgstr ""
 
@@ -407,7 +407,7 @@ msgstr ""
 msgid "Second item"
 msgstr ""
 
-#: inc/design.php:25
+#: inc/design.php:28
 msgid "Secondary text"
 msgstr ""
 
@@ -466,7 +466,7 @@ msgctxt "Style variation name"
 msgid "Light stone"
 msgstr ""
 
-#: inc/design.php:53
+#: inc/design.php:60
 msgid "System sans-serif (as in Windows/phone)"
 msgstr ""
 
@@ -490,7 +490,7 @@ msgstr ""
 msgid "The custom colour “%s” (the former dark bars) is not moved: in the light schemes it matches the section background."
 msgstr ""
 
-#: functions.php:66
+#: functions.php:103
 msgid "Tick the consent to the data processing."
 msgstr ""
 
@@ -512,11 +512,11 @@ msgid "https://memorialbel.ru/"
 msgstr ""
 
 #. translators: 1: number of the photo, 2: number of photos
-#: functions.php:76
+#: functions.php:113
 #, php-format
 msgid "photo %1$d of %2$d"
 msgstr ""
 
-#: functions.php:64
+#: functions.php:101
 msgid "submenu"
 msgstr ""

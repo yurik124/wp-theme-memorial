@@ -24,7 +24,7 @@ function memorial_plugin_command_screens() {
 		array( 'convert', __( 'Convert to blocks', 'memorial-plugin' ), __( 'shortcodes migration', 'memorial-plugin' ), 'edit_pages', 'admin.php?page=memorial-plugin-convert' ),
 		array( 'bookrev', __( 'Guest book reviews', 'memorial-plugin' ), __( 'reviews book', 'memorial-plugin' ), 'edit_posts', 'admin.php?page=memorial-plugin-bookrev' ),
 	);
-	$icons = array(
+	$icons   = array(
 		'mem-contacts' => 'contacts',
 		'mem-prices'   => 'prices',
 		'mem-reviews'  => 'reviews',

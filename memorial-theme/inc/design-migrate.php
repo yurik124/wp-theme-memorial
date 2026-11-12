@@ -88,9 +88,9 @@ function memorial_theme_design_migration_plan( $design ) {
 	}
 	// Текст на кнопке с заливкой: белый, если читается, иначе основной цвет текста (как считало «Оформление»).
 	if ( $custom && isset( $by_slug['on-primary'], $by_slug['primary'], $by_slug['contrast'] ) ) {
-		$primary = $palette[ $by_slug['primary'] ]['color'];
-		$ink     = $palette[ $by_slug['contrast'] ]['color'];
-		$white   = memorial_theme_contrast( $primary, '#ffffff' );
+		$primary                                    = $palette[ $by_slug['primary'] ]['color'];
+		$ink                                        = $palette[ $by_slug['contrast'] ]['color'];
+		$white                                      = memorial_theme_contrast( $primary, '#ffffff' );
 		$palette[ $by_slug['on-primary'] ]['color'] = ( $white >= 4.5 || $white >= memorial_theme_contrast( $primary, $ink ) ) ? '#ffffff' : $ink;
 	}
 	$palette_changed = wp_json_encode( $palette ) !== wp_json_encode( $theme );
@@ -106,7 +106,10 @@ function memorial_theme_design_migration_plan( $design ) {
 	if ( 'system' !== $body && isset( $all[ $body ] ) ) {
 		$vars[] = '--sans:' . $all[ $body ][1];
 	}
-	foreach ( array( 'scale' => '--fs', 'head' => '--fs-h' ) as $key => $var ) {
+	foreach ( array(
+		'scale' => '--fs',
+		'head'  => '--fs-h',
+	) as $key => $var ) {
 		$pct = max( 70, min( 150, (int) ( $design['text'][ $key ] ?? 100 ) ? (int) ( $design['text'][ $key ] ?? 100 ) : 100 ) );
 		if ( 100 !== $pct ) {
 			$vars[] = $var . ':' . rtrim( rtrim( number_format( $pct / 100, 2, '.', '' ), '0' ), '.' );
@@ -164,7 +167,7 @@ function memorial_theme_design_migrate() {
 		} elseif ( $touched ) {
 			$log['result'] = 'skipped-user-styles-exist';
 		} else {
-			$data['version']                    = 3;
+			$data['version']                     = 3;
 			$data['isGlobalStylesUserThemeJSON'] = true;
 			if ( $plan['palette'] ) {
 				$data['settings']['color']['palette']['theme'] = $plan['palette'];

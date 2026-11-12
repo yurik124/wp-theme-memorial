@@ -2,6 +2,7 @@
 /**
  * Styles and scripts of the plugin’s blocks on the site.
  *
+ * Files:
  *   assets/css/blocks.css — look of the blocks; colours and fonts are the presets of the theme (theme.json)
  *                           with fallbacks: var(--wp--preset--color--primary, #5e7052) and so on;
  *   assets/js/view/blocks.js — behaviour of the blocks on the Interactivity API (script module
@@ -56,7 +57,14 @@ add_action( 'init', 'memorial_plugin_register_view_module', 5 );
  */
 function memorial_plugin_view_plural( $form ) {
 	$out = array();
-	foreach ( array( 'zero' => 0, 'one' => 1, 'two' => 2, 'few' => 3, 'many' => 5, 'other' => 11 ) as $category => $n ) {
+	foreach ( array(
+		'zero'  => 0,
+		'one'   => 1,
+		'two'   => 2,
+		'few'   => 3,
+		'many'  => 5,
+		'other' => 11,
+	) as $category => $n ) {
 		$out[ $category ] = $form( $n );
 	}
 	return $out;

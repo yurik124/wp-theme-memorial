@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <ruleset name="Memorial Theme">
-	<description>WordPress Coding Standards for the Memorial block theme. Enabled in CI from stage 2, when functions.php and patterns are rewritten; classic templates are removed in stage 2.</description>
+	<description>WordPress Coding Standards for the Memorial block theme. Covers functions.php, inc/ and patterns/.</description>
 
-	<file>functions.php</file>
-	<file>inc</file>
+	<file>.</file>
 
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>

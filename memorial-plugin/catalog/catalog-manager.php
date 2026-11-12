@@ -348,8 +348,8 @@ function memorial_plugin_cm_merge_conflicts( array $ids ) {
 	$vals = array();
 	foreach ( $ids as $id ) {
 		$row = array(
-			__( 'Price', 'memorial-plugin' )      => (int) get_post_meta( $id, '_mem_price', true ) ? (string) (int) get_post_meta( $id, '_mem_price', true ) : '',
-			__( 'Unit', 'memorial-plugin' )       => trim( (string) get_post_meta( $id, '_mem_unit', true ) ),
+			__( 'Price', 'memorial-plugin' )            => (int) get_post_meta( $id, '_mem_price', true ) ? (string) (int) get_post_meta( $id, '_mem_price', true ) : '',
+			__( 'Unit', 'memorial-plugin' )             => trim( (string) get_post_meta( $id, '_mem_unit', true ) ),
 			__( 'Line under title', 'memorial-plugin' ) => trim( (string) get_post_meta( $id, '_mem_sub', true ) ),
 		);
 		foreach ( memorial_plugin_product_spec_map( $id ) as $k => $v ) {
@@ -534,8 +534,8 @@ function memorial_plugin_products_bulk( WP_REST_Request $request ) {
 				if ( ! $cur && 'set' !== $mode ) {
 					continue 2; // “On request” stays as it is when prices go up or down.
 				}
-				$val   = (float) str_replace( ',', '.', (string) $request['value'] );
-				$new   = match ( $mode ) {
+				$val = (float) str_replace( ',', '.', (string) $request['value'] );
+				$new = match ( $mode ) {
 					'pct'   => $cur * ( 1 + $val / 100 ),
 					'add'   => $cur + $val,
 					'set'   => $val,

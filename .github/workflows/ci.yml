@@ -84,7 +84,7 @@ jobs:
         run: composer install --no-interaction --no-progress
 
       # Полный отчёт — в журнале шага, замечания — ещё и аннотациями к строкам (cs2pr).
-      - name: WPCS — новый код плагина
+      - name: WPCS — весь код плагина
         if: ${{ !cancelled() && matrix.php == '8.4' }}
         run: |
           vendor/bin/phpcs --standard=memorial-plugin/phpcs.xml.dist --report-full --report-checkstyle=phpcs-plugin.xml && s=0 || s=$?
@@ -98,8 +98,12 @@ jobs:
           cs2pr --graceful-warnings phpcs-compat.xml || true
           exit $s
 
-      # Тема переписывается на этапе 2 — тогда включается полный WPCS для неё:
-      # - run: vendor/bin/phpcs --standard=memorial-theme/phpcs.xml.dist
+      - name: WPCS — тема
+        if: ${{ !cancelled() && matrix.php == '8.4' }}
+        run: |
+          vendor/bin/phpcs --standard=memorial-theme/phpcs.xml.dist --report-full --report-checkstyle=phpcs-theme.xml && s=0 || s=$?
+          cs2pr --graceful-warnings phpcs-theme.xml || true
+          exit $s
 
       - name: Автозагрузка плагина (classmap)
         if: ${{ !cancelled() && matrix.php == '8.4' }}

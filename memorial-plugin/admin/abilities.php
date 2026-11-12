@@ -113,9 +113,9 @@ function memorial_plugin_ability_rest( $callback, $params ) {
  * The plugin’s abilities.
  */
 function memorial_plugin_abilities() {
-	$edit   = static fn() => current_user_can( 'edit_posts' );
-	$admin  = static fn() => current_user_can( 'manage_options' );
-	$lead   = static fn( $input ) => current_user_can( 'edit_post', (int) ( $input['id'] ?? 0 ) ) && 'mem_lead' === get_post_type( (int) ( $input['id'] ?? 0 ) );
+	$edit        = static fn() => current_user_can( 'edit_posts' );
+	$admin       = static fn() => current_user_can( 'manage_options' );
+	$lead        = static fn( $input ) => current_user_can( 'edit_post', (int) ( $input['id'] ?? 0 ) ) && 'mem_lead' === get_post_type( (int) ( $input['id'] ?? 0 ) );
 	$meta_public = array(
 		'public'       => true,
 		'show_in_rest' => true,
