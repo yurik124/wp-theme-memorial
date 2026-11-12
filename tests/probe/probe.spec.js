@@ -631,3 +631,45 @@ test.describe( 'аудит цен', () => {
 		fs.writeFileSync( `${ DIR }/prices.json`, JSON.stringify( out, null, 1 ) );
 	} );
 } );
+
+// Общий текст в редакторе: панель «Общий текст» у привязанного абзаца и у обычного, готовые абзацы во вставке.
+test.describe( 'аудит привязок', () => {
+	test.use( { viewport: { width: 1440, height: 1000 } } );
+	test( 'аудит привязок', async ( { page } ) => {
+		test.setTimeout( 300_000 );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/post-new.php?post_type=page' );
+		await page.waitForFunction( () => window.wp?.blocks?.getBlockTypes?.().length > 50, null, { timeout: 60000 } );
+		const id = await page.evaluate( async () => {
+			const bound = ( key ) => `<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"memorial-plugin/settings","args":{"key":"${ key }"}}}}} -->\n<p></p>\n<!-- /wp:paragraph -->`;
+			const content = bound( 'mem_contacts:phones.@first.num' ) + '\n\n' + bound( 'mem_contacts:addrs.@first.addr' ) + '\n\n' + bound( 'mem_contacts:night' ) + '\n\n<!-- wp:paragraph -->\n<p>Обычный абзац со своим текстом.</p>\n<!-- /wp:paragraph -->';
+			const r = await window.wp.apiFetch( { path: '/wp/v2/pages', method: 'POST', data: { title: 'Аудит привязок', status: 'draft', content } } );
+			return r.id;
+		} );
+		await page.goto( '/wp-admin/post.php?action=edit&post=' + id );
+		await page.waitForTimeout( 12000 );
+		await page.evaluate( () => {
+			const pr = window.wp.data.dispatch( 'core/preferences' );
+			pr.set( 'core/edit-post', 'welcomeGuide', false );
+			pr.set( 'core', 'welcomeGuide', false );
+		} ).catch( () => {} );
+		await page.keyboard.press( 'Escape' );
+		const out = {};
+		for ( const [ n, name ] of [ [ 0, 'bound' ], [ 3, 'plain' ] ] ) {
+			await page.evaluate( ( i ) => {
+				const b = window.wp.data.select( 'core/block-editor' ).getBlocks()[ i ];
+				window.wp.data.dispatch( 'core/block-editor' ).selectBlock( b.clientId );
+				window.wp.data.dispatch( 'core/edit-post' )?.openGeneralSidebar?.( 'edit-post/block' );
+			}, n );
+			await page.waitForTimeout( 2500 );
+			await page.screenshot( { path: `${ DIR }/bind-${ name }.png` } );
+		}
+		out.texts = await page.frameLocator( 'iframe[name="editor-canvas"]' ).locator( '[data-type="core/paragraph"]' ).allInnerTexts().catch( () => [] );
+		out.panel = await page.locator( '.components-panel__body' ).allInnerTexts().catch( () => [] );
+		fs.writeFileSync( `${ DIR }/bindings.json`, JSON.stringify( out, null, 1 ) );
+	} );
+} );
