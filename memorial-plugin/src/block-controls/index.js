@@ -159,15 +159,7 @@ function useSections() {
 	}, [] );
 }
 
-/**
- * One post (page or product) with search. Value — post ID (number) or a page path left from earlier.
- * @param root0
- * @param root0.postType
- * @param root0.label
- * @param root0.empty
- * @param root0.value
- * @param root0.onChange
- */
+// One post (page or product) with search. Value — post ID (number) or a page path left from earlier.
 function PostPicker( { postType, label, empty, value, onChange } ) {
 	const [ search, setSearch ] = useState( '' );
 	const id = /^\d+$/.test( String( value || '' ) ) ? Number( value ) : 0;
@@ -212,13 +204,7 @@ function PostPicker( { postType, label, empty, value, onChange } ) {
 	);
 }
 
-/**
- * Several pages in a chosen order. Value — IDs, comma separated (old page paths are kept as they are).
- * @param root0
- * @param root0.label
- * @param root0.value
- * @param root0.onChange
- */
+// Several pages in a chosen order. Value — IDs, comma separated (old page paths are kept as they are).
 function PagesPicker( { label, value, onChange } ) {
 	const list = ids( value );
 	const numeric = list.filter( ( v ) => /^\d+$/.test( v ) ).map( Number );
@@ -279,15 +265,7 @@ function PagesPicker( { label, value, onChange } ) {
 	);
 }
 
-/**
- * One catalog section. Value — slug (attribute “cat”) or term ID (attribute “term”).
- * @param root0
- * @param root0.label
- * @param root0.empty
- * @param root0.value
- * @param root0.byId
- * @param root0.onChange
- */
+// One catalog section. Value — slug (attribute “cat”) or term ID (attribute “term”).
 function SectionPicker( { label, empty, value, byId, onChange } ) {
 	const sections = useSections();
 	const current = sections.find( ( s ) =>
@@ -337,13 +315,7 @@ function SectionPicker( { label, empty, value, byId, onChange } ) {
 	);
 }
 
-/**
- * Several catalog sections. Value — slugs, comma separated.
- * @param root0
- * @param root0.label
- * @param root0.value
- * @param root0.onChange
- */
+// Several catalog sections. Value — slugs, comma separated.
 function SectionsPicker( { label, value, onChange } ) {
 	const sections = useSections();
 	const nameOf = ( v ) =>
@@ -377,13 +349,7 @@ function SectionsPicker( { label, value, onChange } ) {
 	);
 }
 
-/**
- * The chooser of one attribute.
- * @param root0
- * @param root0.picker
- * @param root0.value
- * @param root0.onChange
- */
+// The chooser of one attribute.
 function Picker( { picker, value, onChange } ) {
 	switch ( picker.kind ) {
 		case 'address':
@@ -467,13 +433,7 @@ function Picker( { picker, value, onChange } ) {
 	return null;
 }
 
-/**
- * All choosers of a block; the value is cast to the type of the attribute.
- * @param root0
- * @param root0.name
- * @param root0.attributes
- * @param root0.setAttributes
- */
+// All choosers of a block; the value is cast to the type of the attribute.
 function Pickers( { name, attributes, setAttributes } ) {
 	const pickers = PICKERS[ name ] || {};
 	const type = getBlockType( name )?.attributes || {};
@@ -495,11 +455,7 @@ function Pickers( { name, attributes, setAttributes } ) {
 	) );
 }
 
-/**
- * Does the block find its data on this page (memorial-plugin/v1/block-source)?
- * @param name
- * @param attributes
- */
+// Does the block find its data on this page (memorial-plugin/v1/block-source)?
 function useSource( name, attributes ) {
 	const { postId, postType } = useSelect( ( select ) => {
 		const editor = select( 'core/editor' );
@@ -544,11 +500,7 @@ function useSource( name, attributes ) {
 	return { applies, chosen, source: applies ? source : null };
 }
 
-/**
- * Text under the choosers: what the block shows now when nothing is chosen.
- * @param root0
- * @param root0.source
- */
+// Text under the choosers: what the block shows now when nothing is chosen.
 function AutoNote( { source } ) {
 	if ( ! source?.items?.length ) {
 		return null;
@@ -564,13 +516,7 @@ function AutoNote( { source } ) {
 	);
 }
 
-/**
- * In place of the block: the chooser (nothing found) or the folded line.
- * @param root0
- * @param root0.name
- * @param root0.children
- * @param root0.className
- */
+// In place of the block: the chooser (nothing found) or the folded line.
 function Stand( { name, children, className } ) {
 	const props = useBlockProps( {
 		className: 'memorial-plugin-stand ' + ( className || '' ),
