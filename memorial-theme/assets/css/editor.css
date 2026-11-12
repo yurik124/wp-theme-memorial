@@ -24,7 +24,8 @@
 }
 
 /* Пункт меню с подменю: название и стрелка — в одну строку (в редакторе стрелка уходила под название). */
-.editor-styles-wrapper .header .wp-block-navigation-item {
+.editor-styles-wrapper .header .wp-block-navigation-item,
+.editor-styles-wrapper .header .wp-block-navigation-item__content {
 	flex-direction: row;
 	flex-wrap: nowrap;
 	align-items: center;
