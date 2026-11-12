@@ -368,7 +368,7 @@ function memorial_plugin_works_cards( $a ) {
 		}
 	}
 	if ( ! $works ) {
-		return current_user_can( 'edit_posts' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_works vid="карточки"]: no suitable works with photos — add them in “Our works”.', 'memorial-plugin' ) . '</p>' ) : '';
+		return current_user_can( 'edit_posts' ) ? ( '<p class="is-style-note">' . esc_html__( 'Our works (cards): no suitable works with photos — add them in “Our works”.', 'memorial-plugin' ) . '</p>' ) : '';
 	}
 	$ord  = mb_strtolower( trim( $a['poryadok'] ) );
 	$rand = in_array( $ord, array( 'случайно', 'случайные', 'random' ), true );

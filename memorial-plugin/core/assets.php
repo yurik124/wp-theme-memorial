@@ -243,3 +243,38 @@ function memorial_plugin_editor_block_styles() {
 	}
 }
 add_action( 'enqueue_block_assets', 'memorial_plugin_editor_block_styles', 20 );
+
+/**
+ * Translations of the WordPress packages bundled into the admin screens (@wordpress/dataviews,
+ *
+ * @wordpress/admin-ui): their strings are in the “default” text domain, so the screens take them from
+ * WordPress’s own translation of the editor scripts, which bundle the same packages
+ * (“Search”, “No results”, “Actions”, “Add filter”…).
+ */
+function memorial_plugin_vendor_i18n() {
+	if ( 'en_US' === determine_locale() ) {
+		return;
+	}
+	$handles = array_filter(
+		array( 'memorial-plugin-settings', 'memorial-plugin-catalog', 'memorial-plugin-collections', 'memorial-plugin-convert' ),
+		static fn( $handle ) => wp_script_is( $handle, 'enqueued' )
+	);
+	if ( ! $handles ) {
+		return;
+	}
+	$messages = array();
+	foreach ( array( 'wp-editor', 'wp-edit-site', 'wp-media-utils' ) as $core ) {
+		$json = wp_script_is( $core, 'registered' ) ? load_script_textdomain( $core, 'default' ) : false;
+		$data = $json ? json_decode( $json, true ) : null;
+		if ( ! empty( $data['locale_data']['messages'] ) ) {
+			$messages += $data['locale_data']['messages'];
+		}
+	}
+	if ( ! $messages ) {
+		return;
+	}
+	$js = 'wp.i18n.setLocaleData(' . wp_json_encode( $messages ) . ',"default");';
+	// One screen has one app; the locale data of wp.i18n is shared, so once is enough.
+	wp_add_inline_script( reset( $handles ), $js, 'before' );
+}
+add_action( 'admin_enqueue_scripts', 'memorial_plugin_vendor_i18n', 999 );

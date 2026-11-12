@@ -169,7 +169,6 @@ $memorial_plugin_modules = array(
 	'works/works.php',
 	'works/works-manager.php',
 	// разовые переносы данных.
-	'catalog/catalog-import.php',
 	'catalog/catalog-migrate.php',
 	// SEO, аналитика, заявки.
 	'seo/seo.php',
@@ -238,6 +237,8 @@ require MEMORIAL_PLUGIN_DIR . '/admin/commands.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/floating/floating.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/home.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/home-template.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/home/pages-to-content.php';
+require MEMORIAL_PLUGIN_DIR . '/core/cleanup.php';
 
 /* Включение: адреса товаров/работ заработают после пересборки ссылок (на следующем запросе, когда типы записей уже есть) */
 register_activation_hook(

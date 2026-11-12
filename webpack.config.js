@@ -17,7 +17,6 @@ module.exports = {
 	...base,
 	entry: {
 		'convert/index': path.resolve( __dirname, 'memorial-plugin/src/convert/index.js' ),
-		'import/index': path.resolve( __dirname, 'memorial-plugin/src/import/index.js' ),
 		'inline-value/index': path.resolve( __dirname, 'memorial-plugin/src/inline-value/index.js' ),
 		'settings/index': path.resolve( __dirname, 'memorial-plugin/src/settings/index.js' ),
 		'collections/index': path.resolve( __dirname, 'memorial-plugin/src/collections/index.js' ),

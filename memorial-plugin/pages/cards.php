@@ -122,7 +122,7 @@ add_shortcode(
 		);
 		$pages = memorial_plugin_cards_pages( $a['pages'], (int) get_the_ID() );
 		if ( ! $pages ) {
-			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_cards]: no pages for the cards — add sub-items to this page in the main menu or set pages="page-slug, …".', 'memorial-plugin' ) . '</p>' ) : '';
+			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( 'Section cards: no pages for the cards — add sub-items to this page in the main menu or choose the pages in the block settings.', 'memorial-plugin' ) . '</p>' ) : '';
 		}
 		$show = fn( $k ) => ! memorial_plugin_sc_no( $a[ $k ] );
 		$h    = '<div class="mem-cards">';

@@ -76,6 +76,9 @@ function memorial_plugin_block_keywords() {
 		'contacts-list'   => array( __( 'contacts', 'memorial-plugin' ), __( 'address', 'memorial-plugin' ), __( 'phone', 'memorial-plugin' ) ),
 		'maps'            => array( __( 'map', 'memorial-plugin' ), __( 'address', 'memorial-plugin' ), __( 'route', 'memorial-plugin' ) ),
 		'review-buttons'  => array( __( 'reviews', 'memorial-plugin' ), __( 'Yandex', 'memorial-plugin' ) ),
+		'contacts-badges' => array( __( 'hours', 'memorial-plugin' ), __( 'night', 'memorial-plugin' ), __( 'contacts', 'memorial-plugin' ) ),
+		'contacts-cards'  => array( __( 'contacts', 'memorial-plugin' ), __( 'phone', 'memorial-plugin' ), __( 'address', 'memorial-plugin' ) ),
+		'company-details' => array( __( 'company details', 'memorial-plugin' ), __( 'contacts', 'memorial-plugin' ) ),
 		'review-widget'   => array( __( 'reviews', 'memorial-plugin' ), __( 'Yandex', 'memorial-plugin' ), __( 'widget', 'memorial-plugin' ) ),
 		// Content.
 		'catalog'         => array( __( 'catalog', 'memorial-plugin' ), __( 'products', 'memorial-plugin' ) ),

@@ -566,6 +566,7 @@ select,.sort select{min-height:44px}
 .kontakty__head{margin-bottom:2rem}
 .kontakty__head h1{margin-bottom:.4rem}
 .kontakty__lead{color:var(--mute);margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1rem}
+.kontakty__lead > p{margin:0}
 .kontakty__badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .9rem;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--ink);font-size:1rem;font-weight:500}
 .kontakty__badge .ico{color:var(--gold)}
 .kontakty__badge--night{color:var(--gold3)}

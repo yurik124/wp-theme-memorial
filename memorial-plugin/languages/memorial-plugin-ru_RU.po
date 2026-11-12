@@ -5383,3 +5383,143 @@ msgid_plural "%d posts still use the old [mem_…] shortcodes. They work, but ar
 msgstr[0] "Старые шорткоды [mem_…] остались в %d записи. Они работают, но устарели и будут удалены в 3.0.0."
 msgstr[1] "Старые шорткоды [mem_…] остались в %d записях. Они работают, но устарели и будут удалены в 3.0.0."
 msgstr[2] "Старые шорткоды [mem_…] остались в %d записях. Они работают, но устарели и будут удалены в 3.0.0."
+
+#: prices/prices.php:720
+msgid "(check whether they are up to date; replace them with a site value if you like):"
+msgstr "(проверьте, актуальны ли они; при желании замените значением сайта):"
+
+#: content/patterns.php:43
+msgid "A block with the phone. The title and the text are changed in the block settings."
+msgstr "Блок с телефоном. Заголовок и текст меняются в настройках блока."
+
+#: catalog/catalog-front.php:284
+msgid "Catalog block: the category was not found. Choose it in the block settings."
+msgstr "Блок «Каталог»: раздел не найден. Выберите его в настройках блока."
+
+#: places/places.php:334
+msgid "Cemeteries: no cemeteries added — “Memorial → Cemeteries”. Visitors do not see this message."
+msgstr "Кладбища: кладбища не добавлены — «Мемориал → Кладбища». Посетители это сообщение не видят."
+
+#: blocks/home/home.php:197
+msgid "Contact cards"
+msgstr "Карточки контактов"
+
+#: content/guide.php:148
+msgid "Good to know: there are no published pages inside this page yet. Open the page you need → “Page Attributes” → “Parent” → choose this page."
+msgstr "Полезно знать: внутри этой страницы пока нет опубликованных страниц. Откройте нужную страницу → «Атрибуты страницы» → «Родительская» → выберите эту страницу."
+
+#: places/places.php:181
+msgid "Halls and restaurants for the memorial meal. On a page they are shown by the “Memorial meal halls” block (it is already on the “Memorial meal” page). "
+msgstr "Залы и рестораны для поминального обеда. На странице их выводит блок «Залы для поминок» (он уже стоит на странице «Поминальный обед»). "
+
+#: blocks/home/home.php:205
+msgid "Legal name, taxpayer and registration numbers (Memorial → Contacts)."
+msgstr "Наименование, ИНН и ОГРН (Мемориал → Контакты)."
+
+#: places/places.php:242
+msgid "Memorial meal halls: no halls added — “Memorial → Halls for the memorial meal”. Visitors do not see this message."
+msgstr "Залы для поминок: залы не добавлены — «Мемориал → Залы для поминок». Посетители это сообщение не видят."
+
+#: blocks/home/home.php:190
+msgid "Opening hours badge"
+msgstr "Часы работы"
+
+#: blocks/home/home.php:191
+msgid "Opening hours of the first address, or the night line when it is set (Memorial → Contacts)."
+msgstr "Часы работы первого адреса или ночная линия, если она указана (Мемориал → Контакты)."
+
+#: works/works.php:371
+msgid "Our works (cards): no suitable works with photos — add them in “Our works”."
+msgstr "Наши работы (карточки): нет подходящих работ с фото — добавьте их в «Наших работах»."
+
+#: pages/photos.php:99
+msgid "Our works (photos): there are no photos in “Our works” yet."
+msgstr "Наши работы (фото): в «Наших работах» пока нет фото."
+
+#: reviews/rewio.php:237
+msgid "Paste the key and save, tick the branches — the reviews load by themselves. They are shown on a page by the “Rewio reviews” block."
+msgstr "Вставьте ключ и сохраните, отметьте филиалы — отзывы загрузятся сами. На странице их выводит блок «Отзывы Rewio»."
+
+#: prices/prices.php:239
+msgid "Prices from here are put into the pages automatically — change them only here. In the text of a page a price is put with the “Site value” button of the paragraph toolbar; catalog prices and the number of models are counted from the products."
+msgstr "Цены отсюда подставляются на страницы автоматически — меняйте их только здесь. В текст страницы цену ставят кнопкой «Значение сайта» на панели абзаца; цены каталога и число моделей считаются из товаров."
+
+#: prices/prices.php:123
+msgid "Prices mentioned in the texts of pages. In the text a price is put with the “Site value” button of the paragraph toolbar → “Price”. The price can be a number (500), a range (200–300) or words (free) — the ₽ sign is added to numbers by itself."
+msgstr "Цены, которые упоминаются в текстах страниц. В текст цену ставят кнопкой «Значение сайта» на панели абзаца → «Цена». Цена — число (500), диапазон (200–300) или слова (бесплатно); знак ₽ к числам добавляется сам."
+
+#: prices/prices.php:240
+msgid "Prices now:"
+msgstr "Цены сейчас:"
+
+#: content/faq.php:120
+msgid "Questions and answers: there are no questions on the pages yet (“Details” blocks)."
+msgstr "Вопросы и ответы: на страницах пока нет вопросов (блоков «Подробности»)."
+
+#: blocks/home/pages-to-content.php:319
+msgid "Return the home page and contacts to the templates"
+msgstr "Вернуть главную и «Контакты» в шаблоны"
+
+#: reviews/reviews.php:128
+msgid "Review services for the “Reviews” page: on the page they are shown by the “Reviews” block. "
+msgstr "Сервисы отзывов для страницы «Отзывы»: на странице их выводит блок «Отзывы». "
+
+#: reviews/reviews.php:187
+msgid "Reviews block: add the review services in “Memorial → Reviews”."
+msgstr "Блок «Отзывы»: добавьте сервисы отзывов в «Мемориал → Отзывы»."
+
+#: reviews/rewio.php:1198
+msgid "Rewio reviews: showing the reviews is off — the tick in “Memorial → Reviews → Rewio reviews → 1. Connection”. Only you see this message."
+msgstr "Отзывы Rewio: показ отзывов выключен — галочка в «Мемориал → Отзывы → Отзывы Rewio → 1. Подключение». Это сообщение видите только вы."
+
+#: reviews/rewio.php:1210
+msgid "Rewio reviews: the reviews are not loaded yet — “Memorial → Reviews → Rewio reviews” → “Load reviews now”. Only you see this message."
+msgstr "Отзывы Rewio: отзывы ещё не загружены — «Мемориал → Отзывы → Отзывы Rewio» → «Загрузить отзывы сейчас». Это сообщение видите только вы."
+
+#: pages/cards.php:125
+msgid "Section cards: no pages for the cards — add sub-items to this page in the main menu or choose the pages in the block settings."
+msgstr "Карточки разделов: нет страниц для карточек — добавьте этой странице подпункты в главном меню или выберите страницы в настройках блока."
+
+#: core/settings.php:1227
+msgid "Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited like any page: “Pages → Home”."
+msgstr "Карточки услуг с фото и ценами — на главной и в блоке «Наши услуги» на других страницах. Тексты главной правятся как у любой страницы: «Страницы → Главная»."
+
+#: reviews/rewio.php:33
+msgid "Show the reviews on the site (where the “Rewio reviews” block is)"
+msgstr "Показывать отзывы на сайте (там, где стоит блок «Отзывы Rewio»)"
+
+#: prices/prices.php:24
+msgid "Shown on the home page and by the “Funeral packages” block on any page."
+msgstr "Выводятся на главной и блоком «Пакеты похорон» на любой странице."
+
+#: places/places.php:188
+msgid "The list of cemeteries is shown by the “Cemeteries” block on any page (for example, “Cemeteries of Belgorod and the district”). "
+msgstr "Список кладбищ выводит блок «Кладбища» на любой странице (например, «Кладбища Белгорода и района»). "
+
+#: prices/prices.php:75
+msgid "The table on the cremation page — the “Cremation” block. The total is counted automatically; in the text of other pages it is put with the “Site value” button → “Price”."
+msgstr "Таблица на странице кремации — блок «Кремация». Итог считается сам; в тексте других страниц его ставят кнопкой «Значение сайта» → «Цена»."
+
+#: prices/prices.php:111
+msgid "The “Cremation” card next to the funeral packages (where the “Funeral packages” block is; on other pages — the “Cremation card” setting of the block)"
+msgstr "Карточка «Кремация» рядом с пакетами похорон (там, где стоит блок «Пакеты похорон»; на других страницах — настройка блока «Карточка кремации»)"
+
+#: blocks/home/pages-to-content.php:320
+msgid "Undoes the move of the home page and the “Contacts” page into the page content: the pages get their previous content and the templates show the sections again."
+msgstr "Отменяет перенос главной и страницы «Контакты» в содержимое страниц: страницам возвращается прежнее содержимое, а шаблоны снова выводят разделы."
+
+#: places/places.php:189
+msgid "Which cemeteries to show and whether to show the filter buttons is set in the block settings. "
+msgstr "Какие кладбища показывать и показывать ли кнопки-фильтры — в настройках блока. "
+
+#: blocks/block-meta.php:81
+msgid "company details"
+msgstr "реквизиты"
+
+#: prices/prices.php:711
+msgid "— the cremation total, the ribbon, the delivery and the catalog prices that match the current ones in the texts of pages become site values that change by themselves."
+msgstr "— итог кремации, лента, доставка и цены каталога, совпадающие с текущими, в текстах страниц станут значениями сайта, которые меняются сами."
+
+#: blocks/home/home.php:198
+msgid "“Call”, “Write” and the addresses with directions (Memorial → Contacts)."
+msgstr "«Позвонить», «Написать» и адреса с маршрутом (Мемориал → Контакты)."

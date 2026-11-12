@@ -40,7 +40,7 @@ add_action(
 			),
 			'cta'         => array(
 				__( 'Call to action', 'memorial-plugin' ),
-				__( 'A block with the phone. The title and the text are changed in the shortcode.', 'memorial-plugin' ),
+				__( 'A block with the phone. The title and the text are changed in the block settings.', 'memorial-plugin' ),
 				$sc( '[mem_cta title="Позвоните — подскажем, с чего начать" text="Звонки принимаем круглосуточно."]' ),
 			),
 			'handmade'    => array(

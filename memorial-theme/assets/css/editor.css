@@ -1,0 +1,24 @@
+/*
+ * Только в редакторе сайта. На сайте шапку раскладывает скрипт (assets/js/header-fit.js): меню не
+ * помещается в строку — шапка переходит в две строки или в бургер. В редакторе скрипт не работает,
+ * поэтому меню всегда идёт отдельной строкой под логотипом и контактами, а пункты не наезжают друг на друга.
+ */
+.editor-styles-wrapper .header__in {
+	flex-wrap: wrap;
+	row-gap: 0.5rem;
+	padding-block: 0.5rem;
+}
+
+.editor-styles-wrapper .header .wp-block-navigation {
+	flex: 1 1 100%;
+	order: 3;
+}
+
+.editor-styles-wrapper .header .wp-block-navigation__container {
+	flex-wrap: wrap;
+	gap: 0.25rem 1.25rem;
+}
+
+.editor-styles-wrapper .header .burger {
+	display: none;
+}

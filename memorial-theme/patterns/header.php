@@ -20,9 +20,7 @@ defined( 'ABSPATH' ) || exit;
 <!-- wp:group {"className":"logo__text","layout":{"type":"default"},"style":{"spacing":{"blockGap":"0"}}} -->
 <div class="wp-block-group logo__text"><!-- wp:site-title {"level":0} /-->
 
-<!-- wp:paragraph {"className":"logo__sub"} -->
-<p class="logo__sub"><?php esc_html_e( 'funeral company', 'memorial-theme' ); ?></p>
-<!-- /wp:paragraph --></div>
+<!-- wp:site-tagline {"className":"logo__sub"} /--></div>
 <!-- /wp:group --></div>
 <!-- /wp:group -->
 

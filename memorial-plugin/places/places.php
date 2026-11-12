@@ -178,15 +178,15 @@ add_filter(
 			'slug'   => 'mem-rest',
 			'title'  => __( 'Halls for the memorial meal', 'memorial-plugin' ),
 			'schema' => 'memorial_plugin_rest_schema',
-			'intro'  => __( 'Halls and restaurants for the memorial meal. The block is the “Memorial meal halls” block (or the <code>[mem_restaurants]</code> shortcode, already on the “Memorial meal” page). ', 'memorial-plugin' )
+			'intro'  => __( 'Halls and restaurants for the memorial meal. On a page they are shown by the “Memorial meal halls” block (it is already on the “Memorial meal” page). ', 'memorial-plugin' )
 					. __( 'Phones and websites of the restaurants are not shown on the site — a visitor orders through you with the “Call me back” button.', 'memorial-plugin' ),
 		);
 		$pages['mem_cem']  = array(
 			'slug'   => 'mem-cem',
 			'title'  => __( 'Cemeteries', 'memorial-plugin' ),
 			'schema' => 'memorial_plugin_cem_schema',
-			'intro'  => __( 'The list of cemeteries is the “Cemeteries” block (or the <code>[mem_cemeteries]</code> shortcode) on any page (for example, “Cemeteries of Belgorod and the district”). ', 'memorial-plugin' )
-					. __( 'Only active ones: <code>[mem_cemeteries status="действующие"]</code>, without the filter buttons: <code>filtr="нет"</code>. ', 'memorial-plugin' )
+			'intro'  => __( 'The list of cemeteries is shown by the “Cemeteries” block on any page (for example, “Cemeteries of Belgorod and the district”). ', 'memorial-plugin' )
+					. __( 'Which cemeteries to show and whether to show the filter buttons is set in the block settings. ', 'memorial-plugin' )
 					. __( 'Order — with the ↑ ↓ arrows to the right of a cemetery.', 'memorial-plugin' ),
 		);
 		return $pages;
@@ -239,7 +239,7 @@ add_shortcode(
 		);
 		$items = array_values( array_filter( (array) $o['items'], fn( $r ) => trim( $r['name'] ?? '' ) !== '' ) );
 		if ( ! $items ) {
-			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_restaurants]: no halls added — “Memorial → Halls for the memorial meal”. Visitors do not see this block.', 'memorial-plugin' ) . '</p>' ) : '';
+			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( 'Memorial meal halls: no halls added — “Memorial → Halls for the memorial meal”. Visitors do not see this message.', 'memorial-plugin' ) . '</p>' ) : '';
 		}
 		$btn = trim( $o['block']['btn'] ?? '' );
 		$btn = '' !== $btn ? $btn : __( 'Order a meal here', 'memorial-plugin' );
@@ -331,7 +331,7 @@ add_shortcode(
 			$items = array_values( array_filter( $items, fn( $r ) => in_array( $r['status'] ?? 'open', $want, true ) ) );
 		}
 		if ( ! $items ) {
-			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_cemeteries]: no cemeteries added — “Memorial → Cemeteries”. Visitors do not see this block.', 'memorial-plugin' ) . '</p>' ) : '';
+			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( 'Cemeteries: no cemeteries added — “Memorial → Cemeteries”. Visitors do not see this message.', 'memorial-plugin' ) . '</p>' ) : '';
 		}
 		$names = memorial_plugin_cem_status_names();
 		$cnt   = array_count_values( array_map( fn( $r ) => $r['status'] ?? 'open', $items ) );

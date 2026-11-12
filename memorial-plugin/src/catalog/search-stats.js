@@ -22,11 +22,11 @@ export default function SearchStats() {
 		type: 'table',
 		titleField: 'query',
 		fields: [ 'count', 'found', 'where', 'last' ],
-		sort: { field: 'count', direction: 'desc' },
+		// First what found nothing (it shows which answers the site lacks), then the rest.
+		sort: { field: 'found', direction: 'asc' },
 		perPage: 50,
 		page: 1,
-		// First what found nothing: it shows which answers the site lacks.
-		filters: [ { field: 'nothing', operator: 'is', value: true } ],
+		filters: [],
 		search: '',
 	} );
 

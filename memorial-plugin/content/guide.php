@@ -145,7 +145,7 @@ add_shortcode(
 		$pages = array_filter( $pages, fn( $p ) => ! post_password_required( $p ) );
 		if ( ! $pages ) {
 			return current_user_can( 'edit_pages' )
-			? ( '<p class="is-style-note">' . esc_html__( '[mem_guide]: there are no published pages inside this page yet. Open the page you need → “Page Attributes” → “Parent” → choose this page.', 'memorial-plugin' ) . '</p>' ) : '';
+			? ( '<p class="is-style-note">' . esc_html__( 'Good to know: there are no published pages inside this page yet. Open the page you need → “Page Attributes” → “Parent” → choose this page.', 'memorial-plugin' ) . '</p>' ) : '';
 		}
 
 		$cards = '';

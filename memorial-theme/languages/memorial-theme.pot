@@ -261,7 +261,7 @@ msgstr ""
 msgid "Memorial: design"
 msgstr ""
 
-#: patterns/header.php:34
+#: patterns/header.php:32
 msgid "Menu"
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr ""
 
 #: patterns/home.php
 msgctxt "Pattern description"
-msgid "The first screen and the sections of the home page. The texts come from “Memorial → Home page” at the moment the theme is activated; after that they are edited right in the template."
+msgid "The first screen and the sections of the home page. On a new site the plugin puts them into the content of the front page once; after that they are edited like any page."
 msgstr ""
 
 #: patterns/footer.php
@@ -502,7 +502,7 @@ msgstr ""
 msgid "We will help to get the certificates and arrange the documents."
 msgstr ""
 
-#: patterns/header.php:24
+#: inc/tagline-migrate.php:26
 msgid "funeral company"
 msgstr ""
 

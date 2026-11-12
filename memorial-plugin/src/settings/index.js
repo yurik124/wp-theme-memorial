@@ -353,10 +353,14 @@ function ControlFor( { def, value, onChange } ) {
 				<TextControl
 					{ ...common }
 					type={
-						{ number: 'number', email: 'email', color: 'color' }[
-							def.type
-						] || 'text'
+						{
+							number: 'number',
+							email: 'email',
+							color: 'color',
+							secret: 'password',
+						}[ def.type ] || 'text'
 					}
+					autoComplete={ def.type === 'secret' ? 'off' : undefined }
 					placeholder={ def.placeholder }
 					value={ value ?? '' }
 					onChange={ onChange }
@@ -504,14 +508,20 @@ function App( { option } ) {
 	return (
 		<Page
 			title={ page.title }
-			subTitle={ page.intro ? <RawHTML>{ page.intro }</RawHTML> : null }
 			actions={ actions }
 		>
 			<Flex
 				direction="column"
+				align="stretch"
 				gap={ 4 }
 				className="memorial-plugin-settings"
 			>
+				{ page.intro && (
+					// The intro may hold lists and paragraphs, so it is not the page subtitle (a <p>).
+					<RawHTML className="memorial-plugin-settings__intro">
+						{ page.intro }
+					</RawHTML>
+				) }
 				{ notice && (
 					<Notice
 						status={ notice.status }

@@ -117,7 +117,7 @@ add_shortcode(
 		$skip   = array_map( 'intval', array_filter( explode( ',', $a['exclude'] ) ) );
 		$groups = array_values( array_filter( memorial_plugin_faq_all(), fn( $g ) => ! in_array( $g['id'], $skip, true ) && get_the_ID() !== $g['id'] ) );
 		if ( ! $groups ) {
-			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_faq]: there are no questions on the pages yet (“Details” blocks).', 'memorial-plugin' ) . '</p>' ) : '';
+			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( 'Questions and answers: there are no questions on the pages yet (“Details” blocks).', 'memorial-plugin' ) . '</p>' ) : '';
 		}
 
 		$total = array_sum( array_map( fn( $g ) => count( $g['qs'] ), $groups ) );

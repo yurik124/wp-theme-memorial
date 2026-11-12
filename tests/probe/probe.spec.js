@@ -288,7 +288,7 @@ test.describe( 'аудит админки', () => {
 				.map( ( a ) => ( { href: a.getAttribute( 'href' ), text: a.textContent.trim() } ) )
 				.filter( ( x ) => /mem[-_]|memorial|post_type=mem_/.test( x.href || '' ) )
 		);
-		const hidden = [ 'admin.php?page=mem-import', 'admin.php?page=mem-rewio', 'admin.php?page=memorial-plugin-convert', 'options.php?page=mem-import' ];
+		const hidden = [ 'admin.php?page=mem-rewio' ];
 		const screens = [ ...new Set( [ ...menu.map( ( x ) => x.href ), ...hidden ] ) ];
 		const report = { menu, screens: {} };
 		const watch = ( p ) => {

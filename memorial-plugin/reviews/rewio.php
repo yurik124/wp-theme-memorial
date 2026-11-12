@@ -24,13 +24,13 @@ function memorial_plugin_rewio_schema() {
 			'help'   => __( 'The key is in the app.rewio.ru account (it starts with hrev_). A read-only key is enough. The key is kept on the site’s server, visitors do not see it.', 'memorial-plugin' ),
 			'fields' => array(
 				'key' => array(
-					'type'        => 'text',
+					'type'        => 'secret',
 					'label'       => __( 'API key', 'memorial-plugin' ),
 					'placeholder' => 'hrev_…',
 				),
 				'on'  => array(
 					'type'  => 'checkbox',
-					'label' => __( 'Show the reviews on the site (where the [mem_rewio] shortcode or the block is)', 'memorial-plugin' ),
+					'label' => __( 'Show the reviews on the site (where the “Rewio reviews” block is)', 'memorial-plugin' ),
 				),
 			),
 		),
@@ -234,7 +234,7 @@ add_filter(
 			'hidden' => true,
 			'schema' => 'memorial_plugin_rewio_schema',
 			'intro'  => __( 'Reviews from Yandex Maps, 2GIS, Zoon and other sites through the <a href="https://rewio.ru/" target="_blank" rel="noopener">Rewio</a> service — as cards in the site’s design. ', 'memorial-plugin' )
-					. __( 'Paste the key and save, tick the branches — the reviews load by themselves. They are shown on a page by the “Rewio reviews” block (or the <code>[mem_rewio]</code> shortcode).', 'memorial-plugin' ),
+					. __( 'Paste the key and save, tick the branches — the reviews load by themselves. They are shown on a page by the “Rewio reviews” block.', 'memorial-plugin' ),
 		);
 		return $pages;
 	}
@@ -1195,7 +1195,7 @@ function memorial_plugin_rewio_html( $atts = array() ) {
 		'mem_rewio'
 	);
 	if ( empty( $o['api']['on'] ) ) {
-		return current_user_can( 'manage_options' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_rewio]: showing the reviews is off — the tick in “Memorial → Rewio reviews → 1. Connection”. Only you see this message.', 'memorial-plugin' ) . '</p>' ) : '';
+		return current_user_can( 'manage_options' ) ? ( '<p class="is-style-note">' . esc_html__( 'Rewio reviews: showing the reviews is off — the tick in “Memorial → Reviews → Rewio reviews → 1. Connection”. Only you see this message.', 'memorial-plugin' ) . '</p>' ) : '';
 	}
 	$c = memorial_plugin_rewio_cache_get();
 	// давно не обновлялось (например, отключён WP-Cron) — обновим в фоне, страница не ждёт.
@@ -1207,7 +1207,7 @@ function memorial_plugin_rewio_html( $atts = array() ) {
 		}
 	}
 	if ( empty( $c['groups'] ) ) {
-		return current_user_can( 'manage_options' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_rewio]: the reviews are not loaded yet — “Memorial → Rewio reviews” → “Load reviews now”. Only you see this message.', 'memorial-plugin' ) . '</p>' ) : '';
+		return current_user_can( 'manage_options' ) ? ( '<p class="is-style-note">' . esc_html__( 'Rewio reviews: the reviews are not loaded yet — “Memorial → Reviews → Rewio reviews” → “Load reviews now”. Only you see this message.', 'memorial-plugin' ) . '</p>' ) : '';
 	}
 
 	$hidden = array_map( 'intval', (array) get_option( 'mem_rewio_hidden', array() ) );

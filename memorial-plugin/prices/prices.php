@@ -21,7 +21,7 @@ function memorial_plugin_prices_schema() {
 		'packages'  => array(
 			'type'   => 'group',
 			'label'  => __( 'Funeral packages', 'memorial-plugin' ),
-			'help'   => __( 'Shown on the home page (the “Service packages” block — its title and visibility are set in “Home page”) and by the “Funeral packages” block (or the [mem_packages] shortcode) on any page.', 'memorial-plugin' ),
+			'help'   => __( 'Shown on the home page and by the “Funeral packages” block on any page.', 'memorial-plugin' ),
 			'fields' => array(
 				'badge' => array(
 					'type'  => 'text',
@@ -72,7 +72,7 @@ function memorial_plugin_prices_schema() {
 		'cremation' => array(
 			'type'   => 'group',
 			'label'  => __( 'Cremation package', 'memorial-plugin' ),
-			'help'   => __( 'The table on the cremation page — the “Cremation” block ([mem_cremation]). The total is counted automatically; on other pages it is shown by [mem_price id="kremaciya"].', 'memorial-plugin' ),
+			'help'   => __( 'The table on the cremation page — the “Cremation” block. The total is counted automatically; in the text of other pages it is put with the “Site value” button → “Price”.', 'memorial-plugin' ),
 			'fields' => array(
 				'head_l'     => array(
 					'type'  => 'text',
@@ -108,7 +108,7 @@ function memorial_plugin_prices_schema() {
 				),
 				'card'       => array(
 					'type'  => 'checkbox',
-					'label' => __( 'The “Cremation” card next to the funeral packages on the “Prices” page (where the packages block is; on other pages — [mem_packages cremation="1"])', 'memorial-plugin' ),
+					'label' => __( 'The “Cremation” card next to the funeral packages (where the “Funeral packages” block is; on other pages — the “Cremation card” setting of the block)', 'memorial-plugin' ),
 				),
 				'card_title' => array(
 					'type'        => 'text',
@@ -120,7 +120,7 @@ function memorial_plugin_prices_schema() {
 		'other'     => array(
 			'type'   => 'group',
 			'label'  => __( 'Separate prices', 'memorial-plugin' ),
-			'help'   => __( 'Prices mentioned in the texts of pages. A shortcode with the price code is put into the text, for example [mem_price id="lenta"]. The price can be a number (500), a range (200–300) or words (free) — the theme adds the ₽ sign to numbers itself.', 'memorial-plugin' ),
+			'help'   => __( 'Prices mentioned in the texts of pages. In the text a price is put with the “Site value” button of the paragraph toolbar → “Price”. The price can be a number (500), a range (200–300) or words (free) — the ₽ sign is added to numbers by itself.', 'memorial-plugin' ),
 			'fields' => array(
 				'items' => array(
 					'type'   => 'repeater',
@@ -223,22 +223,21 @@ function memorial_plugin_prices( $section ) {
 add_filter(
 	'memorial_plugin_admin_pages',
 	function ( $pages ) {
-		$codes = '<code>[mem_price id="kremaciya"]</code> — ' . esc_html( memorial_plugin_price_value( 'kremaciya' ) );
+		$vals = array( __( 'Cremation', 'memorial-plugin' ) . ' — ' . memorial_plugin_price_value( 'kremaciya' ) );
 		foreach ( memorial_plugin_prices( 'other' )['items'] ?? array() as $it ) {
-			if ( trim( $it['code'] ?? '' ) === '' ) {
-				continue;
+			if ( trim( $it['code'] ?? '' ) !== '' ) {
+				$vals[] = ( '' !== trim( $it['name'] ?? '' ) ? $it['name'] : $it['code'] ) . ' — ' . memorial_plugin_price_value( $it['code'] );
 			}
-			$codes .= ' · <code>[mem_price id="' . esc_html( $it['code'] ) . '"]</code> — ' . esc_html( memorial_plugin_price_value( $it['code'] ) );
 		}
 		foreach ( memorial_plugin_packages() as $p ) {
-			$codes .= ' · <code>[mem_price paket="' . esc_html( $p['name'] ) . '"]</code> — ' . esc_html( memorial_plugin_rub( array_sum( array_column( $p['items'], 1 ) ) ) );
+			$vals[] = $p['name'] . ' — ' . memorial_plugin_rub( array_sum( array_column( $p['items'], 1 ) ) );
 		}
 		$pages['mem_prices'] = array(
 			'slug'   => 'mem-prices',
 			'title'  => __( 'Prices', 'memorial-plugin' ),
 			'schema' => 'memorial_plugin_prices_schema',
-			'intro'  => __( 'Prices from here are put into the pages automatically — change them only here.<br><b>Shortcodes for the text:</b> ', 'memorial-plugin' ) . $codes
-				. __( '<br>Catalog prices are counted from the products: <code>[mem_cat_price]</code>, <code>[mem_cat_count]</code>.', 'memorial-plugin' )
+			'intro'  => '<p>' . esc_html__( 'Prices from here are put into the pages automatically — change them only here. In the text of a page a price is put with the “Site value” button of the paragraph toolbar; catalog prices and the number of models are counted from the products.', 'memorial-plugin' ) . '</p>'
+				. '<p><b>' . esc_html__( 'Prices now:', 'memorial-plugin' ) . '</b> ' . esc_html( implode( ' · ', $vals ) ) . '</p>'
 				. memorial_plugin_prices_audit_html(),
 		);
 		return $pages;
@@ -709,7 +708,7 @@ function memorial_plugin_prices_audit_html() {
 			. __( '. The previous text is kept in the page’s “Revisions”.', 'memorial-plugin' );
 	}
 	$btn = ' <a class="button" href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=mem-prices' ), 'mem_reprice', 'mem_reprice' ) ) . ( '">' . esc_html__( 'Switch the prices in the texts to automatic ones', 'memorial-plugin' ) . '</a>' )
-		. ( ' <span style="color:#666">' . esc_html__( '— the theme will replace the cremation total, the ribbon, the delivery and the catalog prices that match the current ones in the texts of pages with shortcodes.', 'memorial-plugin' ) . '</span>' );
+		. ( ' <span style="color:#666">' . esc_html__( '— the cremation total, the ribbon, the delivery and the catalog prices that match the current ones in the texts of pages become site values that change by themselves.', 'memorial-plugin' ) . '</span>' );
 	if ( ! empty( $_GET['repriced'] ) ) {
 		$h .= ( '<br><br>' . esc_html__( '✔ Done.', 'memorial-plugin' ) );
 	}
@@ -718,7 +717,7 @@ function memorial_plugin_prices_audit_html() {
 		return $h . ( '<br><br>' . esc_html__( '✔ No prices written into the texts by hand were found.', 'memorial-plugin' ) );
 	}
 	$h .= '<br><br>' . $btn;
-	$h .= ( '<br><br><b>' . esc_html__( 'Prices written into the text by hand — they do not change by themselves', 'memorial-plugin' ) . '</b> ' . esc_html__( '(check whether they are up to date; replace them with a shortcode if you like):', 'memorial-plugin' ) . '<ul style="list-style:disc;margin-left:1.5em">' );
+	$h .= ( '<br><br><b>' . esc_html__( 'Prices written into the text by hand — they do not change by themselves', 'memorial-plugin' ) . '</b> ' . esc_html__( '(check whether they are up to date; replace them with a site value if you like):', 'memorial-plugin' ) . '<ul style="list-style:disc;margin-left:1.5em">' );
 	foreach ( $list as [$obj, $lines] ) {
 		$link = $obj instanceof WP_Term ? get_edit_term_link( $obj ) : get_edit_post_link( $obj->ID );
 		$name = $obj instanceof WP_Term ? sprintf( /* translators: %s: catalog section */ __( 'Catalog section “%s”', 'memorial-plugin' ), $obj->name ) : $obj->post_title;

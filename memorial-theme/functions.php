@@ -45,7 +45,7 @@ add_action(
 		);
 		add_theme_support( 'editor-styles' );
 		// В редакторе страница выглядит как на сайте: общие стили темы (шапка, подвал, разделы) и оформление текста.
-		add_editor_style( array( 'assets/css/main.css', 'assets/css/content.css' ) );
+		add_editor_style( array( 'assets/css/main.css', 'assets/css/content.css', 'assets/css/editor.css' ) );
 	}
 );
 
@@ -190,6 +190,7 @@ require get_template_directory() . '/inc/design.php';
 require get_template_directory() . '/inc/design-migrate.php';
 require get_template_directory() . '/inc/laurel.php';
 require get_template_directory() . '/inc/navigation-migrate.php';
+require get_template_directory() . '/inc/tagline-migrate.php';
 
 /**
  * Script of the header (assets/js/header-fit.js) right after the Header template part: it measures the menu

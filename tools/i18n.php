@@ -26,7 +26,6 @@ const MEMORIAL_I18N_SCRIPTS = [
 	'memorial-plugin-collections'  => 'collections',
 	'memorial-plugin-commands'     => 'commands',
 	'memorial-plugin-convert'      => 'convert',
-	'memorial-plugin-import'       => 'import',
 	'memorial-plugin-editor-meta'  => 'editor-meta',
 	'memorial-plugin-inline-value' => 'inline-value',
 ];

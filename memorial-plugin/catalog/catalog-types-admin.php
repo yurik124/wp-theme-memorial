@@ -125,7 +125,6 @@ function memorial_plugin_types_all() {
 	return array(
 		'types'  => array_values( array_filter( array_map( static fn( $t ) => memorial_plugin_types_data( (int) $t->term_id ), memorial_plugin_manager_types() ) ) ),
 		'ratios' => $ratios,
-		'import' => admin_url( 'admin.php?page=mem-import' ),
 	);
 }
 

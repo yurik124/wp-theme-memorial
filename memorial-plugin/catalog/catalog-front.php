@@ -281,7 +281,7 @@ add_shortcode(
 		$root = memorial_plugin_resolve_cat( $a['cat'], get_the_ID() );
 		if ( ! $root ) {
 			return current_user_can( 'edit_posts' )
-			? ( '<p class="is-style-note">' . esc_html__( '[mem_catalog]: the category was not found. Set it like this: [mem_catalog cat="category-slug"].', 'memorial-plugin' ) . '</p>' ) : '';
+			? ( '<p class="is-style-note">' . esc_html__( 'Catalog block: the category was not found. Choose it in the block settings.', 'memorial-plugin' ) . '</p>' ) : '';
 		}
 
 		// Разделы: товары самой категории (без заголовка) + подкатегории.

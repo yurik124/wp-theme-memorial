@@ -125,7 +125,7 @@ add_filter(
 			'title'     => __( 'Reviews', 'memorial-plugin' ),
 			'schema'    => 'memorial_plugin_reviews_schema',
 			'intro_tab' => true,
-			'intro'     => __( 'Review services for the “Reviews” page. Put the “Reviews” block (or the <code>[mem_reviews]</code> shortcode) on the page. ', 'memorial-plugin' )
+			'intro'     => __( 'Review services for the “Reviews” page: on the page they are shown by the “Reviews” block. ', 'memorial-plugin' )
 					. __( 'The reviews block on the home page is set up separately: “Home page → “Reviews” block”.', 'memorial-plugin' ),
 		);
 		return $pages;
@@ -184,7 +184,7 @@ add_shortcode(
 		$src  = array_values( array_filter( $o['sources'] ?? array(), fn( $s ) => trim( $s['link'] ?? '' ) !== '' || trim( $s['embed'] ?? '' ) !== '' ) );
 		$book = function_exists( 'memorial_plugin_bookreviews_html' ) ? memorial_plugin_bookreviews_html() : '';
 		if ( ! $src ) {
-			return $book ? $book : ( current_user_can( 'manage_options' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_reviews]: add the review services in “Memorial → Reviews”.', 'memorial-plugin' ) . '</p>' ) : '' );
+			return $book ? $book : ( current_user_can( 'manage_options' ) ? ( '<p class="is-style-note">' . esc_html__( 'Reviews block: add the review services in “Memorial → Reviews”.', 'memorial-plugin' ) . '</p>' ) : '' );
 		}
 		$names = memorial_plugin_review_services();
 		$label = fn( $s ) => 'other' === $s['service'] && '' !== trim( $s['name'] ?? '' ) ? trim( $s['name'] ) : ( $names[ $s['service'] ] ?? __( 'Reviews', 'memorial-plugin' ) );

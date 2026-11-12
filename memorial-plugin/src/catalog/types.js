@@ -806,12 +806,6 @@ export default function Types() {
 					>
 						{ __( 'New type', 'memorial-plugin' ) }
 					</Button>
-					<Button variant="tertiary" href={ data.import }>
-						{ __(
-							'Move the catalog from old pages',
-							'memorial-plugin'
-						) }
-					</Button>
 				</Flex>
 			}
 		>

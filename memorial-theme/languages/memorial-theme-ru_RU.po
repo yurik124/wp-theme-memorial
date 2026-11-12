@@ -521,3 +521,8 @@ msgstr "фото %1$d из %2$d"
 #: functions.php:64
 msgid "submenu"
 msgstr "подменю"
+
+#: patterns/home.php
+msgctxt "Pattern description"
+msgid "The first screen and the sections of the home page. On a new site the plugin puts them into the content of the front page once; after that they are edited like any page."
+msgstr "Первый экран и разделы главной. На новом сайте плагин один раз переносит их в содержимое главной страницы; дальше они правятся как любая страница."

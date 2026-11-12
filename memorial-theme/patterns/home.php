@@ -4,7 +4,7 @@
  * Slug: memorial-theme/home
  * Categories: memorial-theme
  * Inserter: no
- * Description: The first screen and the sections of the home page. The texts come from “Memorial → Home page” at the moment the theme is activated; after that they are edited right in the template.
+ * Description: The first screen and the sections of the home page. On a new site the plugin puts them into the content of the front page once; after that they are edited like any page.
  *
  * Разделы строит плагин Memorial Plugin (memorial_plugin_home_markup()): тексты — блоками ядра,
  * данные сайта (услуги, каталог, цены, контакты, карты, отзывы) — его блоками. При первом входе в админку

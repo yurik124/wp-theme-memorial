@@ -280,7 +280,7 @@ body:has(.memorial-plugin-admin) .components-modal__frame {
 	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 	gap: 16px 24px;
 
-	> .dataforms-layouts-regular__field:has(textarea, fieldset) {
+	> .dataforms-layouts-regular__field:has(textarea, fieldset, .memorial-plugin-settings__repeater, .memorial-plugin-settings__order, .memorial-plugin-settings__image) {
 		grid-column: 1 / -1;
 	}
 }

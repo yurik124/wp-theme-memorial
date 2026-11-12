@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
 function memorial_plugin_home_blocks_list() {
 	$icons = array_keys( function_exists( 'memorial_plugin_icon_labels' ) ? memorial_plugin_icon_labels() : array( 'phone' => '' ) );
 	return array(
-		'laurel'         => array(
+		'laurel'          => array(
 			'title'  => __( 'Laurel decoration', 'memorial-plugin' ),
 			'desc'   => __( 'Laurel branch, divider, leaf or wreath drawn by the theme.', 'memorial-plugin' ),
 			'icon'   => 'palmtree',
@@ -40,7 +40,7 @@ function memorial_plugin_home_blocks_list() {
 			),
 			'render' => 'memorial_plugin_home_render_laurel',
 		),
-		'icon'           => array(
+		'icon'            => array(
 			'title'  => __( 'Memorial icon', 'memorial-plugin' ),
 			'desc'   => __( 'Icon from the Memorial set in a round frame.', 'memorial-plugin' ),
 			'icon'   => 'star-empty',
@@ -54,7 +54,7 @@ function memorial_plugin_home_blocks_list() {
 			),
 			'render' => 'memorial_plugin_home_render_icon',
 		),
-		'phone-button'   => array(
+		'phone-button'    => array(
 			'title'  => __( 'Phone button', 'memorial-plugin' ),
 			'desc'   => __( 'Button that calls the main phone number (Memorial → Contacts).', 'memorial-plugin' ),
 			'icon'   => 'phone',
@@ -73,7 +73,7 @@ function memorial_plugin_home_blocks_list() {
 			),
 			'render' => 'memorial_plugin_home_render_phone_button',
 		),
-		'link-button'    => array(
+		'link-button'     => array(
 			'title'  => __( 'Link button', 'memorial-plugin' ),
 			'desc'   => __( 'Button-styled link to a page of the site.', 'memorial-plugin' ),
 			'icon'   => 'button',
@@ -112,14 +112,14 @@ function memorial_plugin_home_blocks_list() {
 			),
 			'render' => 'memorial_plugin_home_render_link_button',
 		),
-		'night-line'     => array(
+		'night-line'      => array(
 			'title'  => __( 'Night phone line', 'memorial-plugin' ),
 			'desc'   => __( 'Note about calls at night (Memorial → Contacts).', 'memorial-plugin' ),
 			'icon'   => 'clock',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_night',
 		),
-		'stat'           => array(
+		'stat'            => array(
 			'title'  => __( 'Figure in a laurel wreath', 'memorial-plugin' ),
 			'desc'   => __( 'Number with a caption in a laurel wreath; the number counts up when it scrolls into view.', 'memorial-plugin' ),
 			'icon'   => 'awards',
@@ -137,54 +137,75 @@ function memorial_plugin_home_blocks_list() {
 			),
 			'render' => 'memorial_plugin_home_render_stat',
 		),
-		'catalog-tiles'  => array(
+		'catalog-tiles'   => array(
 			'title'  => __( 'Catalog tiles', 'memorial-plugin' ),
 			'desc'   => __( 'Catalog sections as photo tiles (menu sub-items of the catalog page, or all sections).', 'memorial-plugin' ),
 			'icon'   => 'screenoptions',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_tiles',
 		),
-		'services-grid'  => array(
+		'services-grid'   => array(
 			'title'  => __( 'Services grid', 'memorial-plugin' ),
 			'desc'   => __( 'Service cards of the home page (Memorial → Home page → Services), full width.', 'memorial-plugin' ),
 			'icon'   => 'screenoptions',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_services',
 		),
-		'packages-grid'  => array(
+		'packages-grid'   => array(
 			'title'  => __( 'Funeral packages grid', 'memorial-plugin' ),
 			'desc'   => __( 'Funeral package cards as on the home page (Memorial → Prices).', 'memorial-plugin' ),
 			'icon'   => 'money-alt',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_packages',
 		),
-		'contacts-list'  => array(
+		'contacts-list'   => array(
 			'title'  => __( 'Contacts list', 'memorial-plugin' ),
 			'desc'   => __( 'All phones, emails, messengers and addresses with hours (Memorial → Contacts).', 'memorial-plugin' ),
 			'icon'   => 'id',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_contacts',
 		),
-		'maps'           => array(
+		'maps'            => array(
 			'title'  => __( 'Maps', 'memorial-plugin' ),
 			'desc'   => __( 'Map for each address; loads on a click so the page stays fast.', 'memorial-plugin' ),
 			'icon'   => 'location-alt',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_maps',
 		),
-		'review-buttons' => array(
+		'review-buttons'  => array(
 			'title'  => __( 'Yandex review buttons', 'memorial-plugin' ),
 			'desc'   => __( '“Leave a review” and “We are on Yandex Maps” buttons.', 'memorial-plugin' ),
 			'icon'   => 'external',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_review_buttons',
 		),
-		'review-widget'  => array(
+		'review-widget'   => array(
 			'title'  => __( 'Yandex reviews widget', 'memorial-plugin' ),
 			'desc'   => __( 'Official Yandex Maps reviews widget; loads after cookie consent or on a click.', 'memorial-plugin' ),
 			'icon'   => 'star-filled',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_review_widget',
+		),
+		'contacts-badges' => array(
+			'title'  => __( 'Opening hours badge', 'memorial-plugin' ),
+			'desc'   => __( 'Opening hours of the first address, or the night line when it is set (Memorial → Contacts).', 'memorial-plugin' ),
+			'icon'   => 'clock',
+			'attrs'  => array(),
+			'render' => static fn() => memorial_plugin_home_part( 'contacts-badges' ),
+		),
+		'contacts-cards'  => array(
+			'title'  => __( 'Contact cards', 'memorial-plugin' ),
+			'desc'   => __( '“Call”, “Write” and the addresses with directions (Memorial → Contacts).', 'memorial-plugin' ),
+			'icon'   => 'id-alt',
+			'attrs'  => array(),
+			'render' => static fn() => memorial_plugin_home_part( 'contacts-cards' ),
+		),
+		'company-details' => array(
+			'title'  => __( 'Company details', 'memorial-plugin' ),
+			'desc'   => __( 'Legal name, taxpayer and registration numbers (Memorial → Contacts).', 'memorial-plugin' ),
+			'icon'   => 'businessperson',
+			'attrs'  => array(),
+			'render' => static fn() => memorial_plugin_home_part( 'company-details' ),
 		),
 	);
 }

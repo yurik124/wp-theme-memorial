@@ -96,7 +96,7 @@ function memorial_plugin_works_photos( $a ) {
 		}
 	}
 	if ( ! $items ) {
-		return current_user_can( 'edit_posts' ) ? ( '<p class="is-style-note">' . esc_html__( '[mem_works vid="фото"]: there are no photos in “Our works” yet.', 'memorial-plugin' ) . '</p>' ) : '';
+		return current_user_can( 'edit_posts' ) ? ( '<p class="is-style-note">' . esc_html__( 'Our works (photos): there are no photos in “Our works” yet.', 'memorial-plugin' ) . '</p>' ) : '';
 	}
 	$rand = in_array( mb_strtolower( trim( $a['poryadok'] ) ), array( 'случайно', 'случайные', 'random' ), true );
 	return memorial_plugin_photos_grid( $items, $n, $rand, 3 );

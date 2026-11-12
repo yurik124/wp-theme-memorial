@@ -1224,7 +1224,7 @@ function memorial_plugin_admin_pages() {
 			'slug'   => 'mem-home',
 			'title'  => __( 'Services', 'memorial-plugin' ),
 			'schema' => 'memorial_plugin_home_services_schema',
-			'intro'  => __( 'Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited right on it: “Appearance → Editor → Templates → Home”.', 'memorial-plugin' ),
+			'intro'  => __( 'Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited like any page: “Pages → Home”.', 'memorial-plugin' ),
 		)
 		: null;
 	return apply_filters(
