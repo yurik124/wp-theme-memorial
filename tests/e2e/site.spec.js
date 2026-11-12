@@ -67,7 +67,9 @@ test( 'главная и «Контакты» — разделы в содерж
 	// Перенос — при входе в админку; на этом экране есть wp.apiFetch.
 	await page.goto( '/wp-admin/admin.php?page=memorial-plugin-convert' );
 	const data = await page.evaluate( async () => {
-		const settings = await window.wp.apiFetch( { path: '/wp/v2/settings' } );
+		const settings = await window.wp.apiFetch( {
+			path: '/wp/v2/settings',
+		} );
 		const front = await window.wp.apiFetch( {
 			path: '/wp/v2/pages/' + settings.page_on_front + '?context=edit',
 		} );
