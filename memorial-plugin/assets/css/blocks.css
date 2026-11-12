@@ -71,8 +71,8 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 .work__media{display:flex;flex-direction:column;gap:.5rem;padding:.6rem;background:var(--wp--preset--color--base,#fbfaf6);min-width:0}
 .work__img{position:relative;display:block;background:var(--wp--preset--color--base-2,#f2efe6);border-radius:10px;overflow:hidden;cursor:zoom-in}
 .work__stage{position:relative}
-.work__img img{width:100%;aspect-ratio:var(--war,4/3);height:auto;object-fit:contain;border-radius:0!important;display:block;margin:0!important}
-.work__thumb img{margin:0!important}
+.work__img img{width:100%;aspect-ratio:var(--war,4/3);height:auto;object-fit:contain;border-radius:0!important;display:block;margin:0}
+.work__thumb img{margin:0}
 .work__arr{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:var(--wp--preset--color--secondary,#3f4d36);font-size:1.7rem;line-height:1;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18);padding:0 0 3px;transition:background .15s}
 .work__arr:hover{background:#fff}
 .work__arr--l{left:.6rem}
@@ -128,7 +128,7 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 .mfaq__search input:focus{outline:2px solid var(--wp--preset--color--primary,#5e7052);outline-offset:1px}
 .content .mfaq__none{margin:.8rem 0 0;color:var(--wp--preset--color--contrast-2,#66675e)}
 .mfaq__toc{display:flex;flex-wrap:wrap;gap:.45rem;margin:1rem 0 .5rem}
-.mfaq__toc .chip{text-decoration:none!important;color:var(--wp--preset--color--contrast,#2a2c28)!important;font-size:.95rem}
+.mfaq__toc .chip{text-decoration:none;color:var(--wp--preset--color--contrast,#2a2c28);font-size:.95rem}
 .mfaq__toc .chip small{color:var(--wp--preset--color--contrast-2,#66675e)}
 .mfaq__group{scroll-margin-top:90px;margin-top:2rem}
 .content .mfaq__title{margin:0 0 .8rem}
@@ -166,7 +166,7 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 .mfaq__group:first-of-type .mfaq__title{border-top:0}
 @media (max-width:600px){.mfaq__toc{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-.25rem;padding:0 .25rem .2rem}.mfaq__toc::-webkit-scrollbar{display:none}.mfaq__toc .chip{flex:none;white-space:nowrap}}
 /* Активная тема — белый текст на тёмном */
-.mfaq__toc .chip.is-on,.mfaq__toc button.chip.is-on{color:var(--wp--preset--color--on-primary,#fff)!important}
+.mfaq__toc .chip.is-on,.mfaq__toc button.chip.is-on{color:var(--wp--preset--color--on-primary,#fff)}
 .mfaq .srow{margin:1rem 0 .5rem}
 .mfaq .srow>.mfaq__toc{margin:0}
 @media (max-width:700px){.mem-pkgs .pkgs{gap:2.4rem}}
@@ -186,9 +186,9 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 /* Панель каталога и «Наших работ»: первая строка — кнопки разделов на всю ширину, ниже — сортировка */
 .mcat__bar,.mcat__bar.is-stuck{flex-direction:column;align-items:stretch;flex-wrap:nowrap;gap:.55rem}
 .mcat__navwrap{flex:none;width:100%}
-.mcat__sort{margin:0!important;align-self:flex-start;display:flex;align-items:center;gap:.5rem}
+.mcat__sort{margin:0;align-self:flex-start;display:flex;align-items:center;gap:.5rem}
 .mcat__sortlbl{font-size:.88rem;color:var(--wp--preset--color--contrast-2,#66675e)}
-.mcat__sort select{max-width:none!important}
+.mcat__sort select{max-width:none}
 @media (max-width:600px){.mcat__sort select{padding:.4rem .6rem;font-size:.88rem}}
 .mcat__bar .mcat__sort{align-self:flex-end}
 /* Отзывы из книги */
@@ -327,11 +327,11 @@ button.rwo__pl[aria-pressed=true]{background:#fff;border-color:var(--wp--preset-
 /* [mem_works vid="карточки"] — примеры работ карточками (вид как у галереи «Карточки с подписью») */
 .mem-wcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;margin:1.5rem 0}
 @media (max-width:600px){.mem-wcards{grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}}
-.mem-wcard{display:flex;flex-direction:column;background:#fff;border:1px solid var(--wp--preset--color--line,#e2ded2);border-radius:12px;padding:.7rem .7rem 0;overflow:hidden;text-decoration:none!important;color:var(--wp--preset--color--contrast,#2a2c28);transition:box-shadow .2s,transform .2s}
+.mem-wcard{display:flex;flex-direction:column;background:#fff;border:1px solid var(--wp--preset--color--line,#e2ded2);border-radius:12px;padding:.7rem .7rem 0;overflow:hidden;text-decoration:none;color:var(--wp--preset--color--contrast,#2a2c28);transition:box-shadow .2s,transform .2s}
 .mem-wcard[hidden]{display:none}
 a.mem-wcard:hover{box-shadow:0 10px 26px -12px rgba(0,0,0,.25);transform:translateY(-2px)}
 .mem-wcard__ph{display:block}
-.mem-wcard__img{display:block;width:100%;height:auto!important;aspect-ratio:var(--mem-ar,3/4);object-fit:contain;background:var(--wp--preset--color--base-2,#f2efe6);border-radius:6px;margin:0!important}
+.mem-wcard__img{display:block;width:100%;height:auto;aspect-ratio:var(--mem-ar,3/4);object-fit:contain;background:var(--wp--preset--color--base-2,#f2efe6);border-radius:6px;margin:0!important}
 .mem-wcard__cap{display:block;margin-top:auto;text-align:center;font-size:.92rem;line-height:1.35;padding:.6rem .2rem .75rem;color:var(--wp--preset--color--contrast,#2a2c28)}
 .mem-wcard__cap strong{display:block;font:600 1.15rem/1.2 var(--wp--preset--font-family--cormorant-garamond,Georgia,serif);color:var(--wp--preset--color--secondary,#3f4d36)}
 @media (max-width:600px){.mem-wcard{padding:.5rem .5rem 0}.mem-wcard__cap{font-size:.85rem}.mem-wcard__cap strong{font-size:1rem}}
@@ -359,7 +359,7 @@ figure.mem-fit > a::before{content:"";position:absolute;inset:-16px;z-index:-1;b
 @media (max-width:600px){.mem-photos{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}}
 .mem-photo{position:relative;display:block;overflow:hidden;border-radius:10px;background:var(--wp--preset--color--base-2,#f2efe6);isolation:isolate;text-decoration:none!important}
 .mem-photo[hidden]{display:none}
-.mem-photo img{display:block;width:100%;height:auto!important;aspect-ratio:var(--mem-ar,4/3);object-fit:cover;margin:0!important;transition:transform .3s}
+.mem-photo img{display:block;width:100%;height:auto;aspect-ratio:var(--mem-ar,4/3);object-fit:cover;margin:0;transition:transform .3s}
 .mem-photo.mem-fit img{object-fit:contain}
 .mem-photo.mem-fit::before{content:"";position:absolute;inset:-16px;z-index:-1;background:var(--mbg,none) center/cover no-repeat;filter:blur(14px) brightness(.95);opacity:.9}
 .mem-photo:hover img{transform:scale(1.03)}

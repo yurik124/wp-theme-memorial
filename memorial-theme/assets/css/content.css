@@ -105,8 +105,8 @@
 .ico-truck{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 16.5V6h12v10.5M14 9.5h4l3.5 3.5v3.5H14'/%3E%3Ccircle cx='6.5' cy='17.5' r='2'/%3E%3Ccircle cx='17.5' cy='17.5' r='2'/%3E%3C/svg%3E")}
 /* Ряд кнопок с прокруткой: стрелки и затухание */
 /* Прайс: слова не рвутся посередине (WordPress у таблиц с «фиксированной шириной» разрешает это — отменяем),
-   короткие ячейки (цены) не переносятся, длинный текст переносится по словам */.wp-block-table.is-style-price td,.wp-block-table.is-style-price th{word-break:normal!important;overflow-wrap:normal!important;hyphens:none}
-.wp-block-table.is-style-price table.has-fixed-layout{table-layout:auto!important}
+   короткие ячейки (цены) не переносятся, длинный текст переносится по словам */.wp-block-table.is-style-price td,.wp-block-table.is-style-price th{word-break:normal;overflow-wrap:normal;hyphens:none}
+.wp-block-table.is-style-price table.has-fixed-layout{table-layout:auto}
 .wp-block-table.is-style-price td:last-child,.wp-block-table.is-style-price th:last-child{white-space:normal;min-width:7.5rem}
 .wp-block-table.is-style-price :is(td,th).mem-nw{white-space:nowrap}
 @media (min-width:701px){.wp-block-table.is-style-price :is(td,th).mem-nw-d{white-space:nowrap}}
@@ -151,7 +151,7 @@
 /* Таблица цен на телефоне (две колонки): ширина колонок постоянная — 52 % / 48 %,
    поэтому цена не сжимается в узкий столбик и не переносится по одному слову */
 @media (max-width:600px){
-  .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))){table-layout:fixed!important}
+  .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))){table-layout:fixed}
   .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) td:first-child,
   .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) th:first-child{width:52%;min-width:0;padding-right:.5rem}
   .wp-block-table.is-style-price table:not(:has(tr > :nth-child(3))) td:last-child,
