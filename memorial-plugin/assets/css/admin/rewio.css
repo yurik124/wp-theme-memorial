@@ -1,0 +1,252 @@
+/**
+ * Memorial → Reviews: Rewio status panel, choice of branches and sites, preview of the loaded reviews
+ * (reviews/rewio.php). Loaded only on that settings screen.
+ */
+
+.mrw-state {
+	border-left: 4px solid #dba617;
+}
+
+.mrw-state.is-ok {
+	border-left-color: #00a32a;
+}
+
+.mrw-state.is-bad {
+	border-left-color: #d63638;
+}
+
+.mrw-state h2 {
+	display: none;
+}
+
+.mrw-state__row {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	flex-wrap: wrap;
+}
+
+.mrw-state__dot {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: #dba617;
+	flex: none;
+}
+
+.mrw-state.is-ok .mrw-state__dot {
+	background: #00a32a;
+}
+
+.mrw-state.is-bad .mrw-state__dot {
+	background: #d63638;
+}
+
+.mrw-state__txt {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	flex: 1;
+	min-width: 260px;
+}
+
+.mrw-state__txt span {
+	color: #646970;
+	font-size: 13px;
+}
+
+.mrw-state__log {
+	font-size: 12px!important;
+}
+
+.mrw-state__msg {
+	margin: 8px 0 0;
+	font-weight: 600;
+}
+
+.mrw-state__msg:empty {
+	display: none;
+}
+
+.mrw-state__msg.is-err {
+	color: #b32d2e;
+}
+
+.mrw-state__msg.is-ok {
+	color: #00a32a;
+}
+
+.mrw__prev {
+	margin-top: 12px;
+}
+
+.mrw__prev summary {
+	cursor: pointer;
+	color: #2271b1;
+	font-weight: 500;
+}
+
+.mrw__prev h3 {
+	margin: 14px 0 6px;
+}
+
+.mrw__prev .is-hid td {
+	opacity: .45;
+}
+
+.mrw__h {
+	font-weight: 600;
+	font-size: 14px;
+	margin: 4px 0 8px;
+}
+
+.mrw__hint {
+	font-weight: 400;
+	color: #646970;
+	font-size: 12.5px;
+	margin-left: 6px;
+}
+
+.mrw__quick {
+	margin: 0 0 8px;
+	color: #50575e;
+}
+
+.mrw__objs {
+	display: grid;
+	gap: 8px;
+	margin-bottom: 10px;
+}
+
+.mrw__obj {
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	padding: 10px 12px;
+	background: #fff;
+}
+
+.mrw__obj.is-on {
+	border-color: #2271b1;
+	background: #f0f6fc;
+}
+
+.mrw__obj.is-demo {
+	opacity: .75;
+}
+
+.mrw__objhead {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 10px;
+	align-items: center;
+	cursor: pointer;
+}
+
+.mrw__cnt {
+	color: #646970;
+	font-size: 13px;
+}
+
+.mrw__obj .mrw__srcs {
+	margin: 8px 0 0 26px;
+}
+
+.rw-ico {
+	--c: #888;
+	display: inline-grid;
+	place-items: center;
+	width: 18px;
+	height: 18px;
+	border-radius: 5px;
+	background: var(--c);
+	color: #fff;
+	font: 700 10px/1 system-ui,sans-serif;
+	vertical-align: -4px;
+}
+
+.rw-ico::before {
+	content: attr(data-g);
+}
+
+.mrw__tag {
+	font-style: normal;
+	font-size: 11.5px;
+	background: #f0f0f1;
+	border-radius: 4px;
+	padding: 1px 6px;
+	color: #50575e;
+}
+
+.mrw__tag.is-wait {
+	background: #fcf9e8;
+	color: #8a6d00;
+}
+
+.mrw__tag.is-bad {
+	background: #fcf0f1;
+	color: #b32d2e;
+}
+
+.mrw__tabs {
+	display: block;
+	margin: 4px 0 16px;
+}
+
+.mrw__srcs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.mrw__src {
+	border: 1px solid #dcdcde;
+	border-radius: 999px;
+	padding: 4px 12px 4px 8px;
+	cursor: pointer;
+	background: #fff;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+}
+
+.mrw__src:has(input:checked) {
+	border-color: #2271b1;
+	background: #f0f6fc;
+}
+
+.mrw__src input {
+	margin: 0 4px 0 0;
+}
+
+.mrw__foot {
+	margin: 10px 0 0;
+}
+
+.mrw__saved {
+	color: #00a32a;
+	font-weight: 600;
+	margin-right: 10px;
+}
+
+.mrw__bad {
+	color: #b32d2e;
+	font-weight: 600;
+}
+
+.mrw__empty {
+	color: #646970;
+}
+
+.mrw__col-hide {
+	width: 110px;
+}
+
+.mrw__col-author {
+	width: 190px;
+}
+
+.mrw__stars {
+	color: #996800;
+}

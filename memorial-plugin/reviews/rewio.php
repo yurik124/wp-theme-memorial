@@ -966,6 +966,45 @@ add_filter(
 	2
 );
 
+/**
+ * Styles and script of the Rewio panel — only on its settings screen (Memorial → Reviews → Rewio).
+ *
+ * @param string $hook_suffix Admin page hook.
+ */
+function memorial_plugin_rewio_admin_assets( $hook_suffix ) {
+	if ( ! str_ends_with( (string) $hook_suffix, '_page_mem-rewio' ) ) {
+		return;
+	}
+	$css = memorial_plugin_asset( '/assets/css/admin/rewio.css' );
+	$js  = memorial_plugin_asset( '/assets/js/admin/rewio.js' );
+	wp_enqueue_style( 'memorial-plugin-rewio-admin', MEMORIAL_PLUGIN_URL . $css, array(), (string) filemtime( MEMORIAL_PLUGIN_DIR . $css ) );
+	wp_enqueue_script( 'memorial-plugin-rewio-admin', MEMORIAL_PLUGIN_URL . $js, array(), (string) filemtime( MEMORIAL_PLUGIN_DIR . $js ), array( 'in_footer' => true ) );
+	wp_add_inline_script(
+		'memorial-plugin-rewio-admin',
+		'window.memorialPluginRewio = ' . wp_json_encode(
+			array(
+				'url'   => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'mem_rewio' ),
+				't'     => array(
+					'noAnswer'     => __( 'The site did not respond', 'memorial-plugin' ),
+					'error'        => __( 'error', 'memorial-plugin' ),
+					'timeout'      => __( 'most likely, the server ran out of time', 'memorial-plugin' ),
+					'retry'        => __( 'Try again in a minute.', 'memorial-plugin' ),
+					'loading'      => __( 'Loading reviews… usually it takes 10–30 seconds', 'memorial-plugin' ),
+					'failed'       => __( 'Error', 'memorial-plugin' ),
+					'saving'       => __( 'Saving…', 'memorial-plugin' ),
+					'saved'        => __( 'Saved ✓ The reviews will update within a minute', 'memorial-plugin' ),
+					'notSaved'     => __( 'Not saved', 'memorial-plugin' ),
+					'notSavedSave' => __( 'Not saved — click “Save” at the bottom', 'memorial-plugin' ),
+					'oneSite'      => __( 'At least one site must stay — otherwise untick the branch itself', 'memorial-plugin' ),
+				),
+			)
+		) . ';',
+		'before'
+	);
+}
+add_action( 'admin_enqueue_scripts', 'memorial_plugin_rewio_admin_assets' );
+
 /* Состояние и предпросмотр — над настройками */
 add_action(
 	'memorial_plugin_admin_after_intro',
@@ -1025,8 +1064,8 @@ add_action(
 			<table class="widefat striped"><tbody>
 				<?php foreach ( $g['reviews'] as $r ) : ?>
 			<tr<?php echo in_array( $r['id'], $hidden, true ) ? ' class="is-hid"' : ''; ?>>
-				<td style="width:110px"><label><input type="checkbox" data-rw-hide="<?php echo (int) $r['id']; ?>"<?php checked( in_array( $r['id'], $hidden, true ) ); ?>> <?php esc_html_e( 'hide', 'memorial-plugin' ); ?></label></td>
-				<td style="width:190px"><b><?php echo esc_html( $r['author'] ); ?></b><br><span style="color:#f5b301"><?php echo esc_html( str_repeat( '★', (int) round( (float) $r['rating'] ) ) ); ?></span><br><small><?php echo esc_html( ( $c['sources'][ $r['src'] ]['name'] ?? $r['slug'] ) . ' · ' . memorial_plugin_rewio_date( $r['date'] ) ); ?></small></td>
+				<td class="mrw__col-hide"><label><input type="checkbox" data-rw-hide="<?php echo (int) $r['id']; ?>"<?php checked( in_array( $r['id'], $hidden, true ) ); ?>> <?php esc_html_e( 'hide', 'memorial-plugin' ); ?></label></td>
+				<td class="mrw__col-author"><b><?php echo esc_html( $r['author'] ); ?></b><br><span class="mrw__stars"><?php echo esc_html( str_repeat( '★', (int) round( (float) $r['rating'] ) ) ); ?></span><br><small><?php echo esc_html( ( $c['sources'][ $r['src'] ]['name'] ?? $r['slug'] ) . ' · ' . memorial_plugin_rewio_date( $r['date'] ) ); ?></small></td>
 				<td><?php echo esc_html( wp_trim_words( $r['text'], 40, '…' ) ); ?>
 					<?php
 					if ( $r['imgs'] ) {
@@ -1040,129 +1079,6 @@ add_action(
 		</details>
 		<?php endif; ?>
 	</section>
-	<style>
-		.mrw-state{border-left:4px solid #dba617}
-		.mrw-state.is-ok{border-left-color:#00a32a}.mrw-state.is-bad{border-left-color:#d63638}
-		.mrw-state h2{display:none}
-		.mrw-state__row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-		.mrw-state__dot{width:12px;height:12px;border-radius:50%;background:#dba617;flex:none}
-		.mrw-state.is-ok .mrw-state__dot{background:#00a32a}.mrw-state.is-bad .mrw-state__dot{background:#d63638}
-		.mrw-state__txt{display:flex;flex-direction:column;gap:2px;flex:1;min-width:260px}
-		.mrw-state__txt span{color:#646970;font-size:13px}
-		.mrw-state__log{font-size:12px!important}
-		.mrw-state__msg{margin:8px 0 0;font-weight:600}.mrw-state__msg:empty{display:none}
-		.mrw-state__msg.is-err{color:#b32d2e}.mrw-state__msg.is-ok{color:#00a32a}
-		.mrw__prev{margin-top:12px}.mrw__prev summary{cursor:pointer;color:#2271b1;font-weight:500}
-		.mrw__prev h3{margin:14px 0 6px}.mrw__prev .is-hid td{opacity:.45}
-		.mrw__h{font-weight:600;font-size:14px;margin:4px 0 8px}
-		.mrw__hint{font-weight:400;color:#646970;font-size:12.5px;margin-left:6px}
-		.mrw__quick{margin:0 0 8px;color:#50575e}
-		.mrw__objs{display:grid;gap:8px;margin-bottom:10px}
-		.mrw__obj{border:1px solid #dcdcde;border-radius:8px;padding:10px 12px;background:#fff}
-		.mrw__obj.is-on{border-color:#2271b1;background:#f0f6fc}
-		.mrw__obj.is-demo{opacity:.75}
-		.mrw__objhead{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;cursor:pointer}
-		.mrw__cnt{color:#646970;font-size:13px}
-		.mrw__obj .mrw__srcs{margin:8px 0 0 26px}
-		.rw-ico{--c:#888;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:5px;background:var(--c);color:#fff;font:700 10px/1 system-ui,sans-serif;vertical-align:-4px}
-		.rw-ico::before{content:attr(data-g)}
-		.mrw__tag{font-style:normal;font-size:11.5px;background:#f0f0f1;border-radius:4px;padding:1px 6px;color:#50575e}
-		.mrw__tag.is-wait{background:#fcf9e8;color:#8a6d00}.mrw__tag.is-bad{background:#fcf0f1;color:#b32d2e}
-		.mrw__tabs{display:block;margin:4px 0 16px}
-		.mrw__srcs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
-		.mrw__src{border:1px solid #dcdcde;border-radius:999px;padding:4px 12px 4px 8px;cursor:pointer;background:#fff;display:inline-flex;align-items:center;gap:6px;font-size:13px}
-		.mrw__src:has(input:checked){border-color:#2271b1;background:#f0f6fc}
-		.mrw__src input{margin:0 4px 0 0}
-		.mrw__foot{margin:10px 0 0}
-		.mrw__saved{color:#00a32a;font-weight:600;margin-right:10px}
-		.mrw__bad{color:#b32d2e;font-weight:600}.mrw__empty{color:#646970}
-	</style>
-	<script>
-	jQuery(function ($) {
-		const A = 
-		<?php
-		echo wp_json_encode(
-			array(
-				'url'   => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'mem_rewio' ),
-				't'     => array(
-					'noAnswer'     => __( 'The site did not respond', 'memorial-plugin' ),
-					'error'        => __( 'error', 'memorial-plugin' ),
-					'timeout'      => __( 'most likely, the server ran out of time', 'memorial-plugin' ),
-					'retry'        => __( 'Try again in a minute.', 'memorial-plugin' ),
-					'loading'      => __( 'Loading reviews… usually it takes 10–30 seconds', 'memorial-plugin' ),
-					'failed'       => __( 'Error', 'memorial-plugin' ),
-					'saving'       => __( 'Saving…', 'memorial-plugin' ),
-					'saved'        => __( 'Saved ✓ The reviews will update within a minute', 'memorial-plugin' ),
-					'notSaved'     => __( 'Not saved', 'memorial-plugin' ),
-					'notSavedSave' => __( 'Not saved — click “Save” at the bottom', 'memorial-plugin' ),
-					'oneSite'      => __( 'At least one site must stay — otherwise untick the branch itself', 'memorial-plugin' ),
-				),
-			)
-		);
-		?>
-		;
-		const T = A.t;
-		const msg = document.querySelector('.mrw-state__msg');
-		const say = (t, cls) => { if (!msg) return; msg.textContent = t; msg.className = 'mrw-state__msg ' + (cls || ''); };
-		const failText = x => T.noAnswer + (x && x.status ? ' (' + T.error + ' ' + x.status + (x.status >= 500 ? ' — ' + T.timeout : '') + ')' : '') + '. ' + T.retry;
-		// загрузить сейчас / обновить список
-		document.addEventListener('click', e => {
-		const b = e.target.closest('[data-rw]'); if (!b) return;
-		const act = b.dataset.rw;
-		b.disabled = true;
-		if (act === 'refresh') say(T.loading);
-		$.post(A.url, { action: 'mem_rewio_' + act, _ajax_nonce: A.nonce }).done(r => {
-			b.disabled = false;
-			if (!r || !r.success) { say((r && r.data) || T.failed, 'is-err'); if (act === 'catalog') say((r && r.data) || T.failed, 'is-err'); return; }
-			if (act === 'refresh') say(r.data, 'is-ok');
-			setTimeout(() => location.reload(), act === 'refresh' ? 800 : 0);
-		}).fail(x => { b.disabled = false; say(failText(x), 'is-err'); });
-		});
-		// выбор филиалов и площадок — сохраняется сразу
-		const box = document.querySelector('[data-rw-box]');
-		if (box) {
-		const saved = box.querySelector('.mrw__saved');
-		const setField = (n, v) => { const f = document.querySelector('[data-rw-field="' + n + '"]'); if (f) f.value = v; };
-		const collect = () => {
-			const objs = [...box.querySelectorAll('[data-rw-obj]:checked')].map(i => i.dataset.rwObj).join(',');
-			// площадки по филиалам: записываем только филиалы, где сняты не все галочки
-			const per = [...box.querySelectorAll('[data-rw-objbox]')].map(ob => {
-			const all = [...ob.querySelectorAll('[data-rw-src]')], on = all.filter(i => i.checked);
-			return on.length && on.length < all.length ? ob.dataset.rwObjbox + ':' + on.map(i => i.dataset.rwSrc).join('.') : '';
-			}).filter(Boolean).join(';');
-			const tabs = box.querySelector('[data-rw-tabs]')?.checked ? 1 : 0;
-			box.querySelectorAll('[data-rw-objbox]').forEach(ob => ob.classList.toggle('is-on', ob.querySelector('[data-rw-obj]').checked));
-			setField('objects', objs); setField('sources', ''); setField('per', per);
-			saved.textContent = T.saving;
-			$.post(A.url, { action: 'mem_rewio_scope', _ajax_nonce: A.nonce, objects: objs, sources: '', per, tabs })
-			.done(r => { saved.textContent = r && r.success ? T.saved : T.notSaved; })
-			.fail(() => { saved.textContent = T.notSavedSave; });
-		};
-		box.addEventListener('change', e => {
-			const t = e.target;
-			if (t.matches('[data-rw-src]')) {
-			const ob = t.closest('[data-rw-objbox]');
-			if (!ob.querySelector('[data-rw-src]:checked')) { t.checked = true; saved.textContent = T.oneSite; return; }
-			ob.querySelector('[data-rw-obj]').checked = true; // настроили площадки — значит, филиал нужен
-			}
-			if (t.matches('[data-rw-obj],[data-rw-src],[data-rw-tabs]')) collect();
-		});
-		box.addEventListener('click', e => {
-			const f = e.target.closest('[data-rw-folder]'); if (!f) return;
-			const ids = f.dataset.rwFolder ? f.dataset.rwFolder.split(',') : [];
-			box.querySelectorAll('[data-rw-obj]').forEach(i => { i.checked = ids.includes(i.dataset.rwObj); });
-			collect();
-		});
-		}
-		// скрыть / вернуть отзыв
-		document.addEventListener('change', e => {
-		const c = e.target.closest('[data-rw-hide]'); if (!c) return;
-		c.closest('tr').classList.toggle('is-hid', c.checked);
-		$.post(A.url, { action: 'mem_rewio_hide', _ajax_nonce: A.nonce, id: c.dataset.rwHide, on: c.checked ? 1 : 0 });
-		});
-	});
-	</script>
 		<?php
 	}
 );

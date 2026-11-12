@@ -1,0 +1,183 @@
+/**
+ * Memorial → Reviews: Rewio status panel (reviews/rewio.php).
+ *
+ * “Load reviews now”, the choice of branches and sites (saved right away) and hiding single reviews.
+ * Requests go to admin-ajax.php with the nonce from window.memorialPluginRewio.
+ */
+( function () {
+	const A = window.memorialPluginRewio;
+	if ( ! A ) {
+		return;
+	}
+	const T = A.t;
+
+	/**
+	 * POST to admin-ajax.php.
+	 *
+	 * @param {Object} data Fields of the request (action and its parameters).
+	 * @return {Promise<Object>} Parsed JSON answer.
+	 */
+	const post = ( data ) => {
+		const body = new URLSearchParams( { _ajax_nonce: A.nonce, ...data } );
+		return window
+			.fetch( A.url, { method: 'POST', credentials: 'same-origin', body } )
+			.then( ( res ) => {
+				if ( ! res.ok ) {
+					const err = new Error( res.statusText );
+					err.status = res.status;
+					throw err;
+				}
+				return res.json();
+			} );
+	};
+
+	const msg = document.querySelector( '.mrw-state__msg' );
+	const say = ( text, cls ) => {
+		if ( ! msg ) {
+			return;
+		}
+		msg.textContent = text;
+		msg.className = 'mrw-state__msg ' + ( cls || '' );
+	};
+	const failText = ( x ) =>
+		T.noAnswer +
+		( x && x.status
+			? ' (' +
+			  T.error +
+			  ' ' +
+			  x.status +
+			  ( x.status >= 500 ? ' — ' + T.timeout : '' ) +
+			  ')'
+			: '' ) +
+		'. ' +
+		T.retry;
+
+	// Load now / refresh the list of branches.
+	document.addEventListener( 'click', ( e ) => {
+		const b = e.target.closest( '[data-rw]' );
+		if ( ! b ) {
+			return;
+		}
+		const act = b.dataset.rw;
+		b.disabled = true;
+		if ( act === 'refresh' ) {
+			say( T.loading );
+		}
+		post( { action: 'mem_rewio_' + act } )
+			.then( ( r ) => {
+				b.disabled = false;
+				if ( ! r || ! r.success ) {
+					say( ( r && r.data ) || T.failed, 'is-err' );
+					return;
+				}
+				if ( act === 'refresh' ) {
+					say( r.data, 'is-ok' );
+				}
+				window.setTimeout(
+					() => window.location.reload(),
+					act === 'refresh' ? 800 : 0
+				);
+			} )
+			.catch( ( x ) => {
+				b.disabled = false;
+				say( failText( x ), 'is-err' );
+			} );
+	} );
+
+	// Branches and sites: saved right away.
+	const box = document.querySelector( '[data-rw-box]' );
+	if ( box ) {
+		const saved = box.querySelector( '.mrw__saved' );
+		const setField = ( name, value ) => {
+			const f = document.querySelector(
+				'[data-rw-field="' + name + '"]'
+			);
+			if ( f ) {
+				f.value = value;
+			}
+		};
+		const collect = () => {
+			const objs = [ ...box.querySelectorAll( '[data-rw-obj]:checked' ) ]
+				.map( ( i ) => i.dataset.rwObj )
+				.join( ',' );
+			// Sites per branch: only the branches where not all the ticks are set.
+			const per = [ ...box.querySelectorAll( '[data-rw-objbox]' ) ]
+				.map( ( ob ) => {
+					const all = [ ...ob.querySelectorAll( '[data-rw-src]' ) ];
+					const on = all.filter( ( i ) => i.checked );
+					return on.length && on.length < all.length
+						? ob.dataset.rwObjbox +
+								':' +
+								on.map( ( i ) => i.dataset.rwSrc ).join( '.' )
+						: '';
+				} )
+				.filter( Boolean )
+				.join( ';' );
+			const tabs = box.querySelector( '[data-rw-tabs]' )?.checked ? 1 : 0;
+			box.querySelectorAll( '[data-rw-objbox]' ).forEach( ( ob ) =>
+				ob.classList.toggle(
+					'is-on',
+					ob.querySelector( '[data-rw-obj]' ).checked
+				)
+			);
+			setField( 'objects', objs );
+			setField( 'sources', '' );
+			setField( 'per', per );
+			saved.textContent = T.saving;
+			post( {
+				action: 'mem_rewio_scope',
+				objects: objs,
+				sources: '',
+				per,
+				tabs,
+			} )
+				.then( ( r ) => {
+					saved.textContent = r && r.success ? T.saved : T.notSaved;
+				} )
+				.catch( () => {
+					saved.textContent = T.notSavedSave;
+				} );
+		};
+		box.addEventListener( 'change', ( e ) => {
+			const t = e.target;
+			if ( t.matches( '[data-rw-src]' ) ) {
+				const ob = t.closest( '[data-rw-objbox]' );
+				if ( ! ob.querySelector( '[data-rw-src]:checked' ) ) {
+					t.checked = true;
+					saved.textContent = T.oneSite;
+					return;
+				}
+				// Sites were set up, so the branch is needed.
+				ob.querySelector( '[data-rw-obj]' ).checked = true;
+			}
+			if ( t.matches( '[data-rw-obj],[data-rw-src],[data-rw-tabs]' ) ) {
+				collect();
+			}
+		} );
+		box.addEventListener( 'click', ( e ) => {
+			const f = e.target.closest( '[data-rw-folder]' );
+			if ( ! f ) {
+				return;
+			}
+			const ids = f.dataset.rwFolder ? f.dataset.rwFolder.split( ',' ) : [];
+			box.querySelectorAll( '[data-rw-obj]' ).forEach( ( i ) => {
+				i.checked = ids.includes( i.dataset.rwObj );
+			} );
+			collect();
+		} );
+	}
+
+	// Hide / show one review.
+	document.addEventListener( 'change', ( e ) => {
+		const c = e.target.closest( '[data-rw-hide]' );
+		if ( ! c ) {
+			return;
+		}
+		c.closest( 'tr' ).classList.toggle( 'is-hid', c.checked );
+		post( {
+			action: 'mem_rewio_hide',
+			id: c.dataset.rwHide,
+			on: c.checked ? 1 : 0,
+		} );
+	} );
+} )();

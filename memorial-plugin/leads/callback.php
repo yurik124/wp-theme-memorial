@@ -194,7 +194,7 @@ function memorial_plugin_callback_html() {
 	</div>
 	</div>
 </dialog>
-<script>window.memCall=<?php echo wp_json_encode( $cfg ); ?>;</script>
+	<?php wp_print_inline_script_tag( 'window.memCall=' . wp_json_encode( $cfg ) . ';' ); ?>
 	<?php
 	return (string) ob_get_clean();
 }

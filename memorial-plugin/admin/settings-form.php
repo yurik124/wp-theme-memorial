@@ -200,7 +200,7 @@ function memorial_plugin_settings_container( $opt ) {
 		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
 		return;
 	}
-	// Panels of other modules (tabs, Rewio status and preview) come with their own styles and scripts, so they
+	// Panels of other modules (tabs, Rewio status and preview) enqueue their own styles and scripts, so they
 	// are printed here as is (only for administrators, by the plugin’s own code) and the app moves them under its header.
 	$extra = memorial_plugin_settings_extra_html( $opt );
 	if ( '' !== $extra ) {
@@ -219,7 +219,6 @@ function memorial_plugin_settings_assets() {
 	}
 	$asset = require $asset_file;
 	wp_enqueue_media(); // Image fields.
-	wp_enqueue_script( 'jquery' ); // Scripts of the extra panels (Rewio).
 	wp_enqueue_script(
 		'memorial-plugin-settings',
 		MEMORIAL_PLUGIN_URL . '/build/settings/index.js',

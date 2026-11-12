@@ -5345,3 +5345,40 @@ msgstr "венок"
 #: blocks/block-meta.php
 msgid "years"
 msgstr "годы"
+
+#: catalog/catalog-import.php
+msgid "Catalog category (empty — the page title)."
+msgstr "Раздел каталога (пусто — название страницы)."
+
+#: src/import/index.js
+msgid "Galleries"
+msgstr "Галереи"
+
+#: src/import/index.js
+msgid "Galleries that become products"
+msgstr "Галереи, которые станут товарами"
+
+#: catalog/catalog-import.php
+msgid "Move the catalog from pages"
+msgstr "Перенести каталог со страниц"
+
+#: src/import/index.js
+msgid "Move…"
+msgstr "Перенести…"
+
+#: src/import/index.js
+msgid "Not moved yet"
+msgstr "Ещё не перенесено"
+
+#: catalog/catalog-import.php
+msgid "Turns the chosen “Cards with captions” galleries of pages into products and the examples of works into “Our works”; can replace the galleries on the page with the catalog block (the old version stays in the page’s revisions). Moving again does not create duplicates."
+msgstr "Превращает выбранные галереи «Карточки с подписями» на страницах в товары, а примеры работ — в «Наши работы»; может заменить галереи на странице блоком каталога (прежний вариант остаётся в редакциях страницы). Повторный перенос не создаёт дублей."
+
+#. translators: %d: number of works
+#: src/import/index.js
+#, php-format
+msgid "Move %d example of works to “Our works”"
+msgid_plural "Move %d examples of works to “Our works”"
+msgstr[0] "Перенести %d пример работ в «Наши работы»"
+msgstr[1] "Перенести %d примера работ в «Наши работы»"
+msgstr[2] "Перенести %d примеров работ в «Наши работы»"

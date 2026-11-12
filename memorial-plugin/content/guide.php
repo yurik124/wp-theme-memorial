@@ -216,7 +216,13 @@ add_shortcode(
 				),
 			)
 		)
-		. '<script type="application/json" data-guide-idx>' . wp_json_encode( $idx, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP ) . '</script>'
+		. wp_get_inline_script_tag(
+			wp_json_encode( $idx, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP ),
+			array(
+				'type'           => 'application/json',
+				'data-guide-idx' => true,
+			)
+		)
 		. '<div class="mguide__grid">' . $cards . '</div></div>';
 	}
 );

@@ -213,13 +213,11 @@ add_action(
 		if ( is_admin() || empty( memorial_plugin_settings( 'mem_metrika' )['counter']['clean_utm'] ) ) {
 			return;
 		}
-		?>
-<script>
-(function(){try{var u=new URL(location.href),p=u.searchParams,k=[];p.forEach(function(v,n){if(/^utm_|^(yclid|gclid|fbclid|ysclid|msclkid|_openstat|roistat|etext)$/i.test(n))k.push(n)});
-if(!k.length)return;window.memOrigUrl=location.href;k.forEach(function(n){p.delete(n)});var q=p.toString();
-history.replaceState(history.state,'',u.pathname+(q?'?'+q:'')+u.hash)}catch(e){}})();
-</script>
-		<?php
+		wp_print_inline_script_tag(
+			'(function(){try{var u=new URL(location.href),p=u.searchParams,k=[];p.forEach(function(v,n){if(/^utm_|^(yclid|gclid|fbclid|ysclid|msclkid|_openstat|roistat|etext)$/i.test(n))k.push(n)});'
+			. 'if(!k.length)return;window.memOrigUrl=location.href;k.forEach(function(n){p.delete(n)});var q=p.toString();'
+			. "history.replaceState(history.state,'',u.pathname+(q?'?'+q:'')+u.hash)}catch(e){}})();"
+		);
 	},
 	1
 );
@@ -242,23 +240,29 @@ add_action(
 				'accurateTrackBounce' => true,
 				'webvisor'            => ! empty( memorial_plugin_settings( 'mem_metrika' )['counter']['webvisor'] ),
 			),
+			'log'  => esc_url_raw( rest_url( 'mem/v1/consent' ) ),
 		);
-		?>
-<script>
-window.memTrack=<?php echo wp_json_encode( $cfg ); ?>;
-		<?php
-		if ( $id ) :
-			?>
-			window.memYm=<?php echo (int) $id; ?>;
-window.ym=window.ym||function(){(ym.a=ym.a||[]).push(arguments)};ym.l=1*new Date();
-		<?php endif; ?>
-</script>
-		<?php
+		$js  = 'window.memTrack=' . wp_json_encode( $cfg ) . ';';
+		if ( $id ) {
+			$js .= 'window.memYm=' . (int) $id . ';window.ym=window.ym||function(){(ym.a=ym.a||[]).push(arguments)};ym.l=1*new Date();';
+		}
+		wp_print_inline_script_tag( $js );
 	},
 	2
 );
 
-/* Загрузчик: Метрика + доп. коды; плашка согласия */
+/* Загрузчик: Метрика + доп. коды; плашка согласия (assets/js/consent.js, в подвале) */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( ! memorial_plugin_tracking_on() && ! memorial_plugin_banner_on() ) {
+			return;
+		}
+		$js = memorial_plugin_asset( '/assets/js/consent.js' );
+		wp_enqueue_script( 'memorial-plugin-consent', MEMORIAL_PLUGIN_URL . $js, array(), (string) filemtime( MEMORIAL_PLUGIN_DIR . $js ), array( 'in_footer' => true ) );
+	}
+);
+
 add_action(
 	'wp_footer',
 	function () {
@@ -273,66 +277,8 @@ add_action(
 		if ( ! wp_is_block_theme() ) {
 			echo memorial_plugin_consent_banner_html(); // phpcs:ignore WordPress.Security.EscapeOutput -- разметка собрана с экранированием.
 		}
-		?>
-<script>
-(function () {
-	var T = window.memTrack, KEY = 'mem_consent_v1', box = document.getElementById('consent');
-	function load() {
-	if (load.done) return; load.done = 1;
-	if (T.id) {
-		var s = document.createElement('script'); s.async = 1; s.src = 'https://mc.yandex.ru/metrika/tag.js';
-		document.head.appendChild(s);
-		if (window.memOrigUrl) {   // адрес почистили от меток — просмотр отправляем вручную, с исходным адресом
-		ym(T.id, 'init', Object.assign({}, T.opts, { defer: true }));
-		ym(T.id, 'hit', window.memOrigUrl, { title: document.title, referer: document.referrer });
-		} else ym(T.id, 'init', T.opts);
-	}
-	var tpl = document.getElementById('mem-after-consent');
-	if (tpl) [].forEach.call(tpl.content.childNodes, function (n) {
-		if (n.nodeName === 'SCRIPT') {               // скрипты из шаблона нужно пересоздать, иначе не запустятся
-		var x = document.createElement('script');
-		[].forEach.call(n.attributes, function (a) { x.setAttribute(a.name, a.value); });
-		x.text = n.textContent; document.body.appendChild(x);
-		} else document.body.appendChild(n.cloneNode(true));
-	});
-	}
-	// Отзыв согласия: счётчик больше ничего не отправляет, cookie Метрики (_ym*) удаляются.
-	// Уже отправленные данные отозвать нельзя — это написано в политике cookie.
-	function revoke() {
-	if (T.id) window['disableYaCounter' + T.id] = true;
-	var host = location.hostname.split('.'), doms = [''];
-	for (var i = 0; i < host.length - 1; i++) doms.push('; domain=.' + host.slice(i).join('.'));
-	document.cookie.split(';').forEach(function (c) {
-		var name = c.split('=')[0].trim();
-		if (name.indexOf('_ym') !== 0) return;
-		doms.forEach(function (d) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + d; });
-	});
-	document.dispatchEvent(new Event('mem:consent-revoked'));
-	}
-	function get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-	function set(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
-	function log(v) { try { navigator.sendBeacon('<?php echo esc_url_raw( rest_url( 'mem/v1/consent' ) ); ?>', new Blob([JSON.stringify({ choice: v })], { type: 'application/json' })); } catch (e) {} }
-	function show(on) { if (!box) return; box.hidden = !on; document.body.classList.toggle('has-consent', on);
-	if (on) document.documentElement.style.setProperty('--consent-h', box.offsetHeight + 'px'); }
-	if (!T.need || get() === 'yes') load();
-	if (T.mode === 'notice') { if (get() !== 'ok' && get() !== 'yes') show(true); }   // уведомление: показать, пока не нажали «Понятно»
-	else if (T.need && get() !== 'yes' && get() !== 'no') show(true);
-	if (box) box.addEventListener('click', function (e) {
-	var b = e.target.closest('[data-consent]'); if (!b) return;
-	var was = get(), v = b.getAttribute('data-consent'); set(v); if (v !== 'ok') log(v); show(false);
-	if (v === 'yes') { load(); document.dispatchEvent(new Event('mem:consent')); }
-	if (v === 'no' && was === 'yes') revoke();
-	});
-	// «Настройки cookie» в подвале — передумать
-	document.addEventListener('click', function (e) {
-	if (!e.target.closest('[data-consent-reset]')) return;
-	e.preventDefault(); try { localStorage.removeItem(KEY); } catch (x) {} show(true);
-	});
-})();
-</script>
-		<?php
 	},
-	20
+	5 // before the footer scripts (consent.js reads the template and the banner).
 );
 
 /** Плашка о cookie (один раз на странице; пусто, если плашка не нужна) */

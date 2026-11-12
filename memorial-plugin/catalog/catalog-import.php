@@ -2,8 +2,11 @@
 /**
  * «Каталог → Перенос со страниц»: один раз превращает галереи-карточки на страницах в товары,
  * а примеры работ (заголовок + фото + таблица цен) — в «Наши работы».
- * По желанию сразу заменяет галереи на странице каталогом [mem_catalog] / [mem_works]
+ * По желанию сразу заменяет галереи на странице блоками каталога и работ
  * (прежний вариант страницы остаётся в её «Редакциях»).
+ *
+ * Экран — DataViews (src/import): список страниц из REST memorial-plugin/v1/import, перенос — способность
+ * memorial-plugin/import-from-pages (Abilities API).
  *
  * @package memorial-plugin
  */
@@ -13,7 +16,10 @@ defined( 'ABSPATH' ) || exit;
 add_action(
 	'admin_menu',
 	function () {
-		add_submenu_page( 'options.php', __( 'Moving from pages', 'memorial-plugin' ), __( 'Moving from pages', 'memorial-plugin' ), 'manage_options', 'mem-import', 'memorial_plugin_import_page' );
+		$hook = add_submenu_page( 'options.php', __( 'Moving from pages', 'memorial-plugin' ), __( 'Moving from pages', 'memorial-plugin' ), 'manage_options', 'mem-import', 'memorial_plugin_import_page' );
+		if ( $hook ) {
+			add_action( 'admin_enqueue_scripts', static fn( $suffix ) => $hook === $suffix && memorial_plugin_import_assets() );
+		}
 	}
 );
 
@@ -289,64 +295,165 @@ function memorial_plugin_import_candidates() {
 	return $res;
 }
 
-/* ---------- Страница ---------- */
+/* ---------- Экран ---------- */
 
 /**
- * Import page.
+ * Pages that can be moved, for the screen: galleries with a sample product, works, moved or not.
+ *
+ * @return array<int,array>
+ */
+function memorial_plugin_import_items() {
+	$items = array();
+	foreach ( memorial_plugin_import_candidates() as $pid => $x ) {
+		$gals = array();
+		foreach ( $x['gal'] as $i => $g ) {
+			$s      = $g['items'][0]['cap'];
+			$gals[] = array(
+				'index'   => (int) $i,
+				'heading' => (string) $g['heading'],
+				'count'   => count( $g['items'] ),
+				'sample'  => trim( $s['name'] . ( $s['sub'] ? ' · ' . $s['sub'] : '' ) . ( $s['price'] ? ' · ' . ( $s['from'] ? __( 'from ', 'memorial-plugin' ) : '' ) . $s['price'] . ' ₽' . ( $s['unit'] ? ' ' . $s['unit'] : '' ) : '' ) ),
+				'checked' => (bool) $g['checked'],
+			);
+		}
+		$items[] = array(
+			'id'        => (int) $pid,
+			'title'     => html_entity_decode( get_the_title( $x['page'] ), ENT_QUOTES, 'UTF-8' ),
+			'link'      => (string) get_permalink( $x['page'] ),
+			'moved'     => (bool) ( get_post_meta( $pid, '_mem_cat', true ) || get_post_meta( $pid, '_mem_works_done', true ) ),
+			'galleries' => $gals,
+			'works'     => count( $x['works'] ),
+		);
+	}
+	return $items;
+}
+
+/**
+ * REST: the list for the screen (GET memorial-plugin/v1/import).
+ */
+function memorial_plugin_import_rest() {
+	register_rest_route(
+		'memorial-plugin/v1',
+		'/import',
+		array(
+			'methods'             => WP_REST_Server::READABLE,
+			'permission_callback' => static fn() => current_user_can( 'manage_options' ),
+			'callback'            => static fn() => rest_ensure_response( memorial_plugin_import_items() ),
+		)
+	);
+}
+add_action( 'rest_api_init', 'memorial_plugin_import_rest' );
+
+/**
+ * Ability memorial-plugin/import-from-pages: the move itself.
+ */
+function memorial_plugin_import_ability() {
+	if ( ! function_exists( 'wp_register_ability' ) ) {
+		return;
+	}
+	wp_register_ability(
+		'memorial-plugin/import-from-pages',
+		array(
+			'label'               => __( 'Move the catalog from pages', 'memorial-plugin' ),
+			'description'         => __( 'Turns the chosen “Cards with captions” galleries of pages into products and the examples of works into “Our works”; can replace the galleries on the page with the catalog block (the old version stays in the page’s revisions). Moving again does not create duplicates.', 'memorial-plugin' ),
+			'category'            => 'memorial',
+			'input_schema'        => array(
+				'type'                 => 'object',
+				'properties'           => array(
+					'pages' => array(
+						'type'     => 'array',
+						'minItems' => 1,
+						'maxItems' => 200,
+						'items'    => array(
+							'type'                 => 'object',
+							'properties'           => array(
+								'id'      => array(
+									'type'    => 'integer',
+									'minimum' => 1,
+								),
+								'cat'     => array(
+									'type'        => 'string',
+									'description' => __( 'Catalog category (empty — the page title).', 'memorial-plugin' ),
+								),
+								'gal'     => array(
+									'type'  => 'array',
+									'items' => array(
+										'type'    => 'integer',
+										'minimum' => 0,
+									),
+								),
+								'works'   => array( 'type' => 'boolean' ),
+								'replace' => array( 'type' => 'boolean' ),
+							),
+							'required'             => array( 'id' ),
+							'additionalProperties' => false,
+						),
+					),
+				),
+				'required'             => array( 'pages' ),
+				'additionalProperties' => false,
+			),
+			'output_schema'       => array(
+				'type'       => 'object',
+				'properties' => array(
+					'products' => array( 'type' => 'integer' ),
+					'works'    => array( 'type' => 'integer' ),
+					'skipped'  => array( 'type' => 'integer' ),
+					'pages'    => array( 'type' => 'integer' ),
+					'message'  => array( 'type' => 'string' ),
+				),
+			),
+			'permission_callback' => static fn() => current_user_can( 'manage_options' ),
+			'execute_callback'    => static function ( $input ) {
+				$selection = array();
+				foreach ( (array) ( $input['pages'] ?? array() ) as $page ) {
+					$selection[ (int) $page['id'] ] = array(
+						'cat'     => (string) ( $page['cat'] ?? '' ),
+						'gal'     => array_map( 'absint', (array) ( $page['gal'] ?? array() ) ),
+						'works'   => ! empty( $page['works'] ),
+						'replace' => ! empty( $page['replace'] ),
+					);
+				}
+				return memorial_plugin_import_run( $selection );
+			},
+			'meta'                => array(
+				'show_in_rest' => true,
+				'annotations'  => array(
+					'destructive' => false,
+					'idempotent'  => true,
+				),
+			),
+		)
+	);
+}
+add_action( 'wp_abilities_api_init', 'memorial_plugin_import_ability' );
+
+/**
+ * Scripts of the screen.
+ */
+function memorial_plugin_import_assets() {
+	$asset_file = MEMORIAL_PLUGIN_DIR . '/build/import/index.asset.php';
+	if ( ! is_readable( $asset_file ) ) {
+		return;
+	}
+	$asset = require $asset_file;
+	wp_enqueue_script( 'memorial-plugin-import', MEMORIAL_PLUGIN_URL . '/build/import/index.js', $asset['dependencies'], $asset['version'], array( 'in_footer' => true ) );
+	wp_set_script_translations( 'memorial-plugin-import', 'memorial-plugin', MEMORIAL_PLUGIN_DIR . '/languages' );
+	wp_enqueue_style( 'wp-components' );
+	if ( is_readable( MEMORIAL_PLUGIN_DIR . '/build/import/style-index.css' ) ) {
+		wp_enqueue_style( 'memorial-plugin-import', MEMORIAL_PLUGIN_URL . '/build/import/style-index.css', array( 'wp-components' ), $asset['version'] );
+	}
+}
+
+/**
+ * The screen: the app of src/import is mounted here.
  */
 function memorial_plugin_import_page() {
-	$c = memorial_plugin_import_candidates(); ?>
-	<div class="wrap">
-		<h1><?php esc_html_e( 'Moving the catalog from pages', 'memorial-plugin' ); ?></h1>
-		<?php if ( ! empty( $_GET['mem_report'] ) ) : ?>
-		<div class="notice notice-success"><p><?php echo esc_html( get_transient( 'mem_import_report' ) ? get_transient( 'mem_import_report' ) : __( 'Done.', 'memorial-plugin' ) ); ?></p></div>
-		<?php endif; ?>
-		<p><?php esc_html_e( 'Here are the pages where the catalog is made of “Cards with captions” galleries or examples of works with price tables. The ticked sections become products (the name, price, caption and photo are taken from the captions) or “Our works”. Moving again does not create duplicates.', 'memorial-plugin' ); ?></p>
-		<?php
-		if ( ! $c ) :
-			?>
-			<p><b><?php esc_html_e( 'No suitable pages were found.', 'memorial-plugin' ); ?></b></p></div>
-			<?php
-			return;
-endif;
-		?>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-		<input type="hidden" name="action" value="mem_import">
-		<?php wp_nonce_field( 'mem_import' ); ?>
-		<?php
-		foreach ( $c as $pid => $x ) :
-			$p = $x['page'];
-			?>
-			<div class="card" style="max-width:900px;padding:12px 18px;margin:14px 0">
-			<h2 style="margin:.3em 0"><a href="<?php echo esc_url( get_permalink( $p ) ); ?>" target="_blank"><?php echo esc_html( $p->post_title ); ?></a>
-				<?php
-				if ( get_post_meta( $pid, '_mem_cat', true ) || get_post_meta( $pid, '_mem_works_done', true ) ) {
-					echo ( ' <span style="color:#2271b1;font-size:13px">' . esc_html__( 'already moved', 'memorial-plugin' ) . '</span>' );}
-				?>
-				</h2>
-			<?php if ( $x['gal'] ) : ?>
-				<p><label><?php esc_html_e( 'Catalog category:', 'memorial-plugin' ); ?> <input type="text" name="cat[<?php echo (int) $pid; ?>]" value="<?php echo esc_attr( $p->post_title ); ?>" class="regular-text"></label></p>
-				<?php
-				foreach ( $x['gal'] as $i => $g ) :
-					$s = $g['items'][0]['cap'];
-					?>
-				<label style="display:block;margin:4px 0"><input type="checkbox" name="gal[<?php echo (int) $pid; ?>][]" value="<?php echo (int) $i; ?>" <?php checked( $g['checked'] ); ?>>
-					<b><?php echo esc_html( $g['heading'] ? $g['heading'] : __( 'Untitled', 'memorial-plugin' ) ); ?></b> — <?php echo esc_html( sprintf( /* translators: %d: number of items */ __( '%d pcs.', 'memorial-plugin' ), count( $g['items'] ) ) ); ?>
-					<span style="color:#646970"><?php esc_html_e( 'for example:', 'memorial-plugin' ); ?> <?php echo esc_html( trim( $s['name'] . ( $s['sub'] ? ' · ' . $s['sub'] : '' ) . ( $s['price'] ? ' · ' . ( $s['from'] ? __( 'from ', 'memorial-plugin' ) : '' ) . $s['price'] . ' ₽' . ( $s['unit'] ? ' ' . $s['unit'] : '' ) : '' ) ) ); ?></span></label>
-				<?php endforeach; ?>
-			<?php endif; ?>
-			<?php if ( $x['works'] ) : ?>
-				<label style="display:block;margin:8px 0 4px"><input type="checkbox" name="works[]" value="<?php echo (int) $pid; ?>" checked>
-				<b><?php esc_html_e( 'Examples of works', 'memorial-plugin' ); ?></b> — <?php echo esc_html( sprintf( /* translators: %d: number of items */ __( '%d pcs.', 'memorial-plugin' ), count( $x['works'] ) ) ); ?> → <?php esc_html_e( '“Our works”', 'memorial-plugin' ); ?></label>
-			<?php endif; ?>
-			<label style="display:block;margin:10px 0 4px;color:#1d2327"><input type="checkbox" name="replace[]" value="<?php echo (int) $pid; ?>" checked>
-				<?php esc_html_e( 'Replace the galleries on the page with the catalog from the admin (the old version stays in the page’s “Revisions”)', 'memorial-plugin' ); ?></label>
-			</div>
-		<?php endforeach; ?>
-		<?php submit_button( __( 'Move the ticked ones', 'memorial-plugin' ) ); ?>
-		</form>
-	</div>
-	<?php
+	if ( ! is_readable( MEMORIAL_PLUGIN_DIR . '/build/import/index.asset.php' ) ) {
+		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
+		return;
+	}
+	echo '<div id="memorial-plugin-import" class="wrap memorial-plugin-admin"></div>';
 }
 
 /* ---------- Перенос ---------- */
@@ -397,119 +504,65 @@ function memorial_plugin_shortcode_block( $code ) {
 	);
 }
 
-add_action(
-	'admin_post_mem_import',
-	function () {
-		check_admin_referer( 'mem_import' );
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Not allowed', 'memorial-plugin' ) );
-		}
-		@set_time_limit( 300 );
-		$cands      = memorial_plugin_import_candidates();
-		$made       = 0;
-		$skipped    = 0;
-		$works_made = 0;
-		$pages      = 0;
-		$replace    = array_map( 'absint', (array) ( $_POST['replace'] ?? array() ) );
+/**
+ * Move the chosen galleries and works of the pages into products and “Our works”.
+ *
+ * @param array $selection Page ID => array( 'cat' => category name, 'gal' => gallery indexes,
+ *                         'works' => move the works, 'replace' => replace the galleries on the page ).
+ * @return array{products:int,works:int,skipped:int,pages:int,message:string}
+ */
+function memorial_plugin_import_run( $selection ) {
+	if ( function_exists( 'set_time_limit' ) ) {
+		set_time_limit( 300 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- many pages and photos in one run.
+	}
+	$cands      = memorial_plugin_import_candidates();
+	$made       = 0;
+	$skipped    = 0;
+	$works_made = 0;
+	$pages      = 0;
 
-		foreach ( $cands as $pid => $x ) {
-			$blocks = parse_blocks( $x['page']->post_content );
-			$cut    = array(); // [от, до, шорткод]
+	foreach ( $cands as $pid => $x ) {
+		$blocks = parse_blocks( $x['page']->post_content );
+		$cut    = array(); // [от, до, шорткод]
 
-			// Товары.
-			$sel  = array_map( 'absint', (array) ( $_POST['gal'][ $pid ] ?? array() ) );
-			$gals = array_values( array_intersect_key( $x['gal'], array_flip( $sel ) ) );
-			if ( $gals ) {
-				$name = sanitize_text_field( wp_unslash( $_POST['cat'][ $pid ] ?? '' ) );
-				if ( '' === $name ) {
-					$name = $x['page']->post_title;
-				}
-				$root = memorial_plugin_import_term( $name, 0, $x['page']->post_name );
-				if ( ! $root ) {
-					continue;
-				}
-				update_post_meta( $pid, '_mem_cat', $root );
-				update_term_meta( $root, 'mem_ratio', $gals[0]['ratio'] );
-				update_term_meta( $root, 'mem_cols', $gals[0]['cols'] );
-				$multi = count( $gals ) > 1;
-				foreach ( $gals as $n => $g ) {
-					$term = $root;
-					if ( $multi ) {
-						$term = memorial_plugin_import_term( $g['heading'] ? $g['heading'] : __( 'Section ', 'memorial-plugin' ) . ( $n + 1 ), $root );
-						update_term_meta( $term, 'mem_order', $n + 1 );
-						update_term_meta( $term, 'mem_ratio', $g['ratio'] );
-						update_term_meta( $term, 'mem_cols', $g['cols'] );
-						if ( $g['anchor'] ) {
-							update_term_meta( $term, 'mem_anchor', $g['anchor'] );
-						}
-						// «47 моделей, от 800 ₽» сайт пишет сам — из описания раздела это убираем
-						$intro = trim( preg_replace( '/^\s*\d+\s+модел[^.]*\.\s*/u', '', wp_strip_all_tags( $g['intro'] ) ) );
-						if ( $intro && ! get_term( $term, 'mem_cat' )->description ) {
-							wp_update_term( $term, 'mem_cat', array( 'description' => $intro ) );
-						}
-					}
-					foreach ( $g['items'] as $k => $it ) {
-						$src = $pid . ':' . $it['id'];
-						if ( get_posts(
-							array(
-								'post_type'      => 'mem_product',
-								'post_status'    => 'any',
-								'fields'         => 'ids',
-								'posts_per_page' => 1,
-								'meta_key'       => '_mem_src',
-								'meta_value'     => $src,
-							)
-						) ) {
-							$skipped++;
-							continue; }
-						$cap = $it['cap'];
-						$id  = wp_insert_post(
-							array(
-								'post_type'   => 'mem_product',
-								'post_status' => 'publish',
-								'menu_order'  => $k + 1,
-								'post_title'  => $cap['name'] ? $cap['name'] : ( $g['heading'] ? $g['heading'] : $name ) . ' ' . ( $k + 1 ),
-							)
-						);
-						if ( is_wp_error( $id ) || ! $id ) {
-							continue;
-						}
-						wp_set_object_terms( $id, array( $term ), 'mem_cat' );
-						if ( get_post_type( $it['id'] ) === 'attachment' ) {
-							set_post_thumbnail( $id, $it['id'] );
-						}
-						update_post_meta( $id, '_mem_price', $cap['price'] );
-						update_post_meta( $id, '_mem_src', $src );
-						if ( $cap['from'] ) {
-							update_post_meta( $id, '_mem_price_from', '1' );
-						}
-						if ( $cap['unit'] ) {
-							update_post_meta( $id, '_mem_unit', $cap['unit'] );
-						}
-						if ( $cap['sub'] ) {
-							update_post_meta( $id, '_mem_sub', $cap['sub'] );
-						}
-						$made++;
-					}
-				}
-				if ( in_array( $pid, $replace, true ) ) {
-					if ( $multi ) {
-						foreach ( $gals as $n => $g ) {
-							$cut[] = array( $g['h'], $g['g'], 0 === $n ? '[mem_catalog]' : '' );
-						}
-					} else {
-						$cut[] = array( $gals[0]['g'], $gals[0]['g'], '[mem_catalog nav="0"]' );
-					}
-				}
+		// Товары.
+		$opts = (array) ( $selection[ $pid ] ?? array() );
+		$sel  = array_map( 'absint', (array) ( $opts['gal'] ?? array() ) );
+		$gals = array_values( array_intersect_key( $x['gal'], array_flip( $sel ) ) );
+		if ( $gals ) {
+			$name = sanitize_text_field( (string) ( $opts['cat'] ?? '' ) );
+			if ( '' === $name ) {
+				$name = $x['page']->post_title;
 			}
-
-			// Работы.
-			if ( $x['works'] && in_array( $pid, array_map( 'absint', (array) ( $_POST['works'] ?? array() ) ), true ) ) {
-				foreach ( $x['works'] as $k => $w ) {
-					$src = $pid . ':' . sanitize_title( $w['title'] );
+			$root = memorial_plugin_import_term( $name, 0, $x['page']->post_name );
+			if ( ! $root ) {
+				continue;
+			}
+			update_post_meta( $pid, '_mem_cat', $root );
+			update_term_meta( $root, 'mem_ratio', $gals[0]['ratio'] );
+			update_term_meta( $root, 'mem_cols', $gals[0]['cols'] );
+			$multi = count( $gals ) > 1;
+			foreach ( $gals as $n => $g ) {
+				$term = $root;
+				if ( $multi ) {
+					$term = memorial_plugin_import_term( $g['heading'] ? $g['heading'] : __( 'Section ', 'memorial-plugin' ) . ( $n + 1 ), $root );
+					update_term_meta( $term, 'mem_order', $n + 1 );
+					update_term_meta( $term, 'mem_ratio', $g['ratio'] );
+					update_term_meta( $term, 'mem_cols', $g['cols'] );
+					if ( $g['anchor'] ) {
+						update_term_meta( $term, 'mem_anchor', $g['anchor'] );
+					}
+					// «47 моделей, от 800 ₽» сайт пишет сам — из описания раздела это убираем
+					$intro = trim( preg_replace( '/^\s*\d+\s+модел[^.]*\.\s*/u', '', wp_strip_all_tags( $g['intro'] ) ) );
+					if ( $intro && ! get_term( $term, 'mem_cat' )->description ) {
+						wp_update_term( $term, 'mem_cat', array( 'description' => $intro ) );
+					}
+				}
+				foreach ( $g['items'] as $k => $it ) {
+					$src = $pid . ':' . $it['id'];
 					if ( get_posts(
 						array(
-							'post_type'      => 'mem_work',
+							'post_type'      => 'mem_product',
 							'post_status'    => 'any',
 							'fields'         => 'ids',
 							'posts_per_page' => 1,
@@ -517,59 +570,120 @@ add_action(
 							'meta_value'     => $src,
 						)
 					) ) {
-						$skipped++;
+						++$skipped;
 						continue; }
-					$id = wp_insert_post(
+					$cap = $it['cap'];
+					$id  = wp_insert_post(
 						array(
-							'post_type'    => 'mem_work',
-							'post_status'  => 'publish',
-							'menu_order'   => $k + 1,
-							'post_title'   => $w['title'],
-							'post_content' => memorial_plugin_blocks_from_shortcodes( trim( $w['text'] ) ),
+							'post_type'   => 'mem_product',
+							'post_status' => 'publish',
+							'menu_order'  => $k + 1,
+							'post_title'  => $cap['name'] ? $cap['name'] : ( $g['heading'] ? $g['heading'] : $name ) . ' ' . ( $k + 1 ),
 						)
 					);
 					if ( is_wp_error( $id ) || ! $id ) {
 						continue;
 					}
-					$photos = array_values( array_unique( array_filter( $w['photos'], fn( $a ) => get_post_type( $a ) === 'attachment' ) ) );
-					update_post_meta( $id, '_mem_photos', implode( ',', $photos ) );
-					if ( $photos ) {
-						set_post_thumbnail( $id, $photos[0] );
+					wp_set_object_terms( $id, array( $term ), 'mem_cat' );
+					if ( get_post_type( $it['id'] ) === 'attachment' ) {
+						set_post_thumbnail( $id, $it['id'] );
 					}
-					update_post_meta( $id, '_mem_size', $w['size'] );
-					update_post_meta( $id, '_mem_rows', $w['rows'] );
+					update_post_meta( $id, '_mem_price', $cap['price'] );
 					update_post_meta( $id, '_mem_src', $src );
-					// Год: из текста («2023 г.»), иначе — год загрузки первого фото на сайт.
-					$year = preg_match( '/\b(199\d|20[0-4]\d)\b/', $w['title'] . ' ' . $w['text'], $ym ) ? (int) $ym[1]
-						: ( $photos ? (int) get_the_date( 'Y', $photos[0] ) : 0 );
-					if ( $year ) {
-						update_post_meta( $id, '_mem_year', $year );
+					if ( $cap['from'] ) {
+						update_post_meta( $id, '_mem_price_from', '1' );
 					}
-					$works_made++;
-				}
-				update_post_meta( $pid, '_mem_works_done', 1 );
-				if ( in_array( $pid, $replace, true ) ) {
-					$cut[] = array( $x['works'][0]['from'], end( $x['works'] )['to'], '[mem_works]' );
+					if ( $cap['unit'] ) {
+						update_post_meta( $id, '_mem_unit', $cap['unit'] );
+					}
+					if ( $cap['sub'] ) {
+						update_post_meta( $id, '_mem_sub', $cap['sub'] );
+					}
+					++$made;
 				}
 			}
-
-			// Замена на странице: вырезаем куски с конца, чтобы номера не сдвигались.
-			if ( $cut ) {
-				usort( $cut, fn( $a, $b ) => $b[0] <=> $a[0] );
-				foreach ( $cut as [$from, $to, $code] ) {
-					array_splice( $blocks, $from, $to - $from + 1, $code ? array( memorial_plugin_shortcode_block( $code ) ) : array() );
+			if ( ! empty( $opts['replace'] ) ) {
+				if ( $multi ) {
+					foreach ( $gals as $n => $g ) {
+						$cut[] = array( $g['h'], $g['g'], 0 === $n ? '[mem_catalog]' : '' );
+					}
+				} else {
+					$cut[] = array( $gals[0]['g'], $gals[0]['g'], '[mem_catalog nav="0"]' );
 				}
-				wp_update_post(
-					array(
-						'ID'           => $pid,
-						'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( serialize_blocks( $blocks ) ) ),
-					)
-				);
-				$pages++;
 			}
 		}
-		set_transient( 'mem_import_report', sprintf( /* translators: 1: products created, 2: works created, 3: products skipped, 4: pages updated */ __( 'Products created: %1$d, works: %2$d. Skipped (already existed): %3$d. Pages updated: %4$d.', 'memorial-plugin' ), $made, $works_made, $skipped, $pages ), 300 );
-		wp_safe_redirect( admin_url( 'admin.php?page=mem-import&mem_report=1' ) );
-		exit;
+
+		// Работы.
+		if ( $x['works'] && ! empty( $opts['works'] ) ) {
+			foreach ( $x['works'] as $k => $w ) {
+				$src = $pid . ':' . sanitize_title( $w['title'] );
+				if ( get_posts(
+					array(
+						'post_type'      => 'mem_work',
+						'post_status'    => 'any',
+						'fields'         => 'ids',
+						'posts_per_page' => 1,
+						'meta_key'       => '_mem_src',
+						'meta_value'     => $src,
+					)
+				) ) {
+					++$skipped;
+					continue; }
+				$id = wp_insert_post(
+					array(
+						'post_type'    => 'mem_work',
+						'post_status'  => 'publish',
+						'menu_order'   => $k + 1,
+						'post_title'   => $w['title'],
+						'post_content' => memorial_plugin_blocks_from_shortcodes( trim( $w['text'] ) ),
+					)
+				);
+				if ( is_wp_error( $id ) || ! $id ) {
+					continue;
+				}
+				$photos = array_values( array_unique( array_filter( $w['photos'], fn( $a ) => get_post_type( $a ) === 'attachment' ) ) );
+				update_post_meta( $id, '_mem_photos', implode( ',', $photos ) );
+				if ( $photos ) {
+					set_post_thumbnail( $id, $photos[0] );
+				}
+				update_post_meta( $id, '_mem_size', $w['size'] );
+				update_post_meta( $id, '_mem_rows', $w['rows'] );
+				update_post_meta( $id, '_mem_src', $src );
+				// Год: из текста («2023 г.»), иначе — год загрузки первого фото на сайт.
+				$year = preg_match( '/\b(199\d|20[0-4]\d)\b/', $w['title'] . ' ' . $w['text'], $ym ) ? (int) $ym[1]
+					: ( $photos ? (int) get_the_date( 'Y', $photos[0] ) : 0 );
+				if ( $year ) {
+					update_post_meta( $id, '_mem_year', $year );
+				}
+				++$works_made;
+			}
+			update_post_meta( $pid, '_mem_works_done', 1 );
+			if ( ! empty( $opts['replace'] ) ) {
+				$cut[] = array( $x['works'][0]['from'], end( $x['works'] )['to'], '[mem_works]' );
+			}
+		}
+
+		// Замена на странице: вырезаем куски с конца, чтобы номера не сдвигались.
+		if ( $cut ) {
+			usort( $cut, fn( $a, $b ) => $b[0] <=> $a[0] );
+			foreach ( $cut as [$from, $to, $code] ) {
+				array_splice( $blocks, $from, $to - $from + 1, $code ? array( memorial_plugin_shortcode_block( $code ) ) : array() );
+			}
+			wp_update_post(
+				array(
+					'ID'           => $pid,
+					'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( serialize_blocks( $blocks ) ) ),
+				)
+			);
+			++$pages;
+		}
 	}
-);
+	return array(
+		'products' => $made,
+		'works'    => $works_made,
+		'skipped'  => $skipped,
+		'pages'    => $pages,
+		/* translators: 1: products created, 2: works created, 3: products skipped, 4: pages updated */
+		'message'  => sprintf( __( 'Products created: %1$d, works: %2$d. Skipped (already existed): %3$d. Pages updated: %4$d.', 'memorial-plugin' ), $made, $works_made, $skipped, $pages ),
+	);
+}

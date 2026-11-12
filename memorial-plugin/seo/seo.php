@@ -148,7 +148,7 @@ function memorial_plugin_crumbs_html() {
  * @param array $data Data.
  */
 function memorial_plugin_ld( $data ) {
-	echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . "\n";
+	wp_print_inline_script_tag( wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG ), array( 'type' => 'application/ld+json' ) );
 }
 
 add_action(

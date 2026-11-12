@@ -13,7 +13,7 @@ msgstr ""
 msgid " (draft)"
 msgstr ""
 
-#: reviews/rewio.php:1018
+#: reviews/rewio.php:1057
 msgid " (hidden: "
 msgstr ""
 
@@ -41,11 +41,11 @@ msgstr ""
 msgid " on the map of Belgorod — Yandex Maps"
 msgstr ""
 
-#: reviews/rewio.php:1001
+#: reviews/rewio.php:1040
 msgid " · next check: "
 msgstr ""
 
-#: reviews/rewio.php:989
+#: reviews/rewio.php:1028
 msgid " — but showing is off (the tick in “1. Connection”)"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of items
-#: catalog/catalog-import.php:334 catalog/catalog-import.php:340
+#: src/import/index.js:37
 #, php-format
 msgid "%d pcs."
 msgstr ""
@@ -144,7 +144,7 @@ msgstr ""
 msgid "(check whether they are up to date; replace them with a shortcode if you like):"
 msgstr ""
 
-#: src/convert/index.js:233
+#: src/convert/index.js:233 src/import/index.js:215
 msgid "(no title)"
 msgstr ""
 
@@ -282,7 +282,7 @@ msgstr ""
 msgid "A photo of the craftsman’s work and a couple of sentences — for wreaths, portraits on monuments, ribbon printing."
 msgstr ""
 
-#: content/guide.php:322
+#: content/guide.php:328
 msgid "A question and a short answer on the card — the “Good to know” field under the text of the article."
 msgstr ""
 
@@ -322,7 +322,7 @@ msgstr ""
 msgid "About the hall in short (optional)"
 msgstr ""
 
-#: seo/metrika.php:354
+#: seo/metrika.php:300
 msgid "Accept"
 msgstr ""
 
@@ -604,7 +604,7 @@ msgstr ""
 msgid "Ask for consent: Metrica and the codes below start after “Accept” (the strict reading of 152-FZ)"
 msgstr ""
 
-#: reviews/rewio.php:1099
+#: reviews/rewio.php:999
 msgid "At least one site must stay — otherwise untick the branch itself"
 msgstr ""
 
@@ -660,7 +660,7 @@ msgstr ""
 msgid "Branch"
 msgstr ""
 
-#: reviews/rewio.php:1344
+#: reviews/rewio.php:1260
 msgid "Branch "
 msgstr ""
 
@@ -780,7 +780,7 @@ msgstr ""
 msgid "Can be converted"
 msgstr ""
 
-#: src/catalog/list-screen.js:97 src/catalog/list-screen.js:124 src/convert/index.js:92 src/collections/index.js:252
+#: src/catalog/list-screen.js:97 src/catalog/list-screen.js:124 src/convert/index.js:92 src/import/index.js:143 src/collections/index.js:252
 msgid "Cancel"
 msgstr ""
 
@@ -848,7 +848,11 @@ msgstr ""
 msgid "Catalog category"
 msgstr ""
 
-#: catalog/catalog-import.php:328
+#: catalog/catalog-import.php:376
+msgid "Catalog category (empty — the page title)."
+msgstr ""
+
+#: src/import/index.js:88
 msgid "Catalog category:"
 msgstr ""
 
@@ -1059,7 +1063,7 @@ msgstr ""
 msgid "Company details (personal data operator)"
 msgstr ""
 
-#: reviews/rewio.php:148 reviews/rewio.php:1411
+#: reviews/rewio.php:148 reviews/rewio.php:1327
 msgid "Company’s reply"
 msgstr ""
 
@@ -1171,7 +1175,7 @@ msgstr ""
 msgid "Could not get the list of branches: "
 msgstr ""
 
-#: reviews/rewio.php:988
+#: reviews/rewio.php:1027
 msgid "Could not load the reviews: "
 msgstr ""
 
@@ -1251,7 +1255,7 @@ msgstr ""
 msgid "Date in the book"
 msgstr ""
 
-#: seo/metrika.php:355
+#: seo/metrika.php:301
 msgid "Decline"
 msgstr ""
 
@@ -1358,11 +1362,11 @@ msgstr ""
 msgid "Done in:"
 msgstr ""
 
-#: catalog/catalog-import.php:302 src/catalog/search-stats.js:41 src/catalog/works.js:192 src/catalog/products.js:373 src/catalog/products.js:395
+#: src/catalog/search-stats.js:41 src/catalog/works.js:192 src/catalog/products.js:373 src/catalog/products.js:395
 msgid "Done."
 msgstr ""
 
-#: reviews/rewio.php:1217
+#: reviews/rewio.php:1133
 msgid "Done: loaded "
 msgstr ""
 
@@ -1414,7 +1418,7 @@ msgstr ""
 msgid "Enter a name and choose where the category goes."
 msgstr ""
 
-#: reviews/rewio.php:1094
+#: reviews/rewio.php:994
 msgid "Error"
 msgstr ""
 
@@ -1450,7 +1454,7 @@ msgstr ""
 msgid "Examples of our works"
 msgstr ""
 
-#: catalog/catalog-import.php:340
+#: src/import/index.js:240
 msgid "Examples of works"
 msgstr ""
 
@@ -1679,6 +1683,14 @@ msgstr ""
 msgid "Funeral packages grid"
 msgstr ""
 
+#: src/import/index.js:221
+msgid "Galleries"
+msgstr ""
+
+#: src/import/index.js:93
+msgid "Galleries that become products"
+msgstr ""
+
 #: blocks/content/content-blocks.php:353
 msgid "Gallery: how many (-1 — all)"
 msgstr ""
@@ -1707,7 +1719,7 @@ msgstr ""
 msgid "Google Maps"
 msgstr ""
 
-#: seo/metrika.php:352
+#: seo/metrika.php:298
 msgid "Got it"
 msgstr ""
 
@@ -1771,7 +1783,7 @@ msgstr ""
 msgid "Heart — care"
 msgstr ""
 
-#: catalog/catalog-import.php:304
+#: src/import/index.js:293
 msgid "Here are the pages where the catalog is made of “Cards with captions” galleries or examples of works with price tables. The ticked sections become products (the name, price, caption and photo are taken from the captions) or “Our works”. Moving again does not create duplicates."
 msgstr ""
 
@@ -2049,7 +2061,7 @@ msgstr ""
 msgid "List products"
 msgstr ""
 
-#: reviews/rewio.php:1013
+#: reviews/rewio.php:1052
 msgid "Load reviews now"
 msgstr ""
 
@@ -2057,7 +2069,7 @@ msgstr ""
 msgid "Loading reviews on schedule, the Rewio reviews block."
 msgstr ""
 
-#: reviews/rewio.php:1093
+#: reviews/rewio.php:993
 msgid "Loading reviews… usually it takes 10–30 seconds"
 msgstr ""
 
@@ -2221,6 +2233,14 @@ msgstr ""
 msgid "Most expensive first"
 msgstr ""
 
+#. translators: %d: number of works
+#: src/import/index.js:104
+#, php-format
+msgid "Move %d example of works to “Our works”"
+msgid_plural "Move %d examples of works to “Our works”"
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/catalog/works.js:276 src/catalog/products.js:531 src/catalog/types.js:355 src/catalog/types.js:603 src/catalog/work-types.js:145
 msgid "Move down"
 msgstr ""
@@ -2253,7 +2273,11 @@ msgstr ""
 msgid "Move the catalog from old pages"
 msgstr ""
 
-#: catalog/catalog-import.php:346
+#: catalog/catalog-import.php:357
+msgid "Move the catalog from pages"
+msgstr ""
+
+#: src/import/index.js:153
 msgid "Move the ticked ones"
 msgstr ""
 
@@ -2273,11 +2297,15 @@ msgstr ""
 msgid "Move up"
 msgstr ""
 
-#: catalog/catalog-import.php:16
+#: src/import/index.js:269
+msgid "Move…"
+msgstr ""
+
+#: catalog/catalog-import.php:19
 msgid "Moving from pages"
 msgstr ""
 
-#: catalog/catalog-import.php:300
+#: src/import/index.js:271 src/import/index.js:292
 msgid "Moving the catalog from pages"
 msgstr ""
 
@@ -2385,7 +2413,7 @@ msgstr ""
 msgid "No requests yet"
 msgstr ""
 
-#: catalog/catalog-import.php:308
+#: src/import/index.js:318
 msgid "No suitable pages were found."
 msgstr ""
 
@@ -2397,11 +2425,7 @@ msgstr ""
 msgid "Northern cemetery"
 msgstr ""
 
-#: catalog/catalog-import.php:405
-msgid "Not allowed"
-msgstr ""
-
-#: reviews/rewio.php:1175 reviews/rewio.php:1207
+#: reviews/rewio.php:1091 reviews/rewio.php:1123
 msgid "Not allowed."
 msgstr ""
 
@@ -2411,19 +2435,23 @@ msgstr ""
 msgid "Not called back yet: %d. Opening the list…"
 msgstr ""
 
-#: reviews/rewio.php:987
+#: reviews/rewio.php:1026
 msgid "Not connected — paste the API key below and save."
+msgstr ""
+
+#: src/import/index.js:252
+msgid "Not moved yet"
 msgstr ""
 
 #: reviews/rewio.php:85
 msgid "Not older than, months (0 — all time)"
 msgstr ""
 
-#: reviews/rewio.php:1097
+#: reviews/rewio.php:997
 msgid "Not saved"
 msgstr ""
 
-#: reviews/rewio.php:1098
+#: reviews/rewio.php:998
 msgid "Not saved — click “Save” at the bottom"
 msgstr ""
 
@@ -2527,7 +2555,7 @@ msgstr ""
 msgid "On the site"
 msgstr ""
 
-#: reviews/rewio.php:989
+#: reviews/rewio.php:1028
 msgid "On the site "
 msgstr ""
 
@@ -2587,7 +2615,7 @@ msgstr ""
 msgid "Only you see this"
 msgstr ""
 
-#: seo/metrika.php:447
+#: seo/metrika.php:393
 msgid "Open Analytics settings"
 msgstr ""
 
@@ -2667,7 +2695,7 @@ msgstr ""
 msgid "Packages"
 msgstr ""
 
-#: core/settings.php:317
+#: src/import/index.js:210 core/settings.php:317
 msgid "Page"
 msgstr ""
 
@@ -2787,7 +2815,7 @@ msgstr ""
 msgid "Photo blocks of products and works — the photos are picked up automatically."
 msgstr ""
 
-#: reviews/rewio.php:1406
+#: reviews/rewio.php:1322
 msgid "Photo for the review"
 msgstr ""
 
@@ -2994,7 +3022,7 @@ msgid "Products before “Show more” (number or “all”; empty — automatic
 msgstr ""
 
 #. translators: 1: products created, 2: works created, 3: products skipped, 4: pages updated
-#: catalog/catalog-import.php:571
+#: catalog/catalog-import.php:687
 #, php-format
 msgid "Products created: %1$d, works: %2$d. Skipped (already existed): %3$d. Pages updated: %4$d."
 msgstr ""
@@ -3082,7 +3110,7 @@ msgid "Rating"
 msgstr ""
 
 #. translators: %s: rating, for example 4,8
-#: reviews/rewio.php:1258
+#: reviews/rewio.php:1174
 #, php-format
 msgid "Rating %s out of 5"
 msgstr ""
@@ -3091,7 +3119,7 @@ msgstr ""
 msgid "Rating (optional)"
 msgstr ""
 
-#: reviews/rewio.php:1401 reviews/bookreviews.php:124 core/assets.php:99
+#: reviews/rewio.php:1317 reviews/bookreviews.php:124 core/assets.php:99
 msgid "Read more"
 msgstr ""
 
@@ -3159,7 +3187,7 @@ msgstr ""
 msgid "Replace photo"
 msgstr ""
 
-#: catalog/catalog-import.php:343
+#: src/import/index.js:117
 msgid "Replace the galleries on the page with the catalog from the admin (the old version stays in the page’s “Revisions”)"
 msgstr ""
 
@@ -3227,7 +3255,7 @@ msgstr ""
 msgid "Reviews are loaded in the background and kept on the site. If Rewio is temporarily unavailable, the last loaded reviews stay on the site."
 msgstr ""
 
-#: reviews/rewio.php:1341 reviews/reviews.php:234
+#: reviews/rewio.php:1257 reviews/reviews.php:234
 msgid "Reviews by branch"
 msgstr ""
 
@@ -3357,7 +3385,7 @@ msgstr ""
 msgid "Save the page first."
 msgstr ""
 
-#: reviews/rewio.php:1096
+#: reviews/rewio.php:996
 msgid "Saved ✓ The reviews will update within a minute"
 msgstr ""
 
@@ -3369,7 +3397,7 @@ msgstr ""
 msgid "Saved. The changes are already on the site."
 msgstr ""
 
-#: reviews/rewio.php:1095
+#: reviews/rewio.php:995
 msgid "Saving…"
 msgstr ""
 
@@ -3411,7 +3439,7 @@ msgstr ""
 msgid "Second step"
 msgstr ""
 
-#: catalog/catalog-import.php:438
+#: catalog/catalog-import.php:548
 msgid "Section "
 msgstr ""
 
@@ -3531,7 +3559,7 @@ msgstr ""
 msgid "Show in examples"
 msgstr ""
 
-#: reviews/rewio.php:1422
+#: reviews/rewio.php:1338
 msgid "Show more reviews"
 msgstr ""
 
@@ -3539,7 +3567,7 @@ msgstr ""
 msgid "Show on the site"
 msgstr ""
 
-#: reviews/rewio.php:1370
+#: reviews/rewio.php:1286
 msgid "Show only the reviews of: "
 msgstr ""
 
@@ -3563,7 +3591,7 @@ msgstr ""
 msgid "Show the map"
 msgstr ""
 
-#: reviews/rewio.php:1365
+#: reviews/rewio.php:1281
 msgid "Show the reviews of a site"
 msgstr ""
 
@@ -3664,11 +3692,11 @@ msgstr ""
 msgid "Soft card"
 msgstr ""
 
-#: reviews/rewio.php:1382 core/assets.php:101
+#: reviews/rewio.php:1298 core/assets.php:101
 msgid "Sort by date"
 msgstr ""
 
-#: reviews/rewio.php:1383 core/assets.php:103
+#: reviews/rewio.php:1299 core/assets.php:103
 msgid "Sort by rating"
 msgstr ""
 
@@ -3676,7 +3704,7 @@ msgstr ""
 msgid "Sort order"
 msgstr ""
 
-#: reviews/rewio.php:1381 blocks/content/content-blocks.php:96 blocks/legacy/render/catalog-archive.php:41 pages/pages.php:416
+#: reviews/rewio.php:1297 blocks/content/content-blocks.php:96 blocks/legacy/render/catalog-archive.php:41 pages/pages.php:416
 msgid "Sorting"
 msgstr ""
 
@@ -3684,7 +3712,7 @@ msgstr ""
 msgid "Sorting for visitors: by date and by rating (on the right above the reviews)"
 msgstr ""
 
-#: catalog/catalog-front.php:322 reviews/rewio.php:1381 works/works.php:179
+#: catalog/catalog-front.php:322 reviews/rewio.php:1297 works/works.php:179
 msgid "Sorting:"
 msgstr ""
 
@@ -3714,7 +3742,7 @@ msgstr ""
 msgid "Starting price: fences"
 msgstr ""
 
-#: src/convert/index.js:257
+#: src/convert/index.js:257 src/import/index.js:247
 msgid "State"
 msgstr ""
 
@@ -3826,7 +3854,7 @@ msgstr ""
 msgid "The API key is not set."
 msgstr ""
 
-#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:200 admin/convert.php:558
+#: catalog/catalog-types-admin.php:33 catalog/catalog-import.php:453 catalog/catalog-manager.php:687 admin/settings-form.php:200 admin/convert.php:558
 msgid "The JavaScript build is missing. Run npm run build."
 msgstr ""
 
@@ -3906,7 +3934,7 @@ msgstr ""
 msgid "The products become one: “%s” gets the photos of all of them, the missing fields and all categories; the others go to the trash and their addresses lead to it."
 msgstr ""
 
-#: reviews/rewio.php:990
+#: reviews/rewio.php:1029
 msgid "The reviews are not loaded yet — click “Load reviews now”."
 msgstr ""
 
@@ -3918,7 +3946,7 @@ msgstr ""
 msgid "The section of works with photos and prices, the works manager, the works blocks."
 msgstr ""
 
-#: reviews/rewio.php:1089
+#: reviews/rewio.php:989
 msgid "The site did not respond"
 msgstr ""
 
@@ -4078,8 +4106,12 @@ msgstr ""
 msgid "Try again"
 msgstr ""
 
-#: reviews/rewio.php:1092
+#: reviews/rewio.php:992
 msgid "Try again in a minute."
+msgstr ""
+
+#: catalog/catalog-import.php:358
+msgid "Turns the chosen “Cards with captions” galleries of pages into products and the examples of works into “Our works”; can replace the galleries on the page with the catalog block (the old version stays in the page’s revisions). Moving again does not create duplicates."
 msgstr ""
 
 #: reviews/rewio.php:176
@@ -4142,7 +4174,7 @@ msgstr ""
 msgid "Untick a feature and it turns off: its menu items disappear, its blocks on pages show nothing. The data is not deleted. The catalog, prices, contacts, documents and SEO are the base of the site, they always work."
 msgstr ""
 
-#: catalog/catalog-import.php:334 catalog/catalog-manager.php:293
+#: catalog/catalog-manager.php:293 src/import/index.js:33 src/import/index.js:229
 msgid "Untitled"
 msgstr ""
 
@@ -4162,7 +4194,7 @@ msgstr ""
 msgid "Update the list of branches"
 msgstr ""
 
-#: reviews/rewio.php:998
+#: reviews/rewio.php:1037
 msgid "Updated:"
 msgstr ""
 
@@ -4194,7 +4226,7 @@ msgstr ""
 msgid "View on the site"
 msgstr ""
 
-#: reviews/rewio.php:1018
+#: reviews/rewio.php:1057
 msgid "View the loaded reviews and hide unneeded ones"
 msgstr ""
 
@@ -4397,7 +4429,7 @@ msgid "Yandex Metrica counter number"
 msgstr ""
 
 #. translators: %s: current Yandex Metrica load mode.
-#: seo/metrika.php:442
+#: seo/metrika.php:388
 #, php-format
 msgid "Yandex Metrica now has a load mode setting. It was set to “%s” to match how the site worked before the update. Please confirm or change it."
 msgstr ""
@@ -4462,11 +4494,11 @@ msgstr ""
 msgid "[mem_reviews]: add the review services in “Memorial → Reviews”."
 msgstr ""
 
-#: reviews/rewio.php:1282
+#: reviews/rewio.php:1198
 msgid "[mem_rewio]: showing the reviews is off — the tick in “Memorial → Rewio reviews → 1. Connection”. Only you see this message."
 msgstr ""
 
-#: reviews/rewio.php:1294
+#: reviews/rewio.php:1210
 msgid "[mem_rewio]: the reviews are not loaded yet — “Memorial → Rewio reviews” → “Load reviews now”. Only you see this message."
 msgstr ""
 
@@ -4494,15 +4526,15 @@ msgstr ""
 msgid "address"
 msgstr ""
 
-#: seo/metrika.php:433
+#: seo/metrika.php:379
 msgid "after cookie consent"
 msgstr ""
 
-#: catalog/catalog-import.php:324
+#: src/import/index.js:256
 msgid "already moved"
 msgstr ""
 
-#: seo/metrika.php:434
+#: seo/metrika.php:380
 msgid "always"
 msgstr ""
 
@@ -4526,11 +4558,11 @@ msgstr ""
 msgid "button"
 msgstr ""
 
-#: reviews/rewio.php:1382
+#: reviews/rewio.php:1298
 msgid "by date"
 msgstr ""
 
-#: reviews/rewio.php:1383
+#: reviews/rewio.php:1299
 msgid "by rating"
 msgstr ""
 
@@ -4638,7 +4670,7 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: reviews/rewio.php:1090
+#: reviews/rewio.php:990
 msgid "error"
 msgstr ""
 
@@ -4662,7 +4694,7 @@ msgstr ""
 msgid "for example max://…"
 msgstr ""
 
-#: catalog/catalog-import.php:335
+#: src/import/index.js:41
 msgid "for example:"
 msgstr ""
 
@@ -4702,7 +4734,7 @@ msgstr ""
 msgid "from"
 msgstr ""
 
-#: catalog/catalog-import.php:335 catalog/catalog.php:143
+#: catalog/catalog-import.php:315 catalog/catalog.php:143
 msgid "from "
 msgstr ""
 
@@ -4736,7 +4768,7 @@ msgstr ""
 msgid "hidden"
 msgstr ""
 
-#: reviews/rewio.php:1028
+#: reviews/rewio.php:1067
 msgid "hide"
 msgstr ""
 
@@ -4800,7 +4832,7 @@ msgid_plural "models"
 msgstr[0] ""
 msgstr[1] ""
 
-#: reviews/rewio.php:1091
+#: reviews/rewio.php:991
 msgid "most likely, the server ran out of time"
 msgstr ""
 
@@ -4848,7 +4880,7 @@ msgstr ""
 msgid "number"
 msgstr ""
 
-#: seo/metrika.php:435
+#: seo/metrika.php:381
 msgid "off"
 msgstr ""
 
@@ -4892,7 +4924,7 @@ msgstr ""
 msgid "photos"
 msgstr ""
 
-#: reviews/rewio.php:1033
+#: reviews/rewio.php:1072
 msgid "photos:"
 msgstr ""
 
@@ -4942,7 +4974,7 @@ msgstr ""
 msgid "rating"
 msgstr ""
 
-#: reviews/rewio.php:874 reviews/rewio.php:989 reviews/rewio.php:1217 reviews/rewio.php:1354 reviews/reviews.php:177
+#: reviews/rewio.php:874 reviews/rewio.php:1028 reviews/rewio.php:1133 reviews/rewio.php:1270 reviews/reviews.php:177
 msgid "review"
 msgid_plural "reviews"
 msgstr[0] ""
@@ -5126,7 +5158,7 @@ msgstr ""
 msgid "»</a> — the halls block was added (the halls themselves — “Memorial → Halls for the memorial meal”)"
 msgstr ""
 
-#: content/guide.php:321
+#: content/guide.php:327
 msgid "— a draft with the search. For an article to appear on it: open the article → “Page Attributes” → “Parent” → “Good to know”."
 msgstr ""
 
@@ -5216,7 +5248,7 @@ msgstr ""
 msgid "“Going to MAX”,"
 msgstr ""
 
-#: content/guide.php:321
+#: content/guide.php:327
 msgid "“Good to know”"
 msgstr ""
 
@@ -5240,7 +5272,7 @@ msgstr ""
 msgid "“Our services” block"
 msgstr ""
 
-#: catalog/catalog-import.php:340 memorial-plugin.php:115
+#: memorial-plugin.php:115
 msgid "“Our works”"
 msgstr ""
 
