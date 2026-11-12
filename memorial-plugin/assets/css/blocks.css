@@ -748,7 +748,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .product__desc{margin-top:3rem}
 .fnav{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1.6rem 2rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--memorial-plugin-line2)}
 .fnav ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
-.fnav a{white-space:normal;color:var(--memorial-plugin-ink)}
+.fnav a,.fnav .fnav__col a{white-space:normal;color:var(--memorial-plugin-ink)}
 .fnav a:hover{color:var(--memorial-plugin-gold3);text-decoration:underline;text-underline-offset:3px}
 .fnav__title{margin:0 0 .8rem;font:600 .8125rem/1.3 var(--memorial-plugin-sans);letter-spacing:.12em;text-transform:uppercase;color:var(--memorial-plugin-gold3)}
 .fnav__title a,body .fnav__title a{color:var(--memorial-plugin-gold3);font-size:inherit}
