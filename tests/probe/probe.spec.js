@@ -457,6 +457,10 @@ test.describe( 'аудит блоков', () => {
 		report.blocks = {};
 		for ( const name of names ) {
 			const loc = canvas.locator( `[data-type="${ name }"]` ).first();
+			if ( ! ( await loc.count().catch( () => 0 ) ) ) {
+				report.blocks[ name ] = { missing: true };
+				continue;
+			}
 			const info = await loc.evaluate( ( el ) => {
 				const r = el.getBoundingClientRect();
 				const text = el.innerText.trim();
@@ -465,15 +469,17 @@ test.describe( 'аудит блоков', () => {
 					return s.opacity === '0' || s.visibility === 'hidden';
 				} ).length;
 				return { w: Math.round( r.width ), h: Math.round( r.height ), text: text.slice( 0, 300 ), hiddenEls: hidden, html: el.innerHTML.slice( 0, 600 ) };
-			} ).catch( ( e ) => ( { error: e.message.slice( 0, 200 ) } ) );
-			await loc.scrollIntoViewIfNeeded().catch( () => {} );
+			}, null, { timeout: 5000 } ).catch( ( e ) => ( { error: e.message.slice( 0, 200 ) } ) );
+			await loc.scrollIntoViewIfNeeded( { timeout: 5000 } ).catch( () => {} );
 			await tab.waitForTimeout( 400 );
-			await loc.screenshot( { path: `${ DIR }/blk-${ name.replace( /\W+/g, '-' ) }.png` } ).catch( () => {} );
+			await loc.screenshot( { path: `${ DIR }/blk-${ name.replace( /\W+/g, '-' ) }.png`, timeout: 10000 } ).catch( () => {} );
+			// промежуточный отчёт: если тест прервётся, собранное останется
+			fs.writeFileSync( `${ DIR }/blocks-audit.json`, JSON.stringify( report, null, 1 ) );
 			report.blocks[ name ] = info;
 		}
 		// вставка: категории плагина
 		await tab.keyboard.press( 'Escape' );
-		await tab.locator( 'button.editor-document-tools__inserter-toggle' ).click().catch( () => {} );
+		await tab.locator( 'button.editor-document-tools__inserter-toggle' ).click( { timeout: 5000 } ).catch( () => {} );
 		await tab.waitForTimeout( 2500 );
 		await tab.screenshot( { path: `${ DIR }/blk-inserter.png` } ).catch( () => {} );
 		report.patterns = await tab.evaluate( async () => {
@@ -508,7 +514,7 @@ test.describe( 'аудит блоков', () => {
 			await t.waitForTimeout( 20000 );
 			await t.screenshot( { path: `${ DIR }/blk-page-${ p.post_name }-top.png` } );
 			const fr = t.frameLocator( 'iframe[name="editor-canvas"]' );
-			await fr.locator( 'footer, .footer' ).last().scrollIntoViewIfNeeded().catch( () => {} );
+			await fr.locator( 'footer, .footer' ).last().scrollIntoViewIfNeeded( { timeout: 5000 } ).catch( () => {} );
 			await t.waitForTimeout( 2000 );
 			await t.screenshot( { path: `${ DIR }/blk-page-${ p.post_name }-bottom.png` } );
 			report[ 'mode-' + p.post_name ] = await t.evaluate( () => window.wp.data.select( 'core/editor' ).getRenderingMode?.() ).catch( () => null );
