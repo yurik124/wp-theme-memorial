@@ -188,3 +188,28 @@ test( 'общий текст: правка в редакторе сохраня�
 		)
 		.toContain( added.trim() );
 } );
+
+test( 'общий текст: основной телефон (@first) и ссылка tel: у кнопки', async ( {
+	page,
+} ) => {
+	await login( page );
+	await page.goto( '/wp-admin/admin.php?page=mem-contacts' );
+	const key = 'mem_contacts:phones.@first.num';
+	const now = await api( page, {
+		path: '/memorial-plugin/v1/texts?keys[]=' + encodeURIComponent( key ),
+	} );
+	expect( now.values[ key ] ).toBeTruthy();
+	const button = `<!-- wp:buttons -->\n<div class="wp-block-buttons"><!-- wp:button {"metadata":{"bindings":{"text":{"source":"memorial-plugin/settings","args":{"key":"${ key }"}},"url":{"source":"memorial-plugin/settings","args":{"key":"${ key }","as":"tel"}}}}} -->\n<div class="wp-block-button"><a class="wp-block-button__link wp-element-button"></a></div>\n<!-- /wp:button --></div>\n<!-- /wp:buttons -->`;
+	const p = await api( page, {
+		path: '/wp/v2/pages',
+		method: 'POST',
+		data: { title: 'Bindings phone', status: 'publish', content: button },
+	} );
+	await page.goto( p.link );
+	const link = page.locator( 'main .wp-block-button__link' );
+	await expect( link ).toHaveText( now.values[ key ] );
+	await expect( link ).toHaveAttribute(
+		'href',
+		'tel:' + now.values[ key ].replace( /[^\d+]/g, '' )
+	);
+} );

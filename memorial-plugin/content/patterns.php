@@ -30,6 +30,11 @@ add_action(
 		// A paragraph whose text is a field of the settings (blocks/bindings.php): edited on a page, changed everywhere.
 		$bound = static fn( $key, $cls = '' ) => '<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"memorial-plugin/settings","args":{"key":"' . $key . '"}}}}' . ( $cls ? ',"className":"' . $cls . '"' : '' ) . '} --><p' . ( $cls ? ' class="' . $cls . '"' : '' ) . '></p><!-- /wp:paragraph -->';
 		$pats  = array(
+			'contacts-shared' => array(
+				__( 'Contacts: phone, address and hours (shared texts)', 'memorial-plugin' ),
+				__( 'A heading and three lines from Memorial → Contacts. The lines can be edited right on the page — they change on every page and in the settings.', 'memorial-plugin' ),
+				$h( __( 'How to reach us', 'memorial-plugin' ) ) . $bound( 'mem_contacts:phones.@first.num', 'has-large-font-size' ) . $bound( 'mem_contacts:addrs.@first.addr' ) . $bound( 'mem_contacts:addrs.@first.hours' ),
+			),
 			'night-shared' => array(
 				__( 'Calls at night (shared text)', 'memorial-plugin' ),
 				__( 'The line “Calls outside working hours” from Memorial → Contacts. It can be changed right on the page — the change goes to the settings and to every page that shows it.', 'memorial-plugin' ),

@@ -6659,3 +6659,39 @@ msgstr "Звонки ночью (общий текст)"
 
 msgid "The line “Calls outside working hours” from Memorial → Contacts. It can be changed right on the page — the change goes to the settings and to every page that shows it."
 msgstr "Строка «Звонки в нерабочее время» из «Мемориал → Контакты». Её можно поменять прямо на странице — правка попадёт в настройки и на все страницы, где она выводится."
+
+msgid "A heading and three lines from Memorial → Contacts. The lines can be edited right on the page — they change on every page and in the settings."
+msgstr "Заголовок и три строки из «Мемориал → Контакты». Строки можно править прямо на странице — они меняются на всех страницах и в настройках."
+
+msgid "A paragraph whose text is kept in Memorial → Contacts: edit it here or there — it changes everywhere."
+msgstr "Абзац, текст которого хранится в «Мемориал → Контакты»: правьте здесь или там — он изменится везде."
+
+msgid "Contacts: phone, address and hours (shared texts)"
+msgstr "Контакты: телефон, адрес и часы (общие тексты)"
+
+msgid "How to reach us"
+msgstr "Как с нами связаться"
+
+msgid "Main address (shared text)"
+msgstr "Основной адрес (общий текст)"
+
+msgid "Main address (the first one in Memorial → Contacts)"
+msgstr "Основной адрес (первый в «Мемориал → Контакты»)"
+
+msgid "Main phone (shared text)"
+msgstr "Основной телефон (общий текст)"
+
+msgid "Main phone (the first one in Memorial → Contacts)"
+msgstr "Основной телефон (первый в «Мемориал → Контакты»)"
+
+msgid "Not chosen — the block has its own text, only on this page."
+msgstr "Не выбрано — у блока свой текст, только на этой странице."
+
+msgid "Opening hours (shared text)"
+msgstr "Часы работы (общий текст)"
+
+msgid "Opening hours of the main address"
+msgstr "Часы работы основного адреса"
+
+msgid "Take the text from the Memorial settings"
+msgstr "Взять текст из настроек «Мемориала»"

@@ -14,11 +14,14 @@ import {
 	dispatch as dataDispatch,
 	useSelect,
 } from '@wordpress/data';
-import { registerBlockBindingsSource } from '@wordpress/blocks';
+import {
+	registerBlockBindingsSource,
+	registerBlockVariation,
+} from '@wordpress/blocks';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { InspectorControls } from '@wordpress/block-editor';
-import { Notice, PanelBody } from '@wordpress/components';
+import { ComboboxControl, Notice, PanelBody } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
@@ -26,9 +29,6 @@ import { __ } from '@wordpress/i18n';
 const DATA = window.memorialPluginBindings || {};
 const SOURCE = DATA.source || 'memorial-plugin/settings';
 const STORE = 'memorial-plugin/texts';
-const FIELD_LABEL = Object.fromEntries(
-	( DATA.fields || [] ).map( ( f ) => [ f.key, f.label ] )
-);
 
 // Plain text of the setting ↔ the HTML of a rich text.
 const toHtml = ( text ) =>
@@ -136,6 +136,10 @@ registerBlockBindingsSource( {
 					'(this text is no longer in the settings)',
 					'memorial-plugin'
 				);
+			} else if ( binding?.args?.as === 'tel' ) {
+				out[ attr ] = 'tel:' + String( value ).replace( /[^\d+]/g, '' );
+			} else if ( binding?.args?.as === 'mailto' ) {
+				out[ attr ] = 'mailto:' + value;
 			} else {
 				out[ attr ] = attr === 'url' ? value : toHtml( value );
 			}
@@ -146,7 +150,8 @@ registerBlockBindingsSource( {
 		let changed = false;
 		Object.entries( bindings ).forEach( ( [ attr, binding ] ) => {
 			const key = binding?.args?.key;
-			if ( key && binding.newValue !== undefined ) {
+			// A link made from the value (tel:, mailto:) follows the text, it is not edited by itself.
+			if ( key && ! binding.args.as && binding.newValue !== undefined ) {
 				dispatch( STORE ).edit(
 					key,
 					attr === 'url'
@@ -213,42 +218,93 @@ addFilter(
 	}
 );
 
-/* ---------- A hint on bound blocks: one text for the whole site ---------- */
+/* ---------- “Shared text” panel: take the text of a block from the settings, or keep its own ---------- */
 
-const withSharedHint = createHigherOrderComponent(
+// The text attribute of the blocks that can show a shared text.
+const TEXT_ATTR = {
+	'core/paragraph': 'content',
+	'core/heading': 'content',
+	'core/button': 'text',
+};
+const FIELD_OPTIONS = ( DATA.fields || [] ).map( ( f ) => ( {
+	value: f.key,
+	label: f.label,
+} ) );
+
+const withSharedText = createHigherOrderComponent(
 	( BlockEdit ) => ( props ) => {
-		const bindings = props.attributes?.metadata?.bindings || {};
-		const keys = Object.values( bindings )
-			.filter( ( b ) => b?.source === SOURCE )
-			.map( ( b ) => b?.args?.key )
-			.filter( Boolean );
-		const unsaved = useSelect(
-			( select ) => keys.some( ( k ) => k in select( STORE ).getEdits() ),
-			[ keys.join( ',' ) ]
+		const { name, attributes, setAttributes } = props;
+		const attr = TEXT_ATTR[ name ];
+		const metadata = attributes?.metadata || {};
+		const bindings = metadata.bindings || {};
+		const own = attr && bindings[ attr ]?.source === SOURCE;
+		const key = own ? bindings[ attr ].args?.key : '';
+		const { unsaved, current } = useSelect(
+			( select ) => ( {
+				unsaved: !! key && key in select( STORE ).getEdits(),
+				current: key ? select( STORE ).getValue( key ) : undefined,
+			} ),
+			[ key ]
 		);
-		if ( ! keys.length ) {
+		if ( ! attr ) {
 			return <BlockEdit { ...props } />;
 		}
+		const choose = ( next ) => {
+			const rest = { ...bindings };
+			delete rest[ attr ];
+			if ( rest.url?.source === SOURCE ) {
+				delete rest.url;
+			}
+			if ( ! next ) {
+				// Back to the block's own text: what was shown stays as its text.
+				const keep =
+					typeof current === 'string' ? { [ attr ]: toHtml( current ) } : {};
+				const meta = { ...metadata, bindings: rest };
+				if ( ! Object.keys( rest ).length ) {
+					delete meta.bindings;
+				}
+				setAttributes( { ...keep, metadata: meta } );
+				return;
+			}
+			rest[ attr ] = { source: SOURCE, args: { key: next } };
+			// A button with a phone number calls it.
+			if ( name === 'core/button' && /\.num$/.test( next ) ) {
+				rest.url = { source: SOURCE, args: { key: next, as: 'tel' } };
+			}
+			setAttributes( { metadata: { ...metadata, bindings: rest } } );
+		};
 		return (
 			<>
 				<BlockEdit { ...props } />
 				<InspectorControls>
 					<PanelBody
 						title={ __( 'Shared text', 'memorial-plugin' ) }
-						initialOpen
+						initialOpen={ !! own }
 					>
-						<Notice status="info" isDismissible={ false }>
-							{ __(
-								'This text is stored once in the Memorial settings: a change here changes it on every page that shows it, after the page is saved.',
+						<ComboboxControl
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							label={ __(
+								'Take the text from the Memorial settings',
 								'memorial-plugin'
 							) }
-						</Notice>
-						{ keys.map( ( k ) => (
-							<p key={ k } className="memorial-plugin-shared-key">
-								{ FIELD_LABEL[ k ] || k }
-							</p>
-						) ) }
-						{ ! DATA.canEdit && (
+							help={ __(
+								'Not chosen — the block has its own text, only on this page.',
+								'memorial-plugin'
+							) }
+							value={ key || null }
+							options={ FIELD_OPTIONS }
+							onChange={ ( v ) => choose( v || '' ) }
+						/>
+						{ own && (
+							<Notice status="info" isDismissible={ false }>
+								{ __(
+									'This text is stored once in the Memorial settings: a change here changes it on every page that shows it, after the page is saved.',
+									'memorial-plugin'
+								) }
+							</Notice>
+						) }
+						{ own && ! DATA.canEdit && (
 							<Notice status="warning" isDismissible={ false }>
 								{ __(
 									'Only an editor or an administrator can change it.',
@@ -269,11 +325,53 @@ const withSharedHint = createHigherOrderComponent(
 			</>
 		);
 	},
-	'withMemorialPluginSharedHint'
+	'withMemorialPluginSharedText'
 );
 
 addFilter(
 	'editor.BlockEdit',
-	'memorial-plugin/bindings/hint',
-	withSharedHint
+	'memorial-plugin/bindings/shared-text',
+	withSharedText
+);
+
+/* ---------- Ready blocks: texts of the contacts as paragraphs ---------- */
+
+const bind = ( key ) => ( {
+	metadata: { bindings: { content: { source: SOURCE, args: { key } } } },
+} );
+[
+	[
+		'phone',
+		__( 'Main phone (shared text)', 'memorial-plugin' ),
+		'mem_contacts:phones.@first.num',
+		'phone',
+	],
+	[
+		'address',
+		__( 'Main address (shared text)', 'memorial-plugin' ),
+		'mem_contacts:addrs.@first.addr',
+		'location',
+	],
+	[
+		'hours',
+		__( 'Opening hours (shared text)', 'memorial-plugin' ),
+		'mem_contacts:addrs.@first.hours',
+		'clock',
+	],
+].forEach( ( [ slug, title, key, icon ] ) =>
+	registerBlockVariation( 'core/paragraph', {
+		name: 'memorial-plugin/' + slug,
+		title,
+		description: __(
+			'A paragraph whose text is kept in Memorial → Contacts: edit it here or there — it changes everywhere.',
+			'memorial-plugin'
+		),
+		icon,
+		category: 'memorial-contacts',
+		keywords: [ 'memorial', __( 'contacts', 'memorial-plugin' ) ],
+		scope: [ 'inserter' ],
+		attributes: bind( key ),
+		isActive: ( attrs ) =>
+			attrs?.metadata?.bindings?.content?.args?.key === key,
+	} )
 );

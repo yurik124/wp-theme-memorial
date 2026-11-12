@@ -256,7 +256,7 @@ msgstr ""
 msgid "5. Updating"
 msgstr ""
 
-#: content/patterns.php:50
+#: content/patterns.php:55
 msgid "A block with the phone. The title and the text are changed in the block settings."
 msgstr ""
 
@@ -272,6 +272,10 @@ msgstr ""
 #: blocks/legacy/render/tagline.php:13
 #, php-format
 msgid "A funeral company on the market for more than %d years"
+msgstr ""
+
+#: content/patterns.php:35
+msgid "A heading and three lines from Memorial → Contacts. The lines can be edited right on the page — they change on every page and in the settings."
 msgstr ""
 
 #: places/places.php:159
@@ -290,15 +294,19 @@ msgstr ""
 msgid "A number (500), a range (200–300) or words (free); ₽ is added to numbers by itself."
 msgstr ""
 
-#: content/patterns.php:45
+#: src/bindings/index.js:357
+msgid "A paragraph whose text is kept in Memorial → Contacts: edit it here or there — it changes everywhere."
+msgstr ""
+
+#: content/patterns.php:50
 msgid "A paragraph with the number of models and the list of sections with prices — everything is counted automatically."
 msgstr ""
 
-#: blocks/bindings.php:231
+#: blocks/bindings.php:247
 msgid "A phone number has only digits, spaces, brackets, hyphens and a leading “+”."
 msgstr ""
 
-#: content/patterns.php:55
+#: content/patterns.php:60
 msgid "A photo of the craftsman’s work and a couple of sentences — for wreaths, portraits on monuments, ribbon printing."
 msgstr ""
 
@@ -318,11 +326,11 @@ msgstr ""
 msgid "A single product from the catalog."
 msgstr ""
 
-#: content/patterns.php:63
+#: content/patterns.php:68
 msgid "A title and three expandable questions. They get onto the “Questions and answers” page automatically."
 msgstr ""
 
-#: content/patterns.php:40
+#: content/patterns.php:45
 msgid "A title, the automatic summary “96 models, from 35,000 ₽” and the catalog."
 msgstr ""
 
@@ -564,7 +572,7 @@ msgstr ""
 msgid "All requests:"
 msgstr ""
 
-#: content/patterns.php:74
+#: content/patterns.php:79
 msgid "All reviews →"
 msgstr ""
 
@@ -596,7 +604,7 @@ msgstr ""
 msgid "Another service"
 msgstr ""
 
-#: content/patterns.php:64
+#: content/patterns.php:69
 msgid "Answer."
 msgstr ""
 
@@ -778,7 +786,7 @@ msgstr ""
 msgid "Call requests"
 msgstr ""
 
-#: content/patterns.php:49 blocks/content/content-blocks.php:297
+#: content/patterns.php:54 blocks/content/content-blocks.php:297
 msgid "Call to action"
 msgstr ""
 
@@ -804,7 +812,7 @@ msgstr ""
 msgid "Called back"
 msgstr ""
 
-#: content/patterns.php:34
+#: content/patterns.php:39
 msgid "Calls at night (shared text)"
 msgstr ""
 
@@ -872,7 +880,7 @@ msgstr ""
 msgid "Cards with links to the service pages. The photo is optional: when it is not chosen, the featured image of the page is used."
 msgstr ""
 
-#: content/patterns.php:83
+#: content/patterns.php:88
 msgid "Cards “photo, title, size and price” from “Our works” — 6 random ones, different every time. A click leads to the work."
 msgstr ""
 
@@ -880,7 +888,7 @@ msgstr ""
 msgid "Cards: these works by title, comma separated"
 msgstr ""
 
-#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:41 seo/seo.php:70 blocks/legacy/legacy.php:171 blocks/legacy/render/catalog-archive.php:25
+#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:46 seo/seo.php:70 blocks/legacy/legacy.php:171 blocks/legacy/render/catalog-archive.php:25
 msgid "Catalog"
 msgstr ""
 
@@ -898,7 +906,7 @@ msgstr ""
 msgid "Catalog exported: %d products."
 msgstr ""
 
-#: content/patterns.php:39
+#: content/patterns.php:44
 msgid "Catalog of the page with a summary"
 msgstr ""
 
@@ -940,7 +948,7 @@ msgstr ""
 msgid "Catalog sub-sections list"
 msgstr ""
 
-#: content/patterns.php:44
+#: content/patterns.php:49
 msgid "Catalog summary by section"
 msgstr ""
 
@@ -991,7 +999,7 @@ msgstr ""
 msgid "Change what the block shows"
 msgstr ""
 
-#: src/bindings/index.js:253
+#: src/bindings/index.js:309
 msgid "Changed — it goes to the settings when you save the page."
 msgstr ""
 
@@ -1145,6 +1153,10 @@ msgstr ""
 
 #: blocks/home/home.php:163
 msgid "Contacts list"
+msgstr ""
+
+#: content/patterns.php:34
+msgid "Contacts: phone, address and hours (shared texts)"
 msgstr ""
 
 #: blocks/legacy/legacy.php:28
@@ -1530,11 +1542,11 @@ msgstr ""
 msgid "Everyone has been called back."
 msgstr ""
 
-#: content/patterns.php:79 content/patterns.php:84
+#: content/patterns.php:84 content/patterns.php:89
 msgid "Examples of our works"
 msgstr ""
 
-#: content/patterns.php:82
+#: content/patterns.php:87
 msgid "Examples of works as cards (random)"
 msgstr ""
 
@@ -1733,7 +1745,7 @@ msgstr ""
 msgid "Frequent searches:"
 msgstr ""
 
-#: content/patterns.php:62 content/patterns.php:64
+#: content/patterns.php:67 content/patterns.php:69
 msgid "Frequently asked questions"
 msgstr ""
 
@@ -1967,6 +1979,10 @@ msgstr ""
 
 #: prices/prices.php:275
 msgid "How to put a price into the text of a page:"
+msgstr ""
+
+#: content/patterns.php:36
+msgid "How to reach us"
 msgstr ""
 
 #: seo/metrika.php:115
@@ -2207,12 +2223,28 @@ msgstr ""
 msgid "Main address"
 msgstr ""
 
+#: src/bindings/index.js:343
+msgid "Main address (shared text)"
+msgstr ""
+
+#: blocks/bindings.php:307
+msgid "Main address (the first one in Memorial → Contacts)"
+msgstr ""
+
 #: blocks/content/inline-values.php:65
 msgid "Main phone (link)"
 msgstr ""
 
+#: src/bindings/index.js:337
+msgid "Main phone (shared text)"
+msgstr ""
+
 #: blocks/content/inline-values.php:83
 msgid "Main phone (text)"
+msgstr ""
+
+#: blocks/bindings.php:303
+msgid "Main phone (the first one in Memorial → Contacts)"
 msgstr ""
 
 #: seo/seo-registry.php:35
@@ -2289,7 +2321,7 @@ msgstr ""
 msgid "Memorial meal halls: no halls added — “Memorial → Halls for the memorial meal”. Visitors do not see this message."
 msgstr ""
 
-#: src/bindings/index.js:117 blocks/bindings.php:295
+#: src/bindings/index.js:117 blocks/bindings.php:327
 msgid "Memorial settings"
 msgstr ""
 
@@ -2571,6 +2603,10 @@ msgstr ""
 msgid "Not chosen — %s."
 msgstr ""
 
+#: src/bindings/index.js:283
+msgid "Not chosen — the block has its own text, only on this page."
+msgstr ""
+
 #: reviews/rewio.php:1026
 msgid "Not connected — paste the API key below and save."
 msgstr ""
@@ -2719,11 +2755,11 @@ msgstr ""
 msgid "Only 5★"
 msgstr ""
 
-#: blocks/bindings.php:236
+#: blocks/bindings.php:252
 msgid "Only a whole number without spaces."
 msgstr ""
 
-#: src/bindings/index.js:245
+#: src/bindings/index.js:301
 msgid "Only an editor or an administrator can change it."
 msgstr ""
 
@@ -2779,6 +2815,10 @@ msgstr ""
 msgid "Opening hours (optional)"
 msgstr ""
 
+#: src/bindings/index.js:349
+msgid "Opening hours (shared text)"
+msgstr ""
+
 #: blocks/home/home.php:191
 msgid "Opening hours badge"
 msgstr ""
@@ -2789,6 +2829,10 @@ msgstr ""
 
 #: blocks/home/home.php:192
 msgid "Opening hours of the first address, or the night line when it is set (Memorial → Contacts)."
+msgstr ""
+
+#: blocks/bindings.php:311
+msgid "Opening hours of the main address"
 msgstr ""
 
 #: blocks/home/home.php:95
@@ -2839,7 +2883,7 @@ msgstr ""
 msgid "Our works"
 msgstr ""
 
-#: content/patterns.php:77
+#: content/patterns.php:82
 msgid "Our works (3 examples)"
 msgstr ""
 
@@ -3129,7 +3173,7 @@ msgstr ""
 msgid "Price on request"
 msgstr ""
 
-#: content/patterns.php:67
+#: content/patterns.php:72
 msgid "Price table"
 msgstr ""
 
@@ -3273,7 +3317,7 @@ msgstr ""
 msgid "Question topics"
 msgstr ""
 
-#: content/patterns.php:64
+#: content/patterns.php:69
 msgid "Question?"
 msgstr ""
 
@@ -3463,7 +3507,7 @@ msgstr ""
 msgid "Reviews from the guest book"
 msgstr ""
 
-#: content/patterns.php:72
+#: content/patterns.php:77
 msgid "Reviews from the guest book (3 latest)"
 msgstr ""
 
@@ -3479,7 +3523,7 @@ msgstr ""
 msgid "Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews)."
 msgstr ""
 
-#: content/patterns.php:74
+#: content/patterns.php:79
 msgid "Reviews of our customers"
 msgstr ""
 
@@ -3729,7 +3773,7 @@ msgstr ""
 msgid "Shape"
 msgstr ""
 
-#: src/bindings/index.js:229
+#: src/bindings/index.js:273
 msgid "Shared text"
 msgstr ""
 
@@ -4012,7 +4056,11 @@ msgstr ""
 msgid "Tagline: years in business"
 msgstr ""
 
-#: content/patterns.php:58
+#: src/bindings/index.js:279
+msgid "Take the text from the Memorial settings"
+msgstr ""
+
+#: content/patterns.php:63
 msgid "Tell in 2–3 sentences how and who does it, how long it takes. Choose a photo of the craftsman at work on the left."
 msgstr ""
 
@@ -4124,7 +4172,7 @@ msgstr ""
 msgid "The key is in the app.rewio.ru account (it starts with hrev_). A read-only key is enough. The key is kept on the site’s server, visitors do not see it."
 msgstr ""
 
-#: content/patterns.php:35
+#: content/patterns.php:40
 msgid "The line “Calls outside working hours” from Memorial → Contacts. It can be changed right on the page — the change goes to the settings and to every page that shows it."
 msgstr ""
 
@@ -4178,7 +4226,7 @@ msgstr ""
 msgid "The section of works with photos and prices, the works manager, the works blocks."
 msgstr ""
 
-#: src/bindings/index.js:201
+#: src/bindings/index.js:206
 msgid "The shared texts were not saved."
 msgstr ""
 
@@ -4191,7 +4239,7 @@ msgid "The table on the cremation page — the “Cremation” block. The total 
 msgstr ""
 
 #. translators: %d: number of characters.
-#: blocks/bindings.php:226
+#: blocks/bindings.php:242
 #, php-format
 msgid "The text is too long: up to %d characters."
 msgstr ""
@@ -4248,7 +4296,7 @@ msgstr ""
 msgid "There is no such question on the site yet. Call or leave your number — we will answer."
 msgstr ""
 
-#: blocks/bindings.php:402
+#: blocks/bindings.php:440
 msgid "These settings were changed elsewhere while the page was open (in another tab or by another person). Reload the page to see the current texts, then make the change again."
 msgstr ""
 
@@ -4260,7 +4308,7 @@ msgstr ""
 msgid "Third step"
 msgstr ""
 
-#: blocks/bindings.php:241
+#: blocks/bindings.php:257
 msgid "This is not an email address."
 msgstr ""
 
@@ -4272,11 +4320,11 @@ msgstr ""
 msgid "This part of the site is switched off in Memorial → Features."
 msgstr ""
 
-#: src/bindings/index.js:233
+#: src/bindings/index.js:293
 msgid "This text is stored once in the Memorial settings: a change here changes it on every page that shows it, after the page is saved."
 msgstr ""
 
-#: blocks/bindings.php:390 blocks/bindings.php:409
+#: blocks/bindings.php:428 blocks/bindings.php:447
 msgid "This text no longer exists in the settings (the row was removed?)."
 msgstr ""
 
@@ -4284,11 +4332,11 @@ msgstr ""
 msgid "This value is empty — check the parameter."
 msgstr ""
 
-#: content/patterns.php:73
+#: content/patterns.php:78
 msgid "Three reviews from the guest book with the photo of the page."
 msgstr ""
 
-#: content/patterns.php:78
+#: content/patterns.php:83
 msgid "Three works with photos, year and prices."
 msgstr ""
 
@@ -4380,7 +4428,7 @@ msgstr ""
 msgid "Twice a day"
 msgstr ""
 
-#: content/patterns.php:68
+#: content/patterns.php:73
 msgid "Two columns “Service — Price”. Prices and “₽” do not break, the table stays neat on a phone."
 msgstr ""
 
@@ -4516,11 +4564,11 @@ msgstr ""
 msgid "We are on Yandex Maps"
 msgstr ""
 
-#: content/patterns.php:57
+#: content/patterns.php:62
 msgid "We make it ourselves"
 msgstr ""
 
-#: content/patterns.php:54
+#: content/patterns.php:59
 msgid "We make it ourselves (photo + text)"
 msgstr ""
 
@@ -5751,7 +5799,7 @@ msgstr ""
 msgid "consent to personal data processing"
 msgstr ""
 
-#: blocks/block-meta.php:139 blocks/block-meta.php:142 blocks/block-meta.php:143 blocks/block-meta.php:144 blocks/block-meta.php:170 blocks/block-meta.php:176
+#: src/bindings/index.js:363 blocks/block-meta.php:139 blocks/block-meta.php:142 blocks/block-meta.php:143 blocks/block-meta.php:144 blocks/block-meta.php:170
 msgid "contacts"
 msgstr ""
 

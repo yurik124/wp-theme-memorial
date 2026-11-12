@@ -10,6 +10,9 @@
  * Key = "<option>:<path>", the path goes through groups by field name and through lists by the row id
  * (`_id`, given to every row when it is saved — core/settings.php), not by its position:
  *   mem_home:services.items.k3j9x0a2qe.title
+ * “@first” instead of a row id is the first row of the list — the main phone, the main address:
+ *   mem_contacts:phones.@first.num
+ * Argument "as": "tel" or "mailto" turns the value into a link address (for the URL of a button).
  * Only text fields of the settings schema can be bound (text, textarea, number, email).
  *
  * Rights: editing needs memorial_edit_texts — editors and administrators (decision of 12.11.2026);
@@ -45,7 +48,7 @@ add_filter( 'user_has_cap', 'memorial_plugin_texts_cap' );
  * @return array|null
  */
 function memorial_plugin_texts_field( $key ) {
-	if ( ! preg_match( '/^(mem_[a-z_]+):([a-z0-9_]+(?:\.[a-z0-9_]+)*)$/', (string) $key, $m ) ) {
+	if ( ! preg_match( '/^(mem_[a-z_]+):((?:[a-z0-9_]+|@first)(?:\.(?:[a-z0-9_]+|@first))*)$/', (string) $key, $m ) ) {
 		return null;
 	}
 	$pages = function_exists( 'memorial_plugin_admin_pages' ) ? memorial_plugin_admin_pages() : array();
@@ -115,8 +118,9 @@ function memorial_plugin_texts_get( $data, $path, $fields ) {
 			++$i;
 			$row = null;
 			foreach ( is_array( $node ) ? $node : array() as $r ) {
-				if ( is_array( $r ) && ( $r['_id'] ?? '' ) === $path[ $i ] ) {
+				if ( is_array( $r ) && memorial_plugin_texts_row_is( $r, $path[ $i ] ) ) {
 					$row = $r;
+					break;
 				}
 			}
 			$node   = $row;
@@ -129,6 +133,18 @@ function memorial_plugin_texts_get( $data, $path, $fields ) {
 		}
 	}
 	return is_scalar( $node ) ? (string) $node : null;
+}
+
+/**
+ * Is this the row a key names: by its id; “@first” names the first row of the list, so the loop stops
+ * on the first row it looks at (the main phone and the main address are the first ones in Memorial → Contacts).
+ *
+ * @param array  $row Row.
+ * @param string $id  Row id or “@first”.
+ * @return bool
+ */
+function memorial_plugin_texts_row_is( $row, $id ) {
+	return '@first' === $id || (string) ( $row['_id'] ?? '' ) === $id;
 }
 
 /**
@@ -153,7 +169,7 @@ function memorial_plugin_texts_set( $data, $path, $fields, $value ) {
 	if ( 'repeater' === ( $field['type'] ?? '' ) ) {
 		$id = array_shift( $path );
 		foreach ( (array) ( $data[ $seg ] ?? array() ) as $n => $row ) {
-			if ( is_array( $row ) && ( $row['_id'] ?? '' ) === $id ) {
+			if ( is_array( $row ) && memorial_plugin_texts_row_is( $row, $id ) ) {
 				$new = $path ? memorial_plugin_texts_set( $row, $path, $field['fields'], $value ) : null;
 				if ( null === $new ) {
 					return null;
@@ -279,6 +295,22 @@ function memorial_plugin_texts_fields_list() {
 		};
 		$walk( call_user_func( $page['schema'] ), memorial_plugin_settings( $option ), '', wp_strip_all_tags( (string) $page['title'] ) );
 	}
+	// The main phone and address: whichever row is the first, even after the rows are reordered.
+	array_unshift(
+		$out,
+		array(
+			'key'   => 'mem_contacts:phones.@first.num',
+			'label' => __( 'Main phone (the first one in Memorial → Contacts)', 'memorial-plugin' ),
+		),
+		array(
+			'key'   => 'mem_contacts:addrs.@first.addr',
+			'label' => __( 'Main address (the first one in Memorial → Contacts)', 'memorial-plugin' ),
+		),
+		array(
+			'key'   => 'mem_contacts:addrs.@first.hours',
+			'label' => __( 'Opening hours of the main address', 'memorial-plugin' ),
+		)
+	);
 	return $out;
 }
 
@@ -297,6 +329,12 @@ function memorial_plugin_texts_register_source() {
 				$raw = memorial_plugin_texts_value( (string) ( $args['key'] ?? '' ) );
 				if ( null === $raw ) {
 					return null;
+				}
+				switch ( $args['as'] ?? '' ) {
+					case 'tel':
+						return 'tel:' . memorial_plugin_tel_of( $raw );
+					case 'mailto':
+						return 'mailto:' . sanitize_email( $raw );
 				}
 				return nl2br( esc_html( memorial_plugin_t( $raw ) ), false );
 			},
