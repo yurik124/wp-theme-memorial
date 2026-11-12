@@ -78,4 +78,12 @@
 	<rule ref="WordPress.WP.GlobalVariablesOverride.Prohibited">
 		<exclude-pattern>*/blocks/legacy/render/*</exclude-pattern>
 	</rule>
+	<!-- Custom capability: editors and administrators edit the shared texts on pages (blocks/bindings.php). -->
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="memorial_edit_texts"/>
+			</property>
+		</properties>
+	</rule>
 </ruleset>

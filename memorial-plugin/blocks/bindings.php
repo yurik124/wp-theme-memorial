@@ -55,7 +55,8 @@ function memorial_plugin_texts_field( $key ) {
 	$fields = call_user_func( $pages[ $m[1] ]['schema'] );
 	$path   = explode( '.', $m[2] );
 	$field  = null;
-	for ( $i = 0; $i < count( $path ); $i++ ) {
+	$last   = count( $path ) - 1;
+	for ( $i = 0; $i <= $last; $i++ ) {
 		$field = $fields[ $path[ $i ] ] ?? null;
 		if ( ! $field ) {
 			return null;
@@ -68,7 +69,7 @@ function memorial_plugin_texts_field( $key ) {
 			$fields = $field['fields'];
 		} elseif ( 'group' === $field['type'] ) {
 			$fields = $field['fields'];
-		} elseif ( $i !== count( $path ) - 1 ) {
+		} elseif ( $last !== $i ) {
 			return null;
 		}
 	}
@@ -87,8 +88,9 @@ function memorial_plugin_texts_field( $key ) {
  * @return mixed|null Value, or null when the place does not exist.
  */
 function memorial_plugin_texts_get( $data, $path, $fields ) {
-	$node = $data;
-	for ( $i = 0; $i < count( $path ); $i++ ) {
+	$node  = $data;
+	$total = count( $path );
+	for ( $i = 0; $i < $total; $i++ ) {
 		$field = $fields[ $path[ $i ] ] ?? array();
 		$node  = is_array( $node ) ? ( $node[ $path[ $i ] ] ?? null ) : null;
 		if ( 'repeater' === ( $field['type'] ?? '' ) ) {
@@ -376,7 +378,7 @@ function memorial_plugin_texts_write( WP_REST_Request $request ) {
 			$errors[ $key ] = $clean->get_error_message();
 			continue;
 		}
-		if ( isset( $versions[ $option ] ) && (int) $versions[ $option ] !== memorial_plugin_texts_version( $option ) ) {
+		if ( isset( $versions[ $option ] ) && memorial_plugin_texts_version( $option ) !== (int) $versions[ $option ] ) {
 			return new WP_Error(
 				'memorial_plugin_texts_conflict',
 				__( 'These settings were changed elsewhere while the page was open (in another tab or by another person). Reload the page to see the current texts, then make the change again.', 'memorial-plugin' ),
@@ -392,7 +394,14 @@ function memorial_plugin_texts_write( WP_REST_Request $request ) {
 		$changed[ $option ] = $new;
 	}
 	if ( $errors ) {
-		return new WP_Error( 'memorial_plugin_texts_invalid', implode( ' ', array_unique( $errors ) ), array( 'status' => 400, 'fields' => $errors ) );
+		return new WP_Error(
+			'memorial_plugin_texts_invalid',
+			implode( ' ', array_unique( $errors ) ),
+			array(
+				'status' => 400,
+				'fields' => $errors,
+			)
+		);
 	}
 	foreach ( $changed as $option => $data ) {
 		update_option( $option, $data ); // Goes through the sanitizer of the screen (register_setting), clears the page cache.

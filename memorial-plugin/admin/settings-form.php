@@ -200,7 +200,7 @@ function memorial_plugin_settings_rest() {
 					if ( ! isset( $pages[ $opt ] ) ) {
 						return new WP_Error( 'memorial_plugin_unknown_settings', __( 'Unknown settings page.', 'memorial-plugin' ), array( 'status' => 404 ) );
 					}
-					if ( null !== $request['version'] && function_exists( 'memorial_plugin_texts_version' ) && (int) $request['version'] !== memorial_plugin_texts_version( $opt ) ) {
+					if ( null !== $request['version'] && function_exists( 'memorial_plugin_texts_version' ) && memorial_plugin_texts_version( $opt ) !== (int) $request['version'] ) {
 						return new WP_Error(
 							'memorial_plugin_settings_conflict',
 							__( 'These settings were changed elsewhere while this screen was open (on a page of the site, in another tab or by another person). Reload the screen — your changes here are not saved.', 'memorial-plugin' ),
