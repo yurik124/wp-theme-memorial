@@ -626,17 +626,12 @@ function memorial_plugin_content_blocks_register() {
 				'description'     => $def['desc'],
 				'category'        => 'memorial',
 				'icon'            => $def['icon'],
-				'keywords'        => array( $def['tag'], 'memorial' ),
+				'keywords'        => memorial_plugin_block_keywords_of( $slug, array( $def['tag'] ) ),
 				'textdomain'      => 'memorial-plugin',
-				'example'         => array(),
+				'example'         => memorial_plugin_block_example( $attributes, 1000 ),
 				'attributes'      => $attributes,
-				'supports'        => array(
-					'autoRegister'  => true,
-					'html'          => false,
-					'spacing'       => array( 'margin' => true ),
-					// Directives of the Interactivity API in the output are processed on the server (cemeteries).
-					'interactivity' => 'cemeteries' === $slug,
-				),
+				// Directives of the Interactivity API in the output are processed on the server (cemeteries).
+				'supports'        => memorial_plugin_block_supports( 'full', array( 'interactivity' => 'cemeteries' === $slug ) ),
 				'render_callback' => static function ( $attributes ) use ( $slug ) {
 					return memorial_plugin_content_block_render( $slug, (array) $attributes );
 				},

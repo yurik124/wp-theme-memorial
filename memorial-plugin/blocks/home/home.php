@@ -204,12 +204,10 @@ function memorial_plugin_home_blocks_register() {
 				'category'        => 'memorial',
 				'icon'            => $def['icon'],
 				'textdomain'      => 'memorial-plugin',
-				'example'         => array(),
+				'keywords'        => memorial_plugin_block_keywords_of( $slug ),
+				'example'         => memorial_plugin_block_example( $def['attrs'], in_array( $slug, array( 'laurel', 'icon', 'phone-button', 'link-button', 'night-line', 'stat' ), true ) ? 400 : 1000 ),
 				'attributes'      => $def['attrs'],
-				'supports'        => array(
-					'autoRegister' => true,
-					'html'         => false,
-				),
+				'supports'        => memorial_plugin_block_supports(),
 				'render_callback' => static function ( $attributes ) use ( $render ) {
 					$html = (string) call_user_func( $render, (array) $attributes );
 					return '' === $html ? '' : memorial_plugin_add_wrapper_attributes( $html );

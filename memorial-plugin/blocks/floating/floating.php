@@ -66,15 +66,18 @@ function memorial_plugin_floating_register() {
 				'category'        => 'memorial',
 				'icon'            => $def['icon'],
 				'textdomain'      => 'memorial-plugin',
-				'example'         => array(),
-				'supports'        => array(
-					'autoRegister' => true,
-					'html'         => false,
-					'reusable'     => false,
-					'multiple'     => false,
+				'keywords'        => memorial_plugin_block_keywords_of( $slug ),
+				'example'         => memorial_plugin_block_example(),
+				'supports'        => memorial_plugin_block_supports(
+					'full',
+					array(
+						'reusable' => false,
+						'multiple' => false,
+					)
 				),
 				'render_callback' => static function () use ( $render ) {
-					return function_exists( $render ) ? (string) call_user_func( $render ) : '';
+					$html = function_exists( $render ) ? (string) call_user_func( $render ) : '';
+					return '' === trim( $html ) ? '' : memorial_plugin_add_wrapper_attributes( $html );
 				},
 			)
 		);

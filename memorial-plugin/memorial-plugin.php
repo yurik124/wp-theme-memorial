@@ -222,6 +222,7 @@ require MEMORIAL_PLUGIN_DIR . '/core/icons-fallback.php';
 
 /* Блоки-обёртки для блоковой темы (этап 2): шапка, подвал, главная, товар, каталог… */
 require MEMORIAL_PLUGIN_DIR . '/core/shortcodes-compat.php';
+require MEMORIAL_PLUGIN_DIR . '/blocks/block-meta.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/legacy/legacy.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/content/content-blocks.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/content/inline-values.php';

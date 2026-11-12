@@ -5097,3 +5097,251 @@ msgstr "Старые шорткоды [mem_…] заменены блоками 
 #: core/shortcodes-compat.php
 msgid "Review or roll back"
 msgstr "Посмотреть или откатить"
+
+#: blocks/block-meta.php
+msgid "FAQ"
+msgstr "частые вопросы"
+
+#: blocks/block-meta.php
+msgid "Yandex"
+msgstr "Яндекс"
+
+#: blocks/block-meta.php
+msgid "address"
+msgstr "адрес"
+
+#: blocks/block-meta.php
+msgid "book"
+msgstr "книга"
+
+#: blocks/block-meta.php
+msgid "breadcrumbs"
+msgstr "хлебные крошки"
+
+#: blocks/block-meta.php
+msgid "button"
+msgstr "кнопка"
+
+#: blocks/block-meta.php
+msgid "call"
+msgstr "позвонить"
+
+#: blocks/block-meta.php
+msgid "call back"
+msgstr "обратный звонок"
+
+#: blocks/block-meta.php
+msgid "call to action"
+msgstr "призыв"
+
+#: blocks/block-meta.php
+msgid "cards"
+msgstr "карточки"
+
+#: blocks/block-meta.php
+msgid "catalog"
+msgstr "каталог"
+
+#: blocks/block-meta.php
+msgid "categories"
+msgstr "разделы"
+
+#: blocks/block-meta.php
+msgid "category"
+msgstr "раздел"
+
+#: blocks/block-meta.php
+msgid "cemeteries"
+msgstr "кладбища"
+
+#: blocks/block-meta.php
+msgid "consent"
+msgstr "согласие"
+
+#: blocks/block-meta.php
+msgid "contacts"
+msgstr "контакты"
+
+#: blocks/block-meta.php
+msgid "cookie"
+msgstr "cookie"
+
+#: blocks/block-meta.php
+msgid "copyright"
+msgstr "копирайт"
+
+#: blocks/block-meta.php
+msgid "cremation"
+msgstr "кремация"
+
+#: blocks/block-meta.php
+msgid "decoration"
+msgstr "украшение"
+
+#: blocks/block-meta.php
+msgid "divider"
+msgstr "разделитель"
+
+#: blocks/block-meta.php
+msgid "figure"
+msgstr "цифра"
+
+#: blocks/block-meta.php
+msgid "footer"
+msgstr "подвал"
+
+#: blocks/block-meta.php
+msgid "form"
+msgstr "форма"
+
+#: blocks/block-meta.php
+msgid "grid"
+msgstr "сетка"
+
+#: blocks/block-meta.php
+msgid "guide"
+msgstr "справочник"
+
+#: blocks/block-meta.php
+msgid "halls"
+msgstr "залы"
+
+#: blocks/block-meta.php
+msgid "header"
+msgstr "шапка"
+
+#: blocks/block-meta.php
+msgid "home page"
+msgstr "главная"
+
+#: blocks/block-meta.php
+msgid "hours"
+msgstr "часы работы"
+
+#: blocks/block-meta.php
+msgid "icon"
+msgstr "иконка"
+
+#: blocks/block-meta.php
+msgid "laurel"
+msgstr "лавр"
+
+#: blocks/block-meta.php
+msgid "link"
+msgstr "ссылка"
+
+#: blocks/block-meta.php
+msgid "map"
+msgstr "карта"
+
+#: blocks/block-meta.php
+msgid "memorial meal"
+msgstr "поминальный обед"
+
+#: blocks/block-meta.php
+msgid "menu"
+msgstr "меню"
+
+#: blocks/block-meta.php
+msgid "mobile"
+msgstr "телефон"
+
+#: blocks/block-meta.php
+msgid "navigation"
+msgstr "навигация"
+
+#: blocks/block-meta.php
+msgid "night"
+msgstr "ночь"
+
+#: blocks/block-meta.php
+msgid "number"
+msgstr "число"
+
+#: blocks/block-meta.php
+msgid "packages"
+msgstr "пакеты"
+
+#: blocks/block-meta.php
+msgid "pages"
+msgstr "страницы"
+
+#: blocks/block-meta.php
+msgid "phone"
+msgstr "телефон"
+
+#: blocks/block-meta.php
+msgid "photos"
+msgstr "фото"
+
+#: blocks/block-meta.php
+msgid "places"
+msgstr "места"
+
+#: blocks/block-meta.php
+msgid "portfolio"
+msgstr "портфолио"
+
+#: blocks/block-meta.php
+msgid "prices"
+msgstr "цены"
+
+#: blocks/block-meta.php
+msgid "privacy"
+msgstr "конфиденциальность"
+
+#: blocks/block-meta.php
+msgid "product"
+msgstr "товар"
+
+#: blocks/block-meta.php
+msgid "products"
+msgstr "товары"
+
+#: blocks/block-meta.php
+msgid "questions"
+msgstr "вопросы"
+
+#: blocks/block-meta.php
+msgid "rating"
+msgstr "рейтинг"
+
+#: blocks/block-meta.php
+msgid "reviews"
+msgstr "отзывы"
+
+#: blocks/block-meta.php
+msgid "route"
+msgstr "маршрут"
+
+#: blocks/block-meta.php
+msgid "sections"
+msgstr "разделы главной"
+
+#: blocks/block-meta.php
+msgid "services"
+msgstr "услуги"
+
+#: blocks/block-meta.php
+msgid "symbol"
+msgstr "символ"
+
+#: blocks/block-meta.php
+msgid "tiles"
+msgstr "плитки"
+
+#: blocks/block-meta.php
+msgid "widget"
+msgstr "виджет"
+
+#: blocks/block-meta.php
+msgid "works"
+msgstr "работы"
+
+#: blocks/block-meta.php
+msgid "wreath"
+msgstr "венок"
+
+#: blocks/block-meta.php
+msgid "years"
+msgstr "годы"

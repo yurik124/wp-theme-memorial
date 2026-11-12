@@ -66,11 +66,9 @@ add_action(
 					'category'        => 'memorial',
 					'icon'            => $icon,
 					'textdomain'      => 'memorial-plugin',
-					'supports'        => array(
-						'autoRegister' => true,
-						'html'         => false,
-						'reusable'     => false,
-					),
+					'keywords'        => memorial_plugin_block_keywords_of( $slug ),
+					'example'         => memorial_plugin_block_example( array(), 1200 ),
+					'supports'        => memorial_plugin_block_supports( 'structure', array( 'reusable' => false ) ),
 					'render_callback' => function ( $attributes, $content, $block ) use ( $slug ) {
 						return memorial_plugin_legacy_render( $slug, $block );
 					},

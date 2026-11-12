@@ -129,7 +129,7 @@ msgid "%s (copy)"
 msgstr ""
 
 #. translators: %s: site name.
-#: blocks/home/home.php:446
+#: blocks/home/home.php:444
 #, php-format
 msgid "%s on the map — Yandex Maps"
 msgstr ""
@@ -294,7 +294,7 @@ msgstr ""
 msgid "A short line in the card: size, material, colour."
 msgstr ""
 
-#: blocks/legacy/legacy.php:141
+#: blocks/legacy/legacy.php:139
 msgid "A single product from the catalog."
 msgstr ""
 
@@ -524,7 +524,7 @@ msgstr ""
 msgid "All products (or of one type) as CSV: type, title, price, “from”, unit, line under the title, categories, specifications, visibility."
 msgstr ""
 
-#: blocks/legacy/legacy.php:142
+#: blocks/legacy/legacy.php:140
 msgid "All products of the catalog."
 msgstr ""
 
@@ -840,7 +840,7 @@ msgstr ""
 msgid "Cards: these works by title, comma separated"
 msgstr ""
 
-#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:34 seo/seo.php:70 blocks/content/content-blocks.php:81 blocks/legacy/legacy.php:142
+#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:34 seo/seo.php:70 blocks/content/content-blocks.php:81 blocks/legacy/legacy.php:140
 msgid "Catalog"
 msgstr ""
 
@@ -870,7 +870,7 @@ msgstr ""
 msgid "Catalog photos"
 msgstr ""
 
-#: blocks/content/inline-values.php:30 blocks/content/inline-values.php:36 blocks/legacy/legacy.php:31 blocks/legacy/legacy.php:143
+#: blocks/content/inline-values.php:30 blocks/content/inline-values.php:36 blocks/legacy/legacy.php:31 blocks/legacy/legacy.php:141
 msgid "Catalog section"
 msgstr ""
 
@@ -1235,7 +1235,7 @@ msgstr ""
 msgid "Customer reviews"
 msgstr ""
 
-#: blocks/home/home.php:443 blocks/legacy/render/parts/reviews.php:42
+#: blocks/home/home.php:441 blocks/legacy/render/parts/reviews.php:42
 msgid "Customer reviews on Yandex Maps"
 msgstr ""
 
@@ -1489,6 +1489,10 @@ msgstr ""
 #. translators: date format of a guest book review: month and year, see https://www.php.net/manual/datetime.format.php
 #: reviews/bookreviews.php:67
 msgid "F Y"
+msgstr ""
+
+#: blocks/block-meta.php:90
+msgid "FAQ"
 msgstr ""
 
 #: seo/seo-registry.php:195
@@ -1977,7 +1981,7 @@ msgstr ""
 msgid "Lead text"
 msgstr ""
 
-#: blocks/home/home.php:426 blocks/legacy/render/parts/reviews.php:35
+#: blocks/home/home.php:424 blocks/legacy/render/parts/reviews.php:35
 msgid "Leave a review"
 msgstr ""
 
@@ -2683,7 +2687,7 @@ msgstr ""
 msgid "Page photo"
 msgstr ""
 
-#: blocks/legacy/legacy.php:28 blocks/legacy/legacy.php:144
+#: blocks/legacy/legacy.php:28 blocks/legacy/legacy.php:142
 msgid "Page with products"
 msgstr ""
 
@@ -2695,7 +2699,7 @@ msgstr ""
 msgid "Pages"
 msgstr ""
 
-#: blocks/legacy/legacy.php:144
+#: blocks/legacy/legacy.php:142
 msgid "Pages set to show catalog tiles or products."
 msgstr ""
 
@@ -2957,7 +2961,7 @@ msgstr ""
 msgid "Prices written into the text by hand — they do not change by themselves"
 msgstr ""
 
-#: catalog/catalog.php:34 blocks/legacy/legacy.php:30 blocks/legacy/legacy.php:141
+#: catalog/catalog.php:34 blocks/legacy/legacy.php:30 blocks/legacy/legacy.php:139
 msgid "Product"
 msgstr ""
 
@@ -3005,7 +3009,7 @@ msgstr ""
 msgid "Products of a catalog section with section links and sorting."
 msgstr ""
 
-#: blocks/legacy/legacy.php:143
+#: blocks/legacy/legacy.php:141
 msgid "Products of one catalog section."
 msgstr ""
 
@@ -3551,7 +3555,7 @@ msgstr ""
 msgid "Show prices"
 msgstr ""
 
-#: reviews/reviews.php:246 reviews/reviews.php:253 blocks/home/home.php:444 blocks/legacy/render/parts/reviews.php:43
+#: reviews/reviews.php:246 reviews/reviews.php:253 blocks/home/home.php:442 blocks/legacy/render/parts/reviews.php:43
 msgid "Show reviews"
 msgstr ""
 
@@ -4202,7 +4206,7 @@ msgstr ""
 msgid "Waiting for the call"
 msgstr ""
 
-#: blocks/home/home.php:427 blocks/legacy/render/parts/reviews.php:36
+#: blocks/home/home.php:425 blocks/legacy/render/parts/reviews.php:36
 msgid "We are on Yandex Maps"
 msgstr ""
 
@@ -4372,6 +4376,10 @@ msgstr ""
 msgid "Write in MAX"
 msgstr ""
 
+#: blocks/block-meta.php:78 blocks/block-meta.php:79
+msgid "Yandex"
+msgstr ""
+
 #: reviews/reviews.php:17 reviews/reviews.php:247
 msgid "Yandex Maps"
 msgstr ""
@@ -4482,6 +4490,10 @@ msgstr ""
 msgid "a draft; add the cemeteries in “Memorial → Cemeteries” and publish it"
 msgstr ""
 
+#: blocks/block-meta.php:76 blocks/block-meta.php:77 blocks/block-meta.php:101
+msgid "address"
+msgstr ""
+
 #: seo/metrika.php:433
 msgid "after cookie consent"
 msgstr ""
@@ -4502,6 +4514,18 @@ msgstr ""
 msgid "and paste its number below. Save."
 msgstr ""
 
+#: blocks/block-meta.php:87
+msgid "book"
+msgstr ""
+
+#: blocks/block-meta.php:108
+msgid "breadcrumbs"
+msgstr ""
+
+#: blocks/block-meta.php:69 blocks/block-meta.php:70
+msgid "button"
+msgstr ""
+
 #: reviews/rewio.php:1382
 msgid "by date"
 msgstr ""
@@ -4510,12 +4534,44 @@ msgstr ""
 msgid "by rating"
 msgstr ""
 
+#: blocks/block-meta.php:69
+msgid "call"
+msgstr ""
+
+#: blocks/block-meta.php:98
+msgid "call back"
+msgstr ""
+
+#: blocks/block-meta.php:92
+msgid "call to action"
+msgstr ""
+
+#: blocks/block-meta.php:96
+msgid "cards"
+msgstr ""
+
+#: blocks/block-meta.php:73 blocks/block-meta.php:81 blocks/block-meta.php:82 blocks/block-meta.php:83 blocks/block-meta.php:110 blocks/block-meta.php:112
+msgid "catalog"
+msgstr ""
+
 #: admin/commands.php:19
 msgid "catalog prices"
 msgstr ""
 
 #: admin/commands.php:20
 msgid "catalog specifications"
+msgstr ""
+
+#: blocks/block-meta.php:73 blocks/block-meta.php:82
+msgid "categories"
+msgstr ""
+
+#: blocks/block-meta.php:113
+msgid "category"
+msgstr ""
+
+#: blocks/block-meta.php:84
+msgid "cemeteries"
 msgstr ""
 
 #: src/catalog/types.js:260
@@ -4530,8 +4586,16 @@ msgstr ""
 msgid "collection is off"
 msgstr ""
 
+#: blocks/block-meta.php:99
+msgid "consent"
+msgstr ""
+
 #: leads/callback.php:171
 msgid "consent to personal data processing"
+msgstr ""
+
+#: blocks/block-meta.php:76 blocks/block-meta.php:104 blocks/block-meta.php:111
+msgid "contacts"
 msgstr ""
 
 #: src/convert/index.js:21
@@ -4542,8 +4606,28 @@ msgstr ""
 msgid "converted, unchanged, no-revision, not-found or an error message."
 msgstr ""
 
+#: blocks/block-meta.php:99
+msgid "cookie"
+msgstr ""
+
+#: blocks/block-meta.php:106
+msgid "copyright"
+msgstr ""
+
 #: legal/legal.php:160
 msgid "create from the template"
+msgstr ""
+
+#: blocks/block-meta.php:93
+msgid "cremation"
+msgstr ""
+
+#: blocks/block-meta.php:67
+msgid "decoration"
+msgstr ""
+
+#: blocks/block-meta.php:67
+msgid "divider"
 msgstr ""
 
 #: legal/legal.php:156
@@ -4564,6 +4648,14 @@ msgstr ""
 
 #: reviews/rewio.php:878
 msgid "example from Rewio"
+msgstr ""
+
+#: blocks/block-meta.php:72
+msgid "figure"
+msgstr ""
+
+#: blocks/block-meta.php:103 blocks/block-meta.php:104 blocks/block-meta.php:105 blocks/block-meta.php:106
+msgid "footer"
 msgstr ""
 
 #: core/settings.php:159
@@ -4602,6 +4694,10 @@ msgstr ""
 msgid "for example: per metre"
 msgstr ""
 
+#: blocks/block-meta.php:98
+msgid "form"
+msgstr ""
+
 #: src/catalog/products.js:297
 msgid "from"
 msgstr ""
@@ -4620,6 +4716,22 @@ msgstr ""
 msgid "from 900 ₽ per person"
 msgstr ""
 
+#: blocks/block-meta.php:74
+msgid "grid"
+msgstr ""
+
+#: blocks/block-meta.php:91
+msgid "guide"
+msgstr ""
+
+#: blocks/block-meta.php:85
+msgid "halls"
+msgstr ""
+
+#: blocks/block-meta.php:101 blocks/block-meta.php:102
+msgid "header"
+msgstr ""
+
 #: admin/abilities.php:788
 msgid "hidden"
 msgstr ""
@@ -4628,12 +4740,32 @@ msgstr ""
 msgid "hide"
 msgstr ""
 
+#: blocks/block-meta.php:109
+msgid "home page"
+msgstr ""
+
+#: blocks/block-meta.php:71 blocks/block-meta.php:101
+msgid "hours"
+msgstr ""
+
+#: blocks/block-meta.php:68
+msgid "icon"
+msgstr ""
+
 #: core/settings.php:610
 msgid "items with ticks"
 msgstr ""
 
+#: blocks/block-meta.php:67
+msgid "laurel"
+msgstr ""
+
 #: admin/commands.php:18
 msgid "leads calls phone"
+msgstr ""
+
+#: blocks/block-meta.php:70
+msgid "link"
 msgstr ""
 
 #. translators: %s: when the list was received
@@ -4642,8 +4774,24 @@ msgstr ""
 msgid "list from Rewio: %s"
 msgstr ""
 
+#: blocks/block-meta.php:77 blocks/block-meta.php:111
+msgid "map"
+msgstr ""
+
+#: blocks/block-meta.php:85
+msgid "memorial meal"
+msgstr ""
+
 #: core/settings.php:129
 msgid "memorialbel or https://t.me/…"
+msgstr ""
+
+#: blocks/block-meta.php:105
+msgid "menu"
+msgstr ""
+
+#: blocks/block-meta.php:107
+msgid "mobile"
 msgstr ""
 
 #: catalog/catalog-front.php:338 catalog/catalog-summary.php:93 pages/cards.php:140
@@ -4656,8 +4804,16 @@ msgstr[1] ""
 msgid "most likely, the server ran out of time"
 msgstr ""
 
+#: blocks/block-meta.php:108
+msgid "navigation"
+msgstr ""
+
 #: admin/abilities.php:160
 msgid "new — nobody has called back yet."
+msgstr ""
+
+#: blocks/block-meta.php:71
+msgid "night"
 msgstr ""
 
 #: legal/legal.php:154
@@ -4672,7 +4828,7 @@ msgstr ""
 msgid "not converted: no permission"
 msgstr ""
 
-#: src/convert/index.js:28 reviews/rewio.php:339
+#: src/convert/index.js:28 reviews/rewio.php:339 blocks/block-meta.php:114
 msgid "not found"
 msgstr ""
 
@@ -4686,6 +4842,10 @@ msgstr ""
 
 #: src/convert/index.js:22
 msgid "nothing to convert"
+msgstr ""
+
+#: blocks/block-meta.php:72
+msgid "number"
 msgstr ""
 
 #: seo/metrika.php:435
@@ -4704,8 +4864,16 @@ msgstr ""
 msgid "open"
 msgstr ""
 
+#: blocks/block-meta.php:75 blocks/block-meta.php:94
+msgid "packages"
+msgstr ""
+
 #: prices/prices.php:725
 msgid "page"
+msgstr ""
+
+#: blocks/block-meta.php:96
+msgid "pages"
 msgstr ""
 
 #: places/places.php:81
@@ -4716,16 +4884,48 @@ msgstr ""
 msgid "per piece"
 msgstr ""
 
+#: blocks/block-meta.php:69 blocks/block-meta.php:71 blocks/block-meta.php:76 blocks/block-meta.php:92 blocks/block-meta.php:102 blocks/block-meta.php:107
+msgid "phone"
+msgstr ""
+
+#: blocks/block-meta.php:83 blocks/block-meta.php:95
+msgid "photos"
+msgstr ""
+
 #: reviews/rewio.php:1033
 msgid "photos:"
+msgstr ""
+
+#: blocks/block-meta.php:84
+msgid "places"
 msgstr ""
 
 #: works/works.php:395
 msgid "plot"
 msgstr ""
 
+#: blocks/block-meta.php:95
+msgid "portfolio"
+msgstr ""
+
 #: admin/commands.php:21
 msgid "portfolio photos examples"
+msgstr ""
+
+#: blocks/block-meta.php:75 blocks/block-meta.php:93 blocks/block-meta.php:94
+msgid "prices"
+msgstr ""
+
+#: blocks/block-meta.php:106
+msgid "privacy"
+msgstr ""
+
+#: blocks/block-meta.php:112
+msgid "product"
+msgstr ""
+
+#: blocks/block-meta.php:81 blocks/block-meta.php:110
+msgid "products"
 msgstr ""
 
 #: content/guide.php:183
@@ -4734,11 +4934,23 @@ msgid_plural "questions"
 msgstr[0] ""
 msgstr[1] ""
 
+#: blocks/block-meta.php:90 blocks/block-meta.php:91
+msgid "questions"
+msgstr ""
+
+#: blocks/block-meta.php:86
+msgid "rating"
+msgstr ""
+
 #: reviews/rewio.php:874 reviews/rewio.php:989 reviews/rewio.php:1217 reviews/rewio.php:1354 reviews/reviews.php:177
 msgid "review"
 msgid_plural "reviews"
 msgstr[0] ""
 msgstr[1] ""
+
+#: blocks/block-meta.php:78 blocks/block-meta.php:79 blocks/block-meta.php:86 blocks/block-meta.php:87 blocks/block-meta.php:88
+msgid "reviews"
+msgstr ""
 
 #: admin/commands.php:25
 msgid "reviews book"
@@ -4746,6 +4958,10 @@ msgstr ""
 
 #: blocks/legacy/render/header-contacts.php:18
 msgid "round the clock"
+msgstr ""
+
+#: blocks/block-meta.php:77
+msgid "route"
 msgstr ""
 
 #: admin/commands.php:23
@@ -4762,6 +4978,14 @@ msgstr ""
 
 #: catalog/catalog-summary.php:168
 msgid "section “"
+msgstr ""
+
+#: blocks/block-meta.php:109
+msgid "sections"
+msgstr ""
+
+#: blocks/block-meta.php:74 blocks/block-meta.php:89
+msgid "services"
 msgstr ""
 
 #: admin/commands.php:41
@@ -4782,6 +5006,10 @@ msgstr ""
 
 #: seo/metrika.php:120
 msgid "shows which button is clicked more often: the header, the first screen, a product card and so on."
+msgstr ""
+
+#: blocks/block-meta.php:68
+msgid "symbol"
 msgstr ""
 
 #: core/settings.php:606
@@ -4824,6 +5052,10 @@ msgstr ""
 msgid "the personal data processing policy"
 msgstr ""
 
+#: blocks/block-meta.php:73
+msgid "tiles"
+msgstr ""
+
 #: core/settings.php:603
 msgid "title"
 msgstr ""
@@ -4858,8 +5090,24 @@ msgstr[1] ""
 msgid "up to %s"
 msgstr ""
 
+#: blocks/block-meta.php:79
+msgid "widget"
+msgstr ""
+
 #: content/guide.php:183
 msgid "with answers"
+msgstr ""
+
+#: blocks/block-meta.php:95
+msgid "works"
+msgstr ""
+
+#: blocks/block-meta.php:72
+msgid "wreath"
+msgstr ""
+
+#: blocks/block-meta.php:103
+msgid "years"
 msgstr ""
 
 #: reviews/rewio.php:800
