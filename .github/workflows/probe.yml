@@ -147,7 +147,7 @@ jobs:
           $WPENV run cli sh -c 'wp plugin deactivate memorial-plugin --quiet 2>/dev/null; wp plugin activate memorial-core; wp theme activate memorial_speshu; wp rewrite flush; rm -rf wp-content/cache/memorial'
           $WPENV run cli wp user create probe probe@example.com --role=administrator --user_pass=probe-pass-123
           # Admin in Russian as on the site: core translations (the site's language) and the probe user's locale.
-          $WPENV run cli sh -c 'l=$(wp option get WPLANG 2>/dev/null); l=${l:-ru_RU}; wp language core install "$l" --quiet && wp user update probe --locale="$l" --quiet' || true
+          $WPENV run cli sh -c 'l=$(wp option get WPLANG 2>/dev/null); l=${l:-ru_RU}; echo "site language: $l"; wp language core install "$l"; wp language core list --status=installed; wp user update probe --locale="$l"; ls wp-content/languages | head' || true
           $WPENV run cli sh -c 'wp post list --post_type=page --post_status=publish --fields=ID,post_title,post_name,url --format=json > wp-content/ci-data/pages.json'
           cp ../data/pages.json ../pages.json
 
