@@ -190,3 +190,23 @@ require get_template_directory() . '/inc/design.php';
 require get_template_directory() . '/inc/design-migrate.php';
 require get_template_directory() . '/inc/laurel.php';
 require get_template_directory() . '/inc/navigation-migrate.php';
+
+/**
+ * Script of the header (assets/js/header-fit.js) right after the Header template part: it measures the menu
+ * before painting. Printed with the WordPress inline script API instead of a <script> in the template.
+ *
+ * @param string $html  Rendered template part.
+ * @param array  $block Parsed block.
+ * @return string
+ */
+function memorial_theme_header_fit_script( $html, $block ) {
+	static $done = false;
+	if ( $done || 'header' !== ( $block['attrs']['slug'] ?? '' ) ) {
+		return $html;
+	}
+	$done = true;
+	$file = get_theme_file_path( 'assets/js/header-fit.js' );
+	$js   = is_readable( $file ) ? (string) file_get_contents( $file ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- a local file of the theme.
+	return '' === $js ? $html : $html . wp_get_inline_script_tag( $js );
+}
+add_filter( 'render_block_core/template-part', 'memorial_theme_header_fit_script', 10, 2 );
