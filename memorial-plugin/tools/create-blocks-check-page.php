@@ -8,9 +8,28 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// The product card shows the product chosen in its settings: a product for it.
+$memorial_plugin_product = (int) ( get_posts(
+	array(
+		'post_type'      => 'mem_product',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'fields'         => 'ids',
+	)
+)[0] ?? 0 );
+if ( ! $memorial_plugin_product ) {
+	$memorial_plugin_product = (int) wp_insert_post(
+		array(
+			'post_type'   => 'mem_product',
+			'post_status' => 'publish',
+			'post_title'  => 'Check product',
+		)
+	);
+}
 $memorial_plugin_markup = '';
 foreach ( array_merge( array_keys( memorial_plugin_legacy_blocks() ), array_keys( memorial_plugin_content_blocks() ), array_keys( memorial_plugin_home_blocks_list() ) ) as $memorial_plugin_slug ) {
-	$memorial_plugin_markup .= '<!-- wp:memorial-plugin/' . $memorial_plugin_slug . ' /-->' . "\n";
+	$memorial_plugin_attrs   = 'product' === $memorial_plugin_slug ? ' {"product":' . $memorial_plugin_product . '}' : '';
+	$memorial_plugin_markup .= '<!-- wp:memorial-plugin/' . $memorial_plugin_slug . $memorial_plugin_attrs . ' /-->' . "\n";
 }
 $memorial_plugin_markup .= '<!-- wp:paragraph --><p>Years: <span class="memorial-plugin-value" data-value="years">STALE</span>.</p><!-- /wp:paragraph -->' . "\n";
 $memorial_plugin_id = wp_insert_post(
