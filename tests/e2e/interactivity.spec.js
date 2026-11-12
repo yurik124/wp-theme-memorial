@@ -105,6 +105,10 @@ test( 'поведение блоков — модуль Interactivity API вме
 	await expect(
 		page.locator( 'script[src*="assets/js/front"]' )
 	).toHaveCount( 0 );
+	// General behaviour of the plugin markup (call-back window, phones, maps…) — also a module.
+	await expect(
+		page.locator( 'script[type="module"][src*="assets/js/view/site.js"]' )
+	).toHaveCount( 1 );
 	const importMap = await page
 		.locator( 'script[type="importmap"]' )
 		.first()

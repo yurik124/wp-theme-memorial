@@ -121,6 +121,7 @@ add_action(
 				array(
 					'locale' => str_replace( '_', '-', determine_locale() ),
 					'i18n'   => memorial_plugin_view_i18n(),
+					'site'   => memorial_plugin_front_i18n(),
 				)
 			);
 		}
@@ -129,27 +130,17 @@ add_action(
 add_action( 'wp_enqueue_scripts', 'memorial_plugin_register_front_assets', 21 );
 
 /**
- * Behaviour of the plugin markup on the site (assets/js/front.js): the “Call me back” window and the
- * phone links are on every page (header, footer, floating blocks), so the script is loaded everywhere.
+ * Behaviour of the plugin markup on every page (assets/js/view/site.js, script module): the “Call me
+ * back” window and the phone links are on every page (header, footer, floating blocks).
  */
-function memorial_plugin_front_script() {
-	$js = memorial_plugin_asset( '/assets/js/front.js' );
-	wp_enqueue_script(
-		'memorial-plugin-front',
-		MEMORIAL_PLUGIN_URL . $js,
-		array(),
-		(string) filemtime( MEMORIAL_PLUGIN_DIR . $js ),
-		array(
-			'strategy'  => 'defer',
-			'in_footer' => true,
-		)
-	);
-	wp_add_inline_script( 'memorial-plugin-front', 'window.memorialPluginFrontI18n = ' . wp_json_encode( memorial_plugin_front_i18n() ) . ';', 'before' );
+function memorial_plugin_site_module() {
+	$js = '/assets/js/view/site.js';
+	wp_enqueue_script_module( 'memorial-plugin-site', MEMORIAL_PLUGIN_URL . $js, array( '@wordpress/interactivity' ), (string) filemtime( MEMORIAL_PLUGIN_DIR . $js ) );
 }
-add_action( 'wp_enqueue_scripts', 'memorial_plugin_front_script', 21 );
+add_action( 'wp_enqueue_scripts', 'memorial_plugin_site_module', 21 );
 
 /**
- * Texts of assets/js/front.js (the script has no dependency on wp-i18n).
+ * Texts of assets/js/view/site.js (getConfig( 'memorial-plugin' ).site).
  *
  * @return array<string,string>
  */

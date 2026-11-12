@@ -1,11 +1,15 @@
 /**
- * Behaviour of the plugin blocks on the site (works in any theme): catalog sorting, Metrika goals,
+ * Behaviour of the plugin markup on every page (works in any theme): catalog sorting, Metrika goals,
  * the “Call me back” window, MAX, phone and e-mail clicks, Yandex reviews and maps loaded on demand,
- * counters, rows of buttons, embedded frames, the photo viewer, anchors.
- * Texts: window.memorialPluginFrontI18n (core/assets.php).
+ * counters, rows of buttons, embedded frames, the photo viewer, anchors, rows dragged with the mouse.
+ * Script module (like view/blocks.js); texts — getConfig( 'memorial-plugin' ).site (core/assets.php).
  */
+import { getConfig } from '@wordpress/interactivity';
+
+const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
+
 (() => {
-  const T = k => (window.memorialPluginFrontI18n || {})[k] || k;
+  const T = k => SITE_TEXTS[k] || k;
   const d = document, body = d.body;
   // Сортировка каталога: применяется сразу при выборе
   d.querySelectorAll('[data-sort] select').forEach(sel => sel.addEventListener('change', () => {
