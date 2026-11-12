@@ -21,11 +21,20 @@ const { chromium } = require( 'playwright' );
 
 const ROOT = resolve( dirname( fileURLToPath( import.meta.url ) ), '..' );
 const DIR = process.argv[ 2 ];
-const FILTER = process.argv[ 3 ] && ! process.argv[ 3 ].startsWith( '--' ) ? process.argv[ 3 ] : '';
+const FILTER =
+	process.argv[ 3 ] && ! process.argv[ 3 ].startsWith( '--' )
+		? process.argv[ 3 ]
+		: '';
 // --selectors=<файл.json>: [ { id, selector } ] → в --out=<файл.json> попадут id правил, чьи селекторы
 // совпадают с изменившимися элементами (changed) и с любыми элементами слепков вообще (present).
-const opt = ( name ) => ( process.argv.find( ( a ) => a.startsWith( `--${ name }=` ) ) || '' ).split( '=' ).slice( 1 ).join( '=' );
-const SELECTORS = opt( 'selectors' ) ? JSON.parse( readFileSync( opt( 'selectors' ), 'utf8' ) ) : [];
+const opt = ( name ) =>
+	( process.argv.find( ( a ) => a.startsWith( `--${ name }=` ) ) || '' )
+		.split( '=' )
+		.slice( 1 )
+		.join( '=' );
+const SELECTORS = opt( 'selectors' )
+	? JSON.parse( readFileSync( opt( 'selectors' ), 'utf8' ) )
+	: [];
 const OUT = opt( 'out' );
 const changedIds = new Set();
 const presentIds = new Set();
@@ -36,7 +45,9 @@ if ( ! DIR ) {
 
 // Какой файл рабочей копии стоит за адресом таблицы стилей в слепке.
 function localFile( href ) {
-	const m = href.match( /wp-content\/(?:themes|plugins)\/(memorial-(?:theme|plugin)\/[^?]+\.css)/ );
+	const m = href.match(
+		/wp-content\/(?:themes|plugins)\/(memorial-(?:theme|plugin)\/[^?]+\.css)/
+	);
 	if ( ! m ) {
 		return null;
 	}
@@ -94,50 +105,83 @@ const collect = () => {
 		for ( let i = 0; i < cs.length; i++ ) {
 			const p = cs[ i ];
 			if ( ! skip.has( p ) ) {
-				out.push( p + ':' + cs.getPropertyValue( p ).replace( /;/g, ',' ) );
+				out.push(
+					p + ':' + cs.getPropertyValue( p ).replace( /;/g, ',' )
+				);
 			}
 		}
 		return out.sort().join( ';' );
 	};
 	window.__els = [ ...document.querySelectorAll( 'body, body *' ) ];
 	// Отпечатки хранятся: подробности берутся из тех же значений, что сравнивались.
-	window.__prints = window.__els.map( ( el ) => [ print( el, null ), print( el, '::before' ), print( el, '::after' ) ] );
+	window.__prints = window.__els.map( ( el ) => [
+		print( el, null ),
+		print( el, '::before' ),
+		print( el, '::after' ),
+	] );
 	return window.__prints.map( ( p ) => p.map( hash ) );
 };
 const detail = ( [ index, pseudo ] ) => {
 	const el = window.__els[ index ];
 	const path = [];
-	for ( let e = el; e && e !== document.body && path.length < 4; e = e.parentElement ) {
-		path.unshift( e.tagName.toLowerCase() + ( e.classList.length ? '.' + [ ...e.classList ].slice( 0, 3 ).join( '.' ) : '' ) );
+	for (
+		let e = el;
+		e && e !== document.body && path.length < 4;
+		e = e.parentElement
+	) {
+		path.unshift(
+			e.tagName.toLowerCase() +
+				( e.classList.length
+					? '.' + [ ...e.classList ].slice( 0, 3 ).join( '.' )
+					: '' )
+		);
 	}
 	return { path: path.join( ' > ' ) + ( pseudo || '' ) };
 };
 
 const browser = await chromium.launch();
-const files = readdirSync( DIR ).filter( ( f ) => /\.(pc|phone)\.html$/.test( f ) && f.includes( FILTER ) ).sort();
+const files = readdirSync( DIR )
+	.filter( ( f ) => /\.(pc|phone)\.html$/.test( f ) && f.includes( FILTER ) )
+	.sort();
 let total = 0;
 const byRule = new Map();
 for ( const file of files ) {
-	const viewport = /\.phone\.html$/.test( file ) ? { width: 390, height: 800 } : { width: 1280, height: 900 };
+	const viewport = /\.phone\.html$/.test( file )
+		? { width: 390, height: 800 }
+		: { width: 1280, height: 900 };
 	const before = readFileSync( join( DIR, file ), 'utf8' );
 	const { html: after, swapped } = swapStyles( before );
 	const pages = [];
 	for ( const html of [ before, after ] ) {
-		const context = await browser.newContext( { viewport, javaScriptEnabled: true, reducedMotion: 'reduce' } );
+		const context = await browser.newContext( {
+			viewport,
+			javaScriptEnabled: true,
+			reducedMotion: 'reduce',
+		} );
 		const page = await context.newPage();
 		await page.route( '**/*', ( route ) => route.abort() );
 		await page.setContent( html, { waitUntil: 'load' } );
 		// Стили читаются, когда страница успокоилась: без переходов и анимаций, после шрифтов и картинок (их нет — ошибки загрузки).
-		await page.addStyleTag( { content: '*,*::before,*::after{transition:none!important;animation:none!important}' } );
+		await page.addStyleTag( {
+			content:
+				'*,*::before,*::after{transition:none!important;animation:none!important}',
+		} );
 		await page.evaluate( () => document.fonts.ready );
 		await page.waitForTimeout( 400 );
-		await page.evaluate( ( skip ) => ( window.__skip = skip ), [ ...SKIP ] );
+		await page.evaluate(
+			( skip ) => ( window.__skip = skip ),
+			[ ...SKIP ]
+		);
 		pages.push( page );
 	}
-	const [ a, b ] = await Promise.all( pages.map( ( p ) => p.evaluate( collect ) ) );
+	const [ a, b ] = await Promise.all(
+		pages.map( ( p ) => p.evaluate( collect ) )
+	);
 	const diffs = [];
 	if ( a.length !== b.length ) {
-		console.log( `${ file }: разное число элементов (${ a.length } / ${ b.length })` );
+		console.log(
+			`${ file }: разное число элементов (${ a.length } / ${ b.length })`
+		);
 	}
 	for ( let i = 0; i < Math.min( a.length, b.length ); i++ ) {
 		[ null, '::before', '::after' ].forEach( ( pseudo, k ) => {
@@ -147,7 +191,9 @@ for ( const file of files ) {
 		} );
 	}
 	total += diffs.length;
-	console.log( `${ file }: таблиц заменено ${ swapped }, элементов ${ a.length }, отличается ${ diffs.length }` );
+	console.log(
+		`${ file }: таблиц заменено ${ swapped }, элементов ${ a.length }, отличается ${ diffs.length }`
+	);
 	// Какие свойства изменились у каждого отличающегося элемента (значения — те же, что сравнивались).
 	const props = ( text ) => {
 		const map = {};
@@ -164,17 +210,34 @@ for ( const file of files ) {
 		const part = diffs.slice( from, from + 150 );
 		const [ xs, ys ] = await Promise.all(
 			pages.map( ( p ) =>
-				p.evaluate( ( ds ) => ds.map( ( [ i, pseudo ] ) => window.__prints[ i ][ [ null, '::before', '::after' ].indexOf( pseudo ) ] ), part )
+				p.evaluate(
+					( ds ) =>
+						ds.map(
+							( [ i, pseudo ] ) =>
+								window.__prints[ i ][
+									[ null, '::before', '::after' ].indexOf(
+										pseudo
+									)
+								]
+						),
+					part
+				)
 			)
 		);
 		part.forEach( ( d, n ) => {
 			const x = props( xs[ n ] );
 			const y = props( ys[ n ] );
-			const changed = Object.keys( { ...x, ...y } ).filter( ( p ) => x[ p ] !== y[ p ] );
+			const changed = Object.keys( { ...x, ...y } ).filter(
+				( p ) => x[ p ] !== y[ p ]
+			);
 			const list = changedOf.get( d[ 0 ] ) || [];
 			changedOf.set( d[ 0 ], list.concat( changed ) );
 			if ( from + n < 400 ) {
-				d.push( changed.map( ( p ) => `${ p }: ${ x[ p ] } → ${ y[ p ] }` ).join( '; ' ) );
+				d.push(
+					changed
+						.map( ( p ) => `${ p }: ${ x[ p ] } → ${ y[ p ] }` )
+						.join( '; ' )
+				);
 			}
 		} );
 	}
@@ -183,22 +246,47 @@ for ( const file of files ) {
 			( [ list, changed ] ) => {
 				// Связано ли свойство правила с изменившимися свойствами элемента.
 				const related = ( prop, names ) => {
-					if ( prop.startsWith( '--' ) || [ 'display', 'position', 'float', 'content', 'all' ].includes( prop ) ) {
+					if (
+						prop.startsWith( '--' ) ||
+						[
+							'display',
+							'position',
+							'float',
+							'content',
+							'all',
+						].includes( prop )
+					) {
 						return true;
 					}
-					const size = /^(min-|max-)?(width|height)$|^aspect-ratio$|^flex|^grid/.test( prop );
+					const size =
+						/^(min-|max-)?(width|height)$|^aspect-ratio$|^flex|^grid/.test(
+							prop
+						);
 					return names.some(
 						( n ) =>
 							n === prop ||
 							n.startsWith( prop + '-' ) ||
-							( size && /width|height|block-size|inline-size/.test( n ) ) ||
-							( prop === 'border-radius' && n.includes( 'radius' ) ) ||
-							( prop === 'font' && ( n.startsWith( 'font' ) || n === 'line-height' ) ) ||
+							( size &&
+								/width|height|block-size|inline-size/.test(
+									n
+								) ) ||
+							( prop === 'border-radius' &&
+								n.includes( 'radius' ) ) ||
+							( prop === 'font' &&
+								( n.startsWith( 'font' ) ||
+									n === 'line-height' ) ) ||
 							( prop === 'color' && n.includes( 'color' ) ) ||
-							( prop === 'text-decoration' && n.includes( 'text-decoration' ) ) ||
-							( prop === 'white-space' && ( n.includes( 'white-space' ) || n.includes( 'text-wrap' ) ) ) ||
-							( prop === 'inset' && /^(top|right|bottom|left|inset)/.test( n ) ) ||
-							( /^(margin|padding)-(left|right|top|bottom)$/.test( prop ) && n.startsWith( prop.split( '-' )[ 0 ] ) )
+							( prop === 'text-decoration' &&
+								n.includes( 'text-decoration' ) ) ||
+							( prop === 'white-space' &&
+								( n.includes( 'white-space' ) ||
+									n.includes( 'text-wrap' ) ) ) ||
+							( prop === 'inset' &&
+								/^(top|right|bottom|left|inset)/.test( n ) ) ||
+							( /^(margin|padding)-(left|right|top|bottom)$/.test(
+								prop
+							) &&
+								n.startsWith( prop.split( '-' )[ 0 ] ) )
 					);
 				};
 				const ids = { changed: [], present: [] };
@@ -207,7 +295,13 @@ for ( const file of files ) {
 						if ( document.querySelector( selector ) ) {
 							ids.present.push( id );
 						}
-						if ( changed.some( ( [ index, names ] ) => window.__els[ index ].matches( selector ) && related( prop || '--', names ) ) ) {
+						if (
+							changed.some(
+								( [ index, names ] ) =>
+									window.__els[ index ].matches( selector ) &&
+									related( prop || '--', names )
+							)
+						) {
 							ids.changed.push( id );
 						}
 					} catch ( e ) {}
@@ -222,7 +316,11 @@ for ( const file of files ) {
 	for ( const d of diffs.slice( 0, 400 ) ) {
 		const x = await pages[ 0 ].evaluate( detail, [ d[ 0 ], d[ 1 ] ] );
 		const key = x.path.replace( /^.* > /, '' ) + ' | ' + d[ 2 ];
-		const item = byRule.get( key ) || { count: 0, where: new Set(), path: x.path };
+		const item = byRule.get( key ) || {
+			count: 0,
+			where: new Set(),
+			path: x.path,
+		};
 		item.count++;
 		item.where.add( file );
 		byRule.set( key, item );
@@ -232,13 +330,22 @@ for ( const file of files ) {
 await browser.close();
 
 if ( OUT ) {
-	writeFileSync( OUT, JSON.stringify( { total, changed: [ ...changedIds ], present: [ ...presentIds ] } ) );
+	writeFileSync(
+		OUT,
+		JSON.stringify( {
+			total,
+			changed: [ ...changedIds ],
+			present: [ ...presentIds ],
+		} )
+	);
 }
 console.log( `\nВсего отличий: ${ total }` );
 [ ...byRule.entries() ]
 	.sort( ( x, y ) => y[ 1 ].count - x[ 1 ].count )
 	.slice( 0, 80 )
 	.forEach( ( [ key, item ] ) => {
-		console.log( `\n× ${ item.count } (${ [ ...item.where ].slice( 0, 3 ).join( ', ' ) }${ item.where.size > 3 ? '…' : '' })\n  ${ item.path }\n  ${ key.slice( key.indexOf( ' | ' ) + 3, 900 ) }` );
+		console.log(
+			`\n× ${ item.count } (${ [ ...item.where ].slice( 0, 3 ).join( ', ' ) }${ item.where.size > 3 ? '…' : '' })\n  ${ item.path }\n  ${ key.slice( key.indexOf( ' | ' ) + 3, 900 ) }`
+		);
 	} );
 process.exit( total ? 1 : 0 );
