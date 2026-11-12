@@ -151,7 +151,7 @@ jobs:
           WPENV=../after/node_modules/.bin/wp-env
           $WPENV start --update
           # переносы при обновлении (стили сайта и т. п.) выполняются в админке — запускаем их, кэш плагина чистим
-          $WPENV run cli sh -c 'rm -rf wp-content/cache/memorial; wp eval "do_action(\"admin_init\");" || true; echo "тема: $(wp option get stylesheet)"'
+          $WPENV run cli sh -c 'rm -rf wp-content/cache/memorial; wp eval "wp_set_current_user( (int) ( get_users( array( \"role\" => \"administrator\", \"number\" => 1, \"fields\" => \"ID\" ) )[0] ?? 1 ) ); do_action(\"admin_init\");" || true; echo "тема: $(wp option get stylesheet)"'
 
       - name: Сравнение — «после»
         run: |
