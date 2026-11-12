@@ -54,7 +54,10 @@ Deactivate Memorial Plugin, activate Memorial Core 1.15 and the theme from the `
 * Fix: “Error loading block” in the editor for plugin blocks with an extra CSS class or style (blocks are registered before the block supports).
 * The [mem_…] shortcodes report a deprecation and name the block that replaces them; the dashboard shows how many posts still use them.
 * All blocks: colour, typography, spacing and border supports, keywords and previews.
-* Moving from pages: DataViews screen and the ability memorial-plugin/import-from-pages; no jQuery in the Rewio panel; inline scripts through the WordPress API.
+* The home page and the Contacts page keep their blocks in the page content (one-time move with a revision and a rollback ability).
+* The line under the site title is the site tagline (Settings → General).
+* “Moving the catalog from pages” removed; test pages and empty “New product” items moved to the trash once.
+* Admin fixes: Prices layout, full-width Reviews and Cemeteries, no default filter in What people search for, the Rewio key as a password field, translated list controls; no jQuery in the Rewio panel; inline scripts through the WordPress API.
 * WordPress Coding Standards for all the code.
 
 = 2.0.0 =
