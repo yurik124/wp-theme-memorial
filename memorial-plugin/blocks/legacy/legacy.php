@@ -16,58 +16,85 @@ defined( 'ABSPATH' ) || exit;
 /** Блоки-обёртки: слаг => [название, описание, иконка Dashicons] */
 function memorial_plugin_legacy_blocks() {
 	return array(
-		'topbar'          => array( __( 'Top bar: address and hours', 'memorial-plugin' ), __( 'Address, opening hours and night phone line above the header.', 'memorial-plugin' ), 'location' ),
+		'topbar'          => array( __( 'Line above the header: address and hours', 'memorial-plugin' ), __( 'One of the addresses with its opening hours and the night phone line, above the header. The address is chosen in the block settings.', 'memorial-plugin' ), 'location' ),
 		'header-contacts' => array( __( 'Header: phone and call back', 'memorial-plugin' ), __( 'Main phone number, “Call me back” button and the call icon for phones.', 'memorial-plugin' ), 'phone' ),
-		'tagline'         => array( __( 'Tagline with years in business', 'memorial-plugin' ), __( '“Funeral company in business for over N years” — or the site tagline if the founding year is not set.', 'memorial-plugin' ), 'heart' ),
+		'tagline'         => array( __( 'Tagline: years in business', 'memorial-plugin' ), __( '“Funeral company in business for over N years” — or the site tagline if the founding year is not set.', 'memorial-plugin' ), 'heart' ),
 		'footer-contacts' => array( __( 'Footer: addresses and phones', 'memorial-plugin' ), __( 'Address and phone columns from Memorial → Contacts.', 'memorial-plugin' ), 'phone' ),
-		'menu-columns'    => array( __( 'Menu in columns', 'memorial-plugin' ), __( 'Footer menu: items with sub-items become columns, single items go to “Information”.', 'memorial-plugin' ), 'menu' ),
+		'menu-columns'    => array( __( 'Footer: menu in columns', 'memorial-plugin' ), __( 'Footer menu: items with sub-items become columns, single items go to “Information”.', 'memorial-plugin' ), 'menu' ),
 		'footer-legal'    => array( __( 'Footer: copyright and documents', 'memorial-plugin' ), __( 'Copyright years, company details, privacy and cookie policy links.', 'memorial-plugin' ), 'media-document' ),
-		'mobile-bar'      => array( __( 'Phone bar on mobile', 'memorial-plugin' ), __( 'Bottom bar on phones: Call and Message (MAX) or Call me back.', 'memorial-plugin' ), 'smartphone' ),
+		'mobile-bar'      => array( __( 'Bottom phone bar on mobiles', 'memorial-plugin' ), __( 'Bottom bar on phones: Call and Message (MAX) or Call me back.', 'memorial-plugin' ), 'smartphone' ),
 		'breadcrumbs'     => array( __( 'Breadcrumbs', 'memorial-plugin' ), __( 'Path to the current page; also adds BreadcrumbList structured data.', 'memorial-plugin' ), 'arrow-right-alt2' ),
-		'home'            => array( __( 'Home page sections', 'memorial-plugin' ), __( 'First screen and the home sections in the order set in Memorial → Home page.', 'memorial-plugin' ), 'admin-home' ),
-		'page-products'   => array( __( 'Page with products', 'memorial-plugin' ), __( 'Catalog tiles or product grid for pages set to show products, with the page text above and below.', 'memorial-plugin' ), 'grid-view' ),
-		'contacts-page'   => array( __( 'Contacts page', 'memorial-plugin' ), __( 'Phones, messengers, addresses with routes, maps and company details.', 'memorial-plugin' ), 'id' ),
-		'product'         => array( __( 'Product', 'memorial-plugin' ), __( 'Product photo, price, specifications, call buttons and related products.', 'memorial-plugin' ), 'products' ),
-		'catalog-archive' => array( __( 'Catalog section', 'memorial-plugin' ), __( 'Catalog or category: sub-sections, sorting, product grid and pagination.', 'memorial-plugin' ), 'archive' ),
-		'not-found'       => array( __( 'Page not found', 'memorial-plugin' ), __( '404 message with a call button and catalog sections.', 'memorial-plugin' ), 'warning' ),
+		'home'            => array( __( 'Home page: all sections (old layout)', 'memorial-plugin' ), __( 'The whole home page built from Memorial → Home page, as before the move to blocks. Today the home page is built from separate blocks.', 'memorial-plugin' ), 'admin-home' ),
+		'page-products'   => array( __( 'Products of the page (for the template)', 'memorial-plugin' ), __( 'Catalog tiles or product grid for pages set to show products, with the page text above and below.', 'memorial-plugin' ), 'grid-view' ),
+		'contacts-page'   => array( __( 'Contacts: the whole page', 'memorial-plugin' ), __( 'Phones, messengers, addresses with routes, maps and company details.', 'memorial-plugin' ), 'id' ),
+		'product'         => array( __( 'Product card', 'memorial-plugin' ), __( 'Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings.', 'memorial-plugin' ), 'products' ),
+		'catalog-archive' => array( __( 'Catalog section with sorting', 'memorial-plugin' ), __( 'Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings.', 'memorial-plugin' ), 'archive' ),
+		'not-found'       => array( __( 'Message “Page not found”', 'memorial-plugin' ), __( '404 message with a call button and catalog sections.', 'memorial-plugin' ), 'warning' ),
 	);
 }
 
-add_filter(
-	'block_categories_all',
-	function ( $cats ) {
-		foreach ( $cats as $c ) {
-			if ( ( $c['slug'] ?? '' ) === 'memorial' ) {
-				return $cats;
-			}
-		}
-		array_unshift(
-			$cats,
-			array(
-				'slug'  => 'memorial',
-				'title' => __( 'Memorial', 'memorial-plugin' ),
-				'icon'  => null,
-			)
-		);
-		return $cats;
-	}
-);
+/**
+ * Settings of the structural blocks: slug => attributes (with labels and pickers, see memorial_plugin_block_attributes()).
+ *
+ * @return array<string,array>
+ */
+function memorial_plugin_legacy_block_attrs() {
+	return array(
+		'topbar'          => array(
+			'address' => array(
+				'type'    => 'integer',
+				'default' => 0,
+				'label'   => __( 'Address', 'memorial-plugin' ),
+				'picker'  => 'address',
+			),
+			'hours'   => array(
+				'type'    => 'boolean',
+				'default' => true,
+				'label'   => __( 'Opening hours of the address', 'memorial-plugin' ),
+			),
+			'night'   => array(
+				'type'    => 'boolean',
+				'default' => true,
+				'label'   => __( 'Night phone line', 'memorial-plugin' ),
+			),
+		),
+		'product'         => array(
+			'product' => array(
+				'type'    => 'integer',
+				'default' => 0,
+				'label'   => __( 'Product', 'memorial-plugin' ),
+				'picker'  => 'product',
+			),
+		),
+		'catalog-archive' => array(
+			'term' => array(
+				'type'    => 'integer',
+				'default' => 0,
+				'label'   => __( 'Catalog section', 'memorial-plugin' ),
+				'picker'  => 'cat-id',
+			),
+		),
+	);
+}
 
 add_action(
 	'init',
 	function () {
+		$all_attrs = memorial_plugin_legacy_block_attrs();
 		foreach ( memorial_plugin_legacy_blocks() as $slug => [$title, $desc, $icon] ) {
+			$attributes = memorial_plugin_block_attributes( 'memorial-plugin/' . $slug, $all_attrs[ $slug ] ?? array() );
 			register_block_type(
 				'memorial-plugin/' . $slug,
 				array(
 					'api_version'     => 3,
 					'title'           => $title,
 					'description'     => $desc,
-					'category'        => 'memorial',
+					'category'        => memorial_plugin_block_category( $slug ),
 					'icon'            => $icon,
 					'textdomain'      => 'memorial-plugin',
 					'keywords'        => memorial_plugin_block_keywords_of( $slug ),
-					'example'         => memorial_plugin_block_example( array(), 1200 ),
+					'example'         => memorial_plugin_block_example( $attributes, 1200 ),
+					'attributes'      => $attributes,
 					'supports'        => memorial_plugin_block_supports( 'structure', array( 'reusable' => false ) ),
 					'render_callback' => function ( $attributes, $content, $block ) use ( $slug ) {
 						return memorial_plugin_legacy_render( $slug, $block );
@@ -108,6 +135,11 @@ function memorial_plugin_legacy_render( $slug, $block = null ) {
  * @param WP_Block $block Block instance.
  */
 function memorial_plugin_legacy_post_id( $block = null ) {
+	// A product chosen in the block settings.
+	$chosen = $block instanceof WP_Block ? (int) ( $block->attributes['product'] ?? 0 ) : 0;
+	if ( $chosen && 'mem_product' === get_post_type( $chosen ) ) {
+		return $chosen;
+	}
 	$id = (int) ( $block->context['postId'] ?? 0 );
 	return $id ? $id : (int) get_queried_object_id();
 }
@@ -179,3 +211,22 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Is this a preview of a block in the editor (the block renderer of the REST API)?
+ *
+ * @return bool
+ */
+function memorial_plugin_is_block_preview() {
+	return defined( 'REST_REQUEST' ) && REST_REQUEST && current_user_can( 'edit_posts' );
+}
+
+/**
+ * A note shown only in the editor preview of a block (on the site — nothing).
+ *
+ * @param string $text Text.
+ * @return string
+ */
+function memorial_plugin_block_note( $text ) {
+	return memorial_plugin_is_block_preview() ? '<p class="is-style-note memorial-plugin-block-note">' . esc_html( $text ) . '</p>' : '';
+}

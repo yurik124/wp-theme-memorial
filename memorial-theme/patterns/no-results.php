@@ -2,6 +2,7 @@
 /**
  * Title: No results
  * Slug: memorial-theme/no-results
+ * Categories: query
  * Inserter: no
  * Description: The text when nothing was found.
  *

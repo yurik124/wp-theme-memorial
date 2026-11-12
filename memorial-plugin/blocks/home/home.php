@@ -41,8 +41,8 @@ function memorial_plugin_home_blocks_list() {
 			'render' => 'memorial_plugin_home_render_laurel',
 		),
 		'icon'            => array(
-			'title'  => __( 'Memorial icon', 'memorial-plugin' ),
-			'desc'   => __( 'Icon from the Memorial set in a round frame.', 'memorial-plugin' ),
+			'title'  => __( 'Icon in a circle', 'memorial-plugin' ),
+			'desc'   => __( 'An icon of the site set (candle, cross, phone, clock…) in a round frame. The icon is chosen in the block settings.', 'memorial-plugin' ),
 			'icon'   => 'star-empty',
 			'attrs'  => array(
 				'name' => array(
@@ -86,7 +86,8 @@ function memorial_plugin_home_blocks_list() {
 				'page'    => array(
 					'type'    => 'integer',
 					'default' => 0,
-					'label'   => __( 'Page ID (the link follows the page if it moves)', 'memorial-plugin' ),
+					'label'   => __( 'Page (the link follows the page if it moves)', 'memorial-plugin' ),
+					'picker'  => 'page',
 				),
 				'url'     => array(
 					'type'    => 'string',
@@ -113,7 +114,7 @@ function memorial_plugin_home_blocks_list() {
 			'render' => 'memorial_plugin_home_render_link_button',
 		),
 		'night-line'      => array(
-			'title'  => __( 'Night phone line', 'memorial-plugin' ),
+			'title'  => __( 'Line “Calls at night”', 'memorial-plugin' ),
 			'desc'   => __( 'Note about calls at night (Memorial → Contacts).', 'memorial-plugin' ),
 			'icon'   => 'clock',
 			'attrs'  => array(),
@@ -138,7 +139,7 @@ function memorial_plugin_home_blocks_list() {
 			'render' => 'memorial_plugin_home_render_stat',
 		),
 		'catalog-tiles'   => array(
-			'title'  => __( 'Catalog tiles', 'memorial-plugin' ),
+			'title'  => __( 'Catalog section tiles', 'memorial-plugin' ),
 			'desc'   => __( 'Catalog sections as photo tiles (menu sub-items of the catalog page, or all sections).', 'memorial-plugin' ),
 			'icon'   => 'screenoptions',
 			'attrs'  => array(),
@@ -222,13 +223,14 @@ function memorial_plugin_home_blocks_register() {
 				'api_version'     => 3,
 				'title'           => $def['title'],
 				'description'     => $def['desc'],
-				'category'        => 'memorial',
+				'category'        => memorial_plugin_block_category( $slug ),
 				'icon'            => $def['icon'],
 				'textdomain'      => 'memorial-plugin',
 				'keywords'        => memorial_plugin_block_keywords_of( $slug ),
 				'example'         => memorial_plugin_block_example( $def['attrs'], in_array( $slug, array( 'laurel', 'icon', 'phone-button', 'link-button', 'night-line', 'stat' ), true ) ? 400 : 1000 ),
-				'attributes'      => $def['attrs'],
-				'supports'        => memorial_plugin_block_supports(),
+				'attributes'      => memorial_plugin_block_attributes( 'memorial-plugin/' . $slug, $def['attrs'] ),
+				// The grids repeat “Our services” and “Funeral packages”: they stay for the pages that have them.
+				'supports'        => memorial_plugin_block_supports( 'full', array( 'inserter' => ! in_array( $slug, array( 'services-grid', 'packages-grid' ), true ) ) ),
 				'render_callback' => static function ( $attributes ) use ( $render ) {
 					$html = (string) call_user_func( $render, (array) $attributes );
 					return '' === $html ? '' : memorial_plugin_add_wrapper_attributes( $html );

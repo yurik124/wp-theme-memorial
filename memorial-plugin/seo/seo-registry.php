@@ -5,8 +5,8 @@
  * The registry memorial_plugin_seo_registry() is a single list “key → label + value function”. Every key becomes
  * the variable %%mem_<key>%% in the SEO plugin, so a title can say
  * “Fences in Belgorod — %%mem_cat_price_ograda%%” and always show the current price.
- * A new value is one more line in the list (or the memorial_plugin_seo_registry filter).
- * The registry is kept minimal: only values that the site’s SEO fields actually use.
+ * The list is edited in «Memorial → Values for texts and SEO» (prices/values.php): a new value is one more
+ * row there with “In the SEO plugin” checked (or the memorial_plugin_seo_registry filter).
  *
  * SEOPress (main): seopress_titles_template_variables_array + seopress_titles_template_replace_array
  * (the two arrays must stay the same length and order, otherwise SEOPress silently substitutes
@@ -22,46 +22,34 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Starting price of a catalog section as plain text (“от 12 300 ₽”).
- *
- * @param string $cat Section slug or name.
- * @return string
- */
-function memorial_plugin_seo_cat_price( $cat ) {
-	$html = memorial_plugin_inline_value_html( 'cat-price', array( 'cat' => $cat ) );
-	return null === $html ? '' : trim( html_entity_decode( wp_strip_all_tags( $html ), ENT_QUOTES, 'UTF-8' ) );
-}
-
-/**
  * The registry: key => label, value function (gets the post ID, may be 0) and the shortcode it replaces.
+ * The values come from «Memorial → Values for texts and SEO» (prices/values.php): only the ones marked
+ * “In the SEO plugin”, so the list of variables of the SEO plugin holds only what the site uses.
  *
  * @return array<string,array{label:string,get:callable,shortcode?:array}>
  */
 function memorial_plugin_seo_registry() {
-	$registry = array(
-		'phone'            => array(
-			'label'     => __( 'Main phone number', 'memorial-plugin' ),
-			'get'       => static function () {
-				return (string) memorial_plugin_opt( 'phone' );
-			},
-			'shortcode' => array( 'mem_phone', array() ),
-		),
-		'years'            => array(
-			'label'     => __( 'Years in business', 'memorial-plugin' ),
-			'get'       => static function () {
-				$years = (int) memorial_plugin_years();
-				return $years ? (string) $years : '';
-			},
-			'shortcode' => array( 'mem_years', array() ),
-		),
-		'cat_price_ograda' => array(
-			'label'     => __( 'Starting price: fences', 'memorial-plugin' ),
-			'get'       => static function () {
-				return memorial_plugin_seo_cat_price( 'modeli-ogradok-i-czeny' );
-			},
-			'shortcode' => array( 'mem_cat_price', array( 'cat' => 'Модели оградок и цены' ) ),
-		),
-	);
+	$registry = array();
+	foreach ( function_exists( 'memorial_plugin_values' ) ? memorial_plugin_values() : array() as $key => $row ) {
+		if ( empty( $row['seo'] ) ) {
+			continue;
+		}
+		$registry[ $key ] = array(
+			'label' => '' !== trim( (string) ( $row['label'] ?? '' ) ) ? (string) $row['label'] : $key,
+			'get'   => static fn() => memorial_plugin_value_text( $row ),
+		);
+		// The shortcode the variable replaces in old SEO fields (the converter swaps them).
+		if ( 'phone' === $row['what'] ) {
+			$registry[ $key ]['shortcode'] = array( 'mem_phone', array() );
+		} elseif ( 'years' === $row['what'] ) {
+			$registry[ $key ]['shortcode'] = array( 'mem_years', array() );
+		} elseif ( 'cat-min' === $row['what'] && empty( $row['bare'] ) ) {
+			$term = get_term_by( 'slug', (string) $row['section'], 'mem_cat' );
+			if ( $term ) {
+				$registry[ $key ]['shortcode'] = array( 'mem_cat_price', array( 'cat' => $term->name ) );
+			}
+		}
+	}
 	/**
 	 * Filters the SEO data registry.
 	 *

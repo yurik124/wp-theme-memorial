@@ -29,6 +29,13 @@ function memorial_plugin_inline_values() {
 			'param'       => 'cat',
 			'param_label' => __( 'Catalog section', 'memorial-plugin' ),
 		),
+		'cat-max'    => array(
+			'tag'         => 'mem_cat_price',
+			'fixed'       => array( 'cena' => 'макс' ),
+			'label'       => __( 'Highest price of a catalog section (“up to …”)', 'memorial-plugin' ),
+			'param'       => 'cat',
+			'param_label' => __( 'Catalog section', 'memorial-plugin' ),
+		),
 		'cat-count'  => array(
 			'tag'         => 'mem_cat_count',
 			'label'       => __( 'Number of models in a catalog section', 'memorial-plugin' ),
@@ -40,6 +47,18 @@ function memorial_plugin_inline_values() {
 			'label'       => __( 'Price from Memorial → Prices', 'memorial-plugin' ),
 			'param'       => 'id',
 			'param_label' => __( 'Price code', 'memorial-plugin' ),
+		),
+		'service'    => array(
+			'callback'    => static fn( $atts ) => esc_html( memorial_plugin_value_price( 'svc:' . (string) ( $atts['title'] ?? '' ) ) ),
+			'label'       => __( 'Price of a service (Memorial → Services)', 'memorial-plugin' ),
+			'param'       => 'title',
+			'param_label' => __( 'Service', 'memorial-plugin' ),
+		),
+		'saved'      => array(
+			'callback'    => static fn( $atts ) => esc_html( memorial_plugin_value_by_key( (string) ( $atts['key'] ?? '' ) ) ),
+			'label'       => __( 'My value (Memorial → Values for texts and SEO)', 'memorial-plugin' ),
+			'param'       => 'key',
+			'param_label' => __( 'Value', 'memorial-plugin' ),
 		),
 		'years'      => array(
 			'tag'         => 'mem_years',
@@ -114,7 +133,7 @@ function memorial_plugin_inline_value_key( $tag ) {
 function memorial_plugin_inline_value_html( $key, $atts ) {
 	$def = memorial_plugin_inline_values()[ $key ] ?? null;
 	if ( $def && isset( $def['callback'] ) && is_callable( $def['callback'] ) ) {
-		return (string) call_user_func( $def['callback'] );
+		return (string) call_user_func( $def['callback'], (array) $atts );
 	}
 	$impl = $def && ! empty( $def['tag'] ) ? memorial_plugin_shortcode_impl( $def['tag'] ) : null;
 	if ( ! $impl ) {
@@ -122,7 +141,7 @@ function memorial_plugin_inline_value_html( $key, $atts ) {
 	}
 	$content = (string) ( $atts['content'] ?? '' );
 	unset( $atts['content'] );
-	$atts = array_map( 'strval', array_filter( (array) $atts, 'is_scalar' ) );
+	$atts = array_merge( array_map( 'strval', array_filter( (array) $atts, 'is_scalar' ) ), (array) ( $def['fixed'] ?? array() ) );
 	return (string) call_user_func( $impl, $atts, $content, $def['tag'] );
 }
 
@@ -248,6 +267,7 @@ function memorial_plugin_inline_values_editor_assets() {
 			'label'      => $def['label'],
 			'param'      => $def['param'],
 			'paramLabel' => $def['param_label'],
+			'choices'    => memorial_plugin_inline_value_choices( $key ),
 		);
 	}
 	wp_add_inline_script(
@@ -257,3 +277,91 @@ function memorial_plugin_inline_values_editor_assets() {
 	);
 }
 add_action( 'enqueue_block_editor_assets', 'memorial_plugin_inline_values_editor_assets' );
+
+/**
+ * Choices of the parameter of a value for the editor (instead of typing a code): [ { label, atts } ].
+ * Null — the parameter is typed (or the value has none).
+ *
+ * @param string $key Value key.
+ * @return array|null
+ */
+function memorial_plugin_inline_value_choices( $key ) {
+	$out = array();
+	switch ( $key ) {
+		case 'cat-price':
+		case 'cat-max':
+		case 'cat-count':
+			$out[] = array(
+				'label' => __( 'The section of the page where the text is', 'memorial-plugin' ),
+				'atts'  => new stdClass(),
+			);
+			foreach ( memorial_plugin_values_sections( false ) as $slug => $name ) {
+				$out[] = array(
+					'label' => $name,
+					'atts'  => array( 'cat' => (string) $slug ),
+				);
+			}
+			return $out;
+		case 'price':
+			foreach ( memorial_plugin_values_prices( false ) as $ref => $label ) {
+				[$kind, $name] = array_pad( explode( ':', (string) $ref, 2 ), 2, '' );
+				if ( 'price' === $kind ) {
+					$out[] = array(
+						'label' => $label,
+						'atts'  => array( 'id' => $name ),
+					);
+				} elseif ( 'paket' === $kind ) {
+					$out[] = array(
+						'label' => $label,
+						'atts'  => array( 'paket' => $name ),
+					);
+				}
+			}
+			return $out;
+		case 'service':
+			foreach ( memorial_plugin_values_prices( false ) as $ref => $label ) {
+				if ( 0 === strpos( (string) $ref, 'svc:' ) ) {
+					$out[] = array(
+						'label' => $label,
+						'atts'  => array( 'title' => substr( (string) $ref, 4 ) ),
+					);
+				}
+			}
+			return $out;
+		case 'saved':
+			foreach ( memorial_plugin_values() as $code => $row ) {
+				$out[] = array(
+					'label' => ( '' !== trim( (string) $row['label'] ) ? $row['label'] : $code ) . ' — ' . memorial_plugin_value_text( $row ),
+					'atts'  => array( 'key' => (string) $code ),
+				);
+			}
+			return $out;
+		case 'doc':
+			foreach ( array(
+				'policy'  => __( 'Privacy policy', 'memorial-plugin' ),
+				'consent' => __( 'Consent to the processing of personal data', 'memorial-plugin' ),
+				'cookies' => __( 'Cookie policy', 'memorial-plugin' ),
+			) as $doc => $label ) {
+				$out[] = array(
+					'label' => $label,
+					'atts'  => array( 'kto' => $doc ),
+				);
+			}
+			return $out;
+		case 'operator':
+			foreach ( array(
+				''        => __( 'Name and details', 'memorial-plugin' ),
+				'адрес'   => __( 'Address', 'memorial-plugin' ),
+				'почта'   => __( 'Email', 'memorial-plugin' ),
+				'телефон' => __( 'Phone', 'memorial-plugin' ),
+				'сайт'    => __( 'Site', 'memorial-plugin' ),
+			) as $what => $label ) {
+				$out[] = array(
+					'label' => $label,
+					'atts'  => '' === $what ? new stdClass() : array( 'chto' => $what ),
+				);
+			}
+			return $out;
+	}
+	return null;
+}

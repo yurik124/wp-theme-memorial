@@ -111,6 +111,7 @@ add_shortcode(
 		$a     = shortcode_atts(
 			array(
 				'pages'   => '',     // какие страницы (пусто — подпункты меню / дочерние).
+				'roditel' => '',     // разделы другой страницы (ID); пусто — этой.
 				'foto'    => 'да',   // фото.
 				'chislo'  => 'да',   // «96 моделей»
 				'cena'    => 'да',   // «от 35 000 ₽»
@@ -120,7 +121,8 @@ add_shortcode(
 			$atts,
 			'mem_cards'
 		);
-		$pages = memorial_plugin_cards_pages( $a['pages'], (int) get_the_ID() );
+		$parent = (int) $a['roditel'];
+		$pages  = memorial_plugin_cards_pages( $a['pages'], $parent && 'publish' === get_post_status( $parent ) ? $parent : (int) get_the_ID() );
 		if ( ! $pages ) {
 			return current_user_can( 'edit_pages' ) ? ( '<p class="is-style-note">' . esc_html__( 'Section cards: no pages for the cards — add sub-items to this page in the main menu or choose the pages in the block settings.', 'memorial-plugin' ) . '</p>' ) : '';
 		}

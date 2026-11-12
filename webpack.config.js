@@ -23,6 +23,7 @@ module.exports = {
 		'catalog/index': path.resolve( __dirname, 'memorial-plugin/src/catalog/index.js' ),
 		'commands/index': path.resolve( __dirname, 'memorial-plugin/src/commands/index.js' ),
 		'editor-meta/index': path.resolve( __dirname, 'memorial-plugin/src/editor-meta/index.js' ),
+		'block-controls/index': path.resolve( __dirname, 'memorial-plugin/src/block-controls/index.js' ),
 	},
 	output: {
 		...base.output,

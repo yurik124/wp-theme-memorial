@@ -170,7 +170,7 @@ add_filter(
 add_action(
 	'init',
 	function () {
-		register_block_pattern_category( 'memorial-theme', array( 'label' => __( 'Memorial: design', 'memorial-theme' ) ) );
+		register_block_pattern_category( 'memorial-theme', array( 'label' => __( 'Memorial: text layouts', 'memorial-theme' ) ) );
 	}
 );
 

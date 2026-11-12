@@ -1,0 +1,66 @@
+// Editor only: the chooser and the folded line in place of a plugin block, the list of chosen pages.
+
+.memorial-plugin-stand {
+	.memorial-plugin-stand__in {
+		min-height: 0;
+	}
+
+	&.is-folded .memorial-plugin-stand__in {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px 12px;
+		box-shadow: inset 0 0 0 1px #ddd;
+
+		.components-placeholder__fieldset {
+			width: auto;
+		}
+	}
+
+	.memorial-plugin-stand__text {
+		max-width: 60ch;
+		margin: 0 0 12px;
+	}
+
+	.memorial-plugin-stand__pickers {
+		display: grid;
+		gap: 16px;
+		width: 100%;
+		max-width: 480px;
+	}
+}
+
+.memorial-plugin-pages-picker {
+	display: grid;
+	gap: 8px;
+
+	ol {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		display: flex;
+		gap: 2px;
+		align-items: center;
+		padding: 2px 0;
+		border-bottom: 1px solid #f0f0f0;
+
+		span {
+			flex: 1;
+		}
+	}
+}
+
+.memorial-plugin-pages-picker__label {
+	margin: 0;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+.memorial-plugin-auto-note {
+	margin: 12px 0 0;
+	color: #757575;
+}

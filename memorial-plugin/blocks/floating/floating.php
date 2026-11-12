@@ -63,7 +63,7 @@ function memorial_plugin_floating_register() {
 				'api_version'     => 3,
 				'title'           => $def['title'],
 				'description'     => $def['desc'],
-				'category'        => 'memorial',
+				'category'        => memorial_plugin_block_category( $slug ),
 				'icon'            => $def['icon'],
 				'textdomain'      => 'memorial-plugin',
 				'keywords'        => memorial_plugin_block_keywords_of( $slug ),

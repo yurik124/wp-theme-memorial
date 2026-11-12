@@ -24,12 +24,14 @@
 	"devDependencies": {
 		"@axe-core/playwright": "^4.10.0",
 		"@playwright/test": "latest",
-		"@wordpress/admin-ui": "latest",
 		"@wordpress/a11y": "latest",
+		"@wordpress/admin-ui": "latest",
 		"@wordpress/api-fetch": "latest",
 		"@wordpress/block-editor": "latest",
+		"@wordpress/blocks": "latest",
 		"@wordpress/commands": "latest",
 		"@wordpress/components": "latest",
+		"@wordpress/compose": "latest",
 		"@wordpress/core-data": "latest",
 		"@wordpress/data": "latest",
 		"@wordpress/dataviews": "latest",
@@ -37,14 +39,16 @@
 		"@wordpress/editor": "latest",
 		"@wordpress/element": "latest",
 		"@wordpress/env": "latest",
+		"@wordpress/hooks": "latest",
+		"@wordpress/html-entities": "latest",
 		"@wordpress/i18n": "latest",
 		"@wordpress/icons": "latest",
 		"@wordpress/interactivity": "latest",
 		"@wordpress/media-utils": "latest",
 		"@wordpress/plugins": "latest",
-		"@wordpress/url": "latest",
 		"@wordpress/rich-text": "latest",
 		"@wordpress/scripts": "latest",
+		"@wordpress/url": "latest",
 		"ajv": "^8.17.1"
 	}
 }

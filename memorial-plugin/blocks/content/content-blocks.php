@@ -33,8 +33,10 @@ function memorial_plugin_content_blocks() {
 	$cat   = array(
 		'type'    => 'string',
 		'default' => '',
-		'label'   => __( 'Catalog section (name or slug; empty — the section of this page)', 'memorial-plugin' ),
+		'label'   => __( 'Catalog section', 'memorial-plugin' ),
 		'sc'      => 'cat',
+		'picker'  => 'cat',
+		'empty'   => __( 'The section of this page', 'memorial-plugin' ),
 	);
 	$count = array(
 		'type'    => 'integer',
@@ -78,8 +80,8 @@ function memorial_plugin_content_blocks() {
 	return array(
 		'catalog'         => array(
 			'tag'   => 'mem_catalog',
-			'title' => __( 'Catalog', 'memorial-plugin' ),
-			'desc'  => __( 'Products of a catalog section with section links and sorting.', 'memorial-plugin' ),
+			'title' => __( 'Catalog: products of a section', 'memorial-plugin' ),
+			'desc'  => __( 'Products of a catalog section with section links and sorting. The section is chosen in the block settings; by default — the section of this page.', 'memorial-plugin' ),
 			'icon'  => 'grid-view',
 			'attrs' => array(
 				'cat'     => $cat,
@@ -131,11 +133,17 @@ function memorial_plugin_content_blocks() {
 		),
 		'category-photos' => array(
 			'tag'   => 'mem_cat_photos',
-			'title' => __( 'Catalog photos', 'memorial-plugin' ),
+			'title' => __( 'Product photos from the catalog', 'memorial-plugin' ),
 			'desc'  => __( 'Photo grid of products from catalog sections.', 'memorial-plugin' ),
 			'icon'  => 'format-gallery',
 			'attrs' => array(
-				'cat'    => array_merge( $cat, array( 'label' => __( 'Catalog sections, comma separated', 'memorial-plugin' ) ) ),
+				'cat'    => array_merge(
+					$cat,
+					array(
+						'label'  => __( 'Catalog sections', 'memorial-plugin' ),
+						'picker' => 'cats',
+					)
+				),
 				'count'  => array_merge( $count, array( 'default' => 6 ) ),
 				'random' => $rand,
 				'prices' => $price,
@@ -224,8 +232,9 @@ function memorial_plugin_content_blocks() {
 				'more' => array(
 					'type'    => 'string',
 					'default' => '',
-					'label'   => __( 'Extra pages, comma separated paths (ritualnye-uslugi/pominalnyj-obed…)', 'memorial-plugin' ),
+					'label'   => __( 'Extra service pages', 'memorial-plugin' ),
 					'sc'      => 'more',
+					'picker'  => 'pages',
 				),
 			),
 		),
@@ -238,8 +247,9 @@ function memorial_plugin_content_blocks() {
 				'exclude' => array(
 					'type'    => 'string',
 					'default' => '',
-					'label'   => __( 'Skip pages (IDs, comma separated)', 'memorial-plugin' ),
+					'label'   => __( 'Skip questions of these pages', 'memorial-plugin' ),
 					'sc'      => 'exclude',
+					'picker'  => 'pages',
 				),
 				'search'  => array(
 					'type'    => 'boolean',
@@ -260,14 +270,17 @@ function memorial_plugin_content_blocks() {
 				'parent'  => array(
 					'type'    => 'string',
 					'default' => '',
-					'label'   => __( 'Parent page (ID or path; empty — this page)', 'memorial-plugin' ),
+					'label'   => __( 'Articles of the page', 'memorial-plugin' ),
 					'sc'      => 'roditel',
+					'picker'  => 'page',
+					'empty'   => __( 'This page', 'memorial-plugin' ),
 				),
 				'pages'   => array(
 					'type'    => 'string',
 					'default' => '',
-					'label'   => __( 'Or these pages (IDs, comma separated, in this order)', 'memorial-plugin' ),
+					'label'   => __( 'Or these pages, in this order', 'memorial-plugin' ),
 					'sc'      => 'stranicy',
+					'picker'  => 'pages',
 				),
 				'all'     => array(
 					'type'    => 'boolean',
@@ -381,14 +394,23 @@ function memorial_plugin_content_blocks() {
 		'cards'           => array(
 			'tag'   => 'mem_cards',
 			'title' => __( 'Section cards', 'memorial-plugin' ),
-			'desc'  => __( 'Cards of child pages (or chosen pages) with photo, product count and starting price.', 'memorial-plugin' ),
+			'desc'  => __( 'Cards of the sections of this page (its sub-items in the menu or child pages), of another page or of chosen pages — with photo, product count and starting price.', 'memorial-plugin' ),
 			'icon'  => 'index-card',
 			'attrs' => array(
+				'parent'  => array(
+					'type'    => 'integer',
+					'default' => 0,
+					'label'   => __( 'Sections of the page', 'memorial-plugin' ),
+					'sc'      => 'roditel',
+					'picker'  => 'page',
+					'empty'   => __( 'This page', 'memorial-plugin' ),
+				),
 				'pages'   => array(
 					'type'    => 'string',
 					'default' => '',
-					'label'   => __( 'Pages, comma separated paths (empty — sub-items in the menu or child pages)', 'memorial-plugin' ),
+					'label'   => __( 'Or these pages, in this order', 'memorial-plugin' ),
 					'sc'      => 'pages',
+					'picker'  => 'pages',
 				),
 				'photo'   => array(
 					'type'    => 'boolean',
@@ -614,17 +636,14 @@ function memorial_plugin_content_blocks_register() {
 		if ( isset( $off[ $def['tag'] ] ) ) {
 			continue;
 		}
-		$attributes = array();
-		foreach ( $def['attrs'] as $name => $attr ) {
-			$attributes[ $name ] = array_intersect_key( $attr, array_flip( array( 'type', 'default', 'enum', 'label' ) ) );
-		}
+		$attributes = memorial_plugin_block_attributes( 'memorial-plugin/' . $slug, $def['attrs'] );
 		register_block_type(
 			'memorial-plugin/' . $slug,
 			array(
 				'api_version'     => 3,
 				'title'           => $def['title'],
 				'description'     => $def['desc'],
-				'category'        => 'memorial',
+				'category'        => memorial_plugin_block_category( $slug ),
 				'icon'            => $def['icon'],
 				'keywords'        => memorial_plugin_block_keywords_of( $slug, array( $def['tag'] ) ),
 				'textdomain'      => 'memorial-plugin',

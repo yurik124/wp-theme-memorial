@@ -683,7 +683,7 @@ msgstr "Филиалы и их площадки"
 
 #: seo/seo.php:96 blocks/legacy/legacy.php:26
 msgid "Breadcrumbs"
-msgstr "Навигация"
+msgstr "Хлебные крошки"
 
 #: core/icons-api.php:31 core/icons-fallback.php:11
 msgid "Building"
@@ -5559,3 +5559,243 @@ msgstr "Отметьте согласие на обработку данных."
 #: assets/js/front.js
 msgid "photo %1$d of %2$d"
 msgstr "фото %1$d из %2$d"
+
+msgid "#%d (no title)"
+msgstr "№%d (без названия)"
+
+msgid "Add a page"
+msgstr "Добавить страницу"
+
+msgid "An icon of the site set (candle, cross, phone, clock…) in a round frame. The icon is chosen in the block settings."
+msgstr "Значок из набора сайта (свеча, крест, телефон, часы…) в круглой рамке. Значок выбирается в настройках блока."
+
+msgid "Articles of the page"
+msgstr "Статьи страницы"
+
+msgid "Bottom phone bar on mobiles"
+msgstr "Нижняя панель с телефоном на мобильных"
+
+msgid "Cards of the sections of this page (its sub-items in the menu or child pages), of another page or of chosen pages — with photo, product count and starting price."
+msgstr "Карточки разделов этой страницы (её подпункты в меню или дочерние страницы), другой страницы или выбранных страниц — с фото, числом товаров и ценой «от»."
+
+msgid "Catalog section tiles"
+msgstr "Плитки разделов каталога"
+
+msgid "Catalog section with sorting"
+msgstr "Раздел каталога с сортировкой"
+
+msgid "Catalog section — for the prices and the number of models of a section"
+msgstr "Раздел каталога — для цен и числа моделей раздела"
+
+msgid "Catalog section: choose the section in the block settings (“What to show”). In the catalog templates the block shows the section that is open."
+msgstr "Раздел каталога: выберите раздел в настройках блока («Что показывать»). В шаблонах каталога блок показывает открытый раздел."
+
+msgid "Catalog: products of a section"
+msgstr "Каталог: товары раздела"
+
+msgid "Code — Latin letters, digits and “_”; in the SEO plugin the value is %%mem_code%%"
+msgstr "Код — латинские буквы, цифры и «_»; в SEO-плагине значение — %%mem_код%%"
+
+msgid "Consent to the processing of personal data"
+msgstr "Согласие на обработку персональных данных"
+
+msgid "Contacts: the whole page"
+msgstr "Контакты: вся страница"
+
+msgid "Cremation (total)"
+msgstr "Кремация (итог)"
+
+msgid "Extra service pages"
+msgstr "Дополнительные страницы услуг"
+
+msgid "Fold the block (only in the editor)"
+msgstr "Свернуть блок (только в редакторе)"
+
+msgid "Footer: menu in columns"
+msgstr "Подвал: меню колонками"
+
+msgid "Found on this page: %s."
+msgstr "Найдено на этой странице: %s."
+
+msgid "Highest price of a catalog section (“up to …”)"
+msgstr "Самая высокая цена раздела каталога («до …»)"
+
+msgid "Home page: all sections (old layout)"
+msgstr "Главная: все разделы (старый вид)"
+
+msgid "Icon in a circle"
+msgstr "Значок в круге"
+
+msgid "In the SEO plugin — the variable %%mem_code%% for titles and descriptions (SEOPress, Yoast, Rank Math)"
+msgstr "В SEO-плагин — переменная %%mem_код%% для заголовков и описаний (SEOPress, Yoast, Rank Math)"
+
+msgid "Line above the header: address and hours"
+msgstr "Строка над шапкой: адрес и часы работы"
+
+msgid "Line “Calls at night”"
+msgstr "Строка «Звонки ночью»"
+
+msgid "Link text (empty — the name of the document)"
+msgstr "Текст ссылки (пусто — название документа)"
+
+msgid "Main phone"
+msgstr "Основной телефон"
+
+msgid "Memorial: catalog and prices"
+msgstr "Мемориал: каталог и цены"
+
+msgid "Memorial: contacts"
+msgstr "Мемориал: контакты"
+
+msgid "Memorial: decoration and buttons"
+msgstr "Мемориал: оформление и кнопки"
+
+msgid "Memorial: header, footer and pop-ups"
+msgstr "Мемориал: шапка, подвал и всплывающие"
+
+msgid "Memorial: ready sections"
+msgstr "Мемориал: готовые секции"
+
+msgid "Memorial: reviews"
+msgstr "Мемориал: отзывы"
+
+msgid "Memorial: services and information"
+msgstr "Мемориал: услуги и информация"
+
+msgid "Memorial: whole pages (for templates)"
+msgstr "Мемориал: целые страницы (для шаблонов)"
+
+msgid "Message “Page not found”"
+msgstr "Сообщение «Страница не найдена»"
+
+msgid "My value (Memorial → Values for texts and SEO)"
+msgstr "Моё значение («Мемориал → Значения для текста и SEO»)"
+
+msgid "Name (seen only in the admin)"
+msgstr "Название (видно только в админке)"
+
+msgid "Name and details"
+msgstr "Название и реквизиты"
+
+msgid "No addresses in Memorial → Contacts"
+msgstr "Нет адресов в «Мемориал → Контакты»"
+
+msgid "No values yet — add them in Memorial → Values for texts and SEO."
+msgstr "Значений пока нет — добавьте их в «Мемориал → Значения для текста и SEO»."
+
+msgid "Not chosen — %s."
+msgstr "Не выбрано — %s."
+
+msgid "Nothing to choose from yet."
+msgstr "Пока не из чего выбрать."
+
+msgid "Number only — without “from”, “up to”, “models” and ₽"
+msgstr "Только число — без «от», «до», «моделей» и ₽"
+
+msgid "One of the addresses with its opening hours and the night phone line, above the header. The address is chosen in the block settings."
+msgstr "Один из адресов с часами работы и ночной линией — над шапкой. Адрес выбирается в настройках блока."
+
+msgid "Opening hours of the address"
+msgstr "Часы работы адреса"
+
+msgid "Or these pages, in this order"
+msgstr "Или эти страницы, в этом порядке"
+
+msgid "Own value (the text below)"
+msgstr "Своё значение (текст ниже)"
+
+msgid "Own value — for “Own value”"
+msgstr "Своё значение — для «Своё значение»"
+
+msgid "Package “%s”"
+msgstr "Пакет «%s»"
+
+msgid "Page (the link follows the page if it moves)"
+msgstr "Страница (ссылка следует за страницей, если её адрес изменится)"
+
+msgid "Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings."
+msgstr "Фото, цена, характеристики, кнопки звонка и похожие товары: открытого товара (шаблон) или выбранного в настройках блока."
+
+msgid "Price from Memorial → Prices or of a service"
+msgstr "Цена из «Мемориал → Цены» или цена услуги"
+
+msgid "Price of a service (Memorial → Services)"
+msgstr "Цена услуги («Мемориал → Услуги»)"
+
+msgid "Price — for “Price from Memorial → Prices or of a service”"
+msgstr "Цена — для «Цена из „Мемориал → Цены“ или цена услуги»"
+
+msgid "Privacy policy"
+msgstr "Политика обработки персональных данных"
+
+msgid "Product card"
+msgstr "Карточка товара"
+
+msgid "Product card: choose the product in the block settings (“What to show”). In the product template the block shows the product that is open."
+msgstr "Карточка товара: выберите товар в настройках блока («Что показывать»). В шаблоне товара блок показывает открытый товар."
+
+msgid "Product photos from the catalog"
+msgstr "Фото товаров из каталога"
+
+msgid "Products of a catalog section with section links and sorting. The section is chosen in the block settings; by default — the section of this page."
+msgstr "Товары раздела каталога со ссылками на подразделы и сортировкой. Раздел выбирается в настройках блока; по умолчанию — раздел этой страницы."
+
+msgid "Products of the page (for the template)"
+msgstr "Товары страницы (для шаблона)"
+
+msgid "Sections of the page"
+msgstr "Разделы страницы"
+
+msgid "Service “%s”"
+msgstr "Услуга «%s»"
+
+msgid "Skip questions of these pages"
+msgstr "Не брать вопросы с этих страниц"
+
+msgid "Starting price of a catalog section (“from …”)"
+msgstr "Цена «от» раздела каталога"
+
+msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
+msgstr "Подразделы, сортировка и товары раздела каталога: открытого (шаблон) или выбранного в настройках блока."
+
+msgid "Tagline: years in business"
+msgstr "Подпись: годы работы"
+
+msgid "The block found nothing to show on this page by itself. Choose what it should show — the choice can be changed later in the block settings (“What to show”)."
+msgstr "Блок не нашёл сам, что показать на этой странице. Выберите, что показывать, — выбор можно поменять потом в настройках блока («Что показывать»)."
+
+msgid "The section of the page where the text is"
+msgstr "Раздел страницы, где стоит текст"
+
+msgid "The section of this page"
+msgstr "раздел этой страницы"
+
+msgid "The whole home page built from Memorial → Home page, as before the move to blocks. Today the home page is built from separate blocks."
+msgstr "Вся главная из «Мемориал → Главная страница», как до перехода на блоки. Сейчас главная собрана из отдельных блоков."
+
+msgid "This page"
+msgstr "эта страница"
+
+msgid "Unfold"
+msgstr "Развернуть"
+
+msgid "Unfold the block"
+msgstr "Развернуть блок"
+
+msgid "Values"
+msgstr "Значения"
+
+msgid "Values for texts and SEO"
+msgstr "Значения для текста и SEO"
+
+msgid "Values now:"
+msgstr "Значения сейчас:"
+
+msgid "Values of the site that change by themselves: the starting or highest price of a catalog section, the number of models, a price from Memorial → Prices or of a service, or your own text. In the text of a page a value is put with the “Site value” button of the paragraph toolbar (“My values”). Only the values marked “In the SEO plugin” are added to the SEO plugin as variables %%mem_code%%."
+msgstr "Значения сайта, которые меняются сами: цена «от» или «до» раздела каталога, число моделей, цена из «Мемориал → Цены» или цена услуги — или ваш текст. В текст страницы значение вставляется кнопкой «Значение сайта» на панели абзаца («Моё значение»). В SEO-плагин попадают только значения с галочкой «В SEO-плагин» — как переменные %%mem_код%%."
+
+msgid "What to show"
+msgstr "Что показывать"
+
+msgid "Which one"
+msgstr "Какое именно"

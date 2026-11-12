@@ -6,7 +6,11 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-	$id  = memorial_plugin_legacy_post_id( $block );
+	$id = memorial_plugin_legacy_post_id( $block );
+if ( 'mem_product' !== get_post_type( $id ) ) {
+	echo memorial_plugin_block_note( __( 'Product card: choose the product in the block settings (“What to show”). In the product template the block shows the product that is open.', 'memorial-plugin' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function.
+	return;
+}
 	$cat = memorial_plugin_product_cat( $id ); ?>
 	<div class="product">
 		<div class="product__media">

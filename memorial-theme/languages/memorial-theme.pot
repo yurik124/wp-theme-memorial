@@ -37,7 +37,7 @@ msgstr ""
 msgid "Accent: buttons, icons, laurel"
 msgstr ""
 
-#: patterns/footer.php:34
+#: patterns/footer.php:36
 msgid "Back to top"
 msgstr ""
 
@@ -238,14 +238,14 @@ msgid "Memorial Modern"
 msgstr ""
 
 #: functions.php:173
-msgid "Memorial: design"
+msgid "Memorial: text layouts"
 msgstr ""
 
-#: patterns/header.php:32
+#: patterns/header.php:34
 msgid "Menu"
 msgstr ""
 
-#: patterns/no-results.php:14
+#: patterns/no-results.php:15
 msgid "Nothing found."
 msgstr ""
 
@@ -471,7 +471,7 @@ msgstr ""
 msgid "https://memorialbel.ru/"
 msgstr ""
 
-#: inc/logo-sync.php:86
+#: inc/logo-sync.php:102
 msgid "logo"
 msgstr ""
 

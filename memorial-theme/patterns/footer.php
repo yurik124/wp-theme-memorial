@@ -2,6 +2,8 @@
 /**
  * Title: Footer
  * Slug: memorial-theme/footer
+ * Categories: footer
+ * Block Types: core/template-part/footer
  * Inserter: no
  * Description: The footer of the site: about, contacts, menu columns, documents and the “Back to top” button.
  *

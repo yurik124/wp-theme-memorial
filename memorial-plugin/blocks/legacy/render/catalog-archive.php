@@ -7,6 +7,19 @@
 
 defined( 'ABSPATH' ) || exit;
 global $wp_query;
+// A section chosen in the block settings, or the block on an ordinary page: products of the section with sorting.
+$memorial_plugin_term = $block instanceof WP_Block ? (int) ( $block->attributes['term'] ?? 0 ) : 0;
+if ( $memorial_plugin_term || ! ( is_tax( 'mem_cat' ) || is_post_type_archive( 'mem_product' ) ) ) {
+	$memorial_plugin_t    = $memorial_plugin_term ? get_term( $memorial_plugin_term, 'mem_cat' ) : null;
+	$memorial_plugin_impl = memorial_plugin_shortcode_impl( 'mem_catalog' );
+	if ( $memorial_plugin_t instanceof WP_Term && $memorial_plugin_impl ) {
+		echo '<h2>' . esc_html( $memorial_plugin_t->name ) . '</h2>';
+		echo call_user_func( $memorial_plugin_impl, array( 'cat' => (string) $memorial_plugin_t->term_id ), '', 'mem_catalog' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup of the catalog.
+	} else {
+		echo memorial_plugin_block_note( __( 'Catalog section: choose the section in the block settings (“What to show”). In the catalog templates the block shows the section that is open.', 'memorial-plugin' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function.
+	}
+	return;
+}
 $is_cat = is_tax( 'mem_cat' );
 $term   = $is_cat ? get_queried_object() : null;
 $title  = $is_cat ? single_term_title( '', false ) : __( 'Catalog', 'memorial-plugin' );

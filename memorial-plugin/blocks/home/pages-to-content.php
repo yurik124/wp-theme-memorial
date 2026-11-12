@@ -371,9 +371,10 @@ function memorial_plugin_pages_to_content_ability() {
 add_action( 'wp_abilities_api_init', 'memorial_plugin_pages_to_content_ability' );
 
 /**
- * The home page and “Contacts” open in the page editor together with their template (header, footer,
- * the frame of the content), as on the site: the title of these pages is a block inside the content, so
- * the separate title field of the editor is not shown and nothing is duplicated.
+ * The home page opens in the page editor without the template — only its own blocks, no header and footer
+ * (they are edited in Appearance → Editor). “Contacts” opens together with its template, as on the site.
+ * The title of these pages is a block inside the content, so the separate title field of the editor is
+ * hidden (memorial_plugin_pages_hide_title()) and nothing is duplicated.
  *
  * @param array                   $settings Editor settings.
  * @param WP_Block_Editor_Context $context  Editor context.
@@ -385,9 +386,29 @@ function memorial_plugin_pages_rendering_mode( $settings, $context ) {
 		return $settings;
 	}
 	$contacts = memorial_plugin_contacts_page();
-	if ( (int) get_option( 'page_on_front' ) === (int) $post->ID || ( $contacts && $contacts->ID === $post->ID ) ) {
+	if ( (int) get_option( 'page_on_front' ) === (int) $post->ID ) {
+		$settings['defaultRenderingMode'] = 'post-only';
+	} elseif ( $contacts && $contacts->ID === $post->ID ) {
 		$settings['defaultRenderingMode'] = 'template-locked';
 	}
 	return $settings;
 }
 add_filter( 'block_editor_settings_all', 'memorial_plugin_pages_rendering_mode', 10, 2 );
+
+/**
+ * The home page in the editor without the template: no separate title field (the H1 is a block of the content).
+ */
+function memorial_plugin_pages_hide_title() {
+	if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
+		return;
+	}
+	$screen = get_current_screen();
+	$post   = get_post();
+	if ( ! $screen || 'page' !== $screen->post_type || ! $post || (int) get_option( 'page_on_front' ) !== (int) $post->ID ) {
+		return;
+	}
+	wp_register_style( 'memorial-plugin-home-editor', false, array(), MEMORIAL_PLUGIN_VER );
+	wp_enqueue_style( 'memorial-plugin-home-editor' );
+	wp_add_inline_style( 'memorial-plugin-home-editor', '.editor-visual-editor__post-title-wrapper{display:none}' );
+}
+add_action( 'enqueue_block_assets', 'memorial_plugin_pages_hide_title' );

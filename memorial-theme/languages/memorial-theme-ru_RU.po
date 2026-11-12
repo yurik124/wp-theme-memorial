@@ -530,3 +530,6 @@ msgstr "Первый экран и разделы главной. На ново�
 #: inc/logo-sync.php
 msgid "logo"
 msgstr "логотип"
+
+msgid "Memorial: text layouts"
+msgstr "Мемориал: оформление текста"

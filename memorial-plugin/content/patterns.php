@@ -21,7 +21,7 @@ add_action(
 			return;
 		}
 		if ( ! WP_Block_Pattern_Categories_Registry::get_instance()->is_registered( 'memorial' ) ) {
-			register_block_pattern_category( 'memorial', array( 'label' => __( 'Memorial', 'memorial-plugin' ) ) );
+			register_block_pattern_category( 'memorial', array( 'label' => __( 'Memorial: ready sections', 'memorial-plugin' ) ) );
 		}
 		$p    = fn( $t, $cls = '' ) => '<!-- wp:paragraph' . ( $cls ? ' {"className":"' . $cls . '"}' : '' ) . ' --><p' . ( $cls ? ' class="' . $cls . '"' : '' ) . '>' . $t . '</p><!-- /wp:paragraph -->';
 		$h    = fn( $t ) => '<!-- wp:heading --><h2 class="wp-block-heading">' . $t . '</h2><!-- /wp:heading -->';

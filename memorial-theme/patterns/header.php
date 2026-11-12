@@ -2,6 +2,8 @@
 /**
  * Title: Header
  * Slug: memorial-theme/header
+ * Categories: header
+ * Block Types: core/template-part/header
  * Inserter: no
  * Description: The header of the site: logo, menu, contacts and the burger.
  *

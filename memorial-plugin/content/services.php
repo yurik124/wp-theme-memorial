@@ -65,7 +65,7 @@ add_shortcode(
 		$items = memorial_plugin_services_items();
 		$have  = array_filter( array_column( $items, 'pid' ) );
 		foreach ( array_filter( array_map( 'trim', explode( ',', $a['more'] ) ) ) as $path ) {
-			$p = get_page_by_path( trim( $path, '/' ) );
+			$p = ctype_digit( $path ) ? get_post( (int) $path ) : get_page_by_path( trim( $path, '/' ) );
 			if ( ! $p || 'publish' !== $p->post_status || in_array( $p->ID, $have, true ) || get_the_ID() === $p->ID ) {
 				continue;
 			}

@@ -22,15 +22,29 @@ const VALUES = window.memorialPluginInlineValues || [];
 function ValueModal( { value, onChange, onClose } ) {
 	const [ key, setKey ] = useState( VALUES[ 0 ]?.key || '' );
 	const [ param, setParam ] = useState( '' );
+	const [ choice, setChoice ] = useState( '0' );
+	const [ text, setText ] = useState( '' );
 	const [ error, setError ] = useState( '' );
 	const def = VALUES.find( ( v ) => v.key === key );
+	const choices = Array.isArray( def?.choices ) ? def.choices : null;
+
+	const atts = () => {
+		let out = {};
+		if ( choices ) {
+			out = { ...( choices[ Number( choice ) ]?.atts || {} ) };
+		} else if ( def?.param && param.trim() ) {
+			out = { [ def.param ]: param.trim() };
+		}
+		if ( key === 'doc' && text.trim() ) {
+			out.content = text.trim();
+		}
+		return out;
+	};
 
 	const add = () => {
-		const atts =
-			def?.param && param.trim() ? { [ def.param ]: param.trim() } : {};
 		const query = [ [ 'key', key ] ]
 			.concat(
-				Object.entries( atts ).map( ( [ k, v ] ) => [
+				Object.entries( atts() ).map( ( [ k, v ] ) => [
 					`atts[${ k }]`,
 					v,
 				] )
@@ -73,10 +87,35 @@ function ValueModal( { value, onChange, onClose } ) {
 				} ) ) }
 				onChange={ ( k ) => {
 					setKey( k );
+					setChoice( '0' );
+					setParam( '' );
 					setError( '' );
 				} }
 			/>
-			{ def?.param && (
+			{ choices && choices.length > 0 && (
+				<SelectControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ def.paramLabel || __( 'Which one', 'memorial-plugin' ) }
+					value={ choice }
+					options={ choices.map( ( c, i ) => ( {
+						value: String( i ),
+						label: c.label,
+					} ) ) }
+					onChange={ setChoice }
+				/>
+			) }
+			{ choices && choices.length === 0 && (
+				<Notice status="warning" isDismissible={ false }>
+					{ key === 'saved'
+						? __(
+								'No values yet — add them in Memorial → Values for texts and SEO.',
+								'memorial-plugin'
+						  )
+						: __( 'Nothing to choose from yet.', 'memorial-plugin' ) }
+				</Notice>
+			) }
+			{ ! choices && def?.param && (
 				<TextControl
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
@@ -85,13 +124,26 @@ function ValueModal( { value, onChange, onClose } ) {
 					onChange={ setParam }
 				/>
 			) }
+			{ key === 'doc' && (
+				<TextControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Link text (empty — the name of the document)', 'memorial-plugin' ) }
+					value={ text }
+					onChange={ setText }
+				/>
+			) }
 			{ error && (
 				<Notice status="error" isDismissible={ false }>
 					{ error }
 				</Notice>
 			) }
 			<p>
-				<Button variant="primary" onClick={ add }>
+				<Button
+					variant="primary"
+					onClick={ add }
+					disabled={ !! choices && choices.length === 0 }
+				>
 					{ __( 'Insert', 'memorial-plugin' ) }
 				</Button>
 			</p>

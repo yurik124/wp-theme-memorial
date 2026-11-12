@@ -406,3 +406,115 @@ test.describe( 'аудит админки', () => {
 		fs.writeFileSync( `${ DIR }/audit.json`, JSON.stringify( report, null, 1 ) );
 	} );
 } );
+
+/*
+ * Аудит блоков: все блоки плагина в черновике (снимок каждого), категории вставки, паттерны без рубрики,
+ * подвал в редакторе сайта и внизу обычной страницы, главная в редакторе.
+ */
+test.describe( 'аудит блоков', () => {
+	test.use( { viewport: { width: 1440, height: 1000 } } );
+	test( 'аудит блоков', async ( { page } ) => {
+		test.setTimeout( 1_500_000 );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		const report = {};
+		const errs = errorsOf( page );
+		// черновик со всеми блоками плагина
+		await page.goto( '/wp-admin/post-new.php?post_type=page' );
+		await page.waitForFunction( () => window.wp?.blocks?.getBlockTypes?.().length > 50, null, { timeout: 60000 } );
+		await page.evaluate( () => {
+			const pr = window.wp.data.dispatch( 'core/preferences' );
+			pr.set( 'core/edit-post', 'welcomeGuide', false );
+			pr.set( 'core', 'welcomeGuide', false );
+		} ).catch( () => {} );
+		report.types = await page.evaluate( () =>
+			window.wp.blocks.getBlockTypes().filter( ( b ) => /^memorial/.test( b.name ) ).map( ( b ) => ( {
+				name: b.name, title: b.title, category: b.category, description: b.description,
+				attrs: Object.fromEntries( Object.entries( b.attributes || {} ).filter( ( [ , a ] ) => a.autoGenerateControl || a.label ).map( ( [ k, a ] ) => [ k, a.type + ( a.enum ? ':' + a.enum.join( '|' ) : '' ) + ( a.autoGenerateControl ? ' auto' : '' ) ] ) ),
+			} ) )
+		);
+		report.categories = await page.evaluate( () => window.wp.blocks.getCategories().map( ( c ) => c.slug + ' — ' + c.title ) );
+		const id = await page.evaluate( async () => {
+			const { createBlock, serialize, getBlockTypes } = window.wp.blocks;
+			const blocks = [];
+			getBlockTypes().filter( ( b ) => /^memorial-plugin\//.test( b.name ) ).forEach( ( b ) => {
+				blocks.push( createBlock( 'core/heading', { level: 3, content: b.name + ' — ' + b.title } ) );
+				blocks.push( createBlock( b.name ) );
+			} );
+			const r = await window.wp.apiFetch( { path: '/wp/v2/pages', method: 'POST', data: { title: 'Аудит блоков', status: 'draft', content: serialize( blocks ) } } );
+			return r.id;
+		} );
+		const tab = await page.context().newPage();
+		await tab.setViewportSize( { width: 1440, height: 1600 } );
+		const ed = errorsOf( tab );
+		await tab.goto( '/wp-admin/post.php?action=edit&post=' + id );
+		await tab.waitForTimeout( 30000 );
+		const canvas = tab.frameLocator( 'iframe[name="editor-canvas"]' );
+		const names = report.types.filter( ( t ) => /^memorial-plugin\//.test( t.name ) ).map( ( t ) => t.name );
+		report.blocks = {};
+		for ( const name of names ) {
+			const loc = canvas.locator( `[data-type="${ name }"]` ).first();
+			const info = await loc.evaluate( ( el ) => {
+				const r = el.getBoundingClientRect();
+				const text = el.innerText.trim();
+				const hidden = [ ...el.querySelectorAll( '*' ) ].filter( ( x ) => {
+					const s = getComputedStyle( x );
+					return s.opacity === '0' || s.visibility === 'hidden';
+				} ).length;
+				return { w: Math.round( r.width ), h: Math.round( r.height ), text: text.slice( 0, 300 ), hiddenEls: hidden, html: el.innerHTML.slice( 0, 600 ) };
+			} ).catch( ( e ) => ( { error: e.message.slice( 0, 200 ) } ) );
+			await loc.scrollIntoViewIfNeeded().catch( () => {} );
+			await tab.waitForTimeout( 400 );
+			await loc.screenshot( { path: `${ DIR }/blk-${ name.replace( /\W+/g, '-' ) }.png` } ).catch( () => {} );
+			report.blocks[ name ] = info;
+		}
+		// вставка: категории плагина
+		await tab.keyboard.press( 'Escape' );
+		await tab.locator( 'button.editor-document-tools__inserter-toggle' ).click().catch( () => {} );
+		await tab.waitForTimeout( 2500 );
+		await tab.screenshot( { path: `${ DIR }/blk-inserter.png` } ).catch( () => {} );
+		report.patterns = await tab.evaluate( async () => {
+			const all = await window.wp.apiFetch( { path: '/wp/v2/block-patterns/patterns' } );
+			const cats = await window.wp.apiFetch( { path: '/wp/v2/block-patterns/categories' } );
+			const user = await window.wp.apiFetch( { path: '/wp/v2/blocks?per_page=100&context=edit' } ).catch( () => [] );
+			return {
+				noCategory: all.filter( ( p ) => ! ( p.categories || [] ).length ).map( ( p ) => p.name + ' — ' + p.title + ( p.inserter === false ? ' (inserter:no)' : '' ) ),
+				categories: cats.map( ( c ) => c.name + ' — ' + c.label ),
+				user: user.map( ( p ) => ( { id: p.id, title: p.title?.raw, sync: p.wp_pattern_sync_status, cats: p.wp_pattern_category } ) ),
+			};
+		} ).catch( ( e ) => ( { error: e.message } ) );
+		report.editorErrors = ed;
+		await tab.close();
+		// подвал: редактор сайта и низ обычной страницы
+		for ( const [ name, url ] of [
+			[ 'footer-part', '/wp-admin/site-editor.php?p=%2Fwp_template_part%2Fmemorial-theme%2F%2Ffooter&canvas=edit' ],
+			[ 'header-part', '/wp-admin/site-editor.php?p=%2Fwp_template_part%2Fmemorial-theme%2F%2Fheader&canvas=edit' ],
+		] ) {
+			const t = await page.context().newPage();
+			await t.goto( url );
+			await t.waitForTimeout( 15000 );
+			await t.screenshot( { path: `${ DIR }/blk-${ name }.png` } );
+			await t.close();
+		}
+		const prices = PAGES.find( ( x ) => /^цены/i.test( x.post_title ) ) || PAGES[ 1 ];
+		const frontId = await page.evaluate( () => window.wp?.apiFetch?.( { path: '/wp/v2/settings' } ).then( ( r ) => r.page_on_front ) ).catch( () => 0 );
+		for ( const p of [ prices, { ID: frontId, post_name: 'front' } ] ) {
+			const t = await page.context().newPage();
+			await t.setViewportSize( { width: 1440, height: 1000 } );
+			await t.goto( '/wp-admin/post.php?action=edit&post=' + p.ID );
+			await t.waitForTimeout( 20000 );
+			await t.screenshot( { path: `${ DIR }/blk-page-${ p.post_name }-top.png` } );
+			const fr = t.frameLocator( 'iframe[name="editor-canvas"]' );
+			await fr.locator( 'footer, .footer' ).last().scrollIntoViewIfNeeded().catch( () => {} );
+			await t.waitForTimeout( 2000 );
+			await t.screenshot( { path: `${ DIR }/blk-page-${ p.post_name }-bottom.png` } );
+			report[ 'mode-' + p.post_name ] = await t.evaluate( () => window.wp.data.select( 'core/editor' ).getRenderingMode?.() ).catch( () => null );
+			await t.close();
+		}
+		report.errors = errs;
+		fs.writeFileSync( `${ DIR }/blocks-audit.json`, JSON.stringify( report, null, 1 ) );
+	} );
+} );
