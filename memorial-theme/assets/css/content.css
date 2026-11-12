@@ -28,23 +28,13 @@
 /* Галочки */.wp-block-list.is-style-checks{list-style:none;padding:0}
 .wp-block-list.is-style-checks>li{position:relative;padding-left:2rem;margin-bottom:.6em}
 .wp-block-list.is-style-checks>li::before{content:"";position:absolute;left:.15rem;top:.45em;width:.85rem;height:.45rem;border:solid var(--gold,#5e7052);border-width:0 0 2px 2px;transform:rotate(-45deg)}
-/* Карточка */.wp-block-group.is-style-card{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:14px;padding:1.4rem 1.6rem;margin:1.5rem 0}
-.wp-block-group.is-style-card>:last-child{margin-bottom:0}
-.wp-block-group.is-style-card>:first-child,.wp-block-group.is-style-card>.wp-block-group__inner-container>:first-child{margin-top:0}
-.wp-block-group.is-style-card>.wp-block-group__inner-container>:last-child{margin-bottom:0}
+/* Карточка */
+
 .wp-block-media-text__content>h3:first-child,.wp-block-media-text__content>h2:first-child{margin-top:0}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-media-text h3{font-size:1.55rem;line-height:1.2}
-.wp-block-group.is-style-card h3{font-size:1.35rem;margin-bottom:.4rem}
-/* Фото + текст */.wp-block-media-text{margin:2rem 0;gap:0}
-.wp-block-media-text.is-style-soft{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:14px;overflow:hidden}
-.wp-block-media-text.is-style-soft img{border-radius:0}
-.wp-block-media-text.is-style-soft>.wp-block-media-text__media{align-self:stretch;margin:0}
-.wp-block-media-text.is-style-soft>.wp-block-media-text__media img{width:100%;height:100%;object-fit:cover;margin:0}
-@media (max-width:600px){.wp-block-media-text.is-style-soft>.wp-block-media-text__media img{height:auto;aspect-ratio:4/3}}
 
-.wp-block-media-text .wp-block-media-text__content{padding:1.4rem 1.8rem}
-.wp-block-media-text .wp-block-media-text__content>:last-child{margin-bottom:0}
-.wp-block-media-text figure{margin:0}
+/* Фото + текст */
+
 /* Частые вопросы (блок «Подробности») */.wp-block-details{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:12px;margin:0 0 .6rem;padding:0;overflow:hidden}
 .wp-block-details summary{cursor:pointer;list-style:none;padding:1rem 3rem 1rem 1.2rem;font-weight:600;position:relative}
 .wp-block-details summary::-webkit-details-marker{display:none}
@@ -53,20 +43,10 @@
 .wp-block-details[open] summary{border-bottom:1px solid var(--line,#e2ded2)}
 .wp-block-details>:not(summary){margin:.9rem 1.2rem}
 .wp-block-details>:last-child{margin-bottom:1rem}
-@media (max-width:600px){.wp-block-media-text .wp-block-media-text__content{padding:1.2rem}.wp-block-table.is-style-price th,.wp-block-table.is-style-price td{padding:.75rem .8rem}}
+@media (max-width:600px){.wp-block-table.is-style-price th,.wp-block-table.is-style-price td{padding:.75rem .8rem}}
 
-/* Галерея «Карточки с подписью»: подпись под картинкой, а не поверх (для чертежей, каталога) */.wp-block-gallery.is-style-cards.has-nested-images{--wp--style--unstable-gallery-gap:.9rem;gap:.9rem}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:12px;padding:.7rem .7rem 0;flex-direction:column;overflow:hidden}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image:not(#individual-image){flex-grow:0;align-self:stretch;justify-content:flex-start;margin:0!important}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image img{border-radius:6px;object-fit:contain;background:#fff;width:100%;height:auto!important;aspect-ratio:5/3}
-.wp-block-gallery.is-style-cards.mem-portrait.has-nested-images figure.wp-block-image img{aspect-ratio:3/4;object-fit:cover}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image figcaption{margin-top:auto!important}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image:has(figcaption)::before{content:none;display:none}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image figcaption{position:static;background:none;color:var(--ink,#2a2c28);text-shadow:none;text-align:center;font-size:.92rem;line-height:1.35;padding:.6rem .2rem .75rem;margin:0;max-height:none;overflow:visible;-webkit-mask-image:none;mask-image:none}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image figcaption strong{display:block;font:500 1.125rem/1.3 var(--lora,Georgia,serif);color:var(--ink,#2a2c28)}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image a{display:block}
-.wp-block-gallery.is-style-cards.mem-photo.has-nested-images figure.wp-block-image img{aspect-ratio:4/3}
-.wp-block-gallery.is-style-cards.mem-tall.has-nested-images figure.wp-block-image img{aspect-ratio:3/5;object-fit:contain}
+/* Галерея «Карточки с подписью»: подпись под картинкой, а не поверх (для чертежей, каталога) */
+
 /* Прайс с несколькими колонками: колонки с цифрами — по ширине содержимого, без переносов */.wp-block-table.is-style-price td:not(:first-child),.wp-block-table.is-style-price th:not(:first-child){white-space:nowrap}
 .wp-block-table.is-style-price td:not(:first-child):not(:last-child){color:var(--mute,#66675e)}
 @media (max-width:600px){
@@ -80,7 +60,7 @@
 /* ---------- Крупное фото ---------- *//* Фото — в своей области, подпись и счётчик — под ним; стрелки не наезжают на текст:
    на ПК — по бокам экрана, на телефоне — внизу, под подписью. Страница под фото не прокручивается. */html.lb-open,html.lb-open body{overflow:hidden}
 /* Галереи и ряды фото: одинаковые пропорции у всех снимков */
-.wp-block-gallery figure.wp-block-image a[data-lb]{cursor:zoom-in}
+
 /* Встроенная панорама / карта, загрузка по кнопке */.mem-embed{position:relative;aspect-ratio:16/9;margin:1.5rem 0;border-radius:14px;overflow:hidden;background:var(--sage,#e6ebdf);color:var(--ink,#2a2c28);display:grid;place-items:center;text-align:center}
 .mem-embed__ph{display:grid;justify-items:center;gap:.8rem;padding:1.5rem}
 .mem-embed__360{font:500 2.6rem/1 var(--serif,Georgia,serif);color:var(--gold3,#3f4d36);border:1px solid var(--gold,#5e7052);border-radius:50%;width:5.5rem;height:5.5rem;display:grid;place-items:center}
@@ -139,16 +119,10 @@
 
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-table td,:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-table th{word-break:normal;overflow-wrap:normal}
 /* Вопросы-«подробности»: чуть больше воздуха между ними */.wp-block-details{margin-bottom:.8rem}
-/* «Карточки»: вся карточка — ссылка (раньше нажималось только фото) */.wp-block-gallery.is-style-cards figure.wp-block-image{position:relative;transition:box-shadow .2s,transform .2s}
-.wp-block-gallery.is-style-cards figure.wp-block-image>a::after{content:"";position:absolute;inset:0;z-index:1}
-.wp-block-gallery.is-style-cards figure.wp-block-image figcaption a{position:relative;z-index:2}
-.wp-block-gallery.is-style-cards figure.wp-block-image:has(>a):hover{box-shadow:0 10px 26px -12px rgba(0,0,0,.25);transform:translateY(-2px)}
+/* «Карточки»: вся карточка — ссылка (раньше нажималось только фото) */
+
 /* Плитки-разделы на телефоне — в столбик, крупно */
-@media (max-width:600px){
-  .wp-block-gallery.mem-hub.has-nested-images figure.wp-block-image:not(#individual-image){width:100%!important;flex-basis:100%}
-  .wp-block-gallery.mem-hub.has-nested-images figure.wp-block-image figcaption{font-size:1rem}
-  .wp-block-gallery.mem-hub.has-nested-images figure.wp-block-image figcaption strong{font-size:1.3rem}
-}
+
 /* Таблицы из 3+ колонок на телефоне — карточками: строка = карточка, значения с подписями из шапки */
 @media (max-width:600px){
   .wp-block-table.mem-stack{overflow:visible}
@@ -206,14 +180,14 @@
           mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath transform='translate(2 14) rotate(-48)' d='M0 0C5.1 -5 12.24 -4.25 17 0C12.24 4.25 5.1 5 0 0Z'/%3E%3C/svg%3E") center/contain no-repeat}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul ul>li::before{width:11px;height:11px;opacity:.7}
 /* Шаги: круглые номера в тонком контуре, вертикальная линия-стебель (на шалфейной подложке — в группе is-style-card) */.wp-block-list.is-style-steps>li{padding-left:3.5rem;padding-bottom:1.4rem}
-/* Карточка и примечание */.wp-block-group.is-style-card{border-radius:14px;box-shadow:0 1px 2px rgba(42,44,40,.04)}
+/* Карточка и примечание */
 .is-style-note{background:var(--sage,#e6ebdf);border-radius:10px;color:var(--ink,#2a2c28)}
 /* Прайс: чередование строк */.wp-block-table.is-style-price tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--bg2,#f2efe6) 55%,#fff)}
 /* Аккордеон «Вопрос–ответ»: разделители и «+» лавром */.wp-block-details{box-shadow:none}
 .wp-block-details summary{font-weight:500}
 .wp-block-details summary:hover{color:var(--gold3,#3f4d36)}
 /* Галереи: тёплые фото со скруглением */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-gallery img{border-radius:10px}
-.wp-block-gallery.is-style-cards figure.wp-block-image:has(>a):hover{box-shadow:0 12px 32px rgba(42,44,40,.08);transform:none}
+
 /* Разделитель WordPress — лавровый «линия — лист — линия» */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) hr.wp-block-separator,:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) hr{border:0;height:18px;width:160px;margin:2.5rem auto;background:url(../img/laurel-divider.svg) center/contain no-repeat;opacity:1}
 /* Цитата */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) blockquote,.wp-block-quote{margin:2rem 0;padding:0 0 0 1.25rem;border-left:2px solid var(--gold2,#a9b796);font:italic 500 1.1875rem/1.6 var(--lora,Georgia,serif);color:var(--mute,#66675e)}
 /* Крупное фото: светлое затемнение вместо чёрного */

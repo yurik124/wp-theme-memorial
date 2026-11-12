@@ -93,6 +93,36 @@ add_action(
 	20
 );
 
+/*
+ * Styles of core blocks (card group, media and text, card gallery): each file loads only on pages that
+ * have that block — wp_enqueue_block_style(). They come after the theme's stylesheets, as they did inside
+ * content.css. The price table, the steps and checks lists and the details stay in content.css: the plugin
+ * prints their classes without the core blocks (cremation prices, FAQ, sub-sections list).
+ */
+add_action(
+	'init',
+	function () {
+		$dir = get_template_directory();
+		$uri = get_template_directory_uri();
+		foreach ( array( 'group', 'media-text', 'gallery' ) as $block ) {
+			$css = memorial_theme_asset( '/assets/css/blocks/core-' . $block . '.css' );
+			if ( ! is_file( $dir . $css ) ) {
+				continue;
+			}
+			wp_enqueue_block_style(
+				'core/' . $block,
+				array(
+					'handle' => 'memorial-theme-' . $block,
+					'src'    => $uri . $css,
+					'path'   => $dir . $css,
+					'deps'   => is_admin() ? array() : array( 'memorial-theme-content' ),
+					'ver'    => (string) filemtime( $dir . $css ),
+				)
+			);
+		}
+	}
+);
+
 /**
  * Texts of assets/js/main.js, translated here (the script has no dependency on wp-i18n).
  *

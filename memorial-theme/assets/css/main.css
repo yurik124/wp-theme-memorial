@@ -257,7 +257,7 @@ select{min-height:44px}
   .mbar .btn{min-height:48px;font-size:1.0625rem;padding:.5rem .6rem;gap:.45rem}
   .mbar .btn .ico{width:18px;height:18px}}
 
-/* старая круглая кнопка звонка больше не нужна */.fab{display:none!important}
+
 
 @media (max-width:480px){
   .logo b{font-size:1.3rem}
