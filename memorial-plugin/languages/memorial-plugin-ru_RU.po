@@ -5877,3 +5877,21 @@ msgstr "в SEO"
 
 msgid "— %s —"
 msgstr "— %s —"
+
+msgid "A number (500), a range (200–300) or words (free); ₽ is added to numbers by itself."
+msgstr "Число (500), диапазон (200–300) или слова (бесплатно); знак ₽ к числам добавится сам."
+
+msgid "As the price is called in the lists, for example “Wreath delivery in Belgorod”."
+msgstr "Как цена будет называться в списках, например «Доставка венков по Белгороду»."
+
+msgid "Can be left empty: it is made from the name when you save. By the code the price is put into texts and SEO titles, so do not change it once it is used."
+msgstr "Можно не заполнять: при сохранении сделается из названия. По коду цена подставляется в тексты и SEO-заголовки, поэтому после использования его не меняйте."
+
+msgid "Code"
+msgstr "Код"
+
+msgid "Its price from Memorial → Services."
+msgstr "Её цена из «Мемориал → Услуги»."
+
+msgid "The price or the number of models is counted from its products."
+msgstr "Цена или число моделей считаются по его товарам."

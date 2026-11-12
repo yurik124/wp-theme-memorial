@@ -624,7 +624,7 @@ test.describe( 'аудит цен', () => {
 		await page.waitForTimeout( 1000 );
 		out.openAfterAdd = await page.locator( '.memorial-plugin-settings__row:not(.is-folded) .memorial-plugin-settings__fields' ).count();
 		await page.screenshot( { path: `${ DIR }/prices-added.png`, fullPage: true } );
-		await page.goto( '/wp-admin/admin.php?page=mem-reviews' );
+		await page.goto( '/wp-admin/admin.php?page=mem-rewio' );
 		await page.waitForTimeout( 6000 );
 		out.keyButtons = await page.locator( '.memorial-plugin-settings__secret button' ).count();
 		await page.screenshot( { path: `${ DIR }/reviews.png`, fullPage: true } );

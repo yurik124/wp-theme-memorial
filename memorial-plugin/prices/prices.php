@@ -131,7 +131,8 @@ function memorial_plugin_prices_schema() {
 					'fields'   => array(
 						'name'    => array(
 							'type'  => 'text',
-							'label' => __( 'Name — as you will find it in the list, for example “Wreath delivery in Belgorod”', 'memorial-plugin' ),
+							'label' => __( 'Name', 'memorial-plugin' ),
+							'help'  => __( 'As the price is called in the lists, for example “Wreath delivery in Belgorod”.', 'memorial-plugin' ),
 						),
 						'what'    => array(
 							'type'    => 'select',
@@ -140,18 +141,21 @@ function memorial_plugin_prices_schema() {
 						),
 						'price'   => array(
 							'type'    => 'text',
-							'label'   => __( 'Price — a number (500), a range (200–300) or words (free); ₽ is added to numbers by itself', 'memorial-plugin' ),
+							'label'   => __( 'Price', 'memorial-plugin' ),
+							'help'    => __( 'A number (500), a range (200–300) or words (free); ₽ is added to numbers by itself.', 'memorial-plugin' ),
 							'show_if' => array( 'what', array( '', 'custom' ) ),
 						),
 						'section' => array(
 							'type'    => 'select',
-							'label'   => __( 'Catalog section — the price or the number of models is counted from its products', 'memorial-plugin' ),
+							'label'   => __( 'Catalog section', 'memorial-plugin' ),
+							'help'    => __( 'The price or the number of models is counted from its products.', 'memorial-plugin' ),
 							'options' => memorial_plugin_values_sections(),
 							'show_if' => array( 'what', array( 'cat-min', 'cat-max', 'cat-count' ) ),
 						),
 						'service' => array(
 							'type'    => 'select',
-							'label'   => __( 'Service — its price from Memorial → Services', 'memorial-plugin' ),
+							'label'   => __( 'Service', 'memorial-plugin' ),
+							'help'    => __( 'Its price from Memorial → Services.', 'memorial-plugin' ),
 							'options' => memorial_plugin_values_services(),
 							'show_if' => array( 'what', array( 'service' ) ),
 						),
@@ -167,7 +171,8 @@ function memorial_plugin_prices_schema() {
 						),
 						'code'    => array(
 							'type'  => 'text',
-							'label' => __( 'Code — can be left empty: it is made from the name when you save (Latin letters, digits and “_”). Change it only if the price is already used in SEO titles.', 'memorial-plugin' ),
+							'label' => __( 'Code', 'memorial-plugin' ),
+							'help'  => __( 'Can be left empty: it is made from the name when you save. By the code the price is put into texts and SEO titles, so do not change it once it is used.', 'memorial-plugin' ),
 						),
 					),
 				),
