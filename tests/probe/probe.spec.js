@@ -333,8 +333,20 @@ test.describe( 'аудит админки', () => {
 			await tab.setViewportSize( { width: 1440, height: 6000 } );
 			const st = watch( tab );
 			st.ssr = [];
+			st.ssrRequests = { single: 0, batch: 0, batchItems: 0 };
 			tab.on( 'response', async ( r ) => {
-				if ( /block-renderer/.test( decodeURIComponent( r.url() ) ) ) {
+				if ( /render-blocks/.test( decodeURIComponent( r.url() ) ) ) {
+					st.ssrRequests.batch++;
+					let answers = [];
+					try { answers = await r.json(); } catch ( e ) {}
+					st.ssrRequests.batchItems += Array.isArray( answers ) ? answers.length : 0;
+					if ( r.status() >= 300 || ! Array.isArray( answers ) ) {
+						st.ssr.push( r.status() + ' render-blocks ' + JSON.stringify( answers ).slice( 0, 600 ) );
+					} else {
+						answers.filter( ( a ) => a.status >= 300 ).forEach( ( a ) => st.ssr.push( a.status + ' ' + JSON.stringify( a.body ).slice( 0, 400 ) ) );
+					}
+				} else if ( /block-renderer/.test( decodeURIComponent( r.url() ) ) ) {
+					st.ssrRequests.single++;
 					let body = '';
 					try { body = await r.text(); } catch ( e ) {}
 					const name = ( decodeURIComponent( r.url() ).match( /block-renderer\/([\w-]+\/[\w-]+)/ ) || [] )[ 1 ];
