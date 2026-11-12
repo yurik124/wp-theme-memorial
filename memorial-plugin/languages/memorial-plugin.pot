@@ -338,7 +338,7 @@ msgstr ""
 msgid "Active — new burials"
 msgstr ""
 
-#: src/catalog/works.js:48 src/catalog/products.js:154 src/catalog/types.js:484 src/catalog/types.js:716 src/catalog/work-types.js:227 src/settings/index.js:225
+#: src/catalog/works.js:48 src/catalog/products.js:154 src/catalog/types.js:484 src/catalog/types.js:716 src/catalog/work-types.js:227 src/settings/index.js:342
 msgid "Add"
 msgstr ""
 
@@ -506,7 +506,7 @@ msgstr ""
 msgid "All categories (tiles)"
 msgstr ""
 
-#: src/settings/index.js:575
+#: src/settings/index.js:712
 msgid "All changes are saved"
 msgstr ""
 
@@ -1607,6 +1607,10 @@ msgstr ""
 msgid "Flower — wreaths"
 msgstr ""
 
+#: src/settings/index.js:220
+msgid "Fold all"
+msgstr ""
+
 #: src/block-controls/index.js:506
 msgid "Fold the block (only in the editor)"
 msgstr ""
@@ -2364,13 +2368,13 @@ msgid "Move photo %d later"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:199
+#: src/settings/index.js:312
 #, php-format
 msgid "Move row %d down"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:188
+#: src/settings/index.js:301
 #, php-format
 msgid "Move row %d up"
 msgstr ""
@@ -2727,7 +2731,7 @@ msgstr ""
 msgid "Open Analytics settings"
 msgstr ""
 
-#: src/settings/index.js:481
+#: src/settings/index.js:618
 msgid "Open site"
 msgstr ""
 
@@ -3334,7 +3338,7 @@ msgid "Remove row"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:211
+#: src/settings/index.js:324
 #, php-format
 msgid "Remove row %d"
 msgstr ""
@@ -3541,6 +3545,12 @@ msgstr ""
 msgid "Round to"
 msgstr ""
 
+#. translators: %d: row number.
+#: src/settings/index.js:264
+#, php-format
+msgid "Row %d"
+msgstr ""
+
 #: core/icons-api.php:36
 msgid "Ruble"
 msgstr ""
@@ -3553,7 +3563,7 @@ msgstr ""
 msgid "SEO title (SEOPress)"
 msgstr ""
 
-#: src/catalog/product-pages.js:125 src/catalog/types.js:164 src/catalog/types.js:483 src/catalog/list-screen.js:105 src/settings/index.js:489 src/settings/index.js:583
+#: src/catalog/product-pages.js:125 src/catalog/types.js:164 src/catalog/types.js:483 src/catalog/list-screen.js:105 src/settings/index.js:626 src/settings/index.js:720
 msgid "Save"
 msgstr ""
 
@@ -3573,7 +3583,7 @@ msgstr ""
 msgid "Saved."
 msgstr ""
 
-#: src/settings/index.js:457
+#: src/settings/index.js:594
 msgid "Saved. The changes are already on the site."
 msgstr ""
 
@@ -4052,7 +4062,7 @@ msgstr ""
 msgid "The API key is not set."
 msgstr ""
 
-#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:200 admin/convert.php:558
+#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:203 admin/convert.php:558
 msgid "The JavaScript build is missing. Run npm run build."
 msgstr ""
 
@@ -4202,7 +4212,7 @@ msgstr ""
 msgid "There are no products in this section yet. Call — we will find what you need."
 msgstr ""
 
-#: src/settings/index.js:571
+#: src/settings/index.js:708
 msgid "There are unsaved changes"
 msgstr ""
 
@@ -4358,6 +4368,10 @@ msgstr ""
 msgid "Unfold"
 msgstr ""
 
+#: src/settings/index.js:229
+msgid "Unfold all"
+msgstr ""
+
 #: src/block-controls/index.js:505
 msgid "Unfold the block"
 msgstr ""
@@ -4386,7 +4400,7 @@ msgstr ""
 msgid "Unknown product type."
 msgstr ""
 
-#: admin/settings-form.php:133 admin/settings-form.php:179
+#: admin/settings-form.php:136 admin/settings-form.php:182
 msgid "Unknown settings page."
 msgstr ""
 
@@ -5384,7 +5398,7 @@ msgstr ""
 msgid "— not chosen —"
 msgstr ""
 
-#: src/settings/index.js:312
+#: src/settings/index.js:449
 msgid "— not selected —"
 msgstr ""
 

@@ -92,6 +92,93 @@
 		grid-column: 1 / -1;
 	}
 
+	// Folding: the head of a row (number, title, summary) and of a group is a button.
+	&__row-head,
+	&__group-head {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		width: 100%;
+		margin: 0;
+		padding: 2px 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-align: left;
+		cursor: pointer;
+
+		.dashicons {
+			margin-left: auto;
+			color: #757575;
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+			outline-offset: 2px;
+		}
+	}
+
+	&__row-head .memorial-plugin-settings__row-title {
+		margin: 0;
+	}
+
+	&__row-sum {
+		color: #5f6158;
+		font-size: 12px;
+	}
+
+	&__row.is-folded {
+		align-items: center;
+		padding-top: 8px;
+		padding-bottom: 8px;
+
+		.memorial-plugin-settings__num,
+		.memorial-plugin-settings__row-actions {
+			margin-top: 0;
+		}
+	}
+
+	&__row-head + &__fields {
+		margin-top: 10px;
+	}
+
+	&__fold-all {
+		display: flex;
+		gap: 4px;
+	}
+
+	// Short rows (contents of a package: name and price) — compact, one line each.
+	&__repeater.is-inline {
+		gap: 4px;
+
+		.memorial-plugin-settings__row {
+			align-items: center;
+			padding: 4px 6px 4px 10px;
+			border-radius: 8px;
+			background: #fff;
+		}
+
+		.memorial-plugin-settings__fields > * {
+			grid-template-columns: minmax(0, 3fr) minmax(90px, 1fr) repeat(auto-fit, minmax(90px, auto));
+			gap: 6px 10px;
+		}
+
+		.memorial-plugin-settings__row-actions {
+			margin-top: 0;
+		}
+
+		// Labels of the fields only above the first line; for screen readers on every line.
+		.memorial-plugin-settings__row + .memorial-plugin-settings__row .components-base-control__label {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	}
+
 	&__row-actions {
 		display: flex;
 		flex: none;

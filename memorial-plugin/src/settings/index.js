@@ -142,17 +142,84 @@ function OrderEdit( { def, value, onChange } ) {
 	);
 }
 
+/**
+ * Title of a folded row: the “collapse” field, otherwise the first filled text field.
+ *
+ * @param {Object} def Repeater description.
+ * @param {Object} row Row values.
+ * @return {string} Title.
+ */
+function rowTitle( def, row ) {
+	if ( def.collapse && row?.[ def.collapse ] ) {
+		return String( row[ def.collapse ] );
+	}
+	const first = ( def.fields || [] ).find(
+		( f ) =>
+			[ 'text', 'textarea', 'email', 'number' ].includes( f.type ) &&
+			String( row?.[ f.id ] ?? '' ).trim()
+	);
+	return first ? String( row[ first.id ] ) : '';
+}
+
+/**
+ * Short summary of a folded row: how many items its nested lists have.
+ *
+ * @param {Object} def Repeater description.
+ * @param {Object} row Row values.
+ * @return {string} Summary.
+ */
+function rowSummary( def, row ) {
+	return ( def.fields || [] )
+		.filter( ( f ) => f.type === 'repeater' && Array.isArray( row?.[ f.id ] ) )
+		.map(
+			( f ) =>
+				f.label.split( ' — ' )[ 0 ].split( '. ' )[ 0 ] +
+				': ' +
+				row[ f.id ].length
+		)
+		.join( ' · ' );
+}
+
 function RepeaterEdit( { def, value, onChange } ) {
 	const rows = Array.isArray( value ) ? value : [];
+	// Rows that have content are folded at first; new rows are open.
+	const [ open, setOpen ] = useState( () => new Set() );
+	const isOpen = ( i ) => def.inline || open.has( i );
+	const toggle = ( i ) => {
+		const next = new Set( open );
+		if ( next.has( i ) ) {
+			next.delete( i );
+		} else {
+			next.add( i );
+		}
+		setOpen( next );
+	};
 	const set = ( i, row ) =>
 		onChange( rows.map( ( r, j ) => ( j === i ? row : r ) ) );
 	const move = ( i, d ) => {
 		const next = [ ...rows ];
 		[ next[ i ], next[ i + d ] ] = [ next[ i + d ], next[ i ] ];
+		const was = new Set( open );
+		const a = was.has( i );
+		const b = was.has( i + d );
+		was.delete( i );
+		was.delete( i + d );
+		if ( a ) {
+			was.add( i + d );
+		}
+		if ( b ) {
+			was.add( i );
+		}
+		setOpen( was );
 		onChange( next );
 	};
 	return (
-		<div className="memorial-plugin-settings__repeater">
+		<div
+			className={
+				'memorial-plugin-settings__repeater' +
+				( def.inline ? ' is-inline' : '' )
+			}
+		>
 			<span
 				className={
 					'memorial-plugin-settings__label' +
@@ -162,72 +229,134 @@ function RepeaterEdit( { def, value, onChange } ) {
 				{ def.label }
 			</span>
 			<Help text={ def.help } />
-			{ rows.map( ( row, i ) => (
-				<div className="memorial-plugin-settings__row" key={ i }>
-					<span
-						className="memorial-plugin-settings__num"
-						aria-hidden="true"
+			{ ! def.inline && rows.length > 1 && (
+				<div className="memorial-plugin-settings__fold-all">
+					<Button
+						size="small"
+						variant="tertiary"
+						onClick={ () => setOpen( new Set() ) }
 					>
-						{ i + 1 }
-					</span>
-					<div className="memorial-plugin-settings__row-main">
-						{ def.collapse && row[ def.collapse ] && (
-							<strong className="memorial-plugin-settings__row-title">
-								{ row[ def.collapse ] }
-							</strong>
+						{ __( 'Fold all', 'memorial-plugin' ) }
+					</Button>
+					<Button
+						size="small"
+						variant="tertiary"
+						onClick={ () =>
+							setOpen( new Set( rows.map( ( r, i ) => i ) ) )
+						}
+					>
+						{ __( 'Unfold all', 'memorial-plugin' ) }
+					</Button>
+				</div>
+			) }
+			{ rows.map( ( row, i ) => {
+				const title = rowTitle( def, row );
+				const shown = isOpen( i );
+				return (
+					<div
+						className={
+							'memorial-plugin-settings__row' +
+							( shown ? '' : ' is-folded' )
+						}
+						key={ i }
+					>
+						{ ! def.inline && (
+							<span
+								className="memorial-plugin-settings__num"
+								aria-hidden="true"
+							>
+								{ i + 1 }
+							</span>
 						) }
-						<div className="memorial-plugin-settings__fields">
-							<FieldsForm
-								defs={ def.fields || [] }
-								data={ row || {} }
-								onChange={ ( edits ) =>
-									set( i, { ...row, ...edits } )
+						<div className="memorial-plugin-settings__row-main">
+							{ ! def.inline && (
+								<button
+									type="button"
+									className="memorial-plugin-settings__row-head"
+									aria-expanded={ shown }
+									onClick={ () => toggle( i ) }
+								>
+									<strong className="memorial-plugin-settings__row-title">
+										{ title ||
+											sprintf(
+												/* translators: %d: row number. */
+												__( 'Row %d', 'memorial-plugin' ),
+												i + 1
+											) }
+									</strong>
+									{ ! shown && rowSummary( def, row ) && (
+										<span className="memorial-plugin-settings__row-sum">
+											{ rowSummary( def, row ) }
+										</span>
+									) }
+									<span
+										className={
+											'dashicons dashicons-arrow-' +
+											( shown ? 'up' : 'down' ) +
+											'-alt2'
+										}
+										aria-hidden="true"
+									/>
+								</button>
+							) }
+							{ shown && (
+								<div className="memorial-plugin-settings__fields">
+									<FieldsForm
+										defs={ def.fields || [] }
+										data={ row || {} }
+										onChange={ ( edits ) =>
+											set( i, { ...row, ...edits } )
+										}
+									/>
+								</div>
+							) }
+						</div>
+						<div className="memorial-plugin-settings__row-actions">
+							<Button
+								size="small"
+								icon="arrow-up-alt2"
+								label={ sprintf(
+									/* translators: %d: row number. */
+									__( 'Move row %d up', 'memorial-plugin' ),
+									i + 1
+								) }
+								disabled={ i === 0 }
+								onClick={ () => move( i, -1 ) }
+							/>
+							<Button
+								size="small"
+								icon="arrow-down-alt2"
+								label={ sprintf(
+									/* translators: %d: row number. */
+									__( 'Move row %d down', 'memorial-plugin' ),
+									i + 1
+								) }
+								disabled={ i === rows.length - 1 }
+								onClick={ () => move( i, 1 ) }
+							/>
+							<Button
+								size="small"
+								icon="trash"
+								isDestructive
+								label={ sprintf(
+									/* translators: %d: row number. */
+									__( 'Remove row %d', 'memorial-plugin' ),
+									i + 1
+								) }
+								onClick={ () =>
+									onChange( rows.filter( ( r, j ) => j !== i ) )
 								}
 							/>
 						</div>
 					</div>
-					<div className="memorial-plugin-settings__row-actions">
-						<Button
-							size="small"
-							icon="arrow-up-alt2"
-							label={ sprintf(
-								/* translators: %d: row number. */
-								__( 'Move row %d up', 'memorial-plugin' ),
-								i + 1
-							) }
-							disabled={ i === 0 }
-							onClick={ () => move( i, -1 ) }
-						/>
-						<Button
-							size="small"
-							icon="arrow-down-alt2"
-							label={ sprintf(
-								/* translators: %d: row number. */
-								__( 'Move row %d down', 'memorial-plugin' ),
-								i + 1
-							) }
-							disabled={ i === rows.length - 1 }
-							onClick={ () => move( i, 1 ) }
-						/>
-						<Button
-							size="small"
-							icon="trash"
-							isDestructive
-							label={ sprintf(
-								/* translators: %d: row number. */
-								__( 'Remove row %d', 'memorial-plugin' ),
-								i + 1
-							) }
-							onClick={ () =>
-								onChange( rows.filter( ( r, j ) => j !== i ) )
-							}
-						/>
-					</div>
-				</div>
-			) ) }
+				);
+			} ) }
 			<Button
 				variant="secondary"
-				onClick={ () => onChange( [ ...rows, {} ] ) }
+				onClick={ () => {
+					setOpen( new Set( [ ...open, rows.length ] ) );
+					onChange( [ ...rows, {} ] );
+				} }
 			>
 				{ '+ ' + ( def.add || __( 'Add', 'memorial-plugin' ) ) }
 			</Button>
@@ -236,21 +365,41 @@ function RepeaterEdit( { def, value, onChange } ) {
 }
 
 function GroupEdit( { def, value, onChange } ) {
+	const [ shown, setShown ] = useState( true );
 	return (
 		<fieldset className="memorial-plugin-settings__group">
 			<legend
 				className={ def.hideLabel ? 'screen-reader-text' : undefined }
 			>
-				{ def.label }
+				<button
+					type="button"
+					className="memorial-plugin-settings__group-head"
+					aria-expanded={ shown }
+					onClick={ () => setShown( ! shown ) }
+				>
+					{ def.label }
+					<span
+						className={
+							'dashicons dashicons-arrow-' +
+							( shown ? 'up' : 'down' ) +
+							'-alt2'
+						}
+						aria-hidden="true"
+					/>
+				</button>
 			</legend>
-			<Help text={ def.help } />
-			<FieldsForm
-				defs={ def.fields || [] }
-				data={ value || {} }
-				onChange={ ( edits ) =>
-					onChange( { ...( value || {} ), ...edits } )
-				}
-			/>
+			{ shown && (
+				<>
+					<Help text={ def.help } />
+					<FieldsForm
+						defs={ def.fields || [] }
+						data={ value || {} }
+						onChange={ ( edits ) =>
+							onChange( { ...( value || {} ), ...edits } )
+						}
+					/>
+				</>
+			) }
 		</fieldset>
 	);
 }

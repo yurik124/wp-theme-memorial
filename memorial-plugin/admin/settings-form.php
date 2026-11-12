@@ -44,6 +44,9 @@ function memorial_plugin_settings_describe( $schema ) {
 		if ( ! empty( $f['open'] ) ) {
 			$field['open'] = true;
 		}
+		if ( ! empty( $f['inline'] ) ) {
+			$field['inline'] = true; // Short rows (name and price) in one line, without folding.
+		}
 		if ( isset( $f['options'] ) && is_array( $f['options'] ) ) {
 			$field['options'] = array();
 			foreach ( $f['options'] as $value => $label ) {

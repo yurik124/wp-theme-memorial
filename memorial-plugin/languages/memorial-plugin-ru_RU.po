@@ -5799,3 +5799,12 @@ msgstr "Что показывать"
 
 msgid "Which one"
 msgstr "Какое именно"
+
+msgid "Fold all"
+msgstr "Свернуть все"
+
+msgid "Unfold all"
+msgstr "Развернуть все"
+
+msgid "Row %d"
+msgstr "Строка %d"

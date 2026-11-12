@@ -371,8 +371,8 @@ function memorial_plugin_pages_to_content_ability() {
 add_action( 'wp_abilities_api_init', 'memorial_plugin_pages_to_content_ability' );
 
 /**
- * The home page opens in the page editor without the template — only its own blocks, no header and footer
- * (they are edited in Appearance → Editor). “Contacts” opens together with its template, as on the site.
+ * The home page and “Contacts” open in the page editor without the template — only their own blocks, no
+ * header and footer (those are edited in Appearance → Editor).
  * The title of these pages is a block inside the content, so the separate title field of the editor is
  * hidden (memorial_plugin_pages_hide_title()) and nothing is duplicated.
  *
@@ -385,18 +385,15 @@ function memorial_plugin_pages_rendering_mode( $settings, $context ) {
 	if ( ! $post instanceof WP_Post || 'page' !== $post->post_type ) {
 		return $settings;
 	}
-	$contacts = memorial_plugin_contacts_page();
-	if ( (int) get_option( 'page_on_front' ) === (int) $post->ID ) {
+	if ( memorial_plugin_pages_own_layout( $post ) ) {
 		$settings['defaultRenderingMode'] = 'post-only';
-	} elseif ( $contacts && $contacts->ID === $post->ID ) {
-		$settings['defaultRenderingMode'] = 'template-locked';
 	}
 	return $settings;
 }
 add_filter( 'block_editor_settings_all', 'memorial_plugin_pages_rendering_mode', 10, 2 );
 
 /**
- * The home page in the editor without the template: no separate title field (the H1 is a block of the content).
+ * The home page and “Contacts” in the editor without the template: no separate title field (the H1 is a block of the content).
  */
 function memorial_plugin_pages_hide_title() {
 	if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
@@ -404,7 +401,7 @@ function memorial_plugin_pages_hide_title() {
 	}
 	$screen = get_current_screen();
 	$post   = get_post();
-	if ( ! $screen || 'page' !== $screen->post_type || ! $post || (int) get_option( 'page_on_front' ) !== (int) $post->ID ) {
+	if ( ! $screen || 'page' !== $screen->post_type || ! $post instanceof WP_Post || ! memorial_plugin_pages_own_layout( $post ) ) {
 		return;
 	}
 	wp_register_style( 'memorial-plugin-home-editor', false, array(), MEMORIAL_PLUGIN_VER );
@@ -412,3 +409,17 @@ function memorial_plugin_pages_hide_title() {
 	wp_add_inline_style( 'memorial-plugin-home-editor', '.editor-visual-editor__post-title-wrapper{display:none}' );
 }
 add_action( 'enqueue_block_assets', 'memorial_plugin_pages_hide_title' );
+
+/**
+ * Pages whose whole layout is in their content: the home page and “Contacts”.
+ *
+ * @param WP_Post $post Page.
+ * @return bool
+ */
+function memorial_plugin_pages_own_layout( $post ) {
+	if ( (int) get_option( 'page_on_front' ) === (int) $post->ID ) {
+		return true;
+	}
+	$contacts = memorial_plugin_contacts_page();
+	return $contacts && (int) $contacts->ID === (int) $post->ID;
+}
