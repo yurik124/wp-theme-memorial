@@ -220,9 +220,10 @@ function memorial_plugin_convert_post_types() {
 /**
  * Posts that contain [mem_ shortcodes or were converted (can be rolled back).
  *
+ * @param bool $check_caps Only posts the current user may edit (false — for the automatic conversion in WP-Cron).
  * @return array<int,array>
  */
-function memorial_plugin_convert_items() {
+function memorial_plugin_convert_items( $check_caps = true ) {
 	global $wpdb;
 	$types    = memorial_plugin_convert_post_types();
 	$statuses = array( 'publish', 'future', 'draft', 'pending', 'private' );
@@ -251,7 +252,7 @@ function memorial_plugin_convert_items() {
 	// phpcs:enable
 	$items = array();
 	foreach ( array_map( 'intval', (array) $ids ) as $id ) {
-		if ( ! current_user_can( 'edit_post', $id ) ) {
+		if ( $check_caps && ! current_user_can( 'edit_post', $id ) ) {
 			continue;
 		}
 		$post  = get_post( $id );

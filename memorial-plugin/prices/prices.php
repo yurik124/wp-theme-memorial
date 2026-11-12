@@ -415,7 +415,7 @@ function memorial_plugin_prices_migrate() {
 			wp_update_post(
 				array(
 					'ID'           => $p->ID,
-					'post_content' => wp_slash( $c ),
+					'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( $c ) ),
 				)
 			);
 			$done[] = $p->ID;

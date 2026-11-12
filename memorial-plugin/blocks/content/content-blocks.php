@@ -542,12 +542,12 @@ function memorial_plugin_content_block_atts( $slug, $attributes ) {
  * @return string
  */
 function memorial_plugin_content_block_render( $slug, $attributes ) {
-	global $shortcode_tags;
-	$def = memorial_plugin_content_blocks()[ $slug ] ?? null;
-	if ( ! $def || empty( $shortcode_tags[ $def['tag'] ] ) || ! is_callable( $shortcode_tags[ $def['tag'] ] ) ) {
+	$def  = memorial_plugin_content_blocks()[ $slug ] ?? null;
+	$impl = $def ? memorial_plugin_shortcode_impl( $def['tag'] ) : null;
+	if ( ! $impl ) {
 		return '';
 	}
-	$html = (string) call_user_func( $shortcode_tags[ $def['tag'] ], memorial_plugin_content_block_atts( $slug, $attributes ), '', $def['tag'] );
+	$html = (string) call_user_func( $impl, memorial_plugin_content_block_atts( $slug, $attributes ), '', $def['tag'] );
 	if ( '' === trim( $html ) ) {
 		return '';
 	}

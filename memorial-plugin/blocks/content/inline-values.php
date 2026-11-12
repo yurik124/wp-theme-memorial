@@ -112,18 +112,18 @@ function memorial_plugin_inline_value_key( $tag ) {
  * @return string|null Null if the key is unknown or its function is switched off.
  */
 function memorial_plugin_inline_value_html( $key, $atts ) {
-	global $shortcode_tags;
 	$def = memorial_plugin_inline_values()[ $key ] ?? null;
 	if ( $def && isset( $def['callback'] ) && is_callable( $def['callback'] ) ) {
 		return (string) call_user_func( $def['callback'] );
 	}
-	if ( ! $def || empty( $def['tag'] ) || empty( $shortcode_tags[ $def['tag'] ] ) || ! is_callable( $shortcode_tags[ $def['tag'] ] ) ) {
+	$impl = $def && ! empty( $def['tag'] ) ? memorial_plugin_shortcode_impl( $def['tag'] ) : null;
+	if ( ! $impl ) {
 		return null;
 	}
 	$content = (string) ( $atts['content'] ?? '' );
 	unset( $atts['content'] );
 	$atts = array_map( 'strval', array_filter( (array) $atts, 'is_scalar' ) );
-	return (string) call_user_func( $shortcode_tags[ $def['tag'] ], $atts, $content, $def['tag'] );
+	return (string) call_user_func( $impl, $atts, $content, $def['tag'] );
 }
 
 /**

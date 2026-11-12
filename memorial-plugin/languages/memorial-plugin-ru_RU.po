@@ -5087,3 +5087,13 @@ msgstr "✔ Цен, вписанных в тексты вручную, не на
 #: legal/legal.php:86
 msgid "✔ published"
 msgstr "✔ опубликована"
+
+#. translators: 1: number of converted posts, 2: number of posts that could not be converted
+#: core/shortcodes-compat.php
+#, php-format
+msgid "The old [mem_…] shortcodes were converted to blocks: %1$d posts. Not converted: %2$d."
+msgstr "Старые шорткоды [mem_…] заменены блоками в записях: %1$d. Не удалось заменить: %2$d."
+
+#: core/shortcodes-compat.php
+msgid "Review or roll back"
+msgstr "Посмотреть или откатить"

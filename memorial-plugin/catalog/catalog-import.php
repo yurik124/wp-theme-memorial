@@ -525,7 +525,7 @@ add_action(
 							'post_status'  => 'publish',
 							'menu_order'   => $k + 1,
 							'post_title'   => $w['title'],
-							'post_content' => trim( $w['text'] ),
+							'post_content' => memorial_plugin_blocks_from_shortcodes( trim( $w['text'] ) ),
 						)
 					);
 					if ( is_wp_error( $id ) || ! $id ) {
@@ -562,7 +562,7 @@ add_action(
 				wp_update_post(
 					array(
 						'ID'           => $pid,
-						'post_content' => wp_slash( serialize_blocks( $blocks ) ),
+						'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( serialize_blocks( $blocks ) ) ),
 					)
 				);
 				$pages++;

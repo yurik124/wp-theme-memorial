@@ -482,7 +482,7 @@ msgstr ""
 msgid "Advantages (with laurel leaves)"
 msgstr ""
 
-#: admin/convert.php:332
+#: admin/convert.php:333
 msgid "After converting"
 msgstr ""
 
@@ -1111,7 +1111,7 @@ msgstr ""
 msgid "Convert the shortcodes of this page to blocks"
 msgstr ""
 
-#: admin/commands.php:24 admin/convert.php:505 admin/convert.php:506 src/convert/index.js:322
+#: admin/commands.php:24 admin/convert.php:506 admin/convert.php:507 src/convert/index.js:322
 msgid "Convert to blocks"
 msgstr ""
 
@@ -2447,7 +2447,7 @@ msgstr ""
 msgid "Nothing to convert automatically in this post."
 msgstr ""
 
-#: admin/convert.php:331
+#: admin/convert.php:332
 msgid "Now"
 msgstr ""
 
@@ -3203,6 +3203,10 @@ msgstr ""
 msgid "Review date"
 msgstr ""
 
+#: core/shortcodes-compat.php:210
+msgid "Review or roll back"
+msgstr ""
+
 #: reviews/reviews.php:128
 msgid "Review services for the “Reviews” page. Put the “Reviews” block (or the <code>[mem_reviews]</code> shortcode) on the page. "
 msgstr ""
@@ -3818,7 +3822,7 @@ msgstr ""
 msgid "The API key is not set."
 msgstr ""
 
-#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:200 admin/convert.php:557
+#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:200 admin/convert.php:558
 msgid "The JavaScript build is missing. Run npm run build."
 msgstr ""
 
@@ -3876,6 +3880,12 @@ msgstr ""
 
 #: catalog/catalog-types-admin.php:154 catalog/catalog-types-admin.php:284 works/works-manager.php:297
 msgid "The name is empty."
+msgstr ""
+
+#. translators: 1: number of converted posts, 2: number of posts that could not be converted
+#: core/shortcodes-compat.php:204
+#, php-format
+msgid "The old [mem_…] shortcodes were converted to blocks: %1$d posts. Not converted: %2$d."
 msgstr ""
 
 #: core/settings.php:386
