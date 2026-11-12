@@ -1,6 +1,8 @@
+/* stylelint-disable selector-class-pattern -- classes of WordPress components and of the plugin are BEM (block__element) */
 // Editor only: the chooser and the folded line in place of a plugin block, the list of chosen pages.
 
 .memorial-plugin-stand {
+
 	.memorial-plugin-stand__in {
 		min-height: 0;
 	}
