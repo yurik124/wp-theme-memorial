@@ -18,7 +18,7 @@
 	var was = h.classList.contains('is-compact');
 	h.classList.add('is-measuring');
 	h.classList.remove('is-compact', 'is-tworow');
-	var compact = innerWidth <= 900, two = false;
+	var compact = !(innerWidth > 900), two = false; // without the “less than” sign: the template HTML is processed after rendering and would break the script
 	if (!compact && over()) {
 		h.classList.add('is-tworow');
 		two = !over();
