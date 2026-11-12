@@ -720,6 +720,8 @@ h1,h2,h3,.pkg h3,.cat h3,.svc__body h3,.card__title,.mcard__name,.fnav__title{ov
 .logo__text .logo__sub{margin:.1rem 0 0;font-size:.75rem;line-height:1.1;color:var(--mute);white-space:nowrap}
 .logo:hover .wp-block-site-title{color:var(--gold3)}
 @media (max-width:480px){.logo__text .wp-block-site-title{font-size:1.3rem}}
+/* подпись — краткое описание сайта (Настройки → Общие), бывает длинной: на узком экране — до двух строк, логотип ужимается */
+@media (max-width:900px){.logo{flex:0 1 auto;min-width:0}.logo__text .logo__sub{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}}
 @media (max-width:380px){
   .logo__text .wp-block-site-title{font-size:1.15rem}
   .logo__text .logo__sub{font-size:.7rem}
