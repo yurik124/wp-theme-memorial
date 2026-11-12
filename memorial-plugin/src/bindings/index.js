@@ -258,7 +258,9 @@ const withSharedText = createHigherOrderComponent(
 			if ( ! next ) {
 				// Back to the block's own text: what was shown stays as its text.
 				const keep =
-					typeof current === 'string' ? { [ attr ]: toHtml( current ) } : {};
+					typeof current === 'string'
+						? { [ attr ]: toHtml( current ) }
+						: {};
 				const meta = { ...metadata, bindings: rest };
 				if ( ! Object.keys( rest ).length ) {
 					delete meta.bindings;
