@@ -150,7 +150,7 @@ add_action(
 		if ( ! function_exists( 'register_block_pattern' ) ) {
 			return;
 		}
-		register_block_pattern_category( 'memorial', array( 'label' => __( 'Memorial', 'memorial-plugin' ) ) );
+		register_block_pattern_category( 'memorial', array( 'label' => __( 'Memorial: ready sections', 'memorial-plugin' ) ) );
 		$step = fn( $ico, $t, $p ) => '<!-- wp:group {"className":"mem-step ' . $ico . '","layout":{"type":"default"}} --><div class="wp-block-group mem-step ' . $ico . '">'
 		. '<!-- wp:heading {"level":3} --><h3 class="wp-block-heading">' . $t . '</h3><!-- /wp:heading -->'
 		. '<!-- wp:paragraph --><p>' . $p . '</p><!-- /wp:paragraph --></div><!-- /wp:group -->';

@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MEMORIAL_THEME_VER', '5.0.0' );
+define( 'MEMORIAL_THEME_VER', '5.0.1' );
 
 /* Translations of the theme (languages/memorial-theme-<locale>.mo / .l10n.php) — before anything translatable */
 add_action(

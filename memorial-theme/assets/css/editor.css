@@ -22,3 +22,23 @@
 .editor-styles-wrapper .header .burger {
 	display: none;
 }
+
+/* Пункт меню с подменю: название и стрелка — в одну строку (в редакторе стрелка уходила под название). */
+.editor-styles-wrapper .header .wp-block-navigation-item {
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: center;
+	white-space: nowrap;
+}
+
+/*
+ * Шапка и подвал в редакторе — на всю ширину холста, как на сайте. Иначе редактор сужает часть шаблона
+ * до ширины содержимого (contentSize), и колонки подвала и шапки съезжают.
+ */
+.editor-styles-wrapper .is-root-container > .wp-block-template-part,
+.editor-styles-wrapper .is-root-container > header.wp-block-group,
+.editor-styles-wrapper .is-root-container > footer.wp-block-group,
+.editor-styles-wrapper .is-root-container > .wp-block-memorial-plugin-topbar {
+	max-width: none;
+	margin-inline: 0;
+}
