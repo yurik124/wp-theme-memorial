@@ -10,6 +10,8 @@
 	<exclude-pattern>*/tests/*</exclude-pattern>
 	<exclude-pattern>*/languages/*</exclude-pattern>
 	<exclude-pattern>*/tools/*</exclude-pattern>
+	<!-- Made by tools/block-json.php from the block.json files. -->
+	<exclude-pattern>*/blocks/types/blocks-manifest.php</exclude-pattern>
 
 	<arg name="extensions" value="php"/>
 	<arg name="basepath" value="."/>
