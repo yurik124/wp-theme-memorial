@@ -262,3 +262,102 @@ test.describe( 'подменю ПК', () => {
 		log( 'pc-sub', { hover, down } );
 	} );
 } );
+
+/**
+ * Аудит админки: все экраны плагина из меню (и скрытые), редактор главной и «Контактов», редактор сайта.
+ * Для каждого экрана — снимок, ошибки JS, ответы REST/AJAX с кодом ≥ 400, ошибки PHP в разметке.
+ */
+test.describe( 'аудит админки', () => {
+	test.use( { viewport: { width: 1440, height: 1000 } } );
+	test( 'аудит админки', async ( { page } ) => {
+		test.setTimeout( 1_200_000 );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.evaluate( () => {
+			const pr = window.wp?.data?.dispatch( 'core/preferences' );
+			pr?.set( 'core/edit-post', 'welcomeGuide', false );
+			pr?.set( 'core/edit-site', 'welcomeGuide', false );
+			pr?.set( 'core', 'welcomeGuide', false );
+		} ).catch( () => {} );
+		// пункты меню плагина и его типов записей
+		const menu = await page.evaluate( () =>
+			[ ...document.querySelectorAll( '#adminmenu a' ) ]
+				.map( ( a ) => ( { href: a.getAttribute( 'href' ), text: a.textContent.trim() } ) )
+				.filter( ( x ) => /mem[-_]|memorial|post_type=mem_/.test( x.href || '' ) )
+		);
+		const hidden = [ 'admin.php?page=mem-import', 'admin.php?page=mem-rewio', 'admin.php?page=memorial-plugin-convert', 'options.php?page=mem-import' ];
+		const screens = [ ...new Set( [ ...menu.map( ( x ) => x.href ), ...hidden ] ) ];
+		const report = { menu, screens: {} };
+		const watch = ( p ) => {
+			const st = { js: [], http: [] };
+			p.on( 'pageerror', ( e ) => st.js.push( 'pageerror: ' + e.message ) );
+			p.on( 'console', ( m ) => m.type() === 'error' && st.js.push( 'console: ' + m.text().slice( 0, 400 ) ) );
+			p.on( 'response', async ( r ) => {
+				if ( r.status() >= 400 && /wp-json|admin-ajax|rest_route/.test( r.url() ) ) {
+					let body = '';
+					try { body = ( await r.text() ).slice( 0, 400 ); } catch ( e ) {}
+					st.http.push( r.status() + ' ' + r.url().replace( /^https?:\/\/[^/]+/, '' ) + ' ' + body );
+				}
+			} );
+			return st;
+		};
+		let n = 0;
+		for ( const s of screens ) {
+			const tab = await page.context().newPage();
+			const st = watch( tab );
+			const url = '/wp-admin/' + s.replace( /^\/?wp-admin\//, '' );
+			await tab.goto( url, { waitUntil: 'load' } ).catch( ( e ) => st.js.push( 'goto: ' + e.message ) );
+			await tab.waitForTimeout( 5000 );
+			const name = 'audit-' + String( ++n ).padStart( 2, '0' ) + '-' + s.replace( /[^a-z0-9]+/gi, '-' ).replace( /-+$/, '' ).slice( 0, 60 );
+			await tab.screenshot( { path: `${ DIR }/${ name }.png`, fullPage: true } ).catch( () => {} );
+			const info = await tab.evaluate( () => ( {
+				title: document.querySelector( 'h1, .admin-ui-page__header h2, h2' )?.textContent.trim(),
+				php: ( document.body.innerHTML.match( /(Fatal error|Warning|Notice|Deprecated)<\/b>:[^<]{0,300}/g ) || [] ).slice( 0, 5 ),
+				notices: [ ...document.querySelectorAll( '.notice, .components-notice' ) ].map( ( x ) => x.textContent.trim().slice( 0, 300 ) ).slice( 0, 8 ),
+				empty: !! document.querySelector( '[id^="memorial-plugin-"]:empty' ),
+				text: ( document.querySelector( '#wpbody-content' )?.innerText || '' ).slice( 0, 1500 ),
+			} ) ).catch( ( e ) => ( { error: e.message } ) );
+			report.screens[ name ] = { url, ...st, ...info };
+			await tab.close();
+		}
+		// редакторы
+		const frontId = await page.evaluate( () => window.wp?.apiFetch?.( { path: '/wp/v2/settings' } ).then( ( r ) => r.page_on_front ) ).catch( () => 0 );
+		const front = PAGES.find( ( x ) => +x.ID === +frontId ) || PAGES.find( ( x ) => /главн/i.test( x.post_title ) );
+		const contacts = PAGES.find( ( x ) => /контакт/i.test( x.post_title ) );
+		const editor = {};
+		for ( const p of [ front, contacts ].filter( Boolean ) ) {
+			const tab = await page.context().newPage();
+			const st = watch( tab );
+			await tab.goto( '/wp-admin/post.php?action=edit&post=' + p.ID );
+			await tab.waitForTimeout( 10000 );
+			await tab.screenshot( { path: `${ DIR }/audit-editor-${ p.post_name || p.ID }.png` } );
+			editor[ p.post_title ] = { ...st, ...( await tab.evaluate( () => {
+				const d = window.wp.data;
+				const ed = d.select( 'core/editor' );
+				return {
+					renderingMode: ed.getRenderingMode?.(),
+					template: ed.getCurrentTemplateId?.(),
+					content: ( ed.getEditedPostContent() || '' ).slice( 0, 2000 ),
+					blocks: d.select( 'core/block-editor' ).getBlocks().map( ( b ) => b.name ),
+				};
+			} ).catch( ( e ) => ( { error: e.message } ) ) ) };
+			await tab.close();
+		}
+		// редактор сайта: шапка
+		{
+			const tab = await page.context().newPage();
+			const st = watch( tab );
+			await tab.goto( '/wp-admin/site-editor.php?p=%2Fwp_template_part%2Fmemorial-theme%2F%2Fheader&canvas=edit' );
+			await tab.waitForTimeout( 12000 );
+			await tab.screenshot( { path: `${ DIR }/audit-site-editor-header.png` } );
+			editor[ 'site-editor header' ] = st;
+			await tab.close();
+		}
+		report.editor = editor;
+		report.options = { show_on_front: null };
+		fs.writeFileSync( `${ DIR }/audit.json`, JSON.stringify( report, null, 1 ) );
+	} );
+} );

@@ -152,8 +152,15 @@ jobs:
       - name: Браузер
         run: cd after && npx playwright install --with-deps chromium || npx playwright install chromium  # зеркала apt бывают недоступны: в образе раннера библиотеки браузера уже есть
 
+      - name: Что снимать (tests/probe/run.env)
+        run: |
+          if [ -f after/tests/probe/run.env ]; then . after/tests/probe/run.env; fi
+          echo "PROBE_GREP=${PROBE_GREP:-бургер-ветка|подменю ПК}" >> "$GITHUB_ENV"
+          echo "PROBE_PHASES=${PROBE_PHASES:-}" >> "$GITHUB_ENV"
+
       - name: Снимки — старое
-        run: cd after && PHASE=classic PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "бургер-ветка|подменю ПК" || true
+        if: ${{ !env.PROBE_PHASES || contains(env.PROBE_PHASES, 'classic') }}
+        run: cd after && PHASE=classic PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "$PROBE_GREP" || true
 
       - name: Переключить на блочное — как на сайте сейчас
         run: |
@@ -161,7 +168,8 @@ jobs:
           ../after/node_modules/.bin/wp-env run cli sh -c 'wp plugin deactivate memorial-core --quiet; wp plugin activate memorial-plugin; wp theme activate memorial-theme; wp rewrite flush; rm -rf wp-content/cache/memorial; wp eval "wp_set_current_user(1); do_action(\"admin_init\");" || true; echo "тема: $(wp option get stylesheet)"'
 
       - name: Снимки — как на сайте сейчас
-        run: cd after && PHASE=before PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "бургер-ветка|подменю ПК" || true
+        if: ${{ !env.PROBE_PHASES || contains(env.PROBE_PHASES, 'before') }}
+        run: cd after && PHASE=before PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "$PROBE_GREP" || true
 
       - name: Переключить на исправленное
         run: |
@@ -171,7 +179,7 @@ jobs:
           ../after/node_modules/.bin/wp-env run cli sh -c 'rm -rf wp-content/cache/memorial; wp eval "wp_set_current_user(1); do_action(\"admin_init\");" || true'
 
       - name: Снимки — исправленное
-        run: cd after && PHASE=block PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "бургер-ветка|подменю ПК" || true
+        run: cd after && PHASE=block PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "$PROBE_GREP" || true
 
       - name: В ветку ci-probe
         if: always()
