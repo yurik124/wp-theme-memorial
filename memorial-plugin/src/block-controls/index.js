@@ -96,13 +96,18 @@ function usePosts( postType, search, chosen ) {
 						per_page: chosen.length,
 						status: 'publish',
 						...fields,
-				  }
+					}
 				: null;
 			return {
-				found: core.getEntityRecords( 'postType', postType, queryFound ) || [],
+				found:
+					core.getEntityRecords( 'postType', postType, queryFound ) ||
+					[],
 				chosen: queryChosen
-					? core.getEntityRecords( 'postType', postType, queryChosen ) ||
-					  []
+					? core.getEntityRecords(
+							'postType',
+							postType,
+							queryChosen
+						) || []
 					: [],
 				loading: ! core.hasFinishedResolution( 'getEntityRecords', [
 					'postType',
@@ -154,7 +159,15 @@ function useSections() {
 	}, [] );
 }
 
-/** One post (page or product) with search. Value — post ID (number) or a page path left from earlier. */
+/**
+ * One post (page or product) with search. Value — post ID (number) or a page path left from earlier.
+ * @param root0
+ * @param root0.postType
+ * @param root0.label
+ * @param root0.empty
+ * @param root0.value
+ * @param root0.onChange
+ */
 function PostPicker( { postType, label, empty, value, onChange } ) {
 	const [ search, setSearch ] = useState( '' );
 	const id = /^\d+$/.test( String( value || '' ) ) ? Number( value ) : 0;
@@ -187,7 +200,7 @@ function PostPicker( { postType, label, empty, value, onChange } ) {
 							/* translators: %s: what an empty choice means. */
 							__( 'Not chosen — %s.', 'memorial-plugin' ),
 							empty
-					  )
+						)
 					: undefined
 			}
 			value={ value ? String( value ) : null }
@@ -199,7 +212,13 @@ function PostPicker( { postType, label, empty, value, onChange } ) {
 	);
 }
 
-/** Several pages in a chosen order. Value — IDs, comma separated (old page paths are kept as they are). */
+/**
+ * Several pages in a chosen order. Value — IDs, comma separated (old page paths are kept as they are).
+ * @param root0
+ * @param root0.label
+ * @param root0.value
+ * @param root0.onChange
+ */
 function PagesPicker( { label, value, onChange } ) {
 	const list = ids( value );
 	const numeric = list.filter( ( v ) => /^\d+$/.test( v ) ).map( Number );
@@ -260,15 +279,23 @@ function PagesPicker( { label, value, onChange } ) {
 	);
 }
 
-/** One catalog section. Value — slug (attribute “cat”) or term ID (attribute “term”). */
+/**
+ * One catalog section. Value — slug (attribute “cat”) or term ID (attribute “term”).
+ * @param root0
+ * @param root0.label
+ * @param root0.empty
+ * @param root0.value
+ * @param root0.byId
+ * @param root0.onChange
+ */
 function SectionPicker( { label, empty, value, byId, onChange } ) {
 	const sections = useSections();
 	const current = sections.find( ( s ) =>
 		byId
 			? s.id === Number( value )
 			: s.slug === value ||
-			  s.name.toLowerCase() === String( value || '' ).toLowerCase() ||
-			  String( s.id ) === String( value )
+				s.name.toLowerCase() === String( value || '' ).toLowerCase() ||
+				String( s.id ) === String( value )
 	);
 	const options = sections.map( ( s ) => ( {
 		value: byId ? String( s.id ) : s.slug,
@@ -294,7 +321,7 @@ function SectionPicker( { label, empty, value, byId, onChange } ) {
 							/* translators: %s: what an empty choice means. */
 							__( 'Not chosen — %s.', 'memorial-plugin' ),
 							empty
-					  )
+						)
 					: undefined
 			}
 			value={ selected }
@@ -310,13 +337,20 @@ function SectionPicker( { label, empty, value, byId, onChange } ) {
 	);
 }
 
-/** Several catalog sections. Value — slugs, comma separated. */
+/**
+ * Several catalog sections. Value — slugs, comma separated.
+ * @param root0
+ * @param root0.label
+ * @param root0.value
+ * @param root0.onChange
+ */
 function SectionsPicker( { label, value, onChange } ) {
 	const sections = useSections();
 	const nameOf = ( v ) =>
 		sections.find(
 			( s ) =>
-				s.slug === v || s.name.toLowerCase() === String( v ).toLowerCase()
+				s.slug === v ||
+				s.name.toLowerCase() === String( v ).toLowerCase()
 		)?.name || v;
 	return (
 		<FormTokenField
@@ -332,8 +366,8 @@ function SectionsPicker( { label, value, onChange } ) {
 						.map( ( t ) => {
 							const name = typeof t === 'string' ? t : t.value;
 							return (
-								sections.find( ( s ) => s.name === name )?.slug ||
-								name
+								sections.find( ( s ) => s.name === name )
+									?.slug || name
 							);
 						} )
 						.join( ',' )
@@ -343,7 +377,13 @@ function SectionsPicker( { label, value, onChange } ) {
 	);
 }
 
-/** The chooser of one attribute. */
+/**
+ * The chooser of one attribute.
+ * @param root0
+ * @param root0.picker
+ * @param root0.value
+ * @param root0.onChange
+ */
 function Picker( { picker, value, onChange } ) {
 	switch ( picker.kind ) {
 		case 'address':
@@ -358,7 +398,7 @@ function Picker( { picker, value, onChange } ) {
 							? ADDRESSES.map( ( a ) => ( {
 									value: String( a.value ),
 									label: a.label,
-							  } ) )
+								} ) )
 							: [
 									{
 										value: '0',
@@ -367,19 +407,36 @@ function Picker( { picker, value, onChange } ) {
 											'memorial-plugin'
 										),
 									},
-							  ]
+								]
 					}
 					onChange={ ( v ) => onChange( Number( v ) || 0 ) }
 				/>
 			);
 		case 'cat':
-			return <SectionPicker { ...picker } value={ value } onChange={ onChange } />;
+			return (
+				<SectionPicker
+					{ ...picker }
+					value={ value }
+					onChange={ onChange }
+				/>
+			);
 		case 'cat-id':
 			return (
-				<SectionPicker { ...picker } byId value={ value } onChange={ onChange } />
+				<SectionPicker
+					{ ...picker }
+					byId
+					value={ value }
+					onChange={ onChange }
+				/>
 			);
 		case 'cats':
-			return <SectionsPicker { ...picker } value={ value } onChange={ onChange } />;
+			return (
+				<SectionsPicker
+					{ ...picker }
+					value={ value }
+					onChange={ onChange }
+				/>
+			);
 		case 'product':
 			return (
 				<PostPicker
@@ -399,12 +456,24 @@ function Picker( { picker, value, onChange } ) {
 				/>
 			);
 		case 'pages':
-			return <PagesPicker { ...picker } value={ value } onChange={ onChange } />;
+			return (
+				<PagesPicker
+					{ ...picker }
+					value={ value }
+					onChange={ onChange }
+				/>
+			);
 	}
 	return null;
 }
 
-/** All choosers of a block; the value is cast to the type of the attribute. */
+/**
+ * All choosers of a block; the value is cast to the type of the attribute.
+ * @param root0
+ * @param root0.name
+ * @param root0.attributes
+ * @param root0.setAttributes
+ */
 function Pickers( { name, attributes, setAttributes } ) {
 	const pickers = PICKERS[ name ] || {};
 	const type = getBlockType( name )?.attributes || {};
@@ -426,7 +495,11 @@ function Pickers( { name, attributes, setAttributes } ) {
 	) );
 }
 
-/** Does the block find its data on this page (memorial-plugin/v1/block-source)? */
+/**
+ * Does the block find its data on this page (memorial-plugin/v1/block-source)?
+ * @param name
+ * @param attributes
+ */
 function useSource( name, attributes ) {
 	const { postId, postType } = useSelect( ( select ) => {
 		const editor = select( 'core/editor' );
@@ -444,7 +517,9 @@ function useSource( name, attributes ) {
 		SOURCE.includes( name ) &&
 		! chosen &&
 		!! postId &&
-		! [ 'wp_template', 'wp_template_part', 'wp_block' ].includes( postType );
+		! [ 'wp_template', 'wp_template_part', 'wp_block' ].includes(
+			postType
+		);
 	const key = name + ':' + postId;
 	const [ source, setSource ] = useState( sourceCache[ key ] );
 	useEffect( () => {
@@ -469,7 +544,11 @@ function useSource( name, attributes ) {
 	return { applies, chosen, source: applies ? source : null };
 }
 
-/** Text under the choosers: what the block shows now when nothing is chosen. */
+/**
+ * Text under the choosers: what the block shows now when nothing is chosen.
+ * @param root0
+ * @param root0.source
+ */
 function AutoNote( { source } ) {
 	if ( ! source?.items?.length ) {
 		return null;
@@ -485,7 +564,13 @@ function AutoNote( { source } ) {
 	);
 }
 
-/** In place of the block: the chooser (nothing found) or the folded line. */
+/**
+ * In place of the block: the chooser (nothing found) or the folded line.
+ * @param root0
+ * @param root0.name
+ * @param root0.children
+ * @param root0.className
+ */
 function Stand( { name, children, className } ) {
 	const props = useBlockProps( {
 		className: 'memorial-plugin-stand ' + ( className || '' ),
@@ -509,7 +594,10 @@ const withPluginControls = createHigherOrderComponent(
 		const { name, attributes, setAttributes, isSelected } = props;
 		const own = name.startsWith( PREFIX );
 		const pickers = own ? PICKERS[ name ] : null;
-		const { applies, source } = useSource( own ? name : '', attributes || {} );
+		const { applies, source } = useSource(
+			own ? name : '',
+			attributes || {}
+		);
 		if ( ! own ) {
 			return <BlockEdit { ...props } />;
 		}
@@ -522,7 +610,10 @@ const withPluginControls = createHigherOrderComponent(
 						label={
 							folded
 								? __( 'Unfold the block', 'memorial-plugin' )
-								: __( 'Fold the block (only in the editor)', 'memorial-plugin' )
+								: __(
+										'Fold the block (only in the editor)',
+										'memorial-plugin'
+									)
 						}
 						onClick={ () =>
 							setAttributes( { editorCollapsed: ! folded } )
@@ -548,7 +639,9 @@ const withPluginControls = createHigherOrderComponent(
 				<Stand name={ name } className="is-folded">
 					<Button
 						variant="secondary"
-						onClick={ () => setAttributes( { editorCollapsed: false } ) }
+						onClick={ () =>
+							setAttributes( { editorCollapsed: false } )
+						}
 					>
 						{ __( 'Unfold', 'memorial-plugin' ) }
 					</Button>
@@ -605,7 +698,10 @@ addFilter(
 		if ( ! name.startsWith( PREFIX ) || ! settings.attributes ) {
 			return settings;
 		}
-		const skip = [ ...Object.keys( PICKERS[ name ] || {} ), 'editorCollapsed' ];
+		const skip = [
+			...Object.keys( PICKERS[ name ] || {} ),
+			'editorCollapsed',
+		];
 		const attributes = { ...settings.attributes };
 		skip.forEach( ( attr ) => {
 			if ( attributes[ attr ]?.autoGenerateControl ) {

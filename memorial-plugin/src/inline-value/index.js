@@ -96,7 +96,9 @@ function ValueModal( { value, onChange, onClose } ) {
 				<SelectControl
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
-					label={ def.paramLabel || __( 'Which one', 'memorial-plugin' ) }
+					label={
+						def.paramLabel || __( 'Which one', 'memorial-plugin' )
+					}
 					value={ choice }
 					options={ choices.map( ( c, i ) => ( {
 						value: String( i ),
@@ -111,8 +113,11 @@ function ValueModal( { value, onChange, onClose } ) {
 						? __(
 								'No values yet — add them in Memorial → Values for texts and SEO.',
 								'memorial-plugin'
-						  )
-						: __( 'Nothing to choose from yet.', 'memorial-plugin' ) }
+							)
+						: __(
+								'Nothing to choose from yet.',
+								'memorial-plugin'
+							) }
 				</Notice>
 			) }
 			{ ! choices && def?.param && (
@@ -128,7 +133,10 @@ function ValueModal( { value, onChange, onClose } ) {
 				<TextControl
 					__next40pxDefaultSize
 					__nextHasNoMarginBottom
-					label={ __( 'Link text (empty — the name of the document)', 'memorial-plugin' ) }
+					label={ __(
+						'Link text (empty — the name of the document)',
+						'memorial-plugin'
+					) }
 					value={ text }
 					onChange={ setText }
 				/>
