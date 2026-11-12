@@ -5088,15 +5088,7 @@ msgstr "✔ Цен, вписанных в тексты вручную, не на
 msgid "✔ published"
 msgstr "✔ опубликована"
 
-#. translators: 1: number of converted posts, 2: number of posts that could not be converted
-#: core/shortcodes-compat.php
-#, php-format
-msgid "The old [mem_…] shortcodes were converted to blocks: %1$d posts. Not converted: %2$d."
-msgstr "Старые шорткоды [mem_…] заменены блоками в записях: %1$d. Не удалось заменить: %2$d."
 
-#: core/shortcodes-compat.php
-msgid "Review or roll back"
-msgstr "Посмотреть или откатить"
 
 #: blocks/block-meta.php
 msgid "FAQ"
@@ -5382,3 +5374,12 @@ msgid_plural "Move %d examples of works to “Our works”"
 msgstr[0] "Перенести %d пример работ в «Наши работы»"
 msgstr[1] "Перенести %d примера работ в «Наши работы»"
 msgstr[2] "Перенести %d примеров работ в «Наши работы»"
+
+#. translators: %d: number of posts
+#: core/shortcodes-compat.php
+#, php-format
+msgid "%d post still uses the old [mem_…] shortcodes. They work, but are deprecated and will be removed in 3.0.0."
+msgid_plural "%d posts still use the old [mem_…] shortcodes. They work, but are deprecated and will be removed in 3.0.0."
+msgstr[0] "Старые шорткоды [mem_…] остались в %d записи. Они работают, но устарели и будут удалены в 3.0.0."
+msgstr[1] "Старые шорткоды [mem_…] остались в %d записях. Они работают, но устарели и будут удалены в 3.0.0."
+msgstr[2] "Старые шорткоды [mem_…] остались в %d записях. Они работают, но устарели и будут удалены в 3.0.0."

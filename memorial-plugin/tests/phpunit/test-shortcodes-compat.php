@@ -27,23 +27,14 @@ class Test_Memorial_Plugin_Shortcodes_Compat extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( '[mem_', $out );
 	}
 
-	public function test_content_is_converted_after_an_update_and_can_be_rolled_back() {
-		$id = self::factory()->post->create(
+	public function test_posts_with_shortcodes_are_counted_for_the_reminder() {
+		self::factory()->post->create(
 			array(
 				'post_type'    => 'page',
 				'post_content' => "<!-- wp:shortcode -->\n[mem_cta]\n<!-- /wp:shortcode -->",
 			)
 		);
-		delete_option( MEMORIAL_PLUGIN_SHORTCODES_MIGRATION );
-		memorial_plugin_shortcodes_migration_schedule();
-		memorial_plugin_shortcodes_migrate();
-
-		$state = get_option( MEMORIAL_PLUGIN_SHORTCODES_MIGRATION );
-		$this->assertTrue( $state['done'] );
-		$this->assertContains( $id, $state['converted'] );
-		$this->assertStringContainsString( '<!-- wp:memorial-plugin/cta', get_post( $id )->post_content );
-
-		$this->assertSame( 'restored', memorial_plugin_convert_rollback( $id ) );
-		$this->assertStringContainsString( '[mem_cta]', get_post( $id )->post_content );
+		memorial_plugin_shortcodes_recount();
+		$this->assertGreaterThanOrEqual( 1, memorial_plugin_shortcodes_left() );
 	}
 }

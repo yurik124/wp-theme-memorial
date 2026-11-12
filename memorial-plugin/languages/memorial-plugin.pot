@@ -91,6 +91,14 @@ msgid_plural "%d posts converted."
 msgstr[0] ""
 msgstr[1] ""
 
+#. translators: %d: number of posts
+#: core/shortcodes-compat.php:158
+#, php-format
+msgid "%d post still uses the old [mem_…] shortcodes. They work, but are deprecated and will be removed in 3.0.0."
+msgid_plural "%d posts still use the old [mem_…] shortcodes. They work, but are deprecated and will be removed in 3.0.0."
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/catalog/products.js:435
 #, php-format
 msgid "%d product added at the end of the list — fill in its price and specifications."
@@ -1115,7 +1123,7 @@ msgstr ""
 msgid "Convert the shortcodes of this page to blocks"
 msgstr ""
 
-#: admin/commands.php:24 admin/convert.php:506 admin/convert.php:507 src/convert/index.js:322
+#: admin/commands.php:24 admin/convert.php:506 admin/convert.php:507 src/convert/index.js:322 core/shortcodes-compat.php:168
 msgid "Convert to blocks"
 msgstr ""
 
@@ -3235,10 +3243,6 @@ msgstr ""
 msgid "Review date"
 msgstr ""
 
-#: core/shortcodes-compat.php:210
-msgid "Review or roll back"
-msgstr ""
-
 #: reviews/reviews.php:128
 msgid "Review services for the “Reviews” page. Put the “Reviews” block (or the <code>[mem_reviews]</code> shortcode) on the page. "
 msgstr ""
@@ -3912,12 +3916,6 @@ msgstr ""
 
 #: catalog/catalog-types-admin.php:154 catalog/catalog-types-admin.php:284 works/works-manager.php:297
 msgid "The name is empty."
-msgstr ""
-
-#. translators: 1: number of converted posts, 2: number of posts that could not be converted
-#: core/shortcodes-compat.php:204
-#, php-format
-msgid "The old [mem_…] shortcodes were converted to blocks: %1$d posts. Not converted: %2$d."
 msgstr ""
 
 #: core/settings.php:386

@@ -25,19 +25,6 @@ $memorial_plugin_id = wp_insert_post(
 echo is_wp_error( $memorial_plugin_id ) ? 'error: ' . esc_html( $memorial_plugin_id->get_error_message() ) : 'page ' . (int) $memorial_plugin_id . "\n";
 
 // Page with old shortcodes for the content converter check (tests/e2e/convert.spec.js).
-// The manual converter is checked on it, so the automatic conversion after an update (core/shortcodes-compat.php)
-// is marked as done for this version and leaves the page alone.
-update_option(
-	MEMORIAL_PLUGIN_SHORTCODES_MIGRATION,
-	array(
-		'version'   => MEMORIAL_PLUGIN_VER,
-		'converted' => array(),
-		'failed'    => array(),
-		'done'      => true,
-		'seen'      => true,
-	),
-	false
-);
 $memorial_plugin_id = wp_insert_post(
 	array(
 		'post_type'    => 'page',
