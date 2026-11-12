@@ -3,7 +3,7 @@ Contributors: memorial
 Requires at least: 7.1
 Tested up to: 7.1
 Requires PHP: 8.1
-Version: 5.0.0
+Version: 5.0.1
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: block-patterns, block-styles, full-site-editing, style-variations, translation-ready, accessibility-ready
