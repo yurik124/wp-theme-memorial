@@ -46,19 +46,13 @@ function memorial_plugin_inline_values() {
 			'tag'         => 'mem_price',
 			'label'       => __( 'Price from Memorial → Prices', 'memorial-plugin' ),
 			'param'       => 'id',
-			'param_label' => __( 'Price code', 'memorial-plugin' ),
+			'param_label' => __( 'Price', 'memorial-plugin' ),
 		),
 		'service'    => array(
-			'callback'    => static fn( $atts ) => esc_html( memorial_plugin_value_price( 'svc:' . (string) ( $atts['title'] ?? '' ) ) ),
+			'callback'    => static fn( $atts ) => esc_html( memorial_plugin_value_service( (string) ( $atts['title'] ?? '' ) ) ),
 			'label'       => __( 'Price of a service (Memorial → Services)', 'memorial-plugin' ),
 			'param'       => 'title',
 			'param_label' => __( 'Service', 'memorial-plugin' ),
-		),
-		'saved'      => array(
-			'callback'    => static fn( $atts ) => esc_html( memorial_plugin_value_by_key( (string) ( $atts['key'] ?? '' ) ) ),
-			'label'       => __( 'My value (Memorial → Values for texts and SEO)', 'memorial-plugin' ),
-			'param'       => 'key',
-			'param_label' => __( 'Value', 'memorial-plugin' ),
 		),
 		'years'      => array(
 			'tag'         => 'mem_years',
@@ -303,36 +297,12 @@ function memorial_plugin_inline_value_choices( $key ) {
 			}
 			return $out;
 		case 'price':
-			foreach ( memorial_plugin_values_prices( false ) as $ref => $label ) {
-				[$kind, $name] = array_pad( explode( ':', (string) $ref, 2 ), 2, '' );
-				if ( 'price' === $kind ) {
-					$out[] = array(
-						'label' => $label,
-						'atts'  => array( 'id' => $name ),
-					);
-				} elseif ( 'paket' === $kind ) {
-					$out[] = array(
-						'label' => $label,
-						'atts'  => array( 'paket' => $name ),
-					);
-				}
-			}
-			return $out;
+			return memorial_plugin_values_price_choices();
 		case 'service':
-			foreach ( memorial_plugin_values_prices( false ) as $ref => $label ) {
-				if ( 0 === strpos( (string) $ref, 'svc:' ) ) {
-					$out[] = array(
-						'label' => $label,
-						'atts'  => array( 'title' => substr( (string) $ref, 4 ) ),
-					);
-				}
-			}
-			return $out;
-		case 'saved':
-			foreach ( memorial_plugin_values() as $code => $row ) {
+			foreach ( memorial_plugin_values_services( false ) as $title => $label ) {
 				$out[] = array(
-					'label' => ( '' !== trim( (string) $row['label'] ) ? $row['label'] : $code ) . ' — ' . memorial_plugin_value_text( $row ),
-					'atts'  => array( 'key' => (string) $code ),
+					'label' => $label,
+					'atts'  => array( 'title' => (string) $title ),
 				);
 			}
 			return $out;

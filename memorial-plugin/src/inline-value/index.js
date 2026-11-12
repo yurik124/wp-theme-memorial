@@ -109,15 +109,7 @@ function ValueModal( { value, onChange, onClose } ) {
 			) }
 			{ choices && choices.length === 0 && (
 				<Notice status="warning" isDismissible={ false }>
-					{ key === 'saved'
-						? __(
-								'No values yet — add them in Memorial → Values for texts and SEO.',
-								'memorial-plugin'
-							)
-						: __(
-								'Nothing to choose from yet.',
-								'memorial-plugin'
-							) }
+					{ __( 'Nothing to choose from yet.', 'memorial-plugin' ) }
 				</Notice>
 			) }
 			{ ! choices && def?.param && (

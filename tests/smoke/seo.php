@@ -17,13 +17,15 @@ function memorial_plugin_opt($k) { return $k === 'phone' ? '+7 (4722) 00-00-00' 
 function memorial_plugin_years() { return 23; }
 function _n($s, $p, $n, $d = null) { return $n === 1 ? $s : $p; }
 function trailingslashit($s) { return rtrim($s, '/') . '/'; }
-// «Мемориал → Значения для текста и SEO» (prices/values.php): значения по умолчанию + одно своё без галочки SEO.
-function memorial_plugin_settings($name) { $d = memorial_plugin_values_defaults(); $d['items'][] = ['label' => 'Своё', 'key' => 'own', 'what' => 'custom', 'text' => '24 часа', 'section' => '', 'price' => '', 'bare' => 0, 'seo' => 0]; return $d; }
+// «Мемориал → Цены → Отдельные цены» (prices/values.php): цена оградок с галочкой SEO и своя цена без неё.
+function memorial_plugin_prices($section) { return ['items' => [
+	['name' => 'Цена «от»: оградки', 'code' => 'cat_price_ograda', 'what' => 'cat-min', 'section' => 'modeli-ogradok-i-czeny', 'price' => '', 'bare' => 0, 'seo' => 1],
+	['name' => 'Доставка', 'code' => 'dostavka', 'what' => 'custom', 'price' => '500', 'seo' => 0],
+]]; }
+function memorial_plugin_price_fmt($v) { return $v . "\u{00A0}₽"; }
 function get_term_by($f, $v, $t) { return $v === 'modeli-ogradok-i-czeny' ? (object) ['term_id' => 7, 'name' => 'Модели оградок и цены'] : false; }
 function memorial_plugin_cat_stats($id) { return $id === 7 ? [96, 12300, 69000] : [0, 0, 0]; }
 function memorial_plugin_rub($n) { return number_format($n, 0, '', "\u{00A0}") . "\u{00A0}₽"; }
-function memorial_plugin_contacts() { return ['founded' => 2003]; }
-function memorial_plugin_addrs() { return [['addr' => 'ул. Студенческая, 40']]; }
 require dirname(__DIR__, 2) . '/memorial-plugin/seo/seo-registry.php';
 require dirname(__DIR__, 2) . '/memorial-plugin/prices/values.php';
 
@@ -35,8 +37,11 @@ $vals = apply_filters('seopress_titles_template_replace_array', ['Мемориа
 $ok(count($vars) === count($vals), 'SEOPress: имён и значений поровну (' . count($vars) . ')');
 $map = array_combine($vars, $vals);
 $ok(($map['%%mem_cat_price_ograda%%'] ?? null) === esc_attr("from 12\u{00A0}300\u{00A0}₽"), 'цена оградок: ' . ($map['%%mem_cat_price_ograda%%'] ?? '—'));
-$ok(! isset($map['%%mem_own%%']), 'значение без галочки «В SEO-плагин» не попадает в SEO-плагин');
-$ok(memorial_plugin_value_by_key('own') === '24 часа', 'своё значение по коду');
+$ok(! isset($map['%%mem_dostavka%%']), 'цена без галочки «В SEO-плагин» не попадает в SEO-плагин');
+$ok(memorial_plugin_value_by_key('dostavka') === "500\u{00A0}₽", 'своя цена по коду');
+$ok(memorial_plugin_value_code_from('Доставка венков по Белгороду!') === 'dostavka_venkov_po_belgorodu', 'код из названия: ' . memorial_plugin_value_code_from('Доставка венков по Белгороду!'));
+$filled = memorial_plugin_values_fill_codes(['other' => ['items' => [['name' => 'Лента', 'code' => ''], ['name' => 'Лента', 'code' => '']]]]);
+$ok(array_column($filled['other']['items'], 'code') === ['lenta', 'lenta_2'], 'коды из одинаковых названий не совпадают');
 $ok(($map['%%mem_years%%'] ?? null) === '23', 'годы работы');
 $ok(($map['%%mem_phone%%'] ?? null) === '+7 (4722) 00-00-00', 'телефон');
 $dyn = apply_filters('seopress_get_dynamic_variables', []);

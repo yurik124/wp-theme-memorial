@@ -532,7 +532,7 @@ test.describe( 'аудит блоков', () => {
 			report[ 'mode-' + p.post_name ] = await t.evaluate( () => window.wp.data.select( 'core/editor' ).getRenderingMode?.() ).catch( () => null );
 			await t.close();
 		}
-		for ( const scr of [ 'mem-prices', 'mem-values' ] ) {
+		for ( const scr of [ 'mem-prices', 'mem-contacts' ] ) {
 			const t = await page.context().newPage();
 			await t.goto( '/wp-admin/admin.php?page=' + scr );
 			await t.waitForTimeout( 6000 );
@@ -591,5 +591,43 @@ test.describe( 'аудит подвала', () => {
 			} ), null, { timeout: 10000 } ).catch( ( e ) => e.message.slice( 0, 200 ) );
 		}
 		fs.writeFileSync( `${ DIR }/parts.json`, JSON.stringify( out, null, 1 ) );
+	} );
+} );
+
+// Экран «Цены»: отдельная цена раскрывается, смена «Откуда берётся цена» не сворачивает строку; «Отзывы»: показ ключа.
+test.describe( 'аудит цен', () => {
+	test.use( { viewport: { width: 1440, height: 1000 } } );
+	test( 'аудит цен', async ( { page } ) => {
+		test.setTimeout( 300_000 );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		const out = {};
+		await page.goto( '/wp-admin/admin.php?page=mem-prices' );
+		await page.waitForTimeout( 6000 );
+		const heads = page.locator( '.memorial-plugin-settings__row-head' );
+		out.heads = await heads.allInnerTexts().catch( () => [] );
+		const last = heads.last();
+		await last.scrollIntoViewIfNeeded().catch( () => {} );
+		await last.click().catch( ( e ) => ( out.clickError = e.message ) );
+		await page.waitForTimeout( 800 );
+		await page.screenshot( { path: `${ DIR }/prices-open.png` } );
+		const sel = page.locator( '.memorial-plugin-settings__row:not(.is-folded) select' ).first();
+		await sel.selectOption( 'cat-min' ).catch( ( e ) => ( out.selectError = e.message ) );
+		await page.waitForTimeout( 1200 );
+		out.stillOpen = await page.locator( '.memorial-plugin-settings__row:not(.is-folded) .memorial-plugin-settings__fields' ).count();
+		out.labels = await page.locator( '.memorial-plugin-settings__row:not(.is-folded) label' ).allInnerTexts().catch( () => [] );
+		await page.screenshot( { path: `${ DIR }/prices-cat-min.png` } );
+		await page.getByRole( 'button', { name: /Добавить цену/ } ).click().catch( ( e ) => ( out.addError = e.message ) );
+		await page.waitForTimeout( 1000 );
+		out.openAfterAdd = await page.locator( '.memorial-plugin-settings__row:not(.is-folded) .memorial-plugin-settings__fields' ).count();
+		await page.screenshot( { path: `${ DIR }/prices-added.png`, fullPage: true } );
+		await page.goto( '/wp-admin/admin.php?page=mem-reviews' );
+		await page.waitForTimeout( 6000 );
+		out.keyButtons = await page.locator( '.memorial-plugin-settings__secret button' ).count();
+		await page.screenshot( { path: `${ DIR }/reviews.png`, fullPage: true } );
+		fs.writeFileSync( `${ DIR }/prices.json`, JSON.stringify( out, null, 1 ) );
 	} );
 } );

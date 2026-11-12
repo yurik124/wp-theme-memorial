@@ -1,15 +1,14 @@
 <?php
 /**
- * «Мемориал → Значения для текста и SEO»: свои значения сайта, которые вставляются в текст страниц
- * (кнопка «Значение сайта» на панели абзаца) и в заголовки и описания SEO-плагина.
+ * «Мемориал → Цены → Отдельные цены»: цены для текста страниц и SEO-заголовков.
  *
- * Значение — строка списка: название, код, что считать и, если нужно, раздел каталога или цена:
- *   — своё значение (любой текст, например «24 часа» или «от 3 дней»);
- *   — цена «от» или «до» раздела каталога, число моделей раздела (считаются по товарам);
- *   — цена из «Мемориал → Цены» (кремация, отдельная цена, пакет похорон) или цена услуги;
- *   — годы работы, год основания, телефон, адрес.
- * Галочка «В SEO-плагин» — только отмеченные значения становятся переменными %%mem_<код>%% в SEOPress,
- * Yoast и Rank Math (seo/seo-registry.php), чтобы не засорять их список.
+ * Строка списка — своя цена или цена, которую сайт считает сам:
+ *   — своя цена (число, диапазон или слова);
+ *   — цена «от» или «до» раздела каталога, число моделей раздела (по опубликованным товарам);
+ *   — цена услуги из «Мемориал → Услуги».
+ * В текст цена вставляется кнопкой «Значение сайта» → «Цена из „Мемориал → Цены“» (по коду строки),
+ * в SEO-плагин попадают только строки с галочкой «В SEO-плагин» — как переменные %%mem_<код>%%
+ * (seo/seo-registry.php). Код можно не заполнять: при сохранении он делается из названия транслитом.
  *
  * @package memorial-plugin
  */
@@ -17,21 +16,17 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * What a value shows: key => label.
+ * Where a price comes from: key => label.
  *
  * @return array<string,string>
  */
 function memorial_plugin_values_kinds() {
 	return array(
-		'custom'    => __( 'Own value (the text below)', 'memorial-plugin' ),
-		'cat-min'   => __( 'Starting price of a catalog section (“from …”)', 'memorial-plugin' ),
+		'custom'    => __( 'Own price — typed below', 'memorial-plugin' ),
+		'cat-min'   => __( 'Lowest price of a catalog section (“from …”)', 'memorial-plugin' ),
 		'cat-max'   => __( 'Highest price of a catalog section (“up to …”)', 'memorial-plugin' ),
 		'cat-count' => __( 'Number of models in a catalog section', 'memorial-plugin' ),
-		'price'     => __( 'Price from Memorial → Prices or of a service', 'memorial-plugin' ),
-		'years'     => __( 'Years in business', 'memorial-plugin' ),
-		'founded'   => __( 'Founding year', 'memorial-plugin' ),
-		'phone'     => __( 'Main phone', 'memorial-plugin' ),
-		'address'   => __( 'Main address', 'memorial-plugin' ),
+		'service'   => __( 'Price of a service (Memorial → Services)', 'memorial-plugin' ),
 	);
 }
 
@@ -42,7 +37,10 @@ function memorial_plugin_values_kinds() {
  * @return array<string,string>
  */
 function memorial_plugin_values_sections( $empty = true ) {
-	$out   = $empty ? array( '' => __( '— not chosen —', 'memorial-plugin' ) ) : array();
+	$out = $empty ? array( '' => __( '— not chosen —', 'memorial-plugin' ) ) : array();
+	if ( ! taxonomy_exists( 'mem_cat' ) ) {
+		return $out;
+	}
 	$terms = get_terms(
 		array(
 			'taxonomy'   => 'mem_cat',
@@ -65,31 +63,17 @@ function memorial_plugin_values_sections( $empty = true ) {
 }
 
 /**
- * Prices to choose from: 'price:<code>', 'paket:<name>', 'svc:<title>' => “name — price now”.
+ * Services with a price: title => “title — price”.
  *
  * @param bool $empty Add “not chosen” first.
  * @return array<string,string>
  */
-function memorial_plugin_values_prices( $empty = true ) {
+function memorial_plugin_values_services( $empty = true ) {
 	$out = $empty ? array( '' => __( '— not chosen —', 'memorial-plugin' ) ) : array();
-	if ( function_exists( 'memorial_plugin_price_value' ) ) {
-		$out['price:kremaciya'] = __( 'Cremation (total)', 'memorial-plugin' ) . ' — ' . memorial_plugin_price_value( 'kremaciya' );
-		foreach ( memorial_plugin_prices( 'other' )['items'] ?? array() as $it ) {
-			$code = trim( (string) ( $it['code'] ?? '' ) );
-			if ( '' !== $code ) {
-				$out[ 'price:' . $code ] = ( '' !== trim( (string) ( $it['name'] ?? '' ) ) ? $it['name'] : $code ) . ' — ' . memorial_plugin_price_value( $code );
-			}
-		}
-		foreach ( memorial_plugin_packages() as $p ) {
-			/* translators: %s: funeral package name. */
-			$out[ 'paket:' . $p['name'] ] = sprintf( __( 'Package “%s”', 'memorial-plugin' ), $p['name'] ) . ' — ' . memorial_plugin_price_value( '', $p['name'] );
-		}
-	}
 	if ( function_exists( 'memorial_plugin_services_items' ) ) {
 		foreach ( memorial_plugin_services_items() as $it ) {
 			if ( '' !== trim( (string) ( $it['price'] ?? '' ) ) ) {
-				/* translators: %s: service name. */
-				$out[ 'svc:' . $it['title'] ] = sprintf( __( 'Service “%s”', 'memorial-plugin' ), $it['title'] ) . ' — ' . memorial_plugin_t( $it['price'] );
+				$out[ (string) $it['title'] ] = $it['title'] . ' — ' . wp_strip_all_tags( memorial_plugin_t( (string) $it['price'] ) );
 			}
 		}
 	}
@@ -97,92 +81,42 @@ function memorial_plugin_values_prices( $empty = true ) {
 }
 
 /**
- * Settings schema.
+ * Prices to choose from in the editor: code => “name — price now” (cremation, separate prices, packages).
  *
- * @return array
+ * @return array<string,array{label:string,atts:array}>
  */
-function memorial_plugin_values_schema() {
-	return array(
-		'items' => array(
-			'type'     => 'repeater',
-			'label'    => __( 'Values', 'memorial-plugin' ),
-			'add'      => __( 'Add a value', 'memorial-plugin' ),
-			'collapse' => 'label',
-			'fields'   => array(
-				'label'   => array(
-					'type'  => 'text',
-					'label' => __( 'Name (seen only in the admin)', 'memorial-plugin' ),
-				),
-				'key'     => array(
-					'type'  => 'text',
-					'label' => __( 'Code — Latin letters, digits and “_”; in the SEO plugin the value is %%mem_code%%', 'memorial-plugin' ),
-				),
-				'what'    => array(
-					'type'    => 'select',
-					'label'   => __( 'What to show', 'memorial-plugin' ),
-					'options' => memorial_plugin_values_kinds(),
-				),
-				'section' => array(
-					'type'    => 'select',
-					'label'   => __( 'Catalog section — for the prices and the number of models of a section', 'memorial-plugin' ),
-					'options' => memorial_plugin_values_sections(),
-				),
-				'price'   => array(
-					'type'    => 'select',
-					'label'   => __( 'Price — for “Price from Memorial → Prices or of a service”', 'memorial-plugin' ),
-					'options' => memorial_plugin_values_prices(),
-				),
-				'text'    => array(
-					'type'  => 'text',
-					'label' => __( 'Own value — for “Own value”', 'memorial-plugin' ),
-				),
-				'bare'    => array(
-					'type'  => 'checkbox',
-					'label' => __( 'Number only — without “from”, “up to”, “models” and ₽', 'memorial-plugin' ),
-				),
-				'seo'     => array(
-					'type'  => 'checkbox',
-					'label' => __( 'In the SEO plugin — the variable %%mem_code%% for titles and descriptions (SEOPress, Yoast, Rank Math)', 'memorial-plugin' ),
-				),
-			),
+function memorial_plugin_values_price_choices() {
+	$out = array(
+		array(
+			'label' => __( 'Cremation (total)', 'memorial-plugin' ) . ' — ' . memorial_plugin_price_value( 'kremaciya' ),
+			'atts'  => array( 'id' => 'kremaciya' ),
 		),
 	);
+	foreach ( memorial_plugin_values() as $code => $row ) {
+		$out[] = array(
+			'label' => ( '' !== trim( (string) ( $row['name'] ?? '' ) ) ? $row['name'] : $code ) . ' — ' . memorial_plugin_value_text( $row ),
+			'atts'  => array( 'id' => (string) $code ),
+		);
+	}
+	foreach ( memorial_plugin_packages() as $p ) {
+		$out[] = array(
+			/* translators: %s: funeral package name. */
+			'label' => sprintf( __( 'Package “%s”', 'memorial-plugin' ), $p['name'] ) . ' — ' . memorial_plugin_price_value( '', $p['name'] ),
+			'atts'  => array( 'paket' => (string) $p['name'] ),
+		);
+	}
+	return $out;
 }
 
 /**
- * Defaults: the variables the SEO fields of the site used before this screen.
- *
- * @return array
- */
-function memorial_plugin_values_defaults() {
-	$row = static fn( $label, $key, $what, $section = '' ) => array(
-		'label'   => $label,
-		'key'     => $key,
-		'what'    => $what,
-		'section' => $section,
-		'price'   => '',
-		'text'    => '',
-		'bare'    => 0,
-		'seo'     => 1,
-	);
-	return array(
-		'items' => array(
-			$row( __( 'Main phone number', 'memorial-plugin' ), 'phone', 'phone' ),
-			$row( __( 'Years in business', 'memorial-plugin' ), 'years', 'years' ),
-			$row( __( 'Starting price: fences', 'memorial-plugin' ), 'cat_price_ograda', 'cat-min', 'modeli-ogradok-i-czeny' ),
-		),
-	);
-}
-
-/**
- * The values: code => row (rows without a code are skipped).
+ * The separate prices: code => row (rows without a code are skipped).
  *
  * @return array<string,array>
  */
 function memorial_plugin_values() {
 	$out = array();
-	foreach ( memorial_plugin_settings( 'mem_values' )['items'] ?? array() as $row ) {
-		$key = memorial_plugin_value_key( (string) ( $row['key'] ?? '' ) );
+	foreach ( memorial_plugin_prices( 'other' )['items'] ?? array() as $row ) {
+		$key = memorial_plugin_value_key( (string) ( $row['code'] ?? '' ) );
 		if ( '' !== $key && ! isset( $out[ $key ] ) ) {
 			$out[ $key ] = $row;
 		}
@@ -201,17 +135,89 @@ function memorial_plugin_value_key( $key ) {
 }
 
 /**
- * Plain text of a value (not escaped).
+ * A code from a name: Russian letters in Latin (transliteration), the rest dropped.
  *
- * @param array $row Value row.
+ * @param string $name Name.
+ * @return string
+ */
+function memorial_plugin_value_code_from( $name ) {
+	$map  = array(
+		'а' => 'a',
+		'б' => 'b',
+		'в' => 'v',
+		'г' => 'g',
+		'д' => 'd',
+		'е' => 'e',
+		'ё' => 'e',
+		'ж' => 'zh',
+		'з' => 'z',
+		'и' => 'i',
+		'й' => 'y',
+		'к' => 'k',
+		'л' => 'l',
+		'м' => 'm',
+		'н' => 'n',
+		'о' => 'o',
+		'п' => 'p',
+		'р' => 'r',
+		'с' => 's',
+		'т' => 't',
+		'у' => 'u',
+		'ф' => 'f',
+		'х' => 'h',
+		'ц' => 'ts',
+		'ч' => 'ch',
+		'ш' => 'sh',
+		'щ' => 'sch',
+		'ъ' => '',
+		'ы' => 'y',
+		'ь' => '',
+		'э' => 'e',
+		'ю' => 'yu',
+		'я' => 'ya',
+	);
+	$name = strtr( mb_strtolower( trim( (string) $name ) ), $map );
+	return substr( memorial_plugin_value_key( $name ), 0, 40 );
+}
+
+/**
+ * Before the prices are saved: every separate price gets a code (from its name, unique).
+ *
+ * @param mixed $value New value of mem_prices.
+ * @return mixed
+ */
+function memorial_plugin_values_fill_codes( $value ) {
+	if ( ! is_array( $value ) || empty( $value['other']['items'] ) || ! is_array( $value['other']['items'] ) ) {
+		return $value;
+	}
+	$used = array( 'kremaciya' => true );
+	foreach ( $value['other']['items'] as $i => $row ) {
+		$code = memorial_plugin_value_key( (string) ( $row['code'] ?? '' ) );
+		if ( '' === $code ) {
+			$base = memorial_plugin_value_code_from( (string) ( $row['name'] ?? '' ) );
+			$base = '' !== $base ? $base : 'cena';
+			$code = $base;
+			for ( $n = 2; isset( $used[ $code ] ); $n++ ) {
+				$code = $base . '_' . $n;
+			}
+		}
+		$used[ $code ]                             = true;
+		$value['other']['items'][ $i ]['code'] = $code;
+	}
+	return $value;
+}
+add_filter( 'pre_update_option_mem_prices', 'memorial_plugin_values_fill_codes' );
+
+/**
+ * Plain text of a separate price (not escaped).
+ *
+ * @param array $row Row of “Separate prices”.
  * @return string
  */
 function memorial_plugin_value_text( $row ) {
 	$bare = ! empty( $row['bare'] );
 	$what = (string) ( $row['what'] ?? 'custom' );
 	switch ( $what ) {
-		case 'custom':
-			return trim( (string) ( $row['text'] ?? '' ) );
 		case 'cat-min':
 		case 'cat-max':
 		case 'cat-count':
@@ -232,41 +238,23 @@ function memorial_plugin_value_text( $row ) {
 			}
 			/* translators: %s: price */
 			return sprintf( 'cat-max' === $what ? __( 'up to %s', 'memorial-plugin' ) : __( 'from %s', 'memorial-plugin' ), memorial_plugin_rub( $v ) );
-		case 'price':
-			$text = memorial_plugin_value_price( (string) ( $row['price'] ?? '' ) );
+		case 'service':
+			$text = memorial_plugin_value_service( (string) ( $row['service'] ?? '' ) );
 			return $bare ? trim( (string) preg_replace( '/^(от|до|from|up to)\s+|\s*₽\s*$/u', '', $text ) ) : $text;
-		case 'years':
-			$years = (int) memorial_plugin_years();
-			return $years ? (string) $years : '';
-		case 'founded':
-			$year = (int) ( memorial_plugin_contacts()['founded'] ?? 0 );
-			return $year ? (string) $year : '';
-		case 'phone':
-			return (string) memorial_plugin_opt( 'phone' );
-		case 'address':
-			$addrs = memorial_plugin_addrs();
-			return $addrs ? (string) $addrs[0]['addr'] : '';
 	}
-	return '';
+	return function_exists( 'memorial_plugin_price_fmt' ) ? memorial_plugin_price_fmt( (string) ( $row['price'] ?? '' ) ) : trim( (string) ( $row['price'] ?? '' ) );
 }
 
 /**
- * A price chosen in the list memorial_plugin_values_prices().
+ * Price of a service by its title (Memorial → Services).
  *
- * @param string $ref 'price:<code>', 'paket:<name>' or 'svc:<title>'.
+ * @param string $title Service title.
  * @return string
  */
-function memorial_plugin_value_price( $ref ) {
-	[$kind, $name] = array_pad( explode( ':', $ref, 2 ), 2, '' );
-	if ( 'price' === $kind && function_exists( 'memorial_plugin_price_value' ) ) {
-		return memorial_plugin_price_value( $name );
-	}
-	if ( 'paket' === $kind && function_exists( 'memorial_plugin_price_value' ) ) {
-		return memorial_plugin_price_value( '', $name );
-	}
-	if ( 'svc' === $kind && function_exists( 'memorial_plugin_services_items' ) ) {
+function memorial_plugin_value_service( $title ) {
+	if ( function_exists( 'memorial_plugin_services_items' ) ) {
 		foreach ( memorial_plugin_services_items() as $it ) {
-			if ( (string) $it['title'] === $name ) {
+			if ( (string) $it['title'] === $title ) {
 				return trim( wp_strip_all_tags( memorial_plugin_t( (string) ( $it['price'] ?? '' ) ) ) );
 			}
 		}
@@ -275,7 +263,7 @@ function memorial_plugin_value_price( $ref ) {
 }
 
 /**
- * Text of a value by its code.
+ * Text of a separate price by its code.
  *
  * @param string $key Code.
  * @return string
@@ -284,22 +272,3 @@ function memorial_plugin_value_by_key( $key ) {
 	$row = memorial_plugin_values()[ memorial_plugin_value_key( $key ) ] ?? null;
 	return $row ? memorial_plugin_value_text( $row ) : '';
 }
-
-/* The settings page «Memorial → Values for texts and SEO». */
-add_filter(
-	'memorial_plugin_admin_pages',
-	function ( $pages ) {
-		$now = array();
-		foreach ( memorial_plugin_values() as $key => $row ) {
-			$now[] = ( '' !== trim( (string) $row['label'] ) ? $row['label'] : $key ) . ' — ' . memorial_plugin_value_text( $row ) . ( ! empty( $row['seo'] ) ? ' (' . memorial_plugin_seo_var( $key ) . ')' : '' );
-		}
-		$pages['mem_values'] = array(
-			'slug'   => 'mem-values',
-			'title'  => __( 'Values for texts and SEO', 'memorial-plugin' ),
-			'schema' => 'memorial_plugin_values_schema',
-			'intro'  => '<p>' . esc_html__( 'Values of the site that change by themselves: the starting or highest price of a catalog section, the number of models, a price from Memorial → Prices or of a service, or your own text. In the text of a page a value is put with the “Site value” button of the paragraph toolbar (“My values”). Only the values marked “In the SEO plugin” are added to the SEO plugin as variables %%mem_code%%.', 'memorial-plugin' ) . '</p>'
-				. ( $now ? '<p><b>' . esc_html__( 'Values now:', 'memorial-plugin' ) . '</b> ' . esc_html( implode( ' · ', $now ) ) . '</p>' : '' ),
-		);
-		return $pages;
-	}
-);

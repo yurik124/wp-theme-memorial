@@ -288,22 +288,26 @@ function SectionPicker( { label, empty, value, byId, onChange } ) {
 	} else if ( value && ! byId ) {
 		selected = String( value );
 	}
+	// A plain list: the choice is changed by choosing another line (no typing, no clearing first).
 	return (
-		<ComboboxControl
+		<SelectControl
 			__next40pxDefaultSize
 			__nextHasNoMarginBottom
 			label={ label }
-			help={
-				empty
-					? sprintf(
-							/* translators: %s: what an empty choice means. */
-							__( 'Not chosen — %s.', 'memorial-plugin' ),
-							empty
-						)
-					: undefined
-			}
-			value={ selected }
-			options={ options }
+			value={ selected || '' }
+			options={ [
+				{
+					value: '',
+					label: empty
+						? sprintf(
+								/* translators: %s: what an empty choice means. */
+								__( '— %s —', 'memorial-plugin' ),
+								empty
+							)
+						: __( '— not chosen —', 'memorial-plugin' ),
+				},
+				...options,
+			] }
 			onChange={ ( v ) => {
 				if ( byId ) {
 					onChange( v ? Number( v ) : 0 );
@@ -538,6 +542,7 @@ function Stand( { name, children, className } ) {
 const withPluginControls = createHigherOrderComponent(
 	( BlockEdit ) => ( props ) => {
 		const { name, attributes, setAttributes, isSelected } = props;
+		const [ choosing, setChoosing ] = useState( false );
 		const own = name.startsWith( PREFIX );
 		const pickers = own ? PICKERS[ name ] : null;
 		const { applies, source } = useSource(
@@ -565,6 +570,14 @@ const withPluginControls = createHigherOrderComponent(
 							setAttributes( { editorCollapsed: ! folded } )
 						}
 					/>
+					{ pickers && (
+						<ToolbarButton
+							icon="admin-settings"
+							label={ __( 'Change what the block shows', 'memorial-plugin' ) }
+							isPressed={ choosing }
+							onClick={ () => setChoosing( ! choosing ) }
+						/>
+					) }
 				</ToolbarGroup>
 			</BlockControls>
 		);
@@ -593,6 +606,23 @@ const withPluginControls = createHigherOrderComponent(
 					</Button>
 				</Stand>
 			);
+		} else if ( choosing && pickers ) {
+			body = (
+				<Stand name={ name } className="is-choosing">
+					<div className="memorial-plugin-stand__pickers">
+						<Pickers { ...props } />
+						<AutoNote source={ source } />
+						<div>
+							<Button
+								variant="primary"
+								onClick={ () => setChoosing( false ) }
+							>
+								{ __( 'Done', 'memorial-plugin' ) }
+							</Button>
+						</div>
+					</div>
+				</Stand>
+			);
 		} else if ( applies && ! source ) {
 			body = (
 				<Stand name={ name }>
@@ -604,7 +634,7 @@ const withPluginControls = createHigherOrderComponent(
 				<Stand name={ name } className="is-choosing">
 					<p className="memorial-plugin-stand__text">
 						{ __(
-							'The block found nothing to show on this page by itself. Choose what it should show — the choice can be changed later in the block settings (“What to show”).',
+							'The block found nothing to show on this page by itself. Choose what it should show — later the choice is changed with the ⚙ button on the block toolbar or in the block settings on the right (“What to show”).',
 							'memorial-plugin'
 						) }
 					</p>

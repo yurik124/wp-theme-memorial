@@ -169,7 +169,23 @@ function rowTitle( def, row ) {
  * @return {string} Summary.
  */
 function rowSummary( def, row ) {
-	return ( def.fields || [] )
+	// Fields named by the schema (“summary”): a select shows its option, a checkbox its label.
+	const named = ( def.summary || [] )
+		.map( ( id ) => ( def.fields || [] ).find( ( f ) => f.id === id ) )
+		.filter( ( f ) => f && shown( f, row ) )
+		.map( ( f ) => {
+			const v = row?.[ f.id ];
+			if ( f.type === 'select' ) {
+				return ( f.options || [] ).find( ( o ) => o.value === String( v ?? '' ) )
+					?.label;
+			}
+			if ( f.type === 'checkbox' ) {
+				return Number( v ) ? f.short || f.label : '';
+			}
+			return String( v ?? '' ).trim();
+		} )
+		.filter( Boolean );
+	const lists = ( def.fields || [] )
 		.filter(
 			( f ) => f.type === 'repeater' && Array.isArray( row?.[ f.id ] )
 		)
@@ -178,14 +194,40 @@ function rowSummary( def, row ) {
 				f.label.split( ' — ' )[ 0 ].split( '. ' )[ 0 ] +
 				': ' +
 				row[ f.id ].length
-		)
-		.join( ' · ' );
+		);
+	return [ ...named, ...lists ].join( ' · ' );
 }
+
+/**
+ * Does a field show for these values (schema “show_if”: another field has one of the values)?
+ *
+ * @param {Object} def  Field description.
+ * @param {Object} data Values of the row or group.
+ * @return {boolean} Shown.
+ */
+function shown( def, data ) {
+	if ( ! def.showIf ) {
+		return true;
+	}
+	const v = String( data?.[ def.showIf.field ] ?? '' );
+	return ( def.showIf.in || [] ).includes( v );
+}
+
+// Which rows are open, kept outside the component: DataForm may mount a list again on every change,
+// and the open rows must stay open (adding a row or changing a field used to fold them all).
+const OPEN_ROWS = new Map();
 
 function RepeaterEdit( { def, value, onChange } ) {
 	const rows = Array.isArray( value ) ? value : [];
 	// Rows that have content are folded at first; new rows are open.
-	const [ open, setOpen ] = useState( () => new Set() );
+	const openKey = def.id + '|' + def.label;
+	const [ open, setOpenState ] = useState(
+		() => OPEN_ROWS.get( openKey ) || new Set()
+	);
+	const setOpen = ( next ) => {
+		OPEN_ROWS.set( openKey, next );
+		setOpenState( next );
+	};
 	const isOpen = ( i ) => def.inline || open.has( i );
 	const toggle = ( i ) => {
 		const next = new Set( open );
@@ -371,6 +413,32 @@ function RepeaterEdit( { def, value, onChange } ) {
 	);
 }
 
+function SecretEdit( { common, def, value, onChange } ) {
+	const [ visible, setVisible ] = useState( false );
+	return (
+		<div className="memorial-plugin-settings__secret">
+			<TextControl
+				{ ...common }
+				type={ visible ? 'text' : 'password' }
+				autoComplete="off"
+				placeholder={ def.placeholder }
+				value={ value ?? '' }
+				onChange={ onChange }
+			/>
+			<Button
+				size="compact"
+				icon={ visible ? 'hidden' : 'visibility' }
+				label={
+					visible
+						? __( 'Hide the key', 'memorial-plugin' )
+						: __( 'Show the key', 'memorial-plugin' )
+				}
+				onClick={ () => setVisible( ! visible ) }
+			/>
+		</div>
+	);
+}
+
 function GroupEdit( { def, value, onChange } ) {
 	const [ shown, setShown ] = useState( true );
 	return (
@@ -504,6 +572,10 @@ function ControlFor( { def, value, onChange } ) {
 					onChange={ onChange }
 				/>
 			);
+		case 'secret':
+			return (
+				<SecretEdit common={ common } def={ def } value={ value } onChange={ onChange } />
+			);
 		default:
 			return (
 				<TextControl
@@ -533,7 +605,11 @@ function ControlFor( { def, value, onChange } ) {
  * @param {Object}                  props.data     Values of these fields.
  * @param {(edits: Object) => void} props.onChange Receives changed values ({ id: value }).
  */
-function FieldsForm( { defs, data, onChange } ) {
+function FieldsForm( { defs: all, data, onChange } ) {
+	const visible = all.filter( ( def ) => shown( def, data ) );
+	const ids = visible.map( ( def ) => def.id ).join( ',' );
+	// eslint-disable-next-line react-hooks/exhaustive-deps -- the visible fields change only with their ids.
+	const defs = useMemo( () => visible, [ all, ids ] );
 	const fields = useMemo(
 		() =>
 			defs.map( ( def ) => ( {

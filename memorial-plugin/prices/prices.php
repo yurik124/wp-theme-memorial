@@ -120,25 +120,54 @@ function memorial_plugin_prices_schema() {
 		'other'     => array(
 			'type'   => 'group',
 			'label'  => __( 'Separate prices', 'memorial-plugin' ),
-			'help'   => __( 'Prices mentioned in the texts of pages. In the text a price is put with the “Site value” button of the paragraph toolbar → “Price”. The price can be a number (500), a range (200–300) or words (free) — the ₽ sign is added to numbers by itself.', 'memorial-plugin' ),
+			'help'   => __( 'Prices that are mentioned in the texts of pages and in SEO titles: your own price or one counted by the site (from / up to of a catalog section, number of models, price of a service). How to put one into a text: in a paragraph, open the arrow ∨ (“More”) on the block toolbar → “Site value” → “Price from Memorial → Prices” → choose the price. The page always shows the current value.', 'memorial-plugin' ),
 			'fields' => array(
 				'items' => array(
-					'type'   => 'repeater',
-					'label'  => __( 'Prices', 'memorial-plugin' ),
-					'add'    => __( 'Add a price', 'memorial-plugin' ),
-					'inline' => true,
-					'fields' => array(
-						'name'  => array(
+					'type'     => 'repeater',
+					'label'    => __( 'Prices', 'memorial-plugin' ),
+					'add'      => __( 'Add a price', 'memorial-plugin' ),
+					'collapse' => 'name',
+					'summary'  => array( 'what', 'price', 'section', 'service', 'seo' ),
+					'fields'   => array(
+						'name'    => array(
 							'type'  => 'text',
-							'label' => __( 'Name', 'memorial-plugin' ),
+							'label' => __( 'Name — as you will find it in the list, for example “Wreath delivery in Belgorod”', 'memorial-plugin' ),
 						),
-						'price' => array(
-							'type'  => 'text',
-							'label' => __( 'Price', 'memorial-plugin' ),
+						'what'    => array(
+							'type'    => 'select',
+							'label'   => __( 'Where the price comes from', 'memorial-plugin' ),
+							'options' => memorial_plugin_values_kinds(),
 						),
-						'code'  => array(
+						'price'   => array(
+							'type'    => 'text',
+							'label'   => __( 'Price — a number (500), a range (200–300) or words (free); ₽ is added to numbers by itself', 'memorial-plugin' ),
+							'show_if' => array( 'what', array( '', 'custom' ) ),
+						),
+						'section' => array(
+							'type'    => 'select',
+							'label'   => __( 'Catalog section — the price or the number of models is counted from its products', 'memorial-plugin' ),
+							'options' => memorial_plugin_values_sections(),
+							'show_if' => array( 'what', array( 'cat-min', 'cat-max', 'cat-count' ) ),
+						),
+						'service' => array(
+							'type'    => 'select',
+							'label'   => __( 'Service — its price from Memorial → Services', 'memorial-plugin' ),
+							'options' => memorial_plugin_values_services(),
+							'show_if' => array( 'what', array( 'service' ) ),
+						),
+						'bare'    => array(
+							'type'    => 'checkbox',
+							'label'   => __( 'Number only — without “from”, “up to”, “models” and ₽', 'memorial-plugin' ),
+							'show_if' => array( 'what', array( 'cat-min', 'cat-max', 'cat-count', 'service' ) ),
+						),
+						'seo'     => array(
+							'type'  => 'checkbox',
+							'label' => __( 'In the SEO plugin — the price can be put into SEO titles and descriptions as the variable %%mem_<code>%%', 'memorial-plugin' ),
+							'short' => __( 'in SEO', 'memorial-plugin' ),
+						),
+						'code'    => array(
 							'type'  => 'text',
-							'label' => __( 'Code (Latin letters)', 'memorial-plugin' ),
+							'label' => __( 'Code — can be left empty: it is made from the name when you save (Latin letters, digits and “_”). Change it only if the price is already used in SEO titles.', 'memorial-plugin' ),
 						),
 					),
 				),
@@ -226,7 +255,8 @@ add_filter(
 		$vals = array( __( 'Cremation', 'memorial-plugin' ) . ' — ' . memorial_plugin_price_value( 'kremaciya' ) );
 		foreach ( memorial_plugin_prices( 'other' )['items'] ?? array() as $it ) {
 			if ( trim( $it['code'] ?? '' ) !== '' ) {
-				$vals[] = ( '' !== trim( $it['name'] ?? '' ) ? $it['name'] : $it['code'] ) . ' — ' . memorial_plugin_price_value( $it['code'] );
+				$vals[] = ( '' !== trim( $it['name'] ?? '' ) ? $it['name'] : $it['code'] ) . ' — ' . memorial_plugin_price_value( $it['code'] )
+					. ( ! empty( $it['seo'] ) ? ' (%%mem_' . memorial_plugin_value_key( (string) $it['code'] ) . '%%)' : '' );
 			}
 		}
 		foreach ( memorial_plugin_packages() as $p ) {
@@ -236,7 +266,8 @@ add_filter(
 			'slug'   => 'mem-prices',
 			'title'  => __( 'Prices', 'memorial-plugin' ),
 			'schema' => 'memorial_plugin_prices_schema',
-			'intro'  => '<p>' . esc_html__( 'Prices from here are put into the pages automatically — change them only here. In the text of a page a price is put with the “Site value” button of the paragraph toolbar; catalog prices and the number of models are counted from the products.', 'memorial-plugin' ) . '</p>'
+			'intro'  => '<p>' . esc_html__( 'Prices from here are put into the pages automatically — change them only here; catalog prices and the number of models are counted from the products.', 'memorial-plugin' ) . '</p>'
+				. '<p><b>' . esc_html__( 'How to put a price into the text of a page:', 'memorial-plugin' ) . '</b> ' . esc_html__( 'click in the paragraph where the price should be → on the block toolbar open the arrow ∨ (“More”) → “Site value” → “Price from Memorial → Prices” → choose the price → “Insert”. The page always shows the current price. Prices marked “In the SEO plugin” are put into SEO titles as %%mem_code%% (shown in brackets below).', 'memorial-plugin' ) . '</p>'
 				. '<p><b>' . esc_html__( 'Prices now:', 'memorial-plugin' ) . '</b> ' . esc_html( implode( ' · ', $vals ) ) . '</p>'
 				. memorial_plugin_prices_audit_html(),
 		);
@@ -292,7 +323,8 @@ function memorial_plugin_price_value( $id, $paket = '' ) {
 	}
 	foreach ( memorial_plugin_prices( 'other' )['items'] ?? array() as $it ) {
 		if ( trim( $it['code'] ?? '' ) !== '' && strcasecmp( trim( $it['code'] ), $id ) === 0 ) {
-			return memorial_plugin_price_fmt( $it['price'] ?? '' );
+			// Own price — as typed; the others are counted by the site (prices/values.php).
+			return function_exists( 'memorial_plugin_value_text' ) ? memorial_plugin_value_text( $it ) : memorial_plugin_price_fmt( $it['price'] ?? '' );
 		}
 	}
 	return '';

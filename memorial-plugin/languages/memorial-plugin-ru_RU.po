@@ -5808,3 +5808,72 @@ msgstr "Развернуть все"
 
 msgid "Row %d"
 msgstr "Строка %d"
+
+msgid "A button in the site style (green, light or outlined) that leads to a page of the site or to any address. The text and the page are set in the block settings on the right."
+msgstr "Кнопка в стиле сайта (зелёная, светлая или с рамкой), ведущая на страницу сайта или на любой адрес. Текст и страница задаются в настройках блока справа."
+
+msgid "Catalog section — the price or the number of models is counted from its products"
+msgstr "Раздел каталога — цена или число моделей считаются по его товарам"
+
+msgid "Change what the block shows"
+msgstr "Изменить, что показывает блок"
+
+msgid "Code — can be left empty: it is made from the name when you save (Latin letters, digits and “_”). Change it only if the price is already used in SEO titles."
+msgstr "Код — можно не заполнять: при сохранении он сделается из названия (латиница, цифры и «_»). Меняйте его, только если понимаете зачем: по коду цена подставляется в тексты и SEO-заголовки."
+
+msgid "Done"
+msgstr "Готово"
+
+msgid "Hide the key"
+msgstr "Скрыть ключ"
+
+msgid "How to put a price into the text of a page:"
+msgstr "Как вставить цену в текст страницы:"
+
+msgid "In the SEO plugin — the price can be put into SEO titles and descriptions as the variable %%mem_<code>%%"
+msgstr "В SEO-плагин — цену можно вставлять в SEO-заголовки и описания переменной %%mem_<код>%%"
+
+msgid "Link button: write the text of the button and choose the page (or type an address) in the block settings on the right."
+msgstr "Кнопка-ссылка: напишите текст кнопки и выберите страницу (или впишите адрес) в настройках блока справа."
+
+msgid "Lowest price of a catalog section (“from …”)"
+msgstr "Цена «от» раздела каталога (самая низкая)"
+
+msgid "Name — as you will find it in the list, for example “Wreath delivery in Belgorod”"
+msgstr "Название — так цена будет называться в списке, например «Доставка венков по Белгороду»"
+
+msgid "Own price — typed below"
+msgstr "Своя цена — вписать вручную"
+
+msgid "Price — a number (500), a range (200–300) or words (free); ₽ is added to numbers by itself"
+msgstr "Цена — число (500), диапазон (200–300) или слова (бесплатно); знак ₽ к числам добавится сам"
+
+msgid "Prices from here are put into the pages automatically — change them only here; catalog prices and the number of models are counted from the products."
+msgstr "Цены отсюда подставляются на страницы сами — меняйте их только здесь; цены каталога и число моделей считаются по товарам."
+
+msgid "Prices that are mentioned in the texts of pages and in SEO titles: your own price or one counted by the site (from / up to of a catalog section, number of models, price of a service). How to put one into a text: in a paragraph, open the arrow ∨ (“More”) on the block toolbar → “Site value” → “Price from Memorial → Prices” → choose the price. The page always shows the current value."
+msgstr "Цены, которые упоминаются в текстах страниц и в SEO-заголовках: своя цена или посчитанная сайтом (цена «от»/«до» раздела каталога, число моделей, цена услуги). Как вставить в текст: в абзаце на панели блока откройте стрелку ∨ («Ещё») → «Значение сайта» → «Цена из „Мемориал → Цены“» → выберите цену. На странице всегда будет текущее значение."
+
+msgid "Service — its price from Memorial → Services"
+msgstr "Услуга — её цена из «Мемориал → Услуги»"
+
+msgid "Show the key"
+msgstr "Показать ключ"
+
+msgid "The block found nothing to show on this page by itself. Choose what it should show — later the choice is changed with the ⚙ button on the block toolbar or in the block settings on the right (“What to show”)."
+msgstr "Блок не нашёл сам, что показать на этой странице. Выберите, что показывать, — потом выбор меняется кнопкой ⚙ на панели блока или в настройках блока справа («Что показывать»)."
+
+msgid "The first number is the main one by itself: it is in the header, on the “Call” and “Order” buttons, in the “Site value → Main phone” of texts and in SEO titles as %%mem_phone%%. To make another number the main one, move it to the top with the arrows."
+msgstr "Первый номер — основной, отдельно его указывать не нужно: он в шапке, на кнопках «Позвонить» и «Заказать», в «Значение сайта → Основной телефон» в текстах и в SEO-заголовках как %%mem_phone%%. Чтобы основным стал другой номер, поднимите его стрелками наверх."
+
+msgid "Where the price comes from"
+msgstr "Откуда берётся цена"
+
+msgid "click in the paragraph where the price should be → on the block toolbar open the arrow ∨ (“More”) → “Site value” → “Price from Memorial → Prices” → choose the price → “Insert”. The page always shows the current price. Prices marked “In the SEO plugin” are put into SEO titles as %%mem_code%% (shown in brackets below)."
+msgstr "поставьте курсор в абзаце, где должна быть цена → на панели блока откройте стрелку ∨ («Ещё») → «Значение сайта» → «Цена из „Мемориал → Цены“» → выберите цену → «Вставить». На странице всегда будет текущая цена. Цены с галочкой «В SEO-плагин» вставляются в SEO-заголовки как %%mem_код%% (код — в скобках ниже)."
+
+msgid "in SEO"
+msgstr "в SEO"
+
+msgid "— %s —"
+msgstr "— %s —"

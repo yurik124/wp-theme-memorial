@@ -211,6 +211,16 @@
 		}
 	}
 
+	&__secret {
+		display: flex;
+		gap: 4px;
+		align-items: flex-end;
+
+		> :first-child {
+			flex: 1;
+		}
+	}
+
 	&__code textarea {
 		font-family: Menlo, Consolas, monospace;
 	}

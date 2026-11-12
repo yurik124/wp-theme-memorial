@@ -50,7 +50,7 @@ function memorial_plugin_contacts_schema() {
 			'type'   => 'repeater',
 			'label'  => __( 'Phones', 'memorial-plugin' ),
 			'add'    => __( 'Add a phone', 'memorial-plugin' ),
-			'help'   => __( 'The first number is the main one: it is in the header and on the “Call” and “Order” buttons.', 'memorial-plugin' ),
+			'help'   => __( 'The first number is the main one by itself: it is in the header, on the “Call” and “Order” buttons, in the “Site value → Main phone” of texts and in SEO titles as %%mem_phone%%. To make another number the main one, move it to the top with the arrows.', 'memorial-plugin' ),
 			'fields' => array(
 				'num'  => array(
 					'type'        => 'text',

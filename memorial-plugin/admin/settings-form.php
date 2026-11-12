@@ -44,6 +44,19 @@ function memorial_plugin_settings_describe( $schema ) {
 		if ( ! empty( $f['open'] ) ) {
 			$field['open'] = true;
 		}
+		if ( ! empty( $f['show_if'] ) && is_array( $f['show_if'] ) ) {
+			// Shown only when another field of the same row or group has one of these values.
+			$field['showIf'] = array(
+				'field' => (string) $f['show_if'][0],
+				'in'    => array_map( 'strval', (array) $f['show_if'][1] ),
+			);
+		}
+		if ( ! empty( $f['summary'] ) ) {
+			$field['summary'] = array_map( 'strval', (array) $f['summary'] ); // Fields shown in a folded row.
+		}
+		if ( ! empty( $f['short'] ) ) {
+			$field['short'] = (string) $f['short']; // Short label of a checkbox in a folded row.
+		}
 		if ( ! empty( $f['inline'] ) ) {
 			$field['inline'] = true; // Short rows (name and price) in one line, without folding.
 		}

@@ -75,7 +75,7 @@ function memorial_plugin_home_blocks_list() {
 		),
 		'link-button'     => array(
 			'title'  => __( 'Link button', 'memorial-plugin' ),
-			'desc'   => __( 'Button-styled link to a page of the site.', 'memorial-plugin' ),
+			'desc'   => __( 'A button in the site style (green, light or outlined) that leads to a page of the site or to any address. The text and the page are set in the block settings on the right.', 'memorial-plugin' ),
 			'icon'   => 'button',
 			'attrs'  => array(
 				'text'    => array(
@@ -302,7 +302,7 @@ function memorial_plugin_home_render_link_button( $a ) {
 	$url  = $page && 'publish' === get_post_status( $page ) ? get_permalink( $page ) : (string) ( $a['url'] ?? '' );
 	$text = trim( (string) ( $a['text'] ?? '' ) );
 	if ( '' === $url || '' === $text ) {
-		return '';
+		return memorial_plugin_block_note( __( 'Link button: write the text of the button and choose the page (or type an address) in the block settings on the right.', 'memorial-plugin' ) );
 	}
 	return '<a class="' . esc_attr( memorial_plugin_home_btn_class( $a ) ) . '" href="' . esc_url( $url ) . '">' . esc_html( $text )
 		. ( ! empty( $a['arrow'] ) ? ' <span aria-hidden="true">→</span>' : '' ) . '</a>';

@@ -228,6 +228,7 @@ require MEMORIAL_PLUGIN_DIR . '/blocks/content/content-blocks.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/content/inline-values.php';
 require MEMORIAL_PLUGIN_DIR . '/seo/seo-registry.php';
 require MEMORIAL_PLUGIN_DIR . '/prices/values.php';
+require MEMORIAL_PLUGIN_DIR . '/core/page-cache.php';
 require MEMORIAL_PLUGIN_DIR . '/admin/convert.php';
 require MEMORIAL_PLUGIN_DIR . '/admin/settings-form.php';
 require MEMORIAL_PLUGIN_DIR . '/admin/collections.php';
