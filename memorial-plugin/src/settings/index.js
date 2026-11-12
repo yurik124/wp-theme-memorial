@@ -170,7 +170,9 @@ function rowTitle( def, row ) {
  */
 function rowSummary( def, row ) {
 	return ( def.fields || [] )
-		.filter( ( f ) => f.type === 'repeater' && Array.isArray( row?.[ f.id ] ) )
+		.filter(
+			( f ) => f.type === 'repeater' && Array.isArray( row?.[ f.id ] )
+		)
 		.map(
 			( f ) =>
 				f.label.split( ' — ' )[ 0 ].split( '. ' )[ 0 ] +
@@ -280,7 +282,10 @@ function RepeaterEdit( { def, value, onChange } ) {
 										{ title ||
 											sprintf(
 												/* translators: %d: row number. */
-												__( 'Row %d', 'memorial-plugin' ),
+												__(
+													'Row %d',
+													'memorial-plugin'
+												),
 												i + 1
 											) }
 									</strong>
@@ -344,7 +349,9 @@ function RepeaterEdit( { def, value, onChange } ) {
 									i + 1
 								) }
 								onClick={ () =>
-									onChange( rows.filter( ( r, j ) => j !== i ) )
+									onChange(
+										rows.filter( ( r, j ) => j !== i )
+									)
 								}
 							/>
 						</div>
