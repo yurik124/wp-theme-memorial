@@ -644,4 +644,4 @@ function memorial_plugin_content_blocks_register() {
 		);
 	}
 }
-add_action( 'init', 'memorial_plugin_content_blocks_register', 30 );
+add_action( 'init', 'memorial_plugin_content_blocks_register', 20 );

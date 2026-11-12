@@ -80,7 +80,7 @@ function memorial_plugin_floating_register() {
 		);
 	}
 }
-add_action( 'init', 'memorial_plugin_floating_register', 30 );
+add_action( 'init', 'memorial_plugin_floating_register', 20 );
 
 /**
  * Block Hooks: the floating blocks go at the end of the Footer template part.
