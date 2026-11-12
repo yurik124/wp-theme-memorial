@@ -330,10 +330,27 @@ test.describe( 'аудит админки', () => {
 		const editor = {};
 		for ( const p of [ front, contacts ].filter( Boolean ) ) {
 			const tab = await page.context().newPage();
+			await tab.setViewportSize( { width: 1440, height: 6000 } );
 			const st = watch( tab );
+			st.ssr = [];
+			tab.on( 'response', async ( r ) => {
+				if ( /block-renderer/.test( decodeURIComponent( r.url() ) ) ) {
+					let body = '';
+					try { body = await r.text(); } catch ( e ) {}
+					const name = ( decodeURIComponent( r.url() ).match( /block-renderer\/([\w-]+\/[\w-]+)/ ) || [] )[ 1 ];
+					if ( r.status() >= 300 || ! /"rendered"/.test( body ) ) {
+						st.ssr.push( r.status() + ' ' + name + ' ' + body.slice( 0, 600 ) + ' ' + ( r.request().postData() || '' ).slice( 0, 400 ) );
+					}
+				}
+			} );
 			await tab.goto( '/wp-admin/post.php?action=edit&post=' + p.ID );
-			await tab.waitForTimeout( 10000 );
+			await tab.waitForTimeout( 20000 );
 			await tab.screenshot( { path: `${ DIR }/audit-editor-${ p.post_name || p.ID }.png` } );
+			st.errorsInCanvas = [];
+			for ( const fr of tab.frames() ) {
+				const t = await fr.evaluate( () => [ ...document.querySelectorAll( '[data-type]' ) ].filter( ( el ) => /Ошибка загрузки блока|Error loading block/.test( el.textContent ) && ! el.querySelector( '[data-type]' ) ).map( ( el ) => el.getAttribute( 'data-type' ) + ': ' + el.textContent.trim().slice( 0, 200 ) ) ).catch( () => [] );
+				st.errorsInCanvas.push( ...t );
+			}
 			editor[ p.post_title ] = { ...st, ...( await tab.evaluate( () => {
 				const d = window.wp.data;
 				const ed = d.select( 'core/editor' );
