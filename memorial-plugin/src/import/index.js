@@ -50,7 +50,11 @@ function galleryLabel( g ) {
 			g.count
 		) +
 		( g.sample
-			? ' (' + __( 'for example:', 'memorial-plugin' ) + ' ' + g.sample + ')'
+			? ' (' +
+				__( 'for example:', 'memorial-plugin' ) +
+				' ' +
+				g.sample +
+				')'
 			: '' )
 	);
 }
@@ -104,7 +108,9 @@ function GalleriesEdit( { data, field, onChange } ) {
 function MoveForm( { item, closeModal, onMove } ) {
 	const [ data, setData ] = useState( {
 		cat: item.title,
-		gal: item.galleries.filter( ( g ) => g.checked ).map( ( g ) => g.index ),
+		gal: item.galleries
+			.filter( ( g ) => g.checked )
+			.map( ( g ) => g.index ),
 		works: item.works > 0,
 		replace: true,
 	} );
@@ -254,7 +260,10 @@ function App() {
 								.map(
 									( g ) =>
 										( g.heading ||
-											__( 'Untitled', 'memorial-plugin' ) ) +
+											__(
+												'Untitled',
+												'memorial-plugin'
+											) ) +
 										' (' +
 										g.count +
 										')'
@@ -296,7 +305,10 @@ function App() {
 				id: 'move',
 				label: __( 'Move…', 'memorial-plugin' ),
 				isPrimary: true,
-				modalHeader: __( 'Moving the catalog from pages', 'memorial-plugin' ),
+				modalHeader: __(
+					'Moving the catalog from pages',
+					'memorial-plugin'
+				),
 				modalSize: 'medium',
 				RenderModal: ( { items: [ item ], closeModal } ) => (
 					<MoveForm

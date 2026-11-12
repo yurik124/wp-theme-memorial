@@ -58,7 +58,8 @@ test( 'предпросмотр блоков в редакторе с класс
 			}
 			try {
 				await window.wp.apiFetch( {
-					path: '/wp/v2/block-renderer/' + type.name + '?context=edit',
+					path:
+						'/wp/v2/block-renderer/' + type.name + '?context=edit',
 					method: 'POST',
 					data: { attributes },
 				} );
