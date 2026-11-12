@@ -6611,3 +6611,45 @@ msgstr "mem_works"
 msgctxt "block keyword"
 msgid "memorial"
 msgstr "мемориал"
+
+msgid "(this text is no longer in the settings)"
+msgstr "(этого текста больше нет в настройках)"
+
+msgid "A phone number has only digits, spaces, brackets, hyphens and a leading “+”."
+msgstr "В номере телефона только цифры, пробелы, скобки, дефисы и «+» в начале."
+
+msgid "Changed — it goes to the settings when you save the page."
+msgstr "Изменено — попадёт в настройки, когда вы сохраните страницу."
+
+msgid "Memorial settings"
+msgstr "Настройки Мемориала"
+
+msgid "Only a whole number without spaces."
+msgstr "Только целое число без пробелов."
+
+msgid "Only an editor or an administrator can change it."
+msgstr "Изменить его может только редактор или администратор."
+
+msgid "Shared text"
+msgstr "Общий текст"
+
+msgid "The shared texts were not saved."
+msgstr "Общие тексты не сохранились."
+
+msgid "The text is too long: up to %d characters."
+msgstr "Текст слишком длинный: не больше %d знаков."
+
+msgid "These settings were changed elsewhere while the page was open (in another tab or by another person). Reload the page to see the current texts, then make the change again."
+msgstr "Эти настройки изменили в другом месте, пока страница была открыта (в другой вкладке или другой человек). Перезагрузите страницу, чтобы увидеть текущие тексты, и внесите правку ещё раз."
+
+msgid "These settings were changed elsewhere while this screen was open (on a page of the site, in another tab or by another person). Reload the screen — your changes here are not saved."
+msgstr "Эти настройки изменили в другом месте, пока экран был открыт (на странице сайта, в другой вкладке или другой человек). Перезагрузите экран — ваши изменения здесь не сохранены."
+
+msgid "This is not an email address."
+msgstr "Это не адрес электронной почты."
+
+msgid "This text is stored once in the Memorial settings: a change here changes it on every page that shows it, after the page is saved."
+msgstr "Этот текст хранится один раз в настройках «Мемориала»: правка здесь меняет его на всех страницах, где он выводится, — после сохранения страницы."
+
+msgid "This text no longer exists in the settings (the row was removed?)."
+msgstr "Этого текста больше нет в настройках (строку удалили?)."

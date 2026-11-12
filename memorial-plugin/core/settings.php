@@ -54,6 +54,7 @@ function memorial_plugin_contacts_schema() {
 			'fields' => array(
 				'num'  => array(
 					'type'        => 'text',
+					'format'      => 'phone', // Checked when it is changed on a page (blocks/bindings.php).
 					'label'       => __( 'Phone number', 'memorial-plugin' ),
 					'placeholder' => '+7 (900) 000-00-00',
 				),
@@ -1114,7 +1115,10 @@ function memorial_plugin_sanitize( $schema, $in ) {
 				foreach ( is_array( $v ) ? $v : array() as $row ) {
 					$r = memorial_plugin_sanitize( $f['fields'], $row );
 					if ( ! memorial_plugin_row_empty( $r, $f['fields'] ) ) {
-						$rows[] = $r;
+						// A stable id of the row: texts bound to it on pages (blocks/bindings.php) follow the row when the list is reordered.
+						$id       = is_array( $row ) ? (string) ( $row['_id'] ?? '' ) : '';
+						$r['_id'] = preg_match( '/^[a-z0-9]{6,32}$/', $id ) ? $id : memorial_plugin_row_id();
+						$rows[]   = $r;
 					}
 				}
 				$out[ $k ] = $rows;
@@ -1168,6 +1172,15 @@ function memorial_plugin_sanitize( $schema, $in ) {
 		}
 	}
 	return $out;
+}
+
+/**
+ * A new id for a row of a list.
+ *
+ * @return string
+ */
+function memorial_plugin_row_id() {
+	return strtolower( wp_generate_password( 10, false, false ) );
 }
 
 /** Пустые строки списков не сохраняем (галочки не в счёт).

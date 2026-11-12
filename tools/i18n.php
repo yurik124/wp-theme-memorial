@@ -29,6 +29,7 @@ const MEMORIAL_I18N_SCRIPTS = [
 	'memorial-plugin-editor-meta'  => 'editor-meta',
 	'memorial-plugin-inline-value' => 'inline-value',
 	'memorial-plugin-block-controls' => 'block-controls',
+	'memorial-plugin-bindings'       => 'bindings',
 ];
 const MEMORIAL_I18N_FUNCS = [
 	// name => [ argument roles ]: s — singular, p — plural, c — context, d — domain, n — number (skipped)

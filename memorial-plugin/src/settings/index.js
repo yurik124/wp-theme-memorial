@@ -699,7 +699,7 @@ function App( { option } ) {
 			const res = await apiFetch( {
 				path: `/memorial-plugin/v1/settings/${ option }`,
 				method: 'POST',
-				data: { value },
+				data: { value, version: page?.version },
 			} );
 			setPage( res );
 			setValue( res.value || {} );
@@ -715,7 +715,7 @@ function App( { option } ) {
 			setNotice( { status: 'error', text: e.message } );
 		}
 		setBusy( false );
-	}, [ option, value ] );
+	}, [ option, value, page ] );
 
 	if ( ! page ) {
 		return notice ? (

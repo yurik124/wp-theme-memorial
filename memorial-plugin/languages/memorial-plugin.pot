@@ -49,7 +49,7 @@ msgstr ""
 msgid " — but showing is off (the tick in “1. Connection”)"
 msgstr ""
 
-#: core/settings.php:623
+#: core/settings.php:624
 msgid " — calmer and more specific. You can change it in “Memorial → Home page”."
 msgstr ""
 
@@ -160,6 +160,10 @@ msgstr ""
 msgid "(optional)"
 msgstr ""
 
+#: src/bindings/index.js:130
+msgid "(this text is no longer in the settings)"
+msgstr ""
+
 #: catalog/catalog-summary.php:275
 msgid ") the old “N models, price from … ₽” were removed — the catalog shows these numbers itself and updates them automatically."
 msgstr ""
@@ -228,7 +232,7 @@ msgstr ""
 msgid "3. Which reviews to show"
 msgstr ""
 
-#: core/settings.php:90 core/settings.php:490
+#: core/settings.php:91 core/settings.php:491
 msgid "308000, Belgorod, 40 Studencheskaya St."
 msgstr ""
 
@@ -274,11 +278,11 @@ msgstr ""
 msgid "A link from Yandex Maps. Empty — a map by the address."
 msgstr ""
 
-#: core/settings.php:243
+#: core/settings.php:244
 msgid "A link under the “Call” and “Call me back” buttons: a person immediately sees where to click if someone close has just died. Empty — the page “What to do when someone dies” (found automatically)."
 msgstr ""
 
-#: core/settings.php:279
+#: core/settings.php:280
 msgid "A low strip of the photo first, the text below"
 msgstr ""
 
@@ -288,6 +292,10 @@ msgstr ""
 
 #: content/patterns.php:38
 msgid "A paragraph with the number of models and the list of sections with prices — everything is counted automatically."
+msgstr ""
+
+#: blocks/bindings.php:211
+msgid "A phone number has only digits, spaces, brackets, hyphens and a leading “+”."
 msgstr ""
 
 #: content/patterns.php:48
@@ -326,7 +334,7 @@ msgstr ""
 msgid "API key"
 msgstr ""
 
-#: core/settings.php:551 core/settings.php:826
+#: core/settings.php:552 core/settings.php:827
 msgid "About the company"
 msgstr ""
 
@@ -378,7 +386,7 @@ msgstr ""
 msgid "Add a line item"
 msgstr ""
 
-#: core/settings.php:404
+#: core/settings.php:405
 msgid "Add a number"
 msgstr ""
 
@@ -406,7 +414,7 @@ msgstr ""
 msgid "Add a review"
 msgstr ""
 
-#: core/settings.php:303
+#: core/settings.php:304
 msgid "Add a service"
 msgstr ""
 
@@ -422,15 +430,15 @@ msgstr ""
 msgid "Add a work"
 msgstr ""
 
-#: core/settings.php:82
+#: core/settings.php:83
 msgid "Add an address"
 msgstr ""
 
-#: core/settings.php:70
+#: core/settings.php:71
 msgid "Add an email"
 msgstr ""
 
-#: core/settings.php:232 core/settings.php:345
+#: core/settings.php:233 core/settings.php:346
 msgid "Add an item"
 msgstr ""
 
@@ -470,7 +478,7 @@ msgstr ""
 msgid "Add to categories…"
 msgstr ""
 
-#: places/places.php:137 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:47 core/settings.php:89
+#: places/places.php:137 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:47 core/settings.php:90
 msgid "Address"
 msgstr ""
 
@@ -486,11 +494,11 @@ msgstr ""
 msgid "Addresses"
 msgstr ""
 
-#: core/settings.php:81
+#: core/settings.php:82
 msgid "Addresses and opening hours"
 msgstr ""
 
-#: core/settings.php:231
+#: core/settings.php:232
 msgid "Advantages (with laurel leaves)"
 msgstr ""
 
@@ -572,7 +580,7 @@ msgstr ""
 msgid "Always: the counter loads on every page without waiting (deferred); the cookie notice is still shown"
 msgstr ""
 
-#: core/settings.php:434
+#: core/settings.php:435
 msgid "An empty line — a new paragraph. You can use <b>, <a> and other simple markup."
 msgstr ""
 
@@ -672,7 +680,7 @@ msgstr ""
 msgid "Block title"
 msgstr ""
 
-#: core/settings.php:398 core/settings.php:550
+#: core/settings.php:399 core/settings.php:551
 msgid "Block with numbers"
 msgstr ""
 
@@ -724,7 +732,7 @@ msgstr ""
 msgid "Button that calls the main phone number (Memorial → Contacts)."
 msgstr ""
 
-#: core/settings.php:100
+#: core/settings.php:101
 msgid "By default — the street and the house"
 msgstr ""
 
@@ -796,7 +804,7 @@ msgstr ""
 msgid "Called back"
 msgstr ""
 
-#: core/settings.php:111
+#: core/settings.php:112
 msgid "Calls outside working hours"
 msgstr ""
 
@@ -824,7 +832,7 @@ msgstr ""
 msgid "Cannot merge: the values differ."
 msgstr ""
 
-#: blocks/content/content-blocks.php:433 blocks/home/home.php:136 core/settings.php:413
+#: blocks/content/content-blocks.php:433 blocks/home/home.php:136 core/settings.php:414
 msgid "Caption"
 msgstr ""
 
@@ -856,7 +864,7 @@ msgstr ""
 msgid "Cards with captions"
 msgstr ""
 
-#: core/settings.php:292
+#: core/settings.php:293
 msgid "Cards with links to the service pages. The photo is optional: when it is not chosen, the featured image of the page is used."
 msgstr ""
 
@@ -979,6 +987,10 @@ msgstr ""
 msgid "Change what the block shows"
 msgstr ""
 
+#: src/bindings/index.js:252
+msgid "Changed — it goes to the settings when you save the page."
+msgstr ""
+
 #: src/convert/index.js:288
 msgid "Changes in the post"
 msgstr ""
@@ -1011,7 +1023,7 @@ msgstr ""
 msgid "Choices, separated by commas"
 msgstr ""
 
-#: core/settings.php:360
+#: core/settings.php:361
 msgid "Choose by the title"
 msgstr ""
 
@@ -1083,7 +1095,7 @@ msgstr ""
 msgid "Columns on a computer"
 msgstr ""
 
-#: blocks/home/home.php:205 blocks/legacy/render/parts/company-details.php:13 core/settings.php:166
+#: blocks/home/home.php:205 blocks/legacy/render/parts/company-details.php:13 core/settings.php:167
 msgid "Company details"
 msgstr ""
 
@@ -1123,7 +1135,7 @@ msgstr ""
 msgid "Contact cards"
 msgstr ""
 
-#: core/settings.php:553 core/settings.php:839 core/settings.php:1235
+#: core/settings.php:554 core/settings.php:840 core/settings.php:1248
 msgid "Contacts"
 msgstr ""
 
@@ -1303,7 +1315,7 @@ msgstr ""
 msgid "Daily from 8:00 to 17:00"
 msgstr ""
 
-#: core/settings.php:95 core/settings.php:500
+#: core/settings.php:96 core/settings.php:501
 msgid "Daily from 9:00 to 18:00"
 msgstr ""
 
@@ -1398,7 +1410,7 @@ msgstr ""
 msgid "Do not fill in"
 msgstr ""
 
-#: core/settings.php:252
+#: core/settings.php:253
 msgid "Do not show the “what to do” link"
 msgstr ""
 
@@ -1438,7 +1450,7 @@ msgstr ""
 msgid "Down"
 msgstr ""
 
-#: core/settings.php:208
+#: core/settings.php:209
 msgid "Drag a row (or a block card below by ⋮⋮) with the mouse or a finger, or press ↑ ↓, then “Save order”. The first screen is always at the top. Blocks marked “hidden” are not visible on the site — turn on “Show this block” in their settings below."
 msgstr ""
 
@@ -1466,11 +1478,11 @@ msgstr ""
 msgid "Edit work"
 msgstr ""
 
-#: blocks/content/inline-values.php:325 core/settings.php:69 core/icons-api.php:26
+#: blocks/content/inline-values.php:325 core/settings.php:70 core/icons-api.php:26
 msgid "Email"
 msgstr ""
 
-#: core/settings.php:154
+#: core/settings.php:155
 msgid "Empty — to the first email of the list above"
 msgstr ""
 
@@ -1490,7 +1502,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: core/settings.php:264
+#: core/settings.php:265
 msgid "Even over the whole photo"
 msgstr ""
 
@@ -1550,7 +1562,7 @@ msgstr ""
 msgid "Extra service pages"
 msgstr ""
 
-#: core/settings.php:202
+#: core/settings.php:203
 msgid "Eyebrow (small letters above the title)"
 msgstr ""
 
@@ -1603,7 +1615,7 @@ msgstr ""
 msgid "First paste the API key into “1. Connection” and save — your branches will appear here."
 msgstr ""
 
-#: core/settings.php:213
+#: core/settings.php:214
 msgid "First screen"
 msgstr ""
 
@@ -1655,7 +1667,7 @@ msgstr ""
 msgid "For every product — as before."
 msgstr ""
 
-#: core/settings.php:456
+#: core/settings.php:457
 msgid "For example 75717068753 or a link like https://yandex.ru/maps/org/…/75717068753/"
 msgstr ""
 
@@ -1671,7 +1683,7 @@ msgstr ""
 msgid "For example: How to get the funeral allowance?"
 msgstr ""
 
-#: core/settings.php:172
+#: core/settings.php:173
 msgid "For example: Sole proprietor Ivan Ivanov"
 msgstr ""
 
@@ -1683,7 +1695,7 @@ msgstr ""
 msgid "For example: documents"
 msgstr ""
 
-#: core/settings.php:63
+#: core/settings.php:64
 msgid "For example: round the clock"
 msgstr ""
 
@@ -1797,7 +1809,7 @@ msgstr ""
 msgid "Got it"
 msgstr ""
 
-#: core/settings.php:263
+#: core/settings.php:264
 msgid "Gradient: lighter at the top, darker at the bottom"
 msgstr ""
 
@@ -1893,7 +1905,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: blocks/home/pages-to-content.php:322 core/settings.php:1241
+#: blocks/home/pages-to-content.php:322 core/settings.php:1254
 msgid "Home page"
 msgstr ""
 
@@ -1901,7 +1913,7 @@ msgstr ""
 msgid "Home page: all sections (old layout)"
 msgstr ""
 
-#: core/settings.php:623
+#: core/settings.php:624
 msgid "Home page: updated "
 msgstr ""
 
@@ -1971,7 +1983,7 @@ msgstr ""
 msgid "I give my %1$s in accordance with %2$s"
 msgstr ""
 
-#: blocks/home/home.php:52 core/settings.php:359
+#: blocks/home/home.php:52 core/settings.php:360
 msgid "Icon"
 msgstr ""
 
@@ -2003,7 +2015,7 @@ msgstr ""
 msgid "In examples"
 msgstr ""
 
-#: core/settings.php:124
+#: core/settings.php:125
 msgid "In the MAX app: Profile → Share profile → Copy link."
 msgstr ""
 
@@ -2015,7 +2027,7 @@ msgstr ""
 msgid "In the article:"
 msgstr ""
 
-#: core/settings.php:1244
+#: core/settings.php:1257
 msgid "In the text you can write <code>{years}</code> — how many years the company has worked, <code>{founded}</code> — the year it was founded, <code>{addr}</code> — the first address, <code>{phone}</code> — the main phone."
 msgstr ""
 
@@ -2039,7 +2051,7 @@ msgstr ""
 msgid "Inside"
 msgstr ""
 
-#: core/settings.php:344
+#: core/settings.php:345
 msgid "Items"
 msgstr ""
 
@@ -2091,7 +2103,7 @@ msgstr ""
 msgid "Leave a review ↗"
 msgstr ""
 
-#: core/settings.php:105
+#: core/settings.php:106
 msgid "Leave empty — the map finds the address itself. To set an exact marker, paste a link from Yandex Maps or the code from the “Map Constructor”."
 msgstr ""
 
@@ -2139,7 +2151,7 @@ msgstr ""
 msgid "Link text (empty — the name of the document)"
 msgstr ""
 
-#: core/settings.php:158
+#: core/settings.php:159
 msgid "Link that starts the MAX app (advanced)"
 msgstr ""
 
@@ -2187,7 +2199,7 @@ msgstr ""
 msgid "Lowest price of a catalog section (“from …”)"
 msgstr ""
 
-#: core/settings.php:122
+#: core/settings.php:123
 msgid "MAX — profile link"
 msgstr ""
 
@@ -2219,7 +2231,7 @@ msgstr ""
 msgid "Map"
 msgstr ""
 
-#: places/places.php:158 core/settings.php:104
+#: places/places.php:158 core/settings.php:105
 msgid "Map (optional)"
 msgstr ""
 
@@ -2231,7 +2243,7 @@ msgstr ""
 msgid "Map pin"
 msgstr ""
 
-#: core/settings.php:99
+#: core/settings.php:100
 msgid "Map tab label (optional)"
 msgstr ""
 
@@ -2256,7 +2268,7 @@ msgid "Material"
 msgstr ""
 
 #. Author of the plugin
-#: memorial-plugin.php admin/abilities.php:33 core/settings.php:1256 core/icons-api.php:51
+#: memorial-plugin.php admin/abilities.php:33 core/settings.php:1269 core/icons-api.php:51
 msgid "Memorial"
 msgstr ""
 
@@ -2279,6 +2291,10 @@ msgstr ""
 
 #: places/places.php:242
 msgid "Memorial meal halls: no halls added — “Memorial → Halls for the memorial meal”. Visitors do not see this message."
+msgstr ""
+
+#: src/bindings/index.js:120 blocks/bindings.php:275
+msgid "Memorial settings"
 msgstr ""
 
 #. translators: %s: settings page title.
@@ -2335,7 +2351,7 @@ msgstr ""
 msgid "Message “Page not found”"
 msgstr ""
 
-#: core/settings.php:117
+#: core/settings.php:118
 msgid "Messengers"
 msgstr ""
 
@@ -2579,7 +2595,7 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
-#: core/settings.php:62
+#: core/settings.php:63
 msgid "Note (optional)"
 msgstr ""
 
@@ -2607,7 +2623,7 @@ msgstr ""
 msgid "Now"
 msgstr ""
 
-#: src/catalog/types.js:174 blocks/home/home.php:131 core/settings.php:409
+#: src/catalog/types.js:174 blocks/home/home.php:131 core/settings.php:410
 msgid "Number"
 msgstr ""
 
@@ -2635,23 +2651,23 @@ msgstr ""
 msgid "Number with a caption in a laurel wreath; the number counts up when it scrolls into view."
 msgstr ""
 
-#: core/settings.php:403
+#: core/settings.php:404
 msgid "Numbers"
 msgstr ""
 
-#: core/settings.php:964
+#: core/settings.php:965
 msgid "OGRN "
 msgstr ""
 
-#: core/settings.php:180
+#: core/settings.php:181
 msgid "OGRN / OGRNIP"
 msgstr ""
 
-#: core/settings.php:964
+#: core/settings.php:965
 msgid "OGRNIP "
 msgstr ""
 
-#: core/settings.php:265
+#: core/settings.php:266
 msgid "Off — the photo without a tint"
 msgstr ""
 
@@ -2667,11 +2683,11 @@ msgstr ""
 msgid "Old price, ₽"
 msgstr ""
 
-#: core/settings.php:276
+#: core/settings.php:277
 msgid "On a phone"
 msgstr ""
 
-#: core/settings.php:141
+#: core/settings.php:142
 msgid "On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email and are kept in “Memorial → Requests”."
 msgstr ""
 
@@ -2705,6 +2721,14 @@ msgstr ""
 
 #: reviews/rewio.php:72
 msgid "Only 5★"
+msgstr ""
+
+#: blocks/bindings.php:216
+msgid "Only a whole number without spaces."
+msgstr ""
+
+#: src/bindings/index.js:244
+msgid "Only an editor or an administrator can change it."
 msgstr ""
 
 #: places/places.php:127
@@ -2751,7 +2775,7 @@ msgstr ""
 msgid "Open site"
 msgstr ""
 
-#: core/settings.php:94
+#: core/settings.php:95
 msgid "Opening hours"
 msgstr ""
 
@@ -2791,7 +2815,7 @@ msgstr ""
 msgid "Order a meal here"
 msgstr ""
 
-#: core/settings.php:207
+#: core/settings.php:208
 msgid "Order of the blocks on the home page"
 msgstr ""
 
@@ -2799,7 +2823,7 @@ msgstr ""
 msgid "Order — with the ↑ ↓ arrows to the right of a cemetery."
 msgstr ""
 
-#: core/settings.php:455
+#: core/settings.php:456
 msgid "Organisation on Yandex Maps — number or link"
 msgstr ""
 
@@ -2811,7 +2835,7 @@ msgstr ""
 msgid "Other counters — start only after consent"
 msgstr ""
 
-#: blocks/content/content-blocks.php:228 core/settings.php:546 core/settings.php:663
+#: blocks/content/content-blocks.php:228 core/settings.php:547 core/settings.php:664
 msgid "Our services"
 msgstr ""
 
@@ -2853,7 +2877,7 @@ msgstr ""
 msgid "Packages"
 msgstr ""
 
-#: core/settings.php:317
+#: core/settings.php:318
 msgid "Page"
 msgstr ""
 
@@ -2917,7 +2941,7 @@ msgstr ""
 msgid "Phone button"
 msgstr ""
 
-#: core/settings.php:57
+#: core/settings.php:58
 msgid "Phone number"
 msgstr ""
 
@@ -2933,11 +2957,11 @@ msgstr ""
 msgid "Phones and websites of the restaurants are not shown on the site — a visitor orders through you with the “Call me back” button."
 msgstr ""
 
-#: core/settings.php:463
+#: core/settings.php:464
 msgid "Phones, email and addresses are taken from the “Memorial → Contacts” page."
 msgstr ""
 
-#: core/settings.php:1237
+#: core/settings.php:1250
 msgid "Phones, email, addresses and opening hours. Changes appear at once in the header, the footer, on the home page and in the product cards."
 msgstr ""
 
@@ -2949,7 +2973,7 @@ msgstr ""
 msgid "Photo"
 msgstr ""
 
-#: places/places.php:133 core/settings.php:326
+#: places/places.php:133 core/settings.php:327
 msgid "Photo (optional)"
 msgstr ""
 
@@ -2977,7 +3001,7 @@ msgstr ""
 msgid "Photo grid of products from catalog sections."
 msgstr ""
 
-#: core/settings.php:364
+#: core/settings.php:365
 msgid "Photo instead of the icon (optional)"
 msgstr ""
 
@@ -2997,7 +3021,7 @@ msgstr ""
 msgid "Photo of the page"
 msgstr ""
 
-#: core/settings.php:256
+#: core/settings.php:257
 msgid "Photo on the right (mourning hall — light, daylight)"
 msgstr ""
 
@@ -3005,7 +3029,7 @@ msgstr ""
 msgid "Photo proportions"
 msgstr ""
 
-#: core/settings.php:261
+#: core/settings.php:262
 msgid "Photo tint (not used in the light theme 4.0)"
 msgstr ""
 
@@ -3085,7 +3109,7 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: core/settings.php:321
+#: core/settings.php:322
 msgid "Price (optional)"
 msgstr ""
 
@@ -3415,7 +3439,7 @@ msgstr ""
 msgid "Review widgets and links to review sites (Memorial → Reviews)."
 msgstr ""
 
-#: reviews/rewio.php:233 reviews/reviews.php:125 reviews/reviews.php:190 core/settings.php:552 core/settings.php:832
+#: reviews/rewio.php:233 reviews/reviews.php:125 reviews/reviews.php:190 core/settings.php:553 core/settings.php:833
 msgid "Reviews"
 msgstr ""
 
@@ -3673,7 +3697,7 @@ msgstr ""
 msgid "Service cards of the home page (Memorial → Home page → Services), full width."
 msgstr ""
 
-#: core/settings.php:1227
+#: core/settings.php:1240
 msgid "Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited like any page: “Pages → Home”."
 msgstr ""
 
@@ -3685,11 +3709,11 @@ msgstr ""
 msgid "Service name (only for “Another service”)"
 msgstr ""
 
-#: core/settings.php:549
+#: core/settings.php:550
 msgid "Service packages"
 msgstr ""
 
-#: core/settings.php:302 core/settings.php:1211 core/settings.php:1225
+#: core/settings.php:303 core/settings.php:1224 core/settings.php:1238
 msgid "Services"
 msgstr ""
 
@@ -3713,6 +3737,10 @@ msgstr ""
 msgid "Shape"
 msgstr ""
 
+#: src/bindings/index.js:228
+msgid "Shared text"
+msgstr ""
+
 #: core/icons-api.php:33
 msgid "Shield with a check mark"
 msgstr ""
@@ -3725,7 +3753,7 @@ msgstr ""
 msgid "Short answer — 1–2 sentences"
 msgstr ""
 
-#: core/settings.php:312
+#: core/settings.php:313
 msgid "Short description"
 msgstr ""
 
@@ -3797,7 +3825,7 @@ msgstr ""
 msgid "Show the reviews on the site (where the “Rewio reviews” block is)"
 msgstr ""
 
-#: core/settings.php:198
+#: core/settings.php:199
 msgid "Show this block"
 msgstr ""
 
@@ -3809,15 +3837,15 @@ msgstr ""
 msgid "Shown"
 msgstr ""
 
-#: core/settings.php:257
+#: core/settings.php:258
 msgid "Shown in a rounded frame next to the text, without darkening."
 msgstr ""
 
-#: core/settings.php:118
+#: core/settings.php:119
 msgid "Shown in the call-back window and in the “Contacts” block. Empty field — no button."
 msgstr ""
 
-#: core/settings.php:113
+#: core/settings.php:114
 msgid "Shown in the top bar, on the first screen, in “Contacts” and in the footer. Empty — not shown."
 msgstr ""
 
@@ -3833,7 +3861,7 @@ msgstr ""
 msgid "Shown on the page card in “Good to know” and in search. Empty — the page title and first paragraph."
 msgstr ""
 
-#: core/settings.php:167
+#: core/settings.php:168
 msgid "Shown on the “Contacts” page and in the footer. Empty fields are not shown."
 msgstr ""
 
@@ -3862,7 +3890,7 @@ msgstr ""
 msgid "Site name with a link to the review"
 msgstr ""
 
-#: core/settings.php:1256
+#: core/settings.php:1269
 msgid "Site settings"
 msgstr ""
 
@@ -3980,11 +4008,11 @@ msgstr ""
 msgid "Switched to automatic prices:"
 msgstr ""
 
-#: core/settings.php:960
+#: core/settings.php:961
 msgid "TIN "
 msgstr ""
 
-#: core/settings.php:176
+#: core/settings.php:177
 msgid "TIN (INN)"
 msgstr ""
 
@@ -4004,7 +4032,7 @@ msgstr ""
 msgid "Templates are a sample under 152-FZ; check them for your business before publishing (better with a lawyer)."
 msgstr ""
 
-#: src/catalog/types.js:173 blocks/home/home.php:84 core/settings.php:236 core/settings.php:354 core/settings.php:431
+#: src/catalog/types.js:173 blocks/home/home.php:84 core/settings.php:237 core/settings.php:355 core/settings.php:432
 msgid "Text"
 msgstr ""
 
@@ -4020,23 +4048,23 @@ msgstr ""
 msgid "Text above the reviews"
 msgstr ""
 
-#: core/settings.php:278
+#: core/settings.php:279
 msgid "Text and the call button first, the photo below (recommended)"
 msgstr ""
 
-#: core/settings.php:450
+#: core/settings.php:451
 msgid "Text next to the reviews"
 msgstr ""
 
-#: core/settings.php:247
+#: core/settings.php:248
 msgid "Text of the “what to do” link"
 msgstr ""
 
-#: places/places.php:38 core/settings.php:149 core/settings.php:226
+#: places/places.php:38 core/settings.php:150 core/settings.php:227
 msgid "Text under the title"
 msgstr ""
 
-#: core/settings.php:1243
+#: core/settings.php:1256
 msgid "Texts and items of the home page blocks. Items can be dragged by ⋮⋮, removed with the cross and added with the button under the list. Empty items are not saved.<br>"
 msgstr ""
 
@@ -4052,7 +4080,7 @@ msgstr ""
 msgid "The API key is not set."
 msgstr ""
 
-#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:216 admin/convert.php:558
+#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:229 admin/convert.php:558
 msgid "The JavaScript build is missing. Run npm run build."
 msgstr ""
 
@@ -4084,7 +4112,7 @@ msgstr ""
 msgid "The counter, goals, cleaning the address of UTM tags, the cookie banner."
 msgstr ""
 
-#: core/settings.php:85
+#: core/settings.php:86
 msgid "The first address is shown in the top bar of the site. Every address gets a tab with a map on the home page."
 msgstr ""
 
@@ -4116,7 +4144,7 @@ msgstr ""
 msgid "The name is empty."
 msgstr ""
 
-#: core/settings.php:386
+#: core/settings.php:387
 msgid "The packages themselves, their contents and prices — in “Memorial → Prices”."
 msgstr ""
 
@@ -4154,6 +4182,10 @@ msgstr ""
 msgid "The section of works with photos and prices, the works manager, the works blocks."
 msgstr ""
 
+#: src/bindings/index.js:199
+msgid "The shared texts were not saved."
+msgstr ""
+
 #: reviews/rewio.php:989
 msgid "The site did not respond"
 msgstr ""
@@ -4162,7 +4194,13 @@ msgstr ""
 msgid "The table on the cremation page — the “Cremation” block. The total is counted automatically; in the text of other pages it is put with the “Site value” button → “Price”."
 msgstr ""
 
-#: core/settings.php:373
+#. translators: %d: number of characters.
+#: blocks/bindings.php:206
+#, php-format
+msgid "The text is too long: up to %d characters."
+msgstr ""
+
+#: core/settings.php:374
 msgid "The tiles are the sub-items of the “Funeral goods” menu item (Appearance → Menus): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category."
 msgstr ""
 
@@ -4190,7 +4228,7 @@ msgstr ""
 msgid "The “Cremation” card next to the funeral packages (where the “Funeral packages” block is; on other pages — the “Cremation card” setting of the block)"
 msgstr ""
 
-#: core/settings.php:187
+#: core/settings.php:188
 msgid "The “more than N years” on the site is counted from it."
 msgstr ""
 
@@ -4218,8 +4256,20 @@ msgstr ""
 msgid "There is no such question on the site yet. Call or leave your number — we will answer."
 msgstr ""
 
+#: blocks/bindings.php:382
+msgid "These settings were changed elsewhere while the page was open (in another tab or by another person). Reload the page to see the current texts, then make the change again."
+msgstr ""
+
+#: admin/settings-form.php:206
+msgid "These settings were changed elsewhere while this screen was open (on a page of the site, in another tab or by another person). Reload the screen — your changes here are not saved."
+msgstr ""
+
 #: content/content.php:164
 msgid "Third step"
+msgstr ""
+
+#: blocks/bindings.php:221
+msgid "This is not an email address."
 msgstr ""
 
 #: blocks/content/content-blocks.php:276 blocks/content/content-blocks.php:406
@@ -4228,6 +4278,14 @@ msgstr ""
 
 #: admin/abilities.php:435
 msgid "This part of the site is switched off in Memorial → Features."
+msgstr ""
+
+#: src/bindings/index.js:232
+msgid "This text is stored once in the Memorial settings: a change here changes it on every page that shows it, after the page is saved."
+msgstr ""
+
+#: blocks/bindings.php:370 blocks/bindings.php:389
+msgid "This text no longer exists in the settings (the row was removed?)."
 msgstr ""
 
 #: src/inline-value/index.js:57
@@ -4266,23 +4324,23 @@ msgstr ""
 msgid "Times"
 msgstr ""
 
-#: core/settings.php:270
+#: core/settings.php:271
 msgid "Tint colour (not used in the light theme 4.0)"
 msgstr ""
 
-#: core/settings.php:284
+#: core/settings.php:285
 msgid "Tint strength, % (not used in the light theme 4.0)"
 msgstr ""
 
-#: admin/abilities.php:759 places/places.php:34 src/catalog/works.js:100 src/catalog/products.js:283 src/convert/index.js:228 core/settings.php:298
+#: admin/abilities.php:759 places/places.php:34 src/catalog/works.js:100 src/catalog/products.js:283 src/convert/index.js:228 core/settings.php:299
 msgid "Title"
 msgstr ""
 
-#: core/settings.php:218
+#: core/settings.php:219
 msgid "Title — first line"
 msgstr ""
 
-#: core/settings.php:222
+#: core/settings.php:223
 msgid "Title — second line (italic, accent colour)"
 msgstr ""
 
@@ -4394,7 +4452,7 @@ msgstr ""
 msgid "Unknown product type."
 msgstr ""
 
-#: admin/settings-form.php:149 admin/settings-form.php:195
+#: admin/settings-form.php:149 admin/settings-form.php:201
 msgid "Unknown settings page."
 msgstr ""
 
@@ -4438,7 +4496,7 @@ msgstr ""
 msgid "Usual 4:3"
 msgstr ""
 
-#: core/settings.php:160
+#: core/settings.php:161
 msgid "Usually leave it empty — the MAX profile link is used. If you know a link that starts the installed app right away, enter it."
 msgstr ""
 
@@ -4478,7 +4536,7 @@ msgstr ""
 msgid "We make it ourselves (photo + text)"
 msgstr ""
 
-#: core/settings.php:112 core/settings.php:527
+#: core/settings.php:113 core/settings.php:528
 msgid "We take calls round the clock"
 msgstr ""
 
@@ -4514,7 +4572,7 @@ msgstr ""
 msgid "What the customers wanted and what was done…"
 msgstr ""
 
-#: core/settings.php:248 core/settings.php:581 core/settings.php:652
+#: core/settings.php:249 core/settings.php:582 core/settings.php:653
 msgid "What to do when someone dies"
 msgstr ""
 
@@ -4542,7 +4600,7 @@ msgstr ""
 msgid "What: empty — name and details; адрес (address), почта (email), телефон (phone), сайт (site)"
 msgstr ""
 
-#: core/settings.php:133
+#: core/settings.php:134
 msgid "WhatsApp — number"
 msgstr ""
 
@@ -4570,7 +4628,7 @@ msgstr ""
 msgid "Where the price comes from"
 msgstr ""
 
-#: core/settings.php:153
+#: core/settings.php:154
 msgid "Where to send requests"
 msgstr ""
 
@@ -4594,7 +4652,7 @@ msgstr ""
 msgid "Who to call back new call back requests leads"
 msgstr ""
 
-#: core/settings.php:547 core/settings.php:711
+#: core/settings.php:548 core/settings.php:712
 msgid "Why people trust us"
 msgstr ""
 
@@ -4612,7 +4670,7 @@ msgstr ""
 msgid "Will stay as shortcodes (inside other text): %s. Edit them in the post."
 msgstr ""
 
-#: core/settings.php:145
+#: core/settings.php:146
 msgid "Window title"
 msgstr ""
 
@@ -4690,7 +4748,7 @@ msgstr ""
 msgid "Year"
 msgstr ""
 
-#: core/settings.php:186
+#: core/settings.php:187
 msgid "Year founded"
 msgstr ""
 
@@ -5789,7 +5847,7 @@ msgstr ""
 msgid "footer"
 msgstr ""
 
-#: core/settings.php:159
+#: core/settings.php:160
 msgid "for example max://…"
 msgstr ""
 
@@ -5805,7 +5863,7 @@ msgstr ""
 msgid "for example: an employee’s surname"
 msgstr ""
 
-#: core/settings.php:322
+#: core/settings.php:323
 msgid "for example: from 58,000 ₽"
 msgstr ""
 
@@ -5883,7 +5941,7 @@ msgstr ""
 msgid "in SEO"
 msgstr ""
 
-#: core/settings.php:610
+#: core/settings.php:611
 msgid "items with ticks"
 msgstr ""
 
@@ -5913,7 +5971,7 @@ msgstr ""
 msgid "memorial meal"
 msgstr ""
 
-#: core/settings.php:129
+#: core/settings.php:130
 msgid "memorialbel or https://t.me/…"
 msgstr ""
 
@@ -6105,7 +6163,7 @@ msgstr ""
 msgid "search statistics queries"
 msgstr ""
 
-#: core/settings.php:600
+#: core/settings.php:601
 msgid "second line of the title"
 msgstr ""
 
@@ -6149,7 +6207,7 @@ msgstr ""
 msgid "symbol"
 msgstr ""
 
-#: core/settings.php:606
+#: core/settings.php:607
 msgid "text under the title"
 msgstr ""
 
@@ -6193,7 +6251,7 @@ msgstr ""
 msgid "tiles"
 msgstr ""
 
-#: core/settings.php:603
+#: core/settings.php:604
 msgid "title"
 msgstr ""
 
@@ -6307,11 +6365,11 @@ msgstr ""
 msgid "“%s” is back as it was before converting."
 msgstr ""
 
-#: core/settings.php:421
+#: core/settings.php:422
 msgid "“About the company” block"
 msgstr ""
 
-#: core/settings.php:613
+#: core/settings.php:614
 msgid "“About the company” text"
 msgstr ""
 
@@ -6331,7 +6389,7 @@ msgstr ""
 msgid "“Call request”,"
 msgstr ""
 
-#: core/settings.php:140
+#: core/settings.php:141
 msgid "“Call” button on a computer"
 msgstr ""
 
@@ -6339,7 +6397,7 @@ msgstr ""
 msgid "“Call”, “Write” and the addresses with directions (Memorial → Contacts)."
 msgstr ""
 
-#: core/settings.php:372
+#: core/settings.php:373
 msgid "“Catalog” block"
 msgstr ""
 
@@ -6347,7 +6405,7 @@ msgstr ""
 msgid "“Cemeteries of Belgorod and the district”"
 msgstr ""
 
-#: core/settings.php:462
+#: core/settings.php:463
 msgid "“Contacts” block"
 msgstr ""
 
@@ -6383,7 +6441,7 @@ msgstr ""
 msgid "“Often searched” words, comma separated (empty — from search statistics)"
 msgstr ""
 
-#: core/settings.php:291
+#: core/settings.php:292
 msgid "“Our services” block"
 msgstr ""
 
@@ -6395,11 +6453,11 @@ msgstr ""
 msgid "“Pre-need funeral contract”"
 msgstr ""
 
-#: core/settings.php:440
+#: core/settings.php:441
 msgid "“Reviews” block (from Yandex Maps)"
 msgstr ""
 
-#: core/settings.php:385
+#: core/settings.php:386
 msgid "“Service packages” block"
 msgstr ""
 
@@ -6407,11 +6465,11 @@ msgstr ""
 msgid "“What people search for on the site” and the automatic “Frequent searches”."
 msgstr ""
 
-#: core/settings.php:242
+#: core/settings.php:243
 msgid "“What to do” link under the buttons"
 msgstr ""
 
-#: core/settings.php:334
+#: core/settings.php:335
 msgid "“Why people trust us” block"
 msgstr ""
 
@@ -6439,7 +6497,7 @@ msgstr ""
 msgid "→ type"
 msgstr ""
 
-#: core/settings.php:1350
+#: core/settings.php:1363
 msgid "✎ Texts and contacts"
 msgstr ""
 

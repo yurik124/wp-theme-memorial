@@ -150,13 +150,16 @@ function memorial_plugin_settings_page_data( $opt ) {
 	}
 	$p = $pages[ $opt ];
 	return array(
-		'option' => $opt,
-		'title'  => (string) ( $p['h1'] ?? $p['title'] ),
-		'intro'  => wp_kses_post( (string) ( $p['intro'] ?? '' ) ),
+		'option'  => $opt,
+		'title'   => (string) ( $p['h1'] ?? $p['title'] ),
+		'intro'   => wp_kses_post( (string) ( $p['intro'] ?? '' ) ),
 		// The extra panels (tabs, Rewio status) are printed by PHP next to the app (with their own scripts) — see the container.
-		'extra'  => has_action( 'memorial_plugin_admin_tabs' ) || has_action( 'memorial_plugin_admin_after_intro' ),
-		'fields' => memorial_plugin_settings_describe( call_user_func( $p['schema'] ) ),
-		'value'  => memorial_plugin_settings( $opt ),
+		'extra'   => has_action( 'memorial_plugin_admin_tabs' ) || has_action( 'memorial_plugin_admin_after_intro' ),
+		'fields'  => memorial_plugin_settings_describe( call_user_func( $p['schema'] ) ),
+		'value'   => memorial_plugin_settings( $opt ),
+		// Grows with every change of the option: a save with an older version is refused (409), so a text
+		// changed meanwhile on a page (blocks/bindings.php) or in another tab is not overwritten.
+		'version' => function_exists( 'memorial_plugin_texts_version' ) ? memorial_plugin_texts_version( $opt ) : 0,
 	);
 }
 
@@ -183,9 +186,12 @@ function memorial_plugin_settings_rest() {
 					return current_user_can( 'manage_options' );
 				},
 				'args'                => array(
-					'value' => array(
+					'value'   => array(
 						'type'     => 'object',
 						'required' => true,
+					),
+					'version' => array(
+						'type' => 'integer',
 					),
 				),
 				'callback'            => static function ( WP_REST_Request $request ) {
@@ -193,6 +199,13 @@ function memorial_plugin_settings_rest() {
 					$pages = memorial_plugin_admin_pages();
 					if ( ! isset( $pages[ $opt ] ) ) {
 						return new WP_Error( 'memorial_plugin_unknown_settings', __( 'Unknown settings page.', 'memorial-plugin' ), array( 'status' => 404 ) );
+					}
+					if ( null !== $request['version'] && function_exists( 'memorial_plugin_texts_version' ) && (int) $request['version'] !== memorial_plugin_texts_version( $opt ) ) {
+						return new WP_Error(
+							'memorial_plugin_settings_conflict',
+							__( 'These settings were changed elsewhere while this screen was open (on a page of the site, in another tab or by another person). Reload the screen — your changes here are not saved.', 'memorial-plugin' ),
+							array( 'status' => 409 )
+						);
 					}
 					$value = memorial_plugin_sanitize( call_user_func( $pages[ $opt ]['schema'] ), (array) $request['value'] );
 					// Keys that the page does not show (for example, the old home page layout kept for rollback) stay as they were.
