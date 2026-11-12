@@ -127,6 +127,48 @@ add_action(
 	}
 );
 add_action( 'wp_enqueue_scripts', 'memorial_plugin_register_front_assets', 21 );
+
+/**
+ * Behaviour of the plugin markup on the site (assets/js/front.js): the “Call me back” window and the
+ * phone links are on every page (header, footer, floating blocks), so the script is loaded everywhere.
+ */
+function memorial_plugin_front_script() {
+	$js = memorial_plugin_asset( '/assets/js/front.js' );
+	wp_enqueue_script(
+		'memorial-plugin-front',
+		MEMORIAL_PLUGIN_URL . $js,
+		array(),
+		(string) filemtime( MEMORIAL_PLUGIN_DIR . $js ),
+		array(
+			'strategy'  => 'defer',
+			'in_footer' => true,
+		)
+	);
+	wp_add_inline_script( 'memorial-plugin-front', 'window.memorialPluginFrontI18n = ' . wp_json_encode( memorial_plugin_front_i18n() ) . ';', 'before' );
+}
+add_action( 'wp_enqueue_scripts', 'memorial_plugin_front_script', 21 );
+
+/**
+ * Texts of assets/js/front.js (the script has no dependency on wp-i18n).
+ *
+ * @return array<string,string>
+ */
+function memorial_plugin_front_i18n() {
+	return array(
+		'fullNumber'   => __( 'Enter the full number: +7 and 10 digits.', 'memorial-plugin' ),
+		'consent'      => __( 'Tick the consent to the data processing.', 'memorial-plugin' ),
+		'notSent'      => __( 'Could not send.', 'memorial-plugin' ),
+		'callUs'       => __( 'Please call us.', 'memorial-plugin' ),
+		'maxFailed'    => __( 'Could not open MAX. Leave your number — we will call you back.', 'memorial-plugin' ),
+		'maxBack'      => __( 'Could not write in MAX? Leave your number — we will call you back.', 'memorial-plugin' ),
+		'reviewsFrame' => __( 'Reviews on Yandex Maps', 'memorial-plugin' ),
+		'mapFrame'     => __( 'Directions map', 'memorial-plugin' ),
+		'scrollLeft'   => __( 'Scroll left', 'memorial-plugin' ),
+		'scrollRight'  => __( 'Scroll right', 'memorial-plugin' ),
+		/* translators: 1: number of the photo, 2: number of photos */
+		'photoOf'      => __( 'photo %1$d of %2$d', 'memorial-plugin' ),
+	);
+}
 add_action(
 	'enqueue_block_assets',
 	static function () {

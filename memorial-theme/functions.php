@@ -99,18 +99,6 @@ function memorial_theme_js_i18n() {
 		/* translators: %s: menu item */
 		'expand'       => __( 'Expand: %s', 'memorial-theme' ),
 		'submenu'      => __( 'submenu', 'memorial-theme' ),
-		'fullNumber'   => __( 'Enter the full number: +7 and 10 digits.', 'memorial-theme' ),
-		'consent'      => __( 'Tick the consent to the data processing.', 'memorial-theme' ),
-		'notSent'      => __( 'Could not send.', 'memorial-theme' ),
-		'callUs'       => __( 'Please call us.', 'memorial-theme' ),
-		'maxFailed'    => __( 'Could not open MAX. Leave your number — we will call you back.', 'memorial-theme' ),
-		'maxBack'      => __( 'Could not write in MAX? Leave your number — we will call you back.', 'memorial-theme' ),
-		'reviewsFrame' => __( 'Reviews on Yandex Maps', 'memorial-theme' ),
-		'mapFrame'     => __( 'Directions map', 'memorial-theme' ),
-		'scrollLeft'   => __( 'Scroll left', 'memorial-theme' ),
-		'scrollRight'  => __( 'Scroll right', 'memorial-theme' ),
-		/* translators: 1: number of the photo, 2: number of photos */
-		'photoOf'      => __( 'photo %1$d of %2$d', 'memorial-theme' ),
 	);
 }
 
