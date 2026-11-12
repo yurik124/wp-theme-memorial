@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/cards",
+    "title": "Section cards",
+    "category": "memorial-catalog",
+    "icon": "index-card",
+    "description": "Cards of the sections of this page (its sub-items in the menu or child pages), of another page or of chosen pages — with photo, product count and starting price.",
+    "keywords": [
+        "cards",
+        "pages",
+        "mem_cards",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "parent": {
+            "type": "integer",
+            "default": 0
+        },
+        "pages": {
+            "type": "string",
+            "default": ""
+        },
+        "photo": {
+            "type": "boolean",
+            "default": true
+        },
+        "number": {
+            "type": "boolean",
+            "default": true
+        },
+        "prices": {
+            "type": "boolean",
+            "default": true
+        },
+        "caption": {
+            "type": "boolean",
+            "default": true
+        },
+        "arrow": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": false
+    },
+    "example": {
+        "attributes": {
+            "parent": 0,
+            "pages": "",
+            "photo": true,
+            "number": true,
+            "prices": true,
+            "caption": true,
+            "arrow": true
+        },
+        "viewportWidth": 1000
+    }
+}

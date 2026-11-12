@@ -1,0 +1,76 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/catalog",
+    "title": "Catalog: products of a section",
+    "category": "memorial-catalog",
+    "icon": "grid-view",
+    "description": "Products of a catalog section with section links and sorting. The section is chosen in the block settings; by default — the section of this page.",
+    "keywords": [
+        "catalog",
+        "products",
+        "mem_catalog",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "cat": {
+            "type": "string",
+            "default": ""
+        },
+        "nav": {
+            "type": "boolean",
+            "default": true
+        },
+        "sort": {
+            "type": "boolean",
+            "default": true
+        },
+        "heading": {
+            "type": "string",
+            "default": "h2",
+            "enum": [
+                "h2",
+                "h3"
+            ]
+        },
+        "show": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": false
+    },
+    "example": {
+        "attributes": {
+            "cat": "",
+            "nav": true,
+            "sort": true,
+            "heading": "h2",
+            "show": ""
+        },
+        "viewportWidth": 1000
+    }
+}

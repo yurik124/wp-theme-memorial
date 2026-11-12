@@ -14,11 +14,22 @@ defined( 'ABSPATH' ) || exit;
 
 define( 'MEMORIAL_THEME_VER', '5.0.1' );
 
-/* Translations of the theme (languages/memorial-theme-<locale>.mo / .l10n.php) — before anything translatable */
+/*
+ * Translations of the theme (languages/memorial-theme-<locale>.mo / .l10n.php) — on init, before anything
+ * translatable: by then the current user is known, so the editor (REST requests with _locale=user) gets the
+ * language of the user, not of the site. Nothing of the theme is translated earlier (the menu locations
+ * are registered on init too).
+ */
 add_action(
-	'after_setup_theme',
+	'init',
 	function () {
 		load_theme_textdomain( 'memorial-theme', get_template_directory() . '/languages' );
+		register_nav_menus(
+			array(
+				'primary' => __( 'Main menu', 'memorial-theme' ),
+				'footer'  => __( 'Footer menu', 'memorial-theme' ),
+			)
+		);
 	},
 	0
 );
@@ -36,13 +47,6 @@ add_action(
 			)
 		);
 		add_theme_support( 'responsive-embeds' );
-		// классические меню — источник для колонок меню в подвале (блок плагина) до этапа 3.
-		register_nav_menus(
-			array(
-				'primary' => __( 'Main menu', 'memorial-theme' ),
-				'footer'  => __( 'Footer menu', 'memorial-theme' ),
-			)
-		);
 		add_theme_support( 'editor-styles' );
 		// В редакторе страница выглядит как на сайте: общие стили темы (шапка, подвал, разделы) и оформление текста.
 		add_editor_style( array( 'assets/css/main.css', 'assets/css/content.css', 'assets/css/editor.css' ) );

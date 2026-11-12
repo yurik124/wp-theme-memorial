@@ -217,8 +217,8 @@ function memorial_plugin_home_blocks_list() {
 function memorial_plugin_home_blocks_register() {
 	foreach ( memorial_plugin_home_blocks_list() as $slug => $def ) {
 		$render = $def['render'];
-		register_block_type(
-			'memorial-plugin/' . $slug,
+		memorial_plugin_register_block(
+			$slug,
 			array(
 				'api_version'     => 3,
 				'title'           => $def['title'],

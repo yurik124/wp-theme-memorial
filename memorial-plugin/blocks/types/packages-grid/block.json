@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/packages-grid",
+    "title": "Funeral packages grid",
+    "category": "memorial-catalog",
+    "icon": "money-alt",
+    "description": "Funeral package cards as on the home page (Memorial → Prices).",
+    "keywords": [
+        "packages",
+        "prices",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1000
+    }
+}

@@ -57,8 +57,8 @@ function memorial_plugin_floating_register() {
 			continue;
 		}
 		$render = $def['render'];
-		register_block_type(
-			'memorial-plugin/' . $slug,
+		memorial_plugin_register_block(
+			$slug,
 			array(
 				'api_version'     => 3,
 				'title'           => $def['title'],

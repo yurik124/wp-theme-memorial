@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/category-photos",
+    "title": "Product photos from the catalog",
+    "category": "memorial-catalog",
+    "icon": "format-gallery",
+    "description": "Photo grid of products from catalog sections.",
+    "keywords": [
+        "photos",
+        "catalog",
+        "mem_cat_photos",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "cat": {
+            "type": "string",
+            "default": ""
+        },
+        "count": {
+            "type": "integer",
+            "default": 6
+        },
+        "random": {
+            "type": "boolean",
+            "default": false
+        },
+        "prices": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": false
+    },
+    "example": {
+        "attributes": {
+            "cat": "",
+            "count": 6,
+            "random": false,
+            "prices": true
+        },
+        "viewportWidth": 1000
+    }
+}

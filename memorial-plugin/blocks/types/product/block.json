@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/product",
+    "title": "Product card",
+    "category": "memorial-pages",
+    "icon": "products",
+    "description": "Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings.",
+    "keywords": [
+        "product",
+        "catalog",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "product": {
+            "type": "integer",
+            "default": 0
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {
+            "product": 0
+        },
+        "viewportWidth": 1200
+    }
+}

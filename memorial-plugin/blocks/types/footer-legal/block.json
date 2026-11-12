@@ -1,0 +1,25 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/footer-legal",
+    "title": "Footer: copyright and documents",
+    "category": "memorial-layout",
+    "icon": "media-document",
+    "description": "Copyright years, company details, privacy and cookie policy links.",
+    "keywords": [
+        "footer",
+        "copyright",
+        "privacy",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

@@ -1,0 +1,81 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/link-button",
+    "title": "Link button",
+    "category": "memorial-design",
+    "icon": "button",
+    "description": "A button in the site style (green, light or outlined) that leads to a page of the site or to any address. The text and the page are set in the block settings on the right.",
+    "keywords": [
+        "button",
+        "link",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "text": {
+            "type": "string",
+            "default": ""
+        },
+        "page": {
+            "type": "integer",
+            "default": 0
+        },
+        "url": {
+            "type": "string",
+            "default": ""
+        },
+        "variant": {
+            "type": "string",
+            "default": "light",
+            "enum": [
+                "gold",
+                "light",
+                "line"
+            ]
+        },
+        "large": {
+            "type": "boolean",
+            "default": true
+        },
+        "arrow": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": true
+    },
+    "example": {
+        "attributes": {
+            "text": "",
+            "page": 0,
+            "url": "",
+            "variant": "light",
+            "large": true,
+            "arrow": true
+        },
+        "viewportWidth": 400
+    }
+}

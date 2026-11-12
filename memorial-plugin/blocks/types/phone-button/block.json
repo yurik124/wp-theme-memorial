@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/phone-button",
+    "title": "Phone button",
+    "category": "memorial-contacts",
+    "icon": "phone",
+    "description": "Button that calls the main phone number (Memorial → Contacts).",
+    "keywords": [
+        "phone",
+        "call",
+        "button",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "variant": {
+            "type": "string",
+            "default": "gold",
+            "enum": [
+                "gold",
+                "light",
+                "line"
+            ]
+        },
+        "large": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": true
+    },
+    "example": {
+        "attributes": {
+            "variant": "gold",
+            "large": true
+        },
+        "viewportWidth": 400
+    }
+}

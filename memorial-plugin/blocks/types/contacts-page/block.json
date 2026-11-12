@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/contacts-page",
+    "title": "Contacts: the whole page",
+    "category": "memorial-pages",
+    "icon": "id",
+    "description": "Phones, messengers, addresses with routes, maps and company details.",
+    "keywords": [
+        "contacts",
+        "map",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

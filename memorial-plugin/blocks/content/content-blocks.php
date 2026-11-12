@@ -637,8 +637,8 @@ function memorial_plugin_content_blocks_register() {
 			continue;
 		}
 		$attributes = memorial_plugin_block_attributes( 'memorial-plugin/' . $slug, $def['attrs'] );
-		register_block_type(
-			'memorial-plugin/' . $slug,
+		memorial_plugin_register_block(
+			$slug,
 			array(
 				'api_version'     => 3,
 				'title'           => $def['title'],

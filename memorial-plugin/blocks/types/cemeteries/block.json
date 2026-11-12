@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/cemeteries",
+    "title": "Cemeteries",
+    "category": "memorial-services",
+    "icon": "location-alt",
+    "description": "Cemeteries with addresses, hours and burial status (Memorial → Cemeteries).",
+    "keywords": [
+        "cemeteries",
+        "places",
+        "mem_cemeteries",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "status": {
+            "type": "string",
+            "default": ""
+        },
+        "filter": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": true
+    },
+    "example": {
+        "attributes": {
+            "status": "",
+            "filter": true
+        },
+        "viewportWidth": 1000
+    }
+}

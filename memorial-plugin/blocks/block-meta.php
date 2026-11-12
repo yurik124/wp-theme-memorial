@@ -397,3 +397,40 @@ function memorial_plugin_block_source( $block, $post ) {
 		'items' => array_values( array_filter( $items, 'strlen' ) ),
 	);
 }
+
+/**
+ * Register a plugin block from its block.json (blocks/types/<slug>/block.json).
+ *
+ * The block.json files hold everything static — name, title, description, category, icon, keywords,
+ * attributes, supports, example — and WordPress translates the title, description and keywords from
+ * them. They are made from the PHP definitions of the blocks by tools/block-json.php, and CI checks that
+ * they are up to date (php tools/block-json.php check). At run time PHP adds only what block.json cannot
+ * carry: the render function and the translated labels of the settings (and lists built from the data
+ * of the site, like the set of icons).
+ *
+ * Without the file (a block added in PHP but not generated yet) the block is registered from PHP as before.
+ *
+ * @param string $slug Block slug without the namespace.
+ * @param array  $args Full registration arguments (PHP definition).
+ * @return WP_Block_Type|false
+ */
+function memorial_plugin_register_block( $slug, $args ) {
+	$dir = MEMORIAL_PLUGIN_DIR . '/blocks/types/' . $slug;
+	if ( defined( 'MEMORIAL_PLUGIN_BLOCK_JSON_BUILD' ) || ! is_readable( $dir . '/block.json' ) ) {
+		return register_block_type( 'memorial-plugin/' . $slug, $args );
+	}
+	$runtime = array_intersect_key( $args, array_flip( array( 'render_callback', 'attributes' ) ) );
+	return register_block_type( $dir, $runtime );
+}
+
+/**
+ * One manifest for all block.json files (WordPress 6.7+): their metadata is read from one PHP file
+ * instead of fifty JSON files on every request.
+ */
+function memorial_plugin_block_metadata_collection() {
+	$manifest = MEMORIAL_PLUGIN_DIR . '/blocks/types/blocks-manifest.php';
+	if ( function_exists( 'wp_register_block_metadata_collection' ) && is_readable( $manifest ) ) {
+		wp_register_block_metadata_collection( MEMORIAL_PLUGIN_DIR . '/blocks/types', $manifest );
+	}
+}
+add_action( 'init', 'memorial_plugin_block_metadata_collection', 1 );

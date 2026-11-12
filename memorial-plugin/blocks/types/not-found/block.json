@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/not-found",
+    "title": "Message “Page not found”",
+    "category": "memorial-pages",
+    "icon": "warning",
+    "description": "404 message with a call button and catalog sections.",
+    "keywords": [
+        "404",
+        "not found",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

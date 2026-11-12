@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/services",
+    "title": "Our services",
+    "category": "memorial-services",
+    "icon": "screenoptions",
+    "description": "Service cards with photos and starting prices (Memorial → Home page → Services).",
+    "keywords": [
+        "services",
+        "mem_services",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "more": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": false
+    },
+    "example": {
+        "attributes": {
+            "more": ""
+        },
+        "viewportWidth": 1000
+    }
+}

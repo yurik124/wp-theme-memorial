@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/page-products",
+    "title": "Products of the page (for the template)",
+    "category": "memorial-pages",
+    "icon": "grid-view",
+    "description": "Catalog tiles or product grid for pages set to show products, with the page text above and below.",
+    "keywords": [
+        "products",
+        "catalog",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

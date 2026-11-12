@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/footer-contacts",
+    "title": "Footer: addresses and phones",
+    "category": "memorial-layout",
+    "icon": "phone",
+    "description": "Address and phone columns from Memorial → Contacts.",
+    "keywords": [
+        "footer",
+        "contacts",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

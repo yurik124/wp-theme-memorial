@@ -167,6 +167,18 @@ function memorial_i18n_extract( $dir, $domain, $project ) {
 					memorial_i18n_js( file_get_contents( $path ), $rel, $domain, $add );
 				}
 			}
+		} elseif ( str_ends_with( $rel, '/block.json' ) ) {
+			// As WordPress translates block.json: title, description, keywords with their contexts.
+			$block = json_decode( file_get_contents( $path ), true );
+			if ( ! empty( $block['title'] ) ) {
+				$add( $block['title'], 'block title', null, $rel, null );
+			}
+			if ( ! empty( $block['description'] ) ) {
+				$add( $block['description'], 'block description', null, $rel, null );
+			}
+			foreach ( (array) ( $block['keywords'] ?? [] ) as $keyword ) {
+				$add( $keyword, 'block keyword', null, $rel, null );
+			}
 		} elseif ( preg_match( '#^(theme\.json|styles/[^/]+\.json)$#', $rel ) ) {
 			memorial_i18n_theme_json( json_decode( file_get_contents( $path ), true ), $rel, $add );
 		}

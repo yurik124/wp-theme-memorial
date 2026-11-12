@@ -5895,3 +5895,719 @@ msgstr "Её цена из «Мемориал → Услуги»."
 
 msgid "The price or the number of models is counted from its products."
 msgstr "Цена или число моделей считаются по его товарам."
+
+msgctxt "block description"
+msgid "A button in the site style (green, light or outlined) that leads to a page of the site or to any address. The text and the page are set in the block settings on the right."
+msgstr "Кнопка в стиле сайта (зелёная, светлая или с рамкой), ведущая на страницу сайта или на любой адрес. Текст и страница задаются в настройках блока справа."
+
+msgctxt "block description"
+msgid "An icon of the site set (candle, cross, phone, clock…) in a round frame. The icon is chosen in the block settings."
+msgstr "Значок из набора сайта (свеча, крест, телефон, часы…) в круглой рамке. Значок выбирается в настройках блока."
+
+msgctxt "block description"
+msgid "Cards of the sections of this page (its sub-items in the menu or child pages), of another page or of chosen pages — with photo, product count and starting price."
+msgstr "Карточки разделов этой страницы (её подпункты в меню или дочерние страницы), другой страницы или выбранных страниц — с фото, числом товаров и ценой «от»."
+
+msgctxt "block description"
+msgid "One of the addresses with its opening hours and the night phone line, above the header. The address is chosen in the block settings."
+msgstr "Один из адресов с часами работы и ночной линией — над шапкой. Адрес выбирается в настройках блока."
+
+msgctxt "block description"
+msgid "Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings."
+msgstr "Фото, цена, характеристики, кнопки звонка и похожие товары: открытого товара (шаблон) или выбранного в настройках блока."
+
+msgctxt "block description"
+msgid "Products of a catalog section with section links and sorting. The section is chosen in the block settings; by default — the section of this page."
+msgstr "Товары раздела каталога со ссылками на подразделы и сортировкой. Раздел выбирается в настройках блока; по умолчанию — раздел этой страницы."
+
+msgctxt "block description"
+msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
+msgstr "Подразделы, сортировка и товары раздела каталога: открытого (шаблон) или выбранного в настройках блока."
+
+msgctxt "block description"
+msgid "The whole home page built from Memorial → Home page, as before the move to blocks. Today the home page is built from separate blocks."
+msgstr "Вся главная из «Мемориал → Главная страница», как до перехода на блоки. Сейчас главная собрана из отдельных блоков."
+
+msgctxt "block title"
+msgid "Bottom phone bar on mobiles"
+msgstr "Нижняя панель с телефоном на мобильных"
+
+msgctxt "block title"
+msgid "Catalog section tiles"
+msgstr "Плитки разделов каталога"
+
+msgctxt "block title"
+msgid "Catalog section with sorting"
+msgstr "Раздел каталога с сортировкой"
+
+msgctxt "block title"
+msgid "Catalog: products of a section"
+msgstr "Каталог: товары раздела"
+
+msgctxt "block title"
+msgid "Contacts: the whole page"
+msgstr "Контакты: вся страница"
+
+msgctxt "block title"
+msgid "Footer: menu in columns"
+msgstr "Подвал: меню колонками"
+
+msgctxt "block title"
+msgid "Home page: all sections (old layout)"
+msgstr "Главная: все разделы (старый вид)"
+
+msgctxt "block title"
+msgid "Icon in a circle"
+msgstr "Значок в круге"
+
+msgctxt "block title"
+msgid "Line above the header: address and hours"
+msgstr "Строка над шапкой: адрес и часы работы"
+
+msgctxt "block title"
+msgid "Line “Calls at night”"
+msgstr "Строка «Звонки ночью»"
+
+msgctxt "block title"
+msgid "Message “Page not found”"
+msgstr "Сообщение «Страница не найдена»"
+
+msgctxt "block title"
+msgid "Product card"
+msgstr "Карточка товара"
+
+msgctxt "block title"
+msgid "Product photos from the catalog"
+msgstr "Фото товаров из каталога"
+
+msgctxt "block title"
+msgid "Products of the page (for the template)"
+msgstr "Товары страницы (для шаблона)"
+
+msgctxt "block title"
+msgid "Tagline: years in business"
+msgstr "Подпись: годы работы"
+
+msgctxt "block description"
+msgid "404 message with a call button and catalog sections."
+msgstr "Сообщение 404 с кнопкой звонка и разделами каталога."
+
+msgctxt "block description"
+msgid "Address and phone columns from Memorial → Contacts."
+msgstr "Колонки адресов и телефонов из «Мемориал → Контакты»."
+
+msgctxt "block description"
+msgid "All phones, emails, messengers and addresses with hours (Memorial → Contacts)."
+msgstr "Все телефоны, почта, мессенджеры и адреса со временем работы («Мемориал → Контакты»)."
+
+msgctxt "block description"
+msgid "Article cards with search: child pages of this or another page, or chosen pages."
+msgstr "Карточки статей с поиском: дочерние страницы этой или другой страницы либо выбранные страницы."
+
+msgctxt "block description"
+msgid "Bottom bar on phones: Call and Message (MAX) or Call me back."
+msgstr "Нижняя панель на телефонах: «Позвонить» и «Написать» (MAX) или «Перезвоните мне»."
+
+msgctxt "block description"
+msgid "Button that calls the main phone number (Memorial → Contacts)."
+msgstr "Кнопка звонка на основной номер («Мемориал → Контакты»)."
+
+msgctxt "block description"
+msgid "Catalog sections as photo tiles (menu sub-items of the catalog page, or all sections)."
+msgstr "Разделы каталога плитками с фото (подпункты меню страницы каталога или все разделы)."
+
+msgctxt "block description"
+msgid "Catalog tiles or product grid for pages set to show products, with the page text above and below."
+msgstr "Плитки каталога или сетка товаров для страниц с показом товаров, с текстом страницы выше и ниже."
+
+msgctxt "block description"
+msgid "Cemeteries with addresses, hours and burial status (Memorial → Cemeteries)."
+msgstr "Кладбища с адресами, временем работы и возможностью захоронения («Мемориал → Кладбища»)."
+
+msgctxt "block description"
+msgid "Completed works with photos, plot sizes and prices: gallery, cards or photos only."
+msgstr "Выполненные работы с фото, размерами участка и ценами: галерея, карточки или только фото."
+
+msgctxt "block description"
+msgid "Cookie notice or consent request (Memorial → Analytics). Without it, Yandex Metrica in the “after consent” mode never loads."
+msgstr "Уведомление о cookie или запрос согласия («Мемориал → Аналитика»). Без него Яндекс Метрика в режиме «после согласия» не загрузится."
+
+msgctxt "block description"
+msgid "Copyright years, company details, privacy and cookie policy links."
+msgstr "Годы работы, реквизиты, ссылки на политику обработки данных и cookie."
+
+msgctxt "block description"
+msgid "Cremation price table (Memorial → Prices → Cremation)."
+msgstr "Таблица цен кремации («Мемориал → Цены → Кремация»)."
+
+msgctxt "block description"
+msgid "Footer menu: items with sub-items become columns, single items go to “Information”."
+msgstr "Меню подвала: пункты с подпунктами становятся колонками, одиночные — в «Информацию»."
+
+msgctxt "block description"
+msgid "Funeral package cards as on the home page (Memorial → Prices)."
+msgstr "Карточки пакетов похорон, как на главной («Мемориал → Цены»)."
+
+msgctxt "block description"
+msgid "Funeral package cards with prices (Memorial → Prices)."
+msgstr "Карточки пакетов похорон с ценами («Мемориал → Цены»)."
+
+msgctxt "block description"
+msgid "Halls for memorial meals with photos and an order button (Memorial → Halls)."
+msgstr "Залы для поминок с фото и кнопкой заказа («Мемориал → Залы»)."
+
+msgctxt "block description"
+msgid "Heading, text and call / message buttons with the site phone."
+msgstr "Заголовок, текст и кнопки звонка / сообщения с телефоном сайта."
+
+msgctxt "block description"
+msgid "Hidden window with the call back form; opens from “Call me back” buttons."
+msgstr "Скрытое окно с формой обратного звонка; открывается кнопками «Перезвоните мне»."
+
+msgctxt "block description"
+msgid "Laurel branch, divider, leaf or wreath drawn by the theme."
+msgstr "Ветвь лавра, разделитель, лист или венок, нарисованные темой."
+
+msgctxt "block description"
+msgid "Legal name, taxpayer and registration numbers (Memorial → Contacts)."
+msgstr "Наименование, ИНН и ОГРН (Мемориал → Контакты)."
+
+msgctxt "block description"
+msgid "List of sub-sections of a catalog section with links and starting prices."
+msgstr "Список подразделов раздела каталога со ссылками и ценами «от»."
+
+msgctxt "block description"
+msgid "Main phone number, “Call me back” button and the call icon for phones."
+msgstr "Основной номер, кнопка «Перезвоните мне» и значок звонка для телефонов."
+
+msgctxt "block description"
+msgid "Map for each address; loads on a click so the page stays fast."
+msgstr "Карта для каждого адреса; загружается по нажатию, чтобы страница оставалась быстрой."
+
+msgctxt "block description"
+msgid "Note about calls at night (Memorial → Contacts)."
+msgstr "Примечание о ночных звонках («Мемориал → Контакты»)."
+
+msgctxt "block description"
+msgid "Number with a caption in a laurel wreath; the number counts up when it scrolls into view."
+msgstr "Число с подписью в лавровом венке; число отсчитывается, когда появляется на экране."
+
+msgctxt "block description"
+msgid "Official Yandex Maps reviews widget; loads after cookie consent or on a click."
+msgstr "Официальный виджет отзывов Яндекс Карт; загружается после согласия на cookie или по нажатию."
+
+msgctxt "block description"
+msgid "Opening hours of the first address, or the night line when it is set (Memorial → Contacts)."
+msgstr "Часы работы первого адреса или ночная линия, если она указана (Мемориал → Контакты)."
+
+msgctxt "block description"
+msgid "Path to the current page; also adds BreadcrumbList structured data."
+msgstr "Путь к текущей странице; добавляет и разметку BreadcrumbList."
+
+msgctxt "block description"
+msgid "Phones, messengers, addresses with routes, maps and company details."
+msgstr "Телефоны, мессенджеры, адреса с маршрутами, карты и реквизиты."
+
+msgctxt "block description"
+msgid "Photo grid of products from catalog sections."
+msgstr "Сетка фото товаров из разделов каталога."
+
+msgctxt "block description"
+msgid "Questions from all pages (Details blocks) on one page, with search."
+msgstr "Вопросы со всех страниц (блоки «Подробности») на одной странице, с поиском."
+
+msgctxt "block description"
+msgid "Review widgets and links to review sites (Memorial → Reviews)."
+msgstr "Виджеты отзывов и ссылки на сервисы отзывов («Мемориал → Отзывы»)."
+
+msgctxt "block description"
+msgid "Reviews left on this site."
+msgstr "Отзывы, оставленные на этом сайте."
+
+msgctxt "block description"
+msgid "Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews)."
+msgstr "Отзывы с Яндекс Карт, загруженные через Rewio («Мемориал → Отзывы Rewio»)."
+
+msgctxt "block description"
+msgid "Service cards of the home page (Memorial → Home page → Services), full width."
+msgstr "Карточки услуг главной («Мемориал → Главная страница → Услуги»), на всю ширину."
+
+msgctxt "block description"
+msgid "Service cards with photos and starting prices (Memorial → Home page → Services)."
+msgstr "Карточки услуг с фото и ценами «от» («Мемориал → Главная страница → Услуги»)."
+
+msgctxt "block description"
+msgid "“Call”, “Write” and the addresses with directions (Memorial → Contacts)."
+msgstr "«Позвонить», «Написать» и адреса с маршрутом (Мемориал → Контакты)."
+
+msgctxt "block description"
+msgid "“Funeral company in business for over N years” — or the site tagline if the founding year is not set."
+msgstr "«Ритуальная компания, которая на рынке больше N лет» — или описание сайта, если год основания не задан."
+
+msgctxt "block description"
+msgid "“Leave a review” and “We are on Yandex Maps” buttons."
+msgstr "Кнопки «Оставить отзыв» и «Мы на Яндекс Картах»."
+
+msgctxt "block keyword"
+msgid "FAQ"
+msgstr "частые вопросы"
+
+msgctxt "block keyword"
+msgid "Yandex"
+msgstr "Яндекс"
+
+msgctxt "block keyword"
+msgid "address"
+msgstr "адрес"
+
+msgctxt "block keyword"
+msgid "book"
+msgstr "книга"
+
+msgctxt "block keyword"
+msgid "breadcrumbs"
+msgstr "хлебные крошки"
+
+msgctxt "block keyword"
+msgid "button"
+msgstr "кнопка"
+
+msgctxt "block keyword"
+msgid "call"
+msgstr "позвонить"
+
+msgctxt "block keyword"
+msgid "call back"
+msgstr "обратный звонок"
+
+msgctxt "block keyword"
+msgid "call to action"
+msgstr "призыв"
+
+msgctxt "block keyword"
+msgid "cards"
+msgstr "карточки"
+
+msgctxt "block keyword"
+msgid "catalog"
+msgstr "каталог"
+
+msgctxt "block keyword"
+msgid "categories"
+msgstr "разделы"
+
+msgctxt "block keyword"
+msgid "category"
+msgstr "раздел"
+
+msgctxt "block keyword"
+msgid "cemeteries"
+msgstr "кладбища"
+
+msgctxt "block keyword"
+msgid "company details"
+msgstr "реквизиты"
+
+msgctxt "block keyword"
+msgid "consent"
+msgstr "согласие"
+
+msgctxt "block keyword"
+msgid "contacts"
+msgstr "контакты"
+
+msgctxt "block keyword"
+msgid "cookie"
+msgstr "cookie"
+
+msgctxt "block keyword"
+msgid "copyright"
+msgstr "копирайт"
+
+msgctxt "block keyword"
+msgid "cremation"
+msgstr "кремация"
+
+msgctxt "block keyword"
+msgid "decoration"
+msgstr "украшение"
+
+msgctxt "block keyword"
+msgid "divider"
+msgstr "разделитель"
+
+msgctxt "block keyword"
+msgid "figure"
+msgstr "цифра"
+
+msgctxt "block keyword"
+msgid "footer"
+msgstr "подвал"
+
+msgctxt "block keyword"
+msgid "form"
+msgstr "форма"
+
+msgctxt "block keyword"
+msgid "grid"
+msgstr "сетка"
+
+msgctxt "block keyword"
+msgid "guide"
+msgstr "справочник"
+
+msgctxt "block keyword"
+msgid "halls"
+msgstr "залы"
+
+msgctxt "block keyword"
+msgid "header"
+msgstr "шапка"
+
+msgctxt "block keyword"
+msgid "home page"
+msgstr "главная"
+
+msgctxt "block keyword"
+msgid "hours"
+msgstr "часы работы"
+
+msgctxt "block keyword"
+msgid "icon"
+msgstr "иконка"
+
+msgctxt "block keyword"
+msgid "laurel"
+msgstr "лавр"
+
+msgctxt "block keyword"
+msgid "link"
+msgstr "ссылка"
+
+msgctxt "block keyword"
+msgid "map"
+msgstr "карта"
+
+msgctxt "block keyword"
+msgid "memorial meal"
+msgstr "поминальный обед"
+
+msgctxt "block keyword"
+msgid "menu"
+msgstr "меню"
+
+msgctxt "block keyword"
+msgid "mobile"
+msgstr "телефон"
+
+msgctxt "block keyword"
+msgid "navigation"
+msgstr "навигация"
+
+msgctxt "block keyword"
+msgid "night"
+msgstr "ночь"
+
+msgctxt "block keyword"
+msgid "not found"
+msgstr "не найдено"
+
+msgctxt "block keyword"
+msgid "number"
+msgstr "число"
+
+msgctxt "block keyword"
+msgid "packages"
+msgstr "пакеты"
+
+msgctxt "block keyword"
+msgid "pages"
+msgstr "страницы"
+
+msgctxt "block keyword"
+msgid "phone"
+msgstr "телефон"
+
+msgctxt "block keyword"
+msgid "photos"
+msgstr "фото"
+
+msgctxt "block keyword"
+msgid "places"
+msgstr "места"
+
+msgctxt "block keyword"
+msgid "portfolio"
+msgstr "портфолио"
+
+msgctxt "block keyword"
+msgid "prices"
+msgstr "цены"
+
+msgctxt "block keyword"
+msgid "privacy"
+msgstr "конфиденциальность"
+
+msgctxt "block keyword"
+msgid "product"
+msgstr "товар"
+
+msgctxt "block keyword"
+msgid "products"
+msgstr "товары"
+
+msgctxt "block keyword"
+msgid "questions"
+msgstr "вопросы"
+
+msgctxt "block keyword"
+msgid "rating"
+msgstr "рейтинг"
+
+msgctxt "block keyword"
+msgid "reviews"
+msgstr "отзывы"
+
+msgctxt "block keyword"
+msgid "route"
+msgstr "маршрут"
+
+msgctxt "block keyword"
+msgid "sections"
+msgstr "разделы главной"
+
+msgctxt "block keyword"
+msgid "services"
+msgstr "услуги"
+
+msgctxt "block keyword"
+msgid "symbol"
+msgstr "символ"
+
+msgctxt "block keyword"
+msgid "tiles"
+msgstr "плитки"
+
+msgctxt "block keyword"
+msgid "widget"
+msgstr "виджет"
+
+msgctxt "block keyword"
+msgid "works"
+msgstr "работы"
+
+msgctxt "block keyword"
+msgid "wreath"
+msgstr "венок"
+
+msgctxt "block keyword"
+msgid "years"
+msgstr "годы"
+
+msgctxt "block title"
+msgid "All questions and answers"
+msgstr "Все вопросы и ответы"
+
+msgctxt "block title"
+msgid "Breadcrumbs"
+msgstr "Хлебные крошки"
+
+msgctxt "block title"
+msgid "Call me back window"
+msgstr "Окно «Перезвоните мне»"
+
+msgctxt "block title"
+msgid "Call to action"
+msgstr "Призыв позвонить"
+
+msgctxt "block title"
+msgid "Catalog sub-sections list"
+msgstr "Список подразделов каталога"
+
+msgctxt "block title"
+msgid "Cemeteries"
+msgstr "Кладбища"
+
+msgctxt "block title"
+msgid "Company details"
+msgstr "Реквизиты"
+
+msgctxt "block title"
+msgid "Contact cards"
+msgstr "Карточки контактов"
+
+msgctxt "block title"
+msgid "Contacts list"
+msgstr "Список контактов"
+
+msgctxt "block title"
+msgid "Cookie banner"
+msgstr "Плашка о cookie"
+
+msgctxt "block title"
+msgid "Cremation prices"
+msgstr "Цены кремации"
+
+msgctxt "block title"
+msgid "Figure in a laurel wreath"
+msgstr "Цифра в лавровом венке"
+
+msgctxt "block title"
+msgid "Footer: addresses and phones"
+msgstr "Подвал: адреса и телефоны"
+
+msgctxt "block title"
+msgid "Footer: copyright and documents"
+msgstr "Подвал: годы работы и документы"
+
+msgctxt "block title"
+msgid "Funeral packages"
+msgstr "Пакеты похорон"
+
+msgctxt "block title"
+msgid "Funeral packages grid"
+msgstr "Сетка пакетов похорон"
+
+msgctxt "block title"
+msgid "Guest book reviews"
+msgstr "Отзывы из книги"
+
+msgctxt "block title"
+msgid "Header: phone and call back"
+msgstr "Шапка: телефон и обратный звонок"
+
+msgctxt "block title"
+msgid "Laurel decoration"
+msgstr "Лавровое украшение"
+
+msgctxt "block title"
+msgid "Link button"
+msgstr "Кнопка-ссылка"
+
+msgctxt "block title"
+msgid "Maps"
+msgstr "Карты"
+
+msgctxt "block title"
+msgid "Memorial meal halls"
+msgstr "Залы для поминок"
+
+msgctxt "block title"
+msgid "Opening hours badge"
+msgstr "Часы работы"
+
+msgctxt "block title"
+msgid "Our services"
+msgstr "Наши услуги"
+
+msgctxt "block title"
+msgid "Our works"
+msgstr "Наши работы"
+
+msgctxt "block title"
+msgid "Phone button"
+msgstr "Кнопка телефона"
+
+msgctxt "block title"
+msgid "Reviews from review sites"
+msgstr "Отзывы с сервисов отзывов"
+
+msgctxt "block title"
+msgid "Section cards"
+msgstr "Карточки разделов"
+
+msgctxt "block title"
+msgid "Services grid"
+msgstr "Сетка услуг"
+
+msgctxt "block title"
+msgid "Useful to know"
+msgstr "Полезно знать"
+
+msgctxt "block title"
+msgid "Yandex Maps reviews"
+msgstr "Отзывы Яндекс Карт"
+
+msgctxt "block title"
+msgid "Yandex review buttons"
+msgstr "Кнопки отзывов Яндекса"
+
+msgctxt "block title"
+msgid "Yandex reviews widget"
+msgstr "Виджет отзывов Яндекса"
+
+msgctxt "block keyword"
+msgid "404"
+msgstr "404"
+
+msgctxt "block keyword"
+msgid "Rewio"
+msgstr "Rewio"
+
+msgctxt "block keyword"
+msgid "mem_bookreviews"
+msgstr "mem_bookreviews"
+
+msgctxt "block keyword"
+msgid "mem_cards"
+msgstr "mem_cards"
+
+msgctxt "block keyword"
+msgid "mem_cat_list"
+msgstr "mem_cat_list"
+
+msgctxt "block keyword"
+msgid "mem_cat_photos"
+msgstr "mem_cat_photos"
+
+msgctxt "block keyword"
+msgid "mem_catalog"
+msgstr "mem_catalog"
+
+msgctxt "block keyword"
+msgid "mem_cemeteries"
+msgstr "mem_cemeteries"
+
+msgctxt "block keyword"
+msgid "mem_cremation"
+msgstr "mem_cremation"
+
+msgctxt "block keyword"
+msgid "mem_cta"
+msgstr "mem_cta"
+
+msgctxt "block keyword"
+msgid "mem_faq"
+msgstr "mem_faq"
+
+msgctxt "block keyword"
+msgid "mem_guide"
+msgstr "mem_guide"
+
+msgctxt "block keyword"
+msgid "mem_packages"
+msgstr "mem_packages"
+
+msgctxt "block keyword"
+msgid "mem_restaurants"
+msgstr "mem_restaurants"
+
+msgctxt "block keyword"
+msgid "mem_reviews"
+msgstr "mem_reviews"
+
+msgctxt "block keyword"
+msgid "mem_rewio"
+msgstr "mem_rewio"
+
+msgctxt "block keyword"
+msgid "mem_services"
+msgstr "mem_services"
+
+msgctxt "block keyword"
+msgid "mem_works"
+msgstr "mem_works"
+
+msgctxt "block keyword"
+msgid "memorial"
+msgstr "мемориал"

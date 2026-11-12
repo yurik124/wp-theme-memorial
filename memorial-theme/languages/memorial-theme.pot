@@ -13,7 +13,7 @@ msgstr ""
 msgid " (custom)"
 msgstr ""
 
-#: functions.php:163
+#: functions.php:167
 msgid " — to the home page"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgid "Documents"
 msgstr ""
 
 #. translators: %s: menu item
-#: functions.php:100
+#: functions.php:104
 #, php-format
 msgid "Expand: %s"
 msgstr ""
@@ -200,7 +200,7 @@ msgctxt "Font size name"
 msgid "Small"
 msgstr ""
 
-#: functions.php:43
+#: functions.php:30
 msgid "Footer menu"
 msgstr ""
 
@@ -224,7 +224,7 @@ msgstr ""
 msgid "Light stone (grey-blue)"
 msgstr ""
 
-#: functions.php:42 inc/navigation-migrate.php:99
+#: functions.php:29 inc/navigation-migrate.php:99
 msgid "Main menu"
 msgstr ""
 
@@ -237,7 +237,7 @@ msgstr ""
 msgid "Memorial Modern"
 msgstr ""
 
-#: functions.php:173
+#: functions.php:177
 msgid "Memorial: text layouts"
 msgstr ""
 
@@ -475,6 +475,6 @@ msgstr ""
 msgid "logo"
 msgstr ""
 
-#: functions.php:101
+#: functions.php:105
 msgid "submenu"
 msgstr ""

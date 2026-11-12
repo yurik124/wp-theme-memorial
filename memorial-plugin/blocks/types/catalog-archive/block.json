@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/catalog-archive",
+    "title": "Catalog section with sorting",
+    "category": "memorial-pages",
+    "icon": "archive",
+    "description": "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings.",
+    "keywords": [
+        "catalog",
+        "category",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "term": {
+            "type": "integer",
+            "default": 0
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {
+            "term": 0
+        },
+        "viewportWidth": 1200
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/breadcrumbs",
+    "title": "Breadcrumbs",
+    "category": "memorial-layout",
+    "icon": "arrow-right-alt2",
+    "description": "Path to the current page; also adds BreadcrumbList structured data.",
+    "keywords": [
+        "breadcrumbs",
+        "navigation",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

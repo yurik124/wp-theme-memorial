@@ -83,8 +83,8 @@ add_action(
 		$all_attrs = memorial_plugin_legacy_block_attrs();
 		foreach ( memorial_plugin_legacy_blocks() as $slug => [$title, $desc, $icon] ) {
 			$attributes = memorial_plugin_block_attributes( 'memorial-plugin/' . $slug, $all_attrs[ $slug ] ?? array() );
-			register_block_type(
-				'memorial-plugin/' . $slug,
+			memorial_plugin_register_block(
+				$slug,
 				array(
 					'api_version'     => 3,
 					'title'           => $title,

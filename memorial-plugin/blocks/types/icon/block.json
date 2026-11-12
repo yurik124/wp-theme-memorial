@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/icon",
+    "title": "Icon in a circle",
+    "category": "memorial-design",
+    "icon": "star-empty",
+    "description": "An icon of the site set (candle, cross, phone, clock…) in a round frame. The icon is chosen in the block settings.",
+    "keywords": [
+        "icon",
+        "symbol",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "name": {
+            "type": "string",
+            "default": "candle"
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": true
+    },
+    "example": {
+        "attributes": {
+            "name": "candle"
+        },
+        "viewportWidth": 400
+    }
+}

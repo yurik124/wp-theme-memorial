@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/guide",
+    "title": "Useful to know",
+    "category": "memorial-services",
+    "icon": "welcome-learn-more",
+    "description": "Article cards with search: child pages of this or another page, or chosen pages.",
+    "keywords": [
+        "guide",
+        "questions",
+        "mem_guide",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "parent": {
+            "type": "string",
+            "default": ""
+        },
+        "pages": {
+            "type": "string",
+            "default": ""
+        },
+        "all": {
+            "type": "boolean",
+            "default": true
+        },
+        "popular": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": false
+    },
+    "example": {
+        "attributes": {
+            "parent": "",
+            "pages": "",
+            "all": true,
+            "popular": ""
+        },
+        "viewportWidth": 1000
+    }
+}

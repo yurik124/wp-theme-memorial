@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/laurel",
+    "title": "Laurel decoration",
+    "category": "memorial-design",
+    "icon": "palmtree",
+    "description": "Laurel branch, divider, leaf or wreath drawn by the theme.",
+    "keywords": [
+        "laurel",
+        "divider",
+        "decoration",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "kind": {
+            "type": "string",
+            "default": "divider",
+            "enum": [
+                "divider",
+                "branch_plain",
+                "leaf",
+                "wreath",
+                "wreath_berry"
+            ]
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": true
+    },
+    "example": {
+        "attributes": {
+            "kind": "divider"
+        },
+        "viewportWidth": 400
+    }
+}

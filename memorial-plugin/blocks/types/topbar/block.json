@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/topbar",
+    "title": "Line above the header: address and hours",
+    "category": "memorial-layout",
+    "icon": "location",
+    "description": "One of the addresses with its opening hours and the night phone line, above the header. The address is chosen in the block settings.",
+    "keywords": [
+        "header",
+        "address",
+        "hours",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "address": {
+            "type": "integer",
+            "default": 0
+        },
+        "hours": {
+            "type": "boolean",
+            "default": true
+        },
+        "night": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {
+            "address": 0,
+            "hours": true,
+            "night": true
+        },
+        "viewportWidth": 1200
+    }
+}

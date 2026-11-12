@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/mobile-bar",
+    "title": "Bottom phone bar on mobiles",
+    "category": "memorial-layout",
+    "icon": "smartphone",
+    "description": "Bottom bar on phones: Call and Message (MAX) or Call me back.",
+    "keywords": [
+        "mobile",
+        "phone",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

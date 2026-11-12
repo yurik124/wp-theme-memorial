@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/packages",
+    "title": "Funeral packages",
+    "category": "memorial-catalog",
+    "icon": "money-alt",
+    "description": "Funeral package cards with prices (Memorial → Prices).",
+    "keywords": [
+        "packages",
+        "prices",
+        "mem_packages",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "cremation": {
+            "type": "string",
+            "default": "auto",
+            "enum": [
+                "auto",
+                "show",
+                "hide"
+            ]
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": false
+    },
+    "example": {
+        "attributes": {
+            "cremation": "auto"
+        },
+        "viewportWidth": 1000
+    }
+}

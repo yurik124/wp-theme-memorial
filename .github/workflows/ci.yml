@@ -57,6 +57,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: php tools/check-prefixes.php
 
+      - name: block.json блоков плагина совпадают с их описаниями в PHP (tools/block-json.php check)
+        if: ${{ !cancelled() }}
+        run: php tools/block-json.php check
+
       - name: Переводы (tools/i18n.php check)
         if: ${{ !cancelled() }}
         run: php tools/i18n.php check

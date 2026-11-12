@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/tagline",
+    "title": "Tagline: years in business",
+    "category": "memorial-layout",
+    "icon": "heart",
+    "description": "“Funeral company in business for over N years” — or the site tagline if the founding year is not set.",
+    "keywords": [
+        "footer",
+        "years",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

@@ -4742,6 +4742,901 @@ msgstr ""
 msgid "and paste its number below. Save."
 msgstr ""
 
+#: blocks/types/not-found/block.json
+msgctxt "block description"
+msgid "404 message with a call button and catalog sections."
+msgstr ""
+
+#: blocks/types/link-button/block.json
+msgctxt "block description"
+msgid "A button in the site style (green, light or outlined) that leads to a page of the site or to any address. The text and the page are set in the block settings on the right."
+msgstr ""
+
+#: blocks/types/footer-contacts/block.json
+msgctxt "block description"
+msgid "Address and phone columns from Memorial → Contacts."
+msgstr ""
+
+#: blocks/types/contacts-list/block.json
+msgctxt "block description"
+msgid "All phones, emails, messengers and addresses with hours (Memorial → Contacts)."
+msgstr ""
+
+#: blocks/types/icon/block.json
+msgctxt "block description"
+msgid "An icon of the site set (candle, cross, phone, clock…) in a round frame. The icon is chosen in the block settings."
+msgstr ""
+
+#: blocks/types/guide/block.json
+msgctxt "block description"
+msgid "Article cards with search: child pages of this or another page, or chosen pages."
+msgstr ""
+
+#: blocks/types/mobile-bar/block.json
+msgctxt "block description"
+msgid "Bottom bar on phones: Call and Message (MAX) or Call me back."
+msgstr ""
+
+#: blocks/types/phone-button/block.json
+msgctxt "block description"
+msgid "Button that calls the main phone number (Memorial → Contacts)."
+msgstr ""
+
+#: blocks/types/cards/block.json
+msgctxt "block description"
+msgid "Cards of the sections of this page (its sub-items in the menu or child pages), of another page or of chosen pages — with photo, product count and starting price."
+msgstr ""
+
+#: blocks/types/catalog-tiles/block.json
+msgctxt "block description"
+msgid "Catalog sections as photo tiles (menu sub-items of the catalog page, or all sections)."
+msgstr ""
+
+#: blocks/types/page-products/block.json
+msgctxt "block description"
+msgid "Catalog tiles or product grid for pages set to show products, with the page text above and below."
+msgstr ""
+
+#: blocks/types/cemeteries/block.json
+msgctxt "block description"
+msgid "Cemeteries with addresses, hours and burial status (Memorial → Cemeteries)."
+msgstr ""
+
+#: blocks/types/works/block.json
+msgctxt "block description"
+msgid "Completed works with photos, plot sizes and prices: gallery, cards or photos only."
+msgstr ""
+
+#: blocks/types/cookie-banner/block.json
+msgctxt "block description"
+msgid "Cookie notice or consent request (Memorial → Analytics). Without it, Yandex Metrica in the “after consent” mode never loads."
+msgstr ""
+
+#: blocks/types/footer-legal/block.json
+msgctxt "block description"
+msgid "Copyright years, company details, privacy and cookie policy links."
+msgstr ""
+
+#: blocks/types/cremation/block.json
+msgctxt "block description"
+msgid "Cremation price table (Memorial → Prices → Cremation)."
+msgstr ""
+
+#: blocks/types/menu-columns/block.json
+msgctxt "block description"
+msgid "Footer menu: items with sub-items become columns, single items go to “Information”."
+msgstr ""
+
+#: blocks/types/packages-grid/block.json
+msgctxt "block description"
+msgid "Funeral package cards as on the home page (Memorial → Prices)."
+msgstr ""
+
+#: blocks/types/packages/block.json
+msgctxt "block description"
+msgid "Funeral package cards with prices (Memorial → Prices)."
+msgstr ""
+
+#: blocks/types/restaurants/block.json
+msgctxt "block description"
+msgid "Halls for memorial meals with photos and an order button (Memorial → Halls)."
+msgstr ""
+
+#: blocks/types/cta/block.json
+msgctxt "block description"
+msgid "Heading, text and call / message buttons with the site phone."
+msgstr ""
+
+#: blocks/types/callback-dialog/block.json
+msgctxt "block description"
+msgid "Hidden window with the call back form; opens from “Call me back” buttons."
+msgstr ""
+
+#: blocks/types/laurel/block.json
+msgctxt "block description"
+msgid "Laurel branch, divider, leaf or wreath drawn by the theme."
+msgstr ""
+
+#: blocks/types/company-details/block.json
+msgctxt "block description"
+msgid "Legal name, taxpayer and registration numbers (Memorial → Contacts)."
+msgstr ""
+
+#: blocks/types/category-list/block.json
+msgctxt "block description"
+msgid "List of sub-sections of a catalog section with links and starting prices."
+msgstr ""
+
+#: blocks/types/header-contacts/block.json
+msgctxt "block description"
+msgid "Main phone number, “Call me back” button and the call icon for phones."
+msgstr ""
+
+#: blocks/types/maps/block.json
+msgctxt "block description"
+msgid "Map for each address; loads on a click so the page stays fast."
+msgstr ""
+
+#: blocks/types/night-line/block.json
+msgctxt "block description"
+msgid "Note about calls at night (Memorial → Contacts)."
+msgstr ""
+
+#: blocks/types/stat/block.json
+msgctxt "block description"
+msgid "Number with a caption in a laurel wreath; the number counts up when it scrolls into view."
+msgstr ""
+
+#: blocks/types/review-widget/block.json
+msgctxt "block description"
+msgid "Official Yandex Maps reviews widget; loads after cookie consent or on a click."
+msgstr ""
+
+#: blocks/types/topbar/block.json
+msgctxt "block description"
+msgid "One of the addresses with its opening hours and the night phone line, above the header. The address is chosen in the block settings."
+msgstr ""
+
+#: blocks/types/contacts-badges/block.json
+msgctxt "block description"
+msgid "Opening hours of the first address, or the night line when it is set (Memorial → Contacts)."
+msgstr ""
+
+#: blocks/types/breadcrumbs/block.json
+msgctxt "block description"
+msgid "Path to the current page; also adds BreadcrumbList structured data."
+msgstr ""
+
+#: blocks/types/contacts-page/block.json
+msgctxt "block description"
+msgid "Phones, messengers, addresses with routes, maps and company details."
+msgstr ""
+
+#: blocks/types/category-photos/block.json
+msgctxt "block description"
+msgid "Photo grid of products from catalog sections."
+msgstr ""
+
+#: blocks/types/product/block.json
+msgctxt "block description"
+msgid "Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings."
+msgstr ""
+
+#: blocks/types/catalog/block.json
+msgctxt "block description"
+msgid "Products of a catalog section with section links and sorting. The section is chosen in the block settings; by default — the section of this page."
+msgstr ""
+
+#: blocks/types/faq/block.json
+msgctxt "block description"
+msgid "Questions from all pages (Details blocks) on one page, with search."
+msgstr ""
+
+#: blocks/types/reviews/block.json
+msgctxt "block description"
+msgid "Review widgets and links to review sites (Memorial → Reviews)."
+msgstr ""
+
+#: blocks/types/book-reviews/block.json
+msgctxt "block description"
+msgid "Reviews left on this site."
+msgstr ""
+
+#: blocks/types/rewio-reviews/block.json
+msgctxt "block description"
+msgid "Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews)."
+msgstr ""
+
+#: blocks/types/services-grid/block.json
+msgctxt "block description"
+msgid "Service cards of the home page (Memorial → Home page → Services), full width."
+msgstr ""
+
+#: blocks/types/services/block.json
+msgctxt "block description"
+msgid "Service cards with photos and starting prices (Memorial → Home page → Services)."
+msgstr ""
+
+#: blocks/types/catalog-archive/block.json
+msgctxt "block description"
+msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
+msgstr ""
+
+#: blocks/types/home/block.json
+msgctxt "block description"
+msgid "The whole home page built from Memorial → Home page, as before the move to blocks. Today the home page is built from separate blocks."
+msgstr ""
+
+#: blocks/types/contacts-cards/block.json
+msgctxt "block description"
+msgid "“Call”, “Write” and the addresses with directions (Memorial → Contacts)."
+msgstr ""
+
+#: blocks/types/tagline/block.json
+msgctxt "block description"
+msgid "“Funeral company in business for over N years” — or the site tagline if the founding year is not set."
+msgstr ""
+
+#: blocks/types/review-buttons/block.json
+msgctxt "block description"
+msgid "“Leave a review” and “We are on Yandex Maps” buttons."
+msgstr ""
+
+#: blocks/types/not-found/block.json
+msgctxt "block keyword"
+msgid "404"
+msgstr ""
+
+#: blocks/types/faq/block.json
+msgctxt "block keyword"
+msgid "FAQ"
+msgstr ""
+
+#: blocks/types/rewio-reviews/block.json
+msgctxt "block keyword"
+msgid "Rewio"
+msgstr ""
+
+#: blocks/types/review-widget/block.json blocks/types/review-buttons/block.json
+msgctxt "block keyword"
+msgid "Yandex"
+msgstr ""
+
+#: blocks/types/topbar/block.json blocks/types/contacts-list/block.json blocks/types/maps/block.json blocks/types/contacts-cards/block.json
+msgctxt "block keyword"
+msgid "address"
+msgstr ""
+
+#: blocks/types/book-reviews/block.json
+msgctxt "block keyword"
+msgid "book"
+msgstr ""
+
+#: blocks/types/breadcrumbs/block.json
+msgctxt "block keyword"
+msgid "breadcrumbs"
+msgstr ""
+
+#: blocks/types/phone-button/block.json blocks/types/link-button/block.json
+msgctxt "block keyword"
+msgid "button"
+msgstr ""
+
+#: blocks/types/phone-button/block.json
+msgctxt "block keyword"
+msgid "call"
+msgstr ""
+
+#: blocks/types/callback-dialog/block.json
+msgctxt "block keyword"
+msgid "call back"
+msgstr ""
+
+#: blocks/types/cta/block.json
+msgctxt "block keyword"
+msgid "call to action"
+msgstr ""
+
+#: blocks/types/cards/block.json
+msgctxt "block keyword"
+msgid "cards"
+msgstr ""
+
+#: blocks/types/catalog/block.json blocks/types/category-list/block.json blocks/types/category-photos/block.json blocks/types/catalog-tiles/block.json blocks/types/product/block.json blocks/types/page-products/block.json
+msgctxt "block keyword"
+msgid "catalog"
+msgstr ""
+
+#: blocks/types/category-list/block.json blocks/types/catalog-tiles/block.json
+msgctxt "block keyword"
+msgid "categories"
+msgstr ""
+
+#: blocks/types/catalog-archive/block.json
+msgctxt "block keyword"
+msgid "category"
+msgstr ""
+
+#: blocks/types/cemeteries/block.json
+msgctxt "block keyword"
+msgid "cemeteries"
+msgstr ""
+
+#: blocks/types/company-details/block.json
+msgctxt "block keyword"
+msgid "company details"
+msgstr ""
+
+#: blocks/types/cookie-banner/block.json
+msgctxt "block keyword"
+msgid "consent"
+msgstr ""
+
+#: blocks/types/contacts-badges/block.json blocks/types/footer-contacts/block.json blocks/types/contacts-list/block.json blocks/types/contacts-page/block.json blocks/types/company-details/block.json blocks/types/contacts-cards/block.json
+msgctxt "block keyword"
+msgid "contacts"
+msgstr ""
+
+#: blocks/types/cookie-banner/block.json
+msgctxt "block keyword"
+msgid "cookie"
+msgstr ""
+
+#: blocks/types/footer-legal/block.json
+msgctxt "block keyword"
+msgid "copyright"
+msgstr ""
+
+#: blocks/types/cremation/block.json
+msgctxt "block keyword"
+msgid "cremation"
+msgstr ""
+
+#: blocks/types/laurel/block.json
+msgctxt "block keyword"
+msgid "decoration"
+msgstr ""
+
+#: blocks/types/laurel/block.json
+msgctxt "block keyword"
+msgid "divider"
+msgstr ""
+
+#: blocks/types/stat/block.json
+msgctxt "block keyword"
+msgid "figure"
+msgstr ""
+
+#: blocks/types/footer-legal/block.json blocks/types/menu-columns/block.json blocks/types/tagline/block.json blocks/types/footer-contacts/block.json
+msgctxt "block keyword"
+msgid "footer"
+msgstr ""
+
+#: blocks/types/callback-dialog/block.json
+msgctxt "block keyword"
+msgid "form"
+msgstr ""
+
+#: blocks/types/services-grid/block.json
+msgctxt "block keyword"
+msgid "grid"
+msgstr ""
+
+#: blocks/types/guide/block.json
+msgctxt "block keyword"
+msgid "guide"
+msgstr ""
+
+#: blocks/types/restaurants/block.json
+msgctxt "block keyword"
+msgid "halls"
+msgstr ""
+
+#: blocks/types/topbar/block.json blocks/types/header-contacts/block.json
+msgctxt "block keyword"
+msgid "header"
+msgstr ""
+
+#: blocks/types/home/block.json
+msgctxt "block keyword"
+msgid "home page"
+msgstr ""
+
+#: blocks/types/contacts-badges/block.json blocks/types/topbar/block.json blocks/types/night-line/block.json
+msgctxt "block keyword"
+msgid "hours"
+msgstr ""
+
+#: blocks/types/icon/block.json
+msgctxt "block keyword"
+msgid "icon"
+msgstr ""
+
+#: blocks/types/laurel/block.json
+msgctxt "block keyword"
+msgid "laurel"
+msgstr ""
+
+#: blocks/types/link-button/block.json
+msgctxt "block keyword"
+msgid "link"
+msgstr ""
+
+#: blocks/types/contacts-page/block.json blocks/types/maps/block.json
+msgctxt "block keyword"
+msgid "map"
+msgstr ""
+
+#: blocks/types/book-reviews/block.json
+msgctxt "block keyword"
+msgid "mem_bookreviews"
+msgstr ""
+
+#: blocks/types/cards/block.json
+msgctxt "block keyword"
+msgid "mem_cards"
+msgstr ""
+
+#: blocks/types/category-list/block.json
+msgctxt "block keyword"
+msgid "mem_cat_list"
+msgstr ""
+
+#: blocks/types/category-photos/block.json
+msgctxt "block keyword"
+msgid "mem_cat_photos"
+msgstr ""
+
+#: blocks/types/catalog/block.json
+msgctxt "block keyword"
+msgid "mem_catalog"
+msgstr ""
+
+#: blocks/types/cemeteries/block.json
+msgctxt "block keyword"
+msgid "mem_cemeteries"
+msgstr ""
+
+#: blocks/types/cremation/block.json
+msgctxt "block keyword"
+msgid "mem_cremation"
+msgstr ""
+
+#: blocks/types/cta/block.json
+msgctxt "block keyword"
+msgid "mem_cta"
+msgstr ""
+
+#: blocks/types/faq/block.json
+msgctxt "block keyword"
+msgid "mem_faq"
+msgstr ""
+
+#: blocks/types/guide/block.json
+msgctxt "block keyword"
+msgid "mem_guide"
+msgstr ""
+
+#: blocks/types/packages/block.json
+msgctxt "block keyword"
+msgid "mem_packages"
+msgstr ""
+
+#: blocks/types/restaurants/block.json
+msgctxt "block keyword"
+msgid "mem_restaurants"
+msgstr ""
+
+#: blocks/types/reviews/block.json
+msgctxt "block keyword"
+msgid "mem_reviews"
+msgstr ""
+
+#: blocks/types/rewio-reviews/block.json
+msgctxt "block keyword"
+msgid "mem_rewio"
+msgstr ""
+
+#: blocks/types/services/block.json
+msgctxt "block keyword"
+msgid "mem_services"
+msgstr ""
+
+#: blocks/types/works/block.json
+msgctxt "block keyword"
+msgid "mem_works"
+msgstr ""
+
+#: blocks/types/catalog/block.json blocks/types/footer-legal/block.json blocks/types/cemeteries/block.json blocks/types/breadcrumbs/block.json blocks/types/category-list/block.json blocks/types/services-grid/block.json
+msgctxt "block keyword"
+msgid "memorial"
+msgstr ""
+
+#: blocks/types/restaurants/block.json
+msgctxt "block keyword"
+msgid "memorial meal"
+msgstr ""
+
+#: blocks/types/menu-columns/block.json
+msgctxt "block keyword"
+msgid "menu"
+msgstr ""
+
+#: blocks/types/mobile-bar/block.json
+msgctxt "block keyword"
+msgid "mobile"
+msgstr ""
+
+#: blocks/types/breadcrumbs/block.json
+msgctxt "block keyword"
+msgid "navigation"
+msgstr ""
+
+#: blocks/types/contacts-badges/block.json blocks/types/night-line/block.json
+msgctxt "block keyword"
+msgid "night"
+msgstr ""
+
+#: blocks/types/not-found/block.json
+msgctxt "block keyword"
+msgid "not found"
+msgstr ""
+
+#: blocks/types/stat/block.json
+msgctxt "block keyword"
+msgid "number"
+msgstr ""
+
+#: blocks/types/packages/block.json blocks/types/packages-grid/block.json
+msgctxt "block keyword"
+msgid "packages"
+msgstr ""
+
+#: blocks/types/cards/block.json
+msgctxt "block keyword"
+msgid "pages"
+msgstr ""
+
+#: blocks/types/mobile-bar/block.json blocks/types/contacts-list/block.json blocks/types/cta/block.json blocks/types/phone-button/block.json blocks/types/night-line/block.json blocks/types/header-contacts/block.json
+msgctxt "block keyword"
+msgid "phone"
+msgstr ""
+
+#: blocks/types/category-photos/block.json blocks/types/works/block.json
+msgctxt "block keyword"
+msgid "photos"
+msgstr ""
+
+#: blocks/types/cemeteries/block.json
+msgctxt "block keyword"
+msgid "places"
+msgstr ""
+
+#: blocks/types/works/block.json
+msgctxt "block keyword"
+msgid "portfolio"
+msgstr ""
+
+#: blocks/types/packages/block.json blocks/types/cremation/block.json blocks/types/packages-grid/block.json
+msgctxt "block keyword"
+msgid "prices"
+msgstr ""
+
+#: blocks/types/footer-legal/block.json
+msgctxt "block keyword"
+msgid "privacy"
+msgstr ""
+
+#: blocks/types/product/block.json
+msgctxt "block keyword"
+msgid "product"
+msgstr ""
+
+#: blocks/types/catalog/block.json blocks/types/page-products/block.json
+msgctxt "block keyword"
+msgid "products"
+msgstr ""
+
+#: blocks/types/guide/block.json blocks/types/faq/block.json
+msgctxt "block keyword"
+msgid "questions"
+msgstr ""
+
+#: blocks/types/reviews/block.json
+msgctxt "block keyword"
+msgid "rating"
+msgstr ""
+
+#: blocks/types/review-widget/block.json blocks/types/reviews/block.json blocks/types/rewio-reviews/block.json blocks/types/book-reviews/block.json blocks/types/review-buttons/block.json
+msgctxt "block keyword"
+msgid "reviews"
+msgstr ""
+
+#: blocks/types/maps/block.json
+msgctxt "block keyword"
+msgid "route"
+msgstr ""
+
+#: blocks/types/home/block.json
+msgctxt "block keyword"
+msgid "sections"
+msgstr ""
+
+#: blocks/types/services-grid/block.json blocks/types/services/block.json
+msgctxt "block keyword"
+msgid "services"
+msgstr ""
+
+#: blocks/types/icon/block.json
+msgctxt "block keyword"
+msgid "symbol"
+msgstr ""
+
+#: blocks/types/catalog-tiles/block.json
+msgctxt "block keyword"
+msgid "tiles"
+msgstr ""
+
+#: blocks/types/review-widget/block.json
+msgctxt "block keyword"
+msgid "widget"
+msgstr ""
+
+#: blocks/types/works/block.json
+msgctxt "block keyword"
+msgid "works"
+msgstr ""
+
+#: blocks/types/stat/block.json
+msgctxt "block keyword"
+msgid "wreath"
+msgstr ""
+
+#: blocks/types/tagline/block.json
+msgctxt "block keyword"
+msgid "years"
+msgstr ""
+
+#: blocks/types/faq/block.json
+msgctxt "block title"
+msgid "All questions and answers"
+msgstr ""
+
+#: blocks/types/mobile-bar/block.json
+msgctxt "block title"
+msgid "Bottom phone bar on mobiles"
+msgstr ""
+
+#: blocks/types/breadcrumbs/block.json
+msgctxt "block title"
+msgid "Breadcrumbs"
+msgstr ""
+
+#: blocks/types/callback-dialog/block.json
+msgctxt "block title"
+msgid "Call me back window"
+msgstr ""
+
+#: blocks/types/cta/block.json
+msgctxt "block title"
+msgid "Call to action"
+msgstr ""
+
+#: blocks/types/catalog-tiles/block.json
+msgctxt "block title"
+msgid "Catalog section tiles"
+msgstr ""
+
+#: blocks/types/catalog-archive/block.json
+msgctxt "block title"
+msgid "Catalog section with sorting"
+msgstr ""
+
+#: blocks/types/category-list/block.json
+msgctxt "block title"
+msgid "Catalog sub-sections list"
+msgstr ""
+
+#: blocks/types/catalog/block.json
+msgctxt "block title"
+msgid "Catalog: products of a section"
+msgstr ""
+
+#: blocks/types/cemeteries/block.json
+msgctxt "block title"
+msgid "Cemeteries"
+msgstr ""
+
+#: blocks/types/company-details/block.json
+msgctxt "block title"
+msgid "Company details"
+msgstr ""
+
+#: blocks/types/contacts-cards/block.json
+msgctxt "block title"
+msgid "Contact cards"
+msgstr ""
+
+#: blocks/types/contacts-list/block.json
+msgctxt "block title"
+msgid "Contacts list"
+msgstr ""
+
+#: blocks/types/contacts-page/block.json
+msgctxt "block title"
+msgid "Contacts: the whole page"
+msgstr ""
+
+#: blocks/types/cookie-banner/block.json
+msgctxt "block title"
+msgid "Cookie banner"
+msgstr ""
+
+#: blocks/types/cremation/block.json
+msgctxt "block title"
+msgid "Cremation prices"
+msgstr ""
+
+#: blocks/types/stat/block.json
+msgctxt "block title"
+msgid "Figure in a laurel wreath"
+msgstr ""
+
+#: blocks/types/footer-contacts/block.json
+msgctxt "block title"
+msgid "Footer: addresses and phones"
+msgstr ""
+
+#: blocks/types/footer-legal/block.json
+msgctxt "block title"
+msgid "Footer: copyright and documents"
+msgstr ""
+
+#: blocks/types/menu-columns/block.json
+msgctxt "block title"
+msgid "Footer: menu in columns"
+msgstr ""
+
+#: blocks/types/packages/block.json
+msgctxt "block title"
+msgid "Funeral packages"
+msgstr ""
+
+#: blocks/types/packages-grid/block.json
+msgctxt "block title"
+msgid "Funeral packages grid"
+msgstr ""
+
+#: blocks/types/book-reviews/block.json
+msgctxt "block title"
+msgid "Guest book reviews"
+msgstr ""
+
+#: blocks/types/header-contacts/block.json
+msgctxt "block title"
+msgid "Header: phone and call back"
+msgstr ""
+
+#: blocks/types/home/block.json
+msgctxt "block title"
+msgid "Home page: all sections (old layout)"
+msgstr ""
+
+#: blocks/types/icon/block.json
+msgctxt "block title"
+msgid "Icon in a circle"
+msgstr ""
+
+#: blocks/types/laurel/block.json
+msgctxt "block title"
+msgid "Laurel decoration"
+msgstr ""
+
+#: blocks/types/topbar/block.json
+msgctxt "block title"
+msgid "Line above the header: address and hours"
+msgstr ""
+
+#: blocks/types/night-line/block.json
+msgctxt "block title"
+msgid "Line “Calls at night”"
+msgstr ""
+
+#: blocks/types/link-button/block.json
+msgctxt "block title"
+msgid "Link button"
+msgstr ""
+
+#: blocks/types/maps/block.json
+msgctxt "block title"
+msgid "Maps"
+msgstr ""
+
+#: blocks/types/restaurants/block.json
+msgctxt "block title"
+msgid "Memorial meal halls"
+msgstr ""
+
+#: blocks/types/not-found/block.json
+msgctxt "block title"
+msgid "Message “Page not found”"
+msgstr ""
+
+#: blocks/types/contacts-badges/block.json
+msgctxt "block title"
+msgid "Opening hours badge"
+msgstr ""
+
+#: blocks/types/services/block.json
+msgctxt "block title"
+msgid "Our services"
+msgstr ""
+
+#: blocks/types/works/block.json
+msgctxt "block title"
+msgid "Our works"
+msgstr ""
+
+#: blocks/types/phone-button/block.json
+msgctxt "block title"
+msgid "Phone button"
+msgstr ""
+
+#: blocks/types/product/block.json
+msgctxt "block title"
+msgid "Product card"
+msgstr ""
+
+#: blocks/types/category-photos/block.json
+msgctxt "block title"
+msgid "Product photos from the catalog"
+msgstr ""
+
+#: blocks/types/page-products/block.json
+msgctxt "block title"
+msgid "Products of the page (for the template)"
+msgstr ""
+
+#: blocks/types/reviews/block.json
+msgctxt "block title"
+msgid "Reviews from review sites"
+msgstr ""
+
+#: blocks/types/cards/block.json
+msgctxt "block title"
+msgid "Section cards"
+msgstr ""
+
+#: blocks/types/services-grid/block.json
+msgctxt "block title"
+msgid "Services grid"
+msgstr ""
+
+#: blocks/types/tagline/block.json
+msgctxt "block title"
+msgid "Tagline: years in business"
+msgstr ""
+
+#: blocks/types/guide/block.json
+msgctxt "block title"
+msgid "Useful to know"
+msgstr ""
+
+#: blocks/types/rewio-reviews/block.json
+msgctxt "block title"
+msgid "Yandex Maps reviews"
+msgstr ""
+
+#: blocks/types/review-buttons/block.json
+msgctxt "block title"
+msgid "Yandex review buttons"
+msgstr ""
+
+#: blocks/types/review-widget/block.json
+msgctxt "block title"
+msgid "Yandex reviews widget"
+msgstr ""
+
 #: blocks/block-meta.php:153
 msgid "book"
 msgstr ""

@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/category-list",
+    "title": "Catalog sub-sections list",
+    "category": "memorial-catalog",
+    "icon": "list-view",
+    "description": "List of sub-sections of a catalog section with links and starting prices.",
+    "keywords": [
+        "categories",
+        "catalog",
+        "mem_cat_list",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "cat": {
+            "type": "string",
+            "default": ""
+        },
+        "prices": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": false
+    },
+    "example": {
+        "attributes": {
+            "cat": "",
+            "prices": true
+        },
+        "viewportWidth": 1000
+    }
+}

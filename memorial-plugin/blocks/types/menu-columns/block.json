@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/menu-columns",
+    "title": "Footer: menu in columns",
+    "category": "memorial-layout",
+    "icon": "menu",
+    "description": "Footer menu: items with sub-items become columns, single items go to “Information”.",
+    "keywords": [
+        "footer",
+        "menu",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

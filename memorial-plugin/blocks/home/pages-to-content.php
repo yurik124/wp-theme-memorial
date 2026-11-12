@@ -405,9 +405,8 @@ function memorial_plugin_pages_hide_title() {
 	if ( ! $screen || 'page' !== $screen->post_type || ! $post instanceof WP_Post || ! memorial_plugin_pages_own_layout( $post ) ) {
 		return;
 	}
-	wp_register_style( 'memorial-plugin-home-editor', false, array(), MEMORIAL_PLUGIN_VER );
-	wp_enqueue_style( 'memorial-plugin-home-editor' );
-	wp_add_inline_style( 'memorial-plugin-home-editor', '.editor-visual-editor__post-title-wrapper,.editor-styles-wrapper .is-root-container>.wp-block-template-part,.editor-styles-wrapper .is-root-container>.wp-block-memorial-plugin-mobile-bar{display:none}' );
+	$path = '/assets/css/editor-own-layout.css';
+	wp_enqueue_style( 'memorial-plugin-own-layout', MEMORIAL_PLUGIN_URL . $path, array(), (string) filemtime( MEMORIAL_PLUGIN_DIR . $path ) );
 }
 add_action( 'enqueue_block_assets', 'memorial_plugin_pages_hide_title' );
 

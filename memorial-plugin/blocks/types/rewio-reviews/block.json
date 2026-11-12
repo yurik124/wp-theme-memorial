@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/rewio-reviews",
+    "title": "Yandex Maps reviews",
+    "category": "memorial-reviews",
+    "icon": "star-half",
+    "description": "Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews).",
+    "keywords": [
+        "reviews",
+        "Rewio",
+        "mem_rewio",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "count": {
+            "type": "integer",
+            "default": 0
+        },
+        "title": {
+            "type": "string",
+            "default": ""
+        },
+        "cols": {
+            "type": "integer",
+            "default": 0
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "interactivity": false
+    },
+    "example": {
+        "attributes": {
+            "count": 0,
+            "title": "",
+            "cols": 0
+        },
+        "viewportWidth": 1000
+    }
+}
