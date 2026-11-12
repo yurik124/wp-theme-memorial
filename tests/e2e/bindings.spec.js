@@ -138,3 +138,49 @@ test( 'общий текст в редакторе: источник зарег�
 	expect( source.canEdit ).toBe( true );
 	expect( source.fields ).toBeGreaterThan( 5 );
 } );
+
+test( 'общий текст: правка в редакторе сохраняется в настройку вместе со страницей', async ( {
+	page,
+} ) => {
+	await login( page );
+	await page.goto( '/wp-admin/admin.php?page=mem-contacts' );
+	const key = 'mem_contacts:night';
+	const before = await api( page, {
+		path: '/memorial-plugin/v1/texts?keys[]=' + encodeURIComponent( key ),
+	} );
+	const p = await api( page, {
+		path: '/wp/v2/pages',
+		method: 'POST',
+		data: { title: 'Bindings editor', status: 'publish', content: bound( key ) },
+	} );
+	await page.goto( `/wp-admin/post.php?post=${ p.id }&action=edit` );
+	await page.evaluate( () => {
+		const pr = window.wp?.data?.dispatch( 'core/preferences' );
+		pr?.set( 'core/edit-post', 'welcomeGuide', false );
+		pr?.set( 'core', 'welcomeGuide', false );
+	} );
+	const canvas = page.frameLocator( 'iframe[name="editor-canvas"]' );
+	const para = canvas.locator( '[data-type="core/paragraph"]' ).first();
+	await expect( para ).toContainText( before.values[ key ] || '' );
+	const added = ' edited ' + Date.now();
+	await para.click();
+	await page.keyboard.press( 'End' );
+	await page.keyboard.type( added );
+	await page
+		.locator( '.editor-post-publish-button, .editor-post-save-draft' )
+		.first()
+		.click();
+	await expect
+		.poll(
+			async () =>
+				(
+					await api( page, {
+						path:
+							'/memorial-plugin/v1/texts?keys[]=' +
+							encodeURIComponent( key ),
+					} )
+				).values[ key ],
+			{ timeout: 15000 }
+		)
+		.toContain( added.trim() );
+} );
