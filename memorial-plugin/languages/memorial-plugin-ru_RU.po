@@ -6653,3 +6653,9 @@ msgstr "Этот текст хранится один раз в настройк
 
 msgid "This text no longer exists in the settings (the row was removed?)."
 msgstr "Этого текста больше нет в настройках (строку удалили?)."
+
+msgid "Calls at night (shared text)"
+msgstr "Звонки ночью (общий текст)"
+
+msgid "The line “Calls outside working hours” from Memorial → Contacts. It can be changed right on the page — the change goes to the settings and to every page that shows it."
+msgstr "Строка «Звонки в нерабочее время» из «Мемориал → Контакты». Её можно поменять прямо на странице — правка попадёт в настройки и на все страницы, где она выводится."

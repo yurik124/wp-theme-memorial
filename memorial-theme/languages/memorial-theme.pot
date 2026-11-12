@@ -13,7 +13,7 @@ msgstr ""
 msgid " (custom)"
 msgstr ""
 
-#: functions.php:167
+#: functions.php:197
 msgid " — to the home page"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgid "Documents"
 msgstr ""
 
 #. translators: %s: menu item
-#: functions.php:104
+#: functions.php:134
 #, php-format
 msgid "Expand: %s"
 msgstr ""
@@ -237,7 +237,7 @@ msgstr ""
 msgid "Memorial Modern"
 msgstr ""
 
-#: functions.php:177
+#: functions.php:207
 msgid "Memorial: text layouts"
 msgstr ""
 
@@ -475,6 +475,6 @@ msgstr ""
 msgid "logo"
 msgstr ""
 
-#: functions.php:105
+#: functions.php:135
 msgid "submenu"
 msgstr ""

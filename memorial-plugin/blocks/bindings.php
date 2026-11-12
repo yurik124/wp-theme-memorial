@@ -73,10 +73,28 @@ function memorial_plugin_texts_field( $key ) {
 			return null;
 		}
 	}
-	if ( ! $field || ! in_array( $field['type'] ?? 'text', array( 'text', 'textarea', 'number', 'email' ), true ) || ! empty( $field['nobind'] ) ) {
+	if ( ! $field || ! memorial_plugin_texts_bindable( (string) end( $path ), $field ) ) {
 		return null;
 	}
 	return array( $field, $m[1], $path );
+}
+
+/**
+ * Can a field be shown and edited on a page: texts, numbers, emails — not links, codes, maps or keys
+ * (they belong to the settings screens), and not a field marked 'nobind'.
+ *
+ * @param string $name  Field name.
+ * @param array  $field Schema field.
+ * @return bool
+ */
+function memorial_plugin_texts_bindable( $name, $field ) {
+	if ( ! in_array( $field['type'] ?? 'text', array( 'text', 'textarea', 'number', 'email' ), true ) || ! empty( $field['nobind'] ) ) {
+		return false;
+	}
+	if ( preg_match( '/(^|_)(link|url|href|embed|org|code|key|token|map|coords?|slug|id|widget|src)$/', $name ) ) {
+		return false;
+	}
+	return ! preg_match( '#^https?://#', (string) ( $field['placeholder'] ?? '' ) );
 }
 
 /**
@@ -251,7 +269,7 @@ function memorial_plugin_texts_fields_list() {
 						$title = (string) ( $row[ $f['collapse'] ?? '' ] ?? '' );
 						$walk( $f['fields'], $row, $prefix . $name . '.' . $row['_id'] . '.', $text . ' ' . ( '' !== $title ? '«' . $title . '»' : '#' . ( $n + 1 ) ) );
 					}
-				} elseif ( in_array( $type, array( 'text', 'textarea', 'number', 'email' ), true ) && empty( $f['nobind'] ) ) {
+				} elseif ( memorial_plugin_texts_bindable( (string) $name, $f ) ) {
 					$out[] = array(
 						'key'   => $option . ':' . $prefix . $name,
 						'label' => mb_strimwidth( $text, 0, 140, '…' ),

@@ -27,7 +27,14 @@ add_action(
 		$h    = fn( $t ) => '<!-- wp:heading --><h2 class="wp-block-heading">' . $t . '</h2><!-- /wp:heading -->';
 		$sc   = fn( $c ) => '<!-- wp:shortcode -->' . $c . '<!-- /wp:shortcode -->';
 		$q    = fn( $question, $answer ) => '<!-- wp:details --><details class="wp-block-details"><summary>' . $question . '</summary>' . $p( $answer ) . '</details><!-- /wp:details -->';
-		$pats = array(
+		// A paragraph whose text is a field of the settings (blocks/bindings.php): edited on a page, changed everywhere.
+		$bound = static fn( $key, $cls = '' ) => '<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"memorial-plugin/settings","args":{"key":"' . $key . '"}}}}' . ( $cls ? ',"className":"' . $cls . '"' : '' ) . '} --><p' . ( $cls ? ' class="' . $cls . '"' : '' ) . '></p><!-- /wp:paragraph -->';
+		$pats  = array(
+			'night-shared' => array(
+				__( 'Calls at night (shared text)', 'memorial-plugin' ),
+				__( 'The line “Calls outside working hours” from Memorial → Contacts. It can be changed right on the page — the change goes to the settings and to every page that shows it.', 'memorial-plugin' ),
+				$bound( 'mem_contacts:night' ),
+			),
 			'catalog'     => array(
 				__( 'Catalog of the page with a summary', 'memorial-plugin' ),
 				__( 'A title, the automatic summary “96 models, from 35,000 ₽” and the catalog.', 'memorial-plugin' ),
