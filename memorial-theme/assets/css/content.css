@@ -1,5 +1,4 @@
-/* Оформление текстов страниц. Подключается и на сайте, и в редакторе (там WordPress сам ограничивает его областью текста). */
-:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))){--r:14px}
+/* Оформление текстов страниц. Подключается и на сайте, и в редакторе (там WordPress сам ограничивает его областью текста). */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))){--r:14px}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))),.editor-styles-wrapper{font-size:1.05rem;line-height:1.7;color:var(--ink,#2a2c28)}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h2{margin:2.6em 0 .7em;font-size:calc(clamp(1.6rem,3.4vw * var(--fs,1),2.2rem) * var(--fs-h,1))}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h3{margin:1.8em 0 .5em}
@@ -11,12 +10,9 @@
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) figure{margin:2rem 0}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) img{border-radius:14px}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) figcaption{font-size:.85rem;color:var(--mute,#66675e);text-align:center;margin-top:.6rem}
-/* Вводный текст */
-.is-style-lead{font-size:1.2rem;line-height:1.65;color:var(--ink,#2a2c28);border-left:2px solid var(--gold2,#a9b796);padding-left:1.1rem}
-/* Примечание */
-.is-style-note{font-size:.95rem;color:var(--mute,#66675e);background:var(--bg2,#f2efe6);border-radius:10px;padding:.8rem 1rem}
-/* Прайс */
-.wp-block-table.is-style-price{margin:1.5rem 0 1rem;overflow-x:auto}
+/* Вводный текст */.is-style-lead{font-size:1.2rem;line-height:1.65;color:var(--ink,#2a2c28);border-left:2px solid var(--gold2,#a9b796);padding-left:1.1rem}
+/* Примечание */.is-style-note{font-size:.95rem;color:var(--mute,#66675e);background:var(--bg2,#f2efe6);border-radius:10px;padding:.8rem 1rem}
+/* Прайс */.wp-block-table.is-style-price{margin:1.5rem 0 1rem;overflow-x:auto}
 .wp-block-table.is-style-price table{width:100%;table-layout:auto;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 0 0 1px var(--line,#e2ded2)}
 .wp-block-table.is-style-price th,.wp-block-table.is-style-price td{border:0;border-bottom:1px solid var(--line,#e2ded2);padding:.85rem 1.1rem;text-align:left;vertical-align:top}
 .wp-block-table.is-style-price thead th{background:var(--sage,#e6ebdf);color:var(--gold3,#3f4d36);font:600 .8125rem/1.3 var(--sans,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif);letter-spacing:.12em;text-transform:uppercase}
@@ -25,35 +21,31 @@
 .wp-block-table.is-style-price td:first-child,.wp-block-table.is-style-price th:first-child{width:100%}
 .wp-block-table.is-style-price tfoot td{background:var(--bg2,#f2efe6);border-top:1px solid var(--gold2,#a9b796);border-bottom:0;font-weight:700;font-size:1.1rem}
 .wp-block-table.is-style-price tfoot td:last-child{font:600 1.5rem/1.1 var(--lora,Georgia,serif);color:var(--ink,#2a2c28)}
-/* Шаги */
-.wp-block-list.is-style-steps{list-style:none;padding:0;margin:1.5rem 0 1.8rem;counter-reset:step}
+/* Шаги */.wp-block-list.is-style-steps{list-style:none;padding:0;margin:1.5rem 0 1.8rem;counter-reset:step}
 .wp-block-list.is-style-steps>li{counter-increment:step;position:relative;padding:0 0 1.2rem 3.4rem;margin:0;min-height:2.4rem}
 .wp-block-list.is-style-steps>li::before{content:counter(step);position:absolute;left:0;top:-.15rem;width:2.3rem;height:2.3rem;border-radius:50%;background:var(--bg,#fbfaf6);border:1px solid var(--gold,#5e7052);color:var(--gold3,#3f4d36);display:grid;place-items:center;font:500 1.25rem/1 var(--serif,Georgia,serif)}
 .wp-block-list.is-style-steps>li:not(:last-child)::after{content:"";position:absolute;left:1.13rem;top:2.45rem;bottom:.15rem;width:1px;background:var(--gold2,#a9b796)}
-/* Галочки */
-.wp-block-list.is-style-checks{list-style:none;padding:0}
+/* Галочки */.wp-block-list.is-style-checks{list-style:none;padding:0}
 .wp-block-list.is-style-checks>li{position:relative;padding-left:2rem;margin-bottom:.6em}
 .wp-block-list.is-style-checks>li::before{content:"";position:absolute;left:.15rem;top:.45em;width:.85rem;height:.45rem;border:solid var(--gold,#5e7052);border-width:0 0 2px 2px;transform:rotate(-45deg)}
-/* Карточка */
-.wp-block-group.is-style-card{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:14px;padding:1.4rem 1.6rem;margin:1.5rem 0}
+/* Карточка */.wp-block-group.is-style-card{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:14px;padding:1.4rem 1.6rem;margin:1.5rem 0}
 .wp-block-group.is-style-card>:last-child{margin-bottom:0}
 .wp-block-group.is-style-card>:first-child,.wp-block-group.is-style-card>.wp-block-group__inner-container>:first-child{margin-top:0}
 .wp-block-group.is-style-card>.wp-block-group__inner-container>:last-child{margin-bottom:0}
 .wp-block-media-text__content>h3:first-child,.wp-block-media-text__content>h2:first-child{margin-top:0}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-media-text h3{font-size:1.55rem;line-height:1.2}
 .wp-block-group.is-style-card h3{font-size:1.35rem;margin-bottom:.4rem}
-/* Фото + текст */
-.wp-block-media-text{margin:2rem 0;gap:0}
+/* Фото + текст */.wp-block-media-text{margin:2rem 0;gap:0}
 .wp-block-media-text.is-style-soft{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:14px;overflow:hidden}
 .wp-block-media-text.is-style-soft img{border-radius:0}
 .wp-block-media-text.is-style-soft>.wp-block-media-text__media{align-self:stretch;margin:0}
 .wp-block-media-text.is-style-soft>.wp-block-media-text__media img{width:100%;height:100%;object-fit:cover;margin:0}
 @media (max-width:600px){.wp-block-media-text.is-style-soft>.wp-block-media-text__media img{height:auto;aspect-ratio:4/3}}
+
 .wp-block-media-text .wp-block-media-text__content{padding:1.4rem 1.8rem}
 .wp-block-media-text .wp-block-media-text__content>:last-child{margin-bottom:0}
 .wp-block-media-text figure{margin:0}
-/* Частые вопросы (блок «Подробности») */
-.wp-block-details{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:12px;margin:0 0 .6rem;padding:0;overflow:hidden}
+/* Частые вопросы (блок «Подробности») */.wp-block-details{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:12px;margin:0 0 .6rem;padding:0;overflow:hidden}
 .wp-block-details summary{cursor:pointer;list-style:none;padding:1rem 3rem 1rem 1.2rem;font-weight:600;position:relative}
 .wp-block-details summary::-webkit-details-marker{display:none}
 .wp-block-details summary::after{content:"+";position:absolute;right:1.2rem;top:50%;transform:translateY(-50%);font-size:1.5rem;font-weight:300;color:var(--gold,#5e7052)}
@@ -62,8 +54,8 @@
 .wp-block-details>:not(summary){margin:.9rem 1.2rem}
 .wp-block-details>:last-child{margin-bottom:1rem}
 @media (max-width:600px){.wp-block-media-text .wp-block-media-text__content{padding:1.2rem}.wp-block-table.is-style-price th,.wp-block-table.is-style-price td{padding:.75rem .8rem}}
-/* Галерея «Карточки с подписью»: подпись под картинкой, а не поверх (для чертежей, каталога) */
-.wp-block-gallery.is-style-cards.has-nested-images{--wp--style--unstable-gallery-gap:.9rem;gap:.9rem}
+
+/* Галерея «Карточки с подписью»: подпись под картинкой, а не поверх (для чертежей, каталога) */.wp-block-gallery.is-style-cards.has-nested-images{--wp--style--unstable-gallery-gap:.9rem;gap:.9rem}
 .wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image{background:#fff;border:1px solid var(--line,#e2ded2);border-radius:12px;padding:.7rem .7rem 0;flex-direction:column;overflow:hidden}
 .wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image:not(#individual-image){flex-grow:0;align-self:stretch;justify-content:flex-start;margin:0!important}
 .wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image img{border-radius:6px;object-fit:contain;background:#fff;width:100%;height:auto!important;aspect-ratio:5/3}
@@ -75,72 +67,38 @@
 .wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image a{display:block}
 .wp-block-gallery.is-style-cards.mem-photo.has-nested-images figure.wp-block-image img{aspect-ratio:4/3}
 .wp-block-gallery.is-style-cards.mem-tall.has-nested-images figure.wp-block-image img{aspect-ratio:3/5;object-fit:contain}
-/* Прайс с несколькими колонками: колонки с цифрами — по ширине содержимого, без переносов */
-.wp-block-table.is-style-price td:not(:first-child),.wp-block-table.is-style-price th:not(:first-child){white-space:nowrap}
+/* Прайс с несколькими колонками: колонки с цифрами — по ширине содержимого, без переносов */.wp-block-table.is-style-price td:not(:first-child),.wp-block-table.is-style-price th:not(:first-child){white-space:nowrap}
 .wp-block-table.is-style-price td:not(:first-child):not(:last-child){color:var(--mute,#66675e)}
 @media (max-width:600px){
   .wp-block-table.is-style-price{font-size:.92rem}
   .wp-block-table.is-style-price td:first-child{min-width:5.8rem}
-  .wp-block-table.is-style-price td:not(:first-child):not(:last-child),.wp-block-table.is-style-price th:not(:first-child):not(:last-child){white-space:normal;padding-left:.4rem;padding-right:.4rem}
-}
-/* Если в прайсе 3+ колонки — ширина колонок по содержимому, а не «всё первой» */
-.wp-block-table.is-style-price table:has(tr > :nth-child(3)) td:first-child,.wp-block-table.is-style-price table:has(tr > :nth-child(3)) th:first-child{width:auto}
+  .wp-block-table.is-style-price td:not(:first-child):not(:last-child),.wp-block-table.is-style-price th:not(:first-child):not(:last-child){white-space:normal;padding-left:.4rem;padding-right:.4rem}}
+
+/* Если в прайсе 3+ колонки — ширина колонок по содержимому, а не «всё первой» */.wp-block-table.is-style-price table:has(tr > :nth-child(3)) td:first-child,.wp-block-table.is-style-price table:has(tr > :nth-child(3)) th:first-child{width:auto}
 @media (max-width:600px){.wp-block-table.is-style-price thead th{letter-spacing:.05em;font-size:.7rem;overflow-wrap:normal;word-break:keep-all;hyphens:none}}
-/* ---------- Крупное фото ---------- */
-/* Фото — в своей области, подпись и счётчик — под ним; стрелки не наезжают на текст:
-   на ПК — по бокам экрана, на телефоне — внизу, под подписью. Страница под фото не прокручивается. */
-html.lb-open,html.lb-open body{overflow:hidden}
-.lb{border:0;padding:0;background:transparent;max-width:100vw;max-height:100vh;width:100vw;height:100vh;height:100dvh;margin:0;overscroll-behavior:contain}
-.lb::backdrop{background:rgba(10,11,13,.94)}
-.lb[open]{display:grid;place-items:center}
-.lb figure{margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;width:min(calc(100vw - 150px),1100px);height:100%;padding:64px 0 18px;box-sizing:border-box}
-.lb__stage{min-height:0;max-width:100%;display:flex;align-items:center;justify-content:center}
-.lb img{max-width:100%;max-height:calc(100dvh - 190px);object-fit:contain;border-radius:6px;background:#fff;transition:filter .2s}
-.lb img.is-low{filter:blur(1.5px)}
-.lb figcaption{color:#e6e1d8;font-size:1rem;line-height:1.4;text-align:center;max-width:60ch}
-.lb__count{margin:0;color:#b9b2a6;font-size:.95rem}
-.lb__count[hidden]{display:none}
-.lb__x,.lb__nav{position:fixed;border:0;padding:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;border-radius:50%;width:48px;height:48px;display:grid;place-items:center}
-.lb__x svg,.lb__nav svg{display:block;width:24px;height:24px}
-.lb__x{top:12px;right:12px}
-.lb__nav{top:50%;margin-top:-24px}
-.lb__nav[hidden]{display:none}
-.lb__prev{left:20px}
-.lb__next{right:20px}
-.lb__x:hover,.lb__nav:hover{background:rgba(255,255,255,.24)}
-@media (max-width:700px){
-  .lb figure{width:calc(100vw - 24px);padding:60px 0 84px}
-  .lb img{max-height:calc(100dvh - 250px)}
-  .lb__nav{top:auto;bottom:16px;margin-top:0}
-  .lb__prev{left:calc(50% - 64px)}
-  .lb__next{right:calc(50% - 64px)}
-}
+
+/* ---------- Крупное фото ---------- *//* Фото — в своей области, подпись и счётчик — под ним; стрелки не наезжают на текст:
+   на ПК — по бокам экрана, на телефоне — внизу, под подписью. Страница под фото не прокручивается. */html.lb-open,html.lb-open body{overflow:hidden}
 /* Галереи и ряды фото: одинаковые пропорции у всех снимков */
-.wp-block-gallery.mem-eq.has-nested-images figure.wp-block-image:not(#individual-image){align-self:flex-start}
-.wp-block-gallery.mem-eq.has-nested-images figure.wp-block-image:not(#individual-image) img{aspect-ratio:var(--mem-ar,4/3);width:100%;height:auto!important;object-fit:cover;flex:none}
-.wp-block-gallery.mem-eq.has-nested-images figure.wp-block-image:not(#individual-image) > a{width:100%;flex:none}
-.mem-eq-cols{align-items:flex-start!important}
-.mem-eq-cols .wp-block-image img{aspect-ratio:var(--mem-ar,4/3);width:100%;height:auto;object-fit:cover}
 .wp-block-gallery figure.wp-block-image a[data-lb]{cursor:zoom-in}
-/* Встроенная панорама / карта, загрузка по кнопке */
-.mem-embed{position:relative;aspect-ratio:16/9;margin:1.5rem 0;border-radius:14px;overflow:hidden;background:var(--sage,#e6ebdf);color:var(--ink,#2a2c28);display:grid;place-items:center;text-align:center}
+/* Встроенная панорама / карта, загрузка по кнопке */.mem-embed{position:relative;aspect-ratio:16/9;margin:1.5rem 0;border-radius:14px;overflow:hidden;background:var(--sage,#e6ebdf);color:var(--ink,#2a2c28);display:grid;place-items:center;text-align:center}
 .mem-embed__ph{display:grid;justify-items:center;gap:.8rem;padding:1.5rem}
 .mem-embed__360{font:500 2.6rem/1 var(--serif,Georgia,serif);color:var(--gold3,#3f4d36);border:1px solid var(--gold,#5e7052);border-radius:50%;width:5.5rem;height:5.5rem;display:grid;place-items:center}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .mem-embed__ph p{margin:0;color:var(--ink,#2a2c28)}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .mem-embed__ph a{color:var(--gold3,#3f4d36);font-size:1rem}
 .mem-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0!important;margin:0!important}
 @media (max-width:600px){.mem-embed{aspect-ratio:4/5}.mem-embed__360{font-size:2rem;width:4.5rem;height:4.5rem}}
+
 /* Шаги с иконками: группа «mem-steps», внутри — группы «mem-step ico-…» (заголовок + текст).
-   Иконки: ico-phone, ico-doctor, ico-police, ico-car, ico-plane, ico-building, ico-hospital, ico-doc, ico-stamp, ico-ruble, ico-pin, ico-candle, ico-flower, ico-cross, ico-people, ico-food, ico-calendar, ico-check, ico-clock, ico-home, ico-chat, ico-heart, ico-card, ico-truck */
-.mem-steps{counter-reset:mstep;margin:1.8rem 0 2.2rem}
+   Иконки: ico-phone, ico-doctor, ico-police, ico-car, ico-plane, ico-building, ico-hospital, ico-doc, ico-stamp, ico-ruble, ico-pin, ico-candle, ico-flower, ico-cross, ico-people, ico-food, ico-calendar, ico-check, ico-clock, ico-home, ico-chat, ico-heart, ico-card, ico-truck */.mem-steps{counter-reset:mstep;margin:1.8rem 0 2.2rem}
 .mem-step{position:relative;counter-increment:mstep;padding:0 0 1.7rem 4.7rem;min-height:4.2rem;--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
   background:linear-gradient(var(--gold2,#a9b796),var(--gold2,#a9b796)) no-repeat 1.65rem 3.6rem/1px calc(100% - 3.9rem)}
 .mem-step:last-child{background:none;padding-bottom:.2rem}
 .mem-step::before{content:"";position:absolute;left:0;top:0;width:3.4rem;height:3.4rem;border-radius:50%;background:var(--gold,#5e7052) var(--ico) center/1.55rem no-repeat;box-shadow:0 0 0 5px var(--sage,#e6ebdf)}
 .mem-step::after{content:counter(mstep);position:absolute;left:2.45rem;top:-.35rem;min-width:1.45rem;height:1.45rem;border-radius:999px;background:var(--bg,#fbfaf6);border:1px solid var(--gold,#5e7052);color:var(--gold3,#3f4d36);font:600 .74rem/1.4rem var(--sans,system-ui,sans-serif);text-align:center;padding:0 .3rem}
-/* Отступы внутри шага — общие для текста (:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h3, p, ul), как было на сайте с классической темой */
-.mem-step.is-urgent::before{background-color:var(--gold3,#3f4d36)}
+/* Отступы внутри шага — общие для текста (:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h3, p, ul), как было на сайте с классической темой */.mem-step.is-urgent::before{background-color:var(--gold3,#3f4d36)}
 @media (max-width:600px){.mem-step{padding-left:3.9rem;background-position:1.35rem 3rem}.mem-step::before{width:2.8rem;height:2.8rem;background-size:1.3rem}.mem-step::after{left:1.95rem}}
+
 .ico-phone{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z'/%3E%3C/svg%3E")}
 .ico-doctor{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 3v5a5 5 0 0 0 10 0V3M6 3H4.5M16 3h1.5M11 13v2a5 5 0 0 0 10 0v-2'/%3E%3Ccircle cx='21' cy='11' r='2'/%3E%3C/svg%3E")}
 .ico-police{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5.2L12 2 4 5.2V12c0 6 8 10 8 10z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E")}
@@ -166,32 +124,22 @@ html.lb-open,html.lb-open body{overflow:hidden}
 .ico-card{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.5' y='5' width='19' height='14' rx='2'/%3E%3Cpath d='M2.5 10h19M6.5 15h4'/%3E%3C/svg%3E")}
 .ico-truck{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 16.5V6h12v10.5M14 9.5h4l3.5 3.5v3.5H14'/%3E%3Ccircle cx='6.5' cy='17.5' r='2'/%3E%3Ccircle cx='17.5' cy='17.5' r='2'/%3E%3C/svg%3E")}
 /* Ряд кнопок с прокруткой: стрелки и затухание */
-.srow{position:relative}
-.srow__arr{display:none;position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid var(--line,#e2ded2);background:#fff;color:var(--ink,#2a2c28);font-size:1.4rem;line-height:1;place-items:center;padding:0 0 2px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12)}
-.srow__arr--l{left:-2px}
-.srow__arr--r{right:-2px}
-.srow.has-l .srow__arr--l,.srow.has-r .srow__arr--r{display:grid}
-.srow.has-r .srow__in{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 60px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 60px),transparent)}
-.srow.has-l .srow__in{-webkit-mask-image:linear-gradient(90deg,transparent,#000 60px);mask-image:linear-gradient(90deg,transparent,#000 60px)}
-.srow.has-l.has-r .srow__in{-webkit-mask-image:linear-gradient(90deg,transparent,#000 60px,#000 calc(100% - 60px),transparent);mask-image:linear-gradient(90deg,transparent,#000 60px,#000 calc(100% - 60px),transparent)}
 /* Прайс: слова не рвутся посередине (WordPress у таблиц с «фиксированной шириной» разрешает это — отменяем),
-   короткие ячейки (цены) не переносятся, длинный текст переносится по словам */
-.wp-block-table.is-style-price td,.wp-block-table.is-style-price th{word-break:normal!important;overflow-wrap:normal!important;hyphens:none}
+   короткие ячейки (цены) не переносятся, длинный текст переносится по словам */.wp-block-table.is-style-price td,.wp-block-table.is-style-price th{word-break:normal!important;overflow-wrap:normal!important;hyphens:none}
 .wp-block-table.is-style-price table.has-fixed-layout{table-layout:auto!important}
 .wp-block-table.is-style-price td:last-child,.wp-block-table.is-style-price th:last-child{white-space:normal;min-width:7.5rem}
 .wp-block-table.is-style-price :is(td,th).mem-nw{white-space:nowrap}
 @media (min-width:701px){.wp-block-table.is-style-price :is(td,th).mem-nw-d{white-space:nowrap}}
+
 @media (max-width:600px){
   .wp-block-table.is-style-price th,.wp-block-table.is-style-price td{padding:.75rem .8rem}
   .wp-block-table.is-style-price td:first-child{width:auto;min-width:0}
   .wp-block-table.is-style-price td:last-child{min-width:6.5rem}
-  .wp-block-table.is-style-price th{white-space:normal}
-}
+  .wp-block-table.is-style-price th{white-space:normal}}
+
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-table td,:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-table th{word-break:normal;overflow-wrap:normal}
-/* Вопросы-«подробности»: чуть больше воздуха между ними */
-.wp-block-details{margin-bottom:.8rem}
-/* «Карточки»: вся карточка — ссылка (раньше нажималось только фото) */
-.wp-block-gallery.is-style-cards figure.wp-block-image{position:relative;transition:box-shadow .2s,transform .2s}
+/* Вопросы-«подробности»: чуть больше воздуха между ними */.wp-block-details{margin-bottom:.8rem}
+/* «Карточки»: вся карточка — ссылка (раньше нажималось только фото) */.wp-block-gallery.is-style-cards figure.wp-block-image{position:relative;transition:box-shadow .2s,transform .2s}
 .wp-block-gallery.is-style-cards figure.wp-block-image>a::after{content:"";position:absolute;inset:0;z-index:1}
 .wp-block-gallery.is-style-cards figure.wp-block-image figcaption a{position:relative;z-index:2}
 .wp-block-gallery.is-style-cards figure.wp-block-image:has(>a):hover{box-shadow:0 10px 26px -12px rgba(0,0,0,.25);transform:translateY(-2px)}
@@ -219,27 +167,12 @@ html.lb-open,html.lb-open body{overflow:hidden}
 }
 /* Ряды кнопок можно тянуть мышью */
 @media (hover:hover) and (pointer:fine){.mcat__nav,.srow__in{cursor:grab}}
-.mcat__nav.is-drag,.srow__in.is-drag{cursor:grabbing;scroll-behavior:auto!important;user-select:none}
-.mcat__nav.is-drag *,.srow__in.is-drag *{cursor:grabbing!important;pointer-events:none}
-.mem-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line,#e2ded2);border-radius:12px;padding:.7rem .7rem 0;text-decoration:none!important;color:var(--ink,#2a2c28)!important;transition:transform .25s,box-shadow .25s}
-.mem-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -16px rgba(0,0,0,.3)}
-.mem-card__ph{display:block;aspect-ratio:5/3;border-radius:6px;overflow:hidden}
-.mem-card__ph img,:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .mem-card__ph img{display:block;width:100%;height:100%;object-fit:cover;margin:0;border-radius:0}
-.mem-card__body{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.2rem;padding:.65rem .2rem .8rem;margin-top:auto}
-.mem-card--noimg .mem-card__body{padding-top:1.1rem;min-height:7rem;justify-content:center}
-.mem-card__title{font:500 1.125rem/1.3 var(--lora,Georgia,serif);color:var(--ink,#2a2c28)}
-.mem-card__sub{font-size:.92rem;line-height:1.4}
-.mem-card__go{font-size:.85rem;color:var(--mute,#66675e);margin-top:.15rem}
-.mem-card:hover .mem-card__go{color:var(--gold3,#3f4d36)}
-@media (max-width:600px){.mem-card__title{font-size:1.3rem}.mem-card__sub{font-size:1rem}}
+:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .mem-card__ph img{display:block;width:100%;height:100%;object-fit:cover;margin:0;border-radius:0}
 @keyframes rwoIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 /* [mem_reviews]: заглушка до загрузки виджета — компактная; после «Показать отзывы» — полная высота */
-.mrev__feed .reviews__widget:not(.is-loaded),.reviews__widget:not(.is-loaded){height:auto!important;min-height:0}
-.mrev__feed .reviews__widget:not(.is-loaded) .reviews__ph,.reviews__widget:not(.is-loaded) .reviews__ph{height:auto;padding:1.4rem 1rem}
 .reviews__ph .btn{margin-top:.3rem}
 
-/* Ссылки: подчёркивание сплошное (без разрывов под «у», «р», «д») */
-:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) a:not(.btn){text-decoration-skip-ink:none}
+/* Ссылки: подчёркивание сплошное (без разрывов под «у», «р», «д») */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) a:not(.btn){text-decoration-skip-ink:none}
 
 /* Таблица цен на телефоне (две колонки): ширина колонок постоянная — 52 % / 48 %,
    поэтому цена не сжимается в узкий столбик и не переносится по одному слову */
@@ -259,48 +192,35 @@ html.lb-open,html.lb-open body{overflow:hidden}
 
 /* ==========================================================================
    «Светлая память» (тема 4.0): лавровые маркеры, шалфейные подложки, тихие разделители
-   ========================================================================== */
-:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))),.editor-styles-wrapper{font-size:1.0625rem;line-height:1.65}
+   ========================================================================== */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))),.editor-styles-wrapper{font-size:1.0625rem;line-height:1.65}
 @media (min-width:1024px){:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))){font-size:1.125rem}}
+
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h2{font-family:var(--serif,"Cormorant Garamond",Georgia,serif);font-weight:500}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h3{font:500 calc(clamp(1.1875rem,1.6vw * var(--fs,1),1.375rem) * var(--fs-h,1))/1.3 var(--lora,Georgia,serif)}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) a:not(.btn){text-decoration-color:var(--gold2,#a9b796)}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) a:not(.btn):hover{text-decoration-color:currentColor}
-/* Маркер списка — лавровый лист (состав пакетов, «что входит», преимущества) */
-:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul:not([class]),:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul.wp-block-list:not([class*="is-style-"]),.wp-block-list.is-style-checks{list-style:none;padding-left:0}
+/* Маркер списка — лавровый лист (состав пакетов, «что входит», преимущества) */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul:not([class]),:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul.wp-block-list:not([class*="is-style-"]),.wp-block-list.is-style-checks{list-style:none;padding-left:0}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul:not([class])>li,:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul.wp-block-list:not([class*="is-style-"])>li,.wp-block-list.is-style-checks>li{position:relative;padding-left:1.7rem}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul:not([class])>li::before,:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul.wp-block-list:not([class*="is-style-"])>li::before,.wp-block-list.is-style-checks>li::before{content:"";position:absolute;left:.1rem;top:.42em;width:14px;height:14px;border:0;transform:none;background:var(--gold,#5e7052);
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath transform='translate(2 14) rotate(-48)' d='M0 0C5.1 -5 12.24 -4.25 17 0C12.24 4.25 5.1 5 0 0Z'/%3E%3C/svg%3E") center/contain no-repeat;
           mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath transform='translate(2 14) rotate(-48)' d='M0 0C5.1 -5 12.24 -4.25 17 0C12.24 4.25 5.1 5 0 0Z'/%3E%3C/svg%3E") center/contain no-repeat}
 :is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) ul ul>li::before{width:11px;height:11px;opacity:.7}
-/* Шаги: круглые номера в тонком контуре, вертикальная линия-стебель (на шалфейной подложке — в группе is-style-card) */
-.wp-block-list.is-style-steps>li{padding-left:3.5rem;padding-bottom:1.4rem}
-/* Карточка и примечание */
-.wp-block-group.is-style-card{border-radius:14px;box-shadow:0 1px 2px rgba(42,44,40,.04)}
+/* Шаги: круглые номера в тонком контуре, вертикальная линия-стебель (на шалфейной подложке — в группе is-style-card) */.wp-block-list.is-style-steps>li{padding-left:3.5rem;padding-bottom:1.4rem}
+/* Карточка и примечание */.wp-block-group.is-style-card{border-radius:14px;box-shadow:0 1px 2px rgba(42,44,40,.04)}
 .is-style-note{background:var(--sage,#e6ebdf);border-radius:10px;color:var(--ink,#2a2c28)}
-/* Прайс: чередование строк */
-.wp-block-table.is-style-price tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--bg2,#f2efe6) 55%,#fff)}
-/* Аккордеон «Вопрос–ответ»: разделители и «+» лавром */
-.wp-block-details{box-shadow:none}
+/* Прайс: чередование строк */.wp-block-table.is-style-price tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--bg2,#f2efe6) 55%,#fff)}
+/* Аккордеон «Вопрос–ответ»: разделители и «+» лавром */.wp-block-details{box-shadow:none}
 .wp-block-details summary{font-weight:500}
 .wp-block-details summary:hover{color:var(--gold3,#3f4d36)}
-/* Галереи: тёплые фото со скруглением */
-:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-gallery img{border-radius:10px}
+/* Галереи: тёплые фото со скруглением */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .wp-block-gallery img{border-radius:10px}
 .wp-block-gallery.is-style-cards figure.wp-block-image:has(>a):hover{box-shadow:0 12px 32px rgba(42,44,40,.08);transform:none}
-.mem-card:hover{transform:none;box-shadow:0 12px 32px rgba(42,44,40,.08)}
-/* Разделитель WordPress — лавровый «линия — лист — линия» */
-:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) hr.wp-block-separator,:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) hr{border:0;height:18px;width:160px;margin:2.5rem auto;background:url(../img/laurel-divider.svg) center/contain no-repeat;opacity:1}
-/* Цитата */
-:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) blockquote,.wp-block-quote{margin:2rem 0;padding:0 0 0 1.25rem;border-left:2px solid var(--gold2,#a9b796);font:italic 500 1.1875rem/1.6 var(--lora,Georgia,serif);color:var(--mute,#66675e)}
+/* Разделитель WordPress — лавровый «линия — лист — линия» */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) hr.wp-block-separator,:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) hr{border:0;height:18px;width:160px;margin:2.5rem auto;background:url(../img/laurel-divider.svg) center/contain no-repeat;opacity:1}
+/* Цитата */:is(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) blockquote,.wp-block-quote{margin:2rem 0;padding:0 0 0 1.25rem;border-left:2px solid var(--gold2,#a9b796);font:italic 500 1.1875rem/1.6 var(--lora,Georgia,serif);color:var(--mute,#66675e)}
 /* Крупное фото: светлое затемнение вместо чёрного */
-.lb::backdrop{background:rgba(42,44,40,.92)}
-/* Инструкции («Что делать, если умер человек»): нумерованные шаги на шалфейной подложке */
-.mem-steps{position:relative;background:var(--sage,#e6ebdf);border-radius:14px;padding:clamp(1.25rem,3vw,2rem) clamp(1rem,3vw,2rem)}
+/* Инструкции («Что делать, если умер человек»): нумерованные шаги на шалфейной подложке */.mem-steps{position:relative;background:var(--sage,#e6ebdf);border-radius:14px;padding:clamp(1.25rem,3vw,2rem) clamp(1rem,3vw,2rem)}
 .mem-steps .mem-step::before{box-shadow:0 0 0 5px color-mix(in srgb,var(--gold,#5e7052) 14%,var(--sage,#e6ebdf))}
 .mem-steps .mem-step{background-image:linear-gradient(color-mix(in srgb,var(--gold,#5e7052) 35%,var(--sage,#e6ebdf)),color-mix(in srgb,var(--gold,#5e7052) 35%,var(--sage,#e6ebdf)))}
 .mem-steps .mem-step:last-child{background:none}
 
-/* Редактор без шаблона: колонка текста той же ширины, что на сайте (820px по центру) */
-.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part)),.editor-styles-wrapper .editor-visual-editor__post-title-wrapper{max-width:820px;margin-inline:auto;padding-inline:1rem;box-sizing:content-box}
-/* В редакторе нет шапки сайта: «липкие» панели (разделы каталога, поиск, вступление отзывов) стоят на своём месте, а не посреди окна */
-.editor-styles-wrapper .mcat__bar,.editor-styles-wrapper .msearch__bar,.editor-styles-wrapper .reviews__intro,.editor-styles-wrapper .header{position:static !important;top:auto !important}
+/* Редактор без шаблона: колонка текста той же ширины, что на сайте (820px по центру) */.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part)),.editor-styles-wrapper .editor-visual-editor__post-title-wrapper{max-width:820px;margin-inline:auto;padding-inline:1rem;box-sizing:content-box}
+/* В редакторе нет шапки сайта: «липкие» панели (разделы каталога, поиск, вступление отзывов) стоят на своём месте, а не посреди окна */.editor-styles-wrapper .mcat__bar,.editor-styles-wrapper .msearch__bar,.editor-styles-wrapper .reviews__intro,.editor-styles-wrapper .header{position:static !important;top:auto !important}

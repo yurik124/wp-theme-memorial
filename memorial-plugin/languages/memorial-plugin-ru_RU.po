@@ -5523,3 +5523,39 @@ msgstr "— итог кремации, лента, доставка и цены 
 #: blocks/home/home.php:198
 msgid "“Call”, “Write” and the addresses with directions (Memorial → Contacts)."
 msgstr "«Позвонить», «Написать» и адреса с маршрутом (Мемориал → Контакты)."
+
+#: assets/js/front.js
+msgid "Could not open MAX. Leave your number — we will call you back."
+msgstr "Не получилось открыть MAX. Оставьте номер — мы перезвоним."
+
+#: assets/js/front.js
+msgid "Could not send."
+msgstr "Не удалось отправить."
+
+#: assets/js/front.js
+msgid "Could not write in MAX? Leave your number — we will call you back."
+msgstr "Не получилось написать в MAX? Оставьте номер — мы перезвоним."
+
+#: assets/js/front.js
+msgid "Directions map"
+msgstr "Карта проезда"
+
+#: assets/js/front.js
+msgid "Enter the full number: +7 and 10 digits."
+msgstr "Введите номер полностью: +7 и 10 цифр."
+
+#: assets/js/front.js
+msgid "Please call us."
+msgstr "Позвоните нам, пожалуйста."
+
+#: assets/js/front.js
+msgid "Reviews on Yandex Maps"
+msgstr "Отзывы на Яндекс Картах"
+
+#: assets/js/front.js
+msgid "Tick the consent to the data processing."
+msgstr "Отметьте согласие на обработку данных."
+
+#: assets/js/front.js
+msgid "photo %1$d of %2$d"
+msgstr "фото %1$d из %2$d"

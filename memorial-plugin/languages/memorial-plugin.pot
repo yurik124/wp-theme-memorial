@@ -1181,8 +1181,20 @@ msgstr ""
 msgid "Could not load the reviews: "
 msgstr ""
 
+#: core/assets.php:162
+msgid "Could not open MAX. Leave your number — we will call you back."
+msgstr ""
+
 #: src/convert/index.js:209
 msgid "Could not roll back: the revision saved before converting is missing."
+msgstr ""
+
+#: core/assets.php:160
+msgid "Could not send."
+msgstr ""
+
+#: core/assets.php:163
+msgid "Could not write in MAX? Leave your number — we will call you back."
 msgstr ""
 
 #: seo/metrika.php:19
@@ -1332,6 +1344,10 @@ msgstr ""
 msgid "Digits only, for example 98765432. Empty — Metrica is off on the site."
 msgstr ""
 
+#: core/assets.php:165
+msgid "Directions map"
+msgstr ""
+
 #: seo/metrika.php:42
 msgid "Do not count visits of those logged into the admin (your own visits will not spoil the statistics)"
 msgstr ""
@@ -1418,6 +1434,10 @@ msgstr ""
 
 #: catalog/catalog-types-admin.php:385
 msgid "Enter a name and choose where the category goes."
+msgstr ""
+
+#: core/assets.php:158
+msgid "Enter the full number: +7 and 10 digits."
 msgstr ""
 
 #: reviews/rewio.php:994
@@ -2857,6 +2877,10 @@ msgstr ""
 msgid "Photos, year, size and prices are changed right here; the description of a work — in the editor."
 msgstr ""
 
+#: core/assets.php:161
+msgid "Please call us."
+msgstr ""
+
 #: leads/callback.php:67
 msgid "Please try again."
 msgstr ""
@@ -3267,6 +3291,10 @@ msgstr ""
 msgid "Reviews of our customers"
 msgstr ""
 
+#: core/assets.php:164
+msgid "Reviews on Yandex Maps"
+msgstr ""
+
 #: admin/collections.php:74
 msgid "Reviews retyped from the paper guest book, with a photo of the page. Before uploading a photo, cover the surname, phone and signature of the author unless they agreed to publication."
 msgstr ""
@@ -3381,11 +3409,11 @@ msgstr ""
 msgid "Saving…"
 msgstr ""
 
-#: core/assets.php:107
+#: core/assets.php:107 core/assets.php:166
 msgid "Scroll left"
 msgstr ""
 
-#: core/assets.php:108
+#: core/assets.php:108 core/assets.php:167
 msgid "Scroll right"
 msgstr ""
 
@@ -4006,6 +4034,10 @@ msgstr ""
 
 #: reviews/rewio.php:842
 msgid "Tick the branches whose reviews to show (nothing ticked — all of them). Unneeded sites can be unticked for every branch."
+msgstr ""
+
+#: core/assets.php:159
+msgid "Tick the consent to the data processing."
 msgstr ""
 
 #: content/content.php:20
@@ -4848,6 +4880,12 @@ msgstr ""
 
 #: blocks/block-meta.php:69 blocks/block-meta.php:71 blocks/block-meta.php:76 blocks/block-meta.php:80 blocks/block-meta.php:95 blocks/block-meta.php:105
 msgid "phone"
+msgstr ""
+
+#. translators: 1: number of the photo, 2: number of photos
+#: core/assets.php:169
+#, php-format
+msgid "photo %1$d of %2$d"
 msgstr ""
 
 #: blocks/block-meta.php:86 blocks/block-meta.php:98

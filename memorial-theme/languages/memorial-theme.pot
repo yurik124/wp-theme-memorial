@@ -13,7 +13,7 @@ msgstr ""
 msgid " (custom)"
 msgstr ""
 
-#: functions.php:175
+#: functions.php:163
 msgid " — to the home page"
 msgstr ""
 
@@ -133,32 +133,12 @@ msgctxt "Color name"
 msgid "Text on a filled button"
 msgstr ""
 
-#: functions.php:106
-msgid "Could not open MAX. Leave your number — we will call you back."
-msgstr ""
-
-#: functions.php:104
-msgid "Could not send."
-msgstr ""
-
-#: functions.php:107
-msgid "Could not write in MAX? Leave your number — we will call you back."
-msgstr ""
-
 #: inc/design.php:24
 msgid "Dark accent: links, eyebrows, hover"
 msgstr ""
 
-#: functions.php:109
-msgid "Directions map"
-msgstr ""
-
 #: patterns/steps-icons.php:27
 msgid "Documents"
-msgstr ""
-
-#: functions.php:102
-msgid "Enter the full number: +7 and 10 digits."
 msgstr ""
 
 #. translators: %s: menu item
@@ -257,7 +237,7 @@ msgstr ""
 msgid "Memorial Modern"
 msgstr ""
 
-#: functions.php:185
+#: functions.php:173
 msgid "Memorial: design"
 msgstr ""
 
@@ -383,24 +363,8 @@ msgctxt "Pattern title"
 msgid "Steps with icons"
 msgstr ""
 
-#: functions.php:105
-msgid "Please call us."
-msgstr ""
-
-#: functions.php:108
-msgid "Reviews on Yandex Maps"
-msgstr ""
-
 #: inc/design.php:30
 msgid "Sage backing: “What to do”, numbers, footer"
-msgstr ""
-
-#: functions.php:110
-msgid "Scroll left"
-msgstr ""
-
-#: functions.php:111
-msgid "Scroll right"
 msgstr ""
 
 #: patterns/note.php:28
@@ -490,10 +454,6 @@ msgstr ""
 msgid "The custom colour “%s” (the former dark bars) is not moved: in the light schemes it matches the section background."
 msgstr ""
 
-#: functions.php:103
-msgid "Tick the consent to the data processing."
-msgstr ""
-
 #: patterns/steps-icons.php:41
 msgid "We will arrange the farewell and the last journey."
 msgstr ""
@@ -509,12 +469,6 @@ msgstr ""
 #. Theme URI of the theme
 #: style.css
 msgid "https://memorialbel.ru/"
-msgstr ""
-
-#. translators: 1: number of the photo, 2: number of photos
-#: functions.php:113
-#, php-format
-msgid "photo %1$d of %2$d"
 msgstr ""
 
 #: functions.php:101
