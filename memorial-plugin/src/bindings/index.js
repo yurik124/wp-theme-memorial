@@ -46,10 +46,7 @@ const toText = ( html ) => {
 /* ---------- Store: values of the keys, edits not saved yet, versions of the settings ---------- */
 
 const store = createReduxStore( STORE, {
-	reducer(
-		state = { values: {}, edits: {}, versions: {} },
-		action
-	) {
+	reducer( state = { values: {}, edits: {}, versions: {} }, action ) {
 		switch ( action.type ) {
 			case 'RECEIVE':
 				return {
@@ -152,7 +149,9 @@ registerBlockBindingsSource( {
 			if ( key && binding.newValue !== undefined ) {
 				dispatch( STORE ).edit(
 					key,
-					attr === 'url' ? binding.newValue : toText( binding.newValue )
+					attr === 'url'
+						? binding.newValue
+						: toText( binding.newValue )
 				);
 				changed = true;
 			}
@@ -198,7 +197,10 @@ addFilter(
 					versions: dataSelect( STORE ).getVersions(),
 				},
 			} );
-			dataDispatch( STORE ).receive( res.values || {}, res.versions || {} );
+			dataDispatch( STORE ).receive(
+				res.values || {},
+				res.versions || {}
+			);
 			dataDispatch( STORE ).saved( keys );
 		} catch ( e ) {
 			// The page is not saved either: the reason is shown in the editor's notice.
@@ -221,8 +223,7 @@ const withSharedHint = createHigherOrderComponent(
 			.map( ( b ) => b?.args?.key )
 			.filter( Boolean );
 		const unsaved = useSelect(
-			( select ) =>
-				keys.some( ( k ) => k in select( STORE ).getEdits() ),
+			( select ) => keys.some( ( k ) => k in select( STORE ).getEdits() ),
 			[ keys.join( ',' ) ]
 		);
 		if ( ! keys.length ) {

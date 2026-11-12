@@ -8,8 +8,7 @@ const { login } = require( './helpers' );
 
 const api = ( page, options ) =>
 	page.evaluate(
-		( o ) =>
-			window.wp.apiFetch( o ).catch( ( e ) => ( { error: e } ) ),
+		( o ) => window.wp.apiFetch( o ).catch( ( e ) => ( { error: e } ) ),
 		options
 	);
 
@@ -45,7 +44,10 @@ test( 'общий текст: вывод, правка с проверкой в�
 	const saved = await api( page, {
 		path: '/memorial-plugin/v1/texts',
 		method: 'POST',
-		data: { values: { [ key ]: text }, versions: { mem_contacts: version } },
+		data: {
+			values: { [ key ]: text },
+			versions: { mem_contacts: version },
+		},
 	} );
 	expect( saved.error ).toBeUndefined();
 	expect( saved.values[ key ] ).toBe( text );
@@ -91,7 +93,9 @@ test( 'общий текст: вывод, правка с проверкой в�
 	expect( phones[ 0 ]._id ).toMatch( /^[a-z0-9]{6,32}$/ );
 	const phoneKey = `mem_contacts:phones.${ phones[ 0 ]._id }.num`;
 	const now = await api( page, {
-		path: '/memorial-plugin/v1/texts?keys[]=' + encodeURIComponent( phoneKey ),
+		path:
+			'/memorial-plugin/v1/texts?keys[]=' +
+			encodeURIComponent( phoneKey ),
 	} );
 	expect( now.values[ phoneKey ] ).toBe( phones[ 0 ].num );
 	const badPhone = await api( page, {
