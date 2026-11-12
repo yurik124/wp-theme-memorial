@@ -172,7 +172,7 @@ function rowSummary( def, row ) {
 	// Fields named by the schema (“summary”): a select shows its option, a checkbox its label.
 	const named = ( def.summary || [] )
 		.map( ( id ) => ( def.fields || [] ).find( ( f ) => f.id === id ) )
-		.filter( ( f ) => f && shown( f, row ) )
+		.filter( ( f ) => f && isShown( f, row ) )
 		.map( ( f ) => {
 			const v = row?.[ f.id ];
 			if ( f.type === 'select' ) {
@@ -206,7 +206,7 @@ function rowSummary( def, row ) {
  * @param {Object} data Values of the row or group.
  * @return {boolean} Shown.
  */
-function shown( def, data ) {
+function isShown( def, data ) {
 	if ( ! def.showIf ) {
 		return true;
 	}
@@ -612,7 +612,7 @@ function ControlFor( { def, value, onChange } ) {
  * @param {(edits: Object) => void} props.onChange Receives changed values ({ id: value }).
  */
 function FieldsForm( { defs: all, data, onChange } ) {
-	const visible = all.filter( ( def ) => shown( def, data ) );
+	const visible = all.filter( ( def ) => isShown( def, data ) );
 	const ids = visible.map( ( def ) => def.id ).join( ',' );
 	// eslint-disable-next-line react-hooks/exhaustive-deps -- the visible fields change only with their ids.
 	const defs = useMemo( () => visible, [ all, ids ] );
