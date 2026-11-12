@@ -255,15 +255,19 @@ function memorial_plugin_vendor_i18n() {
 	if ( 'en_US' === determine_locale() ) {
 		return;
 	}
-	$handles = array_filter(
-		array( 'memorial-plugin-settings', 'memorial-plugin-catalog', 'memorial-plugin-collections', 'memorial-plugin-convert' ),
-		static fn( $handle ) => wp_script_is( $handle, 'enqueued' )
+	// Every app of the plugin screens; the screens enqueue them while the page is rendered, so this runs
+	// right before the footer scripts are printed.
+	$handles = array_values(
+		array_filter(
+			wp_scripts()->queue,
+			static fn( $handle ) => 0 === strpos( $handle, 'memorial-plugin-' ) && in_array( 'wp-i18n', (array) ( wp_scripts()->registered[ $handle ]->deps ?? array() ), true )
+		)
 	);
 	if ( ! $handles ) {
 		return;
 	}
 	$messages = array();
-	foreach ( array( 'wp-editor', 'wp-edit-site', 'wp-media-utils' ) as $core ) {
+	foreach ( array( 'wp-editor', 'wp-edit-site', 'wp-dataviews', 'wp-media-utils', 'wp-components' ) as $core ) {
 		$json = wp_script_is( $core, 'registered' ) ? load_script_textdomain( $core, 'default' ) : false;
 		$data = $json ? json_decode( $json, true ) : null;
 		if ( ! empty( $data['locale_data']['messages'] ) ) {
@@ -277,4 +281,4 @@ function memorial_plugin_vendor_i18n() {
 	// One screen has one app; the locale data of wp.i18n is shared, so once is enough.
 	wp_add_inline_script( reset( $handles ), $js, 'before' );
 }
-add_action( 'admin_enqueue_scripts', 'memorial_plugin_vendor_i18n', 999 );
+add_action( 'admin_print_footer_scripts', 'memorial_plugin_vendor_i18n', 1 );
