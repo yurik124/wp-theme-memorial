@@ -295,8 +295,13 @@ export function ListPage( {
 							</div>
 							<DataViews.FiltersToggled />
 							<DataViews.Layout />
-							{ /* The actions for the selected items and the pages: floating at the bottom of the screen. */ }
 							<DataViews.Footer />
+							{ /* The actions for the selected items: floating at the bottom of the screen. */ }
+							{ DataViews.BulkActionToolbar && (
+								<div className="memorial-plugin-catalog__float">
+									<DataViews.BulkActionToolbar />
+								</div>
+							) }
 						</>
 					) }
 				</DataViews>

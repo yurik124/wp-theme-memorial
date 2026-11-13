@@ -195,6 +195,19 @@ button.memorial-plugin-catalog__photo {
 	margin-left: auto;
 }
 
+// The actions for the selected items: a floating bar at the bottom of the screen.
+.memorial-plugin-catalog__float:not(:empty) {
+	position: sticky;
+	bottom: 16px;
+	z-index: 3;
+	margin: 0 16px 16px;
+	padding: 10px 16px;
+	border: 1px solid #c9d3bf;
+	border-radius: 14px;
+	background: #fff;
+	box-shadow: 0 8px 24px rgba(31, 33, 28, 0.18);
+}
+
 // The actions for the selected items stay at the bottom of the screen while the list is scrolled.
 .memorial-plugin-admin .memorial-plugin-catalog .dataviews-wrapper {
 	overflow: visible;

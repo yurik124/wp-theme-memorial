@@ -783,6 +783,10 @@ test.describe( 'аудит товаров', () => {
 			await tick( 7 );
 			await page.waitForTimeout( 600 );
 			await shot( page, 'prod-03-selected-7' );
+			out.overlay = await page.evaluate( () => {
+				const strip = ( e ) => e ? e.outerHTML.replace( /<svg[\s\S]*?<\/svg>/g, '' ).replace( /\sstyle="[^"]*"/g, '' ).slice( 0, 3500 ) : '';
+				return { thead: strip( document.querySelector( '.dataviews-view-table thead' ) ), float: strip( document.querySelector( '.memorial-plugin-catalog__float' ) ) };
+			} );
 			await page.evaluate( () => window.scrollTo( 0, 900 ) );
 			await page.waitForTimeout( 500 );
 			await shot( page, 'prod-04-scrolled' );
