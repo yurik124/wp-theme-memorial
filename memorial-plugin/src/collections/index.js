@@ -375,7 +375,7 @@ function App( { name } ) {
 									'memorial-plugin'
 								),
 								n
-						  )
+							)
 						: sprintf(
 								/* translators: %d: number of reviews. */
 								_n(
@@ -385,7 +385,7 @@ function App( { name } ) {
 									'memorial-plugin'
 								),
 								n
-						  ),
+							),
 				} );
 				load();
 			} catch ( e ) {
