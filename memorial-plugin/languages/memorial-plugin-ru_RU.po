@@ -6774,3 +6774,6 @@ msgstr "Пояснение"
 
 msgid "How this screen works"
 msgstr "Как работает этот экран — показать пояснение"
+
+msgid "Fold"
+msgstr "Свернуть"

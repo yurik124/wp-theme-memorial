@@ -313,6 +313,19 @@ test.describe( 'аудит админки', () => {
 			await tab.waitForTimeout( 5000 );
 			const name = 'audit-' + String( ++n ).padStart( 2, '0' ) + '-' + s.replace( /[^a-z0-9]+/gi, '-' ).replace( /-+$/, '' ).slice( 0, 60 );
 			await tab.screenshot( { path: `${ DIR }/${ name }.png`, fullPage: true } ).catch( () => {} );
+			// то же с развёрнутыми списками: видно, как стоят поля
+			const unfold = tab.locator( '.memorial-plugin-settings__fold-all button:last-child' );
+			const cnt = await unfold.count().catch( () => 0 );
+			if ( cnt ) {
+				for ( let k = 0; k < cnt; k++ ) { await unfold.nth( k ).click().catch( () => {} ); }
+				for ( let pass = 0; pass < 2; pass++ ) {
+					const heads = tab.locator( '.memorial-plugin-settings__row-head[aria-expanded="false"]' );
+					const c2 = await heads.count().catch( () => 0 );
+					for ( let k = 0; k < c2; k++ ) { await heads.first().click().catch( () => {} ); }
+				}
+				await tab.waitForTimeout( 500 );
+				await tab.screenshot( { path: `${ DIR }/${ name }-open.png`, fullPage: true } ).catch( () => {} );
+			}
 			const info = await tab.evaluate( () => ( {
 				title: document.querySelector( 'h1, .admin-ui-page__header h2, h2' )?.textContent.trim(),
 				php: ( document.body.innerHTML.match( /(Fatal error|Warning|Notice|Deprecated)<\/b>:[^<]{0,300}/g ) || [] ).slice( 0, 5 ),

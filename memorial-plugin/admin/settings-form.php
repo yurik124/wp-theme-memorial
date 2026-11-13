@@ -57,6 +57,9 @@ function memorial_plugin_settings_describe( $schema ) {
 		if ( ! empty( $f['short'] ) ) {
 			$field['short'] = (string) $f['short']; // Short label of a checkbox in a folded row.
 		}
+		if ( ! empty( $f['sum'] ) ) {
+			$field['sum'] = (string) $f['sum']; // The field of a row summed up under the list (“Total”).
+		}
 		if ( ! empty( $f['inline'] ) ) {
 			$field['inline'] = true; // Short rows (name and price) in one line, without folding.
 		}

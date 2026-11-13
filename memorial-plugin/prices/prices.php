@@ -50,6 +50,7 @@ function memorial_plugin_prices_schema() {
 							'label'  => __( 'Contents of the package — the total is counted automatically. “On the card” — 3–5 main items, visible without opening the list', 'memorial-plugin' ),
 							'add'    => __( 'Add a line item', 'memorial-plugin' ),
 							'inline' => true,
+							'sum'    => 'price',
 							'fields' => array(
 								'name'  => array(
 									'type'  => 'text',
@@ -87,6 +88,7 @@ function memorial_plugin_prices_schema() {
 					'label'  => __( 'What is included. “On the card” — the items visible on the cremation card without opening the list', 'memorial-plugin' ),
 					'add'    => __( 'Add a line item', 'memorial-plugin' ),
 					'inline' => true,
+					'sum'    => 'price',
 					'fields' => array(
 						'name'  => array(
 							'type'  => 'text',

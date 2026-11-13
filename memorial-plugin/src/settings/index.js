@@ -135,7 +135,7 @@ function Help( { text } ) {
  * @param {Object} def Field description.
  * @return {{label: *, help: string|undefined, name: string}} What to pass to the control.
  */
-function labelOf( def ) {
+function labelOf( def, always = false ) {
 	const full = String( def.label ?? '' );
 	let name = full;
 	let tail = '';
@@ -158,7 +158,8 @@ function labelOf( def ) {
 		}
 	}
 	const help = String( def.help ?? '' );
-	const longHelp = help.length > HINT_FROM;
+	// In a row of fields any text under one field pushes it out of line, so there it always goes behind “?”.
+	const longHelp = always || help.length > HINT_FROM;
 	const hint = [ tail, longHelp || tail ? help : '' ]
 		.filter( Boolean )
 		.map( ( t ) => t.charAt( 0 ).toUpperCase() + t.slice( 1 ) )
@@ -273,6 +274,14 @@ function OrderEdit( { def, value, onChange } ) {
 	);
 }
 
+// Sum of the “sum” field over the rows of a list, and the way a price is shown.
+const sumOf = ( def, rows ) =>
+	( Array.isArray( rows ) ? rows : [] ).reduce(
+		( total, row ) => total + ( parseFloat( row?.[ def.sum ] ) || 0 ),
+		0
+	);
+const money = ( n ) => new Intl.NumberFormat( 'ru-RU' ).format( n ) + ' ₽';
+
 /**
  * Title of a folded row: the “collapse” field, otherwise the first filled text field.
  *
@@ -300,6 +309,15 @@ function rowTitle( def, row ) {
  * @return {string} Summary.
  */
 function rowSummary( def, row ) {
+	// A nested list with prices: its total first, it is what the owner looks for.
+	const totals = ( def.fields || [] )
+		.filter( ( f ) => f.type === 'repeater' && f.sum )
+		.map(
+			( f ) =>
+				__( 'Total', 'memorial-plugin' ) +
+				': ' +
+				money( sumOf( f, row?.[ f.id ] ) )
+		);
 	// Fields named by the schema (“summary”): a select shows its option, a checkbox its label.
 	const named = ( def.summary || [] )
 		.map( ( id ) => ( def.fields || [] ).find( ( f ) => f.id === id ) )
@@ -327,7 +345,7 @@ function rowSummary( def, row ) {
 				': ' +
 				row[ f.id ].length
 		);
-	return [ ...named, ...lists ].join( ' · ' );
+	return [ ...totals, ...named, ...lists ].join( ' · ' );
 }
 
 /**
@@ -452,6 +470,14 @@ function RepeaterEdit( { def, value, onChange } ) {
 									aria-expanded={ shown }
 									onClick={ () => toggle( i ) }
 								>
+									<span
+										className={
+											'memorial-plugin-settings__row-fold dashicons dashicons-arrow-' +
+											( shown ? 'down' : 'right' ) +
+											'-alt2'
+										}
+										aria-hidden="true"
+									/>
 									<strong className="memorial-plugin-settings__row-title">
 										{ title ||
 											sprintf(
@@ -468,14 +494,11 @@ function RepeaterEdit( { def, value, onChange } ) {
 											{ rowSummary( def, row ) }
 										</span>
 									) }
-									<span
-										className={
-											'dashicons dashicons-arrow-' +
-											( shown ? 'up' : 'down' ) +
-											'-alt2'
-										}
-										aria-hidden="true"
-									/>
+									<span className="memorial-plugin-settings__row-toggle">
+										{ shown
+											? __( 'Fold', 'memorial-plugin' )
+											: __( 'Unfold', 'memorial-plugin' ) }
+									</span>
 								</button>
 							) }
 							{ shown && (
@@ -532,15 +555,26 @@ function RepeaterEdit( { def, value, onChange } ) {
 					</div>
 				);
 			} ) }
-			<Button
-				variant="secondary"
-				onClick={ () => {
-					setOpen( new Set( [ ...open, rows.length ] ) );
-					onChange( [ ...rows, {} ] );
-				} }
-			>
-				{ '+ ' + ( def.add || __( 'Add', 'memorial-plugin' ) ) }
-			</Button>
+			<div className="memorial-plugin-settings__list-foot">
+				<Button
+					variant="secondary"
+					onClick={ () => {
+						setOpen( new Set( [ ...open, rows.length ] ) );
+						onChange( [ ...rows, {} ] );
+					} }
+				>
+					{ '+ ' + ( def.add || __( 'Add', 'memorial-plugin' ) ) }
+				</Button>
+				{ def.sum && (
+					<p
+						className="memorial-plugin-settings__total"
+						aria-live="polite"
+					>
+						{ __( 'Total', 'memorial-plugin' ) + ': ' }
+						<strong>{ money( sumOf( def, rows ) ) }</strong>
+					</p>
+				) }
+			</div>
 		</div>
 	);
 }
@@ -612,7 +646,10 @@ function GroupEdit( { def, value, onChange } ) {
 }
 
 function ControlFor( { def, value, onChange } ) {
-	const text = labelOf( def );
+	const text = labelOf(
+		def,
+		! [ 'textarea', 'code', 'map' ].includes( def.type )
+	);
 	const common = {
 		__next40pxDefaultSize: true,
 		__nextHasNoMarginBottom: true,
