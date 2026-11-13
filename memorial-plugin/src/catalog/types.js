@@ -27,6 +27,7 @@ import {
 } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
 import BooleanEdit from '../shared/boolean-edit';
+import HintedEdit from '../shared/hinted-edit';
 import { ModalButtons, moved } from './list-screen';
 import { termsField } from './fields';
 
@@ -58,8 +59,10 @@ const typeForm = ( t ) => ( {
 	from: !! t.defaults.from,
 	unit: t.defaults.unit,
 	cats: t.defaults.cats || [],
+	showSub: !! t.showSub,
 	ratio: t.ratio,
 	cols: t.cols || '',
+	colsPhone: String( t.colsPhone || 2 ),
 	sort: t.sort || '',
 } );
 
@@ -115,6 +118,7 @@ function TypeSettings( { type, ratios, save } ) {
 					'memorial-plugin'
 				),
 				type: 'integer',
+				Edit: HintedEdit,
 			},
 			{
 				id: 'from',
@@ -127,6 +131,20 @@ function TypeSettings( { type, ratios, save } ) {
 				label: __( 'Unit of a new product', 'memorial-plugin' ),
 				placeholder: __( 'per piece', 'memorial-plugin' ),
 				type: 'text',
+				Edit: HintedEdit,
+			},
+			{
+				id: 'showSub',
+				label: __(
+					'Products have a line under the name',
+					'memorial-plugin'
+				),
+				description: __(
+					'For example “height 90 cm”: a field in the products table and in the product window, a line under the name on the site. When it is off, the lines already typed are kept, only not shown.',
+					'memorial-plugin'
+				),
+				type: 'boolean',
+				Edit: BooleanEdit,
 			},
 			...( type.cats.length
 				? [
@@ -152,6 +170,8 @@ function TypeSettings( { type, ratios, save } ) {
 				),
 				type: 'text',
 				elements: sortElements( type.sorts, type.sort, false ),
+				Edit: HintedEdit,
+				look: true,
 			},
 			{
 				id: 'ratio',
@@ -161,19 +181,40 @@ function TypeSettings( { type, ratios, save } ) {
 					{ value: '', label: __( 'Usual 4:3', 'memorial-plugin' ) },
 					...ratios,
 				],
+				Edit: HintedEdit,
+				look: true,
 			},
 			{
 				id: 'cols',
 				label: __( 'Columns on a computer', 'memorial-plugin' ),
+				description: __( 'From 2 to 6; empty — 4.', 'memorial-plugin' ),
+				type: 'integer',
+				placeholder: '4',
+				Edit: HintedEdit,
+				look: true,
+			},
+			{
+				id: 'colsPhone',
+				label: __( 'Columns on a phone', 'memorial-plugin' ),
 				description: __(
-					'2–6; empty — 4. On a phone always 2.',
+					'One column — large photos, one product under another; two — more products on the screen.',
 					'memorial-plugin'
 				),
-				type: 'integer',
+				type: 'text',
+				elements: [
+					{ value: '1', label: '1' },
+					{ value: '2', label: '2' },
+				],
+				Edit: HintedEdit,
+				look: true,
 			},
 		],
 		[ ratios, type ]
 	);
+	const change = ( e ) => {
+		setData( ( d ) => ( { ...d, ...e } ) );
+		setDirty( true );
+	};
 	return (
 		<Card>
 			<CardHeader>
@@ -185,13 +226,29 @@ function TypeSettings( { type, ratios, save } ) {
 					fields={ fields }
 					form={ {
 						layout: { type: 'regular' },
-						fields: fields.map( ( f ) => f.id ),
+						fields: fields
+							.filter( ( f ) => ! f.look )
+							.map( ( f ) => f.id ),
 					} }
-					onChange={ ( e ) => {
-						setData( ( d ) => ( { ...d, ...e } ) );
-						setDirty( true );
-					} }
+					onChange={ change }
 				/>
+				{ /* How the products look on the site: one row of four short fields. */ }
+				<h3 className="memorial-plugin-catalog__subhead">
+					{ __( 'Products on the site', 'memorial-plugin' ) }
+				</h3>
+				<div className="memorial-plugin-catalog__look">
+					<DataForm
+						data={ data }
+						fields={ fields }
+						form={ {
+							layout: { type: 'regular' },
+							fields: fields
+								.filter( ( f ) => f.look )
+								.map( ( f ) => f.id ),
+						} }
+						onChange={ change }
+					/>
+				</div>
 				<Flex
 					justify="flex-end"
 					className="memorial-plugin-catalog__buttons"
@@ -207,6 +264,8 @@ function TypeSettings( { type, ratios, save } ) {
 								desc: data.desc,
 								ratio: data.ratio,
 								cols: data.cols,
+								colsPhone: Number( data.colsPhone ) || 2,
+								showSub: data.showSub,
 								sort: data.sort,
 								defaults: {
 									price: data.price,

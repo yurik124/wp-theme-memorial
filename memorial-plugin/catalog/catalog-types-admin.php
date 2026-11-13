@@ -99,8 +99,10 @@ function memorial_plugin_types_data( $type_id ) {
 		'defaults' => memorial_plugin_type_defaults( $type_id ),
 		'cats'     => memorial_plugin_types_cats( $type_id ),
 		'ratio'    => (string) get_term_meta( $type_id, 'mem_ratio', true ),
-		'cols'     => (int) get_term_meta( $type_id, 'mem_cols', true ),
-		'sort'     => (string) get_term_meta( $type_id, 'mem_sort', true ),
+		'cols'      => (int) get_term_meta( $type_id, 'mem_cols', true ),
+		'colsPhone' => memorial_plugin_type_cols_phone( $type_id ),
+		'showSub'   => memorial_plugin_type_show_sub( $type_id ),
+		'sort'      => (string) get_term_meta( $type_id, 'mem_sort', true ),
 		'sorts'    => array_map(
 			static fn( $k, $v ) => array(
 				'value' => $k,
@@ -184,6 +186,12 @@ function memorial_plugin_types_save( $type, $values ) {
 	}
 	if ( isset( $values['sort'] ) ) {
 		memorial_plugin_types_set_sort( $type, (string) $values['sort'] );
+	}
+	if ( isset( $values['colsPhone'] ) ) {
+		update_term_meta( $type, 'mem_cols_phone', 1 === absint( $values['colsPhone'] ) ? 1 : 2 );
+	}
+	if ( isset( $values['showSub'] ) ) {
+		update_term_meta( $type, 'mem_show_sub', empty( $values['showSub'] ) ? '0' : '1' );
 	}
 	if ( isset( $values['defaults'] ) ) {
 		$d = (array) $values['defaults'];

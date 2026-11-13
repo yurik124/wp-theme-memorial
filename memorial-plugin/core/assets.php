@@ -307,6 +307,9 @@ function memorial_plugin_vendor_i18n() {
 			$messages += $data['locale_data']['messages'];
 		}
 	}
+	// Strings of the bundled DataViews that WordPress’s own translation does not have yet: translated in
+	// the plugin's file (memorial-plugin-ru_RU.po); WordPress's translation wins as soon as it has them.
+	$messages += array_diff_key( memorial_plugin_vendor_strings(), $messages );
 	if ( ! $messages ) {
 		return;
 	}
@@ -315,3 +318,34 @@ function memorial_plugin_vendor_i18n() {
 	wp_add_inline_script( reset( $handles ), $js, 'before' );
 }
 add_action( 'admin_print_footer_scripts', 'memorial_plugin_vendor_i18n', 1 );
+
+/**
+ * Strings of @wordpress/dataviews missing in the translation of WordPress 7.1, as Jed locale data:
+ * msgid => [ translation, plural forms… ]. Only the translated ones are returned.
+ *
+ * @return array<string,string[]>
+ */
+function memorial_plugin_vendor_strings() {
+	$out    = array();
+	$single = array(
+		'Comfortable' => __( 'Comfortable', 'memorial-plugin' ),
+		'Balanced'    => __( 'Balanced', 'memorial-plugin' ),
+		'Compact'     => __( 'Compact', 'memorial-plugin' ),
+		'Filter'      => __( 'Filter', 'memorial-plugin' ),
+	);
+	foreach ( $single as $id => $tr ) {
+		if ( $tr !== $id ) {
+			$out[ $id ] = array( $tr );
+		}
+	}
+	// “50 of 65 items”: every plural form of the language (Russian has three: 1, 2–4, 5…).
+	$forms = array();
+	foreach ( array( 1, 2, 5 ) as $n ) {
+		/* translators: 1: items shown, 2: all items. */
+		$forms[] = _n( '%1$s of %2$s item', '%1$s of %2$s items', $n, 'memorial-plugin' );
+	}
+	if ( '%1$s of %2$s item' !== $forms[0] ) {
+		$out['%1$s of %2$s item'] = $forms;
+	}
+	return $out;
+}

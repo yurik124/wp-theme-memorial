@@ -254,6 +254,7 @@ function memorial_plugin_products_data() {
 			'fields'   => memorial_plugin_type_fields( (int) $t->term_id ),
 			'cats'     => memorial_plugin_manager_cats( (int) $t->term_id ),
 			'defaults' => memorial_plugin_type_defaults( (int) $t->term_id ),
+			'showSub'  => memorial_plugin_type_show_sub( (int) $t->term_id ),
 		);
 	}
 	$posts = get_posts(

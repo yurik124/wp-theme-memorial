@@ -322,6 +322,7 @@ export default function Products() {
 				type: 'text',
 				enableGlobalSearch: true,
 				enableHiding: false,
+				filterBy: false, // The title is found by the search field.
 			},
 			{
 				id: 'price',
@@ -356,13 +357,18 @@ export default function Products() {
 				placeholder: __( 'for example: per metre', 'memorial-plugin' ),
 				filterBy: false,
 			},
-			{
-				id: 'sub',
-				label: __( 'Line under the title', 'memorial-plugin' ),
-				type: 'text',
-				enableGlobalSearch: true,
-				filterBy: false,
-			},
+			// Only for a type that has it on (Types and categories); the lines typed are kept anyway.
+			...( type?.showSub === false
+				? []
+				: [
+						{
+							id: 'sub',
+							label: __( 'Line under the title', 'memorial-plugin' ),
+							type: 'text',
+							enableGlobalSearch: true,
+							filterBy: false,
+						},
+				  ] ),
 			...specs.map( ( s, i ) => ( {
 				id: 'spec' + i,
 				label: s.label + ( s.unit ? ', ' + s.unit : '' ),

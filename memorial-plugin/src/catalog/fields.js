@@ -93,6 +93,7 @@ export function photosField( label, logo = '' ) {
 		label,
 		enableSorting: false,
 		enableHiding: false,
+		filterBy: false,
 		render: ( { item } ) => <PhotoCell item={ item } logo={ logo } />,
 		Edit: ( { data, field, onChange } ) => (
 			<Photos

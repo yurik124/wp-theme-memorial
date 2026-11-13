@@ -193,7 +193,7 @@ function memorial_plugin_product_photos( $id ) {
 function memorial_plugin_catalog_card( $p, $i ) {
 	$id     = $p->ID;
 	$price  = (int) get_post_meta( $id, '_mem_price', true );
-	$sub    = get_post_meta( $id, '_mem_sub', true );
+	$sub    = memorial_plugin_type_show_sub( memorial_plugin_product_type( $id ) ) ? get_post_meta( $id, '_mem_sub', true ) : '';
 	$thumb  = get_post_thumbnail_id( $id );
 	$photos = memorial_plugin_product_photos( $id );
 	$big    = $thumb ? wp_get_attachment_image_url( $thumb, 'large' ) : '';
@@ -360,7 +360,7 @@ add_shortcode(
 			// много товаров — сначала 3 ряда, остальные по кнопке «Показать ещё» (pokazat="20" — своё число, pokazat="все" — все сразу).
 			$more = memorial_plugin_sc_no( $a['pokazat'] ) || in_array( mb_strtolower( $a['pokazat'] ), array( 'все', 'all' ), true ) ? 0 : ( (int) $a['pokazat'] ? (int) $a['pokazat'] : max( 8, $cols * 3 ) );
 			$more = $more && count( $items ) > $more + 2 ? $more : 0;
-			echo '<ul class="mcat__grid mcat--' . esc_attr( $ratio ) . '" style="--cols:' . (int) $cols . '"' . ( $more ? ' data-more="' . (int) $more . '"' : '' ) . '>';
+			echo '<ul class="mcat__grid mcat--' . esc_attr( $ratio ) . '" style="--cols:' . (int) $cols . ';--cols-phone:' . (int) memorial_plugin_type_cols_phone( memorial_plugin_type_root( $t->term_id ) ) . '"' . ( $more ? ' data-more="' . (int) $more . '"' : '' ) . '>';
 			$GLOBALS['memorial_plugin_card_ratio'] = array(
 				'photo'    => 4 / 3,
 				'portrait' => 3 / 4,

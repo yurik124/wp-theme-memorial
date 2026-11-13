@@ -821,7 +821,7 @@ test.describe( 'аудит товаров', () => {
 			await page.waitForTimeout( 500 );
 			await page.locator( '.dataviews-filters__button, button:has-text("Добавить фильтр"), button:has-text("Add filter")' ).first().click( { timeout: 5000 } ).catch( () => {} );
 			await page.waitForTimeout( 500 );
-			await page.getByRole( 'menuitem' ).first().click( { timeout: 5000 } ).catch( () => {} );
+			await page.getByRole( 'menuitem', { name: /Категории/ } ).first().click( { timeout: 5000 } ).catch( () => {} );
 			await page.waitForTimeout( 800 );
 			await page.locator( '[role=dialog] [role=checkbox], [role=dialog] input[type=checkbox], .dataviews-filters__search-widget-listitem' ).first().click( { timeout: 5000 } ).catch( () => {} );
 			await page.waitForTimeout( 800 );
@@ -838,6 +838,23 @@ test.describe( 'аудит товаров', () => {
 				};
 			} );
 			await page.keyboard.press( 'Escape' );
+			await page.waitForTimeout( 400 );
+			await shot( page, 'prod-12-filter-chip' );
+			out.api = await page.evaluate( async () => {
+				const src = [ ...document.scripts ].map( ( x ) => x.src ).find( ( x ) => /build\/catalog\/index\.js/.test( x ) );
+				const txt = src ? await ( await fetch( src ) ).text() : '';
+				return [ 'BulkActionToolbar', 'FiltersToggle', 'FiltersToggled', 'ViewConfig', 'LayoutSwitcher', 'Pagination', 'BulkActions', 'Footer', 'Search', 'header', 'children' ].map( ( k ) => [ k, ( txt.match( new RegExp( '\\b' + k + '\\s*[:=]', 'g' ) ) || [] ).length ] );
+			} );
+			await page.evaluate( () => document.querySelector( '.dataviews-view-table tbody tr input[type=checkbox], .dataviews-view-table tbody tr [role=checkbox]' )?.click() );
+			await page.waitForTimeout( 500 );
+			out.footerCss = await page.evaluate( () => {
+				const f = document.querySelector( '.dataviews-footer' );
+				if ( ! f ) { return null; }
+				const cs = getComputedStyle( f );
+				const chain = [];
+				for ( let e = f.parentElement; e && chain.length < 8; e = e.parentElement ) { const c = getComputedStyle( e ); chain.push( [ String( e.className ).slice( 0, 60 ), c.overflow, c.overflowY ] ); }
+				return { pos: cs.position, bottom: cs.bottom, html: f.outerHTML.replace( /<svg[\s\S]*?<\/svg>/g, '' ).slice( 0, 2500 ), chain };
+			} );
 		} );
 		await step( 'edit', async () => {
 			await page.goto( '/wp-admin/admin.php?page=mem-products', { waitUntil: 'load' } );

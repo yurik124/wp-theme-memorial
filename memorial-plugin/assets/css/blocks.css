@@ -63,7 +63,7 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 .mcard__price .price--ask{font-size:1rem}
 .mcard.is-hidden,.work.is-hidden{display:none}
 @media (max-width:900px){.mcat__grid{--cols:3!important}}
-@media (max-width:600px){.mcat__grid{--cols:2!important;gap:.6rem}.mcard__link{padding:.5rem .5rem 0}.mcard__name{font-size:1.05rem}.mcat__bar{gap:.5rem}.mcat__nav .chip{font-size:1rem;padding:.4rem .9rem}.mcat__sort select{max-width:128px;padding:.45rem .4rem;font-size:1rem}}
+@media (max-width:600px){.mcat__grid{--cols:var(--cols-phone,2)!important;gap:.6rem}.mcard__link{padding:.5rem .5rem 0}.mcard__name{font-size:1.05rem}.mcat__bar{gap:.5rem}.mcat__nav .chip{font-size:1rem;padding:.4rem .9rem}.mcat__sort select{max-width:128px;padding:.45rem .4rem;font-size:1rem}}
 /* ---------- Наши работы [mem_works] ---------- */
 .works{margin:1.5rem 0 2.5rem}
 .works__list{display:grid;gap:1.5rem}

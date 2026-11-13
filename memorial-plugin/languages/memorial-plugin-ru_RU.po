@@ -6849,3 +6849,46 @@ msgstr "Настроить блок: тексты и что показывать
 
 msgid "Visible on the site"
 msgstr "Показывать на сайте"
+
+#. translators: 1: items shown, 2: all items.
+msgid "%1$s of %2$s item"
+msgid_plural "%1$s of %2$s items"
+msgstr[0] "%1$s из %2$s элемента"
+msgstr[1] "%1$s из %2$s элементов"
+msgstr[2] "%1$s из %2$s элементов"
+
+msgid "Comfortable"
+msgstr "Просторно"
+
+msgid "Balanced"
+msgstr "Обычно"
+
+msgid "Compact"
+msgstr "Компактно"
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "Photo %1$d of %2$d"
+msgstr "Фото %1$d из %2$d"
+
+msgid "Open photo %d large"
+msgstr "Открыть фото %d крупно"
+
+msgid "Products have a line under the name"
+msgstr "У товаров есть строка под названием"
+
+msgid "For example “height 90 cm”: a field in the products table and in the product window, a line under the name on the site. When it is off, the lines already typed are kept, only not shown."
+msgstr "Например, «высота 90 см»: поле в таблице товаров и в окне товара, строка под названием на сайте. Если выключить — уже введённые строки сохраняются, просто не показываются."
+
+msgid "From 2 to 6; empty — 4."
+msgstr "От 2 до 6; пусто — 4."
+
+msgid "Columns on a phone"
+msgstr "Колонок на телефоне"
+
+msgid "One column — large photos, one product under another; two — more products on the screen."
+msgstr "Одна колонка — крупные фото, товары друг под другом; две — больше товаров на экране."
+
+msgid "Products on the site"
+msgstr "Товары на сайте"
