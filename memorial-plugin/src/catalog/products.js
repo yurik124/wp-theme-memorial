@@ -58,11 +58,11 @@ function DescEdit( { data, field, onChange } ) {
 					? __(
 							'This description had lists or photos: after a change it is saved as plain text.',
 							'memorial-plugin'
-					  )
+						)
 					: __(
 							'An empty line starts a new paragraph.',
 							'memorial-plugin'
-					  )
+						)
 			}
 			rows={ 6 }
 			value={ data.desc || '' }
