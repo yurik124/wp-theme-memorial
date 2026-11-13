@@ -139,18 +139,22 @@ function labelOf( def ) {
 	const full = String( def.label ?? '' );
 	let name = full;
 	let tail = '';
-	const dash = full.indexOf( ' — ' );
-	if ( dash > 0 ) {
-		name = full.slice( 0, dash );
-		tail = full.slice( dash + 3 );
-	} else if ( full.length > 48 ) {
-		const cut = [ ': ', ' (' ]
-			.map( ( mark ) => full.indexOf( mark ) )
-			.filter( ( at ) => at > 8 )
-			.sort( ( a, b ) => a - b )[ 0 ];
-		if ( cut ) {
-			name = full.slice( 0, cut );
-			tail = full.slice( cut ).replace( /^: /, '' ).trim();
+	// Only a long label is cut: a short “Name — variant” stays whole, the variant tells the fields apart.
+	if ( full.length > 40 ) {
+		const dash = full.indexOf( ' — ' );
+		const mark = full.slice( 9 ).search( /:\s|[ \u00a0]\(/ );
+		if ( dash > 0 && dash <= 40 ) {
+			name = full.slice( 0, dash );
+			tail = full.slice( dash + 3 );
+		} else if ( mark >= 0 ) {
+			name = full.slice( 0, mark + 9 );
+			tail = full
+				.slice( mark + 9 )
+				.replace( /^:\s/, '' )
+				.trim();
+		} else if ( dash > 0 ) {
+			name = full.slice( 0, dash );
+			tail = full.slice( dash + 3 );
 		}
 	}
 	const help = String( def.help ?? '' );
@@ -241,9 +245,9 @@ function OrderEdit( { def, value, onChange } ) {
 					( def.hideLabel ? ' screen-reader-text' : '' )
 				}
 			>
-				{ def.label }
+				{ labelOf( def ).label }
 			</span>
-			<Help text={ def.help } />
+			<Help text={ labelOf( def ).help } />
 			<ol className="memorial-plugin-settings__order">
 				{ keys.map( ( k, i ) => (
 					<li key={ k }>
@@ -398,9 +402,9 @@ function RepeaterEdit( { def, value, onChange } ) {
 					( def.hideLabel ? ' screen-reader-text' : '' )
 				}
 			>
-				{ def.label }
+				{ labelOf( def ).label }
 			</span>
-			<Help text={ def.help } />
+			<Help text={ labelOf( def ).help } />
 			{ ! def.inline && rows.length > 1 && (
 				<div className="memorial-plugin-settings__fold-all">
 					<Button

@@ -396,18 +396,42 @@
 
 // Checkboxes never share a line with text fields: each one takes its own row, the box and its name on one line.
 .memorial-plugin-admin .dataforms-layouts__wrapper > .dataforms-layouts-regular__field:has(.components-checkbox-control),
-.memorial-plugin-settings__fields > * > *:has(.components-checkbox-control) {
+.memorial-plugin-settings__repeater:not(.is-inline) > .memorial-plugin-settings__row > .memorial-plugin-settings__row-main > .memorial-plugin-settings__fields > * > *:has(.components-checkbox-control) {
 	grid-column: 1 / -1;
+}
+
+// Short rows (name, price, a checkbox): everything on one line, the checkbox at the end.
+.memorial-plugin-settings__repeater.is-inline .memorial-plugin-settings__fields > * {
+	grid-template-columns: minmax(0, 1fr) 120px max-content;
+	align-items: center;
 }
 
 .memorial-plugin-admin .memorial-plugin-settings .components-checkbox-control {
 	padding: 2px 0;
 
-	.components-checkbox-control__label {
+	label.components-checkbox-control__label,
+	label.components-checkbox-control__label * {
 		font-size: 14px;
 		font-weight: 400;
 		line-height: 1.4;
 	}
+
+	label.components-checkbox-control__label .memorial-plugin-settings__hint-btn {
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1;
+	}
+}
+
+// Every label of a field looks the same: normal case, never small capitals.
+.memorial-plugin-admin .memorial-plugin-settings label[class] {
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.memorial-plugin-admin .memorial-plugin-settings .components-input-control__label {
+	font-size: 13px;
+	font-weight: 600;
 }
 
 // Fields of a row start on one line, whatever stands under them.
@@ -423,4 +447,8 @@
 
 .memorial-plugin-settings__fold-all {
 	margin-bottom: -4px;
+}
+
+.memorial-plugin-admin .memorial-plugin-settings__repeater.is-inline .dataforms-layouts-regular__field.dataforms-layouts-regular__field:has(.components-checkbox-control) {
+	grid-column: auto;
 }
