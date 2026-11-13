@@ -254,19 +254,19 @@ function BulkBar( { items, selection, actions, onClear } ) {
  * A list page: title, buttons, notices, optional tabs and the DataViews table.
  *
  * @param {Object}     props
- * @param {string}     props.title     Page title.
- * @param {string}     props.subTitle  Text under the title.
- * @param {Element}    props.actions   Buttons at the top.
- * @param {Element}    props.tabs      Tabs above the list.
- * @param {Object}     props.notice    {status, text} or null.
- * @param {() => void} props.onNotice  Clear the notice.
- * @param {Object[]}   props.items     Items.
- * @param {Object[]}   props.fields    Fields.
- * @param {Object[]}   props.actionsOf Item actions.
- * @param {Object}     props.view      View.
- * @param {() => void} props.setView   Change the view.
- * @param {() => void} props.prefilter Filters that DataViews cannot do itself (array fields): (items, view) → items.
- * @param {boolean}    props.loading   Loading.
+ * @param {string}     props.title        Page title.
+ * @param {string}     props.subTitle     Text under the title.
+ * @param {Element}    props.actions      Buttons at the top.
+ * @param {Element}    props.tabs         Tabs above the list.
+ * @param {Object}     props.notice       {status, text} or null.
+ * @param {() => void} props.onNotice     Clear the notice.
+ * @param {Object[]}   props.items        Items.
+ * @param {Object[]}   props.fields       Fields.
+ * @param {Object[]}   props.actionsOf    Item actions.
+ * @param {Object}     props.view         View.
+ * @param {() => void} props.setView      Change the view.
+ * @param {() => void} props.prefilter    Filters that DataViews cannot do itself (array fields): (items, view) → items.
+ * @param {boolean}    props.loading      Loading.
  * @param {string[]}   props.selection    Selected item IDs (optional: the list keeps them itself).
  * @param {() => void} props.setSelection Change the selection.
  */

@@ -77,7 +77,7 @@ const sortElements = ( sorts, own, inherit ) => [
 						'memorial-plugin'
 					),
 				},
-		  ]
+			]
 		: [] ),
 	...( sorts || [] ),
 ];
@@ -141,7 +141,7 @@ function TypeSettings( { type, ratios, save } ) {
 								label: '— '.repeat( c.depth ) + c.name,
 							} ) )
 						),
-				  ]
+					]
 				: [] ),
 			{
 				id: 'sort',

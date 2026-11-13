@@ -411,7 +411,7 @@ export default function Products() {
 					item.date
 						? new Date( item.date * 1000 ).toLocaleDateString(
 								'ru-RU'
-						  )
+							)
 						: '',
 			},
 		];

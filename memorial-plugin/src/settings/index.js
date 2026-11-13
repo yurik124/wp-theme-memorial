@@ -67,7 +67,8 @@ function Help( { text } ) {
  * Label and explanation of a field: a long label is cut at “ — ”, “: ” or “ (” and its tail, together
  * with a long help text, goes behind “?”; a short help stays under the field.
  *
- * @param {Object} def Field description.
+ * @param {Object} def    Field description.
+ * @param          always
  * @return {{label: *, help: string|undefined, name: string}} What to pass to the control.
  */
 function labelOf( def, always = false ) {
@@ -432,7 +433,10 @@ function RepeaterEdit( { def, value, onChange } ) {
 									<span className="memorial-plugin-settings__row-toggle">
 										{ shown
 											? __( 'Fold', 'memorial-plugin' )
-											: __( 'Unfold', 'memorial-plugin' ) }
+											: __(
+													'Unfold',
+													'memorial-plugin'
+												) }
 									</span>
 								</button>
 							) }

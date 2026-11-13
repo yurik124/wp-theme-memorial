@@ -46,9 +46,7 @@ export default function Hint( { text, label } ) {
 				?
 			</button>
 			{ label && (
-				<span className="memorial-plugin-hint__label">
-					{ label }
-				</span>
+				<span className="memorial-plugin-hint__label">{ label }</span>
 			) }
 			{ isOpen && anchor && (
 				<Popover
