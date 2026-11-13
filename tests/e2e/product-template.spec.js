@@ -8,7 +8,9 @@ test( 'шаблон товара: заголовок ядра, части тов
 	page,
 } ) => {
 	await login( page );
-	await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products' );
+	await page.goto(
+		'/wp-admin/edit.php?post_type=mem_product&page=mem-products'
+	);
 	const api = ( options ) =>
 		page.evaluate( ( o ) => window.wp.apiFetch( o ), options );
 	const type = await api( {
@@ -46,7 +48,9 @@ test( 'шаблон товара: заголовок ядра, части тов
 	await expect( main.locator( '.product__info .about__text' ) ).toContainText(
 		'Short text of the product.'
 	);
-	await expect( main.locator( '.product__cta [data-callback]' ) ).toBeVisible();
+	await expect(
+		main.locator( '.product__cta [data-callback]' )
+	).toBeVisible();
 	await expect( main.locator( '.content.product__desc' ) ).toContainText(
 		'Product description text.'
 	);
