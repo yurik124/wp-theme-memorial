@@ -10,13 +10,15 @@
  * (кроме состояний :hover/:focus и редактора — их слепок не покрывает).
  * Размеры (width, height) сравниваются тоже, поэтому одно изменённое правило даёт отличия и у соседей и предков.
  */
-/* eslint-disable no-console -- a command-line tool. */
+/* eslint-disable no-console, no-bitwise -- a command-line tool; the hash uses bit operations. */
 import { createRequire } from 'node:module';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const require = createRequire( import.meta.url );
+// Playwright comes with @playwright/test in CI and is installed globally on a developer machine.
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { chromium } = require( 'playwright' );
 
 const ROOT = resolve( dirname( fileURLToPath( import.meta.url ) ), '..' );
@@ -66,7 +68,7 @@ function swapStyles( html ) {
 			let css;
 			try {
 				css = readFileSync( file, 'utf8' );
-			} catch ( e ) {
+			} catch {
 				return all;
 			}
 			const base = href.replace( /&amp;/g, '&' );
@@ -304,7 +306,9 @@ for ( const file of files ) {
 						) {
 							ids.changed.push( id );
 						}
-					} catch ( e ) {}
+					} catch {
+						// A selector the browser cannot parse matches nothing.
+					}
 				}
 				return ids;
 			},
