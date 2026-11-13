@@ -741,3 +741,87 @@ test.describe( 'слепки страниц', () => {
 		fs.writeFileSync( `${ DIR }/snap/list.json`, JSON.stringify( list, null, 1 ) );
 	} );
 } );
+
+test.describe( 'аудит товаров', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'аудит товаров', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		const errs = errorsOf( page );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		const out = {};
+		const step = async ( name, fn ) => {
+			try { await fn(); } catch ( e ) { out[ name + ':error' ] = String( e.message ).slice( 0, 300 ); }
+		};
+		await page.goto( '/wp-admin/admin.php?page=mem-products', { waitUntil: 'load' } );
+		await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } ).catch( () => {} );
+		await shot( page, 'prod-01-table' );
+		out.styles = await page.evaluate( () =>
+			[ ...document.querySelectorAll( 'link[rel=stylesheet]' ) ].map( ( l ) => l.href.replace( /^https?:\/\/[^/]+/, '' ) ).filter( ( h ) => /dataviews|memorial|components|admin-ui/.test( h ) )
+		);
+		await step( 'select1', async () => {
+			await page.locator( '.dataviews-view-table tbody tr input[type=checkbox]' ).first().check( { force: true } );
+			await page.waitForTimeout( 400 );
+			await shot( page, 'prod-02-selected-1' );
+			out.bulkHtml = await page.evaluate( () => ( document.querySelector( '.dataviews-bulk-actions-footer__container, .dataviews-footer' )?.outerHTML || '' ).slice( 0, 6000 ) );
+			out.headHtml = await page.evaluate( () => ( document.querySelector( '.dataviews-view-table thead' )?.outerHTML || '' ).slice( 0, 3000 ) );
+		} );
+		await step( 'select7', async () => {
+			const boxes = page.locator( '.dataviews-view-table tbody tr input[type=checkbox]' );
+			for ( let i = 1; i < 7; i++ ) { await boxes.nth( i ).check( { force: true } ); }
+			await page.waitForTimeout( 400 );
+			await shot( page, 'prod-03-selected-7' );
+			await page.evaluate( () => window.scrollTo( 0, 900 ) );
+			await page.waitForTimeout( 400 );
+			await shot( page, 'prod-04-scrolled' );
+			await page.evaluate( () => window.scrollTo( 0, 0 ) );
+		} );
+		await step( 'viewconfig', async () => {
+			await page.locator( '.dataviews__view-actions button[aria-label], .dataviews__view-actions button' ).last().click();
+			await page.waitForTimeout( 600 );
+			await shot( page, 'prod-05-view-config' );
+			out.configHtml = await page.evaluate( () => ( document.querySelector( '.components-popover:last-of-type, .components-dropdown__content' )?.outerHTML || '' ).slice( 0, 12000 ) );
+			await page.keyboard.press( 'Escape' );
+		} );
+		await step( 'grid', async () => {
+			out.actionsHtml = await page.evaluate( () => ( document.querySelector( '.dataviews__view-actions' )?.outerHTML || '' ).slice( 0, 4000 ) );
+			const btns = page.locator( '.dataviews__view-actions button' );
+			const n = await btns.count();
+			await btns.nth( n - 2 ).click();
+			await page.waitForTimeout( 500 );
+			await shot( page, 'prod-06-layout-menu' );
+			await page.getByRole( 'menuitemradio' ).nth( 1 ).click();
+			await page.waitForTimeout( 1000 );
+			await shot( page, 'prod-07-grid' );
+			out.gridHtml = await page.evaluate( () => ( document.querySelector( '.dataviews-wrapper' )?.innerHTML || '' ).slice( 0, 5000 ) );
+			out.gridCss = await page.evaluate( () => {
+				const el = document.querySelector( '[class*="dataviews-view-grid"]' );
+				return el ? { cls: el.className, display: getComputedStyle( el ).display, cols: getComputedStyle( el ).gridTemplateColumns } : null;
+			} );
+		} );
+		await step( 'edit', async () => {
+			await page.goto( '/wp-admin/admin.php?page=mem-products', { waitUntil: 'load' } );
+			await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } );
+			await page.locator( '.dataviews-view-table tbody tr' ).first().getByRole( 'button' ).first().click();
+			await page.waitForTimeout( 800 );
+			await shot( page, 'prod-08-edit-modal', { fullPage: true } );
+		} );
+		for ( const [ n, u ] of [ [ 'types', 'edit.php?post_type=mem_product&page=mem-types' ], [ 'pages', 'edit.php?post_type=mem_product&page=mem-product-pages' ] ] ) {
+			await step( n, async () => {
+				await page.goto( '/wp-admin/' + u, { waitUntil: 'load' } );
+				await page.waitForTimeout( 4000 );
+				await shot( page, 'prod-09-' + n, { fullPage: true } );
+			} );
+		}
+		await step( 'site-editor', async () => {
+			await page.goto( '/wp-admin/site-editor.php?p=%2Fwp_template&canvas=edit', { waitUntil: 'load' } );
+			await page.waitForTimeout( 6000 );
+			await shot( page, 'prod-10-site-editor' );
+		} );
+		out.errors = errs.slice( 0, 20 );
+		log( 'products', out );
+	} );
+} );
