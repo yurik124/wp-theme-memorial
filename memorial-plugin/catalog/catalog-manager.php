@@ -355,10 +355,8 @@ function memorial_plugin_product_save( $id, $values ) {
 				$post['post_status'] = 'publish' === $v ? 'publish' : 'draft';
 				break;
 			case 'desc':
-				// Only a description made of plain paragraphs is edited here; a rich one stays as it is.
-				if ( memorial_plugin_product_desc( get_post( $id ) )['simple'] ) {
-					$post['post_content'] = memorial_plugin_product_desc_blocks( (string) $v );
-				}
+				// Plain text from the product window → paragraphs (a description with lists becomes plain text).
+				$post['post_content'] = memorial_plugin_product_desc_blocks( (string) $v );
 				break;
 			case 'price':
 				update_post_meta( $id, '_mem_price', memorial_plugin_money( $v ) );

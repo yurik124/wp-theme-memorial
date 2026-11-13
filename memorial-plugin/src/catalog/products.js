@@ -1,7 +1,7 @@
 /**
  * Catalog → Products: one tab per product type, the specifications of the type as columns.
  */
-import { useCallback, useMemo, useState } from '@wordpress/element';
+import { useCallback, useMemo, useState, useRef } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import {
@@ -46,30 +46,25 @@ function toRow( p, specs ) {
 }
 
 // Description of a product: plain text; one made in the editor with lists or photos is only shown here.
+// Description of a product: plain text, edited right here (an empty line starts a new paragraph).
+// A description made earlier with lists or photos is edited here too; it then becomes plain text.
 function DescEdit( { data, field, onChange } ) {
-	if ( data.rich ) {
-		return (
-			<div className="memorial-plugin-catalog__desc">
-				<span className="memorial-plugin-catalog__desc-label">
-					{ field.label }
-				</span>
-				<p>{ data.desc }</p>
-				<p>
-					<a href={ data.edit }>
-						{ __(
-							'This description has formatting — change it in the editor',
-							'memorial-plugin'
-						) }
-					</a>
-				</p>
-			</div>
-		);
-	}
 	return (
 		<TextareaControl
 			__nextHasNoMarginBottom
 			label={ field.label }
-			rows={ 5 }
+			help={
+				data.rich
+					? __(
+							'This description had lists or photos: after a change it is saved as plain text.',
+							'memorial-plugin'
+					  )
+					: __(
+							'An empty line starts a new paragraph.',
+							'memorial-plugin'
+					  )
+			}
+			rows={ 6 }
 			value={ data.desc || '' }
 			onChange={ ( v ) => onChange( { desc: v } ) }
 		/>
@@ -261,6 +256,8 @@ export default function Products() {
 	const [ notice, setNotice ] = useState( null );
 	const [ editing, setEditing ] = useState( null );
 	const [ selection, setSelection ] = useState( [] );
+	const selected = useRef( 0 );
+	selected.current = selection.length;
 	const [ busy, setBusy ] = useState( false );
 	const [ typeId, setTypeId ] = useState(
 		() =>
@@ -620,11 +617,6 @@ export default function Products() {
 				callback: ( [ item ] ) => setEditing( item ),
 			},
 			{
-				id: 'editor',
-				label: __( 'Open in the editor', 'memorial-plugin' ),
-				callback: ( [ item ] ) => ( window.location.href = item.edit ),
-			},
-			{
 				id: 'view',
 				label: __( 'View on the site', 'memorial-plugin' ),
 				isEligible: ( item ) => !! item.view,
@@ -681,6 +673,8 @@ export default function Products() {
 				id: 'merge',
 				label: __( 'Merge into one…', 'memorial-plugin' ),
 				supportsBulk: true,
+				// Only for several selected products: one product has nothing to merge with.
+				isEligible: () => selected.current > 1,
 				RenderModal: ( props ) => (
 					<MergeModal { ...props } run={ run } />
 				),

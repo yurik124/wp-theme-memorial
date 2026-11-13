@@ -500,6 +500,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		const show = ( i ) => {
 			idx = ( i + group.length ) % group.length;
 			const it = group[ idx ];
+			// a product under “Show more”: its part of the list opens, so it is there after the view closes
+			const li = it.a?.closest( '[data-more-hidden]' );
+			li?.parentElement?.memReveal?.( li );
 			if ( loaded.has( it.href ) ) {
 				img.src = it.href;
 				img.classList.remove( 'is-low' );
@@ -600,7 +603,13 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					) || a.parentElement;
 				group = [];
 				[ ...scope.querySelectorAll( 'a[data-lb]' ) ]
-					.filter( ( x ) => x.offsetParent !== null )
+					// visible products and those waiting under “Show more” (not the ones filtered out)
+					.filter(
+						( x ) =>
+							x.offsetParent !== null ||
+							( x.closest( '[data-more-hidden]' ) &&
+								scope.offsetParent !== null )
+					)
 					.forEach( ( x ) => {
 						const its = itemsOf( x );
 						if ( x === a ) {

@@ -1067,6 +1067,8 @@ function showMore( g ) {
 		const li = [ ...g.children ];
 		li.forEach( ( x, i ) => {
 			x.hidden = i >= shown;
+			// hidden only until “Show more”: the large view still goes through these products
+			x.toggleAttribute( 'data-more-hidden', i >= shown );
 		} );
 		const rest = li.length - shown;
 		btn.hidden = rest <= 0;
@@ -1083,6 +1085,14 @@ function showMore( g ) {
 		firstNew?.querySelector( 'a,button' )?.focus( { preventScroll: true } );
 	} );
 	g.memMore = apply;
+	// the large view reached a product of the hidden part — open the part up to it
+	g.memReveal = ( item ) => {
+		const i = [ ...g.children ].indexOf( item );
+		if ( i >= shown ) {
+			shown = Math.ceil( ( i + 1 ) / step ) * step;
+			apply();
+		}
+	};
 	// a link to a product (#p-123) in the hidden part — show up to it
 	const h =
 		window.location.hash.length > 1 &&

@@ -6895,3 +6895,9 @@ msgstr "Товары на сайте"
 
 msgid "Actions for the selected items"
 msgstr "Действия с выбранными"
+
+msgid "This description had lists or photos: after a change it is saved as plain text."
+msgstr "В этом описании были списки или фото: после изменения оно сохранится простым текстом."
+
+msgid "An empty line starts a new paragraph."
+msgstr "Пустая строка — новый абзац."

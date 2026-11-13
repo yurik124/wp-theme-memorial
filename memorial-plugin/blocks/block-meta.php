@@ -285,6 +285,20 @@ function memorial_plugin_block_no_auto_controls( $args, $name ) {
 add_filter( 'register_block_type_args', 'memorial_plugin_block_no_auto_controls', PHP_INT_MAX, 2 );
 
 /**
+ * Editor: the look of the plugin's own parts drawn in place of a block (the choice “what to show”, the
+ * folded block). Blocks are drawn inside the frame of the editor canvas, so the styles go through
+ * enqueue_block_assets (which loads them into that frame) — only in the editor, not on the site.
+ */
+function memorial_plugin_block_controls_styles() {
+	if ( ! is_admin() || ! is_readable( MEMORIAL_PLUGIN_DIR . '/build/block-controls/style-index.css' ) ) {
+		return;
+	}
+	$asset = is_readable( MEMORIAL_PLUGIN_DIR . '/build/block-controls/index.asset.php' ) ? require MEMORIAL_PLUGIN_DIR . '/build/block-controls/index.asset.php' : array( 'version' => MEMORIAL_PLUGIN_VER );
+	wp_enqueue_style( 'memorial-plugin-block-controls', MEMORIAL_PLUGIN_URL . '/build/block-controls/style-index.css', array( 'wp-components' ), $asset['version'] );
+}
+add_action( 'enqueue_block_assets', 'memorial_plugin_block_controls_styles' );
+
+/**
  * Editor: choosers in the settings of the plugin blocks (build/block-controls).
  */
 function memorial_plugin_block_controls_assets() {
@@ -300,9 +314,6 @@ function memorial_plugin_block_controls_assets() {
 		$asset['version'],
 		true
 	);
-	if ( is_readable( MEMORIAL_PLUGIN_DIR . '/build/block-controls/style-index.css' ) ) {
-		wp_enqueue_style( 'memorial-plugin-block-controls', MEMORIAL_PLUGIN_URL . '/build/block-controls/style-index.css', array( 'wp-components' ), $asset['version'] );
-	}
 	wp_set_script_translations( 'memorial-plugin-block-controls', 'memorial-plugin', MEMORIAL_PLUGIN_DIR . '/languages' );
 	$addresses = array();
 	foreach ( memorial_plugin_addrs() as $i => $a ) {

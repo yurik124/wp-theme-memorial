@@ -477,12 +477,13 @@ details[id]{scroll-margin-top:calc(var(--hh,72px) + 24px)}
 .work__stage .work__arr svg{width:20px;height:20px;display:block}
 .work__stage .work__arr--l{left:0;transform:translate(-50%,-50%)}
 .work__stage .work__arr--r{right:0;left:auto;transform:translate(50%,-50%)}
-/* Телефон: карточки стоят тесно — стрелки внутри фото у края, чтобы круги соседних карточек не наезжали друг на друга */
+/* Телефон: стрелки как на компьютере — центр круга на краю фото; круг поменьше, а между карточками чуть шире
+   промежуток, чтобы круги соседних карточек не сходились */
 @media (max-width:600px){
-  .mcard__arr{width:28px;height:28px;margin-top:-14px}
-  .mcard__arr--l{left:4px;transform:none}
-  .mcard__arr--r{right:4px;transform:none}
-  .mcard__arr::after{inset:-8px}
+  .mcard__arr{width:26px;height:26px;margin-top:-13px}
+  .mcard__arr svg{width:14px;height:14px}
+  .mcard__arr::after{inset:-9px}
+  .mcat__grid{column-gap:.9rem}
 }
 
 /* ==========================================================================
@@ -960,3 +961,10 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 
 /* Строка точек одной высоты у всех карточек — названия на одном уровне */
 .mcard__dots{min-height:calc(.6rem + 9px);box-sizing:border-box}
+
+/* Выбранный раздел каталога: число моделей того же цвета, что и надпись кнопки (было серым на зелёном) */
+.mcat__nav .chip.is-on small,.chip.is-on small,.chip[aria-current] small,.chip[aria-pressed=true] small{color:inherit;opacity:.85}
+
+/* «Карточки разделов»: карточки по центру при любом их числе, ширина карточки прежняя */
+.mem-cards{grid-template-columns:repeat(auto-fit,minmax(230px,300px));justify-content:center}
+@media (max-width:600px){.mem-cards{grid-template-columns:1fr}}

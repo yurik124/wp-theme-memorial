@@ -25,10 +25,11 @@
 		}
 	}
 
+	// Number of photos: inside the corner of the photo, whole (it used to stick out and be cut by the cell).
 	&__count {
 		position: absolute;
-		right: -6px;
-		bottom: -6px;
+		right: 3px;
+		bottom: 3px;
 		min-width: 18px;
 		padding: 0 4px;
 		border-radius: 9px;
@@ -156,19 +157,22 @@ button.memorial-plugin-catalog__photo {
 	}
 }
 
-.memorial-plugin-hinted {
-	display: inline-flex;
-	align-items: center;
-}
 
-// “Density” of the table changes the photos too, so the rows really get lower or higher
-// (the padding of the cells alone changes the row by a few pixels: the photo sets its height).
+// “Density” of the table changes the photos too, so the rows really get lower or higher (the padding of
+// the cells alone changes the row by a few pixels: the photo sets its height). The photo stays square and
+// whole: no bigger than the room the table gives the picture of a row.
 .memorial-plugin-admin .dataviews-view-table[class*="compact"] {
 	--memorial-plugin-photo: 40px;
 }
 
 .memorial-plugin-admin .dataviews-view-table[class*="comfortable"] {
-	--memorial-plugin-photo: 88px;
+	--memorial-plugin-photo: 64px;
+}
+
+.memorial-plugin-admin .dataviews-view-table .memorial-plugin-catalog__photo {
+	flex: none;
+	width: var(--memorial-plugin-photo, 56px);
+	max-width: none;
 }
 
 // Top row of a list: what is selected on the left; search, filters and the view on the right.

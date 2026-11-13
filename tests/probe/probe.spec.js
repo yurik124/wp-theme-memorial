@@ -867,6 +867,25 @@ test.describe( 'аудит товаров', () => {
 				return { pos: cs.position, bottom: cs.bottom, html: f.outerHTML.replace( /<svg[\s\S]*?<\/svg>/g, '' ).slice( 0, 2500 ), chain };
 			} );
 		} );
+		await step( 'photo-click', async () => {
+			await page.goto( '/wp-admin/admin.php?page=mem-products', { waitUntil: 'load' } );
+			await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } );
+			const ph = page.locator( '.dataviews-view-table tbody tr .memorial-plugin-catalog__photo' ).first();
+			const box = await ph.boundingBox();
+			out.photoHit = await page.evaluate( ( b ) => {
+				if ( ! b ) { return null; }
+				const el = document.elementFromPoint( b.x + b.width / 2, b.y + b.height / 2 );
+				const chain = [];
+				for ( let e = el; e && chain.length < 6; e = e.parentElement ) { chain.push( [ e.tagName, String( e.className ).slice( 0, 70 ), getComputedStyle( e ).pointerEvents, e.inert ] ); }
+				const media = document.querySelector( '.dataviews-view-table tbody tr .memorial-plugin-catalog__photo' )?.parentElement;
+				return { chain, media: media ? [ String( media.className ), media.getBoundingClientRect().width, getComputedStyle( media ).overflow ] : null };
+			}, box );
+			await ph.click( { timeout: 5000 } ).catch( ( e ) => ( out.photoClickErr = String( e ).slice( 0, 200 ) ) );
+			await page.waitForTimeout( 600 );
+			out.viewerOpen = await page.locator( '.memorial-plugin-viewer' ).count();
+			await shot( page, 'prod-13-photo-click' );
+			await page.keyboard.press( 'Escape' );
+		} );
 		await step( 'edit', async () => {
 			await page.goto( '/wp-admin/admin.php?page=mem-products', { waitUntil: 'load' } );
 			await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } );

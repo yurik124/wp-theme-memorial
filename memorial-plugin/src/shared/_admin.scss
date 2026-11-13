@@ -408,3 +408,9 @@ body:has(.memorial-plugin-admin) .dataviews-view-config__properties div.componen
 		vertical-align: middle;
 	}
 }
+
+// A label with its “?” next to it (shared/hinted-edit.js, shared/boolean-edit.js).
+.memorial-plugin-hinted {
+	display: inline-flex;
+	align-items: center;
+}
