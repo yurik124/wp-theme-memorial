@@ -429,7 +429,7 @@
 	text-transform: none;
 }
 
-.memorial-plugin-admin .memorial-plugin-settings .components-input-control__label {
+.memorial-plugin-admin .memorial-plugin-settings label[class*="components-"][class*="label"]:not(.components-checkbox-control__label) {
 	font-size: 13px;
 	font-weight: 600;
 }
