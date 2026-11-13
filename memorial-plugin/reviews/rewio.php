@@ -280,6 +280,23 @@ function memorial_plugin_rewio_per( $s ) {
  * @return string
  */
 function memorial_plugin_rewio_src_url( $sid, $sources ) {
+	// The company's reviews page on that site — from a link of another review of the same site:
+	// yandex.ru/maps/org/<id>/reviews?… → yandex.ru/maps/org/<id>/reviews, 2gis.ru/reviews/<id>/review/<n> → 2gis.ru/reviews/<id>.
+	static $pages = null;
+	if ( null === $pages ) {
+		$pages = array();
+		foreach ( (array) ( memorial_plugin_rewio_cache_get()['groups'] ?? array() ) as $g ) {
+			foreach ( (array) ( $g['reviews'] ?? array() ) as $r ) {
+				$u = (string) ( $r['url'] ?? '' );
+				if ( '' !== $u && ! isset( $pages[ (int) $r['src'] ] ) && preg_match( '~^https?://~', $u ) ) {
+					$pages[ (int) $r['src'] ] = preg_replace( '~/review/[^/?#]+/?$~', '', strtok( $u, '?#' ) );
+				}
+			}
+		}
+	}
+	if ( ! empty( $pages[ $sid ] ) ) {
+		return $pages[ $sid ];
+	}
 	$cat = (array) get_option( 'mem_rewio_catalog', array() );
 	foreach ( (array) ( $cat['objects'] ?? array() ) as $o ) {
 		if ( ! empty( $o['links'][ $sid ] ) ) {
@@ -287,6 +304,9 @@ function memorial_plugin_rewio_src_url( $sid, $sources ) {
 		}
 	}
 	$url = (string) ( $sources[ $sid ]['url'] ?? ( $cat['urls'][ $sid ] ?? '' ) );
+	if ( '' === $url && function_exists( 'memorial_plugin_logo_domain' ) ) {
+		$url = memorial_plugin_logo_domain( (string) ( $sources[ $sid ]['slug'] ?? '' ) );
+	}
 	if ( '' !== $url && ! preg_match( '~^https?://~', $url ) ) {
 		$url = 'https://' . ltrim( $url, '/' );
 	}

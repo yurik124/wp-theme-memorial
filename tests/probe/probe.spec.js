@@ -1021,6 +1021,8 @@ test.describe( 'пакеты', () => {
 		};
 		await page.screenshot( { path: `${ DIR }/pk-admin-saved.png`, fullPage: true } );
 		// первый ряд состава: галочка «На карточке» на одном уровне с полями
+		await page.getByRole( 'button', { name: /Развернуть$/ } ).first().click().catch( () => {} );
+		await page.waitForTimeout( 500 );
 		report.firstRow = await page.evaluate( () => {
 			const rep = document.querySelector( '.memorial-plugin-settings__repeater.is-inline' );
 			const row = rep?.querySelector( '.memorial-plugin-settings__row' );

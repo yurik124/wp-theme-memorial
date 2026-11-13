@@ -182,7 +182,7 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( (string) get_option( 'memorial_plugin_cremation_pkg' ), $items[1]['_id'] );
 		$this->assertArrayHasKey( 'cremation', $saved, 'the old group stays for a rollback' );
 		$this->assertSame( 26000, memorial_plugin_cremation_total() );
-		$this->assertStringContainsString( 'Итого с доставкой', do_shortcode( '[mem_cremation]' ) );
+		$this->assertStringContainsString( 'Итого с доставкой', (string) call_user_func( memorial_plugin_shortcode_impl( 'mem_cremation' ), array() ) );
 		$this->assertCount( 2, memorial_plugin_packages_shown() );
 	}
 
