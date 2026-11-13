@@ -1841,7 +1841,7 @@ msgstr "Как далеко (необязательно)"
 
 #: seo/metrika.php:25
 msgid "How it works"
-msgstr "Как работает"
+msgstr "Как это работает"
 
 #: blocks/content/content-blocks.php:191
 msgid "How many (-1 — all)"
@@ -6768,3 +6768,9 @@ msgstr "Товар: похожие товары"
 msgctxt "block title"
 msgid "Product: specifications"
 msgstr "Товар: характеристики"
+
+msgid "Explanation"
+msgstr "Пояснение"
+
+msgid "How this screen works"
+msgstr "Как работает этот экран — показать пояснение"

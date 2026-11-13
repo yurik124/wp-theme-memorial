@@ -342,7 +342,7 @@ msgstr ""
 msgid "Active — new burials"
 msgstr ""
 
-#: src/catalog/works.js:48 src/catalog/products.js:154 src/catalog/types.js:484 src/catalog/types.js:716 src/catalog/work-types.js:227 src/settings/index.js:386
+#: src/catalog/works.js:48 src/catalog/products.js:154 src/catalog/types.js:484 src/catalog/types.js:716 src/catalog/work-types.js:227 src/settings/index.js:507
 msgid "Add"
 msgstr ""
 
@@ -510,7 +510,7 @@ msgstr ""
 msgid "All categories (tiles)"
 msgstr ""
 
-#: src/settings/index.js:795
+#: src/settings/index.js:945
 msgid "All changes are saved"
 msgstr ""
 
@@ -1011,7 +1011,7 @@ msgstr ""
 msgid "Choose by the title"
 msgstr ""
 
-#: src/settings/index.js:69 src/collections/index.js:54
+#: src/settings/index.js:190 src/collections/index.js:54
 msgid "Choose photo"
 msgstr ""
 
@@ -1414,7 +1414,7 @@ msgstr ""
 msgid "Done: loaded "
 msgstr ""
 
-#: src/settings/index.js:127
+#: src/settings/index.js:248
 msgid "Down"
 msgstr ""
 
@@ -1510,6 +1510,10 @@ msgstr ""
 msgid "Examples of works:"
 msgstr ""
 
+#: src/settings/index.js:60
+msgid "Explanation"
+msgstr ""
+
 #: admin/abilities.php:500
 msgid "Export the catalog"
 msgstr ""
@@ -1599,7 +1603,7 @@ msgstr ""
 msgid "Flower — wreaths"
 msgstr ""
 
-#: src/settings/index.js:259
+#: src/settings/index.js:380
 msgid "Fold all"
 msgstr ""
 
@@ -1857,7 +1861,7 @@ msgstr ""
 msgid "Hide reviews with the words (comma-separated)"
 msgstr ""
 
-#: src/settings/index.js:409
+#: src/settings/index.js:530
 msgid "Hide the key"
 msgstr ""
 
@@ -1893,7 +1897,7 @@ msgstr ""
 msgid "How far (optional)"
 msgstr ""
 
-#: seo/metrika.php:57
+#: src/settings/index.js:116 seo/metrika.php:57
 msgid "How it works"
 msgstr ""
 
@@ -1927,6 +1931,10 @@ msgstr ""
 
 #: leads/callback.php:162
 msgid "How should we address you"
+msgstr ""
+
+#: src/settings/index.js:749
+msgid "How this screen works"
 msgstr ""
 
 #: src/catalog/products.js:54
@@ -2400,13 +2408,13 @@ msgid "Move photo %d later"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:354
+#: src/settings/index.js:475
 #, php-format
 msgid "Move row %d down"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:343
+#: src/settings/index.js:464
 #, php-format
 msgid "Move row %d up"
 msgstr ""
@@ -2751,7 +2759,7 @@ msgstr ""
 msgid "Open Analytics settings"
 msgstr ""
 
-#: src/settings/index.js:701
+#: src/settings/index.js:835
 msgid "Open site"
 msgstr ""
 
@@ -3339,7 +3347,7 @@ msgstr ""
 msgid "Ready-made blocks in the editor"
 msgstr ""
 
-#: src/catalog/works.js:49 src/catalog/products.js:155 src/settings/index.js:79 src/block-controls/index.js:228 src/collections/index.js:64
+#: src/catalog/works.js:49 src/catalog/products.js:155 src/settings/index.js:200 src/block-controls/index.js:228 src/collections/index.js:64
 msgid "Remove"
 msgstr ""
 
@@ -3370,7 +3378,7 @@ msgid "Remove row"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:366
+#: src/settings/index.js:487
 #, php-format
 msgid "Remove row %d"
 msgstr ""
@@ -3387,7 +3395,7 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: src/settings/index.js:68 src/collections/index.js:53
+#: src/settings/index.js:189 src/collections/index.js:53
 msgid "Replace photo"
 msgstr ""
 
@@ -3570,7 +3578,7 @@ msgid "Round to"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:303
+#: src/settings/index.js:424
 #, php-format
 msgid "Row %d"
 msgstr ""
@@ -3587,7 +3595,7 @@ msgstr ""
 msgid "SEO title (SEOPress)"
 msgstr ""
 
-#: src/catalog/product-pages.js:125 src/catalog/types.js:164 src/catalog/types.js:483 src/catalog/list-screen.js:105 src/settings/index.js:709 src/settings/index.js:803
+#: src/catalog/product-pages.js:125 src/catalog/types.js:164 src/catalog/types.js:483 src/catalog/list-screen.js:105 src/settings/index.js:843 src/settings/index.js:953
 msgid "Save"
 msgstr ""
 
@@ -3607,7 +3615,7 @@ msgstr ""
 msgid "Saved."
 msgstr ""
 
-#: src/settings/index.js:677
+#: src/settings/index.js:811
 msgid "Saved. The changes are already on the site."
 msgstr ""
 
@@ -3805,7 +3813,7 @@ msgstr ""
 msgid "Show reviews"
 msgstr ""
 
-#: src/settings/index.js:410
+#: src/settings/index.js:531
 msgid "Show the key"
 msgstr ""
 
@@ -4244,7 +4252,7 @@ msgstr ""
 msgid "There are no products in this section yet. Call — we will find what you need."
 msgstr ""
 
-#: src/settings/index.js:791
+#: src/settings/index.js:941
 msgid "There are unsaved changes"
 msgstr ""
 
@@ -4420,7 +4428,7 @@ msgstr ""
 msgid "Unfold"
 msgstr ""
 
-#: src/settings/index.js:268
+#: src/settings/index.js:389
 msgid "Unfold all"
 msgstr ""
 
@@ -4468,7 +4476,7 @@ msgstr ""
 msgid "Untitled work"
 msgstr ""
 
-#: src/settings/index.js:120
+#: src/settings/index.js:241
 msgid "Up"
 msgstr ""
 
@@ -6343,7 +6351,7 @@ msgstr ""
 msgid "— not chosen —"
 msgstr ""
 
-#: src/settings/index.js:519
+#: src/settings/index.js:635
 msgid "— not selected —"
 msgstr ""
 

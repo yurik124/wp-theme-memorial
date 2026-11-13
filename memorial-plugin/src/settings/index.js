@@ -24,6 +24,7 @@ import {
 	Button,
 	CheckboxControl,
 	Notice,
+	Popover,
 	SelectControl,
 	Spinner,
 	TextareaControl,
@@ -41,10 +42,136 @@ const SITE = window.memorialPluginSettings?.siteUrl || '/';
 
 /* ---------- Controls for schema field types ---------- */
 
+// An explanation longer than this goes behind a round “?” button instead of standing next to the field.
+const HINT_FROM = 70;
+
+// Round “?” button: the explanation opens on hover, focus or click and never takes room in the form.
+function Hint( { text, label } ) {
+	const [ open, setOpen ] = useState( false );
+	const [ pinned, setPinned ] = useState( false );
+	const [ anchor, setAnchor ] = useState( null );
+	if ( ! text ) {
+		return null;
+	}
+	const isOpen = open || pinned;
+	return (
+		<span
+			className="memorial-plugin-settings__hint"
+			onMouseEnter={ () => setOpen( true ) }
+			onMouseLeave={ () => setOpen( false ) }
+		>
+			<button
+				type="button"
+				ref={ setAnchor }
+				className="memorial-plugin-settings__hint-btn"
+				aria-label={ __( 'Explanation', 'memorial-plugin' ) }
+				aria-expanded={ isOpen }
+				onFocus={ () => setOpen( true ) }
+				onBlur={ () => {
+					setOpen( false );
+					setPinned( false );
+				} }
+				onClick={ ( e ) => {
+					// Inside a <label>: the click must not toggle the checkbox or move the focus to the field.
+					e.preventDefault();
+					e.stopPropagation();
+					setPinned( ! pinned );
+				} }
+				onKeyDown={ ( e ) => {
+					if ( e.key === 'Escape' ) {
+						setOpen( false );
+						setPinned( false );
+					}
+				} }
+			>
+				?
+			</button>
+			{ label && (
+				<span className="memorial-plugin-settings__hint-label">
+					{ label }
+				</span>
+			) }
+			{ isOpen && anchor && (
+				<Popover
+					anchor={ anchor }
+					placement="top-start"
+					focusOnMount={ false }
+					offset={ 8 }
+					className="memorial-plugin-settings__hint-pop"
+					onClose={ () => {
+						setOpen( false );
+						setPinned( false );
+					} }
+				>
+					<div role="tooltip">{ text }</div>
+				</Popover>
+			) }
+		</span>
+	);
+}
+
+// A short explanation stays under the title; a long one hides behind “?”.
 function Help( { text } ) {
-	return text ? (
-		<p className="memorial-plugin-settings__help">{ text }</p>
-	) : null;
+	if ( ! text ) {
+		return null;
+	}
+	if ( String( text ).length > HINT_FROM ) {
+		return (
+			<p className="memorial-plugin-settings__help is-hint">
+				<Hint
+					text={ text }
+					label={ __( 'How it works', 'memorial-plugin' ) }
+				/>
+			</p>
+		);
+	}
+	return <p className="memorial-plugin-settings__help">{ text }</p>;
+}
+
+/**
+ * Label and explanation of a field: a long label is cut at “ — ”, “: ” or “ (” and its tail, together
+ * with a long help text, goes behind “?”; a short help stays under the field.
+ *
+ * @param {Object} def Field description.
+ * @return {{label: *, help: string|undefined, name: string}} What to pass to the control.
+ */
+function labelOf( def ) {
+	const full = String( def.label ?? '' );
+	let name = full;
+	let tail = '';
+	const dash = full.indexOf( ' — ' );
+	if ( dash > 0 ) {
+		name = full.slice( 0, dash );
+		tail = full.slice( dash + 3 );
+	} else if ( full.length > 48 ) {
+		const cut = [ ': ', ' (' ]
+			.map( ( mark ) => full.indexOf( mark ) )
+			.filter( ( at ) => at > 8 )
+			.sort( ( a, b ) => a - b )[ 0 ];
+		if ( cut ) {
+			name = full.slice( 0, cut );
+			tail = full.slice( cut ).replace( /^: /, '' ).trim();
+		}
+	}
+	const help = String( def.help ?? '' );
+	const longHelp = help.length > HINT_FROM;
+	const hint = [ tail, longHelp || tail ? help : '' ]
+		.filter( Boolean )
+		.map( ( t ) => t.charAt( 0 ).toUpperCase() + t.slice( 1 ) )
+		.join( '. ' )
+		.replace( /\.\. /g, '. ' );
+	return {
+		name,
+		label: hint ? (
+			<span className="memorial-plugin-settings__label-row">
+				{ name }
+				<Hint text={ hint } />
+			</span>
+		) : (
+			name
+		),
+		help: hint ? undefined : help || undefined,
+	};
 }
 
 function ImageEdit( { def, value, onChange } ) {
@@ -481,12 +608,13 @@ function GroupEdit( { def, value, onChange } ) {
 }
 
 function ControlFor( { def, value, onChange } ) {
+	const text = labelOf( def );
 	const common = {
 		__next40pxDefaultSize: true,
 		__nextHasNoMarginBottom: true,
-		label: def.label,
+		label: def.hideLabel ? text.name : text.label,
 		hideLabelFromVision: !! def.hideLabel,
-		help: def.help,
+		help: text.help,
 	};
 	switch ( def.type ) {
 		case 'group':
@@ -513,23 +641,17 @@ function ControlFor( { def, value, onChange } ) {
 			return (
 				<OrderEdit def={ def } value={ value } onChange={ onChange } />
 			);
-		case 'checkbox': {
-			// “Name — what it does”: the name in bold, the explanation under it in normal text.
-			const [ name, ...rest ] = String( def.label ).split( ' — ' );
-			const about = rest.join( ' — ' );
+		case 'checkbox':
+			// “Name — what it does”: the name next to the box, the explanation behind “?”.
 			return (
 				<CheckboxControl
 					__nextHasNoMarginBottom
-					label={ name }
-					help={
-						[ about, def.help ].filter( Boolean ).join( ' ' ) ||
-						undefined
-					}
+					label={ text.label }
+					help={ text.help }
 					checked={ !! Number( value ) }
 					onChange={ ( v ) => onChange( v ? 1 : 0 ) }
 				/>
 			);
-		}
 		case 'select':
 		case 'page':
 			return (
@@ -559,9 +681,9 @@ function ControlFor( { def, value, onChange } ) {
 			return (
 				<TextareaControl
 					__nextHasNoMarginBottom
-					label={ def.label }
+					label={ common.label }
 					hideLabelFromVision={ !! def.hideLabel }
-					help={ def.help }
+					help={ common.help }
 					placeholder={ def.placeholder }
 					rows={ def.rows || ( def.type === 'map' ? 2 : 3 ) }
 					className={
@@ -650,6 +772,24 @@ function FieldsForm( { defs: all, data, onChange } ) {
 }
 
 /* ---------- Page ---------- */
+
+// The intro of a screen: a short one is shown as it is, a long instruction is folded under one line.
+function Intro( { html } ) {
+	const body = (
+		<RawHTML className="memorial-plugin-settings__intro">{ html }</RawHTML>
+	);
+	if ( String( html ).replace( /<[^>]+>/g, '' ).length < 260 ) {
+		return body;
+	}
+	return (
+		<details className="memorial-plugin-settings__more">
+			<summary>
+				{ __( 'How this screen works', 'memorial-plugin' ) }
+			</summary>
+			{ body }
+		</details>
+	);
+}
 
 function App( { option } ) {
 	const [ page, setPage ] = useState( null );
@@ -753,9 +893,7 @@ function App( { option } ) {
 			>
 				{ page.intro && (
 					// The intro may hold lists and paragraphs, so it is not the page subtitle (a <p>).
-					<RawHTML className="memorial-plugin-settings__intro">
-						{ page.intro }
-					</RawHTML>
+					<Intro html={ page.intro } />
 				) }
 				{ notice && (
 					<Notice
@@ -772,12 +910,19 @@ function App( { option } ) {
 						className="memorial-plugin-settings__card"
 					>
 						<CardHeader>
-							<h2>{ def.label || def.id }</h2>
+							<h2 className="memorial-plugin-settings__card-title">
+								{ def.label || def.id }
+								{ String( def.help ?? '' ).length >
+									HINT_FROM && <Hint text={ def.help } /> }
+							</h2>
 						</CardHeader>
 						<CardBody>
 							{ def.type === 'group' ? (
 								<>
-									<Help text={ def.help } />
+									{ String( def.help ?? '' ).length <=
+										HINT_FROM && (
+										<Help text={ def.help } />
+									) }
 									<FieldsForm
 										defs={ def.fields || [] }
 										data={ value[ def.id ] || {} }
@@ -795,7 +940,18 @@ function App( { option } ) {
 								</>
 							) : (
 								<FieldsForm
-									defs={ [ { ...def, hideLabel: true } ] }
+									defs={ [
+										{
+											...def,
+											hideLabel: true,
+											// A long explanation is behind “?” next to the card title.
+											help:
+												String( def.help ?? '' )
+													.length > HINT_FROM
+													? ''
+													: def.help,
+										},
+									] }
 									data={ value }
 									onChange={ ( edits ) => {
 										setValue( ( v ) => ( {

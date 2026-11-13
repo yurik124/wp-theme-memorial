@@ -6,7 +6,7 @@
 .wp-block-gallery.is-style-cards.mem-portrait.has-nested-images figure.wp-block-image img{aspect-ratio:3/4;object-fit:cover}
 .wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image figcaption{margin-top:auto!important}
 .wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image:has(figcaption)::before{content:none;display:none}
-.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image figcaption{position:static;background:none;color:var(--ink,#2a2c28);text-shadow:none;text-align:center;font-size:.92rem;line-height:1.35;padding:.6rem .2rem .75rem;margin:0;max-height:none;overflow:visible;-webkit-mask-image:none;mask-image:none}
+.wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image figcaption{position:static;background:none;color:var(--ink,#2a2c28);text-shadow:none;text-align:center;font-size:1rem;line-height:1.35;padding:.6rem .2rem .75rem;margin:0;max-height:none;overflow:visible;-webkit-mask-image:none;mask-image:none}
 .wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image figcaption strong{display:block;font:500 1.125rem/1.3 var(--lora,Georgia,serif);color:var(--ink,#2a2c28)}
 .wp-block-gallery.is-style-cards.has-nested-images figure.wp-block-image a{display:block}
 .wp-block-gallery.is-style-cards.mem-photo.has-nested-images figure.wp-block-image img{aspect-ratio:4/3}
