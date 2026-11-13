@@ -1,8 +1,8 @@
 /* stylelint-disable selector-class-pattern -- classes of WordPress components and of the plugin are BEM (block__element) */
 @use "../shared/admin";
 // Styles of the bundled DataViews/DataForm (filters, chips, the bottom bar): the package asks to load them
-// when it is bundled with the plugin; css-loader puts them into this screen's stylesheet.
-@import "~@wordpress/dataviews/build-style/style.css";
+// when it is bundled with the plugin; postcss-import puts them into this screen's stylesheet.
+@import "@wordpress/dataviews/build-style/style.css";
 
 // Settings screens (src/settings): layout of the app's own elements only.
 .memorial-plugin-settings {
