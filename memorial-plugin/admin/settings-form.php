@@ -72,7 +72,10 @@ function memorial_plugin_settings_describe( $schema ) {
 				);
 			}
 		}
-		if ( 'page' === $type ) {
+		if ( array_key_exists( 'default', $f ) && is_scalar( $f['default'] ) ) {
+			$field['default'] = $f['default']; // The value of a new row of a list.
+		}
+		if ( 'page' === $type || 'link' === $type ) {
 			$field['options'] = memorial_plugin_settings_pages();
 		}
 		if ( isset( $f['fields'] ) && is_array( $f['fields'] ) ) {

@@ -135,4 +135,99 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		rest_get_server()->dispatch( $r );
 		$this->assertSame( 2501, (int) get_post_meta( $a, '_mem_price', true ) );
 	}
+
+	public function test_cremation_becomes_a_package_once() {
+		delete_option( 'memorial_plugin_prices_pkg_merge' );
+		delete_option( 'memorial_plugin_cremation_pkg' );
+		update_option(
+			'mem_prices',
+			array(
+				'packages'  => array(
+					'items' => array(
+						array(
+							'name' => 'Эконом',
+							'rows' => array(
+								array(
+									'name'  => 'Гроб',
+									'price' => 7000,
+								),
+							),
+						),
+					),
+				),
+				'cremation' => array(
+					'rows'       => array(
+						array(
+							'name'  => 'Кремирование',
+							'price' => 21500,
+							'key'   => 1,
+						),
+						array(
+							'name'  => 'Урна',
+							'price' => 4500,
+						),
+					),
+					'total'      => 'Итого с доставкой',
+					'card_title' => '',
+				),
+			)
+		);
+		memorial_plugin_prices_cremation_to_packages();
+		memorial_plugin_prices_cremation_to_packages(); // the second call changes nothing.
+		$saved = get_option( 'mem_prices' );
+		$items = $saved['packages']['items'];
+		$this->assertCount( 2, $items );
+		$this->assertSame( 1, $items[0]['show'], 'old packages are shown' );
+		$this->assertSame( 'Итого с доставкой', $items[1]['total'] );
+		$this->assertSame( (string) get_option( 'memorial_plugin_cremation_pkg' ), $items[1]['_id'] );
+		$this->assertArrayHasKey( 'cremation', $saved, 'the old group stays for a rollback' );
+		$this->assertSame( 26000, memorial_plugin_cremation_total() );
+		$this->assertStringContainsString( 'Итого с доставкой', (string) call_user_func( memorial_plugin_shortcode_impl( 'mem_cremation' ), array() ) );
+		$this->assertCount( 2, memorial_plugin_packages_shown() );
+	}
+
+	public function test_hidden_package_is_not_on_the_site() {
+		update_option(
+			'mem_prices',
+			array(
+				'packages' => array(
+					'cols'  => '3',
+					'items' => array(
+						array(
+							'name' => 'Виден',
+							'show' => 1,
+							'rows' => array(
+								array(
+									'name'  => 'Гроб',
+									'price' => 100,
+								),
+							),
+						),
+						array(
+							'name' => 'Скрыт',
+							'show' => 0,
+							'rows' => array(
+								array(
+									'name'  => 'Крест',
+									'price' => 200,
+								),
+							),
+						),
+					),
+				),
+			)
+		);
+		$html = memorial_plugin_packages_markup();
+		$this->assertStringContainsString( 'Виден', $html );
+		$this->assertStringNotContainsString( 'Скрыт', $html );
+		$this->assertStringContainsString( '--pkg-cols:3', $html );
+		$this->assertStringContainsString( 'class="pkg__rows"', $html );
+	}
+
+	public function test_link_field_keeps_a_page_or_an_address() {
+		$schema = array( 'l' => array( 'type' => 'link' ) );
+		$this->assertSame( '12', memorial_plugin_sanitize( $schema, array( 'l' => '12' ) )['l'] );
+		$this->assertSame( 'https://example.ru/a', memorial_plugin_sanitize( $schema, array( 'l' => 'https://example.ru/a' ) )['l'] );
+		$this->assertSame( '', memorial_plugin_sanitize( $schema, array( 'l' => 'javascript:alert(1)' ) )['l'] );
+	}
 }

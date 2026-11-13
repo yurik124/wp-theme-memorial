@@ -248,6 +248,13 @@
 		}
 	}
 
+	// A page of the site or an address typed by hand under it.
+	&__link {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
 	&__secret {
 		display: flex;
 		gap: 4px;
@@ -351,7 +358,7 @@
 	padding: 2px 0;
 
 	label.components-checkbox-control__label,
-	label.components-checkbox-control__label * {
+	label.components-checkbox-control__label *:not(.dashicons) {
 		font-size: 14px;
 		font-weight: 400;
 		line-height: 1.4;
@@ -457,6 +464,12 @@
 	align-items: center;
 	min-height: 40px;
 	padding: 0;
+}
+
+// …and on the first line too, where the other fields have their titles above: level with the inputs.
+.memorial-plugin-admin .memorial-plugin-settings__repeater.is-inline .memorial-plugin-settings__fields .dataforms-layouts-regular__field:has(.components-checkbox-control) {
+	align-self: end;
+	justify-content: flex-end;
 }
 
 // Rewio: a branch, and under it — its review sites, indented.

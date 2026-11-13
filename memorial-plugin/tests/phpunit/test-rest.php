@@ -56,6 +56,35 @@ class Test_Memorial_Plugin_Rest extends WP_UnitTestCase {
 		$this->assertSame( 403, $this->status( 'POST', '/memorial-plugin/v1/catalog/types', 'author', array( 'name' => 'X' ) ) );
 	}
 
+	public function test_save_answers_with_the_saved_value() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		// The value is read (and remembered) before the save — as the screen of “Prices” does.
+		memorial_plugin_prices( 'packages' );
+		$request = new WP_REST_Request( 'POST', '/memorial-plugin/v1/settings/mem_prices' );
+		$request->set_param(
+			'value',
+			array(
+				'packages' => array(
+					'items' => array(
+						array(
+							'name' => 'Новый пакет',
+							'show' => 1,
+							'rows' => array(
+								array(
+									'name'  => 'Гроб',
+									'price' => 5000,
+								),
+							),
+						),
+					),
+				),
+			)
+		);
+		$data  = rest_get_server()->dispatch( $request )->get_data();
+		$names = array_column( $data['value']['packages']['items'], 'name' );
+		$this->assertContains( 'Новый пакет', $names, 'a new package stays on the screen after saving' );
+	}
+
 	public function test_unknown_settings_page() {
 		$this->assertSame( 404, $this->status( 'GET', '/memorial-plugin/v1/settings/nope', 'administrator' ) );
 	}

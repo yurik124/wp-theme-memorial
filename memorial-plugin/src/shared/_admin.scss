@@ -314,7 +314,8 @@ body:has(.memorial-plugin-admin) .components-modal__frame {
 		color: #6f7f62;
 		cursor: help;
 
-		.dashicons {
+		// One size everywhere: labels of checkboxes and modals set their own font size on everything inside.
+		.dashicons.dashicons {
 			width: 20px;
 			height: 20px;
 			font-size: 20px;

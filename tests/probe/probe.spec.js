@@ -933,3 +933,108 @@ test.describe( 'аудит товаров', () => {
 		log( 'products', out );
 	} );
 } );
+
+// Пакеты одним списком, сортировка каталога, «Показать ещё», отзывы Rewio, сохранение «Цен».
+test.describe( 'пакеты', () => {
+	test.use( { viewport: { width: 1366, height: 900 } } );
+	test( 'аудит пакетов', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		const report = {};
+		const errs = errorsOf( page );
+		const front = async ( name, url, width ) => {
+			const t = await page.context().newPage();
+			await t.setViewportSize( { width, height: width < 600 ? 844 : 900 } );
+			await t.goto( url, { waitUntil: 'networkidle' } ).catch( () => {} );
+			await t.addStyleTag( { content: NO_FLOAT + '.reveal{opacity:1!important;transform:none!important}' } );
+			const pk = t.locator( '.mem-pkgs' ).first();
+			if ( await pk.count() ) {
+				await pk.evaluate( ( el ) => el.querySelectorAll( 'details' ).forEach( ( d ) => ( d.open = true ) ) );
+				await pk.screenshot( { path: `${ DIR }/pk-${ name }.png` } ).catch( () => {} );
+				report[ name ] = await pk.evaluate( ( el ) => ( {
+					cards: [ ...el.querySelectorAll( '.pkg' ) ].map( ( c ) => {
+						const r = c.getBoundingClientRect();
+						return { h: c.querySelector( 'h3' )?.textContent, x: Math.round( r.x ), y: Math.round( r.y ), w: Math.round( r.width ), link: c.querySelector( '.pkg__more' )?.href || '', note: c.querySelector( '.pkg__note' )?.textContent || '' };
+					} ),
+					leaf: getComputedStyle( el.querySelector( '.pkg__rows li' ) || el, '::before' ).content,
+				} ) );
+			}
+			const tbl = t.locator( '.mem-cremation' ).first();
+			if ( await tbl.count() ) {
+				await tbl.screenshot( { path: `${ DIR }/pk-${ name }-table.png` } ).catch( () => {} );
+			}
+			const cat = t.locator( '.mcat, .works' ).first();
+			if ( await cat.count() ) {
+				await t.evaluate( () => window.scrollBy( 0, 1400 ) );
+				await t.waitForTimeout( 500 );
+				await t.screenshot( { path: `${ DIR }/pk-${ name }-scrolled.png` } );
+				report[ name + '-cat' ] = await t.evaluate( () => {
+					const s = document.querySelector( '.mcat__sort' );
+					const m = document.querySelector( '.mcat__more:not([hidden])' );
+					const r = m?.getBoundingClientRect();
+					const pr = m?.parentElement.getBoundingClientRect();
+					return { sortTop: s ? Math.round( s.getBoundingClientRect().top ) : null, more: r ? { left: Math.round( r.left - pr.left ), right: Math.round( pr.right - r.right ) } : null };
+				} );
+			}
+			const rw = t.locator( '.rwo__src' );
+			if ( await rw.count() ) {
+				report[ name + '-rewio' ] = await rw.evaluateAll( ( a ) => a.slice( 0, 6 ).map( ( f ) => f.querySelector( 'a' )?.href || 'NO LINK: ' + f.textContent ) );
+			}
+			await t.close();
+		};
+		const byTitle = ( re ) => PAGES.find( ( x ) => re.test( x.post_title ) );
+		const list = [
+			[ 'home', '/' ],
+			[ 'ceny', byTitle( /^цены/i )?.url ],
+			[ 'krem', byTitle( /кремац/i )?.url ],
+			[ 'otzyvy', byTitle( /отзыв/i )?.url ],
+			[ 'groby', byTitle( /гроб/i )?.url ],
+			[ 'raboty', byTitle( /наши работы|работ/i )?.url ],
+		].filter( ( x ) => x[ 1 ] );
+		for ( const [ n, u ] of list ) {
+			await front( n, u, 1366 );
+			await front( n + '-phone', u, 390 );
+		}
+		// админка «Цены»: добавить пакет, сохранить — он должен остаться без обновления страницы
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/admin.php?page=mem-prices' );
+		await page.waitForSelector( '.memorial-plugin-settings__repeater', { timeout: 60000 } );
+		await page.waitForTimeout( 1500 );
+		await page.screenshot( { path: `${ DIR }/pk-admin.png`, fullPage: true } );
+		const before = await page.locator( '.memorial-plugin-settings__row-title' ).count();
+		await page.getByRole( 'button', { name: /Добавить пакет/ } ).first().click();
+		await page.waitForTimeout( 500 );
+		const row = page.locator( '.memorial-plugin-settings__row:not(.is-folded)' ).last();
+		await row.locator( 'input[type=text]' ).first().fill( 'Проба' );
+		await page.waitForTimeout( 300 );
+		await page.screenshot( { path: `${ DIR }/pk-admin-new.png`, fullPage: true } );
+		await page.getByRole( 'button', { name: /^Сохранить$/ } ).first().click();
+		await page.waitForTimeout( 4000 );
+		report.admin = {
+			before,
+			after: await page.locator( '.memorial-plugin-settings__row-title' ).count(),
+			titles: await page.locator( '.memorial-plugin-settings__row-title' ).allTextContents(),
+			hints: await page.evaluate( () => [ ...new Set( [ ...document.querySelectorAll( '.memorial-plugin-hint__btn .dashicons' ) ].map( ( d ) => getComputedStyle( d ).fontSize ) ) ] ),
+		};
+		await page.screenshot( { path: `${ DIR }/pk-admin-saved.png`, fullPage: true } );
+		// первый ряд состава: галочка «На карточке» на одном уровне с полями
+		await page.getByRole( 'button', { name: /Развернуть$/ } ).first().click().catch( () => {} );
+		await page.waitForTimeout( 500 );
+		report.firstRow = await page.evaluate( () => {
+			const rep = document.querySelector( '.memorial-plugin-settings__repeater.is-inline' );
+			const row = rep?.querySelector( '.memorial-plugin-settings__row' );
+			const inp = row?.querySelector( 'input[type=text]' )?.getBoundingClientRect();
+			const cb = row?.querySelector( 'input[type=checkbox]' )?.getBoundingClientRect();
+			return inp && cb ? { input: Math.round( inp.top + inp.height / 2 ), checkbox: Math.round( cb.top + cb.height / 2 ) } : null;
+		} );
+		const inl = page.locator( '.memorial-plugin-settings__repeater.is-inline' ).first();
+		if ( await inl.count() ) {
+			await inl.screenshot( { path: `${ DIR }/pk-admin-rows.png` } ).catch( () => {} );
+		}
+		report.errors = errs;
+		log( 'packages', report );
+	} );
+} );

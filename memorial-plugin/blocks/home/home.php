@@ -447,12 +447,7 @@ function memorial_plugin_home_render_services() {
  * @return string
  */
 function memorial_plugin_home_render_packages() {
-	if ( ! memorial_plugin_packages() ) {
-		return '';
-	}
-	ob_start();
-	memorial_plugin_packages_html();
-	return trim( (string) ob_get_clean() );
+	return memorial_plugin_packages_markup();
 }
 
 /**

@@ -165,24 +165,22 @@ add_shortcode(
 		ob_start();
 		echo '<div class="works" data-works data-wp-interactive="memorial-plugin/works" data-wp-init="callbacks.init">';
 		$show_nav = '0' !== $a['nav'] && count( $types ) > 1 && '' === $a['type'];
-		if ( $show_nav || ( '0' !== $a['sort'] && count( $works ) > 1 ) ) {
+		// The kind buttons stick to the top of the screen; the sorting stays in its place above the works.
+		if ( $show_nav ) {
 			echo '<span class="mcat__pin" aria-hidden="true"></span><div class="mcat__bar">';
-			if ( $show_nav ) {
-				echo ( '<div class="mcat__navwrap"><nav class="mcat__nav" aria-label="' . esc_attr__( 'Kinds of works', 'memorial-plugin' ) . '"><button type="button" class="chip is-on" data-type="">' . esc_html__( 'All', 'memorial-plugin' ) . '</button>' );
-				foreach ( $types as $slug => $name ) {
-					echo '<button type="button" class="chip" data-type="' . esc_attr( $slug ) . '">' . esc_html( $name ) . '</button>';
-				}
-				echo '</nav></div>';
+			echo ( '<div class="mcat__navwrap"><nav class="mcat__nav" aria-label="' . esc_attr__( 'Kinds of works', 'memorial-plugin' ) . '"><button type="button" class="chip is-on" data-type="">' . esc_html__( 'All', 'memorial-plugin' ) . '</button>' );
+			foreach ( $types as $slug => $name ) {
+				echo '<button type="button" class="chip" data-type="' . esc_attr( $slug ) . '">' . esc_html( $name ) . '</button>';
 			}
-			if ( '0' !== $a['sort'] && count( $works ) > 1 ) {
-				// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- static markup with escaped strings.
-				echo ( '<label class="mcat__sort"><span class="mcat__sortlbl">' . esc_html__( 'Sorting:', 'memorial-plugin' ) . '</span><select data-works-sort data-wp-on--change="actions.sort">' )
-					. ( '<option value="">' . esc_html__( 'Default', 'memorial-plugin' ) . '</option>' )
-					. ( $has_year ? ( '<option value="new">' . esc_html__( 'Newest first', 'memorial-plugin' ) . '</option>' ) : '' )
-					. ( '<option value="asc">' . esc_html__( 'Cheapest first', 'memorial-plugin' ) . '</option><option value="desc">' . esc_html__( 'Most expensive first', 'memorial-plugin' ) . '</option></select></label>' );
-				// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
-			}
-			echo '</div>';
+			echo '</nav></div></div>';
+		}
+		if ( '0' !== $a['sort'] && count( $works ) > 1 ) {
+			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- static markup with escaped strings.
+			echo ( '<div class="mcat__sortrow"><label class="mcat__sort"><span class="mcat__sortlbl">' . esc_html__( 'Sorting:', 'memorial-plugin' ) . '</span><select data-works-sort data-wp-on--change="actions.sort">' )
+				. ( '<option value="">' . esc_html__( 'Default', 'memorial-plugin' ) . '</option>' )
+				. ( $has_year ? ( '<option value="new">' . esc_html__( 'Newest first', 'memorial-plugin' ) . '</option>' ) : '' )
+				. ( '<option value="asc">' . esc_html__( 'Cheapest first', 'memorial-plugin' ) . '</option><option value="desc">' . esc_html__( 'Most expensive first', 'memorial-plugin' ) . '</option></select></label></div>' );
+			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		echo '<div class="works__list">';
 		foreach ( $works as $i => $w ) {

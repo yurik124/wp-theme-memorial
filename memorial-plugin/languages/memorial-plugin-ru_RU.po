@@ -6901,3 +6901,62 @@ msgstr "В этом описании были списки или фото: по
 
 msgid "An empty line starts a new paragraph."
 msgstr "Пустая строка — новый абзац."
+
+msgid "A page of the site or any address. Empty — no link."
+msgstr "Страница сайта или любой адрес. Пусто — без ссылки."
+
+msgid "A text link on the card above the button, for example “More about cremation”; the arrow → is added by itself."
+msgstr "Текстовая ссылка на карточке над кнопкой, например «Подробнее о кремации»; стрелка → добавляется сама."
+
+msgid "Another address…"
+msgstr "Другой адрес…"
+
+msgid "Funeral and cremation packages: on the home page and by the “Funeral packages” block on any page — the same everywhere. The cremation table on the cremation page is the “Cremation prices” block."
+msgstr "Пакеты похорон и кремации: на главной и блоком «Пакеты похорон» на любой странице — везде одинаково. Таблица на странице кремации — блок «Цены кремации»."
+
+msgid "How many package cards stand in a row on a computer. An incomplete last row stands in the middle; on a phone the cards go one under another. The same on every page."
+msgstr "Сколько карточек пакетов в ряду на компьютере. Неполный последний ряд стоит по центру; на телефоне карточки идут одна под другой. Одинаково на всех страницах."
+
+msgid "Left column title (empty — “What is included”)"
+msgstr "Заголовок левой колонки (пусто — «Что входит»)"
+
+msgid "Link text"
+msgstr "Текст ссылки"
+
+msgid "More details"
+msgstr "Подробнее"
+
+msgid "Package"
+msgstr "Пакет"
+
+msgid "Package cards with prices (Memorial → Prices) — the same on every page."
+msgstr "Карточки пакетов с ценами (Мемориал → Цены) — одинаково на всех страницах."
+
+msgid "Price table of a package with the total (Memorial → Prices → Funeral packages); by default — the cremation package."
+msgstr "Таблица цен пакета с итогом (Мемориал → Цены → Пакеты похорон); по умолчанию — пакет кремации."
+
+msgid "Right column title (empty — “Cost”)"
+msgstr "Заголовок правой колонки (пусто — «Стоимость»)"
+
+msgid "Under the list on the card and in the total row of the price table, for example “Total with delivery to the crematorium”."
+msgstr "Под списком на карточке и в итоговой строке таблицы цен, например «Итого с доставкой до крематория»."
+
+msgid "Where the link leads"
+msgstr "Куда ведёт ссылка"
+
+msgid "hidden on the site"
+msgstr "скрыт на сайте"
+
+msgid "on the site"
+msgstr "на сайте"
+
+msgid "— no link —"
+msgstr "— без ссылки —"
+
+msgctxt "block description"
+msgid "Package cards with prices (Memorial → Prices) — the same on every page."
+msgstr "Карточки пакетов с ценами (Мемориал → Цены) — одинаково на всех страницах."
+
+msgctxt "block description"
+msgid "Price table of a package with the total (Memorial → Prices → Funeral packages); by default — the cremation package."
+msgstr "Таблица цен пакета с итогом (Мемориал → Цены → Пакеты похорон); по умолчанию — пакет кремации."

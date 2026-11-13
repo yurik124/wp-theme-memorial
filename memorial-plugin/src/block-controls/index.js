@@ -46,6 +46,7 @@ const DATA = window.memorialPluginBlockControls || {};
 const PICKERS = DATA.pickers || {};
 const TEXTS = DATA.texts || {};
 const ADDRESSES = DATA.addresses || [];
+const PACKAGES = DATA.packages || [];
 // A block that shows nothing until this setting is filled in: its fields open in place of the block.
 const REQUIRED = { 'memorial-plugin/stat': 'number' };
 const PREFIX = 'memorial-plugin/';
@@ -406,6 +407,23 @@ function Picker( { picker, value, onChange } ) {
 								]
 					}
 					onChange={ ( v ) => onChange( Number( v ) || 0 ) }
+				/>
+			);
+		case 'package':
+			return (
+				<SelectControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ picker.label }
+					value={ String( value || '' ) }
+					options={ [
+						{ value: '', label: picker.empty || '—' },
+						...PACKAGES.map( ( p ) => ( {
+							value: String( p.value ),
+							label: p.label,
+						} ) ),
+					] }
+					onChange={ onChange }
 				/>
 			);
 		case 'cat':

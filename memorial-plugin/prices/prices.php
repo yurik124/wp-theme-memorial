@@ -1,9 +1,9 @@
 <?php
 /**
- * «Мемориал → Цены»: пакеты похорон, пакет кремации, отдельные цены.
+ * «Мемориал → Цены»: пакеты (похороны и кремация — одним списком), отдельные цены.
  * Цены выводятся на страницах шорткодами и меняются сразу везде:
- *   [mem_packages]                 — карточки пакетов похорон
- *   [mem_cremation]                — таблица «Пакет кремации» с итогом
+ *   [mem_packages]                 — карточки пакетов
+ *   [mem_cremation]                — таблица пакета кремации (или пакета paket="<_id>") с итогом
  *   [mem_price id="kremaciya"]     — итог кремации, «58 000 ₽»
  *   [mem_price paket="Эконом"]     — итог пакета похорон
  *   [mem_price id="lenta"]         — цена из «Отдельные цены» по коду
@@ -18,10 +18,10 @@ defined( 'ABSPATH' ) || exit;
  */
 function memorial_plugin_prices_schema() {
 	return array(
-		'packages'  => array(
+		'packages' => array(
 			'type'   => 'group',
 			'label'  => __( 'Funeral packages', 'memorial-plugin' ),
-			'help'   => __( 'Shown on the home page and by the “Funeral packages” block on any page.', 'memorial-plugin' ),
+			'help'   => __( 'Funeral and cremation packages: on the home page and by the “Funeral packages” block on any page — the same everywhere. The cremation table on the cremation page is the “Cremation prices” block.', 'memorial-plugin' ),
 			'fields' => array(
 				'badge' => array(
 					'type'  => 'text',
@@ -31,21 +31,40 @@ function memorial_plugin_prices_schema() {
 					'type'  => 'text',
 					'label' => __( 'Button text', 'memorial-plugin' ),
 				),
+				'cols'  => array(
+					'type'    => 'select',
+					'label'   => __( 'Columns on a computer', 'memorial-plugin' ),
+					'help'    => __( 'How many package cards stand in a row on a computer. An incomplete last row stands in the middle; on a phone the cards go one under another. The same on every page.', 'memorial-plugin' ),
+					'options' => array(
+						'1' => '1',
+						'2' => '2',
+						'3' => '3',
+						'4' => '4',
+					),
+					'default' => '3',
+				),
 				'items' => array(
 					'type'     => 'repeater',
 					'label'    => __( 'Packages', 'memorial-plugin' ),
 					'add'      => __( 'Add a package', 'memorial-plugin' ),
 					'collapse' => 'name',
+					'summary'  => array( 'show' ),
 					'fields'   => array(
-						'name'     => array(
+						'name'      => array(
 							'type'  => 'text',
 							'label' => __( 'Package name', 'memorial-plugin' ),
 						),
-						'featured' => array(
+						'show'      => array(
+							'type'    => 'checkbox',
+							'label'   => __( 'Show on the site', 'memorial-plugin' ),
+							'short'   => __( 'on the site', 'memorial-plugin' ),
+							'default' => 1,
+						),
+						'featured'  => array(
 							'type'  => 'checkbox',
 							'label' => __( 'Highlight (accent frame and the label)', 'memorial-plugin' ),
 						),
-						'rows'     => array(
+						'rows'      => array(
 							'type'   => 'repeater',
 							'label'  => __( 'Contents of the package — the total is counted automatically. “On the card” — 3–5 main items, visible without opening the list', 'memorial-plugin' ),
 							'add'    => __( 'Add a line item', 'memorial-plugin' ),
@@ -66,60 +85,28 @@ function memorial_plugin_prices_schema() {
 								),
 							),
 						),
+						'total'     => array(
+							'type'        => 'text',
+							'label'       => __( 'Caption of the total row', 'memorial-plugin' ),
+							'help'        => __( 'Under the list on the card and in the total row of the price table, for example “Total with delivery to the crematorium”.', 'memorial-plugin' ),
+							'placeholder' => __( 'Total', 'memorial-plugin' ),
+						),
+						'link_text' => array(
+							'type'        => 'text',
+							'label'       => __( 'Link text', 'memorial-plugin' ),
+							'help'        => __( 'A text link on the card above the button, for example “More about cremation”; the arrow → is added by itself.', 'memorial-plugin' ),
+							'placeholder' => __( 'More details', 'memorial-plugin' ),
+						),
+						'link'      => array(
+							'type'  => 'link',
+							'label' => __( 'Where the link leads', 'memorial-plugin' ),
+							'help'  => __( 'A page of the site or any address. Empty — no link.', 'memorial-plugin' ),
+						),
 					),
 				),
 			),
 		),
-		'cremation' => array(
-			'type'   => 'group',
-			'label'  => __( 'Cremation package', 'memorial-plugin' ),
-			'help'   => __( 'The table on the cremation page — the “Cremation” block. The total is counted automatically; in the text of other pages it is put with the “Site value” button → “Price”.', 'memorial-plugin' ),
-			'fields' => array(
-				'head_l'     => array(
-					'type'  => 'text',
-					'label' => __( 'Left column title', 'memorial-plugin' ),
-				),
-				'head_r'     => array(
-					'type'  => 'text',
-					'label' => __( 'Right column title', 'memorial-plugin' ),
-				),
-				'rows'       => array(
-					'type'   => 'repeater',
-					'label'  => __( 'What is included. “On the card” — the items visible on the cremation card without opening the list', 'memorial-plugin' ),
-					'add'    => __( 'Add a line item', 'memorial-plugin' ),
-					'inline' => true,
-					'sum'    => 'price',
-					'fields' => array(
-						'name'  => array(
-							'type'  => 'text',
-							'label' => __( 'Line item', 'memorial-plugin' ),
-						),
-						'price' => array(
-							'type'  => 'number',
-							'label' => __( 'Price, ₽', 'memorial-plugin' ),
-						),
-						'key'   => array(
-							'type'  => 'checkbox',
-							'label' => __( 'On the card', 'memorial-plugin' ),
-						),
-					),
-				),
-				'total'      => array(
-					'type'  => 'text',
-					'label' => __( 'Caption of the total row', 'memorial-plugin' ),
-				),
-				'card'       => array(
-					'type'  => 'checkbox',
-					'label' => __( 'The “Cremation” card next to the funeral packages (where the “Funeral packages” block is; on other pages — the “Cremation card” setting of the block)', 'memorial-plugin' ),
-				),
-				'card_title' => array(
-					'type'        => 'text',
-					'label'       => __( 'Card title', 'memorial-plugin' ),
-					'placeholder' => __( 'Cremation', 'memorial-plugin' ),
-				),
-			),
-		),
-		'other'     => array(
+		'other'    => array(
 			'type'   => 'group',
 			'label'  => __( 'Separate prices', 'memorial-plugin' ),
 			'help'   => __( 'Prices that are mentioned in the texts of pages and in SEO titles: your own price or one counted by the site (from / up to of a catalog section, number of models, price of a service). How to put one into a text: in a paragraph, open the arrow ∨ (“More”) on the block toolbar → “Site value” → “Price from Memorial → Prices” → choose the price. The page always shows the current value.', 'memorial-plugin' ),
@@ -195,8 +182,12 @@ function memorial_plugin_prices_defaults() {
 		'packages'  => array(
 			'badge' => $src['badge'] ?? $home['badge'],
 			'btn'   => $src['btn'] ?? $home['btn'],
-			'items' => $src['items'] ?? $home['items'],
+			'cols'  => '3',
+			// A package without the “Show on the site” mark (saved before it appeared) is shown.
+			'items' => array_map( static fn( $p ) => is_array( $p ) ? $p + array( 'show' => 1 ) : $p, (array) ( $src['items'] ?? $home['items'] ) ),
 		),
+		// Before 2.0 cremation was a separate group; it stays in the base (to roll back) and is the source of
+		// the cremation package made from it once (memorial_plugin_prices_cremation_to_packages()).
 		'cremation' => array(
 			'head_l'     => __( 'What is included', 'memorial-plugin' ),
 			'head_r'     => __( 'Cost', 'memorial-plugin' ),
@@ -285,10 +276,109 @@ add_filter(
 /* ---------- Вывод ---------- */
 
 /**
+ * A package of the list by its row id (as saved: name, rows, total, link…), or null.
+ *
+ * @param string $id Row id (_id).
+ * @return array|null
+ */
+function memorial_plugin_package_by_id( $id ) {
+	foreach ( (array) ( memorial_plugin_prices( 'packages' )['items'] ?? array() ) as $p ) {
+		if ( is_array( $p ) && '' !== (string) $id && (string) ( $p['_id'] ?? '' ) === (string) $id ) {
+			return $p;
+		}
+	}
+	return null;
+}
+
+/**
+ * The cremation package: the one made from the old “Cremation package” group, else a package with
+ * “cremat…” / «кремац…» in its name, else (before the move) the old group itself.
+ *
+ * @return array{name:string,rows:array,total:string}
+ */
+function memorial_plugin_cremation_pkg() {
+	$p = memorial_plugin_package_by_id( (string) get_option( 'memorial_plugin_cremation_pkg', '' ) );
+	if ( ! $p ) {
+		foreach ( (array) ( memorial_plugin_prices( 'packages' )['items'] ?? array() ) as $it ) {
+			if ( is_array( $it ) && preg_match( '/кремац|cremat/ui', (string) ( $it['name'] ?? '' ) ) ) {
+				$p = $it;
+				break;
+			}
+		}
+	}
+	if ( ! $p && ! get_option( 'memorial_plugin_cremation_pkg' ) ) {
+		$c = memorial_plugin_prices( 'cremation' );
+		$p = array(
+			'name'  => '' !== trim( (string) ( $c['card_title'] ?? '' ) ) ? $c['card_title'] : __( 'Cremation', 'memorial-plugin' ),
+			'rows'  => $c['rows'] ?? array(),
+			'total' => $c['total'] ?? '',
+		);
+	}
+	return array(
+		'name'  => (string) ( $p['name'] ?? '' ),
+		'rows'  => array_values( array_filter( (array) ( $p['rows'] ?? array() ), fn( $r ) => is_array( $r ) && trim( (string) ( $r['name'] ?? '' ) ) !== '' ) ),
+		'total' => (string) ( $p['total'] ?? '' ),
+	);
+}
+
+/**
  * Cremation total.
  */
 function memorial_plugin_cremation_total() {
-	return array_sum( array_map( fn( $r ) => (int) ( $r['price'] ?? 0 ), memorial_plugin_prices( 'cremation' )['rows'] ?? array() ) );
+	return array_sum( array_map( fn( $r ) => (int) ( $r['price'] ?? 0 ), memorial_plugin_cremation_pkg()['rows'] ) );
+}
+
+/**
+ * Once: the old “Cremation package” group becomes the last package of the list (rows, “On the card”
+ * marks, the caption of the total, the link to the cremation page); the packages saved before get the
+ * “Show on the site” mark. The old group stays in the base untouched — to roll back.
+ */
+function memorial_plugin_prices_cremation_to_packages() {
+	if ( get_option( 'memorial_plugin_prices_pkg_merge' ) ) {
+		return;
+	}
+	update_option( 'memorial_plugin_prices_pkg_merge', 1 );
+	$saved = get_option( 'mem_prices' );
+	if ( ! is_array( $saved ) ) {
+		$saved = memorial_plugin_prices_defaults();
+	}
+	$def   = memorial_plugin_prices_defaults();
+	$items = array();
+	foreach ( (array) ( $saved['packages']['items'] ?? $def['packages']['items'] ) as $p ) {
+		if ( is_array( $p ) ) {
+			$p['_id'] = preg_match( '/^[a-z0-9]{6,32}$/', (string) ( $p['_id'] ?? '' ) ) ? $p['_id'] : memorial_plugin_row_id();
+			$items[]  = $p + array( 'show' => 1 );
+		}
+	}
+	$c    = is_array( $saved['cremation'] ?? null ) ? $saved['cremation'] : $def['cremation'];
+	$rows = array_values( array_filter( (array) ( $c['rows'] ?? array() ), fn( $r ) => is_array( $r ) && trim( (string) ( $r['name'] ?? '' ) ) !== '' ) );
+	if ( $rows ) {
+		$page    = function_exists( 'memorial_plugin_guess_page' ) ? (int) memorial_plugin_guess_page( array( 'ritualnye-uslugi/kremacziya', 'kremacziya', 'kremaciya', 'kremaciya-v-belgorode' ) ) : 0;
+		$id      = memorial_plugin_row_id();
+		$items[] = array(
+			'name'      => '' !== trim( (string) ( $c['card_title'] ?? '' ) ) ? trim( $c['card_title'] ) : __( 'Cremation', 'memorial-plugin' ),
+			'show'      => 1,
+			'featured'  => 0,
+			'rows'      => array_map(
+				static fn( $r ) => array(
+					'name'  => (string) $r['name'],
+					'price' => '' === (string) ( $r['price'] ?? '' ) ? '' : (int) $r['price'],
+					'key'   => empty( $r['key'] ) ? 0 : 1,
+					'_id'   => memorial_plugin_row_id(),
+				),
+				$rows
+			),
+			'total'     => (string) ( $c['total'] ?? '' ),
+			'link_text' => __( 'More about cremation', 'memorial-plugin' ),
+			'link'      => $page ? (string) $page : '',
+			'_id'       => $id,
+		);
+		update_option( 'memorial_plugin_cremation_pkg', $id );
+	}
+	$saved['packages']          = (array) ( $saved['packages'] ?? array() );
+	$saved['packages']['items'] = $items;
+	$saved['packages']['cols']  = (string) ( $saved['packages']['cols'] ?? '3' );
+	update_option( 'mem_prices', $saved );
 }
 
 /** Число или диапазон → «500 ₽», «200–300 ₽»; слова — как есть
@@ -354,17 +444,33 @@ add_shortcode(
 
 add_shortcode(
 	'mem_cremation',
-	function () {
-		$c    = memorial_plugin_prices( 'cremation' );
-		$rows = array_filter( $c['rows'] ?? array(), fn( $r ) => trim( $r['name'] ?? '' ) !== '' );
+	function ( $atts = array() ) {
+		$a = shortcode_atts(
+			array(
+				'paket' => '',
+				'left'  => '',
+				'right' => '',
+			),
+			$atts,
+			'mem_cremation'
+		);
+		// Another package of the list by its id; empty — the cremation package.
+		$p    = '' !== trim( $a['paket'] ) ? memorial_plugin_package_by_id( trim( $a['paket'] ) ) : null;
+		$p    = $p ? $p : memorial_plugin_cremation_pkg();
+		$rows = array_values( array_filter( (array) ( $p['rows'] ?? array() ), fn( $r ) => is_array( $r ) && trim( (string) ( $r['name'] ?? '' ) ) !== '' ) );
 		if ( ! $rows ) {
 			return '';
 		}
-		$h = '<figure class="wp-block-table is-style-price mem-cremation"><table><thead><tr><th>' . esc_html( $c['head_l'] ? $c['head_l'] : __( 'What is included', 'memorial-plugin' ) ) . '</th><th>' . esc_html( $c['head_r'] ? $c['head_r'] : __( 'Cost', 'memorial-plugin' ) ) . '</th></tr></thead><tbody>';
+		// Column titles: from the block, else as they were set for the old cremation table.
+		$old   = memorial_plugin_prices( 'cremation' );
+		$left  = trim( $a['left'] ) !== '' ? trim( $a['left'] ) : ( ! empty( $old['head_l'] ) ? $old['head_l'] : __( 'What is included', 'memorial-plugin' ) );
+		$right = trim( $a['right'] ) !== '' ? trim( $a['right'] ) : ( ! empty( $old['head_r'] ) ? $old['head_r'] : __( 'Cost', 'memorial-plugin' ) );
+		$sum   = array_sum( array_map( fn( $r ) => (int) ( $r['price'] ?? 0 ), $rows ) );
+		$h     = '<figure class="wp-block-table is-style-price mem-cremation"><table><thead><tr><th>' . esc_html( $left ) . '</th><th>' . esc_html( $right ) . '</th></tr></thead><tbody>';
 		foreach ( $rows as $r ) {
-			$h .= '<tr><td>' . esc_html( $r['name'] ) . '</td><td class="mem-nw">' . ( (int) $r['price'] ? esc_html( memorial_plugin_rub( (int) $r['price'] ) ) : '' ) . '</td></tr>';
+			$h .= '<tr><td>' . esc_html( $r['name'] ) . '</td><td class="mem-nw">' . ( (int) ( $r['price'] ?? 0 ) ? esc_html( memorial_plugin_rub( (int) $r['price'] ) ) : '' ) . '</td></tr>';
 		}
-		$h .= '</tbody><tfoot><tr><td>' . esc_html( $c['total'] ? $c['total'] : __( 'Total', 'memorial-plugin' ) ) . '</td><td class="mem-nw">' . esc_html( memorial_plugin_rub( memorial_plugin_cremation_total() ) ) . '</td></tr></tfoot></table></figure>';
+		$h .= '</tbody><tfoot><tr><td>' . esc_html( '' !== trim( (string) ( $p['total'] ?? '' ) ) ? $p['total'] : __( 'Total', 'memorial-plugin' ) ) . '</td><td class="mem-nw">' . esc_html( memorial_plugin_rub( $sum ) ) . '</td></tr></tfoot></table></figure>';
 		return $h;
 	}
 );
@@ -435,7 +541,7 @@ function memorial_plugin_prices_migrate() {
 			$c
 		);
 
-		$krem = (int) array_sum( array_map( fn( $r ) => (int) ( $r['price'] ?? 0 ), ( is_array( $saved ) ? $saved : memorial_plugin_prices_defaults() )['cremation']['rows'] ) );
+		$krem = (int) memorial_plugin_cremation_total();
 		// 2) итог кремации в тексте
 		if ( $krem ) {
 			$c = preg_replace( '/' . $num( $krem ) . $nbsp_re . '?(?:₽|рублей|руб\.?)/u', '[mem_price id="kremaciya"]', $c );
@@ -676,6 +782,9 @@ add_action(
 		}
 	}
 );
+
+// After the old moves of the prices (admin_init above): the cremation package — on the site too, at once after an update.
+add_action( 'init', 'memorial_plugin_prices_cremation_to_packages', 30 );
 
 /* ---------- Проверка: цены в текстах, которые не меняются сами ---------- */
 /** Фразы с ценой из текста: целые предложения / строки таблицы, где есть «₽» или «руб»
