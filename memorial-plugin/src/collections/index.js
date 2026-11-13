@@ -362,25 +362,30 @@ function App( { name } ) {
 						hidden,
 					} );
 				}
+				const n = list.length;
 				setNotice( {
 					status: 'success',
-					text: sprintf(
-						/* translators: %d: number of reviews. */
-						hidden
-							? _n(
+					text: hidden
+						? sprintf(
+								/* translators: %d: number of reviews. */
+								_n(
 									'%d review hidden on the site.',
 									'%d reviews hidden on the site.',
-									list.length,
-									'memorial-plugin'
-								)
-							: _n(
-									'%d review shown on the site.',
-									'%d reviews shown on the site.',
-									list.length,
+									n,
 									'memorial-plugin'
 								),
-						list.length
-					),
+								n
+						  )
+						: sprintf(
+								/* translators: %d: number of reviews. */
+								_n(
+									'%d review shown on the site.',
+									'%d reviews shown on the site.',
+									n,
+									'memorial-plugin'
+								),
+								n
+						  ),
 				} );
 				load();
 			} catch ( e ) {

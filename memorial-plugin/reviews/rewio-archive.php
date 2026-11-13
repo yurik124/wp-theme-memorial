@@ -215,8 +215,9 @@ function memorial_plugin_rewio_archive( $groups, $fetch, $common ) {
 				if ( memorial_plugin_rewio_differs( $old, $r ) ) {
 					memorial_plugin_rewio_write( $pid, $r, $site );
 					update_post_meta( $pid, '_rw_changed', $now );
-				} elseif ( $old !== array_diff_key( $r, array( 'obj' => 1 ) ) ) {
-					update_post_meta( $pid, '_rw_data', wp_slash( memorial_plugin_rewio_json( array_diff_key( $r, array( 'obj' => 1 ) ) ) ) ); // photos, reply date…
+				} elseif ( array_diff_key( $r, array( 'obj' => 1 ) ) !== $old ) {
+					// Photos, reply date and the like: kept up to date without the “changed” mark.
+					update_post_meta( $pid, '_rw_data', wp_slash( memorial_plugin_rewio_json( array_diff_key( $r, array( 'obj' => 1 ) ) ) ) );
 				}
 				delete_post_meta( $pid, '_rw_gone' ); // back on the site.
 			}
@@ -350,7 +351,9 @@ function memorial_plugin_rewio_set_hidden( $id, $hide ) {
 		$post   = $copies[ $id ] ?? null;
 	}
 	$rid = $post ? (int) get_post_meta( $post->ID, '_rw_id', true ) : $id;
-	if ( $post && ( 'draft' === $post->post_status ) !== (bool) $hide ) {
+	$was  = $post && 'draft' === $post->post_status;
+	$want = (bool) $hide;
+	if ( $post && $want !== $was ) {
 		wp_update_post(
 			array(
 				'ID'          => $post->ID,
@@ -551,7 +554,8 @@ function memorial_plugin_rewio_saved( $name, $post_id, $values ) {
 		return;
 	}
 	if ( array_key_exists( 'status', $values ) ) {
-		memorial_plugin_rewio_set_hidden( $post_id, 'draft' === get_post_status( $post_id ) );
+		$hide = 'draft' === get_post_status( $post_id );
+		memorial_plugin_rewio_set_hidden( $post_id, $hide );
 	}
 	if ( array_key_exists( 'use', $values ) || array_key_exists( 'link', $values ) ) {
 		memorial_plugin_rewio_rebuild();
