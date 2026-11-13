@@ -965,6 +965,8 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 /* Выбранный раздел каталога: число моделей того же цвета, что и надпись кнопки (было серым на зелёном) */
 .mcat__nav .chip.is-on small,.chip.is-on small,.chip[aria-current] small,.chip[aria-pressed=true] small{color:inherit;opacity:.85}
 
-/* «Карточки разделов»: карточки по центру при любом их числе, ширина карточки прежняя */
-.mem-cards{grid-template-columns:repeat(auto-fit,minmax(230px,300px));justify-content:center}
-@media (max-width:600px){.mem-cards{grid-template-columns:1fr}}
+/* «Карточки разделов»: неполный ряд — по центру; ширина карточки как в сетке на 4 колонки, но не уже 230px
+   (в узкой колонке страницы — по 3 в ряд), на телефоне — одна во всю ширину */
+.mem-cards{display:flex;flex-wrap:wrap;justify-content:center}
+.mem-cards>*{flex:0 1 calc((100% - 3 * .9rem) / 4);min-width:min(230px,100%);box-sizing:border-box}
+@media (max-width:600px){.mem-cards>*{flex-basis:100%}}

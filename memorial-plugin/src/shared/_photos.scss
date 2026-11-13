@@ -117,14 +117,14 @@
 		overflow: hidden;
 	}
 
-	// The stage has the height left in the window (the dialog itself takes about 120px of the screen, its
-	// title ~70px, the counter ~40px), and the photo fits into it whole.
+	// The stage has the height left in the window: the dialog is the screen less ~270px, its title ~72px,
+	// its padding ~48px, the counter ~40px. The photo fits into the stage whole.
 	&__stage {
 		display: flex;
 		gap: 12px;
 		align-items: center;
 		justify-content: center;
-		height: calc(100vh - 300px);
+		height: calc(100vh - 440px);
 		min-height: 200px;
 
 		img {
