@@ -283,9 +283,12 @@ function rowSummary( def, row ) {
 				row[ f.id ].length
 		);
 	const token = tokenOf( def, row );
-	return [ ...totals, ...named, ...lists, ...( token ? [ token ] : [] ) ].join(
-		' · '
-	);
+	return [
+		...totals,
+		...named,
+		...lists,
+		...( token ? [ token ] : [] ),
+	].join( ' · ' );
 }
 
 /**
