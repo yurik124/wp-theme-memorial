@@ -14,8 +14,10 @@
 	order: 3;
 }
 
-.editor-styles-wrapper .header .wp-block-navigation__container {
+/* Сильнее правил шапки из main.css (.header .nav.wp-block-navigation …), иначе пункты слипаются. */
+.editor-styles-wrapper .header .nav.wp-block-navigation .wp-block-navigation__container {
 	flex-wrap: wrap;
+	align-items: center;
 	gap: 0.25rem 1.25rem;
 }
 
@@ -24,12 +26,21 @@
 }
 
 /* Пункт меню с подменю: название и стрелка — в одну строку (в редакторе стрелка уходила под название). */
-.editor-styles-wrapper .header .wp-block-navigation-item,
-.editor-styles-wrapper .header .wp-block-navigation-item__content {
+.editor-styles-wrapper .header .nav.wp-block-navigation .wp-block-navigation-item {
+	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
 	align-items: center;
 	white-space: nowrap;
+}
+
+.editor-styles-wrapper .header .nav.wp-block-navigation .wp-block-navigation-item__content {
+	white-space: nowrap;
+}
+
+.editor-styles-wrapper .header .nav.wp-block-navigation .wp-block-navigation__submenu-icon {
+	flex: none;
+	margin-left: -0.35rem;
 }
 
 /*
