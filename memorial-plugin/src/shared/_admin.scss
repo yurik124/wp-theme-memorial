@@ -404,7 +404,7 @@ body:has(.memorial-plugin-admin) .dataviews-view-config__properties div.componen
 	.dataviews-view-config__label::after {
 		content: "\f160";
 		margin-left: 8px;
-		font-family: dashicons;
+		font-family: dashicons, sans-serif;
 		font-size: 14px;
 		vertical-align: middle;
 	}

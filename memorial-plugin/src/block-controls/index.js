@@ -189,7 +189,7 @@ function PostPicker( { postType, label, empty, value, onChange } ) {
 	}, [ found, chosen, value, id ] );
 	const current = value
 		? options.find( ( o ) => o.value === String( value ) )?.label ||
-		  String( value )
+			String( value )
 		: '';
 	return (
 		<div className="memorial-plugin-post-picker">

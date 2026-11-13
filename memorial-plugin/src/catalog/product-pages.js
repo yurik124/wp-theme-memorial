@@ -112,7 +112,8 @@ export default function ProductPages() {
 										/>
 										<label
 											htmlFor={
-												'memorial-plugin-pp-' + el.value
+												'memorial-plugin-pp-' +
+												el.value
 											}
 										>
 											{ el.label }

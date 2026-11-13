@@ -67,7 +67,7 @@ function Help( { text } ) {
  * Label and explanation of a field: a long label is cut at “ — ”, “: ” or “ (” and its tail, together
  * with a long help text, goes behind “?”; a short help stays under the field.
  *
- * @param {Object} def    Field description.
+ * @param {Object}  def    Field description.
  * @param {boolean} always Every explanation behind “?” (a field in a row of fields).
  * @return {{label: *, help: string|undefined, name: string}} What to pass to the control.
  */
