@@ -186,7 +186,12 @@ function toField( def ) {
 				isLong: true,
 				render: ( { item } ) => {
 					const t = String( item[ def.id ] || '' );
-					return t.length > 120 ? t.slice( 0, 120 ) + '…' : t;
+					// Wraps inside its column instead of running over the next ones.
+					return (
+						<span className="memorial-plugin-collection__long">
+							{ t.length > 160 ? t.slice( 0, 160 ) + '…' : t }
+						</span>
+					);
 				},
 				Edit: TextareaEdit,
 			};

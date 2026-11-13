@@ -40,3 +40,12 @@
 .memorial-plugin-collection__fixed dd {
 	white-space: pre-line;
 }
+
+// A long text in a column of the list (a review): a few lines, not one endless line.
+.memorial-plugin-collection__long {
+	display: block;
+	min-width: 220px;
+	max-width: 440px;
+	white-space: normal;
+	line-height: 1.45;
+}

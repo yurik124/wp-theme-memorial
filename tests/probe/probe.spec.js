@@ -1061,23 +1061,22 @@ test.describe( 'отзывы и разрешения', () => {
 		const first = page.locator( '.dataviews-view-table tbody tr' ).first();
 		if ( await first.count() ) {
 			await first.hover();
-			await first.locator( 'button[aria-label="Actions"], button[aria-label="Действия"]' ).first().click().catch( () => {} );
+			await first.locator( 'button[aria-label="Actions"], button[aria-label="Действия"]' ).first().click( { timeout: 8000 } ).catch( () => {} );
 			await page.waitForTimeout( 400 );
 			await page.screenshot( { path: `${ DIR }/rv-actions.png` } );
-			await page.getByRole( 'menuitem', { name: /Скрыть на сайте/ } ).click().catch( () => {} );
+			await page.getByRole( 'menuitem', { name: /Скрыть на сайте/ } ).click( { timeout: 8000 } ).catch( () => {} );
 			await page.waitForTimeout( 2500 );
 			report.afterHide = await page.locator( '.components-notice' ).allTextContents();
-			await first.locator( 'button' ).first().click().catch( () => {} );
 		}
-		await page.locator( '.dataviews-view-table tbody tr' ).first().getByRole( 'button', { name: /Изменить|Edit/ } ).first().click().catch( () => {} );
+		await page.locator( '.dataviews-view-table tbody tr' ).first().getByRole( 'button', { name: /Изменить|Edit/ } ).first().click( { timeout: 8000 } ).catch( () => {} );
 		await page.waitForTimeout( 800 );
 		await page.screenshot( { path: `${ DIR }/rv-edit.png` } );
-		report.hidden = await page.evaluate( () => fetch( '/wp-json/wp/v2/settings' ).then( () => null ).catch( () => null ) );
+		await page.keyboard.press( 'Escape' );
 		await page.goto( '/wp-admin/admin.php?page=mem-modules' );
 		await page.waitForSelector( '.memorial-plugin-settings__tabs', { timeout: 60000 } ).catch( () => {} );
 		await page.waitForTimeout( 1000 );
 		await page.screenshot( { path: `${ DIR }/rv-settings.png`, fullPage: true } );
-		await page.getByRole( 'tab', { name: /Разрешения/ } ).click().catch( () => {} );
+		await page.getByRole( 'tab', { name: /Разрешения/ } ).click( { timeout: 8000 } ).catch( () => {} );
 		await page.waitForTimeout( 800 );
 		await page.screenshot( { path: `${ DIR }/rv-perms.png`, fullPage: true } );
 		report.perms = await page.locator( '.memorial-plugin-settings__perms tbody tr' ).allTextContents();
