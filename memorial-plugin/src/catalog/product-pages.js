@@ -102,7 +102,7 @@ export default function ProductPages() {
 									>
 										<input
 											type="radio"
-											id={ 'memorial-plugin-pp-' + el.value }
+											id={ `pp-${ el.value }` }
 											name="memorial-plugin-product-pages"
 											value={ el.value }
 											checked={ mode === el.value }
@@ -111,10 +111,7 @@ export default function ProductPages() {
 											}
 										/>
 										<label
-											htmlFor={
-												'memorial-plugin-pp-' +
-												el.value
-											}
+											htmlFor={ `pp-${ el.value }` }
 										>
 											{ el.label }
 										</label>
