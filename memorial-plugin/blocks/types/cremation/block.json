@@ -5,7 +5,7 @@
     "title": "Cremation prices",
     "category": "memorial-catalog",
     "icon": "editor-table",
-    "description": "Cremation price table (Memorial → Prices → Cremation).",
+    "description": "Price table of a package with the total (Memorial → Prices → Funeral packages); by default — the cremation package.",
     "keywords": [
         "cremation",
         "prices",
@@ -13,6 +13,20 @@
         "memorial"
     ],
     "textdomain": "memorial-plugin",
+    "attributes": {
+        "paket": {
+            "type": "string",
+            "default": ""
+        },
+        "left": {
+            "type": "string",
+            "default": ""
+        },
+        "right": {
+            "type": "string",
+            "default": ""
+        }
+    },
     "supports": {
         "autoRegister": true,
         "html": false,
@@ -38,7 +52,11 @@
         "interactivity": false
     },
     "example": {
-        "attributes": {},
+        "attributes": {
+            "paket": "",
+            "left": "",
+            "right": ""
+        },
         "viewportWidth": 1000
     }
 }

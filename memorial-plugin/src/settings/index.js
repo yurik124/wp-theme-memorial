@@ -299,6 +299,69 @@ function isShown( def, data ) {
 	return ( def.showIf.in || [] ).includes( v );
 }
 
+// A new row of a list: the fields that have a default value (“Show on the site” is on) get it.
+function newRow( def ) {
+	const row = {};
+	( def.fields || [] ).forEach( ( f ) => {
+		if ( f.default !== undefined ) {
+			row[ f.id ] = f.default;
+		}
+	} );
+	return row;
+}
+
+/**
+ * Where a link leads: a page of the site from the list, or any address typed by hand.
+ * The value is the page ID (digits) or the address.
+ *
+ * @param {Object}   props
+ * @param {Object}   props.common   Label, help and sizes of the control.
+ * @param {Object}   props.def      Field description (options — the pages).
+ * @param {string}   props.value    Page ID or address.
+ * @param {Function} props.onChange Receives the new value.
+ */
+function LinkEdit( { common, def, value, onChange } ) {
+	const v = String( value ?? '' );
+	const isPage = /^\d+$/.test( v );
+	const [ own, setOwn ] = useState( v !== '' && ! isPage );
+	const custom = own || ( v !== '' && ! isPage );
+	return (
+		<div className="memorial-plugin-settings__link">
+			<SelectControl
+				{ ...common }
+				value={ custom ? '__url' : v }
+				options={ [
+					{
+						value: '',
+						label: __( '— no link —', 'memorial-plugin' ),
+					},
+					...( def.options || [] ),
+					{
+						value: '__url',
+						label: __( 'Another address…', 'memorial-plugin' ),
+					},
+				] }
+				onChange={ ( next ) => {
+					setOwn( next === '__url' );
+					onChange( next === '__url' ? '' : next );
+				} }
+			/>
+			{ custom && (
+				<TextControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Address', 'memorial-plugin' ) }
+					hideLabelFromVision
+					type="url"
+					placeholder="https://"
+					value={ isPage ? '' : v }
+					onChange={ onChange }
+				/>
+			) }
+		</div>
+	);
+}
+
 // Which rows are open, kept outside the component: DataForm may mount a list again on every change,
 // and the open rows must stay open (adding a row or changing a field used to fold them all).
 const OPEN_ROWS = new Map();
@@ -499,7 +562,7 @@ function RepeaterEdit( { def, value, onChange } ) {
 					variant="secondary"
 					onClick={ () => {
 						setOpen( new Set( [ ...open, rows.length ] ) );
-						onChange( [ ...rows, {} ] );
+						onChange( [ ...rows, newRow( def ) ] );
 					} }
 				>
 					{ '+ ' + ( def.add || __( 'Add', 'memorial-plugin' ) ) }
@@ -652,6 +715,15 @@ function ControlFor( { def, value, onChange } ) {
 							: [] ),
 						...( def.options || [] ),
 					] }
+					onChange={ onChange }
+				/>
+			);
+		case 'link':
+			return (
+				<LinkEdit
+					common={ common }
+					def={ def }
+					value={ value }
 					onChange={ onChange }
 				/>
 			);

@@ -911,7 +911,7 @@ return array (
     'title' => 'Cremation prices',
     'category' => 'memorial-catalog',
     'icon' => 'editor-table',
-    'description' => 'Cremation price table (Memorial → Prices → Cremation).',
+    'description' => 'Price table of a package with the total (Memorial → Prices → Funeral packages); by default — the cremation package.',
     'keywords' => 
     array (
       0 => 'cremation',
@@ -920,6 +920,24 @@ return array (
       3 => 'memorial',
     ),
     'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'paket' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+      'left' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+      'right' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+    ),
     'supports' => 
     array (
       'autoRegister' => true,
@@ -953,6 +971,9 @@ return array (
     array (
       'attributes' => 
       array (
+        'paket' => '',
+        'left' => '',
+        'right' => '',
       ),
       'viewportWidth' => 1000,
     ),
@@ -1710,7 +1731,7 @@ return array (
     'title' => 'Funeral packages',
     'category' => 'memorial-catalog',
     'icon' => 'money-alt',
-    'description' => 'Funeral package cards with prices (Memorial → Prices).',
+    'description' => 'Package cards with prices (Memorial → Prices) — the same on every page.',
     'keywords' => 
     array (
       0 => 'packages',
@@ -1719,20 +1740,6 @@ return array (
       3 => 'memorial',
     ),
     'textdomain' => 'memorial-plugin',
-    'attributes' => 
-    array (
-      'cremation' => 
-      array (
-        'type' => 'string',
-        'default' => 'auto',
-        'enum' => 
-        array (
-          0 => 'auto',
-          1 => 'show',
-          2 => 'hide',
-        ),
-      ),
-    ),
     'supports' => 
     array (
       'autoRegister' => true,
@@ -1766,7 +1773,6 @@ return array (
     array (
       'attributes' => 
       array (
-        'cremation' => 'auto',
       ),
       'viewportWidth' => 1000,
     ),

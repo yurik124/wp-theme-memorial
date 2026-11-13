@@ -5,7 +5,7 @@
     "title": "Funeral packages",
     "category": "memorial-catalog",
     "icon": "money-alt",
-    "description": "Funeral package cards with prices (Memorial → Prices).",
+    "description": "Package cards with prices (Memorial → Prices) — the same on every page.",
     "keywords": [
         "packages",
         "prices",
@@ -13,17 +13,6 @@
         "memorial"
     ],
     "textdomain": "memorial-plugin",
-    "attributes": {
-        "cremation": {
-            "type": "string",
-            "default": "auto",
-            "enum": [
-                "auto",
-                "show",
-                "hide"
-            ]
-        }
-    },
     "supports": {
         "autoRegister": true,
         "html": false,
@@ -49,9 +38,7 @@
         "interactivity": false
     },
     "example": {
-        "attributes": {
-            "cremation": "auto"
-        },
+        "attributes": {},
         "viewportWidth": 1000
     }
 }

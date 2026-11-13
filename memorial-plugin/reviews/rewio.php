@@ -271,6 +271,28 @@ function memorial_plugin_rewio_per( $s ) {
 	return $out;
 }
 
+/**
+ * A link for a review that came without its own: the company's page on that review site (the Rewio
+ * branch), else the review site itself.
+ *
+ * @param int   $sid     Review site ID.
+ * @param array $sources Review sites of the cache.
+ * @return string
+ */
+function memorial_plugin_rewio_src_url( $sid, $sources ) {
+	$cat = (array) get_option( 'mem_rewio_catalog', array() );
+	foreach ( (array) ( $cat['objects'] ?? array() ) as $o ) {
+		if ( ! empty( $o['links'][ $sid ] ) ) {
+			return (string) $o['links'][ $sid ];
+		}
+	}
+	$url = (string) ( $sources[ $sid ]['url'] ?? ( $cat['urls'][ $sid ] ?? '' ) );
+	if ( '' !== $url && ! preg_match( '~^https?://~', $url ) ) {
+		$url = 'https://' . ltrim( $url, '/' );
+	}
+	return $url;
+}
+
 /** Значок площадки — настоящий значок сервиса (reviews/logos.php)
  *
  * @param string $slug Slug.
@@ -370,11 +392,17 @@ function memorial_plugin_rewio_catalog_fetch( $key = null ) {
 	$objects = array();
 	$used    = array();
 	foreach ( $obj['data'] ?? array() as $o ) {
-		$sids = array();
+		$sids  = array();
+		$links = array(); // the branch's own page on each review site — the link of a review that came without one.
 		foreach ( $o['links'] ?? array() as $l ) {
 			$sid          = (int) $l['source_id'];
 			$sids[]       = $sid;
-			$used[ $sid ] = true; }
+			$used[ $sid ] = true;
+			$lu           = (string) ( $l['url'] ?? ( $l['link'] ?? ( $l['source_url'] ?? '' ) ) );
+			if ( preg_match( '~^https?://~', $lu ) ) {
+				$links[ $sid ] = $lu;
+			}
+		}
 		$objects[] = array(
 			'id'      => (int) $o['id'],
 			'name'    => (string) $o['name'],
@@ -383,6 +411,7 @@ function memorial_plugin_rewio_catalog_fetch( $key = null ) {
 			'demo'    => ! empty( $o['is_demo'] ),
 			'active'  => ! isset( $o['is_active'] ) || $o['is_active'],
 			'sources' => array_values( array_unique( $sids ) ),
+			'links'   => $links,
 		);
 	}
 	$folders = array();
@@ -482,7 +511,8 @@ function memorial_plugin_rewio_refresh() {
 		$f   = $o['filter'];
 		$sc  = $o['scope'];
 		$cat = get_option( 'mem_rewio_catalog' );
-		if ( ! is_array( $cat ) || empty( $cat['objects'] ) ) {
+		// A list saved before the branches kept their links to the review sites is fetched again.
+		if ( ! is_array( $cat ) || empty( $cat['objects'] ) || ! isset( $cat['objects'][0]['links'] ) ) {
 			$cat = memorial_plugin_rewio_catalog_fetch();
 			if ( is_wp_error( $cat ) ) {
 				throw new Exception( $cat->get_error_message() );
@@ -527,6 +557,12 @@ function memorial_plugin_rewio_refresh() {
 				throw new Exception( '«' . $name . '»: ' . $r->get_error_message() );
 			}
 			$reviews  = array_map( 'memorial_plugin_rewio_norm', $r['data'] ?? array() );
+			foreach ( $reviews as &$rv ) {
+				if ( '' === $rv['url'] ) {
+					$rv['url'] = (string) ( $by_id[ $id ]['links'][ $rv['src'] ] ?? '' );
+				}
+			}
+			unset( $rv );
 			$note     = $r['collecting']['message'] ?? ( $r['access']['message'] ?? '' );
 			$log[]    = '«' . $name . __( '»: loaded ', 'memorial-plugin' ) . count( $reviews ) . __( ' of ', 'memorial-plugin' ) . (int) ( $r['total'] ?? count( $reviews ) ) . ( $note ? ' (' . $note . ')' : '' );
 			$an       = memorial_plugin_rewio_get(
@@ -604,6 +640,7 @@ function memorial_plugin_rewio_refresh() {
 			$sources[ (int) $sid ] = array(
 				'name' => $nm,
 				'slug' => $cat['slugs'][ $sid ] ?? '',
+				'url'  => $cat['urls'][ $sid ] ?? '',
 			);
 		}
 		$n = 0;
@@ -1328,8 +1365,10 @@ function memorial_plugin_rewio_html( $atts = array() ) {
 			}
 			if ( ! empty( $v['source'] ) && $name ) {
 				$ico = memorial_plugin_rewio_icon( $r['slug'] ? $r['slug'] : ( $src[ $r['src'] ]['slug'] ?? '' ), $name );
+				// No link of the review itself — the site's page of the company, at least the review site.
+				$url = '' !== $r['url'] ? $r['url'] : memorial_plugin_rewio_src_url( (int) $r['src'], $src );
 				$h  .= '<footer class="rwo__src">'
-					. ( $r['url'] ? '<a href="' . esc_url( $r['url'] ) . '" target="_blank" rel="noopener nofollow">' . $ico . esc_html( $name ) . ' ↗</a>' : $ico . esc_html( $name ) ) . '</footer>';
+					. ( $url ? '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener nofollow">' . $ico . esc_html( $name ) . ' ↗</a>' : $ico . esc_html( $name ) ) . '</footer>';
 			}
 			$h .= '</article>';
 		}

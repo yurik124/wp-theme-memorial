@@ -322,21 +322,19 @@ add_shortcode(
 
 		ob_start();
 		echo '<div class="mcat" data-mcat data-wp-interactive="memorial-plugin/catalog" data-wp-init="callbacks.init">';
-		if ( '0' !== $a['nav'] || ( '0' !== $a['sort'] && $total > 1 ) ) {
+		// The section buttons stick to the top of the screen; the sorting stays in its place above the products.
+		if ( '0' !== $a['nav'] && count( $titled ) > 1 ) {
 			echo '<span class="mcat__pin" aria-hidden="true"></span><div class="mcat__bar">';
-			if ( '0' !== $a['nav'] && count( $titled ) > 1 ) {
-				echo ( '<div class="mcat__navwrap"><nav class="mcat__nav" aria-label="' . esc_attr__( 'Catalog sections', 'memorial-plugin' ) . '">' );
-				foreach ( $titled as [$t, $items] ) {
-					echo '<a class="chip" href="#' . esc_attr( memorial_plugin_term_anchor( $t ) ) . '">' . esc_html( $t->name ) . ' <small>' . count( $items ) . '</small></a>';
-				}
-				echo '</nav></div>';
+			echo ( '<div class="mcat__navwrap"><nav class="mcat__nav" aria-label="' . esc_attr__( 'Catalog sections', 'memorial-plugin' ) . '">' );
+			foreach ( $titled as [$t, $items] ) {
+				echo '<a class="chip" href="#' . esc_attr( memorial_plugin_term_anchor( $t ) ) . '">' . esc_html( $t->name ) . ' <small>' . count( $items ) . '</small></a>';
 			}
-			if ( '0' !== $a['sort'] && $total > 1 ) {
-				echo ( '<label class="mcat__sort"><span class="mcat__sortlbl">' . esc_html__( 'Sorting:', 'memorial-plugin' ) . '</span><select data-mcat-sort data-wp-on--change="actions.sort">' )
-					. ( '<option value="">' . esc_html__( 'Default', 'memorial-plugin' ) . '</option><option value="asc">' . esc_html__( 'Cheapest first', 'memorial-plugin' ) . '</option><option value="desc">' . esc_html__( 'Most expensive first', 'memorial-plugin' ) . '</option>' )
-					. '</select></label>';
-			}
-			echo '</div>';
+			echo '</nav></div></div>';
+		}
+		if ( '0' !== $a['sort'] && $total > 1 ) {
+			echo ( '<div class="mcat__sortrow"><label class="mcat__sort"><span class="mcat__sortlbl">' . esc_html__( 'Sorting:', 'memorial-plugin' ) . '</span><select data-mcat-sort data-wp-on--change="actions.sort">' )
+				. ( '<option value="">' . esc_html__( 'Default', 'memorial-plugin' ) . '</option><option value="asc">' . esc_html__( 'Cheapest first', 'memorial-plugin' ) . '</option><option value="desc">' . esc_html__( 'Most expensive first', 'memorial-plugin' ) . '</option>' )
+				. '</select></label></div>';
 		}
 
 		foreach ( $sections as [$t, $items, $with_head] ) {

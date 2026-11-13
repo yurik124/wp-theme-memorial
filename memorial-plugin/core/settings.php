@@ -872,10 +872,17 @@ function memorial_plugin_merge( $def, $saved ) {
 /**
  * Settings.
  *
- * @param string $name Name.
+ * @param string $name  Name.
+ * @param bool   $flush Forget the remembered value (after the option is written).
  */
-function memorial_plugin_settings( $name ) {
+function memorial_plugin_settings( $name, $flush = false ) {
 	static $cache = array();
+	if ( $flush ) {
+		// The option was just written: the next read takes it from the base again
+		// (the save answer of the settings screen used to show the value from before the save).
+		unset( $cache[ $name ] );
+		return array();
+	}
 	if ( ! isset( $cache[ $name ] ) ) {
 		// Значения по умолчанию: memorial_plugin_<имя без mem_>_defaults; тема подставляет свою функцию фильтром
 		// memorial_plugin_settings_defaults. Имена настроек в базе (mem_…) прежние — переименованы только функции.
@@ -886,6 +893,19 @@ function memorial_plugin_settings( $name ) {
 	}
 	return $cache[ $name ];
 }
+
+// Any write of a mem_… option (settings screen, import, code) — the next read is fresh.
+foreach ( array( 'added_option', 'updated_option', 'deleted_option' ) as $memorial_plugin_hook ) {
+	add_action(
+		$memorial_plugin_hook,
+		static function ( $option ) {
+			if ( is_string( $option ) && str_starts_with( $option, 'mem_' ) ) {
+				memorial_plugin_settings( $option, true );
+			}
+		}
+	);
+}
+unset( $memorial_plugin_hook );
 
 /**
  * Contacts.
@@ -1132,6 +1152,10 @@ function memorial_plugin_sanitize( $schema, $in ) {
 				break;
 			case 'page':
 				$out[ $k ] = absint( $v ) ? absint( $v ) : '';
+				break;
+			case 'link': // a page of the site (its ID) or any address.
+				$v         = is_scalar( $v ) ? trim( (string) $v ) : '';
+				$out[ $k ] = ctype_digit( $v ) ? ( absint( $v ) ? (string) absint( $v ) : '' ) : esc_url_raw( $v );
 				break;
 			case 'order':
 				$v         = array_values( array_intersect( is_array( $v ) ? array_map( 'strval', $v ) : array(), array_keys( $f['options'] ) ) );

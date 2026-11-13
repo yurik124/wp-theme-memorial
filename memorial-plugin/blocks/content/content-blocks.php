@@ -305,29 +305,37 @@ function memorial_plugin_content_blocks() {
 		'cremation'       => array(
 			'tag'   => 'mem_cremation',
 			'title' => __( 'Cremation prices', 'memorial-plugin' ),
-			'desc'  => __( 'Cremation price table (Memorial → Prices → Cremation).', 'memorial-plugin' ),
+			'desc'  => __( 'Price table of a package with the total (Memorial → Prices → Funeral packages); by default — the cremation package.', 'memorial-plugin' ),
 			'icon'  => 'editor-table',
-			'attrs' => array(),
+			'attrs' => array(
+				'paket' => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Package', 'memorial-plugin' ),
+					'sc'      => 'paket',
+					'picker'  => 'package',
+					'empty'   => __( 'Cremation', 'memorial-plugin' ),
+				),
+				'left'  => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Left column title (empty — “What is included”)', 'memorial-plugin' ),
+					'sc'      => 'left',
+				),
+				'right' => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Right column title (empty — “Cost”)', 'memorial-plugin' ),
+					'sc'      => 'right',
+				),
+			),
 		),
 		'packages'        => array(
 			'tag'   => 'mem_packages',
 			'title' => __( 'Funeral packages', 'memorial-plugin' ),
-			'desc'  => __( 'Funeral package cards with prices (Memorial → Prices).', 'memorial-plugin' ),
+			'desc'  => __( 'Package cards with prices (Memorial → Prices) — the same on every page.', 'memorial-plugin' ),
 			'icon'  => 'money-alt',
-			'attrs' => array(
-				'cremation' => array(
-					'type'    => 'string',
-					'default' => 'auto',
-					'enum'    => array( 'auto', 'show', 'hide' ),
-					'label'   => __( 'Cremation card (auto — as set in Memorial → Prices)', 'memorial-plugin' ),
-					'sc'      => 'cremation',
-					'fmt'     => array(
-						'auto' => '',
-						'show' => '1',
-						'hide' => '0',
-					),
-				),
-			),
+			'attrs' => array(),
 		),
 		'works'           => array(
 			'tag'   => 'mem_works',
