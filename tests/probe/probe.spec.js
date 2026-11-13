@@ -878,9 +878,11 @@ test.describe( 'аудит товаров', () => {
 				const chain = [];
 				for ( let e = el; e && chain.length < 6; e = e.parentElement ) { chain.push( [ e.tagName, String( e.className ).slice( 0, 70 ), getComputedStyle( e ).pointerEvents, e.inert ] ); }
 				const media = document.querySelector( '.dataviews-view-table tbody tr .memorial-plugin-catalog__photo' )?.parentElement;
-				return { chain, media: media ? [ String( media.className ), media.getBoundingClientRect().width, getComputedStyle( media ).overflow ] : null };
+				const btn = document.querySelector( '.dataviews-view-table tbody tr .memorial-plugin-catalog__photo' );
+				const r = ( e ) => e && e.getBoundingClientRect().toJSON();
+				return { chain, media: media ? [ String( media.className ), r( media ), getComputedStyle( media ).overflow, media.outerHTML.replace( /<svg[\s\S]*?<\/svg>/g, '' ).slice( 0, 900 ) ] : null, btn: [ btn?.tagName, r( btn ), getComputedStyle( btn ).display, r( btn?.querySelector( 'img' ) ) ], b };
 			}, box );
-			await ph.click( { timeout: 5000 } ).catch( ( e ) => ( out.photoClickErr = String( e ).slice( 0, 200 ) ) );
+			await ph.click( { timeout: 5000 } ).catch( ( e ) => ( out.photoClickErr = String( e ).slice( -600 ) ) );
 			await page.waitForTimeout( 600 );
 			out.viewerOpen = await page.locator( '.memorial-plugin-viewer' ).count();
 			await shot( page, 'prod-13-photo-click' );
