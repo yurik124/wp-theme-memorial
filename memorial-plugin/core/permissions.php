@@ -168,7 +168,7 @@ function memorial_plugin_perm_rows() {
 		}
 		$rows[] = array(
 			'key'   => 'screen_' . $opt,
-			'label' => wp_strip_all_tags( (string) ( $p['h1'] ?? $p['title'] ) ),
+			'label' => wp_strip_all_tags( (string) $p['title'] ), // the menu name (the hidden Rewio page has the same heading as «Отзывы»).
 		);
 	}
 	foreach ( memorial_plugin_perm_extra() as $key => $e ) {
