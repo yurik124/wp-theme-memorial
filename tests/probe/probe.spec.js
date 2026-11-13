@@ -686,18 +686,19 @@ test.describe( 'слепки страниц', () => {
 		const list = [ { name: 'home', path: '/' } ];
 		PAGES.forEach( ( p ) => list.push( { name: 'page-' + ( p.post_name || p.ID ), path: p.url.replace( /^https?:\/\/[^/]+/, '' ) } ) );
 		list.push( { name: 'catalog', path: '/catalog/' }, { name: '404', path: '/no-such-page-404/' }, { name: 'search', path: '/?s=памятник' } );
-		const seen = new Set( list.map( ( x ) => x.path ) );
 		for ( const [ screen, viewport ] of [ [ 'pc', { width: 1280, height: 900 } ], [ 'phone', { width: 390, height: 800 } ] ] ) {
 			const context = await browser.newContext( { viewport } );
 			const page = await context.newPage();
 			if ( screen === 'pc' ) {
-				// разделы каталога и товары — по ссылкам со страницы каталога
-				await page.goto( '/catalog/', { waitUntil: 'load' } ).catch( () => {} );
-				const links = await page.evaluate( () => [ ...document.querySelectorAll( 'main a[href]' ) ].map( ( a ) => new URL( a.href ).pathname ) ).catch( () => [] );
-				const cats = [ ...new Set( links.filter( ( l ) => /\/catalog\/.+/.test( l ) ) ) ].slice( 0, 3 );
-				const products = [ ...new Set( links.filter( ( l ) => /\/tovar\/.+/.test( l ) ) ) ].slice( 0, 3 );
-				cats.forEach( ( l, i ) => ! seen.has( l ) && list.push( { name: 'cat-' + i, path: l } ) );
-				products.forEach( ( l, i ) => ! seen.has( l ) && list.push( { name: 'product-' + i, path: l } ) );
+				// разделы каталога и товары — из REST (самые наполненные разделы, товары с фото и без)
+				const rest = async ( path ) => {
+					const res = await page.request.get( '/wp-json/wp/v2/' + path ).catch( () => null );
+					return res && res.ok() ? await res.json() : [];
+				};
+				const cats = await rest( 'mem_cat?per_page=3&orderby=count&order=desc&_fields=link' );
+				const products = await rest( 'mem_product?per_page=4&orderby=id&order=asc&_fields=link' );
+				cats.forEach( ( x, i ) => list.push( { name: 'cat-' + i, path: new URL( x.link ).pathname } ) );
+				products.forEach( ( x, i ) => list.push( { name: 'product-' + i, path: new URL( x.link ).pathname } ) );
 			}
 			for ( const item of list ) {
 				await page.goto( item.path, { waitUntil: 'load' } ).catch( () => {} );
