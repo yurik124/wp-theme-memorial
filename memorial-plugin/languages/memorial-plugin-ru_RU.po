@@ -7064,3 +7064,6 @@ msgid_plural "%d reviews shown on the site."
 msgstr[0] "%d отзыв снова показан на сайте."
 msgstr[1] "%d отзыва снова показаны на сайте."
 msgstr[2] "%d отзывов снова показано на сайте."
+
+msgid "In a text field or a block write:"
+msgstr "В текстовом поле или в блоке пишите:"

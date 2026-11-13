@@ -1004,6 +1004,7 @@ test.describe( 'пакеты', () => {
 		await page.waitForSelector( '.memorial-plugin-settings__repeater', { timeout: 60000 } );
 		await page.waitForTimeout( 1500 );
 		await page.screenshot( { path: `${ DIR }/pk-admin.png`, fullPage: true } );
+		report.tokens = await page.locator( '.memorial-plugin-settings__row-sum' ).allTextContents();
 		const before = await page.locator( '.memorial-plugin-settings__row-title' ).count();
 		await page.getByRole( 'button', { name: /Добавить пакет/ } ).first().click();
 		await page.waitForTimeout( 500 );

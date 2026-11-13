@@ -51,6 +51,13 @@ function memorial_plugin_settings_describe( $schema ) {
 				'in'    => array_map( 'strval', (array) $f['show_if'][1] ),
 			);
 		}
+		if ( ! empty( $f['token'] ) && is_array( $f['token'] ) ) {
+			// A row of a list shows what to write in a text to put its value in: {price:<field value>}.
+			$field['token'] = array(
+				'field' => (string) $f['token'][0],
+				'fmt'   => (string) $f['token'][1],
+			);
+		}
 		if ( ! empty( $f['summary'] ) ) {
 			$field['summary'] = array_map( 'strval', (array) $f['summary'] ); // Fields shown in a folded row.
 		}

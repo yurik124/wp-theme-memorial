@@ -49,6 +49,7 @@ function memorial_plugin_prices_schema() {
 					'add'      => __( 'Add a package', 'memorial-plugin' ),
 					'collapse' => 'name',
 					'summary'  => array( 'show' ),
+					'token'    => array( 'name', '{price:%s}' ),
 					'fields'   => array(
 						'name'      => array(
 							'type'  => 'text',
@@ -117,6 +118,7 @@ function memorial_plugin_prices_schema() {
 					'add'      => __( 'Add a price', 'memorial-plugin' ),
 					'collapse' => 'name',
 					'summary'  => array( 'what', 'price', 'section', 'service', 'seo' ),
+					'token'    => array( 'code', '{price:%s}' ),
 					'fields'   => array(
 						'name'    => array(
 							'type'  => 'text',
