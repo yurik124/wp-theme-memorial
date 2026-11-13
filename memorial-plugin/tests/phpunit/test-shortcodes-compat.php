@@ -26,15 +26,4 @@ class Test_Memorial_Plugin_Shortcodes_Compat extends WP_UnitTestCase {
 		$this->assertStringContainsString( '<!-- wp:memorial-plugin/cta', $out );
 		$this->assertStringNotContainsString( '[mem_', $out );
 	}
-
-	public function test_posts_with_shortcodes_are_counted_for_the_reminder() {
-		self::factory()->post->create(
-			array(
-				'post_type'    => 'page',
-				'post_content' => "<!-- wp:shortcode -->\n[mem_cta]\n<!-- /wp:shortcode -->",
-			)
-		);
-		memorial_plugin_shortcodes_recount();
-		$this->assertGreaterThanOrEqual( 1, memorial_plugin_shortcodes_left() );
-	}
 }

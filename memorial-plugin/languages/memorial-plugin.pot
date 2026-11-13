@@ -83,22 +83,6 @@ msgid_plural "%d articles"
 msgstr[0] ""
 msgstr[1] ""
 
-#. translators: %d: number of posts.
-#: src/convert/index.js:162
-#, php-format
-msgid "%d post converted."
-msgid_plural "%d posts converted."
-msgstr[0] ""
-msgstr[1] ""
-
-#. translators: %d: number of posts
-#: core/shortcodes-compat.php:158
-#, php-format
-msgid "%d post still uses the old [mem_…] shortcodes. They work, but are deprecated and will be removed in 3.0.0."
-msgid_plural "%d posts still use the old [mem_…] shortcodes. They work, but are deprecated and will be removed in 3.0.0."
-msgstr[0] ""
-msgstr[1] ""
-
 #: src/catalog/products.js:435
 #, php-format
 msgid "%d product added at the end of the list — fill in its price and specifications."
@@ -150,10 +134,6 @@ msgstr ""
 
 #: prices/prices.php:757
 msgid "(check whether they are up to date; replace them with a site value if you like):"
-msgstr ""
-
-#: src/convert/index.js:233
-msgid "(no title)"
 msgstr ""
 
 #: leads/callback.php:162
@@ -322,7 +302,7 @@ msgstr ""
 msgid "A short line in the card: size, material, colour."
 msgstr ""
 
-#: blocks/legacy/legacy.php:192
+#: blocks/legacy/legacy.php:193
 msgid "A single product from the catalog."
 msgstr ""
 
@@ -510,7 +490,7 @@ msgstr ""
 msgid "Advantages (with laurel leaves)"
 msgstr ""
 
-#: admin/convert.php:333
+#: admin/convert.php:331
 msgid "After converting"
 msgstr ""
 
@@ -552,7 +532,7 @@ msgstr ""
 msgid "All products (or of one type) as CSV: type, title, price, “from”, unit, line under the title, categories, specifications, visibility."
 msgstr ""
 
-#: blocks/legacy/legacy.php:193
+#: blocks/legacy/legacy.php:194
 msgid "All products of the catalog."
 msgstr ""
 
@@ -820,15 +800,11 @@ msgstr ""
 msgid "Calls outside working hours"
 msgstr ""
 
-#: src/convert/index.js:262
-msgid "Can be converted"
-msgstr ""
-
 #: prices/prices.php:175
 msgid "Can be left empty: it is made from the name when you save. By the code the price is put into texts and SEO titles, so do not change it once it is used."
 msgstr ""
 
-#: src/catalog/list-screen.js:97 src/catalog/list-screen.js:124 src/convert/index.js:92 src/collections/index.js:252
+#: src/catalog/list-screen.js:97 src/catalog/list-screen.js:124 src/collections/index.js:252
 msgid "Cancel"
 msgstr ""
 
@@ -888,7 +864,7 @@ msgstr ""
 msgid "Cards: these works by title, comma separated"
 msgstr ""
 
-#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:46 seo/seo.php:70 blocks/legacy/legacy.php:193 blocks/legacy/render/catalog-archive.php:25
+#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:46 seo/seo.php:70 blocks/legacy/legacy.php:194 blocks/legacy/render/catalog-archive.php:25
 msgid "Catalog"
 msgstr ""
 
@@ -901,7 +877,7 @@ msgid "Catalog category"
 msgstr ""
 
 #. translators: %d: number of products.
-#: src/commands/index.js:83
+#: src/commands/index.js:82
 #, php-format
 msgid "Catalog exported: %d products."
 msgstr ""
@@ -1001,10 +977,6 @@ msgstr ""
 
 #: src/bindings/index.js:311
 msgid "Changed — it goes to the settings when you save the page."
-msgstr ""
-
-#: src/convert/index.js:288
-msgid "Changes in the post"
 msgstr ""
 
 #: admin/abilities.php:373
@@ -1167,27 +1139,15 @@ msgstr ""
 msgid "Contents of the package — the total is counted automatically. “On the card” — 3–5 main items, visible without opening the list"
 msgstr ""
 
-#: src/convert/index.js:102 src/convert/index.js:300
-msgid "Convert"
-msgstr ""
-
 #: admin/abilities.php:537
 msgid "Convert shortcodes to blocks"
 msgstr ""
 
-#: src/commands/index.js:158
+#: src/commands/index.js:157
 msgid "Convert the shortcodes of this page to blocks"
 msgstr ""
 
-#: admin/commands.php:24 admin/convert.php:506 admin/convert.php:507 src/convert/index.js:322 core/shortcodes-compat.php:168
-msgid "Convert to blocks"
-msgstr ""
-
-#: src/convert/index.js:266
-msgid "Converted"
-msgstr ""
-
-#: src/commands/index.js:187
+#: src/commands/index.js:186
 msgid "Converted. Reloading the editor…"
 msgstr ""
 
@@ -1219,7 +1179,7 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-#: src/commands/index.js:182
+#: src/commands/index.js:181
 msgid "Could not convert."
 msgstr ""
 
@@ -1245,10 +1205,6 @@ msgstr ""
 
 #: core/assets.php:153
 msgid "Could not open MAX. Leave your number — we will call you back."
-msgstr ""
-
-#: src/convert/index.js:209
-msgid "Could not roll back: the revision saved before converting is missing."
 msgstr ""
 
 #: core/assets.php:151
@@ -1538,7 +1494,7 @@ msgstr ""
 msgid "Every specification is a column in “Products” and a line in the product card on the site. The default value goes into new products of the type. Renaming a specification renames it in all products."
 msgstr ""
 
-#: src/commands/index.js:124
+#: src/commands/index.js:123
 msgid "Everyone has been called back."
 msgstr ""
 
@@ -1558,11 +1514,11 @@ msgstr ""
 msgid "Export the catalog"
 msgstr ""
 
-#: src/commands/index.js:66
+#: src/commands/index.js:65
 msgid "Export the catalog to CSV"
 msgstr ""
 
-#: src/commands/index.js:67
+#: src/commands/index.js:66
 msgid "Export the catalog to CSV products prices Excel"
 msgstr ""
 
@@ -1841,7 +1797,7 @@ msgstr ""
 msgid "Guest book review"
 msgstr ""
 
-#: admin/commands.php:25 reviews/bookreviews.php:19 reviews/bookreviews.php:21 reviews/bookreviews.php:22 blocks/content/content-blocks.php:192
+#: admin/commands.php:24 reviews/bookreviews.php:19 reviews/bookreviews.php:21 reviews/bookreviews.php:22 blocks/content/content-blocks.php:192
 msgid "Guest book reviews"
 msgstr ""
 
@@ -2330,7 +2286,7 @@ msgid "Memorial settings"
 msgstr ""
 
 #. translators: %s: settings page title.
-#: admin/commands.php:40
+#: admin/commands.php:39
 #, php-format
 msgid "Memorial: %s"
 msgstr ""
@@ -2571,10 +2527,6 @@ msgstr ""
 msgid "No photo"
 msgstr ""
 
-#: src/convert/index.js:348
-msgid "No posts with shortcodes left."
-msgstr ""
-
 #: catalog/catalog-manager.php:492
 msgid "No products selected."
 msgstr ""
@@ -2596,7 +2548,7 @@ msgid "Not allowed."
 msgstr ""
 
 #. translators: %d: number of requests.
-#: src/commands/index.js:118
+#: src/commands/index.js:117
 #, php-format
 msgid "Not called back yet: %d. Opening the list…"
 msgstr ""
@@ -2651,11 +2603,7 @@ msgstr ""
 msgid "Nothing to choose from yet."
 msgstr ""
 
-#: src/convert/index.js:72
-msgid "Nothing to convert automatically in this post."
-msgstr ""
-
-#: admin/convert.php:332
+#: admin/convert.php:330
 msgid "Now"
 msgstr ""
 
@@ -2773,10 +2721,6 @@ msgstr ""
 
 #: src/catalog/product-pages.js:35
 msgid "Only for products with a description (recommended): a product without one opens as a large photo in the catalog, and its old address leads to the catalog section. These addresses are not in the sitemap."
-msgstr ""
-
-#: src/convert/index.js:270
-msgid "Only manual edits left"
 msgstr ""
 
 #: seo/metrika.php:60
@@ -2941,7 +2885,7 @@ msgstr ""
 msgid "Page photo"
 msgstr ""
 
-#: blocks/legacy/legacy.php:195
+#: blocks/legacy/legacy.php:196
 msgid "Page with products"
 msgstr ""
 
@@ -2953,7 +2897,7 @@ msgstr ""
 msgid "Pages"
 msgstr ""
 
-#: blocks/legacy/legacy.php:195
+#: blocks/legacy/legacy.php:196
 msgid "Pages set to show catalog tiles or products."
 msgstr ""
 
@@ -3137,14 +3081,6 @@ msgstr ""
 msgid "Post IDs (at most 10 per call)."
 msgstr ""
 
-#: src/convert/index.js:323
-msgid "Posts with [mem_…] shortcodes. Check the changes with “Preview”, then convert — one post or several at once. Before saving, the current text is kept as a revision, so “Roll back” returns it."
-msgstr ""
-
-#: src/convert/index.js:285
-msgid "Preview and convert"
-msgstr ""
-
 #: catalog/catalog-front.php:384
 msgid "Previous"
 msgstr ""
@@ -3227,7 +3163,7 @@ msgstr ""
 msgid "Privacy policy"
 msgstr ""
 
-#: catalog/catalog.php:34 blocks/legacy/legacy.php:70 blocks/legacy/legacy.php:192
+#: catalog/catalog.php:34 blocks/legacy/legacy.php:70 blocks/legacy/legacy.php:193
 msgid "Product"
 msgstr ""
 
@@ -3297,7 +3233,7 @@ msgstr ""
 msgid "Products of a catalog section with section links and sorting. The section is chosen in the block settings; by default — the section of this page."
 msgstr ""
 
-#: blocks/legacy/legacy.php:194
+#: blocks/legacy/legacy.php:195
 msgid "Products of one catalog section."
 msgstr ""
 
@@ -3617,10 +3553,6 @@ msgstr ""
 msgid "Right column title"
 msgstr ""
 
-#: src/convert/index.js:307
-msgid "Roll back"
-msgstr ""
-
 #: admin/abilities.php:590
 msgid "Roll back a conversion"
 msgstr ""
@@ -3663,7 +3595,7 @@ msgstr ""
 msgid "Save specifications"
 msgstr ""
 
-#: src/commands/index.js:168
+#: src/commands/index.js:167
 msgid "Save the page first."
 msgstr ""
 
@@ -3823,10 +3755,6 @@ msgstr ""
 
 #: core/settings.php:313
 msgid "Short description"
-msgstr ""
-
-#: src/convert/index.js:250
-msgid "Shortcodes"
 msgstr ""
 
 #. translators: 1: how many more, 2: how many are left
@@ -4036,10 +3964,6 @@ msgstr ""
 msgid "Starting price of a catalog section"
 msgstr ""
 
-#: src/convert/index.js:257
-msgid "State"
-msgstr ""
-
 #: blocks/content/content-blocks.php:167
 msgid "Status filter buttons"
 msgstr ""
@@ -4156,7 +4080,7 @@ msgstr ""
 msgid "The API key is not set."
 msgstr ""
 
-#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:229 admin/convert.php:558
+#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:687 admin/settings-form.php:229
 msgid "The JavaScript build is missing. Run npm run build."
 msgstr ""
 
@@ -4344,7 +4268,7 @@ msgstr ""
 msgid "Third step"
 msgstr ""
 
-#: blocks/legacy/legacy.php:164
+#: blocks/legacy/legacy.php:165
 msgid "This block shows a part of the product that is open — it works in the product template (Appearance → Editor → Templates)."
 msgstr ""
 
@@ -4412,7 +4336,7 @@ msgstr ""
 msgid "Tint strength, % (not used in the light theme 4.0)"
 msgstr ""
 
-#: admin/abilities.php:759 places/places.php:34 src/catalog/works.js:100 src/catalog/products.js:283 src/convert/index.js:228 core/settings.php:299
+#: admin/abilities.php:759 places/places.php:34 src/catalog/works.js:100 src/catalog/products.js:283 core/settings.php:299 core/settings.php:341
 msgid "Title"
 msgstr ""
 
@@ -4472,7 +4396,7 @@ msgstr ""
 msgid "Two columns “Service — Price”. Prices and “₽” do not break, the table stays neat on a phone."
 msgstr ""
 
-#: catalog/catalog.php:21 admin/abilities.php:758 src/convert/index.js:239
+#: catalog/catalog.php:21 admin/abilities.php:758
 msgid "Type"
 msgstr ""
 
@@ -4720,11 +4644,11 @@ msgstr ""
 msgid "Which one"
 msgstr ""
 
-#: src/commands/index.js:100
+#: src/commands/index.js:99
 msgid "Who to call back"
 msgstr ""
 
-#: src/commands/index.js:101
+#: src/commands/index.js:100
 msgid "Who to call back new call back requests leads"
 msgstr ""
 
@@ -4738,12 +4662,6 @@ msgstr ""
 
 #: reviews/reviews.php:70
 msgid "Widget code (optional)"
-msgstr ""
-
-#. translators: %s: list of shortcodes.
-#: src/convert/index.js:82
-#, php-format
-msgid "Will stay as shortcodes (inside other text): %s. Edit them in the post."
 msgstr ""
 
 #: core/settings.php:146
@@ -5893,10 +5811,6 @@ msgstr ""
 msgid "contacts"
 msgstr ""
 
-#: src/convert/index.js:21
-msgid "converted"
-msgstr ""
-
 #: admin/abilities.php:556
 msgid "converted, unchanged, no-revision, not-found or an error message."
 msgstr ""
@@ -6111,15 +6025,7 @@ msgstr ""
 msgid "not chosen"
 msgstr ""
 
-#: src/convert/index.js:23
-msgid "not converted: could not save a revision"
-msgstr ""
-
-#: src/convert/index.js:27
-msgid "not converted: no permission"
-msgstr ""
-
-#: src/convert/index.js:28 reviews/rewio.php:339 blocks/block-meta.php:179
+#: reviews/rewio.php:339 blocks/block-meta.php:179
 msgid "not found"
 msgstr ""
 
@@ -6129,10 +6035,6 @@ msgstr ""
 
 #: src/catalog/search-stats.js:101
 msgid "nothing"
-msgstr ""
-
-#: src/convert/index.js:22
-msgid "nothing to convert"
 msgstr ""
 
 #: blocks/block-meta.php:135
@@ -6249,7 +6151,7 @@ msgstr[1] ""
 msgid "reviews"
 msgstr ""
 
-#: admin/commands.php:25
+#: admin/commands.php:24
 msgid "reviews book"
 msgstr ""
 
@@ -6281,12 +6183,8 @@ msgstr ""
 msgid "services"
 msgstr ""
 
-#: admin/commands.php:41
+#: admin/commands.php:40
 msgid "settings"
-msgstr ""
-
-#: admin/commands.php:24
-msgid "shortcodes migration"
 msgstr ""
 
 #: core/assets.php:106
@@ -6455,12 +6353,6 @@ msgstr ""
 
 #: prices/prices.php:748
 msgid "— the cremation total, the ribbon, the delivery and the catalog prices that match the current ones in the texts of pages become site values that change by themselves."
-msgstr ""
-
-#. translators: %s: post title.
-#: src/convert/index.js:203
-#, php-format
-msgid "“%s” is back as it was before converting."
 msgstr ""
 
 #: core/settings.php:422

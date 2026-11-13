@@ -1,9 +1,10 @@
 <?php
 /**
- * Content converter: [mem_…] shortcodes in posts → blocks and inline values. Run by a button, never automatically.
+ * Content converter: [mem_…] shortcodes in posts → blocks and inline values. Never run automatically.
  *
- * Screen: Memorial → Convert to blocks (src/convert). It lists the posts that still contain shortcodes,
- * shows a diff before converting, converts the chosen posts in batches and can roll a post back.
+ * There is no admin screen for it: the content the plugin writes itself is converted before saving, and a
+ * post that still has shortcodes is converted from its editor (command “Convert shortcodes to blocks”,
+ * ability memorial-plugin/convert-content), with a rollback.
  *
  * What changes:
  *  - a Shortcode block (or a paragraph) with only block-level shortcodes → the plugin blocks
@@ -21,9 +22,6 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-
-/** Posts per conversion request. */
-const MEMORIAL_PLUGIN_CONVERT_BATCH = 10;
 
 /**
  * Block-level shortcode tags => block slug.
@@ -419,144 +417,4 @@ function memorial_plugin_convert_rollback( $id ) {
 	}
 	delete_post_meta( $id, '_memorial_plugin_converted' );
 	return 'restored';
-}
-
-/**
- * Permission for one post.
- *
- * @param WP_REST_Request $request Request with id.
- * @return bool
- */
-function memorial_plugin_convert_can_edit( WP_REST_Request $request ) {
-	return current_user_can( 'edit_post', (int) $request['id'] );
-}
-
-/**
- * REST routes of the converter (memorial-plugin/v1/convert…).
- */
-function memorial_plugin_convert_rest() {
-	$ns = 'memorial-plugin/v1';
-	register_rest_route(
-		$ns,
-		'/convert',
-		array(
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => static function () {
-					return current_user_can( 'edit_pages' );
-				},
-				'callback'            => static function () {
-					return rest_ensure_response( memorial_plugin_convert_items() );
-				},
-			),
-			array(
-				'methods'             => WP_REST_Server::CREATABLE,
-				'permission_callback' => static function () {
-					return current_user_can( 'edit_pages' );
-				},
-				'args'                => array(
-					'ids' => array(
-						'type'     => 'array',
-						'required' => true,
-						'items'    => array( 'type' => 'integer' ),
-						'maxItems' => MEMORIAL_PLUGIN_CONVERT_BATCH,
-					),
-				),
-				'callback'            => static function ( WP_REST_Request $request ) {
-					$out = array();
-					foreach ( array_unique( array_map( 'absint', (array) $request['ids'] ) ) as $id ) {
-						$out[ $id ] = current_user_can( 'edit_post', $id ) ? memorial_plugin_convert_post( $id ) : 'forbidden';
-					}
-					return rest_ensure_response( $out );
-				},
-			),
-		)
-	);
-	register_rest_route(
-		$ns,
-		'/convert/(?P<id>\d+)',
-		array(
-			'methods'             => WP_REST_Server::READABLE,
-			'permission_callback' => 'memorial_plugin_convert_can_edit',
-			'callback'            => static function ( WP_REST_Request $request ) {
-				return rest_ensure_response( memorial_plugin_convert_preview( (int) $request['id'] ) );
-			},
-		)
-	);
-	register_rest_route(
-		$ns,
-		'/convert/(?P<id>\d+)/rollback',
-		array(
-			'methods'             => WP_REST_Server::CREATABLE,
-			'permission_callback' => 'memorial_plugin_convert_can_edit',
-			'callback'            => static function ( WP_REST_Request $request ) {
-				return rest_ensure_response( array( 'result' => memorial_plugin_convert_rollback( (int) $request['id'] ) ) );
-			},
-		)
-	);
-}
-add_action( 'rest_api_init', 'memorial_plugin_convert_rest' );
-
-/**
- * Screen Memorial → Convert to blocks.
- */
-function memorial_plugin_convert_menu() {
-	$hook = add_submenu_page(
-		'mem-contacts',
-		__( 'Convert to blocks', 'memorial-plugin' ),
-		__( 'Convert to blocks', 'memorial-plugin' ),
-		'edit_pages',
-		'memorial-plugin-convert',
-		'memorial_plugin_convert_page'
-	);
-	if ( $hook ) {
-		add_action( 'load-' . $hook, 'memorial_plugin_convert_assets' );
-	}
-}
-add_action( 'admin_menu', 'memorial_plugin_convert_menu', 20 );
-
-/**
- * Scripts and styles of the screen (only there).
- */
-function memorial_plugin_convert_assets() {
-	add_action(
-		'admin_enqueue_scripts',
-		static function () {
-			$asset_file = MEMORIAL_PLUGIN_DIR . '/build/convert/index.asset.php';
-			if ( ! is_readable( $asset_file ) ) {
-				return;
-			}
-			$asset = require $asset_file;
-			wp_enqueue_script(
-				'memorial-plugin-convert',
-				MEMORIAL_PLUGIN_URL . '/build/convert/index.js',
-				$asset['dependencies'],
-				$asset['version'],
-				array( 'in_footer' => true )
-			);
-			wp_set_script_translations( 'memorial-plugin-convert', 'memorial-plugin', MEMORIAL_PLUGIN_DIR . '/languages' );
-			wp_add_inline_script(
-				'memorial-plugin-convert',
-				'window.memorialPluginConvert = ' . wp_json_encode( array( 'batch' => MEMORIAL_PLUGIN_CONVERT_BATCH ) ) . ';',
-				'before'
-			);
-			wp_enqueue_style( 'wp-components' );
-			if ( is_readable( MEMORIAL_PLUGIN_DIR . '/build/convert/style-index.css' ) ) {
-				wp_enqueue_style( 'memorial-plugin-convert', MEMORIAL_PLUGIN_URL . '/build/convert/style-index.css', array( 'wp-components' ), $asset['version'] );
-			}
-			// The diff table looks like on the Revisions screen.
-			wp_enqueue_style( 'revisions' );
-		}
-	);
-}
-
-/**
- * Container for the screen app.
- */
-function memorial_plugin_convert_page() {
-	if ( ! is_readable( MEMORIAL_PLUGIN_DIR . '/build/convert/index.asset.php' ) ) {
-		echo '<div class="wrap"><p>' . esc_html__( 'The JavaScript build is missing. Run npm run build.', 'memorial-plugin' ) . '</p></div>';
-		return;
-	}
-	echo '<div id="memorial-plugin-convert" class="wrap memorial-plugin-admin"></div>';
 }

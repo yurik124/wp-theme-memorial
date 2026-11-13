@@ -41,7 +41,6 @@ const ICONS = {
 	works: gallery,
 	'work-types': list,
 	search,
-	convert: blockDefault,
 	services: pages,
 	default: people,
 };

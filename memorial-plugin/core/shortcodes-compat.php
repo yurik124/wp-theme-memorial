@@ -9,9 +9,8 @@
  * (memorial_plugin_shortcode_impl()). In the content a shortcode keeps working until 3.0.0, but:
  *  - every use reports a deprecation (_deprecated_function(), visible with WP_DEBUG) that names the block
  *    which replaces it;
- *  - the dashboard reminds editors how many posts still use shortcodes; they are converted to blocks in
- *    Memorial → Convert to blocks, with a preview and a rollback (admin/convert.php). The conversion is not
- *    started automatically: the site owner reviews the changes (decision 9 of the migration plan).
+ *  - a post that still has shortcodes is converted from its editor (command “Convert shortcodes to blocks”),
+ *    with a rollback (admin/convert.php). The conversion is never started automatically.
  *
  * New content written by the plugin itself (page drafts, legal documents, price replacement) is
  * converted to blocks before it is saved, so no new shortcodes appear.
@@ -23,9 +22,6 @@ defined( 'ABSPATH' ) || exit;
 
 /** Version since which the shortcodes are deprecated. */
 const MEMORIAL_PLUGIN_SHORTCODES_DEPRECATED = '2.0.0';
-
-/** Transient: number of posts that still contain shortcodes. */
-const MEMORIAL_PLUGIN_SHORTCODES_LEFT = 'memorial_plugin_shortcodes_left';
 
 /**
  * Implementations of the former shortcodes: tag => callback.
@@ -115,65 +111,3 @@ function memorial_plugin_shortcode_deprecated( $atts, $content = null, $tag = ''
 function memorial_plugin_blocks_from_shortcodes( $content ) {
 	return function_exists( 'memorial_plugin_convert_content' ) ? memorial_plugin_convert_content( (string) $content, false ) : (string) $content;
 }
-
-/* ---------- Reminder to convert the remaining content ---------- */
-
-/**
- * Number of posts that still contain [mem_…] shortcodes (cached for an hour, reset after a conversion).
- *
- * @return int
- */
-function memorial_plugin_shortcodes_left() {
-	$n = get_transient( MEMORIAL_PLUGIN_SHORTCODES_LEFT );
-	if ( false === $n ) {
-		$n = 0;
-		if ( function_exists( 'memorial_plugin_convert_items' ) ) {
-			foreach ( memorial_plugin_convert_items( false ) as $item ) {
-				$n += ! empty( $item['pending'] ) ? 1 : 0;
-			}
-		}
-		set_transient( MEMORIAL_PLUGIN_SHORTCODES_LEFT, $n, HOUR_IN_SECONDS );
-	}
-	return (int) $n;
-}
-
-/**
- * Converting stays a manual step with a preview (decision 9 of the migration plan): on the dashboard
- * editors see how many posts still use the deprecated shortcodes and a link to “Convert to blocks”.
- */
-function memorial_plugin_shortcodes_notice() {
-	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-	if ( ! $screen || 'dashboard' !== $screen->id || ! current_user_can( 'edit_pages' ) ) {
-		return;
-	}
-	$n = memorial_plugin_shortcodes_left();
-	if ( ! $n ) {
-		return;
-	}
-	printf(
-		'<div class="notice notice-warning"><p>%1$s <a href="%2$s">%3$s</a></p></div>',
-		esc_html(
-			sprintf(
-				/* translators: %d: number of posts */
-				_n(
-					'%d post still uses the old [mem_…] shortcodes. They work, but are deprecated and will be removed in 3.0.0.',
-					'%d posts still use the old [mem_…] shortcodes. They work, but are deprecated and will be removed in 3.0.0.',
-					$n,
-					'memorial-plugin'
-				),
-				$n
-			)
-		),
-		esc_url( admin_url( 'admin.php?page=memorial-plugin-convert' ) ),
-		esc_html__( 'Convert to blocks', 'memorial-plugin' )
-	);
-}
-add_action( 'admin_notices', 'memorial_plugin_shortcodes_notice' );
-
-/**
- * Recount after a post is saved (converted, rolled back or edited).
- */
-function memorial_plugin_shortcodes_recount() {
-	delete_transient( MEMORIAL_PLUGIN_SHORTCODES_LEFT );
-}
-add_action( 'save_post', 'memorial_plugin_shortcodes_recount' );

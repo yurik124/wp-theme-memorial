@@ -21,7 +21,6 @@ function memorial_plugin_command_screens() {
 		array( 'works', __( 'Our works', 'memorial-plugin' ), __( 'portfolio photos examples', 'memorial-plugin' ), 'edit_posts', 'edit.php?post_type=mem_work&page=mem-works' ),
 		array( 'work-types', __( 'Kinds of works', 'memorial-plugin' ), '', 'manage_categories', 'edit.php?post_type=mem_work&page=mem-work-types' ),
 		array( 'search', __( 'What people search for on the site', 'memorial-plugin' ), __( 'search statistics queries', 'memorial-plugin' ), 'edit_pages', 'admin.php?page=mem-sq' ),
-		array( 'convert', __( 'Convert to blocks', 'memorial-plugin' ), __( 'shortcodes migration', 'memorial-plugin' ), 'edit_pages', 'admin.php?page=memorial-plugin-convert' ),
 		array( 'bookrev', __( 'Guest book reviews', 'memorial-plugin' ), __( 'reviews book', 'memorial-plugin' ), 'edit_posts', 'admin.php?page=memorial-plugin-bookrev' ),
 	);
 	$icons   = array(
