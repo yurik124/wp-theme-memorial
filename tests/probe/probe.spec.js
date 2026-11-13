@@ -785,7 +785,15 @@ test.describe( 'аудит товаров', () => {
 			await shot( page, 'prod-03-selected-7' );
 			out.overlay = await page.evaluate( () => {
 				const strip = ( e ) => e ? e.outerHTML.replace( /<svg[\s\S]*?<\/svg>/g, '' ).replace( /\sstyle="[^"]*"/g, '' ).slice( 0, 3500 ) : '';
-				return { thead: strip( document.querySelector( '.dataviews-view-table thead' ) ), float: strip( document.querySelector( '.memorial-plugin-catalog__float' ) ) };
+				const t = document.querySelector( '.dataviews-view-table' );
+				const box = t?.parentElement?.cloneNode( true );
+				box?.querySelectorAll( 'tbody, thead, svg' ).forEach( ( x ) => x.remove() );
+				const ov = [ ...document.querySelectorAll( '[class*="bulk"]' ) ].map( ( e ) => {
+					const cs = getComputedStyle( e );
+					return [ String( e.className ).slice( 0, 90 ), e.tagName, cs.position, cs.top, Math.round( e.getBoundingClientRect().top ), Math.round( e.getBoundingClientRect().width ) ];
+				} );
+				const th = document.querySelector( '.dataviews-view-table thead' );
+				return { box: box ? box.outerHTML.replace( /\sstyle="[^"]*"/g, '' ).slice( 0, 3000 ) : '', ov, theadPos: th ? [ getComputedStyle( th ).position, getComputedStyle( th ).top ] : null, headH: document.querySelector( '.memorial-plugin-admin [class*="__stack"][class*="__header"]' )?.getBoundingClientRect().height };
 			} );
 			await page.evaluate( () => window.scrollTo( 0, 900 ) );
 			await page.waitForTimeout( 500 );
