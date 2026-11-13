@@ -28,9 +28,6 @@ import {
 import { Page } from '@wordpress/admin-ui';
 import BooleanEdit from '../shared/boolean-edit';
 import { runAbility } from '../shared/abilities';
-// Styles of the bundled DataViews/DataForm (filters, chips, footer…): the package asks to load them
-// when it is bundled; they go to style-index.css with the rest.
-import '@wordpress/dataviews/build-style/style.css';
 import './style.scss';
 
 const API = '/memorial-plugin/v1/collections/';

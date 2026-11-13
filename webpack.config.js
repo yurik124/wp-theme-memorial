@@ -29,18 +29,6 @@ module.exports = {
 		...base.output,
 		path: path.resolve( __dirname, 'memorial-plugin/build' ),
 	},
-	module: {
-		...base.module,
-		rules: [
-			...base.module.rules,
-			// The package says “sideEffects: false”, so webpack would drop `import '…/build-style/style.css'`
-			// as unused: its stylesheet is a side effect we need (filters, chips, footer of DataViews).
-			{
-				test: /[\\/]@wordpress[\\/](dataviews|admin-ui)[\\/]build-style[\\/].*\.css$/,
-				sideEffects: true,
-			},
-		],
-	},
 	plugins: [
 		...base.plugins.filter(
 			( plugin ) => plugin.constructor.name !== 'DependencyExtractionWebpackPlugin'

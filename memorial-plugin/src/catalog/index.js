@@ -10,9 +10,6 @@ import WorkTypes from './work-types';
 import Types from './types';
 import SearchStats from './search-stats';
 import ProductPages from './product-pages';
-// Styles of the bundled DataViews/DataForm (filters, chips, footer…): the package asks to load them
-// when it is bundled; they go to style-index.css with the rest.
-import '@wordpress/dataviews/build-style/style.css';
 import './style.scss';
 
 const SCREENS = {
