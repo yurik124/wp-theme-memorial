@@ -790,8 +790,7 @@ test.describe( 'аудит товаров', () => {
 			await page.evaluate( () => window.scrollTo( 0, 0 ) );
 		} );
 		await step( 'viewconfig', async () => {
-			const btns = page.locator( '.dataviews__view-actions button' );
-			await btns.last().click( { timeout: 5000 } );
+			await page.locator( '.memorial-plugin-catalog__tools button' ).last().click( { timeout: 5000 } );
 			await page.waitForTimeout( 800 );
 			await shot( page, 'prod-05-view-config' );
 			out.configHtml = await page.evaluate( () => {
@@ -874,6 +873,15 @@ test.describe( 'аудит товаров', () => {
 			await page.goto( '/wp-admin/site-editor.php?p=%2Fwp_template_part%2Fmemorial-theme%2F%2Fheader&canvas=edit', { waitUntil: 'load' } );
 			await page.waitForTimeout( 6000 );
 			await shot( page, 'prod-10-site-editor' );
+		} );
+		out.built = await page.evaluate( async () => {
+			const res = {};
+			for ( const f of [ 'index.css', 'style-index.css' ] ) {
+				const r = await fetch( '/wp-content/plugins/memorial-plugin/build/catalog/' + f );
+				const t = r.ok ? await r.text() : '';
+				res[ f ] = { status: r.status, size: t.length, chip: t.includes( 'summary-chip-remove' ), layer: ( t.match( /@layer[^{;]*/g ) || [] ).slice( 0, 5 ) };
+			}
+			return res;
 		} );
 		// какие файлы стилей есть в собранном пакете DataViews (на раннере есть node_modules)
 		try {
