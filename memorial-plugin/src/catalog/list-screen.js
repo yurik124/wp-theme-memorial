@@ -371,7 +371,7 @@ export function ListPage( {
 													'memorial-plugin'
 												),
 												selection.length
-										  )
+											)
 										: '' }
 								</span>
 								<div className="memorial-plugin-catalog__tools">

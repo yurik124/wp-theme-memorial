@@ -363,12 +363,15 @@ export default function Products() {
 				: [
 						{
 							id: 'sub',
-							label: __( 'Line under the title', 'memorial-plugin' ),
+							label: __(
+								'Line under the title',
+								'memorial-plugin'
+							),
 							type: 'text',
 							enableGlobalSearch: true,
 							filterBy: false,
 						},
-				  ] ),
+					] ),
 			...specs.map( ( s, i ) => ( {
 				id: 'spec' + i,
 				label: s.label + ( s.unit ? ', ' + s.unit : '' ),
