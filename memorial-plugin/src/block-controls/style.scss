@@ -53,6 +53,11 @@
 			font-weight: 400;
 		}
 
+		// Every caption here in normal case (WordPress writes some of them in capitals).
+		* {
+			text-transform: none;
+		}
+
 		.components-base-control__help {
 			margin-top: 6px;
 		}
