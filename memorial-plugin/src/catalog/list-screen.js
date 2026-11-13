@@ -12,6 +12,16 @@ import {
 } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
 
+// The table is laid out from the parts of DataViews when this version has them (otherwise its own layout).
+const COMPOSE = [
+	DataViews.Search,
+	DataViews.FiltersToggle,
+	DataViews.FiltersToggled,
+	DataViews.ViewConfig,
+	DataViews.Layout,
+	DataViews.Footer,
+].every( Boolean );
+
 /**
  * Data of a list screen: GET once, then items are replaced by what the server returns after each change.
  *
@@ -186,70 +196,6 @@ export function ModalButtons( {
 	);
 }
 
-// The actions for the selected items above the table too: the same ones the table shows under itself.
-function BulkBar( { items, selection, actions, onClear } ) {
-	const [ modal, setModal ] = useState( null );
-	const chosen = useMemo( () => {
-		const ids = new Set( ( selection || [] ).map( String ) );
-		return items.filter( ( i ) => ids.has( String( i.id ) ) );
-	}, [ items, selection ] );
-	if ( ! chosen.length ) {
-		return null;
-	}
-	const usable = actions
-		.filter( ( a ) => a.supportsBulk )
-		.map( ( a ) => ( {
-			action: a,
-			list: a.isEligible ? chosen.filter( a.isEligible ) : chosen,
-		} ) )
-		.filter( ( x ) => x.list.length );
-	return (
-		<div className="memorial-plugin-catalog__bulk">
-			<strong>
-				{ sprintf(
-					/* translators: %d: number of selected items. */
-					_n(
-						'%d item selected',
-						'%d items selected',
-						chosen.length,
-						'memorial-plugin'
-					),
-					chosen.length
-				) }
-			</strong>
-			{ usable.map( ( { action, list } ) => (
-				<Button
-					key={ action.id }
-					size="compact"
-					variant="secondary"
-					isDestructive={ action.isDestructive }
-					onClick={ () =>
-						action.RenderModal
-							? setModal( { action, list } )
-							: action.callback( list )
-					}
-				>
-					{ action.label.replace( /…$/, '' ) }
-				</Button>
-			) ) }
-			<Button size="compact" variant="tertiary" onClick={ onClear }>
-				{ __( 'Clear the selection', 'memorial-plugin' ) }
-			</Button>
-			{ modal && (
-				<Modal
-					title={ modal.action.label.replace( /…$/, '' ) }
-					onRequestClose={ () => setModal( null ) }
-				>
-					<modal.action.RenderModal
-						items={ modal.list }
-						closeModal={ () => setModal( null ) }
-					/>
-				</Modal>
-			) }
-		</div>
-	);
-}
-
 /**
  * A list page: title, buttons, notices, optional tabs and the DataViews table.
  *
@@ -307,12 +253,6 @@ export function ListPage( {
 					</Notice>
 				) }
 				{ tabs }
-				<BulkBar
-					items={ items || [] }
-					selection={ selection }
-					actions={ actionsOf || [] }
-					onClear={ () => setSelection( [] ) }
-				/>
 				<DataViews
 					data={ data }
 					fields={ fields }
@@ -325,13 +265,41 @@ export function ListPage( {
 					defaultLayouts={ { table: {} } }
 					getItemId={ ( item ) => String( item.id ) }
 					isLoading={ loading }
-				/>
-				<BulkBar
-					items={ items || [] }
-					selection={ selection }
-					actions={ actionsOf || [] }
-					onClear={ () => setSelection( [] ) }
-				/>
+				>
+					{ COMPOSE && (
+						<>
+							{ /* One row: what is selected on the left; search, filters and the view on the right. */ }
+							<div className="memorial-plugin-catalog__top">
+								<span
+									className="memorial-plugin-catalog__chosen"
+									aria-live="polite"
+								>
+									{ selection.length
+										? sprintf(
+												/* translators: %d: number of selected items. */
+												_n(
+													'%d item selected',
+													'%d items selected',
+													selection.length,
+													'memorial-plugin'
+												),
+												selection.length
+										  )
+										: '' }
+								</span>
+								<div className="memorial-plugin-catalog__tools">
+									<DataViews.Search />
+									<DataViews.FiltersToggle />
+									<DataViews.ViewConfig />
+								</div>
+							</div>
+							<DataViews.FiltersToggled />
+							<DataViews.Layout />
+							{ /* The actions for the selected items and the pages: floating at the bottom of the screen. */ }
+							<DataViews.Footer />
+						</>
+					) }
+				</DataViews>
 			</div>
 		</Page>
 	);

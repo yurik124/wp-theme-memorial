@@ -357,12 +357,6 @@ body:has(.memorial-plugin-admin) .components-modal__frame {
 	top: var(--wp-admin--admin-bar--height, 32px);
 }
 
-// The table's own row of actions for the selected items is replaced by the bar above and below the table
-// (src/catalog/list-screen.js): its buttons broke into two lines and it repeated the “select all” checkbox.
-.memorial-plugin-admin .dataviews-view-table__bulk-actions-overlay,
-.memorial-plugin-admin .dataviews-bulk-actions-footer__container {
-	display: none;
-}
 
 // Every label of a field looks the same on all screens and in their dialogs: normal case, one size.
 .memorial-plugin-admin label[class],

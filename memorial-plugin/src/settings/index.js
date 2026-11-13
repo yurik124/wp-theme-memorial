@@ -36,6 +36,9 @@ import { Page } from '@wordpress/admin-ui';
 
 import Hint from '../shared/hint';
 import RewioScope from './rewio-scope';
+// Styles of the bundled DataViews/DataForm (filters, chips, footer…): the package asks to load them
+// when it is bundled; they go to style-index.css with the rest.
+import '@wordpress/dataviews/build-style/style.css';
 import './style.scss';
 
 const SITE = window.memorialPluginSettings?.siteUrl || '/';

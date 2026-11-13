@@ -92,7 +92,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of selected items.
-#: src/catalog/list-screen.js:171
+#: src/catalog/list-screen.js:221
 #, php-format
 msgid "%d item selected"
 msgid_plural "%d items selected"
@@ -100,7 +100,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of products.
-#: src/catalog/products.js:511
+#: src/catalog/products.js:512
 #, php-format
 msgid "%d product added at the top of the list. It is hidden from the site: fill it in and tick “Show on the site”."
 msgid_plural "%d products added at the top of the list. They are hidden from the site: fill them in and tick “Show on the site”."
@@ -124,7 +124,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of records.
-#: src/collections/index.js:321
+#: src/collections/index.js:324
 #, php-format
 msgid "%d record moved to the trash."
 msgid_plural "%d records moved to the trash."
@@ -197,7 +197,7 @@ msgstr ""
 msgid ". The previous text of the page is in its “Revisions”."
 msgstr ""
 
-#: src/catalog/products.js:322 src/editor-meta/index.js:59
+#: src/catalog/products.js:323 src/editor-meta/index.js:59
 msgid "0 — “price on request”."
 msgstr ""
 
@@ -359,7 +359,7 @@ msgstr ""
 msgid "Active — new burials"
 msgstr ""
 
-#: src/catalog/works.js:48 src/catalog/products.js:182 src/catalog/types.js:600 src/catalog/types.js:836 src/catalog/work-types.js:227 src/settings/index.js:473
+#: src/catalog/works.js:48 src/catalog/products.js:182 src/catalog/types.js:600 src/catalog/types.js:836 src/catalog/work-types.js:227 src/settings/index.js:476
 msgid "Add"
 msgstr ""
 
@@ -451,7 +451,7 @@ msgstr ""
 msgid "Add category"
 msgstr ""
 
-#: src/catalog/products.js:778
+#: src/catalog/products.js:779
 msgid "Add from photos"
 msgstr ""
 
@@ -467,11 +467,11 @@ msgstr ""
 msgid "Add photos"
 msgstr ""
 
-#: src/catalog/products.js:790
+#: src/catalog/products.js:791
 msgid "Add product"
 msgstr ""
 
-#: src/catalog/fields.js:264 src/editor-meta/index.js:211
+#: src/catalog/fields.js:265 src/editor-meta/index.js:211
 msgid "Add row"
 msgstr ""
 
@@ -479,11 +479,11 @@ msgstr ""
 msgid "Add specification"
 msgstr ""
 
-#: src/catalog/products.js:690
+#: src/catalog/products.js:691
 msgid "Add to categories…"
 msgstr ""
 
-#: src/catalog/products.js:406
+#: src/catalog/products.js:407
 msgid "Added"
 msgstr ""
 
@@ -531,7 +531,7 @@ msgstr ""
 msgid "All categories (tiles)"
 msgstr ""
 
-#: src/settings/index.js:924
+#: src/settings/index.js:927
 msgid "All changes are saved"
 msgstr ""
 
@@ -761,7 +761,7 @@ msgstr ""
 msgid "Cafe “…”"
 msgstr ""
 
-#: src/collections/index.js:375 blocks/legacy/render/mobile-bar.php:15 blocks/legacy/render/parts/contacts-cards.php:23
+#: src/collections/index.js:378 blocks/legacy/render/mobile-bar.php:15 blocks/legacy/render/parts/contacts-cards.php:23
 msgid "Call"
 msgstr ""
 
@@ -833,7 +833,7 @@ msgstr ""
 msgid "Can be left empty: it is made from the name when you save. By the code the price is put into texts and SEO titles, so do not change it once it is used."
 msgstr ""
 
-#: src/catalog/list-screen.js:105 src/catalog/list-screen.js:134 src/collections/index.js:252
+#: src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:255
 msgid "Cancel"
 msgstr ""
 
@@ -957,7 +957,7 @@ msgstr ""
 msgid "Catalog: products of a section"
 msgstr ""
 
-#: catalog/catalog.php:59 admin/abilities.php:764 src/catalog/products.js:169 src/catalog/products.js:385 src/catalog/types.js:771
+#: catalog/catalog.php:59 admin/abilities.php:764 src/catalog/products.js:169 src/catalog/products.js:386 src/catalog/types.js:771
 msgid "Categories"
 msgstr ""
 
@@ -993,7 +993,7 @@ msgstr[1] ""
 msgid "Change prices"
 msgstr ""
 
-#: src/catalog/products.js:624
+#: src/catalog/products.js:625
 msgid "Change prices…"
 msgstr ""
 
@@ -1033,7 +1033,7 @@ msgstr ""
 msgid "Choose by the title"
 msgstr ""
 
-#: src/settings/index.js:130 src/collections/index.js:54
+#: src/settings/index.js:133 src/collections/index.js:57
 msgid "Choose photo"
 msgstr ""
 
@@ -1051,10 +1051,6 @@ msgstr ""
 
 #: content/search.php:57
 msgid "Clear the search"
-msgstr ""
-
-#: src/catalog/list-screen.js:196
-msgid "Clear the selection"
 msgstr ""
 
 #: src/catalog/search-stats.js:193 src/catalog/search-stats.js:208
@@ -1205,7 +1201,7 @@ msgstr ""
 msgid "Cookie settings"
 msgstr ""
 
-#: src/catalog/works.js:345 src/catalog/products.js:664
+#: src/catalog/works.js:345 src/catalog/products.js:665
 msgid "Copy"
 msgstr ""
 
@@ -1382,7 +1378,7 @@ msgstr ""
 msgid "Deletes the given queries from the search statistics, or all statistics when no queries are given."
 msgstr ""
 
-#: src/catalog/products.js:392 src/catalog/types.js:97 src/catalog/types.js:570 src/catalog/types.js:651
+#: src/catalog/products.js:393 src/catalog/types.js:97 src/catalog/types.js:570 src/catalog/types.js:651
 msgid "Description"
 msgstr ""
 
@@ -1440,7 +1436,7 @@ msgstr ""
 msgid "Done in:"
 msgstr ""
 
-#: src/catalog/search-stats.js:41 src/catalog/works.js:192 src/catalog/products.js:442 src/catalog/products.js:464
+#: src/catalog/search-stats.js:41 src/catalog/works.js:192 src/catalog/products.js:443 src/catalog/products.js:465
 msgid "Done."
 msgstr ""
 
@@ -1448,7 +1444,7 @@ msgstr ""
 msgid "Done: loaded "
 msgstr ""
 
-#: src/settings/index.js:188
+#: src/settings/index.js:191
 msgid "Down"
 msgstr ""
 
@@ -1460,7 +1456,7 @@ msgstr ""
 msgid "Each branch on its own tab"
 msgstr ""
 
-#: src/catalog/works.js:259 src/catalog/products.js:605 src/catalog/types.js:694 src/collections/index.js:214 src/collections/index.js:339
+#: src/catalog/works.js:259 src/catalog/products.js:606 src/catalog/types.js:694 src/collections/index.js:217 src/collections/index.js:342
 msgid "Edit"
 msgstr ""
 
@@ -1570,7 +1566,7 @@ msgstr ""
 msgid "Export the catalog to CSV products prices Excel"
 msgstr ""
 
-#: src/catalog/products.js:813
+#: src/catalog/products.js:814
 msgid "Export to CSV"
 msgstr ""
 
@@ -1651,11 +1647,11 @@ msgstr ""
 msgid "Flower — wreaths"
 msgstr ""
 
-#: src/settings/index.js:403
+#: src/settings/index.js:406
 msgid "Fold"
 msgstr ""
 
-#: src/settings/index.js:337
+#: src/settings/index.js:340
 msgid "Fold all"
 msgstr ""
 
@@ -1909,7 +1905,7 @@ msgstr ""
 msgid "Heart — care"
 msgstr ""
 
-#: admin/collections.php:113 src/catalog/fields.js:159 src/catalog/fields.js:180
+#: admin/collections.php:113 src/catalog/fields.js:160 src/catalog/fields.js:181
 msgid "Hidden"
 msgstr ""
 
@@ -1917,7 +1913,7 @@ msgstr ""
 msgid "Hidden window with the call back form; opens from “Call me back” buttons."
 msgstr ""
 
-#: src/catalog/works.js:326 src/catalog/products.js:652
+#: src/catalog/works.js:326 src/catalog/products.js:653
 msgid "Hide from the site"
 msgstr ""
 
@@ -1925,7 +1921,7 @@ msgstr ""
 msgid "Hide reviews with the words (comma-separated)"
 msgstr ""
 
-#: src/settings/index.js:506
+#: src/settings/index.js:509
 msgid "Hide the key"
 msgstr ""
 
@@ -1961,7 +1957,7 @@ msgstr ""
 msgid "How far (optional)"
 msgstr ""
 
-#: src/settings/index.js:51 seo/metrika.php:57
+#: src/settings/index.js:54 seo/metrika.php:57
 msgid "How it works"
 msgstr ""
 
@@ -2001,7 +1997,7 @@ msgstr ""
 msgid "How the products of this type go when a visitor opens the section. A category can have its own order."
 msgstr ""
 
-#: src/settings/index.js:728
+#: src/settings/index.js:731
 msgid "How this screen works"
 msgstr ""
 
@@ -2175,7 +2171,7 @@ msgstr ""
 msgid "Line item"
 msgstr ""
 
-#: admin/abilities.php:763 src/catalog/products.js:357 src/editor-meta/index.js:108
+#: admin/abilities.php:763 src/catalog/products.js:358 src/editor-meta/index.js:108
 msgid "Line under the title"
 msgstr ""
 
@@ -2323,7 +2319,7 @@ msgstr ""
 msgid "Mark a request as called back"
 msgstr ""
 
-#: src/collections/index.js:356
+#: src/collections/index.js:359
 msgid "Mark as called back"
 msgstr ""
 
@@ -2403,7 +2399,7 @@ msgstr ""
 msgid "Merge"
 msgstr ""
 
-#: src/catalog/products.js:670
+#: src/catalog/products.js:671
 msgid "Merge into one…"
 msgstr ""
 
@@ -2475,18 +2471,18 @@ msgid "Move photo %d later"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:440
+#: src/settings/index.js:443
 #, php-format
 msgid "Move row %d down"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:429
+#: src/settings/index.js:432
 #, php-format
 msgid "Move row %d up"
 msgstr ""
 
-#: src/catalog/works.js:351 src/catalog/products.js:678 src/collections/index.js:346
+#: src/catalog/works.js:351 src/catalog/products.js:679 src/collections/index.js:349
 msgid "Move to trash"
 msgstr ""
 
@@ -2538,7 +2534,7 @@ msgstr ""
 msgid "New kind of work"
 msgstr ""
 
-#: catalog/catalog.php:38 catalog/catalog-manager.php:312 src/catalog/products.js:850
+#: catalog/catalog.php:38 catalog/catalog-manager.php:312 src/catalog/products.js:851
 msgid "New product"
 msgstr ""
 
@@ -2582,7 +2578,7 @@ msgstr ""
 msgid "Night phone line"
 msgstr ""
 
-#: src/catalog/search-stats.js:113 src/catalog/works.js:164 src/catalog/products.js:339 src/collections/index.js:102 src/collections/index.js:112
+#: src/catalog/search-stats.js:113 src/catalog/works.js:164 src/catalog/products.js:340 src/collections/index.js:105 src/collections/index.js:115
 msgid "No"
 msgstr ""
 
@@ -2766,7 +2762,7 @@ msgstr ""
 msgid "On the card"
 msgstr ""
 
-#: admin/collections.php:108 admin/abilities.php:767 src/catalog/fields.js:155
+#: admin/collections.php:108 admin/abilities.php:767 src/catalog/fields.js:156
 msgid "On the site"
 msgstr ""
 
@@ -2842,7 +2838,7 @@ msgstr ""
 msgid "Open Analytics settings"
 msgstr ""
 
-#: src/catalog/products.js:612
+#: src/catalog/products.js:613
 msgid "Open in the editor"
 msgstr ""
 
@@ -2852,7 +2848,7 @@ msgstr ""
 msgid "Open photo %d large"
 msgstr ""
 
-#: src/settings/index.js:814
+#: src/settings/index.js:817
 msgid "Open site"
 msgstr ""
 
@@ -2896,7 +2892,7 @@ msgstr ""
 msgid "Or these pages, in this order"
 msgstr ""
 
-#: admin/collections.php:117 src/catalog/fields.js:190 src/catalog/types.js:662 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:79
+#: admin/collections.php:117 src/catalog/fields.js:191 src/catalog/types.js:662 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:79
 msgid "Order"
 msgstr ""
 
@@ -3236,11 +3232,11 @@ msgstr ""
 msgid "Price table"
 msgstr ""
 
-#: src/catalog/products.js:752
+#: src/catalog/products.js:753
 msgid "Price, specifications, categories and the description are changed right here. Select several products to change prices or categories at once."
 msgstr ""
 
-#: src/catalog/products.js:320 src/catalog/fields.js:235 src/editor-meta/index.js:58 prices/prices.php:61 prices/prices.php:99
+#: src/catalog/products.js:321 src/catalog/fields.js:236 src/editor-meta/index.js:58 prices/prices.php:61 prices/prices.php:99
 msgid "Price, ₽"
 msgstr ""
 
@@ -3326,7 +3322,7 @@ msgstr ""
 msgid "Product: specifications"
 msgstr ""
 
-#: catalog/catalog-manager.php:23 admin/commands.php:19 src/catalog/products.js:751 src/catalog/types.js:642 pages/pages.php:23
+#: catalog/catalog-manager.php:23 admin/commands.php:19 src/catalog/products.js:752 src/catalog/types.js:642 pages/pages.php:23
 msgid "Products"
 msgstr ""
 
@@ -3458,7 +3454,7 @@ msgstr ""
 msgid "Ready-made blocks in the editor"
 msgstr ""
 
-#: src/catalog/works.js:49 src/catalog/products.js:183 src/settings/index.js:140 src/block-controls/index.js:204 src/block-controls/index.js:257 src/collections/index.js:64
+#: src/catalog/works.js:49 src/catalog/products.js:183 src/settings/index.js:143 src/block-controls/index.js:204 src/block-controls/index.js:257 src/collections/index.js:67
 msgid "Remove"
 msgstr ""
 
@@ -3470,7 +3466,7 @@ msgstr ""
 msgid "Remove ad tags from the address bar (utm_…, yclid, gclid…): a visitor sees and copies a clean address. Metrica still gets the address with the tags — the sources in the reports are not lost"
 msgstr ""
 
-#: src/catalog/products.js:703
+#: src/catalog/products.js:704
 msgid "Remove from categories…"
 msgstr ""
 
@@ -3484,12 +3480,12 @@ msgstr ""
 msgid "Remove photo %d"
 msgstr ""
 
-#: src/catalog/fields.js:251 src/editor-meta/index.js:198
+#: src/catalog/fields.js:252 src/editor-meta/index.js:198
 msgid "Remove row"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:452
+#: src/settings/index.js:455
 #, php-format
 msgid "Remove row %d"
 msgstr ""
@@ -3506,7 +3502,7 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: src/settings/index.js:129 src/collections/index.js:53
+#: src/settings/index.js:132 src/collections/index.js:56
 msgid "Replace photo"
 msgstr ""
 
@@ -3689,7 +3685,7 @@ msgid "Round to"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:389
+#: src/settings/index.js:392
 #, php-format
 msgid "Row %d"
 msgstr ""
@@ -3706,7 +3702,7 @@ msgstr ""
 msgid "SEO title (SEOPress)"
 msgstr ""
 
-#: src/catalog/product-pages.js:152 src/catalog/types.js:272 src/catalog/types.js:599 src/catalog/list-screen.js:115 src/settings/index.js:822 src/settings/index.js:932
+#: src/catalog/product-pages.js:152 src/catalog/types.js:272 src/catalog/types.js:599 src/catalog/list-screen.js:125 src/settings/index.js:825 src/settings/index.js:935
 msgid "Save"
 msgstr ""
 
@@ -3722,11 +3718,11 @@ msgstr ""
 msgid "Saved ✓ The reviews will update within a minute"
 msgstr ""
 
-#: src/catalog/works.js:237 src/catalog/product-pages.js:138 src/catalog/products.js:591 src/catalog/types.js:872 src/catalog/work-types.js:71 src/collections/index.js:448
+#: src/catalog/works.js:237 src/catalog/product-pages.js:138 src/catalog/products.js:592 src/catalog/types.js:872 src/catalog/work-types.js:71 src/collections/index.js:451
 msgid "Saved."
 msgstr ""
 
-#: src/settings/index.js:790
+#: src/settings/index.js:793
 msgid "Saved. The changes are already on the site."
 msgstr ""
 
@@ -3904,7 +3900,7 @@ msgstr ""
 msgid "Show more reviews"
 msgstr ""
 
-#: src/catalog/works.js:307 src/catalog/products.js:640
+#: src/catalog/works.js:307 src/catalog/products.js:641
 msgid "Show on the site"
 msgstr ""
 
@@ -3928,7 +3924,7 @@ msgstr ""
 msgid "Show reviews"
 msgstr ""
 
-#: src/settings/index.js:507
+#: src/settings/index.js:510
 msgid "Show the key"
 msgstr ""
 
@@ -3948,11 +3944,11 @@ msgstr ""
 msgid "Show this block"
 msgstr ""
 
-#: src/catalog/products.js:335 src/editor-meta/index.js:84
+#: src/catalog/products.js:336 src/editor-meta/index.js:84
 msgid "Show “from”"
 msgstr ""
 
-#: admin/collections.php:112 src/catalog/fields.js:158 src/catalog/fields.js:176
+#: admin/collections.php:112 src/catalog/fields.js:159 src/catalog/fields.js:177
 msgid "Shown"
 msgstr ""
 
@@ -4025,7 +4021,7 @@ msgstr ""
 msgid "Skip questions of these pages"
 msgstr ""
 
-#: src/catalog/fields.js:192
+#: src/catalog/fields.js:193
 msgid "Smaller first. The arrows in the row menu move the item one place."
 msgstr ""
 
@@ -4355,7 +4351,7 @@ msgstr ""
 msgid "The “more than N years” on the site is counted from it."
 msgstr ""
 
-#: src/catalog/products.js:824
+#: src/catalog/products.js:825
 msgid "There are no product types yet. Add one in “Types and categories”, for example “Wreaths”."
 msgstr ""
 
@@ -4367,7 +4363,7 @@ msgstr ""
 msgid "There are no products in this section yet. Call — we will find what you need."
 msgstr ""
 
-#: src/settings/index.js:920
+#: src/settings/index.js:923
 msgid "There are unsaved changes"
 msgstr ""
 
@@ -4487,12 +4483,12 @@ msgstr ""
 msgid "Too many requests. Please call us."
 msgstr ""
 
-#: src/catalog/works.js:142 src/settings/index.js:227 src/settings/index.js:480 prices/prices.php:367 works/works.php:261
+#: src/catalog/works.js:142 src/settings/index.js:230 src/settings/index.js:483 prices/prices.php:367 works/works.php:261
 msgid "Total"
 msgstr ""
 
 #. translators: %s: total price.
-#: src/catalog/fields.js:269
+#: src/catalog/fields.js:270
 #, php-format
 msgid "Total: %s"
 msgstr ""
@@ -4503,7 +4499,7 @@ msgstr ""
 msgid "Total: %s ₽"
 msgstr ""
 
-#: src/catalog/works.js:414 src/catalog/products.js:816
+#: src/catalog/works.js:414 src/catalog/products.js:817
 msgid "Trash"
 msgstr ""
 
@@ -4531,7 +4527,7 @@ msgstr ""
 msgid "Type of product"
 msgstr ""
 
-#: catalog/catalog-types-admin.php:19 catalog/catalog-manager.php:63 catalog/catalog-manager.php:64 admin/commands.php:20 src/catalog/products.js:802 src/catalog/types.js:908
+#: catalog/catalog-types-admin.php:19 catalog/catalog-manager.php:63 catalog/catalog-manager.php:64 admin/commands.php:20 src/catalog/products.js:803 src/catalog/types.js:908
 msgid "Types and categories"
 msgstr ""
 
@@ -4543,11 +4539,11 @@ msgstr ""
 msgid "Under the title of the catalog on the site (optional)."
 msgstr ""
 
-#: src/settings/index.js:404 src/block-controls/index.js:682
+#: src/settings/index.js:407 src/block-controls/index.js:682
 msgid "Unfold"
 msgstr ""
 
-#: src/settings/index.js:346
+#: src/settings/index.js:349
 msgid "Unfold all"
 msgstr ""
 
@@ -4555,7 +4551,7 @@ msgstr ""
 msgid "Unfold the block"
 msgstr ""
 
-#: catalog/catalog-manager.php:414 admin/abilities.php:762 src/catalog/products.js:346 src/catalog/types.js:364
+#: catalog/catalog-manager.php:414 admin/abilities.php:762 src/catalog/products.js:347 src/catalog/types.js:364
 msgid "Unit"
 msgstr ""
 
@@ -4595,7 +4591,7 @@ msgstr ""
 msgid "Untitled work"
 msgstr ""
 
-#: src/settings/index.js:181
+#: src/settings/index.js:184
 msgid "Up"
 msgstr ""
 
@@ -4635,7 +4631,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/catalog/products.js:617
+#: src/catalog/products.js:618
 msgid "View on the site"
 msgstr ""
 
@@ -4647,7 +4643,7 @@ msgstr ""
 msgid "View →"
 msgstr ""
 
-#: src/catalog/fields.js:166
+#: src/catalog/fields.js:167
 msgid "Visible on the site"
 msgstr ""
 
@@ -4812,7 +4808,7 @@ msgid "Work"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/catalog/fields.js:216 src/editor-meta/index.js:181
+#: src/catalog/fields.js:217 src/editor-meta/index.js:181
 #, php-format
 msgid "Work %d"
 msgstr ""
@@ -4881,7 +4877,7 @@ msgstr ""
 msgid "Years in business"
 msgstr ""
 
-#: src/catalog/search-stats.js:112 src/catalog/works.js:163 src/catalog/products.js:338 src/collections/index.js:101 src/collections/index.js:108
+#: src/catalog/search-stats.js:112 src/catalog/works.js:163 src/catalog/products.js:339 src/collections/index.js:104 src/collections/index.js:111
 msgid "Yes"
 msgstr ""
 
@@ -6011,7 +6007,7 @@ msgstr ""
 msgid "for example: korziny"
 msgstr ""
 
-#: src/catalog/products.js:348 src/editor-meta/index.js:75
+#: src/catalog/products.js:349 src/editor-meta/index.js:75
 msgid "for example: per metre"
 msgstr ""
 
@@ -6019,7 +6015,7 @@ msgstr ""
 msgid "form"
 msgstr ""
 
-#: src/catalog/products.js:327
+#: src/catalog/products.js:328
 msgid "from"
 msgstr ""
 
@@ -6161,7 +6157,7 @@ msgstr ""
 msgid "off"
 msgstr ""
 
-#: catalog/catalog-summary.php:120 src/catalog/products.js:331 prices/values.php:234
+#: catalog/catalog-summary.php:120 src/catalog/products.js:332 prices/values.php:234
 msgid "on request"
 msgstr ""
 
@@ -6455,7 +6451,7 @@ msgstr ""
 msgid "— not chosen —"
 msgstr ""
 
-#: src/settings/index.js:614
+#: src/settings/index.js:617
 msgid "— not selected —"
 msgstr ""
 

@@ -116,28 +116,6 @@ button.memorial-plugin-catalog__photo {
 }
 
 
-// Actions for the selected items, above the table.
-.memorial-plugin-catalog__bulk {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px;
-	align-items: center;
-	margin: 12px 0;
-	padding: 10px 16px;
-	border: 1px solid #c9d3bf;
-	border-radius: 12px;
-	background: #f1f4ec;
-
-	strong {
-		margin-right: 8px;
-		font-size: 14px;
-	}
-
-	.components-button {
-		white-space: nowrap;
-	}
-}
-
 // A description with formatting, shown read-only in the form.
 .memorial-plugin-catalog__desc {
 	padding: 12px 14px;
@@ -188,4 +166,43 @@ button.memorial-plugin-catalog__photo {
 
 .memorial-plugin-admin .dataviews-view-table[class*="comfortable"] {
 	--memorial-plugin-photo: 88px;
+}
+
+// Top row of a list: what is selected on the left; search, filters and the view on the right.
+.memorial-plugin-catalog__top {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px 24px;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 20px;
+	border-bottom: 1px solid #e6e2d8;
+}
+
+.memorial-plugin-catalog__chosen {
+	color: #1f211c;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.memorial-plugin-catalog__tools {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	margin-left: auto;
+}
+
+// The actions for the selected items stay at the bottom of the screen while the list is scrolled.
+.memorial-plugin-admin .memorial-plugin-catalog .dataviews-wrapper {
+	overflow: visible;
+}
+
+.memorial-plugin-admin .memorial-plugin-catalog .dataviews-footer {
+	position: sticky;
+	bottom: 0;
+	z-index: 2;
+	border-top: 1px solid #e6e2d8;
+	border-radius: 0 0 16px 16px;
+	background: #fff;
+	box-shadow: 0 -6px 16px rgba(31, 33, 28, 0.06);
 }
