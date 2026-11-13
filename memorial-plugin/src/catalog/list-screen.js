@@ -196,6 +196,93 @@ export function ModalButtons( {
 	);
 }
 
+// The actions for the selected items, floating at the bottom of the screen — shown only while the table's
+// own row of actions (in its head) is scrolled out of sight, so the two are never seen at once.
+function FloatingActions( { items, selection, actions } ) {
+	const [ modal, setModal ] = useState( null );
+	const [ hidden, setHidden ] = useState( false );
+	const chosen = useMemo( () => {
+		const ids = new Set( ( selection || [] ).map( String ) );
+		return items.filter( ( i ) => ids.has( String( i.id ) ) );
+	}, [ items, selection ] );
+	const any = chosen.length > 0;
+	useEffect( () => {
+		const row = document.querySelector(
+			'.memorial-plugin-catalog .dataviews-view-table thead'
+		);
+		if ( ! any || ! row || ! window.IntersectionObserver ) {
+			setHidden( false );
+			return;
+		}
+		const io = new window.IntersectionObserver(
+			( [ e ] ) => setHidden( ! e.isIntersecting ),
+			{ threshold: 0.6 }
+		);
+		io.observe( row );
+		return () => io.disconnect();
+	}, [ any ] );
+	const usable = actions
+		.filter( ( a ) => a.supportsBulk )
+		.map( ( a ) => ( {
+			action: a,
+			list: a.isEligible ? chosen.filter( a.isEligible ) : chosen,
+		} ) )
+		.filter( ( x ) => x.list.length );
+	return (
+		<>
+			{ any && hidden && (
+				<div
+					className="memorial-plugin-catalog__float"
+					role="toolbar"
+					aria-label={ __(
+						'Actions for the selected items',
+						'memorial-plugin'
+					) }
+				>
+					<strong>
+						{ sprintf(
+							/* translators: %d: number of selected items. */
+							_n(
+								'%d item selected',
+								'%d items selected',
+								chosen.length,
+								'memorial-plugin'
+							),
+							chosen.length
+						) }
+					</strong>
+					{ usable.map( ( { action, list } ) => (
+						<Button
+							key={ action.id }
+							size="compact"
+							variant="secondary"
+							isDestructive={ action.isDestructive }
+							onClick={ () =>
+								action.RenderModal
+									? setModal( { action, list } )
+									: action.callback( list )
+							}
+						>
+							{ action.label.replace( /…$/, '' ) }
+						</Button>
+					) ) }
+				</div>
+			) }
+			{ modal && (
+				<Modal
+					title={ modal.action.label.replace( /…$/, '' ) }
+					onRequestClose={ () => setModal( null ) }
+				>
+					<modal.action.RenderModal
+						items={ modal.list }
+						closeModal={ () => setModal( null ) }
+					/>
+				</Modal>
+			) }
+		</>
+	);
+}
+
 /**
  * A list page: title, buttons, notices, optional tabs and the DataViews table.
  *
@@ -234,25 +321,6 @@ export function ListPage( {
 	setSelection: setOuterSelection,
 } ) {
 	const [ ownSelection, setOwnSelection ] = useState( [] );
-	// The pinned title of the screen: the floating row of the table (and its actions for the selected
-	// items) sticks right under it, not behind it.
-	useEffect( () => {
-		const head = document.querySelector(
-			'.memorial-plugin-admin [class*="__stack"][class*="__header"]'
-		);
-		if ( ! head || ! window.ResizeObserver ) {
-			return;
-		}
-		const set = () =>
-			document.documentElement.style.setProperty(
-				'--memorial-plugin-head',
-				Math.round( head.getBoundingClientRect().height ) + 'px'
-			);
-		const ro = new window.ResizeObserver( set );
-		ro.observe( head );
-		set();
-		return () => ro.disconnect();
-	}, [] );
 	const selection = outerSelection ?? ownSelection;
 	const setSelection = setOuterSelection ?? setOwnSelection;
 	const { data, paginationInfo } = useMemo( () => {
@@ -318,6 +386,11 @@ export function ListPage( {
 						</>
 					) }
 				</DataViews>
+				<FloatingActions
+					items={ items || [] }
+					selection={ selection }
+					actions={ actionsOf || [] }
+				/>
 			</div>
 		</Page>
 	);

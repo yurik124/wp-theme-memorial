@@ -195,23 +195,8 @@ button.memorial-plugin-catalog__photo {
 	margin-left: auto;
 }
 
-// The head of the table — and, while products are selected, its row of actions — float under the
-// pinned title of the screen when the list is scrolled (the table makes them sticky; here only where).
-.memorial-plugin-admin .memorial-plugin-catalog .dataviews-wrapper {
-	overflow: visible;
-}
-
-.memorial-plugin-admin .memorial-plugin-catalog .dataviews-view-table thead,
-.memorial-plugin-admin .memorial-plugin-catalog .dataviews-view-table__bulk-actions-overlay {
-	top: calc(var(--wp-admin--admin-bar--height, 32px) + var(--memorial-plugin-head, 0px));
-	z-index: 4;
-}
-
-.memorial-plugin-admin .memorial-plugin-catalog .dataviews-bulk-actions {
-	box-shadow: 0 6px 14px rgba(31, 33, 28, 0.12);
-}
-
-// Buttons keep their words on one line; if they do not fit, the row scrolls sideways instead of cutting.
+// The table's own row of actions: buttons keep their words on one line; if they do not fit, the row
+// scrolls sideways instead of cutting the last ones.
 .memorial-plugin-admin .memorial-plugin-catalog .dataviews-bulk-actions__actions {
 	overflow-x: auto;
 	flex-wrap: nowrap;
@@ -219,6 +204,50 @@ button.memorial-plugin-catalog__photo {
 	button {
 		flex: none;
 		white-space: nowrap;
+	}
+}
+
+// The same actions floating at the bottom of the screen while the head of the table is out of sight.
+.memorial-plugin-catalog__float {
+	position: fixed;
+	right: 24px;
+	bottom: 20px;
+	left: calc(var(--memorial-plugin-menu, 160px) + 24px);
+	z-index: 100;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+	padding: 12px 16px;
+	border: 1px solid #c9d3bf;
+	border-radius: 14px;
+	background: #fff;
+	box-shadow: 0 10px 28px rgba(31, 33, 28, 0.2);
+
+	strong {
+		margin-right: 8px;
+		font-size: 14px;
+	}
+
+	.components-button {
+		white-space: nowrap;
+	}
+}
+
+body.folded .memorial-plugin-catalog__float {
+	--memorial-plugin-menu: 36px;
+}
+
+@media (max-width: 960px) {
+	.memorial-plugin-catalog__float {
+		--memorial-plugin-menu: 36px;
+	}
+}
+
+@media (max-width: 782px) {
+	.memorial-plugin-catalog__float {
+		right: 8px;
+		left: 8px;
 	}
 }
 

@@ -6892,3 +6892,6 @@ msgstr "Одна колонка — крупные фото, товары дру
 
 msgid "Products on the site"
 msgstr "Товары на сайте"
+
+msgid "Actions for the selected items"
+msgstr "Действия с выбранными"
