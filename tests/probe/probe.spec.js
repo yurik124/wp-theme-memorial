@@ -875,6 +875,19 @@ test.describe( 'аудит товаров', () => {
 			await page.waitForTimeout( 6000 );
 			await shot( page, 'prod-10-site-editor' );
 		} );
+		// какие файлы стилей есть в собранном пакете DataViews (на раннере есть node_modules)
+		try {
+			const fs = require( 'fs' );
+			const path = require( 'path' );
+			const root = path.resolve( 'node_modules/@wordpress/dataviews' );
+			const pkg = JSON.parse( fs.readFileSync( path.join( root, 'package.json' ), 'utf8' ) );
+			const css = [];
+			const walk = ( d, depth ) => { for ( const f of fs.readdirSync( d ) ) { const p = path.join( d, f ); if ( fs.statSync( p ).isDirectory() ) { if ( depth < 3 && f !== 'node_modules' ) { walk( p, depth + 1 ); } } else if ( /\.css$/.test( f ) ) { css.push( path.relative( root, p ) + ' ' + fs.statSync( p ).size ); } } };
+			walk( root, 0 );
+			out.pkg = { version: pkg.version, exports: pkg.exports, style: pkg.style, sideEffects: pkg.sideEffects, css: css.slice( 0, 40 ) };
+		} catch ( e ) {
+			out.pkg = String( e );
+		}
 		out.errors = errs.slice( 0, 20 );
 		log( 'products', out );
 	} );

@@ -14,8 +14,8 @@
 
 		img {
 			display: block;
-			width: 56px;
-			height: 56px;
+			width: var(--memorial-plugin-photo, 56px);
+			height: var(--memorial-plugin-photo, 56px);
 			border-radius: 10px;
 			object-fit: cover;
 			box-shadow: 0 0 0 1px rgba(31, 33, 28, 0.06);
@@ -178,4 +178,14 @@ button.memorial-plugin-catalog__photo {
 .memorial-plugin-hinted {
 	display: inline-flex;
 	align-items: center;
+}
+
+// “Density” of the table changes the photos too, so the rows really get lower or higher
+// (the padding of the cells alone changes the row by a few pixels: the photo sets its height).
+.memorial-plugin-admin .dataviews-view-table[class*="compact"] {
+	--memorial-plugin-photo: 40px;
+}
+
+.memorial-plugin-admin .dataviews-view-table[class*="comfortable"] {
+	--memorial-plugin-photo: 88px;
 }
