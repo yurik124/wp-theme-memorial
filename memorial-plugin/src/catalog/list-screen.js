@@ -326,6 +326,12 @@ export function ListPage( {
 					getItemId={ ( item ) => String( item.id ) }
 					isLoading={ loading }
 				/>
+				<BulkBar
+					items={ items || [] }
+					selection={ selection }
+					actions={ actionsOf || [] }
+					onClear={ () => setSelection( [] ) }
+				/>
 			</div>
 		</Page>
 	);

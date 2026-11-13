@@ -162,11 +162,6 @@ body:has(.memorial-plugin-admin) {
 			background: #faf9f5;
 		}
 
-		td,
-		th {
-			padding-top: 12px;
-			padding-bottom: 12px;
-		}
 
 		td:first-child,
 		th:first-child {
@@ -350,4 +345,52 @@ body:has(.memorial-plugin-admin) .components-modal__frame {
 	font-weight: 400;
 	line-height: 1.5;
 	white-space: normal;
+}
+
+// The pinned title of a screen stays under the WordPress toolbar, not behind it.
+.memorial-plugin-admin [class*="__stack"][class*="__header"] {
+	top: var(--wp-admin--admin-bar--height, 32px);
+}
+
+// The table's own row of actions for the selected items is replaced by the bar above and below the table
+// (src/catalog/list-screen.js): its buttons broke into two lines and it repeated the “select all” checkbox.
+.memorial-plugin-admin .dataviews-view-table__bulk-actions-overlay,
+.memorial-plugin-admin .dataviews-bulk-actions-footer__container {
+	display: none;
+}
+
+// Every label of a field looks the same on all screens and in their dialogs: normal case, one size.
+.memorial-plugin-admin label[class],
+body:has(.memorial-plugin-admin) .components-modal__frame label[class] {
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.memorial-plugin-admin label.components-checkbox-control__label,
+body:has(.memorial-plugin-admin) .components-modal__frame label.components-checkbox-control__label {
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.4;
+}
+
+// Fields of one row stand on one line: the label takes the room it needs, the field sticks to the bottom;
+// a checkbox takes its own row.
+.memorial-plugin-admin .dataforms-layouts__wrapper {
+	align-items: stretch;
+}
+
+.memorial-plugin-admin .dataforms-layouts-regular__field {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
+	> * {
+		width: 100%;
+	}
+
+	&:has(.components-checkbox-control):not(:has(.memorial-plugin-settings__repeater)) {
+		grid-column: 1 / -1;
+	}
 }

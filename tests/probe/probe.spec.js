@@ -799,7 +799,9 @@ test.describe( 'аудит товаров', () => {
 				if ( ! p ) { return ''; }
 				const c = p.cloneNode( true );
 				c.querySelectorAll( 'svg' ).forEach( ( x ) => x.remove() );
-				return c.outerHTML.slice( 0, 9000 );
+				const html = c.outerHTML;
+				const at = html.indexOf( 'Свойства' );
+				return html.slice( Math.max( 0, at - 300 ), at + 5000 );
 			} );
 			await page.keyboard.press( 'Escape' );
 		} );
@@ -818,7 +820,7 @@ test.describe( 'аудит товаров', () => {
 			} );
 		}
 		await step( 'site-editor', async () => {
-			await page.goto( '/wp-admin/site-editor.php?p=%2Fwp_template&canvas=edit', { waitUntil: 'load' } );
+			await page.goto( '/wp-admin/site-editor.php?p=%2Fwp_template_part%2Fmemorial-theme%2F%2Fheader&canvas=edit', { waitUntil: 'load' } );
 			await page.waitForTimeout( 6000 );
 			await shot( page, 'prod-10-site-editor' );
 		} );
