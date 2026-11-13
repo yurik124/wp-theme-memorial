@@ -244,7 +244,7 @@ msgstr ""
 msgid "4. How it looks on the site"
 msgstr ""
 
-#: blocks/legacy/legacy.php:31
+#: blocks/legacy/legacy.php:37
 msgid "404 message with a call button and catalog sections."
 msgstr ""
 
@@ -294,7 +294,7 @@ msgstr ""
 msgid "A number (500), a range (200–300) or words (free); ₽ is added to numbers by itself."
 msgstr ""
 
-#: src/bindings/index.js:357
+#: src/bindings/index.js:359
 msgid "A paragraph whose text is kept in Memorial → Contacts: edit it here or there — it changes everywhere."
 msgstr ""
 
@@ -322,7 +322,7 @@ msgstr ""
 msgid "A short line in the card: size, material, colour."
 msgstr ""
 
-#: blocks/legacy/legacy.php:170
+#: blocks/legacy/legacy.php:192
 msgid "A single product from the catalog."
 msgstr ""
 
@@ -486,7 +486,7 @@ msgstr ""
 msgid "Add to categories…"
 msgstr ""
 
-#: places/places.php:137 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:46 core/settings.php:90
+#: places/places.php:137 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:52 core/settings.php:90
 msgid "Address"
 msgstr ""
 
@@ -552,7 +552,7 @@ msgstr ""
 msgid "All products (or of one type) as CSV: type, title, price, “from”, unit, line under the title, categories, specifications, visibility."
 msgstr ""
 
-#: blocks/legacy/legacy.php:171
+#: blocks/legacy/legacy.php:193
 msgid "All products of the catalog."
 msgstr ""
 
@@ -652,7 +652,7 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: blocks/legacy/render/product.php:43
+#: blocks/legacy/render/product-specs.php:26
 msgid "Availability"
 msgstr ""
 
@@ -774,7 +774,7 @@ msgstr ""
 msgid "Call back: "
 msgstr ""
 
-#: content/search.php:70 content/content.php:67 blocks/legacy/render/mobile-bar.php:19 blocks/legacy/render/product.php:53 blocks/legacy/render/parts/contacts-cards.php:35 blocks/legacy/render/header-contacts.php:20
+#: content/search.php:70 content/content.php:67 blocks/legacy/render/product-buy.php:15 blocks/legacy/render/mobile-bar.php:19 blocks/legacy/render/parts/contacts-cards.php:35 blocks/legacy/render/header-contacts.php:20
 msgid "Call me back"
 msgstr ""
 
@@ -888,7 +888,7 @@ msgstr ""
 msgid "Cards: these works by title, comma separated"
 msgstr ""
 
-#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:46 seo/seo.php:70 blocks/legacy/legacy.php:171 blocks/legacy/render/catalog-archive.php:25
+#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:46 seo/seo.php:70 blocks/legacy/legacy.php:193 blocks/legacy/render/catalog-archive.php:25
 msgid "Catalog"
 msgstr ""
 
@@ -910,7 +910,7 @@ msgstr ""
 msgid "Catalog of the page with a summary"
 msgstr ""
 
-#: prices/prices.php:150 blocks/content/content-blocks.php:36 blocks/content/inline-values.php:30 blocks/content/inline-values.php:37 blocks/content/inline-values.php:43 blocks/legacy/legacy.php:72
+#: prices/prices.php:150 blocks/content/content-blocks.php:36 blocks/content/inline-values.php:30 blocks/content/inline-values.php:37 blocks/content/inline-values.php:43 blocks/legacy/legacy.php:78
 msgid "Catalog section"
 msgstr ""
 
@@ -918,7 +918,7 @@ msgstr ""
 msgid "Catalog section tiles"
 msgstr ""
 
-#: blocks/legacy/legacy.php:30
+#: blocks/legacy/legacy.php:36
 msgid "Catalog section with sorting"
 msgstr ""
 
@@ -999,7 +999,7 @@ msgstr ""
 msgid "Change what the block shows"
 msgstr ""
 
-#: src/bindings/index.js:309
+#: src/bindings/index.js:311
 msgid "Changed — it goes to the settings when you save the page."
 msgstr ""
 
@@ -1741,6 +1741,10 @@ msgstr ""
 msgid "Founding year"
 msgstr ""
 
+#: blocks/legacy/legacy.php:35
+msgid "Four more products of the same catalog section. For the product template."
+msgstr ""
+
 #: content/search.php:61
 msgid "Frequent searches:"
 msgstr ""
@@ -2215,7 +2219,7 @@ msgstr ""
 msgid "MAX — profile link"
 msgstr ""
 
-#: catalog/catalog-front.php:225 src/editor-meta/index.js:92 templates/product-card.php:45 blocks/legacy/render/product.php:43
+#: catalog/catalog-front.php:225 src/editor-meta/index.js:92 templates/product-card.php:45 blocks/legacy/render/product-specs.php:26
 msgid "Made to order"
 msgstr ""
 
@@ -2223,7 +2227,7 @@ msgstr ""
 msgid "Main address"
 msgstr ""
 
-#: src/bindings/index.js:343
+#: src/bindings/index.js:345
 msgid "Main address (shared text)"
 msgstr ""
 
@@ -2235,7 +2239,7 @@ msgstr ""
 msgid "Main phone (link)"
 msgstr ""
 
-#: src/bindings/index.js:337
+#: src/bindings/index.js:339
 msgid "Main phone (shared text)"
 msgstr ""
 
@@ -2375,7 +2379,7 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: blocks/legacy/legacy.php:31
+#: blocks/legacy/legacy.php:37
 msgid "Message “Page not found”"
 msgstr ""
 
@@ -2543,7 +2547,7 @@ msgstr ""
 msgid "Next photo"
 msgstr ""
 
-#: blocks/legacy/legacy.php:57
+#: blocks/legacy/legacy.php:63
 msgid "Night phone line"
 msgstr ""
 
@@ -2603,7 +2607,7 @@ msgstr ""
 msgid "Not chosen — %s."
 msgstr ""
 
-#: src/bindings/index.js:283
+#: src/bindings/index.js:285
 msgid "Not chosen — the block has its own text, only on this page."
 msgstr ""
 
@@ -2759,7 +2763,7 @@ msgstr ""
 msgid "Only a whole number without spaces."
 msgstr ""
 
-#: src/bindings/index.js:301
+#: src/bindings/index.js:303
 msgid "Only an editor or an administrator can change it."
 msgstr ""
 
@@ -2815,7 +2819,7 @@ msgstr ""
 msgid "Opening hours (optional)"
 msgstr ""
 
-#: src/bindings/index.js:349
+#: src/bindings/index.js:351
 msgid "Opening hours (shared text)"
 msgstr ""
 
@@ -2823,7 +2827,7 @@ msgstr ""
 msgid "Opening hours badge"
 msgstr ""
 
-#: blocks/legacy/legacy.php:52
+#: blocks/legacy/legacy.php:58
 msgid "Opening hours of the address"
 msgstr ""
 
@@ -2937,7 +2941,7 @@ msgstr ""
 msgid "Page photo"
 msgstr ""
 
-#: blocks/legacy/legacy.php:173
+#: blocks/legacy/legacy.php:195
 msgid "Page with products"
 msgstr ""
 
@@ -2949,7 +2953,7 @@ msgstr ""
 msgid "Pages"
 msgstr ""
 
-#: blocks/legacy/legacy.php:173
+#: blocks/legacy/legacy.php:195
 msgid "Pages set to show catalog tiles or products."
 msgstr ""
 
@@ -3061,6 +3065,10 @@ msgstr ""
 msgid "Photo of the page"
 msgstr ""
 
+#: blocks/legacy/legacy.php:31
+msgid "Photo of the product that is open (a laurel wreath when there is no photo). For the product template."
+msgstr ""
+
 #: core/settings.php:257
 msgid "Photo on the right (mourning hall — light, daylight)"
 msgstr ""
@@ -3169,6 +3177,10 @@ msgstr ""
 msgid "Price of a service (Memorial → Services)"
 msgstr ""
 
+#: blocks/legacy/legacy.php:32
+msgid "Price of the product that is open. For the product template."
+msgstr ""
+
 #: catalog/catalog.php:140
 msgid "Price on request"
 msgstr ""
@@ -3215,7 +3227,7 @@ msgstr ""
 msgid "Privacy policy"
 msgstr ""
 
-#: catalog/catalog.php:34 blocks/legacy/legacy.php:64 blocks/legacy/legacy.php:170
+#: catalog/catalog.php:34 blocks/legacy/legacy.php:70 blocks/legacy/legacy.php:192
 msgid "Product"
 msgstr ""
 
@@ -3227,7 +3239,7 @@ msgstr ""
 msgid "Product card"
 msgstr ""
 
-#: blocks/legacy/render/product.php:11
+#: blocks/legacy/render/product.php:14
 msgid "Product card: choose the product in the block settings (“What to show”). In the product template the block shows the product that is open."
 msgstr ""
 
@@ -3245,6 +3257,26 @@ msgstr ""
 
 #: admin/abilities.php:295
 msgid "Product type (top catalog category) ID; 0 — all."
+msgstr ""
+
+#: blocks/legacy/legacy.php:34
+msgid "Product: call buttons"
+msgstr ""
+
+#: blocks/legacy/legacy.php:31
+msgid "Product: photo"
+msgstr ""
+
+#: blocks/legacy/legacy.php:32
+msgid "Product: price"
+msgstr ""
+
+#: blocks/legacy/legacy.php:35
+msgid "Product: similar products"
+msgstr ""
+
+#: blocks/legacy/legacy.php:33
+msgid "Product: specifications"
 msgstr ""
 
 #: catalog/catalog-manager.php:23 admin/commands.php:19 src/catalog/products.js:663 src/catalog/types.js:526 pages/pages.php:23
@@ -3265,7 +3297,7 @@ msgstr ""
 msgid "Products of a catalog section with section links and sorting. The section is chosen in the block settings; by default — the section of this page."
 msgstr ""
 
-#: blocks/legacy/legacy.php:172
+#: blocks/legacy/legacy.php:194
 msgid "Products of one catalog section."
 msgstr ""
 
@@ -3773,7 +3805,7 @@ msgstr ""
 msgid "Shape"
 msgstr ""
 
-#: src/bindings/index.js:273
+#: src/bindings/index.js:275
 msgid "Shared text"
 msgstr ""
 
@@ -3905,7 +3937,7 @@ msgstr ""
 msgid "Shows (publishes) or hides (makes drafts of) products or works."
 msgstr ""
 
-#: blocks/legacy/render/product.php:83
+#: blocks/legacy/render/product-related.php:33
 msgid "Similar products"
 msgstr ""
 
@@ -3988,6 +4020,10 @@ msgstr ""
 msgid "Specifications"
 msgstr ""
 
+#: blocks/legacy/legacy.php:33
+msgid "Specifications and the short description of the product that is open. For the product template."
+msgstr ""
+
 #: catalog/catalog-front.php:25
 msgid "Square"
 msgstr ""
@@ -4028,7 +4064,7 @@ msgstr ""
 msgid "Sub-section heading level"
 msgstr ""
 
-#: blocks/legacy/legacy.php:30
+#: blocks/legacy/legacy.php:36
 msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
 msgstr ""
 
@@ -4056,7 +4092,7 @@ msgstr ""
 msgid "Tagline: years in business"
 msgstr ""
 
-#: src/bindings/index.js:279
+#: src/bindings/index.js:281
 msgid "Take the text from the Memorial settings"
 msgstr ""
 
@@ -4308,6 +4344,10 @@ msgstr ""
 msgid "Third step"
 msgstr ""
 
+#: blocks/legacy/legacy.php:164
+msgid "This block shows a part of the product that is open — it works in the product template (Appearance → Editor → Templates)."
+msgstr ""
+
 #: blocks/bindings.php:257
 msgid "This is not an email address."
 msgstr ""
@@ -4320,7 +4360,7 @@ msgstr ""
 msgid "This part of the site is switched off in Memorial → Features."
 msgstr ""
 
-#: src/bindings/index.js:293
+#: src/bindings/index.js:295
 msgid "This text is stored once in the Memorial settings: a change here changes it on every page that shows it, after the page is saved."
 msgstr ""
 
@@ -4796,7 +4836,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: blocks/legacy/render/product.php:55
+#: blocks/legacy/render/product-buy.php:17
 msgid "You can check the availability, sizes and terms by phone — we will help you choose."
 msgstr ""
 
@@ -4921,6 +4961,11 @@ msgctxt "block description"
 msgid "Footer menu: items with sub-items become columns, single items go to “Information”."
 msgstr ""
 
+#: blocks/types/product-related/block.json
+msgctxt "block description"
+msgid "Four more products of the same catalog section. For the product template."
+msgstr ""
+
 #: blocks/types/packages-grid/block.json
 msgctxt "block description"
 msgid "Funeral package cards as on the home page (Memorial → Prices)."
@@ -5011,9 +5056,19 @@ msgctxt "block description"
 msgid "Photo grid of products from catalog sections."
 msgstr ""
 
+#: blocks/types/product-media/block.json
+msgctxt "block description"
+msgid "Photo of the product that is open (a laurel wreath when there is no photo). For the product template."
+msgstr ""
+
 #: blocks/types/product/block.json
 msgctxt "block description"
 msgid "Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings."
+msgstr ""
+
+#: blocks/types/product-price/block.json
+msgctxt "block description"
+msgid "Price of the product that is open. For the product template."
 msgstr ""
 
 #: blocks/types/catalog/block.json
@@ -5051,9 +5106,19 @@ msgctxt "block description"
 msgid "Service cards with photos and starting prices (Memorial → Home page → Services)."
 msgstr ""
 
+#: blocks/types/product-specs/block.json
+msgctxt "block description"
+msgid "Specifications and the short description of the product that is open. For the product template."
+msgstr ""
+
 #: blocks/types/catalog-archive/block.json
 msgctxt "block description"
 msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
+msgstr ""
+
+#: blocks/types/product-buy/block.json
+msgctxt "block description"
+msgid "“Call” and “Call me back” buttons with a hint, under the product. For the product template."
 msgstr ""
 
 #: blocks/types/contacts-cards/block.json
@@ -5666,6 +5731,31 @@ msgctxt "block title"
 msgid "Product photos from the catalog"
 msgstr ""
 
+#: blocks/types/product-buy/block.json
+msgctxt "block title"
+msgid "Product: call buttons"
+msgstr ""
+
+#: blocks/types/product-media/block.json
+msgctxt "block title"
+msgid "Product: photo"
+msgstr ""
+
+#: blocks/types/product-price/block.json
+msgctxt "block title"
+msgid "Product: price"
+msgstr ""
+
+#: blocks/types/product-related/block.json
+msgctxt "block title"
+msgid "Product: similar products"
+msgstr ""
+
+#: blocks/types/product-specs/block.json
+msgctxt "block title"
+msgid "Product: specifications"
+msgstr ""
+
 #: blocks/types/page-products/block.json
 msgctxt "block title"
 msgid "Products of the page (for the template)"
@@ -5799,7 +5889,7 @@ msgstr ""
 msgid "consent to personal data processing"
 msgstr ""
 
-#: src/bindings/index.js:363 blocks/block-meta.php:139 blocks/block-meta.php:142 blocks/block-meta.php:143 blocks/block-meta.php:144 blocks/block-meta.php:170
+#: src/bindings/index.js:365 blocks/block-meta.php:139 blocks/block-meta.php:142 blocks/block-meta.php:143 blocks/block-meta.php:144 blocks/block-meta.php:170
 msgid "contacts"
 msgstr ""
 
@@ -6395,6 +6485,10 @@ msgstr ""
 
 #: seo/metrika.php:118
 msgid "“Call request”,"
+msgstr ""
+
+#: blocks/legacy/legacy.php:34
+msgid "“Call” and “Call me back” buttons with a hint, under the product. For the product template."
 msgstr ""
 
 #: core/settings.php:141

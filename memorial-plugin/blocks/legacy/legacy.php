@@ -27,6 +27,12 @@ function memorial_plugin_legacy_blocks() {
 		'page-products'   => array( __( 'Products of the page (for the template)', 'memorial-plugin' ), __( 'Catalog tiles or product grid for pages set to show products, with the page text above and below.', 'memorial-plugin' ), 'grid-view' ),
 		'contacts-page'   => array( __( 'Contacts: the whole page', 'memorial-plugin' ), __( 'Phones, messengers, addresses with routes, maps and company details.', 'memorial-plugin' ), 'id' ),
 		'product'         => array( __( 'Product card', 'memorial-plugin' ), __( 'Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings.', 'memorial-plugin' ), 'products' ),
+		// The product template is built from core blocks (title, text) and these parts; they follow the product that is open.
+		'product-media'   => array( __( 'Product: photo', 'memorial-plugin' ), __( 'Photo of the product that is open (a laurel wreath when there is no photo). For the product template.', 'memorial-plugin' ), 'format-image' ),
+		'product-price'   => array( __( 'Product: price', 'memorial-plugin' ), __( 'Price of the product that is open. For the product template.', 'memorial-plugin' ), 'money-alt' ),
+		'product-specs'   => array( __( 'Product: specifications', 'memorial-plugin' ), __( 'Specifications and the short description of the product that is open. For the product template.', 'memorial-plugin' ), 'editor-table' ),
+		'product-buy'     => array( __( 'Product: call buttons', 'memorial-plugin' ), __( '“Call” and “Call me back” buttons with a hint, under the product. For the product template.', 'memorial-plugin' ), 'phone' ),
+		'product-related' => array( __( 'Product: similar products', 'memorial-plugin' ), __( 'Four more products of the same catalog section. For the product template.', 'memorial-plugin' ), 'screenoptions' ),
 		'catalog-archive' => array( __( 'Catalog section with sorting', 'memorial-plugin' ), __( 'Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings.', 'memorial-plugin' ), 'archive' ),
 		'not-found'       => array( __( 'Message “Page not found”', 'memorial-plugin' ), __( '404 message with a call button and catalog sections.', 'memorial-plugin' ), 'warning' ),
 	);
@@ -141,6 +147,22 @@ function memorial_plugin_legacy_post_id( $block = null ) {
 	}
 	$id = (int) ( $block->context['postId'] ?? 0 );
 	return $id ? $id : (int) get_queried_object_id();
+}
+
+/**
+ * ID of the product a block of the product template shows; 0 when it is not a product
+ * (then the editor preview explains where the block works, and the site shows nothing).
+ *
+ * @param WP_Block|null $block Block instance.
+ * @return int
+ */
+function memorial_plugin_legacy_product_id( $block = null ) {
+	$id = memorial_plugin_legacy_post_id( $block );
+	if ( 'mem_product' === get_post_type( $id ) ) {
+		return $id;
+	}
+	echo memorial_plugin_block_note( __( 'This block shows a part of the product that is open — it works in the product template (Appearance → Editor → Templates).', 'memorial-plugin' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function.
+	return 0;
 }
 
 /** Общая часть блоков (render/parts/<имя>.php) — в своей области видимости, как прежде get_template_part()

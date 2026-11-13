@@ -6695,3 +6695,76 @@ msgstr "Часы работы основного адреса"
 
 msgid "Take the text from the Memorial settings"
 msgstr "Взять текст из настроек «Мемориала»"
+
+msgid "Product: photo"
+msgstr "Товар: фото"
+
+msgid "Photo of the product that is open (a laurel wreath when there is no photo). For the product template."
+msgstr "Фото открытого товара (лавровый венок, если фото нет). Для шаблона товара."
+
+msgid "Product: price"
+msgstr "Товар: цена"
+
+msgid "Price of the product that is open. For the product template."
+msgstr "Цена открытого товара. Для шаблона товара."
+
+msgid "Product: specifications"
+msgstr "Товар: характеристики"
+
+msgid "Specifications and the short description of the product that is open. For the product template."
+msgstr "Характеристики и краткое описание открытого товара. Для шаблона товара."
+
+msgid "Product: call buttons"
+msgstr "Товар: кнопки звонка"
+
+msgid "“Call” and “Call me back” buttons with a hint, under the product. For the product template."
+msgstr "Кнопки «Позвонить» и «Перезвоните мне» с подсказкой под товаром. Для шаблона товара."
+
+msgid "Product: similar products"
+msgstr "Товар: похожие товары"
+
+msgid "Four more products of the same catalog section. For the product template."
+msgstr "Ещё четыре товара из того же раздела каталога. Для шаблона товара."
+
+msgid "This block shows a part of the product that is open — it works in the product template (Appearance → Editor → Templates)."
+msgstr "Этот блок показывает часть открытого товара — он работает в шаблоне товара («Внешний вид → Редактор → Шаблоны»)."
+
+msgctxt "block description"
+msgid "Four more products of the same catalog section. For the product template."
+msgstr "Ещё четыре товара из того же раздела каталога. Для шаблона товара."
+
+msgctxt "block description"
+msgid "Photo of the product that is open (a laurel wreath when there is no photo). For the product template."
+msgstr "Фото открытого товара (лавровый венок, если фото нет). Для шаблона товара."
+
+msgctxt "block description"
+msgid "Price of the product that is open. For the product template."
+msgstr "Цена открытого товара. Для шаблона товара."
+
+msgctxt "block description"
+msgid "Specifications and the short description of the product that is open. For the product template."
+msgstr "Характеристики и краткое описание открытого товара. Для шаблона товара."
+
+msgctxt "block description"
+msgid "“Call” and “Call me back” buttons with a hint, under the product. For the product template."
+msgstr "Кнопки «Позвонить» и «Перезвоните мне» с подсказкой под товаром. Для шаблона товара."
+
+msgctxt "block title"
+msgid "Product: call buttons"
+msgstr "Товар: кнопки звонка"
+
+msgctxt "block title"
+msgid "Product: photo"
+msgstr "Товар: фото"
+
+msgctxt "block title"
+msgid "Product: price"
+msgstr "Товар: цена"
+
+msgctxt "block title"
+msgid "Product: similar products"
+msgstr "Товар: похожие товары"
+
+msgctxt "block title"
+msgid "Product: specifications"
+msgstr "Товар: характеристики"

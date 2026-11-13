@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/product-media",
+    "title": "Product: photo",
+    "category": "memorial-pages",
+    "icon": "format-image",
+    "description": "Photo of the product that is open (a laurel wreath when there is no photo). For the product template.",
+    "keywords": [
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

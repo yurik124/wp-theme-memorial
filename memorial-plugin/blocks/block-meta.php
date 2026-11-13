@@ -87,7 +87,7 @@ function memorial_plugin_block_category( $slug ) {
 		'memorial-reviews'  => array( 'reviews', 'book-reviews', 'rewio-reviews', 'review-buttons', 'review-widget' ),
 		'memorial-design'   => array( 'laurel', 'icon', 'stat', 'link-button' ),
 		'memorial-layout'   => array( 'topbar', 'header-contacts', 'tagline', 'footer-contacts', 'menu-columns', 'footer-legal', 'mobile-bar', 'breadcrumbs', 'callback-dialog', 'cookie-banner' ),
-		'memorial-pages'    => array( 'page-products', 'contacts-page', 'product', 'catalog-archive', 'not-found' ),
+		'memorial-pages'    => array( 'page-products', 'contacts-page', 'product', 'product-media', 'product-price', 'product-specs', 'product-buy', 'product-related', 'catalog-archive', 'not-found' ),
 	);
 	foreach ( $groups as $category => $slugs ) {
 		if ( in_array( $slug, $slugs, true ) ) {

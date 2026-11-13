@@ -2021,6 +2021,146 @@ return array (
       'viewportWidth' => 1200,
     ),
   ),
+  'product-buy' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/product-buy',
+    'title' => 'Product: call buttons',
+    'category' => 'memorial-pages',
+    'icon' => 'phone',
+    'description' => '“Call” and “Call me back” buttons with a hint, under the product. For the product template.',
+    'keywords' => 
+    array (
+      0 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'reusable' => false,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+      ),
+      'viewportWidth' => 1200,
+    ),
+  ),
+  'product-media' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/product-media',
+    'title' => 'Product: photo',
+    'category' => 'memorial-pages',
+    'icon' => 'format-image',
+    'description' => 'Photo of the product that is open (a laurel wreath when there is no photo). For the product template.',
+    'keywords' => 
+    array (
+      0 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'reusable' => false,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+      ),
+      'viewportWidth' => 1200,
+    ),
+  ),
+  'product-price' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/product-price',
+    'title' => 'Product: price',
+    'category' => 'memorial-pages',
+    'icon' => 'money-alt',
+    'description' => 'Price of the product that is open. For the product template.',
+    'keywords' => 
+    array (
+      0 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'reusable' => false,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+      ),
+      'viewportWidth' => 1200,
+    ),
+  ),
+  'product-related' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/product-related',
+    'title' => 'Product: similar products',
+    'category' => 'memorial-pages',
+    'icon' => 'screenoptions',
+    'description' => 'Four more products of the same catalog section. For the product template.',
+    'keywords' => 
+    array (
+      0 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'reusable' => false,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+      ),
+      'viewportWidth' => 1200,
+    ),
+  ),
+  'product-specs' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/product-specs',
+    'title' => 'Product: specifications',
+    'category' => 'memorial-pages',
+    'icon' => 'editor-table',
+    'description' => 'Specifications and the short description of the product that is open. For the product template.',
+    'keywords' => 
+    array (
+      0 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'reusable' => false,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+      ),
+      'viewportWidth' => 1200,
+    ),
+  ),
   'restaurants' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',

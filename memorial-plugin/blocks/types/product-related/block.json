@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/product-related",
+    "title": "Product: similar products",
+    "category": "memorial-pages",
+    "icon": "screenoptions",
+    "description": "Four more products of the same catalog section. For the product template.",
+    "keywords": [
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}

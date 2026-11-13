@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/product-price",
+    "title": "Product: price",
+    "category": "memorial-pages",
+    "icon": "money-alt",
+    "description": "Price of the product that is open. For the product template.",
+    "keywords": [
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "reusable": false
+    },
+    "example": {
+        "attributes": {},
+        "viewportWidth": 1200
+    }
+}
