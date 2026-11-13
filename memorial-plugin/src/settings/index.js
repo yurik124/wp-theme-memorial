@@ -282,7 +282,25 @@ function rowSummary( def, row ) {
 				': ' +
 				row[ f.id ].length
 		);
-	return [ ...totals, ...named, ...lists ].join( ' · ' );
+	const token = tokenOf( def, row );
+	return [
+		...totals,
+		...named,
+		...lists,
+		...( token ? [ token ] : [] ),
+	].join( ' · ' );
+}
+
+/**
+ * What to write in a text to put the value of this row in (schema “token”), for example {price:lenta}.
+ *
+ * @param {Object} def Repeater description.
+ * @param {Object} row Row values.
+ * @return {string} The token or ''.
+ */
+function tokenOf( def, row ) {
+	const v = String( row?.[ def.token?.field ] ?? '' ).trim();
+	return def.token && v ? def.token.fmt.replace( '%s', v ) : '';
 }
 
 /**
@@ -557,6 +575,15 @@ function RepeaterEdit( { def, value, onChange } ) {
 												) }
 									</span>
 								</button>
+							) }
+							{ shown && tokenOf( def, row ) && (
+								<p className="memorial-plugin-settings__token">
+									{ __(
+										'In a text field or a block write:',
+										'memorial-plugin'
+									) + ' ' }
+									<code>{ tokenOf( def, row ) }</code>
+								</p>
 							) }
 							{ shown && (
 								<div className="memorial-plugin-settings__fields">

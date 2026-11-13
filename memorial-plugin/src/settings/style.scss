@@ -533,3 +533,19 @@
 		white-space: nowrap;
 	}
 }
+
+// What to write in a text to put the price of the row in: {price:…} — selected with one click.
+.memorial-plugin-settings__token {
+	margin: 4px 0 8px;
+	color: #5f6158;
+	font-size: 13px;
+
+	code {
+		padding: 2px 6px;
+		border-radius: 4px;
+		background: #f0ede4;
+		color: #1f211c;
+		font-size: 13px;
+		user-select: all;
+	}
+}
