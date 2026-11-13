@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function memorial_plugin_editor_meta() {
 	$flag  = static fn( $v ) => empty( $v ) ? '' : '1';
-	$money = static fn( $v ) => absint( preg_replace( '/\D/', '', (string) $v ) );
+	$money = 'memorial_plugin_money';
 	$ids   = static fn( $v ) => implode( ',', array_values( array_unique( array_filter( array_map( 'absint', explode( ',', (string) $v ) ) ) ) ) );
 	$text  = static fn( $v ) => trim( sanitize_text_field( (string) $v ) );
 	return array(

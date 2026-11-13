@@ -92,4 +92,47 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$css = memorial_plugin_theme_bridge_css();
 		$this->assertStringContainsString( '--wp--preset--color--contrast:var(--wp--preset--color--foreground)', $css );
 	}
+	public function test_money_keeps_roubles() {
+		$this->assertSame( 2500, memorial_plugin_money( '2 500' ) );
+		$this->assertSame( 2500, memorial_plugin_money( 'от 2500 ₽' ) );
+		$this->assertSame( 2501, memorial_plugin_money( '2500,50' ) );
+		$this->assertSame( 2501, memorial_plugin_money( 2500.5 ) );
+		$this->assertSame( 0, memorial_plugin_money( '' ) );
+	}
+
+	public function test_prices_change_only_as_asked() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		$a = self::factory()->post->create( array( 'post_type' => 'mem_product' ) );
+		$b = self::factory()->post->create( array( 'post_type' => 'mem_product' ) );
+		update_post_meta( $a, '_mem_price', 1000 );
+		update_post_meta( $b, '_mem_price', 0 );
+		$bulk = function ( $params ) use ( $a, $b ) {
+			$r = new WP_REST_Request( 'POST', '/memorial-plugin/v1/catalog/products/bulk' );
+			foreach ( array_merge( array( 'ids' => array( $a, $b ) ), $params ) as $k => $v ) {
+				$r->set_param( $k, $v );
+			}
+			return rest_get_server()->dispatch( $r )->get_status();
+		};
+		// One price: exactly as typed, not rounded to tens.
+		$this->assertSame( 200, $bulk( array( 'op' => 'price', 'mode' => 'set', 'value' => 1799, 'round' => 10 ) ) );
+		$this->assertSame( 1799, (int) get_post_meta( $a, '_mem_price', true ) );
+		$this->assertSame( 1799, (int) get_post_meta( $b, '_mem_price', true ) );
+		// Percent: computed and rounded; another product is not touched.
+		$c = self::factory()->post->create( array( 'post_type' => 'mem_product' ) );
+		update_post_meta( $c, '_mem_price', 3000 );
+		$this->assertSame( 200, $bulk( array( 'op' => 'price', 'mode' => 'pct', 'value' => 10, 'round' => 10 ) ) );
+		$this->assertSame( 1980, (int) get_post_meta( $a, '_mem_price', true ) );
+		$this->assertSame( 3000, (int) get_post_meta( $c, '_mem_price', true ) );
+		// The same request twice gives the same result as twice by hand, nothing else.
+		$this->assertSame( 200, $bulk( array( 'op' => 'price', 'mode' => 'add', 'value' => 20, 'round' => 1 ) ) );
+		$this->assertSame( 2000, (int) get_post_meta( $a, '_mem_price', true ) );
+		// Saving one field of a product does not touch its price.
+		$r = new WP_REST_Request( 'PUT', '/memorial-plugin/v1/catalog/products/' . $a );
+		$r->set_param( 'values', array( 'sub' => 'высота 90 см' ) );
+		rest_get_server()->dispatch( $r );
+		$this->assertSame( 2000, (int) get_post_meta( $a, '_mem_price', true ) );
+		$r->set_param( 'values', array( 'price' => '2500,50' ) );
+		rest_get_server()->dispatch( $r );
+		$this->assertSame( 2501, (int) get_post_meta( $a, '_mem_price', true ) );
+	}
 }

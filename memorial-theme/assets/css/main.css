@@ -418,3 +418,9 @@ body .kontakty__legal p,body .kontakty__badge,body .footer__addr small,body .foo
 /* Мобильное меню: ветка, раскрытая скриптом (текущая страница), видна и без фокуса.
    Ядро прячет подменю (visibility:hidden; opacity:0), пока внутри нет фокуса или наведения; раскрытая
    кнопкой ветка была видна только потому, что фокус оставался на кнопке. */.header.is-compact .nav.is-open .has-child.is-open>.wp-block-navigation__submenu-container{visibility:visible !important;opacity:1 !important;height:auto !important;overflow:visible !important}
+/* Название, описание и знак — одна ссылка на главную: ссылка названия растянута на всю область логотипа
+   (одна остановка Tab, а нажать можно и на описание). */
+.header .logo{position:relative}
+.header .logo .wp-block-site-title a::after{content:"";position:absolute;inset:0;z-index:1}
+.header .logo .wp-block-site-title a:focus-visible{outline:0}
+.header .logo:has(.wp-block-site-title a:focus-visible){outline:2px solid var(--gold,#5e7052);outline-offset:4px;border-radius:6px}

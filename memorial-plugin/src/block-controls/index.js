@@ -634,6 +634,14 @@ const withPluginControls = createHigherOrderComponent(
 			own ? name : '',
 			attributes || {}
 		);
+		// The block found nothing by itself: the choice opens and stays open until “Done”,
+		// even after the first page is chosen (then the block finds something and would close at once).
+		const nothing = applies && !! source && ! source.found;
+		useEffect( () => {
+			if ( nothing ) {
+				setChoosing( true );
+			}
+		}, [ nothing ] );
 		if ( ! own ) {
 			return <BlockEdit { ...props } />;
 		}

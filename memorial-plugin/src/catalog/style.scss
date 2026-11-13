@@ -115,17 +115,6 @@ button.memorial-plugin-catalog__photo {
 	opacity: 0.8;
 }
 
-.memorial-plugin-catalog__big {
-	display: grid;
-	gap: 16px;
-	justify-items: center;
-
-	img {
-		max-width: 100%;
-		max-height: 75vh;
-		border-radius: 10px;
-	}
-}
 
 // Actions for the selected items, above the table.
 .memorial-plugin-catalog__bulk {

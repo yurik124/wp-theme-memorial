@@ -127,17 +127,20 @@ function PriceModal( { items, closeModal, run } ) {
 							)
 				}
 			/>
-			<SelectControl
-				__next40pxDefaultSize
-				__nextHasNoMarginBottom
-				label={ __( 'Round to', 'memorial-plugin' ) }
-				value={ round }
-				options={ [ '1', '10', '50', '100' ].map( ( r ) => ( {
-					value: r,
-					label: rub( r ),
-				} ) ) }
-				onChange={ setRound }
-			/>
+			{ /* One price is set exactly as typed: rounding is only for a computed price. */ }
+			{ mode !== 'set' && (
+				<SelectControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ __( 'Round to', 'memorial-plugin' ) }
+					value={ round }
+					options={ [ '1', '10', '50', '100' ].map( ( r ) => ( {
+						value: r,
+						label: rub( r ),
+					} ) ) }
+					onChange={ setRound }
+				/>
+			) }
 			<ModalButtons
 				label={ sprintf(
 					/* translators: %d: number of products. */

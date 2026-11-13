@@ -6,9 +6,8 @@
 
 	legend {
 		margin-bottom: 8px;
-		font-size: 11px;
-		font-weight: 500;
-		text-transform: uppercase;
+		font-size: 13px;
+		font-weight: 600;
 	}
 }
 
@@ -17,28 +16,135 @@
 	ul {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 8px;
-		margin: 0 0 8px;
+		gap: 12px;
+		margin: 0 0 12px;
 		padding: 0;
 		list-style: none;
 	}
 
 	li {
+		position: relative;
+		width: 96px;
 		margin: 0;
-	}
-
-	li:first-child img {
-		outline: 3px solid var(--wp-admin-theme-color, #3858e9);
 	}
 
 	img,
 	&__empty {
 		display: block;
-		width: 72px;
-		height: 72px;
-		border-radius: 2px;
+		width: 96px;
+		height: 96px;
+		border-radius: 8px;
 		background: #f0f0f0;
 		object-fit: cover;
+	}
+
+	// The main photo: a frame in the colour of the site.
+	li:first-child img {
+		outline: 3px solid #5e7052;
+		outline-offset: -3px;
+	}
+
+	&__open {
+		display: block;
+		padding: 0;
+		border: 0;
+		border-radius: 8px;
+		background: none;
+		cursor: zoom-in;
+
+		&:focus-visible {
+			outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+			outline-offset: 2px;
+		}
+	}
+
+	// × — on the corner of the photo, a white circle.
+	.components-button.memorial-plugin-photos__remove {
+		position: absolute;
+		top: 4px;
+		right: 4px;
+		width: 28px;
+		min-width: 28px;
+		height: 28px;
+		padding: 0;
+		justify-content: center;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+		color: #b32d2e;
+
+		&:hover {
+			background: #b32d2e;
+			color: #fff;
+		}
+	}
+
+	// Moving: two equal round buttons under the photo.
+	&__move {
+		display: flex;
+		gap: 8px;
+		justify-content: center;
+		margin-top: 6px;
+
+		.components-button {
+			width: 32px;
+			min-width: 32px;
+			height: 32px;
+			padding: 0;
+			justify-content: center;
+			border: 1px solid #c9d3bf;
+			border-radius: 50%;
+			background: #fff;
+			color: #3f4d36;
+
+			&:hover:not(:disabled) {
+				border-color: #5e7052;
+				background: #f1f4ec;
+			}
+
+			&:disabled {
+				opacity: 0.35;
+			}
+		}
+	}
+}
+
+// Large photos: the whole photo fits the window, arrows on its sides.
+.memorial-plugin-viewer {
+
+	.components-modal__content {
+		overflow: hidden;
+	}
+
+	&__stage {
+		display: flex;
+		gap: 12px;
+		align-items: center;
+		justify-content: center;
+
+		img {
+			display: block;
+			max-width: calc(100% - 112px);
+			max-height: calc(100vh - 220px);
+			border-radius: 10px;
+			object-fit: contain;
+		}
+	}
+
+	&__arrow.components-button {
+		flex: none;
+		width: 44px;
+		height: 44px;
+		justify-content: center;
+		border: 1px solid #c9d3bf;
+		border-radius: 50%;
+		background: #fff;
+	}
+
+	&__count {
+		margin: 10px 0 0;
+		color: #5f6158;
+		text-align: center;
 	}
 }
 

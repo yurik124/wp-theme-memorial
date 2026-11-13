@@ -958,11 +958,11 @@ function memorial_plugin_legal_parts() {
 	}
 	$inn = preg_replace( '/\D/', '', $l['inn'] ?? '' );
 	if ( $inn ) {
-		$out[] = __( 'TIN ', 'memorial-plugin' ) . $inn;
+		$out[] = rtrim( __( 'TIN ', 'memorial-plugin' ) ) . "\u{00A0}" . $inn; // A non-breaking space: the label never leaves its number.
 	}
 	$ogrn = preg_replace( '/\D/', '', $l['ogrn'] ?? '' );
 	if ( $ogrn ) {
-		$out[] = ( strlen( $ogrn ) === 15 ? __( 'OGRNIP ', 'memorial-plugin' ) : __( 'OGRN ', 'memorial-plugin' ) ) . $ogrn;
+		$out[] = rtrim( strlen( $ogrn ) === 15 ? __( 'OGRNIP ', 'memorial-plugin' ) : __( 'OGRN ', 'memorial-plugin' ) ) . "\u{00A0}" . $ogrn;
 	}
 	return $out;
 }

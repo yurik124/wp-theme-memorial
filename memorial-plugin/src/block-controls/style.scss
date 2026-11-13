@@ -26,9 +26,40 @@
 
 	.memorial-plugin-stand__pickers {
 		display: grid;
-		gap: 16px;
+		gap: 20px;
 		width: 100%;
 		max-width: 480px;
+		padding: 8px 4px;
+		text-align: left;
+
+		// Switches one under another with room between them; labels in normal case, readable size.
+		.components-toggle-control {
+			margin: 0 0 4px;
+		}
+
+		.components-toggle-control + .components-toggle-control {
+			margin-top: 8px;
+		}
+
+		.components-base-control__label,
+		.components-input-control__label,
+		label {
+			font-size: 13px;
+			font-weight: 600;
+			text-transform: none;
+		}
+
+		.components-toggle-control label {
+			font-weight: 400;
+		}
+
+		.components-base-control__help {
+			margin-top: 6px;
+		}
+
+		> div:last-child {
+			padding-top: 4px;
+		}
 	}
 }
 

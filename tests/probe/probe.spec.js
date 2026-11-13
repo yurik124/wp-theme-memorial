@@ -805,6 +805,40 @@ test.describe( 'аудит товаров', () => {
 			} );
 			await page.keyboard.press( 'Escape' );
 		} );
+		await step( 'filter', async () => {
+			await page.goto( '/wp-admin/admin.php?page=mem-products', { waitUntil: 'load' } );
+			await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } );
+			out.footer = await page.evaluate( () => document.querySelector( '.dataviews-footer, .dataviews-pagination' )?.innerText || '' );
+			// какие строки таблицы остались без перевода: все тексты пакета из собранного файла
+			out.bundleStrings = await page.evaluate( async () => {
+				const src = [ ...document.scripts ].map( ( x ) => x.src ).find( ( x ) => /build\/catalog\/index\.js/.test( x ) );
+				const txt = src ? await ( await fetch( src ) ).text() : '';
+				const found = new Set();
+				for ( const m of txt.matchAll( /\(0,[a-zA-Z_$.]+\.(?:__|_n|_x|sprintf)\)\("((?:[^"\\]|\\.){2,80})"/g ) ) { found.add( m[ 1 ] ); }
+				return [ ...found ].filter( ( x ) => /item|of %|Select|Deselect|filter|Filter|Density|Compact|Comfortable|Balanced|Reset|Search|selected/.test( x ) ).map( ( x ) => [ x, window.wp.i18n.__( x ) ] );
+			} );
+			await page.locator( '.dataviews-filters__visibility-toggle, button:has-text("Фильтр"), button[aria-label*="фильтр" i]' ).first().click( { timeout: 5000 } ).catch( () => {} );
+			await page.waitForTimeout( 500 );
+			await page.locator( '.dataviews-filters__button, button:has-text("Добавить фильтр"), button:has-text("Add filter")' ).first().click( { timeout: 5000 } ).catch( () => {} );
+			await page.waitForTimeout( 500 );
+			await page.getByRole( 'menuitem' ).first().click( { timeout: 5000 } ).catch( () => {} );
+			await page.waitForTimeout( 800 );
+			await page.locator( '[role=dialog] [role=checkbox], [role=dialog] input[type=checkbox], .dataviews-filters__search-widget-listitem' ).first().click( { timeout: 5000 } ).catch( () => {} );
+			await page.waitForTimeout( 800 );
+			await shot( page, 'prod-11-filter' );
+			out.filterCss = await page.evaluate( () => {
+				const has = ( sel ) => [ ...document.styleSheets ].some( ( sh ) => { try { return [ ...sh.cssRules ].some( ( r ) => ( r.selectorText || '' ).includes( sel ) ); } catch { return false; } } );
+				const chip = document.querySelector( '[class*="summary-chip"]' );
+				return {
+					chipRemoveRule: has( 'summary-chip-remove' ),
+					listItemRule: has( 'search-widget-listitem' ),
+					chipClasses: chip ? [ ...chip.parentElement.querySelectorAll( '*' ) ].slice( 0, 12 ).map( ( e ) => e.className && String( e.className ) ) : [],
+					popover: ( document.querySelector( '.components-popover, [role=dialog]' )?.outerHTML || '' ).replace( /<svg[\s\S]*?<\/svg>/g, '' ).slice( 0, 2500 ),
+					sheets: [ ...document.styleSheets ].map( ( sh ) => ( sh.href || 'inline:' + ( sh.ownerNode?.id || '' ) ).replace( /^https?:\/\/[^/]+/, '' ) ).filter( ( h ) => /dataviews|components|memorial|admin-ui|inline/.test( h ) ),
+				};
+			} );
+			await page.keyboard.press( 'Escape' );
+		} );
 		await step( 'edit', async () => {
 			await page.goto( '/wp-admin/admin.php?page=mem-products', { waitUntil: 'load' } );
 			await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } );

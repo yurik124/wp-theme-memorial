@@ -957,3 +957,6 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 /* «Карточки разделов» прямо на странице без общей колонки (главная): по центру, шириной как остальные секции */
 .home .wp-block-post-content>.mem-cards,.home .entry-content>.mem-cards{width:min(1200px,100% - 2rem);margin-inline:auto}
 @media (min-width:782px){.home .wp-block-post-content>.mem-cards,.home .entry-content>.mem-cards{width:min(1200px,100% - 4rem)}}
+
+/* Строка точек одной высоты у всех карточек — названия на одном уровне */
+.mcard__dots{min-height:calc(.6rem + 9px);box-sizing:border-box}

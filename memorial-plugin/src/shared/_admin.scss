@@ -298,33 +298,38 @@ body:has(.memorial-plugin-admin) .components-modal__frame {
 	margin-left: 8px;
 	vertical-align: middle;
 
+	// The “?” is the WordPress help icon (a drawn circle with the mark), so it is always centred,
+	// whatever font the label around it has.
 	&__btn {
 		display: inline-grid;
 		flex: none;
 		place-items: center;
-		width: 20px;
-		height: 20px;
+		width: 24px;
+		height: 24px;
+		margin: -2px 0;
 		padding: 0;
-		border: 1px solid #a9b796;
+		border: 0;
 		border-radius: 50%;
-		background: #f1f4ec;
-		color: #3f4d36;
-		font-size: 12px;
-		font-weight: 700;
-		line-height: 1;
+		background: none;
+		color: #6f7f62;
 		cursor: help;
+
+		.dashicons {
+			width: 20px;
+			height: 20px;
+			font-size: 20px;
+			line-height: 1;
+		}
 
 		&:hover,
 		&:focus-visible,
 		&[aria-expanded="true"] {
-			border-color: #5e7052;
-			background: #5e7052;
-			color: #fff;
+			color: #3f4d36;
 		}
 
 		&:focus-visible {
 			outline: 2px solid var(--wp-admin-theme-color, #3858e9);
-			outline-offset: 2px;
+			outline-offset: 1px;
 		}
 	}
 

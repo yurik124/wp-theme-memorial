@@ -118,6 +118,56 @@ function memorial_plugin_product_specs( $id ) {
 	return $out;
 }
 
+/**
+ * A price typed by a person → whole roubles.
+ *
+ * “2 500”, “2500 ₽”, “от 2500” → 2500; “2500,50” or 2500.5 → 2501 (kopecks are rounded, not glued to the
+ * roubles: earlier “2500,50” became 250050).
+ *
+ * @param mixed $v Value.
+ * @return int
+ */
+function memorial_plugin_money( $v ) {
+	if ( is_int( $v ) || is_float( $v ) ) {
+		return max( 0, (int) round( $v ) );
+	}
+	$s = preg_replace( '/[\s\x{00A0}\x{202F}]+/u', '', (string) $v );
+	if ( ! preg_match( '/\d+(?:[.,]\d+)?/', $s, $m ) ) {
+		return 0;
+	}
+	return max( 0, (int) round( (float) str_replace( ',', '.', $m[0] ) ) );
+}
+
+/**
+ * Specifications as visitors see them: a number gets the unit set for this specification in its type
+ * (“Height 140” → “Height 140 cm”); the stored text stays as it is.
+ *
+ * @param int $id Product ID.
+ * @return array<int,array{0:string,1:string}>
+ */
+function memorial_plugin_product_specs_shown( $id ) {
+	$specs = memorial_plugin_product_specs( $id );
+	$type  = function_exists( 'memorial_plugin_product_type' ) ? (int) memorial_plugin_product_type( $id ) : 0;
+	if ( ! $specs || ! $type || ! function_exists( 'memorial_plugin_type_fields' ) ) {
+		return $specs;
+	}
+	$units = array();
+	foreach ( memorial_plugin_type_fields( $type, false ) as $f ) {
+		if ( '' !== $f['unit'] ) {
+			$units[ mb_strtolower( $f['label'] ) ] = $f['unit'];
+		}
+	}
+	foreach ( $specs as &$s ) {
+		$unit = $units[ mb_strtolower( $s[0] ) ] ?? '';
+		// Only a bare number (or “700 × 2050”) gets the unit: a value typed with its unit is not changed.
+		if ( '' !== $unit && preg_match( '/^[\d\s.,×xх*\/-]+$/u', $s[1] ) ) {
+			$s[1] .= "\u{00A0}" . $unit;
+		}
+	}
+	unset( $s );
+	return $specs;
+}
+
 /* Поля товара — в боковой панели блочного редактора (admin/editor-meta.php), список — admin/catalog-views.php */
 add_action(
 	'save_post_mem_product',

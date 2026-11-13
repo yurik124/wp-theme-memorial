@@ -43,7 +43,10 @@ export default function Hint( { text, label } ) {
 					}
 				} }
 			>
-				?
+				<span
+					className="dashicons dashicons-editor-help"
+					aria-hidden="true"
+				/>
 			</button>
 			{ label && (
 				<span className="memorial-plugin-hint__label">{ label }</span>

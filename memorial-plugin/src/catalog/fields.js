@@ -9,10 +9,9 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
-	Modal,
 	TextControl,
 } from '@wordpress/components';
-import Photos from '../shared/photos';
+import Photos, { PhotoViewer } from '../shared/photos';
 
 /**
  * Price in roubles: 12 500 ₽.
@@ -71,17 +70,11 @@ function PhotoCell( { item, logo } ) {
 				) }
 			</button>
 			{ open && (
-				<Modal
+				<PhotoViewer
 					title={ item.title || __( 'Photo', 'memorial-plugin' ) }
-					size="large"
-					onRequestClose={ () => setOpen( false ) }
-				>
-					<div className="memorial-plugin-catalog__big">
-						{ photos.map( ( p ) => (
-							<img key={ p.id } src={ p.big || p.url } alt="" />
-						) ) }
-					</div>
-				</Modal>
+					urls={ photos.map( ( p ) => p.big || p.url ) }
+					onClose={ () => setOpen( false ) }
+				/>
 			) }
 		</>
 	);

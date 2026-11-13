@@ -199,7 +199,7 @@ function memorial_plugin_catalog_card( $p, $i ) {
 	$big    = $thumb ? wp_get_attachment_image_url( $thumb, 'large' ) : '';
 	$page   = memorial_plugin_product_has_page( $id ) ? get_permalink( $id ) : '';
 	$title  = get_the_title( $id );
-	$cap    = $title . ( $sub ? ' · ' . $sub : '' ) . implode( '', array_map( fn( $x ) => ' · ' . ( '' !== $x[0] ? $x[0] . ' ' : '' ) . $x[1], memorial_plugin_product_specs( $id ) ) )
+	$cap    = $title . ( $sub ? ' · ' . $sub : '' ) . implode( '', array_map( fn( $x ) => ' · ' . ( '' !== $x[0] ? $x[0] . ' ' : '' ) . $x[1], memorial_plugin_product_specs_shown( $id ) ) )
 			. ( $price ? ' · ' . wp_strip_all_tags( memorial_plugin_price_html( $id ) ) : '' );
 
 	echo '<li class="mcard" id="' . memorial_plugin_product_anchor( $id ) . '" data-price="' . (int) $price . '" data-i="' . (int) $i . '">';
@@ -241,15 +241,16 @@ function memorial_plugin_catalog_card( $p, $i ) {
 			. ( '<span class="mcard__arr mcard__arr--r" role="button" tabindex="0" aria-label="' . esc_html__( 'Next photo', 'memorial-plugin' ) . '" data-dir="1" data-wp-on--click="actions.step" data-wp-on--keydown="actions.key">' ) . memorial_plugin_chevron( 'r' ) . '</span>';
 	}
 	echo '</span>';
+	// Точки есть у каждой карточки (у одного фото — пустая строка той же высоты): названия соседних карточек на одном уровне.
+	echo '<span class="mcard__dots" aria-hidden="true">';
 	if ( count( $photos ) > 1 ) {
-		echo '<span class="mcard__dots" aria-hidden="true">';
 		foreach ( $photos as $k => $p ) {
 			echo '<i' . ( $k ? '' : ' class="is-on"' ) . '></i>';
 		}
-		echo '</span>';
 	}
+	echo '</span>';
 	echo '<span class="mcard__body"><span class="mcard__name">' . esc_html( $title ) . '</span>';
-	$specs = memorial_plugin_product_specs( $id );
+	$specs = memorial_plugin_product_specs_shown( $id );
 	// подпись повторяет характеристику («700 × 2050» и «Ширина × высота: 700 × 2050 мм») — не дублируем.
 	if ( $sub && $specs ) {
 		$num = fn( $t ) => preg_replace( '/\D+/', ' ', $t );

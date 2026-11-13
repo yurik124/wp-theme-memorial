@@ -360,7 +360,7 @@ function memorial_plugin_product_save( $id, $values ) {
 				}
 				break;
 			case 'price':
-				update_post_meta( $id, '_mem_price', absint( preg_replace( '/\D/', '', (string) $v ) ) );
+				update_post_meta( $id, '_mem_price', memorial_plugin_money( $v ) );
 				break;
 			case 'from':
 				update_post_meta( $id, '_mem_price_from', empty( $v ) ? '' : '1' );
@@ -602,7 +602,8 @@ function memorial_plugin_products_bulk( WP_REST_Request $request ) {
 					'set'   => $val,
 					default => $cur,
 				};
-				$round = max( 1, absint( $request['round'] ) );
+				// One price is set exactly as typed; only a computed price (percent, plus roubles) is rounded.
+				$round = 'set' === $mode ? 1 : max( 1, absint( $request['round'] ) );
 				update_post_meta( $id, '_mem_price', max( 0, (int) ( round( $new / $round ) * $round ) ) );
 				break;
 			case 'cats_add':
