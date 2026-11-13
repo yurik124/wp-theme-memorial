@@ -893,6 +893,7 @@ return array (
       'autoRegister' => true,
       'html' => false,
       'reusable' => false,
+      'inserter' => false,
     ),
     'example' => 
     array (

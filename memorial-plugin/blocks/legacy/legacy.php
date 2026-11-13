@@ -100,7 +100,8 @@ add_action(
 					'keywords'        => memorial_plugin_block_keywords_of( $slug ),
 					'example'         => memorial_plugin_block_example( $attributes, 1200 ),
 					'attributes'      => $attributes,
-					'supports'        => memorial_plugin_block_supports( 'structure', array( 'reusable' => false ) ),
+					// “Contacts: the whole page” is kept only for old saved templates: the Contacts page is built from separate blocks now.
+					'supports'        => memorial_plugin_block_supports( 'structure', array( 'reusable' => false ) + ( 'contacts-page' === $slug ? array( 'inserter' => false ) : array() ) ),
 					'render_callback' => function ( $attributes, $content, $block ) use ( $slug ) {
 						return memorial_plugin_legacy_render( $slug, $block );
 					},
