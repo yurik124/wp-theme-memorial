@@ -195,22 +195,36 @@ button.memorial-plugin-catalog__photo {
 	margin-left: auto;
 }
 
-// The actions for the selected items: a floating bar at the bottom of the screen.
-.memorial-plugin-catalog__float:not(:empty) {
-	position: sticky;
-	bottom: 16px;
-	z-index: 3;
-	margin: 0 16px 16px;
-	padding: 10px 16px;
-	border: 1px solid #c9d3bf;
-	border-radius: 14px;
-	background: #fff;
-	box-shadow: 0 8px 24px rgba(31, 33, 28, 0.18);
-}
-
-// The actions for the selected items stay at the bottom of the screen while the list is scrolled.
+// The head of the table — and, while products are selected, its row of actions — float under the
+// pinned title of the screen when the list is scrolled (the table makes them sticky; here only where).
 .memorial-plugin-admin .memorial-plugin-catalog .dataviews-wrapper {
 	overflow: visible;
+}
+
+.memorial-plugin-admin .memorial-plugin-catalog .dataviews-view-table thead,
+.memorial-plugin-admin .memorial-plugin-catalog .dataviews-view-table__bulk-actions-overlay {
+	top: calc(var(--wp-admin--admin-bar--height, 32px) + var(--memorial-plugin-head, 0px));
+	z-index: 4;
+}
+
+.memorial-plugin-admin .memorial-plugin-catalog .dataviews-bulk-actions {
+	box-shadow: 0 6px 14px rgba(31, 33, 28, 0.12);
+}
+
+// Buttons keep their words on one line; if they do not fit, the row scrolls sideways instead of cutting.
+.memorial-plugin-admin .memorial-plugin-catalog .dataviews-bulk-actions__actions {
+	overflow-x: auto;
+	flex-wrap: nowrap;
+
+	button {
+		flex: none;
+		white-space: nowrap;
+	}
+}
+
+// The number of selected products is shown once — in the row with the search.
+.memorial-plugin-admin .memorial-plugin-catalog .dataviews-bulk-actions-footer__item-count {
+	display: none;
 }
 
 .memorial-plugin-admin .memorial-plugin-catalog .dataviews-footer {

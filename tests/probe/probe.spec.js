@@ -795,7 +795,7 @@ test.describe( 'аудит товаров', () => {
 				const th = document.querySelector( '.dataviews-view-table thead' );
 				return { box: box ? box.outerHTML.replace( /\sstyle="[^"]*"/g, '' ).slice( 0, 3000 ) : '', ov, theadPos: th ? [ getComputedStyle( th ).position, getComputedStyle( th ).top ] : null, headH: document.querySelector( '.memorial-plugin-admin [class*="__stack"][class*="__header"]' )?.getBoundingClientRect().height };
 			} );
-			await page.evaluate( () => window.scrollTo( 0, 900 ) );
+			await page.evaluate( () => window.scrollTo( 0, 420 ) );
 			await page.waitForTimeout( 500 );
 			await shot( page, 'prod-04-scrolled' );
 			out.sticky = await page.evaluate( () => [ ...document.querySelectorAll( '#wpbody-content *' ) ].filter( ( e ) => [ 'sticky', 'fixed' ].includes( getComputedStyle( e ).position ) ).slice( 0, 12 ).map( ( e ) => ( { cls: String( e.className ).slice( 0, 120 ), pos: getComputedStyle( e ).position, top: getComputedStyle( e ).top, z: getComputedStyle( e ).zIndex, rect: e.getBoundingClientRect().toJSON() } ) ) );

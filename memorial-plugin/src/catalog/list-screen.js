@@ -234,6 +234,25 @@ export function ListPage( {
 	setSelection: setOuterSelection,
 } ) {
 	const [ ownSelection, setOwnSelection ] = useState( [] );
+	// The pinned title of the screen: the floating row of the table (and its actions for the selected
+	// items) sticks right under it, not behind it.
+	useEffect( () => {
+		const head = document.querySelector(
+			'.memorial-plugin-admin [class*="__stack"][class*="__header"]'
+		);
+		if ( ! head || ! window.ResizeObserver ) {
+			return;
+		}
+		const set = () =>
+			document.documentElement.style.setProperty(
+				'--memorial-plugin-head',
+				Math.round( head.getBoundingClientRect().height ) + 'px'
+			);
+		const ro = new window.ResizeObserver( set );
+		ro.observe( head );
+		set();
+		return () => ro.disconnect();
+	}, [] );
 	const selection = outerSelection ?? ownSelection;
 	const setSelection = setOuterSelection ?? setOwnSelection;
 	const { data, paginationInfo } = useMemo( () => {
@@ -296,12 +315,6 @@ export function ListPage( {
 							<DataViews.FiltersToggled />
 							<DataViews.Layout />
 							<DataViews.Footer />
-							{ /* The actions for the selected items: floating at the bottom of the screen. */ }
-							{ DataViews.BulkActionToolbar && (
-								<div className="memorial-plugin-catalog__float">
-									<DataViews.BulkActionToolbar />
-								</div>
-							) }
 						</>
 					) }
 				</DataViews>
