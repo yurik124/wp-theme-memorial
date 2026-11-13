@@ -68,7 +68,7 @@ function Help( { text } ) {
  * with a long help text, goes behind “?”; a short help stays under the field.
  *
  * @param {Object} def    Field description.
- * @param          always
+ * @param {boolean} always Every explanation behind “?” (a field in a row of fields).
  * @return {{label: *, help: string|undefined, name: string}} What to pass to the control.
  */
 function labelOf( def, always = false ) {

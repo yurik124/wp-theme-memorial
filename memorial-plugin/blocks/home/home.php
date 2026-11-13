@@ -393,7 +393,14 @@ function memorial_plugin_tiles_to_cards() {
 			$done[] = (int) $p->ID;
 		}
 	}
-	update_option( 'memorial_plugin_tiles_to_cards', array( 'time' => time(), 'posts' => $done ), false );
+	update_option(
+		'memorial_plugin_tiles_to_cards',
+		array(
+			'time'  => time(),
+			'posts' => $done,
+		),
+		false
+	);
 }
 add_action( 'admin_init', 'memorial_plugin_tiles_to_cards', 30 );
 

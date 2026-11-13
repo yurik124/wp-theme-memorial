@@ -96,9 +96,13 @@ export default function ProductPages() {
 							<fieldset className="memorial-plugin-catalog__choice">
 								<legend>{ fields[ 0 ].label }</legend>
 								{ fields[ 0 ].elements.map( ( el ) => (
-									<label key={ el.value }>
+									<div
+										key={ el.value }
+										className="memorial-plugin-catalog__option"
+									>
 										<input
 											type="radio"
+											id={ 'memorial-plugin-pp-' + el.value }
 											name="memorial-plugin-product-pages"
 											value={ el.value }
 											checked={ mode === el.value }
@@ -106,9 +110,15 @@ export default function ProductPages() {
 												setMode( el.value )
 											}
 										/>
-										<span>{ el.label }</span>
+										<label
+											htmlFor={
+												'memorial-plugin-pp-' + el.value
+											}
+										>
+											{ el.label }
+										</label>
 										<Hint text={ el.description } />
-									</label>
+									</div>
 								) ) }
 							</fieldset>
 							<Flex

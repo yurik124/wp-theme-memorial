@@ -1,3 +1,4 @@
+/* stylelint-disable selector-class-pattern -- classes of the plugin are BEM (block__element) */
 @use "../shared/admin";
 @use "../shared/photos";
 
@@ -78,7 +79,7 @@
 		font-weight: 600;
 	}
 
-	label {
+	.memorial-plugin-catalog__option {
 		display: flex;
 		gap: 8px;
 		align-items: center;
