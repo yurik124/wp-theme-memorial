@@ -165,14 +165,24 @@ button.memorial-plugin-catalog__photo {
 	--memorial-plugin-photo: 40px;
 }
 
-.memorial-plugin-admin .dataviews-view-table[class*="comfortable"] {
-	--memorial-plugin-photo: 64px;
+// The room the table gives the picture of a row grows with the photo, so it is never cut; the photo lies
+// above the table's own frame of that room (a transparent layer that otherwise takes the clicks).
+.memorial-plugin-admin .dataviews-view-table .dataviews-column-primary__media {
+	width: var(--memorial-plugin-photo, 56px);
+	min-width: var(--memorial-plugin-photo, 56px);
+	height: var(--memorial-plugin-photo, 56px);
 }
 
 .memorial-plugin-admin .dataviews-view-table .memorial-plugin-catalog__photo {
+	position: relative;
+	z-index: 1;
 	flex: none;
 	width: var(--memorial-plugin-photo, 56px);
 	max-width: none;
+}
+
+.memorial-plugin-admin .dataviews-view-table[class*="comfortable"] {
+	--memorial-plugin-photo: 88px;
 }
 
 // Top row of a list: what is selected on the left; search, filters and the view on the right.
