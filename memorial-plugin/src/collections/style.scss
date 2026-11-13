@@ -26,3 +26,17 @@
 		font-weight: 500;
 	}
 }
+
+// One switch of the whole list (review list: “Show reviews deleted on the review site”).
+.memorial-plugin-collection__toggle {
+	margin: 0 0 16px;
+	padding: 12px 16px;
+	border: 1px solid #e6e2d8;
+	border-radius: 10px;
+	background: #fff;
+}
+
+// Long texts in the edit window keep their lines (the first version of a review).
+.memorial-plugin-collection__fixed dd {
+	white-space: pre-line;
+}

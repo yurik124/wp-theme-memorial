@@ -1038,3 +1038,50 @@ test.describe( 'пакеты', () => {
 		log( 'packages', report );
 	} );
 } );
+
+// «Список отзывов», «Настройки» с вкладкой «Разрешения», подстановка цены.
+test.describe( 'отзывы и разрешения', () => {
+	test.use( { viewport: { width: 1366, height: 900 } } );
+	test( 'аудит отзывов', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/admin.php?page=memorial-plugin-rewio' );
+		await page.waitForSelector( '.dataviews-view-table, .dataviews-no-results', { timeout: 60000 } ).catch( () => {} );
+		await page.waitForTimeout( 1500 );
+		await page.screenshot( { path: `${ DIR }/rv-list.png`, fullPage: true } );
+		report.rows = await page.locator( '.dataviews-view-table tbody tr' ).count();
+		report.menu = await page.locator( '#adminmenu a[href*="memorial-plugin-rewio"]' ).count();
+		// скрыть первый отзыв через действие строки
+		const first = page.locator( '.dataviews-view-table tbody tr' ).first();
+		if ( await first.count() ) {
+			await first.hover();
+			await first.locator( 'button[aria-label="Actions"], button[aria-label="Действия"]' ).first().click().catch( () => {} );
+			await page.waitForTimeout( 400 );
+			await page.screenshot( { path: `${ DIR }/rv-actions.png` } );
+			await page.getByRole( 'menuitem', { name: /Скрыть на сайте/ } ).click().catch( () => {} );
+			await page.waitForTimeout( 2500 );
+			report.afterHide = await page.locator( '.components-notice' ).allTextContents();
+			await first.locator( 'button' ).first().click().catch( () => {} );
+		}
+		await page.locator( '.dataviews-view-table tbody tr' ).first().getByRole( 'button', { name: /Изменить|Edit/ } ).first().click().catch( () => {} );
+		await page.waitForTimeout( 800 );
+		await page.screenshot( { path: `${ DIR }/rv-edit.png` } );
+		report.hidden = await page.evaluate( () => fetch( '/wp-json/wp/v2/settings' ).then( () => null ).catch( () => null ) );
+		await page.goto( '/wp-admin/admin.php?page=mem-modules' );
+		await page.waitForSelector( '.memorial-plugin-settings__tabs', { timeout: 60000 } ).catch( () => {} );
+		await page.waitForTimeout( 1000 );
+		await page.screenshot( { path: `${ DIR }/rv-settings.png`, fullPage: true } );
+		await page.getByRole( 'tab', { name: /Разрешения/ } ).click().catch( () => {} );
+		await page.waitForTimeout( 800 );
+		await page.screenshot( { path: `${ DIR }/rv-perms.png`, fullPage: true } );
+		report.perms = await page.locator( '.memorial-plugin-settings__perms tbody tr' ).allTextContents();
+		report.errors = errs;
+		log( 'reviews', report );
+	} );
+} );

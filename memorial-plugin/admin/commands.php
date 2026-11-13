@@ -15,13 +15,14 @@ defined( 'ABSPATH' ) || exit;
  */
 function memorial_plugin_command_screens() {
 	$screens = array(
-		array( 'leads', __( 'Call back requests', 'memorial-plugin' ), __( 'leads calls phone', 'memorial-plugin' ), 'edit_posts', 'admin.php?page=memorial-plugin-leads' ),
+		array( 'leads', __( 'Call back requests', 'memorial-plugin' ), __( 'leads calls phone', 'memorial-plugin' ), 'memorial_plugin_leads', 'admin.php?page=memorial-plugin-leads' ),
 		array( 'products', __( 'Products', 'memorial-plugin' ), __( 'catalog prices', 'memorial-plugin' ), 'edit_posts', 'edit.php?post_type=mem_product&page=mem-products' ),
 		array( 'types', __( 'Types and categories', 'memorial-plugin' ), __( 'catalog specifications', 'memorial-plugin' ), 'manage_categories', 'edit.php?post_type=mem_product&page=mem-types' ),
 		array( 'works', __( 'Our works', 'memorial-plugin' ), __( 'portfolio photos examples', 'memorial-plugin' ), 'edit_posts', 'edit.php?post_type=mem_work&page=mem-works' ),
 		array( 'work-types', __( 'Kinds of works', 'memorial-plugin' ), '', 'manage_categories', 'edit.php?post_type=mem_work&page=mem-work-types' ),
 		array( 'search', __( 'What people search for on the site', 'memorial-plugin' ), __( 'search statistics queries', 'memorial-plugin' ), 'edit_pages', 'admin.php?page=mem-sq' ),
-		array( 'bookrev', __( 'Guest book reviews', 'memorial-plugin' ), __( 'reviews book', 'memorial-plugin' ), 'edit_posts', 'admin.php?page=memorial-plugin-bookrev' ),
+		array( 'bookrev', __( 'Guest book reviews', 'memorial-plugin' ), __( 'reviews book', 'memorial-plugin' ), 'memorial_plugin_bookrev', 'admin.php?page=memorial-plugin-bookrev' ),
+		array( 'rewio', __( 'Review list', 'memorial-plugin' ), __( 'reviews rewio yandex hide', 'memorial-plugin' ), 'memorial_plugin_reviews', 'admin.php?page=memorial-plugin-rewio' ),
 	);
 	$icons   = array(
 		'mem-contacts' => 'contacts',
@@ -38,7 +39,7 @@ function memorial_plugin_command_screens() {
 			/* translators: %s: settings page title. */
 			sprintf( __( 'Memorial: %s', 'memorial-plugin' ), wp_strip_all_tags( (string) $p['title'] ) ),
 			__( 'settings', 'memorial-plugin' ),
-			'manage_options',
+			memorial_plugin_screen_cap( $opt ),
 			'admin.php?page=' . $slug,
 			$icons[ $slug ] ?? 'features',
 		);
@@ -80,7 +81,7 @@ function memorial_plugin_commands_assets() {
 				'leadsUrl' => admin_url( 'admin.php?page=memorial-plugin-leads' ),
 				'can'      => array(
 					'export'  => current_user_can( 'edit_posts' ),
-					'leads'   => current_user_can( 'edit_posts' ),
+					'leads'   => current_user_can( 'memorial_plugin_leads' ),
 					'convert' => current_user_can( 'edit_posts' ),
 				),
 			)

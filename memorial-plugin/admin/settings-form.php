@@ -75,6 +75,13 @@ function memorial_plugin_settings_describe( $schema ) {
 		if ( array_key_exists( 'default', $f ) && is_scalar( $f['default'] ) ) {
 			$field['default'] = $f['default']; // The value of a new row of a list.
 		}
+		if ( ! empty( $f['tab'] ) ) {
+			$field['tab'] = (string) $f['tab']; // A top-level field on its own tab of the screen.
+		}
+		if ( 'perms' === $type ) {
+			$field['items'] = memorial_plugin_perm_rows();
+			$field['roles'] = memorial_plugin_perm_roles();
+		}
 		if ( 'page' === $type || 'link' === $type ) {
 			$field['options'] = memorial_plugin_settings_pages();
 		}
@@ -179,8 +186,8 @@ function memorial_plugin_settings_rest() {
 		array(
 			array(
 				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => static function () {
-					return current_user_can( 'manage_options' );
+				'permission_callback' => static function ( WP_REST_Request $request ) {
+					return memorial_plugin_can_screen( (string) $request['option'] );
 				},
 				'callback'            => static function ( WP_REST_Request $request ) {
 					return rest_ensure_response( memorial_plugin_settings_page_data( (string) $request['option'] ) );
@@ -188,8 +195,8 @@ function memorial_plugin_settings_rest() {
 			),
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
-				'permission_callback' => static function () {
-					return current_user_can( 'manage_options' );
+				'permission_callback' => static function ( WP_REST_Request $request ) {
+					return memorial_plugin_can_screen( (string) $request['option'] );
 				},
 				'args'                => array(
 					'value'   => array(

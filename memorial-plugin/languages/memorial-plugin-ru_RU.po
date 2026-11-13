@@ -6960,3 +6960,107 @@ msgstr "Карточки пакетов с ценами (Мемориал → Ц
 msgctxt "block description"
 msgid "Price table of a package with the total (Memorial → Prices → Funeral packages); by default — the cremation package."
 msgstr "Таблица цен пакета с итогом (Мемориал → Цены → Пакеты похорон); по умолчанию — пакет кремации."
+
+msgid "(headings, captions, button texts) write {price:code} — the price is put in and changes together with this screen."
+msgstr "(заголовки, подписи, тексты кнопок) пишите {price:код} — цена подставится и будет меняться вместе с этим экраном."
+
+msgid "As loaded"
+msgstr "Как загружен"
+
+msgid "As on the review site now"
+msgstr "Как сейчас на площадке"
+
+msgid "Changed on the review site"
+msgstr "Изменён на площадке"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Deleted on the review site"
+msgstr "Удалён на площадке"
+
+msgid "Empty — the link of the review site (or the company page there)."
+msgstr "Пусто — ссылка площадки (или страница компании на ней)."
+
+msgid "First version"
+msgstr "Первый вариант"
+
+msgid "Hide on the site"
+msgstr "Скрыть на сайте"
+
+msgid "Hide or show a review"
+msgstr "Скрыть или показать отзыв"
+
+msgid "Hides a Rewio review on the site or shows it again; the review stays in the list."
+msgstr "Скрывает отзыв Rewio на сайте или снова показывает его; отзыв остаётся в списке."
+
+msgid "ID of the review in the list."
+msgstr "ID отзыва в списке."
+
+msgid "In a text field of “Memorial → …”"
+msgstr "В текстовом поле «Мемориал → …»"
+
+msgid "On our site"
+msgstr "На нашем сайте"
+
+msgid "On the review site"
+msgstr "На площадке"
+
+msgid "Own link to the source"
+msgstr "Своя ссылка на источник"
+
+msgid "Permissions"
+msgstr "Разрешения"
+
+msgid "Review list"
+msgstr "Список отзывов"
+
+msgid "Review list (hide / show)"
+msgstr "Список отзывов (скрыть / показать)"
+
+msgid "Reviews loaded from Yandex Maps, 2GIS and other sites through Rewio. A hidden review is not shown on the site; the site keeps its copy, so a review changed or deleted on the review site stays here with a mark."
+msgstr "Отзывы, загруженные с Яндекс Карт, 2ГИС и других площадок через Rewio. Скрытый отзыв не показывается на сайте. Сайт хранит свою копию, поэтому изменённый или удалённый на площадке отзыв остаётся здесь с пометкой."
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Shared texts right on a page"
+msgstr "Общие тексты прямо на странице"
+
+msgid "Show reviews deleted on the review site"
+msgstr "Показывать отзывы, удалённые на площадке"
+
+msgid "The first version"
+msgstr "Первый вариант"
+
+msgid "Tick what a role may open and change. An administrator may do everything. “Settings” (this screen) is only for administrators."
+msgstr "Отметьте, что роль может открывать и менять. Администратору доступно всё. «Настройки» (этот экран) — только для администраторов."
+
+msgid "What"
+msgstr "Что"
+
+msgid "What editors and authors may do"
+msgstr "Что могут редакторы и авторы"
+
+msgid "What of the “Memorial” plugin works on the site, and what editors and authors may do."
+msgstr "Что из плагина «Мемориал» работает на сайте и что могут редакторы и авторы."
+
+msgid "Which version to show"
+msgstr "Какой вариант показывать"
+
+msgid "reviews rewio yandex hide"
+msgstr "отзывы rewio яндекс скрыть"
+
+#. translators: %d: number of reviews.
+msgid "%d review hidden on the site."
+msgid_plural "%d reviews hidden on the site."
+msgstr[0] "%d отзыв скрыт на сайте."
+msgstr[1] "%d отзыва скрыты на сайте."
+msgstr[2] "%d отзывов скрыто на сайте."
+
+#. translators: %d: number of reviews.
+msgid "%d review shown on the site."
+msgid_plural "%d reviews shown on the site."
+msgstr[0] "%d отзыв снова показан на сайте."
+msgstr[1] "%d отзыва снова показаны на сайте."
+msgstr[2] "%d отзывов снова показано на сайте."

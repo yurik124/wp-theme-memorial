@@ -46,7 +46,7 @@ function memorial_plugin_uninstall_site( $everything ) {
 	}
 
 	// Posts of the plugin’s types, with their meta, revisions and attached terms.
-	foreach ( array( 'mem_product', 'mem_work', 'mem_lead', 'mem_bookrev' ) as $type ) {
+	foreach ( array( 'mem_product', 'mem_work', 'mem_lead', 'mem_bookrev', 'mem_rewio' ) as $type ) {
 		$ids = get_posts(
 			array(
 				'post_type'      => $type,

@@ -230,4 +230,137 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( 'https://example.ru/a', memorial_plugin_sanitize( $schema, array( 'l' => 'https://example.ru/a' ) )['l'] );
 		$this->assertSame( '', memorial_plugin_sanitize( $schema, array( 'l' => 'javascript:alert(1)' ) )['l'] );
 	}
+
+	public function test_price_tokens() {
+		update_option(
+			'mem_prices',
+			array(
+				'packages' => array(
+					'items' => array(
+						array(
+							'name' => 'Эконом',
+							'show' => 1,
+							'rows' => array(
+								array(
+									'name'  => 'Гроб',
+									'price' => 1000,
+								),
+							),
+						),
+					),
+				),
+				'other'    => array(
+					'items' => array(
+						array(
+							'name'  => 'Лента',
+							'price' => '500',
+							'code'  => 'lenta',
+						),
+					),
+				),
+			)
+		);
+		wp_set_current_user( 0 );
+		$this->assertSame( 'Надпись — 500' . "\u{00A0}₽", memorial_plugin_t( 'Надпись — {price:lenta}' ) );
+		$this->assertStringContainsString( '1' . "\u{202F}" . '000', memorial_plugin_t( '{price:Эконом}' ) );
+		$this->assertSame( 'x ', memorial_plugin_t( 'x {price:nope}' ), 'unknown code — nothing for visitors' );
+		$this->assertStringContainsString( '500', memorial_plugin_price_tokens_block( '<p>{price:lenta}</p>' ) );
+	}
+
+	public function test_permissions_follow_the_table() {
+		$editor = self::factory()->user->create( array( 'role' => 'editor' ) );
+		$author = self::factory()->user->create( array( 'role' => 'author' ) );
+		$admin  = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		delete_option( 'mem_modules_page' );
+		$this->assertTrue( user_can( $editor, 'memorial_plugin_screen_mem_prices' ), 'editors get Prices by default' );
+		$this->assertTrue( user_can( $editor, 'memorial_plugin_reviews' ) );
+		$this->assertFalse( user_can( $author, 'memorial_plugin_screen_mem_prices' ) );
+		$this->assertFalse( user_can( $editor, 'memorial_plugin_screen_mem_contacts' ) );
+		$this->assertTrue( user_can( $admin, 'memorial_plugin_screen_mem_contacts' ) );
+		update_option(
+			'mem_modules_page',
+			array(
+				'perms' => array(
+					'screen_mem_prices' => array(
+						'editor' => 0,
+						'author' => 1,
+					),
+				),
+			)
+		);
+		$this->assertFalse( user_can( $editor, 'memorial_plugin_screen_mem_prices' ) );
+		$this->assertTrue( user_can( $author, 'memorial_plugin_screen_mem_prices' ) );
+		$this->assertTrue( user_can( $editor, 'memorial_edit_texts' ), 'other rights keep their defaults' );
+		delete_option( 'mem_modules_page' );
+	}
+
+	public function test_rewio_copy_marks_changed_and_gone() {
+		if ( ! function_exists( 'memorial_plugin_rewio_archive' ) ) {
+			$this->markTestSkipped( 'Rewio is off.' );
+		}
+		update_option( 'memorial_plugin_rewio_archive', 1 );
+		update_option( 'mem_rewio_show_gone', 0 );
+		$review = static fn( $id, $text, $date, $url = 'https://yandex.ru/maps/org/1/reviews?r=1' ) => array(
+			'id'     => $id,
+			'author' => 'Анна',
+			'text'   => $text,
+			'date'   => $date,
+			'rating' => 5.0,
+			'src'    => 1,
+			'slug'   => 'yandex',
+			'url'    => $url,
+			'reply'  => '',
+			'rdate'  => '',
+			'imgs'   => array(),
+			'obj'    => 7,
+		);
+		$fetch  = array(
+			7 => array(
+				'n'      => 2,
+				'limit'  => 100,
+				'oldest' => '2026-01-01',
+				'sids'   => array(),
+			),
+		);
+		$common = array( 'min_rating' => 1 );
+		$groups = array(
+			array(
+				'name'    => '',
+				'summary' => null,
+				'reviews' => array( $review( 101, 'Спасибо', '2026-03-01' ), $review( 102, 'Хорошо', '2026-02-01' ) ),
+			),
+		);
+		memorial_plugin_rewio_archive( $groups, $fetch, $common );
+		// 101 changed its text and lost its link, 102 is gone from the site.
+		$fetch[7]['n'] = 1;
+		$groups        = array(
+			array(
+				'name'    => '',
+				'summary' => null,
+				'reviews' => array( $review( 101, 'Спасибо большое', '2026-03-01', '' ) ),
+			),
+		);
+		$shown         = memorial_plugin_rewio_archive( $groups, $fetch, $common );
+		$copies        = memorial_plugin_rewio_copies();
+		$this->assertSame( 'changed', get_post_meta( $copies[101]->ID, '_rw_state', true ) );
+		$this->assertSame( 'Спасибо', memorial_plugin_rewio_copy_data( $copies[101]->ID, 'first' )['text'], 'the first version is kept' );
+		$this->assertSame( 'gone', get_post_meta( $copies[102]->ID, '_rw_state', true ) );
+		$this->assertSame( array( 101 ), array_column( $shown[0]['reviews'], 'id' ), 'gone reviews are not shown by default' );
+		$this->assertSame( 'Спасибо большое', $shown[0]['reviews'][0]['text'], 'the new version is shown by default' );
+		update_post_meta( $copies[101]->ID, '_rw_use', 'first' );
+		update_option( 'mem_rewio_show_gone', 1 );
+		$shown = memorial_plugin_rewio_fill(
+			array(
+				array(
+					'name' => '',
+					'ids'  => array( 101 ),
+				),
+			)
+		);
+		$this->assertSame( array( 101, 102 ), array_column( $shown[0]['reviews'], 'id' ) );
+		$this->assertSame( 'Спасибо', $shown[0]['reviews'][0]['text'] );
+		memorial_plugin_rewio_set_hidden( 102, true );
+		$this->assertContains( 102, array_map( 'intval', (array) get_option( 'mem_rewio_hidden' ) ) );
+		$this->assertSame( 'draft', get_post_status( $copies[102]->ID ) );
+	}
 }

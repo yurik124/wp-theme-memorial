@@ -14,6 +14,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
+	CheckboxControl,
 	Modal,
 	Notice,
 	TextareaControl,
@@ -182,6 +183,7 @@ function toField( def ) {
 			return {
 				...field,
 				type: 'text',
+				isLong: true,
 				render: ( { item } ) => {
 					const t = String( item[ def.id ] || '' );
 					return t.length > 120 ? t.slice( 0, 120 ) + '…' : t;
@@ -198,7 +200,10 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 	const [ error, setError ] = useState( '' );
 	const [ busy, setBusy ] = useState( false );
 	const editable = fields.filter( ( f ) => ! f.readonly );
-	const fixed = fields.filter( ( f ) => f.readonly && item[ f.id ] );
+	const fixed = fields.filter(
+		( f ) =>
+			f.readonly && item[ f.id ] !== '' && item[ f.id ] !== null && item[ f.id ] !== undefined
+	);
 	const save = async () => {
 		setBusy( true );
 		const values = {};
@@ -237,7 +242,7 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 						<div key={ f.id }>
 							<dt>{ f.label }</dt>
 							<dd>
-								{ f.render
+								{ f.render && ! f.isLong
 									? f.render( { item } )
 									: item[ f.id ] }
 							</dd>
@@ -285,15 +290,18 @@ function App( { name } ) {
 						( v ) =>
 							v || {
 								type: 'table',
+								// Fields marked hidden are only in the edit window (and in “View options”).
 								fields: res.fields
-									.map( ( f ) => f.id )
 									.filter(
-										( id ) => id !== res.fields[ 0 ].id
-									),
+										( f ) =>
+											! f.hidden &&
+											f.id !== res.fields[ 0 ].id
+									)
+									.map( ( f ) => f.id ),
 								titleField: res.fields[ 0 ].id,
 								perPage: 25,
 								page: 1,
-								sort: {
+								sort: res.sort || {
 									field: res.fields[ 0 ].id,
 									direction: 'asc',
 								},
@@ -341,6 +349,44 @@ function App( { name } ) {
 		[ name, load ]
 	);
 
+	// Hide / show reviews of the list: ability memorial-plugin/set-review-hidden (reviews/rewio-archive.php).
+	const setHidden = useCallback(
+		async ( list, hidden ) => {
+			try {
+				for ( const item of list ) {
+					await runAbility( 'memorial-plugin/set-review-hidden', {
+						id: item.id,
+						hidden,
+					} );
+				}
+				setNotice( {
+					status: 'success',
+					text: sprintf(
+						/* translators: %d: number of reviews. */
+						hidden
+							? _n(
+									'%d review hidden on the site.',
+									'%d reviews hidden on the site.',
+									list.length,
+									'memorial-plugin'
+							  )
+							: _n(
+									'%d review shown on the site.',
+									'%d reviews shown on the site.',
+									list.length,
+									'memorial-plugin'
+							  ),
+						list.length
+					),
+				} );
+				load();
+			} catch ( e ) {
+				setNotice( { status: 'error', text: e.message } );
+			}
+		},
+		[ load ]
+	);
+
 	const actions = useMemo( () => {
 		const out = [
 			{
@@ -350,14 +396,36 @@ function App( { name } ) {
 				icon: 'edit',
 				callback: ( [ item ] ) => setEditing( item ),
 			},
-			{
+		];
+		if ( meta?.trash !== false ) {
+			out.push( {
 				id: 'trash',
 				label: __( 'Move to trash', 'memorial-plugin' ),
 				isDestructive: true,
 				supportsBulk: true,
 				callback: ( list ) => remove( list ),
-			},
-		];
+			} );
+		}
+		if ( name === 'rewio' ) {
+			out.push(
+				{
+					id: 'hide',
+					label: __( 'Hide on the site', 'memorial-plugin' ),
+					icon: 'hidden',
+					supportsBulk: true,
+					isEligible: ( item ) => item.status !== 'draft',
+					callback: ( list ) => setHidden( list, true ),
+				},
+				{
+					id: 'show',
+					label: __( 'Show on the site', 'memorial-plugin' ),
+					icon: 'visibility',
+					supportsBulk: true,
+					isEligible: ( item ) => item.status === 'draft',
+					callback: ( list ) => setHidden( list, false ),
+				}
+			);
+		}
 		if ( name === 'leads' ) {
 			// Ability memorial-plugin/set-lead-done (admin/abilities.php), also in the Command Palette.
 			out.splice( 1, 0, {
@@ -390,7 +458,28 @@ function App( { name } ) {
 			} );
 		}
 		return out;
-	}, [ name, remove, load ] );
+	}, [ name, remove, load, meta, setHidden ] );
+
+	// One switch of the whole list (“Show reviews deleted on the review site”).
+	const toggle = async ( value ) => {
+		try {
+			const res = await apiFetch( {
+				path: API + name + '/toggle',
+				method: 'POST',
+				data: { value },
+			} );
+			setMeta( ( m ) => ( {
+				...m,
+				toggle: { ...m.toggle, value: !! res.value },
+			} ) );
+			setNotice( {
+				status: 'success',
+				text: __( 'Saved.', 'memorial-plugin' ),
+			} );
+		} catch ( e ) {
+			setNotice( { status: 'error', text: e.message } );
+		}
+	};
 
 	const { data, paginationInfo } = useMemo(
 		() =>
@@ -433,6 +522,17 @@ function App( { name } ) {
 				>
 					{ notice.text }
 				</Notice>
+			) }
+			{ meta.toggle && (
+				<div className="memorial-plugin-collection__toggle">
+					<CheckboxControl
+						__nextHasNoMarginBottom
+						label={ meta.toggle.label }
+						checked={ !! meta.toggle.value }
+						disabled={ ! meta.toggle.can }
+						onChange={ toggle }
+					/>
+				</div>
 			) }
 			<DataViews
 				data={ data }

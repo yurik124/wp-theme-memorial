@@ -250,15 +250,17 @@ function memorial_plugin_prices( $section ) {
 add_filter(
 	'memorial_plugin_admin_pages',
 	function ( $pages ) {
-		$vals = array( __( 'Cremation', 'memorial-plugin' ) . ' — ' . memorial_plugin_price_value( 'kremaciya' ) );
+		// Every price with what to write in a text field of «Мемориал → …»: {price:код}.
+		$vals = array( __( 'Cremation', 'memorial-plugin' ) . ' — ' . memorial_plugin_price_value( 'kremaciya' ) . ' {price:kremaciya}' );
 		foreach ( memorial_plugin_prices( 'other' )['items'] ?? array() as $it ) {
 			if ( trim( $it['code'] ?? '' ) !== '' ) {
 				$vals[] = ( '' !== trim( $it['name'] ?? '' ) ? $it['name'] : $it['code'] ) . ' — ' . memorial_plugin_price_value( $it['code'] )
+					. ' {price:' . trim( $it['code'] ) . '}'
 					. ( ! empty( $it['seo'] ) ? ' (%%mem_' . memorial_plugin_value_key( (string) $it['code'] ) . '%%)' : '' );
 			}
 		}
 		foreach ( memorial_plugin_packages() as $p ) {
-			$vals[] = $p['name'] . ' — ' . memorial_plugin_rub( array_sum( array_column( $p['items'], 1 ) ) );
+			$vals[] = $p['name'] . ' — ' . memorial_plugin_rub( array_sum( array_column( $p['items'], 1 ) ) ) . ' {price:' . $p['name'] . '}';
 		}
 		$pages['mem_prices'] = array(
 			'slug'   => 'mem-prices',
@@ -266,6 +268,7 @@ add_filter(
 			'schema' => 'memorial_plugin_prices_schema',
 			'intro'  => '<p>' . esc_html__( 'Prices from here are put into the pages automatically — change them only here; catalog prices and the number of models are counted from the products.', 'memorial-plugin' ) . '</p>'
 				. '<p><b>' . esc_html__( 'How to put a price into the text of a page:', 'memorial-plugin' ) . '</b> ' . esc_html__( 'click in the paragraph where the price should be → on the block toolbar open the arrow ∨ (“More”) → “Site value” → “Price from Memorial → Prices” → choose the price → “Insert”. The page always shows the current price. Prices marked “In the SEO plugin” are put into SEO titles as %%mem_code%% (shown in brackets below).', 'memorial-plugin' ) . '</p>'
+				. '<p><b>' . esc_html__( 'In a text field of “Memorial → …”', 'memorial-plugin' ) . '</b> ' . esc_html__( '(headings, captions, button texts) write {price:code} — the price is put in and changes together with this screen.', 'memorial-plugin' ) . '</p>'
 				. '<p><b>' . esc_html__( 'Prices now:', 'memorial-plugin' ) . '</b> ' . esc_html( implode( ' · ', $vals ) ) . '</p>'
 				. memorial_plugin_prices_audit_html(),
 		);
@@ -762,7 +765,7 @@ function memorial_plugin_catalog_numbers( $html, $page_term = 0 ) {
 add_action(
 	'admin_init',
 	function () {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! memorial_plugin_can_screen( 'mem_prices' ) ) {
 			return;
 		}
 		// кнопка «Перевести ещё раз» на странице «Цены».
