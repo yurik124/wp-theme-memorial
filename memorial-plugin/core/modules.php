@@ -1,9 +1,9 @@
 <?php
 /**
- * «Мемориал → Функции»: включение и выключение частей плагина (список — memorial_plugin_optional() в memorial-core.php).
+ * «Мемориал → Настройки»: вкладка «Функции» — включение и выключение частей плагина (список — memorial_plugin_optional() в memorial-core.php).
  * Выключенная функция не загружается вовсе: нет её настроек в меню, расписаний и нагрузки на сайт.
  * Её шорткоды на страницах ничего не выводят (а не показываются текстом). Данные (работы, отзывы, настройки) не удаляются —
- * включите обратно, и всё вернётся.
+ * включите обратно, и всё вернётся. Вкладка «Разрешения» — права ролей (core/permissions.php).
  *
  * @package memorial-plugin
  */
@@ -22,11 +22,18 @@ function memorial_plugin_modules_schema() {
 		);
 	}
 	return array(
-		'on' => array(
+		'on'    => array(
 			'type'   => 'group',
+			'tab'    => __( 'Features', 'memorial-plugin' ),
 			'label'  => __( 'Plugin features', 'memorial-plugin' ),
 			'help'   => __( 'Untick a feature and it turns off: its menu items disappear, its blocks on pages show nothing. The data is not deleted. The catalog, prices, contacts, documents and SEO are the base of the site, they always work.', 'memorial-plugin' ),
 			'fields' => $f,
+		),
+		'perms' => array(
+			'type'  => 'perms',
+			'tab'   => __( 'Permissions', 'memorial-plugin' ),
+			'label' => __( 'What editors and authors may do', 'memorial-plugin' ),
+			'help'  => __( 'Tick what a role may open and change. An administrator may do everything. “Settings” (this screen) is only for administrators.', 'memorial-plugin' ),
 		),
 	);
 }
@@ -34,7 +41,10 @@ function memorial_plugin_modules_schema() {
  * Modules page defaults.
  */
 function memorial_plugin_modules_page_defaults() {
-	return array( 'on' => array_fill_keys( array_keys( memorial_plugin_optional() ), 1 ) );
+	return array(
+		'on'    => array_fill_keys( array_keys( memorial_plugin_optional() ), 1 ),
+		'perms' => memorial_plugin_perm_defaults(),
+	);
 }
 
 add_filter(
@@ -42,9 +52,9 @@ add_filter(
 	function ( $pages ) {
 		$pages['mem_modules_page'] = array(
 			'slug'   => 'mem-modules',
-			'title'  => __( 'Features', 'memorial-plugin' ),
+			'title'  => __( 'Settings', 'memorial-plugin' ),
 			'schema' => 'memorial_plugin_modules_schema',
-			'intro'  => __( 'What of the “Memorial” plugin works on the site.', 'memorial-plugin' ),
+			'intro'  => __( 'What of the “Memorial” plugin works on the site, and what editors and authors may do.', 'memorial-plugin' ),
 		);
 		return $pages;
 	}

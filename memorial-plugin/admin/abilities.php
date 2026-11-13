@@ -122,7 +122,7 @@ function memorial_plugin_abilities() {
 	);
 
 	if ( function_exists( 'memorial_plugin_collection' ) ) {
-		memorial_plugin_abilities_leads( $edit, $lead );
+		memorial_plugin_abilities_leads( static fn() => current_user_can( 'memorial_plugin_leads' ), static fn( $input ) => current_user_can( 'memorial_plugin_leads' ) && $lead( $input ) );
 	}
 	if ( function_exists( 'memorial_plugin_products_data' ) ) {
 		memorial_plugin_abilities_catalog( $edit, $meta_public );

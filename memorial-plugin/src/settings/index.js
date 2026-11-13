@@ -26,6 +26,7 @@ import {
 	Notice,
 	SelectControl,
 	Spinner,
+	TabPanel,
 	TextareaControl,
 	TextControl,
 	Flex,
@@ -359,6 +360,60 @@ function LinkEdit( { common, def, value, onChange } ) {
 				/>
 			) }
 		</div>
+	);
+}
+
+/**
+ * «Настройки → Разрешения»: rows — screens and rights, columns — roles, a checkbox in every cell.
+ *
+ * @param {Object}   props
+ * @param {Object}   props.def      Field: items (key, label), roles (id, label).
+ * @param {Object}   props.value    { key: { role: 0|1 } }.
+ * @param {Function} props.onChange Receives the whole table.
+ */
+function PermsEdit( { def, value, onChange } ) {
+	const v = value && typeof value === 'object' ? value : {};
+	const roles = def.roles || [];
+	const set = ( key, role, on ) =>
+		onChange( {
+			...v,
+			[ key ]: { ...( v[ key ] || {} ), [ role ]: on ? 1 : 0 },
+		} );
+	return (
+		<table className="memorial-plugin-settings__perms">
+			<thead>
+				<tr>
+					<th scope="col">{ __( 'What', 'memorial-plugin' ) }</th>
+					{ roles.map( ( r ) => (
+						<th scope="col" key={ r.id }>
+							{ r.label }
+						</th>
+					) ) }
+				</tr>
+			</thead>
+			<tbody>
+				{ ( def.items || [] ).map( ( row ) => (
+					<tr key={ row.key }>
+						<th scope="row">{ row.label }</th>
+						{ roles.map( ( r ) => (
+							<td key={ r.id }>
+								<CheckboxControl
+									__nextHasNoMarginBottom
+									label={ row.label + ' — ' + r.label }
+									className="memorial-plugin-settings__perm"
+									checked={
+										!! Number( v[ row.key ]?.[ r.id ] )
+									}
+									onChange={ ( on ) =>
+										set( row.key, r.id, on )
+									}
+								/>
+							</td>
+						) ) }
+					</tr>
+				) ) }
+			</tbody>
+		</table>
 	);
 }
 
@@ -718,6 +773,10 @@ function ControlFor( { def, value, onChange } ) {
 					onChange={ onChange }
 				/>
 			);
+		case 'perms':
+			return (
+				<PermsEdit def={ def } value={ value } onChange={ onChange } />
+			);
 		case 'link':
 			return (
 				<LinkEdit
@@ -843,6 +902,31 @@ function Intro( { html } ) {
 	);
 }
 
+/**
+ * Cards of a screen; top-level fields with “tab” stand on tabs of their own («Настройки»: Функции, Разрешения).
+ *
+ * @param {Array}    defs Top-level fields.
+ * @param {Function} card Renders one card.
+ * @return {*} Cards or tabs.
+ */
+function withTabs( defs, card ) {
+	const tabbed = defs.filter( ( d ) => d.tab );
+	if ( ! tabbed.length ) {
+		return defs.map( card );
+	}
+	return (
+		<>
+			{ defs.filter( ( d ) => ! d.tab ).map( card ) }
+			<TabPanel
+				className="memorial-plugin-settings__tabs"
+				tabs={ tabbed.map( ( d ) => ( { name: d.id, title: d.tab } ) ) }
+			>
+				{ ( tab ) => card( tabbed.find( ( d ) => d.id === tab.name ) ) }
+			</TabPanel>
+		</>
+	);
+}
+
 function App( { option } ) {
 	const [ page, setPage ] = useState( null );
 	const [ value, setValue ] = useState( {} );
@@ -956,7 +1040,7 @@ function App( { option } ) {
 					</Notice>
 				) }
 				<div ref={ extraRef } />
-				{ page.fields.map( ( def ) => (
+				{ withTabs( page.fields, ( def ) => (
 					<Card
 						key={ def.id }
 						className="memorial-plugin-settings__card"

@@ -1024,12 +1024,60 @@ function memorial_plugin_tel_of( $num ) {
 	return preg_replace( '/[^\d+]/', '', $num );
 }
 
+/**
+ * {price:код} in a text → the price now: a code of «Цены → Отдельные цены» ({price:lenta}), kremaciya —
+ * the cremation package, or the name of a package ({price:Эконом}). An unknown code shows nothing to
+ * visitors and stays as it is for those who may change the prices — so it is noticed.
+ *
+ * @param string $s Text.
+ * @return string
+ */
+function memorial_plugin_price_tokens( $s ) {
+	if ( false === strpos( (string) $s, '{price:' ) || ! function_exists( 'memorial_plugin_price_value' ) ) {
+		return (string) $s;
+	}
+	return (string) preg_replace_callback(
+		'/\{price:([^{}]{1,80})\}/u',
+		static function ( $m ) {
+			$code = trim( html_entity_decode( $m[1], ENT_QUOTES, 'UTF-8' ) );
+			$v    = memorial_plugin_price_value( $code );
+			if ( '' === $v ) {
+				$v = memorial_plugin_price_value( '', $code ); // the name of a package.
+			}
+			if ( '' === $v ) {
+				return function_exists( 'memorial_plugin_can_screen' ) && memorial_plugin_can_screen( 'mem_prices' ) ? $m[0] : '';
+			}
+			return $v;
+		},
+		(string) $s
+	);
+}
+
+/**
+ * {price:…} written in a block (a heading, a paragraph, a setting shown by a block) — on the site.
+ *
+ * @param string $html Block HTML.
+ * @return string
+ */
+function memorial_plugin_price_tokens_block( $html ) {
+	if ( is_admin() || false === strpos( (string) $html, '{price:' ) ) {
+		return $html;
+	}
+	return (string) preg_replace_callback(
+		'/\{price:[^{}<>]{1,80}\}/u',
+		static fn( $m ) => esc_html( memorial_plugin_price_tokens( $m[0] ) ),
+		(string) $html
+	);
+}
+add_filter( 'render_block', 'memorial_plugin_price_tokens_block', 20 );
+
 /** Подстановки в тексты: {years}, {founded}, {addr}, {phone}
  *
  * @param array $s Section data.
  */
 function memorial_plugin_t( $s ) {
 	$a = memorial_plugin_addrs();
+	$s = memorial_plugin_price_tokens( (string) $s );
 	return strtr(
 		(string) $s,
 		array(
@@ -1152,6 +1200,9 @@ function memorial_plugin_sanitize( $schema, $in ) {
 				break;
 			case 'page':
 				$out[ $k ] = absint( $v ) ? absint( $v ) : '';
+				break;
+			case 'perms': // «Настройки → Разрешения» (core/permissions.php).
+				$out[ $k ] = memorial_plugin_perm_clean( $v );
 				break;
 			case 'link': // a page of the site (its ID) or any address.
 				$v         = is_scalar( $v ) ? trim( (string) $v ) : '';
@@ -1298,7 +1349,7 @@ add_action(
 				empty( $p['hidden'] ) ? 'mem-contacts' : '',
 				$p['title'],
 				$p['title'],
-				'manage_options',
+				memorial_plugin_screen_cap( $opt ), // «Настройки → Разрешения».
 				$p['slug'],
 				fn() => memorial_plugin_settings_container( $opt )
 			);
@@ -1327,7 +1378,7 @@ add_action(
 		if ( empty( $submenu['mem-contacts'] ) ) {
 			return;
 		}
-		$order = array( 'memorial-plugin-leads', 'mem-contacts', 'mem-prices', 'mem-reviews', 'mem-home', 'mem-rest', 'mem-cem', 'mem-design', 'mem-metrika', 'mem-legal', 'mem-sq', 'mem-modules' );
+		$order = array( 'memorial-plugin-leads', 'mem-contacts', 'mem-prices', 'mem-reviews', 'memorial-plugin-rewio', 'mem-home', 'mem-rest', 'mem-cem', 'mem-design', 'mem-metrika', 'mem-legal', 'mem-sq', 'mem-modules' );
 		$items = $submenu['mem-contacts'];
 		usort(
 			$items,

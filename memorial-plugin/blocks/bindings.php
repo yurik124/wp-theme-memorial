@@ -26,19 +26,7 @@ defined( 'ABSPATH' ) || exit;
 
 const MEMORIAL_PLUGIN_BINDINGS_SOURCE = 'memorial-plugin/settings';
 
-/**
- * Editors and administrators may edit the shared texts (no role is changed in the database).
- *
- * @param array $allcaps Capabilities of the user.
- * @return array
- */
-function memorial_plugin_texts_cap( $allcaps ) {
-	if ( ! empty( $allcaps['edit_others_pages'] ) || ! empty( $allcaps['manage_options'] ) ) {
-		$allcaps['memorial_edit_texts'] = true;
-	}
-	return $allcaps;
-}
-add_filter( 'user_has_cap', 'memorial_plugin_texts_cap' );
+// The right memorial_edit_texts is given by core/permissions.php («Настройки → Разрешения»; editors by default).
 
 /**
  * Field of the settings schema and the place of a key: [schema field, option, path segments] or null.

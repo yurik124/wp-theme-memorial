@@ -34,6 +34,11 @@ class Test_Memorial_Plugin_Rest extends WP_UnitTestCase {
 		$this->assertSame( 200, $this->status( 'GET', '/memorial-plugin/v1/settings/mem_contacts', 'administrator' ) );
 	}
 
+	public function test_editors_get_prices_but_not_contacts() {
+		$this->assertSame( 200, $this->status( 'GET', '/memorial-plugin/v1/settings/mem_prices', 'editor' ) );
+		$this->assertSame( 403, $this->status( 'GET', '/memorial-plugin/v1/settings/mem_modules_page', 'editor' ) );
+	}
+
 	public function test_leads_are_not_for_subscribers() {
 		$this->assertSame( 401, $this->status( 'GET', '/memorial-plugin/v1/collections/leads', null ) );
 		$this->assertSame( 403, $this->status( 'GET', '/memorial-plugin/v1/collections/leads', 'subscriber' ) );

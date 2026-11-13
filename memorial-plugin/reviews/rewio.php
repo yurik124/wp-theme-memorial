@@ -568,6 +568,7 @@ function memorial_plugin_rewio_refresh() {
 		$per    = memorial_plugin_rewio_per( $sc['per'] ?? '' );
 		$global = memorial_plugin_rewio_ids( $sc['sources'] ?? '' ); // старая общая настройка площадок.
 		$groups = array();
+		$fetch  = array(); // what was asked of every branch: how far back the list goes (reviews/rewio-archive.php).
 		foreach ( $ids as $id ) {
 			$name                 = $by_id[ $id ]['name'];
 			$sids                 = $per[ $id ] ?? ( $global ? array_values( array_intersect( $global, $by_id[ $id ]['sources'] ) ) : array() );
@@ -577,12 +578,19 @@ function memorial_plugin_rewio_refresh() {
 				throw new Exception( '«' . $name . '»: ' . $r->get_error_message() );
 			}
 			$reviews  = array_map( 'memorial_plugin_rewio_norm', $r['data'] ?? array() );
+			// A review without its own link gets one when shown (memorial_plugin_rewio_src_url()); here the link
+			// stays as the site gave it — its disappearance marks the review “changed” (reviews/rewio-archive.php).
 			foreach ( $reviews as &$rv ) {
-				if ( '' === $rv['url'] ) {
-					$rv['url'] = (string) ( $by_id[ $id ]['links'][ $rv['src'] ] ?? '' );
-				}
+				$rv['obj'] = (int) $id;
 			}
 			unset( $rv );
+			$dates        = array_filter( array_column( $reviews, 'date' ) );
+			$fetch[ $id ] = array(
+				'n'      => count( $reviews ),
+				'limit'  => (int) $common['limit'],
+				'oldest' => $dates ? min( $dates ) : '',
+				'sids'   => $sids,
+			);
 			$note     = $r['collecting']['message'] ?? ( $r['access']['message'] ?? '' );
 			$log[]    = '«' . $name . __( '»: loaded ', 'memorial-plugin' ) . count( $reviews ) . __( ' of ', 'memorial-plugin' ) . (int) ( $r['total'] ?? count( $reviews ) ) . ( $note ? ' (' . $note . ')' : '' );
 			$an       = memorial_plugin_rewio_get(
@@ -654,6 +662,11 @@ function memorial_plugin_rewio_refresh() {
 			usort( $g['reviews'], fn( $a, $b ) => strcmp( $b['date'], $a['date'] ) );
 		}
 		unset( $g );
+		// Own copy of every review: new, changed and gone from the site are compared with it; what is shown
+		// (the version, the link, gone reviews) is built from that copy.
+		if ( function_exists( 'memorial_plugin_rewio_archive' ) ) {
+			$groups = memorial_plugin_rewio_archive( $groups, $fetch, $common );
+		}
 
 		$sources = array();
 		foreach ( $cat['all_sources'] ?? $cat['sources'] as $sid => $nm ) {
@@ -1144,7 +1157,7 @@ add_action(
 	'wp_ajax_mem_rewio_catalog',
 	function () {
 		check_ajax_referer( 'mem_rewio' );
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! memorial_plugin_can_screen( 'mem_rewio' ) ) {
 			wp_send_json_error( __( 'Not allowed.', 'memorial-plugin' ) );
 		}
 		$c = memorial_plugin_rewio_catalog_fetch();
@@ -1156,7 +1169,7 @@ add_action(
 	'wp_ajax_mem_rewio_scope',
 	function () {
 		check_ajax_referer( 'mem_rewio' );
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! memorial_plugin_can_screen( 'mem_rewio' ) ) {
 			wp_send_json_error();
 		}
 		$o          = get_option( 'mem_rewio', array() );
@@ -1176,7 +1189,7 @@ add_action(
 	'wp_ajax_mem_rewio_refresh',
 	function () {
 		check_ajax_referer( 'mem_rewio' );
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! memorial_plugin_can_screen( 'mem_rewio' ) ) {
 			wp_send_json_error( __( 'Not allowed.', 'memorial-plugin' ) );
 		}
 		$r = memorial_plugin_rewio_refresh();
@@ -1195,12 +1208,16 @@ add_action(
 	'wp_ajax_mem_rewio_hide',
 	function () {
 		check_ajax_referer( 'mem_rewio' );
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! memorial_plugin_can_screen( 'mem_rewio' ) ) {
 			wp_send_json_error();
 		}
 		$id = absint( $_POST['id'] ?? 0 );
-		$h  = array_map( 'intval', (array) get_option( 'mem_rewio_hidden', array() ) );
-		$h  = ! empty( $_POST['on'] ) ? array_values( array_unique( array_merge( $h, array( $id ) ) ) ) : array_values( array_diff( $h, array( $id ) ) );
+		if ( function_exists( 'memorial_plugin_rewio_set_hidden' ) ) {
+			memorial_plugin_rewio_set_hidden( $id, ! empty( $_POST['on'] ) );
+			wp_send_json_success();
+		}
+		$h = array_map( 'intval', (array) get_option( 'mem_rewio_hidden', array() ) );
+		$h = ! empty( $_POST['on'] ) ? array_values( array_unique( array_merge( $h, array( $id ) ) ) ) : array_values( array_diff( $h, array( $id ) ) );
 		update_option( 'mem_rewio_hidden', $h, false );
 		wp_send_json_success();
 	}

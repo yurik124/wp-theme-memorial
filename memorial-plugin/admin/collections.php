@@ -18,18 +18,21 @@ defined( 'ABSPATH' ) || exit;
  * Collections: name => post type, labels, capability, actions, fields.
  *
  * Field: label, type (text, textarea, date, select, boolean, image, url, datetime), source
- * (title, content, date, status, menu_order, thumbnail or meta:<key>), readonly, options, help.
+ * (title, content, date, status, menu_order, thumbnail or meta:<key>), readonly, options, help,
+ * cap (who may change it; others see it read-only), hidden (not a column of the list by default).
+ * Collection: also trash (false — no “Move to trash”), sort (field, direction of the list),
+ * toggle (option, label, cap — one switch of the whole list above it).
  *
  * @return array<string,array>
  */
 function memorial_plugin_collections() {
-	$branches = function_exists( 'memorial_plugin_branch_options' ) ? memorial_plugin_branch_options() : array();
-	return array(
+	$branches    = function_exists( 'memorial_plugin_branch_options' ) ? memorial_plugin_branch_options() : array();
+	$collections = array(
 		'leads'   => array(
 			'post_type' => 'mem_lead',
 			'title'     => __( 'Call-back requests', 'memorial-plugin' ),
 			'intro'     => __( 'Requests from the “Call me back” window. Each one also comes by email; here they are kept even if the email is lost.', 'memorial-plugin' ),
-			'cap'       => 'edit_posts',
+			'cap'       => 'memorial_plugin_leads',
 			'create'    => false,
 			'fields'    => array(
 				'phone' => array(
@@ -72,7 +75,7 @@ function memorial_plugin_collections() {
 			'post_type' => 'mem_bookrev',
 			'title'     => __( 'Reviews from the guest book', 'memorial-plugin' ),
 			'intro'     => __( 'Reviews retyped from the paper guest book, with a photo of the page. Before uploading a photo, cover the surname, phone and signature of the author unless they agreed to publication.', 'memorial-plugin' ),
-			'cap'       => 'edit_posts',
+			'cap'       => 'memorial_plugin_bookrev',
 			'create'    => true,
 			'fields'    => array(
 				'author' => array(
@@ -122,6 +125,12 @@ function memorial_plugin_collections() {
 			),
 		),
 	);
+	/**
+	 * Filters the record lists: a module adds its own (reviews/rewio-archive.php — «Список отзывов»).
+	 *
+	 * @param array $collections Name => description.
+	 */
+	return (array) apply_filters( 'memorial_plugin_collections', $collections );
 }
 
 /**
@@ -152,6 +161,9 @@ function memorial_plugin_collection_get( $post, $field ) {
 			) : null;
 	}
 	$value = get_post_meta( $post->ID, substr( $source, 5 ), true );
+	if ( 'integer' === $field['type'] ) {
+		return '' === (string) $value ? null : (int) round( (float) $value );
+	}
 	return 'boolean' === $field['type'] ? (bool) $value : (string) $value;
 }
 
@@ -183,7 +195,7 @@ function memorial_plugin_collection_save( $id, $col, $values ) {
 	$meta  = array();
 	$thumb = null;
 	foreach ( $col['fields'] as $key => $field ) {
-		if ( ! empty( $field['readonly'] ) || ! array_key_exists( $key, $values ) ) {
+		if ( ! empty( $field['readonly'] ) || ! array_key_exists( $key, $values ) || ( ! empty( $field['cap'] ) && ! current_user_can( $field['cap'] ) ) ) {
 			continue;
 		}
 		$v = $values[ $key ];
@@ -202,6 +214,9 @@ function memorial_plugin_collection_save( $id, $col, $values ) {
 				break;
 			case 'textarea':
 				$v = sanitize_textarea_field( (string) $v );
+				break;
+			case 'url':
+				$v = esc_url_raw( trim( (string) $v ) );
 				break;
 			case 'image':
 				$v = is_array( $v ) ? absint( $v['id'] ?? 0 ) : absint( $v );
@@ -245,6 +260,15 @@ function memorial_plugin_collection_save( $id, $col, $values ) {
 	if ( null !== $thumb ) {
 		$thumb ? set_post_thumbnail( $id, $thumb ) : delete_post_thumbnail( $id );
 	}
+	$name = (string) ( $col['name'] ?? '' );
+	/**
+	 * A record of a list was saved.
+	 *
+	 * @param string $name   Collection name.
+	 * @param int    $id     Post ID.
+	 * @param array  $values Values sent (by field key).
+	 */
+	do_action( 'memorial_plugin_collection_saved', $name, (int) $id, $values );
 	return (int) $id;
 }
 
@@ -256,7 +280,7 @@ function memorial_plugin_collection_save( $id, $col, $values ) {
  */
 function memorial_plugin_collection( $name ) {
 	$all = memorial_plugin_collections();
-	return $all[ $name ] ?? new WP_Error( 'memorial_plugin_unknown_collection', __( 'Unknown list.', 'memorial-plugin' ), array( 'status' => 404 ) );
+	return isset( $all[ $name ] ) ? $all[ $name ] + array( 'name' => $name ) : new WP_Error( 'memorial_plugin_unknown_collection', __( 'Unknown list.', 'memorial-plugin' ), array( 'status' => 404 ) );
 }
 
 /**
@@ -305,7 +329,8 @@ function memorial_plugin_collections_rest() {
 					foreach ( $col['fields'] as $key => $field ) {
 						$fields[] = array_merge(
 							array( 'id' => $key ),
-							array_intersect_key( $field, array_flip( array( 'label', 'type', 'readonly', 'help', 'placeholder' ) ) ),
+							array_intersect_key( $field, array_flip( array( 'label', 'type', 'readonly', 'help', 'placeholder', 'hidden' ) ) ),
+							! empty( $field['cap'] ) && ! current_user_can( $field['cap'] ) ? array( 'readonly' => true ) : array(),
 							isset( $field['options'] ) ? array(
 								'options' => array_map(
 									static fn( $v, $l ) => array(
@@ -323,6 +348,13 @@ function memorial_plugin_collections_rest() {
 							'title'  => $col['title'],
 							'intro'  => $col['intro'],
 							'create' => ! empty( $col['create'] ),
+							'trash'  => ! isset( $col['trash'] ) || $col['trash'],
+							'sort'   => $col['sort'] ?? null,
+							'toggle' => empty( $col['toggle'] ) ? null : array(
+								'label' => $col['toggle']['label'],
+								'value' => (bool) get_option( $col['toggle']['option'] ),
+								'can'   => current_user_can( $col['toggle']['cap'] ?? 'manage_options' ),
+							),
 							'fields' => $fields,
 							'items'  => array_map( static fn( $p ) => memorial_plugin_collection_item( $p, $col ), $posts ),
 						)
@@ -341,6 +373,28 @@ function memorial_plugin_collections_rest() {
 					return is_wp_error( $id ) ? $id : rest_ensure_response( memorial_plugin_collection_item( get_post( $id ), $col ) );
 				},
 			),
+		)
+	);
+	register_rest_route(
+		$ns,
+		'/collections/(?P<name>[a-z]+)/toggle',
+		array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'permission_callback' => static function ( WP_REST_Request $request ) {
+				$col = memorial_plugin_collection( (string) $request['name'] );
+				return ! is_wp_error( $col ) && ! empty( $col['toggle'] ) && current_user_can( $col['cap'] ) && current_user_can( $col['toggle']['cap'] ?? 'manage_options' );
+			},
+			'args'                => array(
+				'value' => array(
+					'type'     => 'boolean',
+					'required' => true,
+				),
+			),
+			'callback'            => static function ( WP_REST_Request $request ) {
+				$col = memorial_plugin_collection( (string) $request['name'] );
+				update_option( $col['toggle']['option'], $request['value'] ? 1 : 0, false );
+				return rest_ensure_response( array( 'value' => (bool) get_option( $col['toggle']['option'] ) ) );
+			},
 		)
 	);
 	register_rest_route(
@@ -378,9 +432,13 @@ function memorial_plugin_collections_menu() {
 	$screens = array(
 		'leads'   => array( 'mem-contacts', 'edit.php?post_type=mem_lead' ),
 		'bookrev' => array( '', '' ), // no menu item: opened from the “Reviews” tabs, as before.
+		'rewio'   => array( 'mem-contacts', '' ), // «Список отзывов» (when the Rewio feature is on).
 	);
 	foreach ( $screens as $name => $where ) {
-		$col  = memorial_plugin_collections()[ $name ];
+		$col = memorial_plugin_collections()[ $name ] ?? null;
+		if ( ! $col ) {
+			continue;
+		}
 		$hook = add_submenu_page(
 			$where[0],
 			$col['title'],

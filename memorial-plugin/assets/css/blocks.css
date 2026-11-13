@@ -648,7 +648,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .pkg__list summary:hover{color:var(--memorial-plugin-ink)}
 .pkg__list .pkg__rows{list-style:none;margin:0;padding:0 0 .25rem}
 .pkg__list .pkg__rows b{flex:none}
-.pkg__list .pkg__rows li{display:flex;justify-content:space-between;gap:1rem;padding:.45rem 0;border-bottom:1px dashed var(--memorial-plugin-line)}
+.pkg__list .pkg__rows li{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.45rem 0;border-bottom:1px dashed var(--memorial-plugin-line)}
 .pkg__list .pkg__rows li:last-child{border-bottom:0}
 .pkg__list .pkg__rows li::before{content:none}
 .pkg__list b{font-weight:400;color:var(--memorial-plugin-mute);white-space:nowrap}
