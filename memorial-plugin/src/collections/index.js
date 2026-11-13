@@ -202,7 +202,10 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 	const editable = fields.filter( ( f ) => ! f.readonly );
 	const fixed = fields.filter(
 		( f ) =>
-			f.readonly && item[ f.id ] !== '' && item[ f.id ] !== null && item[ f.id ] !== undefined
+			f.readonly &&
+			item[ f.id ] !== '' &&
+			item[ f.id ] !== null &&
+			item[ f.id ] !== undefined
 	);
 	const save = async () => {
 		setBusy( true );
@@ -369,13 +372,13 @@ function App( { name } ) {
 									'%d reviews hidden on the site.',
 									list.length,
 									'memorial-plugin'
-							  )
+								)
 							: _n(
 									'%d review shown on the site.',
 									'%d reviews shown on the site.',
 									list.length,
 									'memorial-plugin'
-							  ),
+								),
 						list.length
 					),
 				} );

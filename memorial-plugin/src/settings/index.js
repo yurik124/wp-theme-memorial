@@ -401,7 +401,9 @@ function PermsEdit( { def, value, onChange } ) {
 									__nextHasNoMarginBottom
 									label={ row.label + ' — ' + r.label }
 									className="memorial-plugin-settings__perm"
-									checked={ !! Number( v[ row.key ]?.[ r.id ] ) }
+									checked={
+										!! Number( v[ row.key ]?.[ r.id ] )
+									}
 									onChange={ ( on ) =>
 										set( row.key, r.id, on )
 									}
@@ -919,9 +921,7 @@ function withTabs( defs, card ) {
 				className="memorial-plugin-settings__tabs"
 				tabs={ tabbed.map( ( d ) => ( { name: d.id, title: d.tab } ) ) }
 			>
-				{ ( tab ) =>
-					card( tabbed.find( ( d ) => d.id === tab.name ) )
-				}
+				{ ( tab ) => card( tabbed.find( ( d ) => d.id === tab.name ) ) }
 			</TabPanel>
 		</>
 	);
