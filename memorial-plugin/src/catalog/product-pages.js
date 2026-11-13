@@ -110,9 +110,7 @@ export default function ProductPages() {
 												setMode( el.value )
 											}
 										/>
-										<label
-											htmlFor={ `pp-${ el.value }` }
-										>
+										<label htmlFor={ `pp-${ el.value }` }>
 											{ el.label }
 										</label>
 										<Hint text={ el.description } />
