@@ -239,12 +239,14 @@ body.folded .memorial-plugin-catalog__float {
 }
 
 @media (max-width: 960px) {
+
 	.memorial-plugin-catalog__float {
 		--memorial-plugin-menu: 36px;
 	}
 }
 
 @media (max-width: 782px) {
+
 	.memorial-plugin-catalog__float {
 		right: 8px;
 		left: 8px;

@@ -188,7 +188,7 @@ function memorial_plugin_types_save( $type, $values ) {
 		memorial_plugin_types_set_sort( $type, (string) $values['sort'] );
 	}
 	if ( isset( $values['colsPhone'] ) ) {
-		update_term_meta( $type, 'mem_cols_phone', 1 === absint( $values['colsPhone'] ) ? 1 : 2 );
+		update_term_meta( $type, 'mem_cols_phone', min( 2, max( 1, absint( $values['colsPhone'] ) ) ) );
 	}
 	if ( isset( $values['showSub'] ) ) {
 		update_term_meta( $type, 'mem_show_sub', empty( $values['showSub'] ) ? '0' : '1' );
