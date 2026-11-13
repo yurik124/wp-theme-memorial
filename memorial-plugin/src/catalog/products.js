@@ -11,6 +11,7 @@ import {
 	RadioControl,
 	SelectControl,
 	TabPanel,
+	TextareaControl,
 	TextControl,
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
@@ -18,20 +19,13 @@ import BooleanEdit from '../shared/boolean-edit';
 import { runAbility, download } from '../shared/abilities';
 import {
 	useListData,
-	moved,
 	bySiteOrder,
 	EditModal,
 	ModalButtons,
 	ListPage,
 	arrayFilters,
 } from './list-screen';
-import {
-	photosField,
-	termsField,
-	statusField,
-	orderField,
-	rub,
-} from './fields';
+import { photosField, termsField, statusField, rub } from './fields';
 
 const API = '/memorial-plugin/v1/catalog/products';
 const catsFilter = arrayFilters( [ 'cats' ] );
@@ -49,6 +43,37 @@ function toRow( p, specs ) {
 		row[ 'spec' + i ] = p.specs?.[ s.label ] || '';
 	} );
 	return row;
+}
+
+// Description of a product: plain text; one made in the editor with lists or photos is only shown here.
+function DescEdit( { data, field, onChange } ) {
+	if ( data.rich ) {
+		return (
+			<div className="memorial-plugin-catalog__desc">
+				<span className="memorial-plugin-catalog__desc-label">
+					{ field.label }
+				</span>
+				<p>{ data.desc }</p>
+				<p>
+					<a href={ data.edit }>
+						{ __(
+							'This description has formatting — change it in the editor',
+							'memorial-plugin'
+						) }
+					</a>
+				</p>
+			</div>
+		);
+	}
+	return (
+		<TextareaControl
+			__nextHasNoMarginBottom
+			label={ field.label }
+			rows={ 5 }
+			value={ data.desc || '' }
+			onChange={ ( v ) => onChange( { desc: v } ) }
+		/>
+	);
 }
 
 function PriceModal( { items, closeModal, run } ) {
@@ -232,6 +257,7 @@ export default function Products() {
 	const { data, error, merge, reload } = useListData( API );
 	const [ notice, setNotice ] = useState( null );
 	const [ editing, setEditing ] = useState( null );
+	const [ selection, setSelection ] = useState( [] );
 	const [ busy, setBusy ] = useState( false );
 	const [ typeId, setTypeId ] = useState(
 		() =>
@@ -244,7 +270,8 @@ export default function Products() {
 		titleField: 'title',
 		mediaField: 'photos',
 		fields: [ 'price', 'sub', 'cats', 'status' ],
-		sort: { field: 'order', direction: 'asc' },
+		// New products first: a product just added is at the top of the list.
+		sort: { field: 'date', direction: 'desc' },
 		perPage: 50,
 		page: 1,
 		filters: [],
@@ -285,7 +312,7 @@ export default function Products() {
 			label: c.name,
 		} ) );
 		return [
-			photosField( __( 'Photos', 'memorial-plugin' ) ),
+			photosField( __( 'Photos', 'memorial-plugin' ), data?.logo ),
 			{
 				id: 'title',
 				label: __( 'Title', 'memorial-plugin' ),
@@ -360,10 +387,40 @@ export default function Products() {
 						),
 					]
 				: [] ),
+			{
+				id: 'desc',
+				label: __( 'Description', 'memorial-plugin' ),
+				type: 'text',
+				enableGlobalSearch: true,
+				enableSorting: false,
+				filterBy: false,
+				Edit: DescEdit,
+				render: ( { item } ) =>
+					( item.desc || '' ).length > 80
+						? item.desc.slice( 0, 80 ) + '…'
+						: item.desc || '',
+			},
 			statusField(),
-			orderField(),
+			{
+				id: 'date',
+				label: __( 'Added', 'memorial-plugin' ),
+				type: 'integer',
+				filterBy: false,
+				readOnly: true,
+				render: ( { item } ) =>
+					item.date
+						? new Date( item.date * 1000 ).toLocaleDateString(
+								'ru-RU'
+						  )
+						: '',
+			},
 		];
-	}, [ type, specs ] );
+	}, [ type, specs, data?.logo ] );
+	// The form: everything but the date of adding.
+	const formFields = useMemo(
+		() => fields.filter( ( f ) => f.id !== 'date' ),
+		[ fields ]
+	);
 
 	const run = useCallback(
 		async ( list, body ) => {
@@ -376,6 +433,10 @@ export default function Products() {
 				} );
 				if ( ! res.conflicts ) {
 					merge( res );
+					// Merged or removed products are gone: nothing stays selected.
+					if ( [ 'merge', 'trash' ].includes( body.op ) ) {
+						setSelection( [] );
+					}
 					setNotice( {
 						status: 'success',
 						text: __( 'Done.', 'memorial-plugin' ),
@@ -427,38 +488,75 @@ export default function Products() {
 	}, [ type ] );
 
 	const create = useCallback(
-		async ( photos = [] ) => {
+		async ( photos = [], values = null ) => {
 			setBusy( true );
 			try {
 				const res = await apiFetch( {
 					path: API,
 					method: 'POST',
-					data: { type: type.id, photos },
+					data: values
+						? { type: type.id, values }
+						: { type: type.id, photos },
 				} );
 				merge( res );
+				setView( ( v ) => ( {
+					...v,
+					page: 1,
+					sort: { field: 'date', direction: 'desc' },
+				} ) );
 				setNotice( {
 					status: 'success',
 					text: sprintf(
 						/* translators: %d: number of products. */
 						_n(
-							'%d product added at the end of the list — fill in its price and specifications.',
-							'%d products added at the end of the list — fill in their prices and specifications.',
+							'%d product added at the top of the list. It is hidden from the site: fill it in and tick “Show on the site”.',
+							'%d products added at the top of the list. They are hidden from the site: fill them in and tick “Show on the site”.',
 							res.items.length,
 							'memorial-plugin'
 						),
 						res.items.length
 					),
 				} );
-				if ( res.items.length === 1 ) {
+				if ( ! values && res.items.length === 1 ) {
 					setEditing( toRow( res.items[ 0 ], specs ) );
 				}
 			} catch ( e ) {
+				if ( values ) {
+					throw e; // The form shows the reason and stays open.
+				}
 				setNotice( { status: 'error', text: e.message } );
 			} finally {
 				setBusy( false );
 			}
 		},
 		[ type, specs, merge ]
+	);
+
+	// A product that does not exist yet: the form of “Add product”; it is created only by “Save”.
+	const blank = useCallback(
+		() =>
+			toRow(
+				{
+					id: 0,
+					title: '',
+					status: 'draft',
+					type: type.id,
+					photos: [],
+					price: type.defaults?.price || 0,
+					from: !! type.defaults?.from,
+					unit: type.defaults?.unit || '',
+					sub: '',
+					desc: '',
+					specs: Object.fromEntries(
+						specs
+							.filter( ( s ) => s.default )
+							.map( ( s ) => [ s.label, s.default ] )
+					),
+					cats: type.defaults?.cats || [],
+				},
+				specs
+			),
+		[ type, specs ]
 	);
 
 	const save = useCallback(
@@ -478,6 +576,10 @@ export default function Products() {
 			if ( Object.keys( specValues ).length ) {
 				values.specs = specValues;
 			}
+			if ( ! item.id ) {
+				await create( [], values );
+				return;
+			}
 			const res = await apiFetch( {
 				path: API + '/' + item.id,
 				method: 'PUT',
@@ -489,22 +591,10 @@ export default function Products() {
 				text: __( 'Saved.', 'memorial-plugin' ),
 			} );
 		},
-		[ specs, merge ]
+		[ specs, merge, create ]
 	);
 
 	const actions = useMemo( () => {
-		const sorted = bySiteOrder( items );
-		const move =
-			( dir ) =>
-			( [ item ] ) => {
-				const ids = moved( sorted, item.id, dir );
-				if ( ids ) {
-					run(
-						ids.map( ( id ) => ( { id } ) ),
-						{ op: 'order' }
-					);
-				}
-			};
 		const cats = ( type?.cats || [] ).map( ( c ) => ( {
 			value: c.id,
 			label: c.name,
@@ -519,7 +609,7 @@ export default function Products() {
 			},
 			{
 				id: 'editor',
-				label: __( 'Edit text in the editor', 'memorial-plugin' ),
+				label: __( 'Open in the editor', 'memorial-plugin' ),
 				callback: ( [ item ] ) => ( window.location.href = item.edit ),
 			},
 			{
@@ -528,16 +618,6 @@ export default function Products() {
 				isEligible: ( item ) => !! item.view,
 				callback: ( [ item ] ) =>
 					window.open( item.view, '_blank', 'noopener' ),
-			},
-			{
-				id: 'up',
-				label: __( 'Move up', 'memorial-plugin' ),
-				callback: move( -1 ),
-			},
-			{
-				id: 'down',
-				label: __( 'Move down', 'memorial-plugin' ),
-				callback: move( 1 ),
 			},
 			{
 				id: 'price',
@@ -603,7 +683,7 @@ export default function Products() {
 		];
 		if ( cats.length ) {
 			list.splice(
-				6,
+				4,
 				0,
 				{
 					id: 'cats_add',
@@ -634,7 +714,7 @@ export default function Products() {
 			);
 		}
 		return list;
-	}, [ items, type, run, ability ] );
+	}, [ type, run, ability ] );
 
 	if ( error ) {
 		return (
@@ -670,7 +750,7 @@ export default function Products() {
 			<ListPage
 				title={ __( 'Products', 'memorial-plugin' ) }
 				subTitle={ __(
-					'Price, specifications and categories are changed right here; the description of a product — in the editor. Select several products to change prices or categories at once.',
+					'Price, specifications, categories and the description are changed right here. Select several products to change prices or categories at once.',
 					'memorial-plugin'
 				) }
 				actions={
@@ -704,7 +784,7 @@ export default function Products() {
 									/>
 									<Button
 										variant="secondary"
-										onClick={ () => create() }
+										onClick={ () => setEditing( blank() ) }
 										disabled={ busy }
 									>
 										{ __(
@@ -759,24 +839,21 @@ export default function Products() {
 				setView={ setView }
 				prefilter={ catsFilter }
 				loading={ ! data }
+				selection={ selection }
+				setSelection={ setSelection }
 			/>
 			{ editing && (
 				<EditModal
-					title={ editing.title }
+					title={
+						editing.id
+							? editing.title
+							: __( 'New product', 'memorial-plugin' )
+					}
 					item={ editing }
-					fields={ fields }
+					fields={ formFields }
+					isNew={ ! editing.id }
 					onSave={ ( edits ) => save( editing, edits ) }
 					onClose={ () => setEditing( null ) }
-					extra={
-						<p>
-							<a href={ editing.edit }>
-								{ __(
-									'Description of the product — in the editor',
-									'memorial-plugin'
-								) }
-							</a>
-						</p>
-					}
 				/>
 			) }
 		</>

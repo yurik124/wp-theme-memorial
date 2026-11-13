@@ -51,6 +51,17 @@ function memorial_plugin_laurel( $kind, $arg = '' ) {
  * @return string SVG markup or a character.
  */
 function memorial_plugin_noimg_mark() {
+	// A product without a photo shows the logo of the site: the theme gives it through the filter
+	// (its own logo, the site icon or the laurel mark with the letter); another theme — the logo it has set.
+	$logo = (string) apply_filters( 'memorial_plugin_logo', '', 96 );
+	if ( '' === $logo ) {
+		$id   = (int) get_theme_mod( 'custom_logo' );
+		$url  = $id ? wp_get_attachment_image_url( $id, 'medium' ) : get_site_icon_url( 192 );
+		$logo = $url ? '<img src="' . esc_url( $url ) . '" alt="" loading="lazy" decoding="async">' : '';
+	}
+	if ( '' !== $logo ) {
+		return '<span class="memorial-plugin-logo">' . $logo . '</span>';
+	}
 	$mark = memorial_plugin_laurel( 'wreath' );
 	return '' !== $mark ? $mark : '✝';
 }

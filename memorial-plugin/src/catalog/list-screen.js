@@ -2,7 +2,7 @@
  * Common part of the catalog lists: loading, DataViews, the quick edit form, notices, reordering.
  */
 import { useCallback, useEffect, useMemo, useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { Button, Flex, Modal, Notice } from '@wordpress/components';
 import {
@@ -85,8 +85,17 @@ export function bySiteOrder( items ) {
  * @param {() => void} props.onSave  Gets the changed values; returns a promise.
  * @param {() => void} props.onClose Close.
  * @param {Element}    props.extra   Something to show above the form (links).
+ * @param {boolean}    props.isNew   The item does not exist yet: “Save” creates it, so it is active at once.
  */
-export function EditModal( { title, item, fields, onSave, onClose, extra } ) {
+export function EditModal( {
+	title,
+	item,
+	fields,
+	onSave,
+	onClose,
+	extra,
+	isNew,
+} ) {
 	const [ edits, setEdits ] = useState( {} );
 	const [ busy, setBusy ] = useState( false );
 	const [ error, setError ] = useState( '' );
@@ -128,7 +137,9 @@ export function EditModal( { title, item, fields, onSave, onClose, extra } ) {
 				<Button
 					variant="primary"
 					isBusy={ busy }
-					disabled={ busy || ! Object.keys( edits ).length }
+					disabled={
+						busy || ( ! isNew && ! Object.keys( edits ).length )
+					}
 					onClick={ save }
 				>
 					{ __( 'Save', 'memorial-plugin' ) }
@@ -175,6 +186,70 @@ export function ModalButtons( {
 	);
 }
 
+// The actions for the selected items above the table too: the same ones the table shows under itself.
+function BulkBar( { items, selection, actions, onClear } ) {
+	const [ modal, setModal ] = useState( null );
+	const chosen = useMemo( () => {
+		const ids = new Set( ( selection || [] ).map( String ) );
+		return items.filter( ( i ) => ids.has( String( i.id ) ) );
+	}, [ items, selection ] );
+	if ( ! chosen.length ) {
+		return null;
+	}
+	const usable = actions
+		.filter( ( a ) => a.supportsBulk )
+		.map( ( a ) => ( {
+			action: a,
+			list: a.isEligible ? chosen.filter( a.isEligible ) : chosen,
+		} ) )
+		.filter( ( x ) => x.list.length );
+	return (
+		<div className="memorial-plugin-catalog__bulk">
+			<strong>
+				{ sprintf(
+					/* translators: %d: number of selected items. */
+					_n(
+						'%d item selected',
+						'%d items selected',
+						chosen.length,
+						'memorial-plugin'
+					),
+					chosen.length
+				) }
+			</strong>
+			{ usable.map( ( { action, list } ) => (
+				<Button
+					key={ action.id }
+					size="compact"
+					variant="secondary"
+					isDestructive={ action.isDestructive }
+					onClick={ () =>
+						action.RenderModal
+							? setModal( { action, list } )
+							: action.callback( list )
+					}
+				>
+					{ action.label.replace( /…$/, '' ) }
+				</Button>
+			) ) }
+			<Button size="compact" variant="tertiary" onClick={ onClear }>
+				{ __( 'Clear the selection', 'memorial-plugin' ) }
+			</Button>
+			{ modal && (
+				<Modal
+					title={ modal.action.label.replace( /…$/, '' ) }
+					onRequestClose={ () => setModal( null ) }
+				>
+					<modal.action.RenderModal
+						items={ modal.list }
+						closeModal={ () => setModal( null ) }
+					/>
+				</Modal>
+			) }
+		</div>
+	);
+}
+
 /**
  * A list page: title, buttons, notices, optional tabs and the DataViews table.
  *
@@ -192,6 +267,8 @@ export function ModalButtons( {
  * @param {() => void} props.setView   Change the view.
  * @param {() => void} props.prefilter Filters that DataViews cannot do itself (array fields): (items, view) → items.
  * @param {boolean}    props.loading   Loading.
+ * @param {string[]}   props.selection    Selected item IDs (optional: the list keeps them itself).
+ * @param {() => void} props.setSelection Change the selection.
  */
 export function ListPage( {
 	title,
@@ -207,7 +284,12 @@ export function ListPage( {
 	setView,
 	prefilter,
 	loading,
+	selection: outerSelection,
+	setSelection: setOuterSelection,
 } ) {
+	const [ ownSelection, setOwnSelection ] = useState( [] );
+	const selection = outerSelection ?? ownSelection;
+	const setSelection = setOuterSelection ?? setOwnSelection;
 	const { data, paginationInfo } = useMemo( () => {
 		let list = items || [];
 		let v = view;
@@ -225,6 +307,12 @@ export function ListPage( {
 					</Notice>
 				) }
 				{ tabs }
+				<BulkBar
+					items={ items || [] }
+					selection={ selection }
+					actions={ actionsOf || [] }
+					onClear={ () => setSelection( [] ) }
+				/>
 				<DataViews
 					data={ data }
 					fields={ fields }
@@ -232,7 +320,9 @@ export function ListPage( {
 					onChangeView={ setView }
 					actions={ actionsOf }
 					paginationInfo={ paginationInfo }
-					defaultLayouts={ { table: {}, grid: {}, list: {} } }
+					selection={ selection }
+					onChangeSelection={ setSelection }
+					defaultLayouts={ { table: {} } }
 					getItemId={ ( item ) => String( item.id ) }
 					isLoading={ loading }
 				/>

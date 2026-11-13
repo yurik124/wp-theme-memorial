@@ -161,8 +161,93 @@ function memorial_plugin_type_defaults( $type_id ) {
 		'price' => (int) ( $d['price'] ?? 0 ) ? (int) $d['price'] : '',
 		'from'  => ! empty( $d['from'] ),
 		'unit'  => (string) ( $d['unit'] ?? '' ),
+		'cats'  => array_values( array_filter( array_map( 'absint', (array) ( $d['cats'] ?? array() ) ), static fn( $c ) => $c && term_exists( $c, 'mem_cat' ) ) ),
 	);
 }
+
+/**
+ * Ways to order the products of a type or a category on the site.
+ *
+ * @return array<string,string> Key => label.
+ */
+function memorial_plugin_sort_options() {
+	return array(
+		'new'        => __( 'Newest first', 'memorial-plugin' ),
+		'old'        => __( 'Oldest first', 'memorial-plugin' ),
+		'price_asc'  => __( 'Cheapest first', 'memorial-plugin' ),
+		'price_desc' => __( 'Most expensive first', 'memorial-plugin' ),
+	);
+}
+
+/**
+ * Order of the products of a term: its own setting, otherwise of the nearest ancestor that has one.
+ * Nothing set anywhere (terms made before this setting) — '' : the former order, as arranged by hand.
+ *
+ * @param int $term_id Term ID.
+ * @return string '' or a key of memorial_plugin_sort_options().
+ */
+function memorial_plugin_term_sort( $term_id ) {
+	$guard = 0;
+	while ( $term_id && $guard++ < 10 ) {
+		$s = (string) get_term_meta( $term_id, 'mem_sort', true );
+		if ( isset( memorial_plugin_sort_options()[ $s ] ) ) {
+			return $s;
+		}
+		$t       = get_term( $term_id, 'mem_cat' );
+		$term_id = $t && ! is_wp_error( $t ) ? (int) $t->parent : 0;
+	}
+	return '';
+}
+
+/**
+ * Products in the order of the setting.
+ *
+ * @param WP_Post[] $posts Products (in the former order).
+ * @param string    $sort  '' or a key of memorial_plugin_sort_options().
+ * @return WP_Post[]
+ */
+function memorial_plugin_sort_products( array $posts, $sort ) {
+	if ( '' === $sort || count( $posts ) < 2 ) {
+		return $posts;
+	}
+	$price = static fn( $p ) => (int) get_post_meta( $p->ID, '_mem_price', true );
+	usort(
+		$posts,
+		static function ( $a, $b ) use ( $sort, $price ) {
+			switch ( $sort ) {
+				case 'old':
+					return strcmp( $a->post_date, $b->post_date ) ? strcmp( $a->post_date, $b->post_date ) : $a->ID <=> $b->ID;
+				case 'price_asc':
+				case 'price_desc':
+					$pa = $price( $a );
+					$pb = $price( $b );
+					// “Price on request” (0) always goes last.
+					if ( ! $pa || ! $pb ) {
+						return $pa === $pb ? $b->ID <=> $a->ID : ( $pa ? -1 : 1 );
+					}
+					if ( $pa !== $pb ) {
+						return 'price_asc' === $sort ? $pa <=> $pb : $pb <=> $pa;
+					}
+					return $b->ID <=> $a->ID;
+				default:
+					return strcmp( $b->post_date, $a->post_date ) ? strcmp( $b->post_date, $a->post_date ) : $b->ID <=> $a->ID;
+			}
+		}
+	);
+	return $posts;
+}
+
+/**
+ * A new type or category shows its newest products first.
+ *
+ * @param int $term_id Term ID.
+ */
+function memorial_plugin_new_term_sort( $term_id ) {
+	if ( '' === (string) get_term_meta( $term_id, 'mem_sort', true ) ) {
+		update_term_meta( $term_id, 'mem_sort', 'new' );
+	}
+}
+add_action( 'created_mem_cat', 'memorial_plugin_new_term_sort' );
 
 /** Применить значения по умолчанию к новому товару
  *
@@ -179,6 +264,11 @@ function memorial_plugin_apply_type_defaults( $post_id, $type_id ) {
 	}
 	if ( '' !== $d['unit'] ) {
 		update_post_meta( $post_id, '_mem_unit', $d['unit'] );
+	}
+	// Categories of a new product: with them the product lies only in them, not right in the type.
+	$cats = array_values( array_filter( $d['cats'], static fn( $c ) => $c !== (int) $type_id && memorial_plugin_type_root( $c ) === (int) $type_id ) );
+	if ( $cats ) {
+		wp_set_object_terms( $post_id, $cats, 'mem_cat' );
 	}
 	$lines = array();
 	foreach ( memorial_plugin_type_fields( $type_id, false ) as $f ) {

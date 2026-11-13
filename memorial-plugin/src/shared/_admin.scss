@@ -294,3 +294,60 @@ body:has(.memorial-plugin-admin) .components-modal__frame {
 		padding-left: 0;
 	}
 }
+
+// Round “?” — an explanation of a field, a group or a card (src/shared/hint.js).
+.memorial-plugin-hint {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+	margin-left: 8px;
+	vertical-align: middle;
+
+	&__btn {
+		display: inline-grid;
+		flex: none;
+		place-items: center;
+		width: 20px;
+		height: 20px;
+		padding: 0;
+		border: 1px solid #a9b796;
+		border-radius: 50%;
+		background: #f1f4ec;
+		color: #3f4d36;
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1;
+		cursor: help;
+
+		&:hover,
+		&:focus-visible,
+		&[aria-expanded="true"] {
+			border-color: #5e7052;
+			background: #5e7052;
+			color: #fff;
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+			outline-offset: 2px;
+		}
+	}
+
+	&__label {
+		color: #5f6158;
+		font-size: 13px;
+		font-weight: 400;
+	}
+}
+
+.memorial-plugin-hint__pop .components-popover__content {
+	width: max-content;
+	max-width: min(340px, 90vw);
+	padding: 12px 14px;
+	border-radius: 10px;
+	color: #1f211c;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.5;
+	white-space: normal;
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Товар: фото (или лавровый венок, если фото нет).
+ * Товар: фото (или логотип сайта, если фото нет).
  *
  * @package memorial-plugin
  */
@@ -16,7 +16,7 @@ if ( ! $id ) {
 if ( has_post_thumbnail( $id ) ) {
 	echo get_the_post_thumbnail( $id, 'large', array( 'fetchpriority' => 'high' ) );
 } else {
-	echo '<span class="card__noimg">' . memorial_plugin_laurel( 'wreath' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG of the plugin.
+	echo '<span class="card__noimg">' . memorial_plugin_noimg_mark() . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the logo: markup of the theme or an escaped <img>.
 }
 ?>
 </div>

@@ -94,6 +94,16 @@ function memorial_plugin_resolve_cat( $val, $page_id = 0 ) {
  * @param int $term_id Term ID.
  */
 function memorial_plugin_cat_products( $term_id ) {
+	return memorial_plugin_sort_products( memorial_plugin_cat_products_raw( $term_id ), memorial_plugin_term_sort( $term_id ) );
+}
+
+/**
+ * Products of one category in the former order (by hand, then by date).
+ *
+ * @param int $term_id Term ID.
+ * @return WP_Post[]
+ */
+function memorial_plugin_cat_products_raw( $term_id ) {
 	return get_posts(
 		array(
 			'post_type'      => 'mem_product',
@@ -295,6 +305,8 @@ add_shortcode(
 			foreach ( memorial_plugin_sorted_children( $k->term_id ) as $kk ) {
 				$items = array_merge( $items, memorial_plugin_cat_products( $kk->term_id ) );
 			}
+			// A section with sub-sections is one list on the page: ordered as the section itself is set.
+			$items = memorial_plugin_sort_products( $items, memorial_plugin_term_sort( $k->term_id ) );
 			if ( $items ) {
 				$sections[] = array( $k, $items, true );
 			}

@@ -96,5 +96,8 @@ function memorial_theme_logo_mark( $size = 44 ) {
 	return '<span class="logo__mark" aria-hidden="true">' . memorial_theme_laurel( 'mark', memorial_theme_logo_letter() ) . '</span>';
 }
 
+/* Логотип для блоков плагина (товар без фото) */
+add_filter( 'memorial_plugin_logo', fn( $html, $size = 96 ) => memorial_theme_logo_mark( (int) $size ), 10, 2 );
+
 /* Лавр для блоков плагина (пакеты, «нет фото» в каталоге) — через фильтр Memorial Plugin */
 add_filter( 'memorial_plugin_laurel', fn( $html, $kind, $arg = '' ) => memorial_theme_laurel( $kind, $arg ), 10, 3 );

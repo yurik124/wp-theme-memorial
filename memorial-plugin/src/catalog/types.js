@@ -28,6 +28,7 @@ import {
 import { Page } from '@wordpress/admin-ui';
 import BooleanEdit from '../shared/boolean-edit';
 import { ModalButtons, moved } from './list-screen';
+import { termsField } from './fields';
 
 const API = '/memorial-plugin/v1/catalog/';
 
@@ -56,9 +57,30 @@ const typeForm = ( t ) => ( {
 	price: t.defaults.price || 0,
 	from: !! t.defaults.from,
 	unit: t.defaults.unit,
+	cats: t.defaults.cats || [],
 	ratio: t.ratio,
 	cols: t.cols || '',
+	sort: t.sort || '',
 } );
+
+// How the products go on the site: '' is kept only for types made before this setting.
+const sortElements = ( sorts, own, inherit ) => [
+	...( inherit
+		? [ { value: '', label: __( 'As in the type', 'memorial-plugin' ) } ]
+		: [] ),
+	...( ! inherit && ! own
+		? [
+				{
+					value: '',
+					label: __(
+						'Former order (as arranged by hand)',
+						'memorial-plugin'
+					),
+				},
+		  ]
+		: [] ),
+	...( sorts || [] ),
+];
 
 function TypeSettings( { type, ratios, save } ) {
 	const [ data, setData ] = useState( () => typeForm( type ) );
@@ -106,6 +128,31 @@ function TypeSettings( { type, ratios, save } ) {
 				placeholder: __( 'per piece', 'memorial-plugin' ),
 				type: 'text',
 			},
+			...( type.cats.length
+				? [
+						termsField(
+							'cats',
+							__(
+								'Categories of a new product',
+								'memorial-plugin'
+							),
+							type.cats.map( ( c ) => ( {
+								value: c.id,
+								label: '— '.repeat( c.depth ) + c.name,
+							} ) )
+						),
+				  ]
+				: [] ),
+			{
+				id: 'sort',
+				label: __( 'Order of products on the site', 'memorial-plugin' ),
+				description: __(
+					'How the products of this type go when a visitor opens the section. A category can have its own order.',
+					'memorial-plugin'
+				),
+				type: 'text',
+				elements: sortElements( type.sorts, type.sort, false ),
+			},
 			{
 				id: 'ratio',
 				label: __( 'Photos in the cards', 'memorial-plugin' ),
@@ -125,7 +172,7 @@ function TypeSettings( { type, ratios, save } ) {
 				type: 'integer',
 			},
 		],
-		[ ratios ]
+		[ ratios, type ]
 	);
 	return (
 		<Card>
@@ -160,10 +207,12 @@ function TypeSettings( { type, ratios, save } ) {
 								desc: data.desc,
 								ratio: data.ratio,
 								cols: data.cols,
+								sort: data.sort,
 								defaults: {
 									price: data.price,
 									from: data.from,
 									unit: data.unit,
+									cats: data.cats,
 								},
 							} );
 							setBusy( false );
@@ -444,11 +493,13 @@ function Specs( { type, save } ) {
 	);
 }
 
-function CatForm( { cat, parents, onCancel, onOk } ) {
+function CatForm( { cat, parents, sorts, onCancel, onOk } ) {
 	const [ data, setData ] = useState( {
 		name: cat?.name || '',
 		desc: cat?.desc || '',
 		parent: parents[ 0 ]?.value,
+		// A new category: newest products first.
+		sort: cat ? cat.sort || '' : 'new',
 	} );
 	const [ busy, setBusy ] = useState( false );
 	const fields = [
@@ -472,6 +523,12 @@ function CatForm( { cat, parents, onCancel, onOk } ) {
 			),
 			type: 'text',
 			Edit: TextareaEdit,
+		},
+		{
+			id: 'sort',
+			label: __( 'Order of products on the site', 'memorial-plugin' ),
+			type: 'text',
+			elements: sortElements( sorts, data.sort, true ),
 		},
 	];
 	return (
@@ -590,11 +647,13 @@ function Cats( { type, call } ) {
 					<CatForm
 						cat={ item }
 						parents={ parents }
+						sorts={ type.sorts }
 						onCancel={ closeModal }
 						onOk={ async ( d ) => {
 							await call( 'cats/' + item.id, 'PUT', {
 								name: d.name,
 								desc: d.desc,
+								sort: d.sort,
 							} );
 							closeModal();
 						} }
@@ -687,12 +746,14 @@ function Cats( { type, call } ) {
 					>
 						<CatForm
 							parents={ parents }
+							sorts={ type.sorts }
 							onCancel={ () => setAdding( false ) }
 							onOk={ async ( d ) => {
 								await call( 'cats', 'POST', {
 									name: d.name,
 									parent: d.parent,
 									desc: d.desc,
+									sort: d.sort,
 								} );
 								setAdding( false );
 							} }

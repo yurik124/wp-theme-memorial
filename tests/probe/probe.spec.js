@@ -745,7 +745,8 @@ test.describe( 'слепки страниц', () => {
 test.describe( 'аудит товаров', () => {
 	test.use( { viewport: { width: 1440, height: 900 } } );
 	test( 'аудит товаров', async ( { page } ) => {
-		test.setTimeout( 600_000 );
+		test.setTimeout( 300_000 );
+		page.setDefaultTimeout( 15000 );
 		const errs = errorsOf( page );
 		await page.goto( '/wp-login.php' );
 		await page.fill( '#user_login', 'probe' );
@@ -762,50 +763,50 @@ test.describe( 'аудит товаров', () => {
 		out.styles = await page.evaluate( () =>
 			[ ...document.querySelectorAll( 'link[rel=stylesheet]' ) ].map( ( l ) => l.href.replace( /^https?:\/\/[^/]+/, '' ) ).filter( ( h ) => /dataviews|memorial|components|admin-ui/.test( h ) )
 		);
+		const tick = ( n ) => page.evaluate( ( k ) => {
+			const boxes = [ ...document.querySelectorAll( '.dataviews-view-table tbody tr' ) ].map( ( tr ) => tr.querySelector( '[role=checkbox], input[type=checkbox]' ) );
+			boxes.slice( 0, k ).forEach( ( b ) => b && b.getAttribute( 'aria-checked' ) !== 'true' && ! b.checked && b.click() );
+		}, n );
 		await step( 'select1', async () => {
-			await page.locator( '.dataviews-view-table tbody tr input[type=checkbox]' ).first().check( { force: true } );
-			await page.waitForTimeout( 400 );
+			await tick( 1 );
+			await page.waitForTimeout( 600 );
 			await shot( page, 'prod-02-selected-1' );
-			out.bulkHtml = await page.evaluate( () => ( document.querySelector( '.dataviews-bulk-actions-footer__container, .dataviews-footer' )?.outerHTML || '' ).slice( 0, 6000 ) );
-			out.headHtml = await page.evaluate( () => ( document.querySelector( '.dataviews-view-table thead' )?.outerHTML || '' ).slice( 0, 3000 ) );
+			out.wrapperHtml = await page.evaluate( () => {
+				const w = document.querySelector( '.dataviews-wrapper' );
+				const c = w.cloneNode( true );
+				c.querySelectorAll( 'tbody tr:nth-child(n+3)' ).forEach( ( x ) => x.remove() );
+				c.querySelectorAll( 'svg' ).forEach( ( x ) => x.remove() );
+				return c.outerHTML.slice( 0, 14000 );
+			} );
 		} );
 		await step( 'select7', async () => {
-			const boxes = page.locator( '.dataviews-view-table tbody tr input[type=checkbox]' );
-			for ( let i = 1; i < 7; i++ ) { await boxes.nth( i ).check( { force: true } ); }
-			await page.waitForTimeout( 400 );
+			await tick( 7 );
+			await page.waitForTimeout( 600 );
 			await shot( page, 'prod-03-selected-7' );
 			await page.evaluate( () => window.scrollTo( 0, 900 ) );
-			await page.waitForTimeout( 400 );
+			await page.waitForTimeout( 500 );
 			await shot( page, 'prod-04-scrolled' );
+			out.sticky = await page.evaluate( () => [ ...document.querySelectorAll( '#wpbody-content *' ) ].filter( ( e ) => [ 'sticky', 'fixed' ].includes( getComputedStyle( e ).position ) ).slice( 0, 12 ).map( ( e ) => ( { cls: String( e.className ).slice( 0, 120 ), pos: getComputedStyle( e ).position, top: getComputedStyle( e ).top, z: getComputedStyle( e ).zIndex, rect: e.getBoundingClientRect().toJSON() } ) ) );
 			await page.evaluate( () => window.scrollTo( 0, 0 ) );
 		} );
 		await step( 'viewconfig', async () => {
-			await page.locator( '.dataviews__view-actions button[aria-label], .dataviews__view-actions button' ).last().click();
-			await page.waitForTimeout( 600 );
-			await shot( page, 'prod-05-view-config' );
-			out.configHtml = await page.evaluate( () => ( document.querySelector( '.components-popover:last-of-type, .components-dropdown__content' )?.outerHTML || '' ).slice( 0, 12000 ) );
-			await page.keyboard.press( 'Escape' );
-		} );
-		await step( 'grid', async () => {
-			out.actionsHtml = await page.evaluate( () => ( document.querySelector( '.dataviews__view-actions' )?.outerHTML || '' ).slice( 0, 4000 ) );
 			const btns = page.locator( '.dataviews__view-actions button' );
-			const n = await btns.count();
-			await btns.nth( n - 2 ).click();
-			await page.waitForTimeout( 500 );
-			await shot( page, 'prod-06-layout-menu' );
-			await page.getByRole( 'menuitemradio' ).nth( 1 ).click();
-			await page.waitForTimeout( 1000 );
-			await shot( page, 'prod-07-grid' );
-			out.gridHtml = await page.evaluate( () => ( document.querySelector( '.dataviews-wrapper' )?.innerHTML || '' ).slice( 0, 5000 ) );
-			out.gridCss = await page.evaluate( () => {
-				const el = document.querySelector( '[class*="dataviews-view-grid"]' );
-				return el ? { cls: el.className, display: getComputedStyle( el ).display, cols: getComputedStyle( el ).gridTemplateColumns } : null;
+			await btns.last().click( { timeout: 5000 } );
+			await page.waitForTimeout( 800 );
+			await shot( page, 'prod-05-view-config' );
+			out.configHtml = await page.evaluate( () => {
+				const p = [ ...document.querySelectorAll( '.components-popover, [role=dialog]' ) ].pop();
+				if ( ! p ) { return ''; }
+				const c = p.cloneNode( true );
+				c.querySelectorAll( 'svg' ).forEach( ( x ) => x.remove() );
+				return c.outerHTML.slice( 0, 9000 );
 			} );
+			await page.keyboard.press( 'Escape' );
 		} );
 		await step( 'edit', async () => {
 			await page.goto( '/wp-admin/admin.php?page=mem-products', { waitUntil: 'load' } );
 			await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } );
-			await page.locator( '.dataviews-view-table tbody tr' ).first().getByRole( 'button' ).first().click();
+			await page.locator( '.dataviews-view-table tbody tr' ).first().getByRole( 'button', { name: /Изменить|Edit/ } ).first().click( { timeout: 8000 } );
 			await page.waitForTimeout( 800 );
 			await shot( page, 'prod-08-edit-modal', { fullPage: true } );
 		} );

@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function memorial_plugin_product_pages_mode() {
 	$m = get_option( 'mem_product_pages', 'auto' );
-	return in_array( $m, array( 'auto', 'all' ), true ) ? $m : 'auto';
+	return in_array( $m, array( 'auto', 'all', 'none' ), true ) ? $m : 'auto'; // none — no product has its own page.
 }
 
 /** Есть ли у товара своя страница
@@ -29,6 +29,9 @@ function memorial_plugin_product_has_page( $id = 0 ) {
 	$id = $id ? $id : get_the_ID();
 	if ( memorial_plugin_product_pages_mode() === 'all' ) {
 		return true;
+	}
+	if ( memorial_plugin_product_pages_mode() === 'none' ) {
+		return false;
 	}
 	return trim( wp_strip_all_tags( (string) get_post_field( 'post_content', $id ) ) ) !== '';
 }
@@ -195,12 +198,12 @@ add_action(
 					'args'                => array(
 						'mode' => array(
 							'type'     => 'string',
-							'enum'     => array( 'auto', 'all' ),
+							'enum'     => array( 'auto', 'all', 'none' ),
 							'required' => true,
 						),
 					),
 					'callback'            => function ( WP_REST_Request $request ) {
-						update_option( 'mem_product_pages', 'all' === $request['mode'] ? 'all' : 'auto' );
+						update_option( 'mem_product_pages', in_array( $request['mode'], array( 'all', 'none' ), true ) ? $request['mode'] : 'auto' );
 						return rest_ensure_response( memorial_plugin_product_pages_data() );
 					},
 				),

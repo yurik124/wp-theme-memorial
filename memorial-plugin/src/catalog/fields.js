@@ -2,12 +2,14 @@
  * Field kinds shared by the catalog lists: photos, a set of terms (categories, kinds), status, order, money.
  */
 import { __, sprintf } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
 import {
 	Button,
 	CheckboxControl,
 	Flex,
 	FlexBlock,
 	FlexItem,
+	Modal,
 	TextControl,
 } from '@wordpress/components';
 import Photos from '../shared/photos';
@@ -25,38 +27,80 @@ export const rub = ( n ) =>
 		Number( n || 0 ).toLocaleString( 'ru-RU' )
 	);
 
+// The photo of a row: a click opens it large, with the other photos of the item one under another.
+function PhotoCell( { item, logo } ) {
+	const [ open, setOpen ] = useState( false );
+	const photos = item.photos || [];
+	const [ first ] = photos;
+	if ( ! first ) {
+		// Without a photo — the logo of the site, as on the site itself.
+		return logo ? (
+			<span className="memorial-plugin-catalog__photo is-logo">
+				<img
+					src={ logo }
+					alt={ __( 'No photo', 'memorial-plugin' ) }
+					title={ __( 'No photo', 'memorial-plugin' ) }
+				/>
+			</span>
+		) : (
+			<span className="memorial-plugin-catalog__nophoto">
+				{ __( 'No photo', 'memorial-plugin' ) }
+			</span>
+		);
+	}
+	return (
+		<>
+			<button
+				type="button"
+				className="memorial-plugin-catalog__photo"
+				aria-label={ sprintf(
+					/* translators: %s: item title. */
+					__( 'Enlarge the photo: %s', 'memorial-plugin' ),
+					item.title || ''
+				) }
+				onClick={ ( e ) => {
+					e.stopPropagation();
+					setOpen( true );
+				} }
+			>
+				<img src={ first.url } alt="" />
+				{ photos.length > 1 && (
+					<span className="memorial-plugin-catalog__count">
+						{ photos.length }
+					</span>
+				) }
+			</button>
+			{ open && (
+				<Modal
+					title={ item.title || __( 'Photo', 'memorial-plugin' ) }
+					size="large"
+					onRequestClose={ () => setOpen( false ) }
+				>
+					<div className="memorial-plugin-catalog__big">
+						{ photos.map( ( p ) => (
+							<img key={ p.id } src={ p.big || p.url } alt="" />
+						) ) }
+					</div>
+				</Modal>
+			) }
+		</>
+	);
+}
+
 /**
- * Photos: [{id, url}] (the first one is the main photo).
+ * Photos: [{id, url, big}] (the first one is the main photo).
  *
  * @param {string} label Label.
+ * @param {string} logo  URL of the site logo, shown for an item without photos.
  * @return {Object} Field.
  */
-export function photosField( label ) {
+export function photosField( label, logo = '' ) {
 	return {
 		id: 'photos',
 		label,
 		enableSorting: false,
 		enableHiding: false,
-		render: ( { item } ) => {
-			const [ first ] = item.photos || [];
-			if ( ! first ) {
-				return (
-					<span className="memorial-plugin-catalog__nophoto">
-						{ __( 'No photo', 'memorial-plugin' ) }
-					</span>
-				);
-			}
-			return (
-				<span className="memorial-plugin-catalog__photo">
-					<img src={ first.url } alt="" />
-					{ item.photos.length > 1 && (
-						<span className="memorial-plugin-catalog__count">
-							{ item.photos.length }
-						</span>
-					) }
-				</span>
-			);
-		},
+		render: ( { item } ) => <PhotoCell item={ item } logo={ logo } />,
 		Edit: ( { data, field, onChange } ) => (
 			<Photos
 				label={ field.label }
@@ -146,6 +190,17 @@ export function statusField() {
 			{ value: 'draft', label: __( 'Hidden', 'memorial-plugin' ) },
 		],
 		filterBy: { operators: [ 'is' ] },
+		// In the form — one checkbox instead of a choice of two words.
+		Edit: ( { data, onChange } ) => (
+			<CheckboxControl
+				__nextHasNoMarginBottom
+				label={ __( 'Show on the site', 'memorial-plugin' ) }
+				checked={ data.status === 'publish' }
+				onChange={ ( on ) =>
+					onChange( { status: on ? 'publish' : 'draft' } )
+				}
+			/>
+		),
 		render: ( { item } ) =>
 			item.status === 'publish' ? (
 				<span className="memorial-plugin-badge">

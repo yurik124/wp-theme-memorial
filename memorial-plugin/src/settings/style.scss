@@ -16,55 +16,6 @@
 		margin: 0 0 4px;
 	}
 
-	// Round “?” — the explanation of a field, a group or a card; opens on hover, focus or click.
-	&__hint {
-		display: inline-flex;
-		gap: 6px;
-		align-items: center;
-		margin-left: 8px;
-		vertical-align: middle;
-	}
-
-	&__help.is-hint &__hint {
-		margin-left: 0;
-	}
-
-	&__hint-btn {
-		display: inline-grid;
-		flex: none;
-		place-items: center;
-		width: 20px;
-		height: 20px;
-		padding: 0;
-		border: 1px solid #a9b796;
-		border-radius: 50%;
-		background: #f1f4ec;
-		color: #3f4d36;
-		font-size: 12px;
-		font-weight: 700;
-		line-height: 1;
-		cursor: help;
-
-		&:hover,
-		&:focus-visible,
-		&[aria-expanded="true"] {
-			border-color: #5e7052;
-			background: #5e7052;
-			color: #fff;
-		}
-
-		&:focus-visible {
-			outline: 2px solid var(--wp-admin-theme-color, #3858e9);
-			outline-offset: 2px;
-		}
-	}
-
-	&__hint-label {
-		color: #5f6158;
-		font-size: 13px;
-		font-weight: 400;
-	}
-
 	&__label-row {
 		display: inline-flex;
 		align-items: center;
@@ -381,19 +332,6 @@
 	line-height: 1.6;
 }
 
-// The text of a hint: readable width, normal weight.
-.memorial-plugin-settings__hint-pop .components-popover__content {
-	width: max-content;
-	max-width: min(340px, 90vw);
-	padding: 12px 14px;
-	border-radius: 10px;
-	color: #1f211c;
-	font-size: 14px;
-	font-weight: 400;
-	line-height: 1.5;
-	white-space: normal;
-}
-
 // Checkboxes never share a line with text fields: each one takes its own row, the box and its name on one line.
 .memorial-plugin-admin .dataforms-layouts__wrapper > .dataforms-layouts-regular__field:has(.components-checkbox-control),
 .memorial-plugin-settings__repeater:not(.is-inline) > .memorial-plugin-settings__row > .memorial-plugin-settings__row-main > .memorial-plugin-settings__fields > * > *:has(.components-checkbox-control) {
@@ -416,7 +354,7 @@
 		line-height: 1.4;
 	}
 
-	label.components-checkbox-control__label .memorial-plugin-settings__hint-btn {
+	label.components-checkbox-control__label .memorial-plugin-hint__btn {
 		font-size: 12px;
 		font-weight: 700;
 		line-height: 1;
@@ -535,4 +473,8 @@
 
 .memorial-plugin-settings__rewio .components-checkbox-control {
 	padding: 0;
+}
+
+.memorial-plugin-settings__help.is-hint .memorial-plugin-hint {
+	margin-left: 0;
 }

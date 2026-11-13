@@ -24,7 +24,6 @@ import {
 	Button,
 	CheckboxControl,
 	Notice,
-	Popover,
 	SelectControl,
 	Spinner,
 	TextareaControl,
@@ -35,6 +34,7 @@ import { MediaUpload } from '@wordpress/media-utils';
 import { DataForm } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
 
+import Hint from '../shared/hint';
 import RewioScope from './rewio-scope';
 import './style.scss';
 
@@ -44,71 +44,6 @@ const SITE = window.memorialPluginSettings?.siteUrl || '/';
 
 // An explanation longer than this goes behind a round “?” button instead of standing next to the field.
 const HINT_FROM = 70;
-
-// Round “?” button: the explanation opens on hover, focus or click and never takes room in the form.
-function Hint( { text, label } ) {
-	const [ open, setOpen ] = useState( false );
-	const [ pinned, setPinned ] = useState( false );
-	const [ anchor, setAnchor ] = useState( null );
-	if ( ! text ) {
-		return null;
-	}
-	const isOpen = open || pinned;
-	return (
-		<span
-			className="memorial-plugin-settings__hint"
-			onMouseEnter={ () => setOpen( true ) }
-			onMouseLeave={ () => setOpen( false ) }
-		>
-			<button
-				type="button"
-				ref={ setAnchor }
-				className="memorial-plugin-settings__hint-btn"
-				aria-label={ __( 'Explanation', 'memorial-plugin' ) }
-				aria-expanded={ isOpen }
-				onFocus={ () => setOpen( true ) }
-				onBlur={ () => {
-					setOpen( false );
-					setPinned( false );
-				} }
-				onClick={ ( e ) => {
-					// Inside a <label>: the click must not toggle the checkbox or move the focus to the field.
-					e.preventDefault();
-					e.stopPropagation();
-					setPinned( ! pinned );
-				} }
-				onKeyDown={ ( e ) => {
-					if ( e.key === 'Escape' ) {
-						setOpen( false );
-						setPinned( false );
-					}
-				} }
-			>
-				?
-			</button>
-			{ label && (
-				<span className="memorial-plugin-settings__hint-label">
-					{ label }
-				</span>
-			) }
-			{ isOpen && anchor && (
-				<Popover
-					anchor={ anchor }
-					placement="top-start"
-					focusOnMount={ false }
-					offset={ 8 }
-					className="memorial-plugin-settings__hint-pop"
-					onClose={ () => {
-						setOpen( false );
-						setPinned( false );
-					} }
-				>
-					<div role="tooltip">{ text }</div>
-				</Popover>
-			) }
-		</span>
-	);
-}
 
 // A short explanation stays under the title; a long one hides behind “?”.
 function Help( { text } ) {

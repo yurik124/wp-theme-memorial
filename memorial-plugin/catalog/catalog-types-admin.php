@@ -67,6 +67,7 @@ function memorial_plugin_types_cats( $parent, $depth = 0 ) {
 			'parent' => (int) $c->parent,
 			'count'  => memorial_plugin_cat_count( $c->term_id ),
 			'desc'   => $c->description,
+			'sort'   => (string) get_term_meta( $c->term_id, 'mem_sort', true ),
 			'pos'    => $i,
 		);
 		$out   = array_merge( $out, memorial_plugin_types_cats( (int) $c->term_id, $depth + 1 ) );
@@ -99,6 +100,15 @@ function memorial_plugin_types_data( $type_id ) {
 		'cats'     => memorial_plugin_types_cats( $type_id ),
 		'ratio'    => (string) get_term_meta( $type_id, 'mem_ratio', true ),
 		'cols'     => (int) get_term_meta( $type_id, 'mem_cols', true ),
+		'sort'     => (string) get_term_meta( $type_id, 'mem_sort', true ),
+		'sorts'    => array_map(
+			static fn( $k, $v ) => array(
+				'value' => $k,
+				'label' => $v,
+			),
+			array_keys( memorial_plugin_sort_options() ),
+			memorial_plugin_sort_options()
+		),
 		'page'     => $page ? array(
 			'title' => get_the_title( $page ),
 			'url'   => (string) get_permalink( $page ),
@@ -172,6 +182,9 @@ function memorial_plugin_types_save( $type, $values ) {
 		$c = absint( $values['cols'] );
 		$c ? update_term_meta( $type, 'mem_cols', min( 6, max( 2, $c ) ) ) : delete_term_meta( $type, 'mem_cols' );
 	}
+	if ( isset( $values['sort'] ) ) {
+		memorial_plugin_types_set_sort( $type, (string) $values['sort'] );
+	}
 	if ( isset( $values['defaults'] ) ) {
 		$d = (array) $values['defaults'];
 		update_term_meta(
@@ -181,6 +194,12 @@ function memorial_plugin_types_save( $type, $values ) {
 				'price' => absint( preg_replace( '/\D/', '', (string) ( $d['price'] ?? '' ) ) ),
 				'from'  => empty( $d['from'] ) ? 0 : 1,
 				'unit'  => trim( sanitize_text_field( (string) ( $d['unit'] ?? '' ) ) ),
+				'cats'  => array_values(
+					array_filter(
+						array_map( 'absint', (array) ( $d['cats'] ?? array() ) ),
+						static fn( $c ) => $c && $c !== (int) $type && memorial_plugin_type_root( $c ) === (int) $type
+					)
+				),
 			)
 		);
 	}
@@ -219,6 +238,17 @@ function memorial_plugin_types_save( $type, $values ) {
 		}
 	}
 	return true;
+}
+
+/**
+ * Order of the products of a type or a category: a known key is stored, '' removes the setting
+ * (a category then follows its parent; with nothing set — the former order, by hand).
+ *
+ * @param int    $term_id Term ID.
+ * @param string $sort    Key of memorial_plugin_sort_options() or ''.
+ */
+function memorial_plugin_types_set_sort( $term_id, $sort ) {
+	isset( memorial_plugin_sort_options()[ $sort ] ) ? update_term_meta( $term_id, 'mem_sort', $sort ) : delete_term_meta( $term_id, 'mem_sort' );
 }
 
 /**
@@ -397,6 +427,9 @@ function memorial_plugin_types_rest() {
 					return $r;
 				}
 				update_term_meta( $r['term_id'], 'mem_order', 1000 );
+				if ( null !== $request['sort'] ) {
+					memorial_plugin_types_set_sort( (int) $r['term_id'], (string) $request['sort'] );
+				}
 				return $all();
 			},
 		)
@@ -423,6 +456,9 @@ function memorial_plugin_types_rest() {
 					if ( is_wp_error( $r ) ) {
 						$r->add_data( array( 'status' => 400 ) );
 						return $r;
+					}
+					if ( null !== $request['sort'] ) {
+						memorial_plugin_types_set_sort( (int) $request['id'], (string) $request['sort'] );
 					}
 					return $all();
 				},

@@ -6777,3 +6777,69 @@ msgstr "Как работает этот экран — показать поя�
 
 msgid "Fold"
 msgstr "Свернуть"
+
+msgid "A product without a description opens as a large photo in the catalog, and its old address leads to the catalog section. These addresses are not in the sitemap."
+msgstr "Товар без описания открывается в каталоге крупным фото, а его старый адрес ведёт в раздел каталога. Этих адресов нет в карте сайта."
+
+msgid "Added"
+msgstr "Добавлен"
+
+msgid "As in the type"
+msgstr "Как у типа"
+
+msgid "Categories of a new product"
+msgstr "Категории нового товара"
+
+msgid "Clear the selection"
+msgstr "Снять выбор"
+
+msgid "Enlarge the photo: %s"
+msgstr "Увеличить фото: %s"
+
+msgid "Every product has its own address, even one without a description."
+msgstr "У каждого товара свой адрес, даже если описания нет."
+
+msgid "For every product"
+msgstr "Для каждого товара"
+
+msgid "Former order (as arranged by hand)"
+msgstr "Прежний порядок (как расставлено вручную)"
+
+msgid "How the products of this type go when a visitor opens the section. A category can have its own order."
+msgstr "В каком порядке идут товары этого типа, когда посетитель открывает раздел. У категории может быть свой порядок."
+
+msgid "No page"
+msgstr "Нет страницы"
+
+msgid "No product has its own page: every product opens as a large photo in the catalog, and its address leads to the catalog section."
+msgstr "Своей страницы нет ни у одного товара: каждый открывается в каталоге крупным фото, а его адрес ведёт в раздел каталога."
+
+msgid "Oldest first"
+msgstr "Сначала старые"
+
+msgid "Only for products with a description (recommended)"
+msgstr "Только для товаров с описанием (рекомендуется)"
+
+msgid "Open in the editor"
+msgstr "Открыть в редакторе"
+
+msgid "Order of products on the site"
+msgstr "Порядок товаров на сайте"
+
+msgid "Price, specifications, categories and the description are changed right here. Select several products to change prices or categories at once."
+msgstr "Цена, характеристики, категории и описание меняются прямо здесь. Выберите несколько товаров, чтобы изменить цены или категории сразу."
+
+msgid "This description has formatting — change it in the editor"
+msgstr "В этом описании есть оформление — измените его в редакторе"
+
+msgid "%d item selected"
+msgid_plural "%d items selected"
+msgstr[0] "Выбран %d элемент"
+msgstr[1] "Выбрано %d элемента"
+msgstr[2] "Выбрано %d элементов"
+
+msgid "%d product added at the top of the list. It is hidden from the site: fill it in and tick “Show on the site”."
+msgid_plural "%d products added at the top of the list. They are hidden from the site: fill them in and tick “Show on the site”."
+msgstr[0] "Добавлен %d товар — он в начале списка и скрыт с сайта: заполните его и поставьте галочку «Показывать на сайте»."
+msgstr[1] "Добавлено %d товара — они в начале списка и скрыты с сайта: заполните их и поставьте галочку «Показывать на сайте»."
+msgstr[2] "Добавлено %d товаров — они в начале списка и скрыты с сайта: заполните их и поставьте галочку «Показывать на сайте»."

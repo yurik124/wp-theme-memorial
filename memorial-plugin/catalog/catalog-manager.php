@@ -143,7 +143,7 @@ function memorial_plugin_manager_cats( $type_id, $depth = 0 ) {
  * Photos as {id, url}.
  *
  * @param int[] $ids Attachment IDs.
- * @return array<int,array{id:int,url:string}>
+ * @return array<int,array{id:int,url:string,big:string}>
  */
 function memorial_plugin_catalog_photos( $ids ) {
 	return array_values(
@@ -151,6 +151,7 @@ function memorial_plugin_catalog_photos( $ids ) {
 			static fn( $a ) => array(
 				'id'  => (int) $a,
 				'url' => (string) wp_get_attachment_image_url( $a, 'thumbnail' ),
+				'big' => (string) wp_get_attachment_image_url( $a, 'large' ),
 			),
 			$ids
 		)
@@ -165,6 +166,7 @@ function memorial_plugin_catalog_photos( $ids ) {
  */
 function memorial_plugin_manager_product( $p ) {
 	$type = memorial_plugin_product_type( $p->ID );
+	$desc = memorial_plugin_product_desc( $p );
 	$cats = wp_get_object_terms( $p->ID, 'mem_cat', array( 'fields' => 'ids' ) );
 	$m    = static fn( $k ) => (string) get_post_meta( $p->ID, $k, true );
 	return array(
@@ -179,10 +181,63 @@ function memorial_plugin_manager_product( $p ) {
 		'sub'    => $m( '_mem_sub' ),
 		'specs'  => (object) memorial_plugin_product_spec_map( $p->ID ),
 		'cats'   => array_values( array_diff( is_wp_error( $cats ) ? array() : array_map( 'intval', $cats ), array( $type ) ) ),
-		'order'  => (int) $p->menu_order,
+		'date'   => (int) get_post_time( 'U', true, $p ),
+		'desc'   => $desc['text'],
+		'rich'   => ! $desc['simple'],
 		'edit'   => (string) get_edit_post_link( $p->ID, 'raw' ),
 		'view'   => '' !== trim( wp_strip_all_tags( $p->post_content ) ) ? (string) get_permalink( $p ) : '',
 	);
+}
+
+/**
+ * Description of a product as plain text for the quick edit form.
+ *
+ * Simple — the content is only paragraphs, so it can be edited as text without losing anything;
+ * otherwise (lists, photos, headings made in the editor) the form shows it read-only.
+ *
+ * @param WP_Post $p Product.
+ * @return array{text:string,simple:bool}
+ */
+function memorial_plugin_product_desc( $p ) {
+	$content = (string) $p->post_content;
+	$simple  = true;
+	$parts   = array();
+	foreach ( parse_blocks( $content ) as $block ) {
+		$html = trim( (string) $block['innerHTML'] );
+		if ( '' === $html && empty( $block['blockName'] ) ) {
+			continue;
+		}
+		if ( ! in_array( $block['blockName'], array( null, 'core/paragraph', 'core/freeform' ), true ) || preg_match( '~<(?!/?(p|br)\b)[a-z]~i', $html ) ) {
+			$simple = false;
+		}
+		foreach ( preg_split( '~</p>\s*<p[^>]*>|\n\s*\n~i', $html ) as $para ) {
+			$para = trim( html_entity_decode( wp_strip_all_tags( preg_replace( '~<br\s*/?>~i', "\n", $para ) ), ENT_QUOTES, 'UTF-8' ) );
+			if ( '' !== $para ) {
+				$parts[] = $para;
+			}
+		}
+	}
+	return array(
+		'text'   => implode( "\n\n", $parts ),
+		'simple' => $simple,
+	);
+}
+
+/**
+ * Plain text → paragraphs of the block editor.
+ *
+ * @param string $text Text; an empty line separates paragraphs.
+ * @return string Block markup.
+ */
+function memorial_plugin_product_desc_blocks( $text ) {
+	$out = array();
+	foreach ( preg_split( '~\R\s*\R~u', trim( (string) $text ) ) as $para ) {
+		$para = trim( sanitize_textarea_field( $para ) );
+		if ( '' !== $para ) {
+			$out[] = "<!-- wp:paragraph -->\n<p>" . nl2br( esc_html( $para ), false ) . "</p>\n<!-- /wp:paragraph -->";
+		}
+	}
+	return implode( "\n\n", $out );
 }
 
 /**
@@ -194,10 +249,11 @@ function memorial_plugin_products_data() {
 	$types = array();
 	foreach ( memorial_plugin_manager_types() as $t ) {
 		$types[] = array(
-			'id'     => (int) $t->term_id,
-			'name'   => $t->name,
-			'fields' => memorial_plugin_type_fields( (int) $t->term_id ),
-			'cats'   => memorial_plugin_manager_cats( (int) $t->term_id ),
+			'id'       => (int) $t->term_id,
+			'name'     => $t->name,
+			'fields'   => memorial_plugin_type_fields( (int) $t->term_id ),
+			'cats'     => memorial_plugin_manager_cats( (int) $t->term_id ),
+			'defaults' => memorial_plugin_type_defaults( (int) $t->term_id ),
 		);
 	}
 	$posts = get_posts(
@@ -206,12 +262,14 @@ function memorial_plugin_products_data() {
 			'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
 			'posts_per_page' => -1,
 			'orderby'        => array(
-				'menu_order' => 'ASC',
-				'date'       => 'ASC',
+				'date' => 'DESC',
+				'ID'   => 'DESC',
 			),
 		)
 	);
+	$logo = (int) get_theme_mod( 'custom_logo' );
 	return array(
+		'logo'      => $logo ? (string) wp_get_attachment_image_url( $logo, 'thumbnail' ) : (string) get_site_icon_url( 150 ),
 		'types'     => $types,
 		'items'     => array_map( 'memorial_plugin_manager_product', $posts ),
 		'canManage' => current_user_can( 'manage_categories' ),
@@ -221,7 +279,7 @@ function memorial_plugin_products_data() {
 }
 
 /**
- * New product of a type (at the end of the type), with a photo or without.
+ * New product of a type, with a photo or without: hidden from the site until the owner fills it in and shows it.
  *
  * @param int    $type  Type ID.
  * @param int    $att   Photo ID or 0.
@@ -249,7 +307,7 @@ function memorial_plugin_cm_create( $type, $att, $title = '' ) {
 	$id    = wp_insert_post(
 		array(
 			'post_type'   => 'mem_product',
-			'post_status' => 'publish',
+			'post_status' => 'draft',
 			'post_title'  => '' !== $title ? $title : __( 'New product', 'memorial-plugin' ),
 			'menu_order'  => $order,
 		)
@@ -295,8 +353,11 @@ function memorial_plugin_product_save( $id, $values ) {
 			case 'status':
 				$post['post_status'] = 'publish' === $v ? 'publish' : 'draft';
 				break;
-			case 'order':
-				$post['menu_order'] = (int) $v;
+			case 'desc':
+				// Only a description made of plain paragraphs is edited here; a rich one stays as it is.
+				if ( memorial_plugin_product_desc( get_post( $id ) )['simple'] ) {
+					$post['post_content'] = memorial_plugin_product_desc_blocks( (string) $v );
+				}
 				break;
 			case 'price':
 				update_post_meta( $id, '_mem_price', absint( preg_replace( '/\D/', '', (string) $v ) ) );
@@ -612,6 +673,9 @@ function memorial_plugin_products_rest() {
 						'items'   => array( 'type' => 'integer' ),
 						'default' => array(),
 					),
+					'values' => array(
+						'type' => 'object', // One product filled in the form: created together with its fields.
+					),
 				),
 				'callback'            => static function ( WP_REST_Request $request ) {
 					$type = (int) $request['type'];
@@ -622,6 +686,9 @@ function memorial_plugin_products_rest() {
 					$photos = array_filter( array_map( 'absint', (array) $request['photos'] ), 'wp_attachment_is_image' );
 					foreach ( $photos ? $photos : array( 0 ) as $att ) {
 						$id = memorial_plugin_cm_create( $type, $att );
+						if ( $id && ! $photos && is_array( $request['values'] ) ) {
+							memorial_plugin_product_save( $id, $request['values'] );
+						}
 						if ( $id ) {
 							$out[] = memorial_plugin_manager_product( get_post( $id ) );
 						}
