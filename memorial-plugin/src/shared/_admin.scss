@@ -394,3 +394,18 @@ body:has(.memorial-plugin-admin) .components-modal__frame label.components-check
 		grid-column: 1 / -1;
 	}
 }
+
+// “Appearance” of a list: the properties that are always shown (title, photo) look locked, not clickable.
+body:has(.memorial-plugin-admin) .dataviews-view-config__properties div.components-item {
+	color: #757575;
+	background: #f6f7f7;
+	cursor: not-allowed;
+
+	.dataviews-view-config__label::after {
+		content: "\f160";
+		margin-left: 8px;
+		font-family: dashicons;
+		font-size: 14px;
+		vertical-align: middle;
+	}
+}
