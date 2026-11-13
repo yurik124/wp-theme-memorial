@@ -194,7 +194,7 @@ export function statusField() {
 		Edit: ( { data, onChange } ) => (
 			<CheckboxControl
 				__nextHasNoMarginBottom
-				label={ __( 'Show on the site', 'memorial-plugin' ) }
+				label={ __( 'Visible on the site', 'memorial-plugin' ) }
 				checked={ data.status === 'publish' }
 				onChange={ ( on ) =>
 					onChange( { status: on ? 'publish' : 'draft' } )

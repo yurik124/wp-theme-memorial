@@ -271,7 +271,7 @@ function memorial_plugin_home_sections( $o ) {
 		};
 	}
 	if ( $on( 'catalog' ) ) {
-		$s['catalog'] = static fn( $alt ) => memorial_plugin_home_section( 'catalog', $alt, memorial_plugin_home_head( $o['catalog'] ) . memorial_plugin_home_block( 'memorial-plugin/catalog-tiles' ) );
+		$s['catalog'] = static fn( $alt ) => memorial_plugin_home_section( 'catalog', $alt, memorial_plugin_home_head( $o['catalog'] ) . memorial_plugin_home_block( 'memorial-plugin/cards', memorial_plugin_catalog_page() ? array( 'parent' => (int) memorial_plugin_catalog_page() ) : array() ) );
 	}
 	if ( $on( 'prices' ) && memorial_plugin_packages() ) {
 		$s['prices'] = static fn( $alt ) => memorial_plugin_home_section( 'prices', $alt, memorial_plugin_home_head( $o['prices'] ) . memorial_plugin_home_block( 'memorial-plugin/packages-grid' ) );

@@ -138,13 +138,6 @@ function memorial_plugin_home_blocks_list() {
 			),
 			'render' => 'memorial_plugin_home_render_stat',
 		),
-		'catalog-tiles'   => array(
-			'title'  => __( 'Catalog section tiles', 'memorial-plugin' ),
-			'desc'   => __( 'Catalog sections as photo tiles (menu sub-items of the catalog page, or all sections).', 'memorial-plugin' ),
-			'icon'   => 'screenoptions',
-			'attrs'  => array(),
-			'render' => 'memorial_plugin_home_render_tiles',
-		),
 		'services-grid'   => array(
 			'title'  => __( 'Services grid', 'memorial-plugin' ),
 			'desc'   => __( 'Service cards of the home page (Memorial → Home page → Services), full width.', 'memorial-plugin' ),
@@ -334,6 +327,75 @@ function memorial_plugin_home_render_stat( $a ) {
 		. '<span class="stat__ring">' . memorial_plugin_laurel( 'wreath_berry' ) . '<b' . $cnt . '>' . esc_html( $num ) . '</b></span>'
 		. '<span class="stat__label">' . memorial_plugin_nbsp( esc_html( (string) ( $a['label'] ?? '' ) ) ) . '</span></div>';
 }
+
+/**
+ * The former block “Catalog section tiles” (removed: “Section cards” does the same and can be set up).
+ * Content that still has it is rewritten once (memorial_plugin_tiles_to_cards()); until then, and in
+ * templates kept in the database, the block is shown as the section cards of the catalog page.
+ *
+ * @param string|null $pre   Short-circuit value.
+ * @param array       $block Parsed block.
+ * @return string|null
+ */
+function memorial_plugin_tiles_block_compat( $pre, $block ) {
+	if ( 'memorial-plugin/catalog-tiles' !== ( $block['blockName'] ?? '' ) ) {
+		return $pre;
+	}
+	$root = memorial_plugin_catalog_page();
+	return $root && memorial_plugin_menu_children( $root )
+		? render_block(
+			array(
+				'blockName'    => 'memorial-plugin/cards',
+				'attrs'        => array( 'parent' => (int) $root ),
+				'innerBlocks'  => array(),
+				'innerHTML'    => '',
+				'innerContent' => array(),
+			)
+		)
+		: memorial_plugin_home_render_tiles();
+}
+add_filter( 'pre_render_block', 'memorial_plugin_tiles_block_compat', 10, 2 );
+
+/**
+ * Once: pages that have the removed block get “Section cards” of the catalog page instead (a revision is kept).
+ */
+function memorial_plugin_tiles_to_cards() {
+	if ( get_option( 'memorial_plugin_tiles_to_cards' ) || ! current_user_can( 'edit_pages' ) ) {
+		return;
+	}
+	$root = memorial_plugin_catalog_page();
+	if ( ! $root ) {
+		return; // No catalog page yet: the compatibility render keeps showing the sections.
+	}
+	$done = array();
+	foreach ( get_posts(
+		array(
+			'post_type'      => array( 'page', 'post', 'wp_template', 'wp_template_part', 'wp_block' ),
+			'post_status'    => 'any',
+			'posts_per_page' => -1,
+			's'              => 'wp:memorial-plugin/catalog-tiles',
+		)
+	) as $p ) {
+		$new = preg_replace(
+			'~<!--\s+wp:memorial-plugin/catalog-tiles(\s+\{[^>]*\})?\s+/-->~',
+			'<!-- wp:memorial-plugin/cards ' . wp_json_encode( array( 'parent' => (int) $root ) ) . ' /-->',
+			(string) $p->post_content
+		);
+		if ( is_string( $new ) && $new !== $p->post_content ) {
+			wp_update_post(
+				wp_slash(
+					array(
+						'ID'           => $p->ID,
+						'post_content' => $new,
+					)
+				)
+			);
+			$done[] = (int) $p->ID;
+		}
+	}
+	update_option( 'memorial_plugin_tiles_to_cards', array( 'time' => time(), 'posts' => $done ), false );
+}
+add_action( 'admin_init', 'memorial_plugin_tiles_to_cards', 30 );
 
 /**
  * Catalog tiles: menu sub-items of the catalog page, otherwise all top sections.

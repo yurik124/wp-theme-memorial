@@ -384,60 +384,6 @@ return array (
       'viewportWidth' => 1200,
     ),
   ),
-  'catalog-tiles' => 
-  array (
-    '$schema' => 'https://schemas.wp.org/trunk/block.json',
-    'apiVersion' => 3,
-    'name' => 'memorial-plugin/catalog-tiles',
-    'title' => 'Catalog section tiles',
-    'category' => 'memorial-catalog',
-    'icon' => 'screenoptions',
-    'description' => 'Catalog sections as photo tiles (menu sub-items of the catalog page, or all sections).',
-    'keywords' => 
-    array (
-      0 => 'catalog',
-      1 => 'tiles',
-      2 => 'categories',
-      3 => 'memorial',
-    ),
-    'textdomain' => 'memorial-plugin',
-    'supports' => 
-    array (
-      'autoRegister' => true,
-      'html' => false,
-      'color' => 
-      array (
-        'text' => true,
-        'background' => true,
-        'link' => true,
-      ),
-      'typography' => 
-      array (
-        'fontSize' => true,
-        'lineHeight' => true,
-      ),
-      'spacing' => 
-      array (
-        'margin' => true,
-        'padding' => true,
-      ),
-      '__experimentalBorder' => 
-      array (
-        'color' => true,
-        'radius' => true,
-        'style' => true,
-        'width' => true,
-      ),
-      'inserter' => true,
-    ),
-    'example' => 
-    array (
-      'attributes' => 
-      array (
-      ),
-      'viewportWidth' => 1000,
-    ),
-  ),
   'category-list' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',

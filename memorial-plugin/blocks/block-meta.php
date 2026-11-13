@@ -82,7 +82,7 @@ function memorial_plugin_block_categories() {
 function memorial_plugin_block_category( $slug ) {
 	$groups = array(
 		'memorial-contacts' => array( 'phone-button', 'night-line', 'contacts-list', 'contacts-cards', 'contacts-badges', 'maps', 'company-details' ),
-		'memorial-catalog'  => array( 'catalog', 'category-list', 'category-photos', 'catalog-tiles', 'cards', 'packages', 'packages-grid', 'cremation' ),
+		'memorial-catalog'  => array( 'catalog', 'category-list', 'category-photos', 'cards', 'packages', 'packages-grid', 'cremation' ),
 		'memorial-services' => array( 'services', 'services-grid', 'works', 'cemeteries', 'restaurants', 'faq', 'guide', 'cta' ),
 		'memorial-reviews'  => array( 'reviews', 'book-reviews', 'rewio-reviews', 'review-buttons', 'review-widget' ),
 		'memorial-design'   => array( 'laurel', 'icon', 'stat', 'link-button' ),
@@ -133,7 +133,6 @@ function memorial_plugin_block_keywords() {
 		'link-button'     => array( __( 'button', 'memorial-plugin' ), __( 'link', 'memorial-plugin' ) ),
 		'night-line'      => array( __( 'night', 'memorial-plugin' ), __( 'phone', 'memorial-plugin' ), __( 'hours', 'memorial-plugin' ) ),
 		'stat'            => array( __( 'number', 'memorial-plugin' ), __( 'figure', 'memorial-plugin' ), __( 'wreath', 'memorial-plugin' ) ),
-		'catalog-tiles'   => array( __( 'catalog', 'memorial-plugin' ), __( 'tiles', 'memorial-plugin' ), __( 'categories', 'memorial-plugin' ) ),
 		'services-grid'   => array( __( 'services', 'memorial-plugin' ), __( 'grid', 'memorial-plugin' ) ),
 		'packages-grid'   => array( __( 'packages', 'memorial-plugin' ), __( 'prices', 'memorial-plugin' ) ),
 		'contacts-list'   => array( __( 'contacts', 'memorial-plugin' ), __( 'address', 'memorial-plugin' ), __( 'phone', 'memorial-plugin' ) ),
@@ -317,6 +316,7 @@ function memorial_plugin_block_controls_assets() {
 		'window.memorialPluginBlockControls = ' . wp_json_encode(
 			array(
 				'pickers'   => memorial_plugin_block_pickers(),
+				'texts'     => memorial_plugin_block_texts(),
 				'addresses' => $addresses,
 			)
 		) . ';',
@@ -324,6 +324,38 @@ function memorial_plugin_block_controls_assets() {
 	);
 }
 add_action( 'enqueue_block_editor_assets', 'memorial_plugin_block_controls_assets' );
+
+/**
+ * Settings of the plugin blocks that are plain values (a text, a number, a switch, one of several):
+ * the editor shows them right in place of the block (button “Set up the block”), not only in the sidebar.
+ *
+ * @return array<string,array<string,array{label:string,type:string,options?:array}>>
+ */
+function memorial_plugin_block_texts() {
+	$out     = array();
+	$pickers = memorial_plugin_block_pickers();
+	foreach ( WP_Block_Type_Registry::get_instance()->get_all_registered() as $name => $type ) {
+		if ( 0 !== strpos( $name, 'memorial-plugin/' ) ) {
+			continue;
+		}
+		foreach ( (array) $type->attributes as $attr => $def ) {
+			$label = (string) ( $def['label'] ?? '' );
+			$kind  = (string) ( $def['type'] ?? '' );
+			if ( '' === $label || isset( $pickers[ $name ][ $attr ] ) || ! in_array( $kind, array( 'string', 'boolean', 'integer', 'number' ), true ) ) {
+				continue;
+			}
+			$field = array(
+				'label' => $label,
+				'type'  => $kind,
+			);
+			if ( ! empty( $def['enum'] ) ) {
+				$field['options'] = array_values( array_map( 'strval', (array) $def['enum'] ) );
+			}
+			$out[ $name ][ $attr ] = $field;
+		}
+	}
+	return $out;
+}
 
 /**
  * REST: can a block find its data on this page by itself (GET /memorial-plugin/v1/block-source?block=…&post=…)?

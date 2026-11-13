@@ -27,6 +27,8 @@ import {
 	Placeholder,
 	SelectControl,
 	Spinner,
+	TextControl,
+	ToggleControl,
 	ToolbarButton,
 	ToolbarGroup,
 } from '@wordpress/components';
@@ -42,7 +44,10 @@ import './style.scss';
 
 const DATA = window.memorialPluginBlockControls || {};
 const PICKERS = DATA.pickers || {};
+const TEXTS = DATA.texts || {};
 const ADDRESSES = DATA.addresses || [];
+// A block that shows nothing until this setting is filled in: its fields open in place of the block.
+const REQUIRED = { 'memorial-plugin/stat': 'number' };
 const PREFIX = 'memorial-plugin/';
 // Blocks that look for their data on the page when nothing is chosen.
 const SOURCE = [
@@ -83,7 +88,8 @@ function usePosts( postType, search, chosen ) {
 			const core = select( coreStore );
 			const fields = { _fields: 'id,title,parent', context: 'view' };
 			const queryFound = {
-				per_page: 20,
+				// Without a search — all pages (the REST limit is 100), so the list is not cut at the first twenty.
+				per_page: search ? 30 : 100,
 				search: search || undefined,
 				orderby: search ? 'relevance' : 'title',
 				order: 'asc',
@@ -181,26 +187,44 @@ function PostPicker( { postType, label, empty, value, onChange } ) {
 		}
 		return list;
 	}, [ found, chosen, value, id ] );
+	const current = value
+		? options.find( ( o ) => o.value === String( value ) )?.label ||
+		  String( value )
+		: '';
 	return (
-		<ComboboxControl
-			__next40pxDefaultSize
-			__nextHasNoMarginBottom
-			label={ label }
-			help={
-				empty
-					? sprintf(
-							/* translators: %s: what an empty choice means. */
-							__( 'Not chosen — %s.', 'memorial-plugin' ),
-							empty
-						)
-					: undefined
-			}
-			value={ value ? String( value ) : null }
-			options={ options }
-			isLoading={ loading }
-			onFilterValueChange={ setSearch }
-			onChange={ ( v ) => onChange( v || '' ) }
-		/>
+		<div className="memorial-plugin-post-picker">
+			<ComboboxControl
+				__next40pxDefaultSize
+				__nextHasNoMarginBottom
+				label={ label }
+				help={
+					empty
+						? sprintf(
+								/* translators: %s: what an empty choice means. */
+								__( 'Not chosen — %s.', 'memorial-plugin' ),
+								empty
+							)
+						: undefined
+				}
+				value={ value ? String( value ) : null }
+				options={ options }
+				isLoading={ loading }
+				onFilterValueChange={ setSearch }
+				onChange={ ( v ) => onChange( v || '' ) }
+			/>
+			{ !! value && (
+				<p className="memorial-plugin-post-picker__chosen">
+					<span>{ current }</span>
+					<Button
+						variant="link"
+						isDestructive
+						onClick={ () => onChange( '' ) }
+					>
+						{ __( 'Remove', 'memorial-plugin' ) }
+					</Button>
+				</p>
+			) }
+		</div>
 	);
 }
 
@@ -243,12 +267,14 @@ function PagesPicker( { label, value, onChange } ) {
 							/>
 							<Button
 								size="small"
-								icon="no-alt"
-								label={ __( 'Remove', 'memorial-plugin' ) }
+								variant="link"
+								isDestructive
 								onClick={ () =>
 									set( list.filter( ( x ) => x !== v ) )
 								}
-							/>
+							>
+								{ __( 'Remove', 'memorial-plugin' ) }
+							</Button>
 						</li>
 					) ) }
 				</ol>
@@ -459,6 +485,56 @@ function Pickers( { name, attributes, setAttributes } ) {
 	) );
 }
 
+// Plain settings of a block (texts, numbers, switches) as fields — the same values as in the sidebar.
+function Texts( { name, attributes, setAttributes } ) {
+	return Object.entries( TEXTS[ name ] || {} ).map( ( [ attr, def ] ) => {
+		const value = attributes[ attr ];
+		if ( def.type === 'boolean' ) {
+			return (
+				<ToggleControl
+					key={ attr }
+					__nextHasNoMarginBottom
+					label={ def.label }
+					checked={ !! value }
+					onChange={ ( v ) => setAttributes( { [ attr ]: v } ) }
+				/>
+			);
+		}
+		if ( def.options ) {
+			return (
+				<SelectControl
+					key={ attr }
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ def.label }
+					value={ String( value ?? '' ) }
+					options={ def.options.map( ( o ) => ( {
+						value: o,
+						label: o === '' ? '—' : o,
+					} ) ) }
+					onChange={ ( v ) => setAttributes( { [ attr ]: v } ) }
+				/>
+			);
+		}
+		const numeric = def.type !== 'string';
+		return (
+			<TextControl
+				key={ attr }
+				__next40pxDefaultSize
+				__nextHasNoMarginBottom
+				label={ def.label }
+				type={ numeric ? 'number' : 'text' }
+				value={ value ?? '' }
+				onChange={ ( v ) =>
+					setAttributes( {
+						[ attr ]: numeric ? Number( v ) || 0 : v,
+					} )
+				}
+			/>
+		);
+	} );
+}
+
 // Does the block find its data on this page (memorial-plugin/v1/block-source)?
 function useSource( name, attributes ) {
 	const { postId, postType } = useSelect( ( select ) => {
@@ -545,6 +621,15 @@ const withPluginControls = createHigherOrderComponent(
 		const [ choosing, setChoosing ] = useState( false );
 		const own = name.startsWith( PREFIX );
 		const pickers = own ? PICKERS[ name ] : null;
+		const texts = own ? TEXTS[ name ] : null;
+		const required = own ? REQUIRED[ name ] : '';
+		const missing = !! required && ! attributes?.[ required ];
+		// The fields stay open while the first value is being typed.
+		useEffect( () => {
+			if ( missing ) {
+				setChoosing( true );
+			}
+		}, [ missing ] );
 		const { applies, source } = useSource(
 			own ? name : '',
 			attributes || {}
@@ -570,11 +655,11 @@ const withPluginControls = createHigherOrderComponent(
 							setAttributes( { editorCollapsed: ! folded } )
 						}
 					/>
-					{ pickers && (
+					{ ( pickers || texts ) && (
 						<ToolbarButton
 							icon="admin-settings"
 							label={ __(
-								'Change what the block shows',
+								'Set up the block: texts and what it shows',
 								'memorial-plugin'
 							) }
 							isPressed={ choosing }
@@ -609,15 +694,17 @@ const withPluginControls = createHigherOrderComponent(
 					</Button>
 				</Stand>
 			);
-		} else if ( choosing && pickers ) {
+		} else if ( ( choosing || missing ) && ( pickers || texts ) ) {
 			body = (
 				<Stand name={ name } className="is-choosing">
 					<div className="memorial-plugin-stand__pickers">
+						<Texts { ...props } />
 						<Pickers { ...props } />
 						<AutoNote source={ source } />
 						<div>
 							<Button
 								variant="primary"
+								disabled={ missing }
 								onClick={ () => setChoosing( false ) }
 							>
 								{ __( 'Done', 'memorial-plugin' ) }

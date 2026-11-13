@@ -67,3 +67,19 @@
 	margin: 12px 0 0;
 	color: #757575;
 }
+
+// The chosen page under the search field, with a visible “Remove”.
+.memorial-plugin-post-picker__chosen {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	justify-content: space-between;
+	margin: 8px 0 0;
+	padding: 6px 10px;
+	border-radius: 6px;
+	background: #f0f0f0;
+}
+
+.memorial-plugin-pages-picker li .components-button.is-link {
+	margin-left: 8px;
+}
