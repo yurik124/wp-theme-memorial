@@ -577,7 +577,7 @@ function CatForm( { cat, parents, sorts, onCancel, onOk } ) {
 			id: 'desc',
 			label: __( 'Description', 'memorial-plugin' ),
 			description: __(
-				'Under the section title on the site; the catalog itself adds “47 models, from 800 ₽”. A price in the text — {price:code} (the codes are in Memorial → Prices → Separate prices). A price in the text — {price:code} (the codes are in Memorial → Prices → Separate prices).',
+				'Under the section title on the site; the catalog itself adds “47 models, from 800 ₽”. A price in the text — {price:code} (the codes are in Memorial → Prices → Separate prices).',
 				'memorial-plugin'
 			),
 			type: 'text',
