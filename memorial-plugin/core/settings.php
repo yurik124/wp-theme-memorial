@@ -139,7 +139,7 @@ function memorial_plugin_contacts_schema() {
 		'call'       => array(
 			'type'   => 'group',
 			'label'  => __( '“Call” button on a computer', 'memorial-plugin' ),
-			'help'   => __( 'On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email and are kept in “Memorial → Requests”.', 'memorial-plugin' ),
+			'help'   => __( 'On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email (where — “Memorial → Settings → Email”) and are kept in “Memorial → Requests”.', 'memorial-plugin' ),
 			'fields' => array(
 				'title'   => array(
 					'type'  => 'text',
@@ -148,11 +148,6 @@ function memorial_plugin_contacts_schema() {
 				'note'    => array(
 					'type'  => 'text',
 					'label' => __( 'Text under the title', 'memorial-plugin' ),
-				),
-				'email'   => array(
-					'type'        => 'email',
-					'label'       => __( 'Where to send requests', 'memorial-plugin' ),
-					'placeholder' => __( 'Empty — to the first email of the list above', 'memorial-plugin' ),
 				),
 				'max_app' => array(
 					'type'        => 'text',
@@ -1209,6 +1204,12 @@ function memorial_plugin_sanitize( $schema, $in ) {
 				break;
 			case 'page':
 				$out[ $k ] = absint( $v ) ? absint( $v ) : '';
+				break;
+			case 'button': // an action of the screen (a test email): nothing to keep.
+			case 'hidden': // a field of a switched-off feature: its saved value stays as it is.
+				break;
+			case 'emails': // addresses separated by commas.
+				$out[ $k ] = implode( ', ', array_filter( array_map( 'sanitize_email', array_map( 'trim', explode( ',', is_scalar( $v ) ? (string) $v : '' ) ) ), 'is_email' ) );
 				break;
 			case 'perms': // «Настройки → Разрешения» (core/permissions.php).
 				$out[ $k ] = memorial_plugin_perm_clean( $v );

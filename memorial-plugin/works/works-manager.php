@@ -104,6 +104,7 @@ function memorial_plugin_wm_kinds() {
 function memorial_plugin_wm_item( $w ) {
 	$d     = memorial_plugin_work_data( $w->ID );
 	$kinds = wp_get_object_terms( $w->ID, 'mem_work_type', array( 'fields' => 'ids' ) );
+	$desc  = memorial_plugin_product_desc( $w ); // the description of a work is edited in its window, as for products.
 	return array(
 		'id'      => (int) $w->ID,
 		'title'   => html_entity_decode( get_the_title( $w ), ENT_QUOTES, 'UTF-8' ),
@@ -116,6 +117,8 @@ function memorial_plugin_wm_item( $w ) {
 		'kinds'   => is_wp_error( $kinds ) ? array() : array_map( 'intval', $kinds ),
 		'example' => (bool) get_post_meta( $w->ID, '_mem_example', true ),
 		'order'   => (int) $w->menu_order,
+		'desc'    => $desc['text'],
+		'rich'    => ! $desc['simple'],
 		'edit'    => (string) get_edit_post_link( $w->ID, 'raw' ),
 	);
 }
@@ -139,6 +142,10 @@ function memorial_plugin_wm_save( $id, $values ) {
 				break;
 			case 'order':
 				$post['menu_order'] = (int) $v;
+				break;
+			case 'desc':
+				// Plain text from the window → paragraphs (a description with lists or photos becomes plain text).
+				$post['post_content'] = memorial_plugin_product_desc_blocks( (string) $v );
 				break;
 			case 'year':
 				$y = memorial_plugin_work_year( $v );

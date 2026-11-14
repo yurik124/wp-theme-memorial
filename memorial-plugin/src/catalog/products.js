@@ -11,7 +11,6 @@ import {
 	RadioControl,
 	SelectControl,
 	TabPanel,
-	TextareaControl,
 	TextControl,
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
@@ -25,7 +24,7 @@ import {
 	ListPage,
 	arrayFilters,
 } from './list-screen';
-import { photosField, termsField, statusField, rub } from './fields';
+import { photosField, termsField, statusField, rub, DescEdit } from './fields';
 
 const API = '/memorial-plugin/v1/catalog/products';
 const catsFilter = arrayFilters( [ 'cats' ] );
@@ -48,28 +47,6 @@ function toRow( p, specs ) {
 // Description of a product: plain text; one made in the editor with lists or photos is only shown here.
 // Description of a product: plain text, edited right here (an empty line starts a new paragraph).
 // A description made earlier with lists or photos is edited here too; it then becomes plain text.
-function DescEdit( { data, field, onChange } ) {
-	return (
-		<TextareaControl
-			__nextHasNoMarginBottom
-			label={ field.label }
-			help={
-				data.rich
-					? __(
-							'This description had lists or photos: after a change it is saved as plain text.',
-							'memorial-plugin'
-						)
-					: __(
-							'An empty line starts a new paragraph.',
-							'memorial-plugin'
-						)
-			}
-			rows={ 6 }
-			value={ data.desc || '' }
-			onChange={ ( v ) => onChange( { desc: v } ) }
-		/>
-	);
-}
 
 function PriceModal( { items, closeModal, run } ) {
 	const [ mode, setMode ] = useState( 'pct' );

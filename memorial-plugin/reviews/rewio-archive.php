@@ -472,13 +472,9 @@ function memorial_plugin_rewio_collection( $cols ) {
 				),
 			),
 			'status' => array(
-				'label'   => __( 'On our site', 'memorial-plugin' ),
-				'type'    => 'select',
-				'source'  => 'status',
-				'options' => array(
-					'publish' => __( 'Shown', 'memorial-plugin' ),
-					'draft'   => __( 'Hidden', 'memorial-plugin' ),
-				),
+				'label'  => __( 'Show on the site', 'memorial-plugin' ),
+				'type'   => 'visible',
+				'source' => 'status',
 			),
 			'first'  => array(
 				'label'    => __( 'First version', 'memorial-plugin' ),

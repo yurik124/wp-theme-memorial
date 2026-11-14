@@ -680,6 +680,7 @@ function memorial_plugin_rewio_refresh() {
 		foreach ( $groups as $g ) {
 			$n += count( $g['reviews'] );
 		}
+		$was = memorial_plugin_rewio_cache_get();
 		if ( ! memorial_plugin_rewio_cache_set(
 			array(
 				'time'    => time(),
@@ -688,6 +689,10 @@ function memorial_plugin_rewio_refresh() {
 			)
 		) ) {
 			throw new Exception( __( 'Reviews were received (', 'memorial-plugin' ) . $n . __( '), but were not saved in the site’s database. Tell the theme developer.', 'memorial-plugin' ) );
+		}
+		// The reviews on the site changed (new, changed, gone, other ratings) — the saved pages are made again.
+		if ( wp_json_encode( $was['groups'] ?? array() ) !== wp_json_encode( $groups ) && function_exists( 'memorial_plugin_page_cache_clear' ) ) {
+			memorial_plugin_page_cache_clear();
 		}
 		memorial_plugin_rewio_status(
 			array(

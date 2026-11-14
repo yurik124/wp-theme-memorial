@@ -1081,6 +1081,28 @@ test.describe( 'отзывы и разрешения', () => {
 		await page.waitForTimeout( 800 );
 		await page.screenshot( { path: `${ DIR }/rv-perms.png`, fullPage: true } );
 		report.perms = await page.locator( '.memorial-plugin-settings__perms tbody tr' ).allTextContents();
+		await page.getByRole( 'tab', { name: /Почта/ } ).click( { timeout: 8000 } ).catch( () => {} );
+		await page.waitForTimeout( 800 );
+		await page.screenshot( { path: `${ DIR }/rv-mail.png`, fullPage: true } );
+		await page.getByRole( 'button', { name: /тестовое письмо/ } ).click( { timeout: 8000 } ).catch( () => {} );
+		await page.waitForTimeout( 3000 );
+		report.mailTest = await page.locator( '.memorial-plugin-settings__action .components-notice' ).allTextContents();
+		report.mailRaw = await page.evaluate( async () => {
+			const st = await window.wp.apiFetch( { path: '/memorial-plugin/v1/settings/mem_modules_page' } ).catch( () => ( {} ) );
+			const r = await window.wp.apiFetch( { path: '/memorial-plugin/v1/lead-mail-test', method: 'POST', data: { values: st?.value?.mail || {} }, parse: false } ).catch( ( e ) => e );
+			return r && r.text ? r.status + ' ' + ( await r.text() ).slice( 0, 1500 ) : String( r?.message || r );
+		} );
+		await page.goto( '/wp-admin/admin.php?page=memorial-plugin-leads' );
+		await page.waitForTimeout( 4000 );
+		await page.screenshot( { path: `${ DIR }/rv-leads.png`, fullPage: true } );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_work&page=mem-works' );
+		await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } ).catch( () => {} );
+		await page.locator( '.dataviews-view-table tbody tr' ).first().getByRole( 'button', { name: /Изменить/ } ).first().click( { timeout: 8000 } ).catch( () => {} );
+		const t0 = Date.now();
+		await page.waitForSelector( '.memorial-plugin-photos img', { timeout: 20000 } ).catch( () => {} );
+		report.workPhotosMs = Date.now() - t0;
+		await page.waitForTimeout( 800 );
+		await page.screenshot( { path: `${ DIR }/rv-work-edit.png`, fullPage: true } );
 		report.errors = errs;
 		log( 'reviews', report );
 	} );

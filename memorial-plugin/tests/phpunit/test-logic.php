@@ -397,4 +397,45 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		wp_set_current_user( 0 );
 		$this->assertSame( 'от ', memorial_plugin_t( 'от {price:krem_svc}' ) );
 	}
+
+	public function test_lead_mail_uses_the_template() {
+		if ( ! function_exists( 'memorial_plugin_lead_mail_send' ) ) {
+			$this->markTestSkipped( 'Call-back is off.' );
+		}
+		reset_phpmailer_instance();
+		$res = memorial_plugin_lead_mail_send(
+			array(
+				'phone' => '+7 900 111-22-33',
+				'name'  => '',
+				'page'  => '',
+			),
+			array(
+				'to'         => 'a@example.com, wrong, b@example.com',
+				'subject'    => 'Звонок: {phone} ({name})',
+				'body'       => 'Телефон {phone}, имя {name}',
+				'from_name'  => 'Мемориал',
+				'from_email' => 'site@example.com',
+			)
+		);
+		$this->assertTrue( $res['ok'] );
+		$this->assertSame( array( 'a@example.com', 'b@example.com' ), $res['to'] );
+		$mail = tests_retrieve_phpmailer_instance()->get_sent();
+		$this->assertSame( 'Звонок: +7 900 111-22-33', $mail->subject, 'an empty name leaves no brackets' );
+		$this->assertStringContainsString( 'имя —', $mail->body );
+		$this->assertStringContainsString( 'site@example.com', $mail->header );
+	}
+
+	public function test_moving_the_address_keeps_the_features() {
+		if ( ! function_exists( 'memorial_plugin_lead_mail_move' ) ) {
+			$this->markTestSkipped( 'Call-back is off.' );
+		}
+		delete_option( 'memorial_plugin_lead_mail_moved' );
+		delete_option( 'mem_modules_page' );
+		$on = array_fill_keys( array_keys( memorial_plugin_optional() ), 1 );
+		update_option( 'mem_modules', $on );
+		update_option( 'mem_contacts', array( 'call' => array( 'email' => 'calls@example.com' ) ) );
+		memorial_plugin_lead_mail_move();
+		$this->assertSame( 'calls@example.com', get_option( 'mem_modules_page' )['mail']['to'] );
+		$this->assertSame( $on, get_option( 'mem_modules' ), 'no feature is switched off' );
+	}
 }

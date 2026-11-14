@@ -2,7 +2,7 @@
  * Our works → Works.
  */
 import { useCallback, useMemo, useState } from '@wordpress/element';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { Button, Flex, Notice } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
@@ -24,6 +24,7 @@ import {
 	orderField,
 	RowsEdit,
 	rub,
+	DescEdit,
 } from './fields';
 
 const API = '/memorial-plugin/v1/catalog/works';
@@ -169,13 +170,27 @@ export default function Works() {
 				filterBy: { operators: [ 'is' ] },
 				render: ( { item } ) => ( item.example ? '✓' : '' ),
 			},
+			{
+				id: 'desc',
+				label: __( 'Description', 'memorial-plugin' ),
+				type: 'text',
+				enableGlobalSearch: true,
+				enableSorting: false,
+				filterBy: false,
+				Edit: DescEdit,
+				render: ( { item } ) =>
+					( item.desc || '' ).length > 80
+						? item.desc.slice( 0, 80 ) + '…'
+						: item.desc || '',
+			},
 			statusField(),
 			orderField(),
 		],
 		[ kinds ]
 	);
+	// The window: no total (it is counted) and no place in the list (“Move up / down” change it).
 	const formFields = useMemo(
-		() => fields.filter( ( f ) => f.id !== 'total' ),
+		() => fields.filter( ( f ) => ! [ 'total', 'order' ].includes( f.id ) ),
 		[ fields ]
 	);
 
@@ -262,11 +277,6 @@ export default function Works() {
 				isPrimary: true,
 				icon: 'edit',
 				callback: ( [ item ] ) => setEditing( item ),
-			},
-			{
-				id: 'editor',
-				label: __( 'Edit text in the editor', 'memorial-plugin' ),
-				callback: ( [ item ] ) => ( window.location.href = item.edit ),
 			},
 			{
 				id: 'up',
@@ -371,7 +381,7 @@ export default function Works() {
 			<ListPage
 				title={ __( 'Our works', 'memorial-plugin' ) }
 				subTitle={ __(
-					'Photos, year, size and prices are changed right here; the description of a work — in the editor.',
+					'Photos, year, size, prices and the description of a work are changed right here.',
 					'memorial-plugin'
 				) }
 				actions={
@@ -435,20 +445,6 @@ export default function Works() {
 					fields={ formFields }
 					onSave={ ( edits ) => save( editing, edits ) }
 					onClose={ () => setEditing( null ) }
-					extra={
-						<p>
-							<a href={ editing.edit }>
-								{ sprintf(
-									/* translators: %s: work title. */
-									__(
-										'Description of “%s” — in the editor',
-										'memorial-plugin'
-									),
-									editing.title
-								) }
-							</a>
-						</p>
-					}
 				/>
 			) }
 		</>

@@ -124,6 +124,55 @@ function toField( def ) {
 					),
 				Edit: BooleanEdit,
 			};
+		case 'visible':
+			// Shown on the site — a checkbox (the record is published or a draft).
+			return {
+				...field,
+				type: 'boolean',
+				elements: [
+					{ value: true, label: __( 'Shown', 'memorial-plugin' ) },
+					{ value: false, label: __( 'Hidden', 'memorial-plugin' ) },
+				],
+				filterBy: { operators: [ 'is' ] },
+				render: ( { item } ) =>
+					item[ def.id ] ? (
+						<span className="memorial-plugin-badge">
+							{ __( 'Shown', 'memorial-plugin' ) }
+						</span>
+					) : (
+						<span className="memorial-plugin-badge is-muted">
+							{ __( 'Hidden', 'memorial-plugin' ) }
+						</span>
+					),
+				Edit: BooleanEdit,
+			};
+		case 'pagelink':
+			// A page of the site by its title (a long one shortened), the link opens it.
+			return {
+				...field,
+				type: 'text',
+				getValue: ( { item } ) => item[ def.id ]?.title || '',
+				render: ( { item } ) => {
+					const p = item[ def.id ];
+					if ( ! p ) {
+						return '—';
+					}
+					const t =
+						p.title.length > 40
+							? p.title.slice( 0, 38 ) + '…'
+							: p.title;
+					return (
+						<a
+							href={ p.url }
+							target="_blank"
+							rel="noreferrer"
+							title={ p.title }
+						>
+							{ t }
+						</a>
+					);
+				},
+			};
 		case 'select':
 			return {
 				...field,
@@ -269,7 +318,11 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 					setItem( ( i ) => ( { ...i, ...edits } ) )
 				}
 			/>
-			<Flex justify="flex-end">
+			<Flex
+				justify="flex-end"
+				gap={ 3 }
+				className="memorial-plugin-collection__buttons"
+			>
 				<Button variant="tertiary" onClick={ onClose }>
 					{ __( 'Cancel', 'memorial-plugin' ) }
 				</Button>
@@ -426,7 +479,7 @@ function App( { name } ) {
 					label: __( 'Hide on the site', 'memorial-plugin' ),
 					icon: 'hidden',
 					supportsBulk: true,
-					isEligible: ( item ) => item.status !== 'draft',
+					isEligible: ( item ) => !! item.status,
 					callback: ( list ) => setHidden( list, true ),
 				},
 				{
@@ -434,7 +487,7 @@ function App( { name } ) {
 					label: __( 'Show on the site', 'memorial-plugin' ),
 					icon: 'visibility',
 					supportsBulk: true,
-					isEligible: ( item ) => item.status === 'draft',
+					isEligible: ( item ) => ! item.status,
 					callback: ( list ) => setHidden( list, false ),
 				}
 			);
