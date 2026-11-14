@@ -457,4 +457,42 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'Спасибо за помощь', $mail->body );
 		delete_option( 'mem_modules_page' );
 	}
+
+	public function test_menu_links_without_page_ids_find_pages_by_address() {
+		$parent = self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_title'  => 'Ритуальные товары',
+				'post_name'   => 'ritualnye-tovary',
+				'post_status' => 'publish',
+			)
+		);
+		$child  = self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_title'  => 'Венки',
+				'post_name'   => 'venki',
+				'post_status' => 'publish',
+			)
+		);
+		// As the menu of the site after the slugs were renamed: kind and address, no page ID.
+		$link = static fn( $label, $url ) => '<!-- wp:navigation-link {"label":"' . $label . '","type":"page","url":"' . $url . '","kind":"post-type"} /-->';
+		$nav  = self::factory()->post->create(
+			array(
+				'post_type'    => 'wp_navigation',
+				'post_status'  => 'publish',
+				'post_title'   => 'Главное меню',
+				'post_content' => '<!-- wp:navigation-submenu {"label":"Ритуальные товары","type":"page","url":"' . get_permalink( $parent ) . '","kind":"post-type"} -->'
+					. $link( 'Венки', get_permalink( $child ) ) . '<!-- /wp:navigation-submenu -->',
+			)
+		);
+		delete_transient( 'memorial_plugin_menu_urls' );
+		$pin = static fn() => $nav;
+		add_filter( 'memorial_plugin_main_nav_id', $pin, 99 );
+		$items = array_values( memorial_plugin_menu_items( true ) );
+		remove_filter( 'memorial_plugin_main_nav_id', $pin, 99 );
+		$this->assertSame( array( $parent, $child ), array_map( static fn( $i ) => (int) $i->object_id, $items ) );
+		$this->assertSame( 'post_type', $items[1]->type );
+		$this->assertSame( (int) $items[0]->ID, (int) $items[1]->menu_item_parent );
+	}
 }
