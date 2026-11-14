@@ -1249,23 +1249,30 @@ test.describe( 'редактор сайта', () => {
 	} );
 } );
 
-test.describe( 'редактор сайта 2', () => {
+test.describe( 'итог 2.1', () => {
 	test.use( { viewport: { width: 1440, height: 900 } } );
-	test( 'редактор сайта 2: превью главной', async ( { page, browser } ) => {
+	test( 'итог 2.1: редактор сайта, меню, обновление', async ( { page, browser } ) => {
 		test.setTimeout( 900_000 );
 		page.setDefaultTimeout( 20000 );
 		const report = {};
-		// Картинка темы с копии сайта (с фото)
+		const BASE = 'http://localhost:8888';
+		// Картинка темы (screenshot.png 1200×900) — главная копии сайта с фото
 		const ctx = await browser.newContext( { viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 } );
 		const p2 = await ctx.newPage();
-		await p2.goto( '/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
-		await p2.addStyleTag( { content: NO_FLOAT + '[class*=cookie],[class*=consent],[class*=mobile-bar],[class*=mbar]{display:none !important}' } ).catch( () => {} );
-		await p2.evaluate( () => document.querySelectorAll( '[class*=reveal], .is-hidden-reveal' ).forEach( ( e ) => e.classList.add( 'is-visible', 'in' ) ) ).catch( () => {} );
+		await p2.goto( BASE + '/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
+		await p2.addStyleTag( { content: NO_FLOAT + '[class*=cookie],[class*=consent],.mbar{display:none !important} *{animation:none !important;transition:none !important} .reveal,[data-reveal],.js-reveal{opacity:1 !important;transform:none !important}' } ).catch( () => {} );
 		await p2.waitForTimeout( 3000 );
 		await p2.screenshot( { path: `${ DIR }/theme-screenshot.png` } );
-		await p2.setViewportSize( { width: 1440, height: 1080 } );
-		await p2.waitForTimeout( 1500 );
-		await p2.screenshot( { path: `${ DIR }/theme-screenshot-1440.png` } );
+		await p2.screenshot( { path: `${ DIR }/front-full.png`, fullPage: true } );
+		// Подвал и крошки — из «Навигации»
+		report.footerCols = await p2.locator( '.fnav .fnav__title' ).allTextContents().catch( () => [] );
+		report.footerLinks = await p2.locator( '.fnav a' ).count().catch( () => 0 );
+		const faq = PAGES.find( ( x ) => /вопрос/i.test( x.post_title ) );
+		const sub = PAGES.find( ( x ) => /оградк|венки|гроб/i.test( x.post_title ) );
+		for ( const pg of [ faq, sub ].filter( Boolean ) ) {
+			await p2.goto( BASE + new URL( pg.url ).pathname, { waitUntil: 'domcontentloaded' } ).catch( () => {} );
+			report[ 'crumbs ' + pg.post_title ] = ( await p2.locator( '.crumbs, .breadcrumbs, nav[aria-label*="крошк" i], [class*=crumb]' ).first().innerText().catch( () => '' ) ).replace( /\s+/g, ' ' );
+		}
 		await ctx.close();
 
 		await page.goto( '/wp-login.php' );
@@ -1273,51 +1280,58 @@ test.describe( 'редактор сайта 2', () => {
 		await page.fill( '#user_pass', 'probe-pass-123' );
 		await page.click( '#wp-submit' );
 		await page.waitForURL( /wp-admin/ );
-		const pages = PAGES;
-		const faq = pages.find( ( x ) => /вопрос/i.test( x.post_title ) );
-		const contacts = pages.find( ( x ) => /контакт/i.test( x.post_title ) );
+		report.appearance = await page.locator( '#menu-appearance .wp-submenu a' ).evaluateAll( ( a ) => a.map( ( x ) => x.textContent.trim() ) );
+		// журналы обновления — со страницы всех настроек
+		await page.goto( '/wp-admin/options.php' );
+		report.options = await page.evaluate( () => {
+			const out = {};
+			for ( const k of [ 'memorial_plugin_upgrade_210', 'memorial_theme_upgrade_510', 'memorial_plugin_db', 'memorial_theme_db', 'memorial_theme_main_nav', 'memorial_plugin_webp', 'mem_design', 'mem_speed', 'theme_mods_memorial_speshu', 'memorial_theme_nav_migrated' ] ) {
+				const el = document.querySelector( '#' + k );
+				out[ k ] = el ? ( el.value || el.textContent || '' ).slice( 0, 400 ) : '(нет)';
+			}
+			return out;
+		} );
+		report.types = await page.evaluate( async () => {
+			await new Promise( ( r ) => setTimeout( r, 500 ) );
+			const t = await fetch( '/wp-json/wp/v2/types/page?context=edit', { headers: { 'X-WP-Nonce': window.wpApiSettings?.nonce || '' } } ).then( ( r ) => r.json() ).catch( () => ( {} ) );
+			const n = await fetch( '/wp-json/wp/v2/navigation?context=edit&per_page=50&status=publish,draft,trash', { headers: { 'X-WP-Nonce': window.wpApiSettings?.nonce || '' } } ).then( ( r ) => r.json() ).catch( () => [] );
+			return { mode: t.default_rendering_mode, nav: Array.isArray( n ) ? n.map( ( x ) => x.id + ' ' + x.status + ' ' + x.title?.raw ) : n };
+		} );
 		const probeOne = async ( name, url ) => {
 			await page.goto( url );
-			await page.waitForSelector( '.edit-site-layout, .edit-site', { timeout: 60000 } ).catch( () => {} );
+			await page.waitForSelector( '.edit-site-layout, .edit-site, .editor-header', { timeout: 60000 } ).catch( () => {} );
 			await page.evaluate( () => {
 				try {
-					window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', 'welcomeGuide', false );
-					window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', 'welcomeGuideStyles', false );
-					window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', 'welcomeGuidePage', false );
-					window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', 'welcomeGuideTemplate', false );
+					for ( const k of [ 'welcomeGuide', 'welcomeGuideStyles', 'welcomeGuidePage', 'welcomeGuideTemplate' ] ) {
+						window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', k, false );
+						window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-post', k, false );
+					}
 				} catch ( e ) {}
 			} );
 			await page.waitForTimeout( 6000 );
-			const st = await page.evaluate( () => {
-				const s = window.wp.data.select( 'core/editor' );
-				return {
-					mode: s.getRenderingMode?.(),
-					postType: s.getCurrentPostType?.(),
-					postId: s.getCurrentPostId?.(),
-					tpl: window.wp.data.select( 'core/edit-site' )?.getEditedPostId?.(),
-				};
-			} ).catch( ( e ) => ( { e: String( e ) } ) );
+			const st = await page.evaluate( () => ( { mode: window.wp.data.select( 'core/editor' ).getRenderingMode?.() } ) ).catch( ( e ) => ( { e: String( e ) } ) );
 			const frame = page.frame( { name: 'editor-canvas' } );
 			st.canvas = frame ? await frame.evaluate( () => ( {
-				ownLayoutCss: !! document.querySelector( '#memorial-plugin-own-layout-css, link[href*="editor-own-layout"]' ),
 				parts: [ ...document.querySelectorAll( '.wp-block-template-part' ) ].map( ( e ) => e.tagName + ':' + getComputedStyle( e ).display ),
-				titleWrapper: [ ...document.querySelectorAll( '.editor-visual-editor__post-title-wrapper' ) ].map( ( e ) => getComputedStyle( e ).display ),
+				title: [ ...document.querySelectorAll( '.editor-visual-editor__post-title-wrapper' ) ].map( ( e ) => getComputedStyle( e ).display ),
+				warnings: [ ...document.querySelectorAll( '.block-editor-warning' ) ].length,
 			} ) ).catch( ( e ) => String( e ) ) : null;
 			report[ name ] = st;
-			await shot( page, 'se2-' + name ).catch( () => {} );
-			log( 'site-editor-2', report );
+			await shot( page, 'fin-' + name ).catch( () => {} );
+			log( 'final', report );
 		};
-		await probeOne( 'root', '/wp-admin/site-editor.php' );
-		await probeOne( 'styles', '/wp-admin/site-editor.php?p=%2Fstyles' );
+		const front = PAGES.find( ( x ) => /главн/i.test( x.post_title ) );
+		await probeOne( 'se-root', '/wp-admin/site-editor.php' );
+		await probeOne( 'se-styles', '/wp-admin/site-editor.php?p=%2Fstyles' );
 		if ( faq ) {
-			await probeOne( 'page-faq', '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/page/' + faq.ID ) );
+			await probeOne( 'se-page-faq', '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/page/' + faq.ID ) );
+			await probeOne( 'edit-faq', '/wp-admin/post.php?post=' + faq.ID + '&action=edit' );
 		}
-		if ( contacts ) {
-			await probeOne( 'page-contacts', '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/page/' + contacts.ID ) );
+		if ( front ) {
+			await probeOne( 'edit-front', '/wp-admin/post.php?post=' + front.ID + '&action=edit' );
 		}
-		await probeOne( 'page-front-edit', '/wp-admin/post.php?post=' + ( pages.find( ( x ) => /главн/i.test( x.post_title ) )?.ID || 0 ) + '&action=edit' );
-		// Без файла стилей плагина — так ли выглядит превью главной
-		await page.route( /editor-own-layout/, ( r ) => r.abort() );
-		await probeOne( 'root-no-css', '/wp-admin/site-editor.php' );
+		await probeOne( 'se-templates', '/wp-admin/site-editor.php?p=%2Ftemplate' );
+		await probeOne( 'se-footer', '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/wp_template_part/memorial-theme//footer' ) + '&canvas=edit' );
+		log( 'final', report );
 	} );
 } );
