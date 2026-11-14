@@ -39,6 +39,24 @@
 		return err;
 	}
 
+	// The edited post goes with the preview (post_id, as WordPress does it): blocks that depend on the page
+	// — the breadcrumbs — show what they show on the site.
+	function withPost( path ) {
+		if ( /[?&]post_id=/.test( path ) ) {
+			return path;
+		}
+		var id = 0;
+		try {
+			id = window.wp.data.select( 'core/editor' ).getCurrentPostId();
+		} catch ( e ) {
+			id = 0;
+		}
+		if ( typeof id !== 'number' || ! id ) {
+			return path;
+		}
+		return path + ( path.indexOf( '?' ) === -1 ? '?' : '&' ) + 'post_id=' + id;
+	}
+
 	function flush( next ) {
 		timer = 0;
 		var items = queue.filter( function ( item ) {
@@ -95,6 +113,7 @@
 				return next( options );
 			}
 		}
+		path = withPost( path );
 		return new Promise( function ( resolve, reject ) {
 			var item = { path: path, attributes: attributes, resolve: resolve, reject: reject, aborted: false };
 			if ( options.signal ) {

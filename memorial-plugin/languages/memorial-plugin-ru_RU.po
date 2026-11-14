@@ -4116,8 +4116,8 @@ msgid "Types and categories"
 msgstr "Типы и категории"
 
 #: src/catalog/types.js:461
-msgid "Under the section title on the site; the catalog itself adds “47 models, from 800 ₽”."
-msgstr "Под названием раздела на сайте; каталог сам добавит «47 моделей, от 800 ₽»."
+msgid "Under the section title on the site; the catalog itself adds “47 models, from 800 ₽”. A price in the text — {price:code} (the codes are in Memorial → Prices → Separate prices)."
+msgstr "Под названием раздела на сайте; каталог сам добавит «47 моделей, от 800 ₽». Цена в тексте — {price:код} (коды — в «Мемориал → Цены → Отдельные цены»)."
 
 #: src/catalog/types.js:73
 msgid "Under the title of the catalog on the site (optional)."
@@ -7185,3 +7185,12 @@ msgstr "Карточки услуг главной («Мемориал → Ус�
 msgctxt "block description"
 msgid "Service cards with photos and starting prices (Memorial → Services)."
 msgstr "Карточки услуг с фото и ценами «от» («Мемориал → Услуги»)."
+
+msgid "%s — highest price"
+msgstr "%s — цена «до»"
+
+msgid "%s — lowest price"
+msgstr "%s — цена «от»"
+
+msgid "%s — number of models"
+msgstr "%s — число моделей"

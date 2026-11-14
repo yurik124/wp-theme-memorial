@@ -36,7 +36,7 @@ $subs   = get_terms(
 	<h1><?php echo esc_html( $title ); ?></h1>
 	<?php
 	if ( $is_cat && $term->description ) {
-		echo '<div class="cat-desc">' . wp_kses_post( wpautop( $term->description ) ) . '</div>';}
+		echo '<div class="cat-desc">' . wp_kses_post( wpautop( memorial_plugin_t( $term->description ) ) ) . '</div>';}
 	?>
 
 	<?php if ( ! is_wp_error( $subs ) && $subs ) : ?>

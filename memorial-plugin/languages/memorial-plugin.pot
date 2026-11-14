@@ -157,6 +157,24 @@ msgstr ""
 msgid "%s on the map — Yandex Maps"
 msgstr ""
 
+#. translators: %s: catalog section.
+#: core/upgrade.php:185
+#, php-format
+msgid "%s — highest price"
+msgstr ""
+
+#. translators: %s: catalog section.
+#: core/upgrade.php:183
+#, php-format
+msgid "%s — lowest price"
+msgstr ""
+
+#. translators: %s: catalog section.
+#: core/upgrade.php:187
+#, php-format
+msgid "%s — number of models"
+msgstr ""
+
 #. translators: %s: amount.
 #: src/catalog/fields.js:19
 #, php-format
@@ -773,7 +791,7 @@ msgstr ""
 msgid "Branches and their sites"
 msgstr ""
 
-#: seo/seo.php:133 blocks/legacy/legacy.php:26
+#: seo/seo.php:152 blocks/legacy/legacy.php:26
 msgid "Breadcrumbs"
 msgstr ""
 
@@ -935,7 +953,7 @@ msgstr ""
 msgid "Cards: these works by title, comma separated"
 msgstr ""
 
-#: catalog/catalog.php:33 catalog/catalog.php:35 catalog/catalog-summary.php:174 content/patterns.php:46 seo/seo.php:70 blocks/legacy/legacy.php:194
+#: catalog/catalog.php:33 catalog/catalog.php:35 catalog/catalog-summary.php:174 content/patterns.php:46 seo/seo.php:89 blocks/legacy/legacy.php:194
 msgid "Catalog"
 msgstr ""
 
@@ -1997,7 +2015,7 @@ msgstr ""
 msgid "Highlight (accent frame and the label)"
 msgstr ""
 
-#: seo/seo.php:68 blocks/home/pages-to-content.php:202 pages/pages.php:557
+#: seo/seo.php:74 seo/seo.php:87 blocks/home/pages-to-content.php:202 pages/pages.php:557
 msgid "Home"
 msgstr ""
 
@@ -3066,7 +3084,7 @@ msgstr ""
 msgid "Page (the link follows the page if it moves)"
 msgstr ""
 
-#: seo/seo.php:116 blocks/legacy/render/not-found.php:18
+#: seo/seo.php:135 blocks/legacy/render/not-found.php:18
 msgid "Page not found"
 msgstr ""
 
@@ -4704,7 +4722,7 @@ msgid "Under the list on the card and in the total row of the price table, for e
 msgstr ""
 
 #: src/catalog/types.js:571
-msgid "Under the section title on the site; the catalog itself adds “47 models, from 800 ₽”."
+msgid "Under the section title on the site; the catalog itself adds “47 models, from 800 ₽”. A price in the text — {price:code} (the codes are in Memorial → Prices → Separate prices). A price in the text — {price:code} (the codes are in Memorial → Prices → Separate prices)."
 msgstr ""
 
 #: src/catalog/types.js:98

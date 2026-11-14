@@ -62,6 +62,25 @@ function memorial_plugin_page_crumbs( $page_id ) {
 
 /** Список крошек: [[название, ссылка], ...] */
 function memorial_plugin_crumbs() {
+	// In the editor the block is drawn by a REST request with the edited page as the global post:
+	// the crumbs of that page, as on the site.
+	$editing = defined( 'REST_REQUEST' ) && REST_REQUEST && get_post() instanceof WP_Post && 'page' === get_post_type();
+	if ( $editing ) {
+		if ( (int) get_option( 'page_on_front' ) === (int) get_the_ID() ) {
+			return array();
+		}
+		$id    = (int) get_the_ID();
+		$chain = memorial_plugin_page_crumbs( $id );
+		$c     = array( array( __( 'Home', 'memorial-plugin' ), home_url( '/' ) ) );
+		if ( $chain ) {
+			return array_merge( $c, $chain );
+		}
+		foreach ( array_reverse( get_post_ancestors( $id ) ) as $a ) {
+			$c[] = array( get_the_title( $a ), get_permalink( $a ) );
+		}
+		$c[] = array( get_the_title( $id ), get_permalink( $id ) );
+		return $c;
+	}
 	if ( is_front_page() ) {
 		return array();
 	}
