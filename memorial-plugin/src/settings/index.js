@@ -1009,7 +1009,9 @@ function withTabs( defs, card ) {
 			>
 				{ ( tab ) => {
 					const title = tabbed.find( ( d ) => d.id === tab.name ).tab;
-					return tabbed.filter( ( d ) => d.tab === title ).map( card );
+					return tabbed
+						.filter( ( d ) => d.tab === title )
+						.map( card );
 				} }
 			</TabPanel>
 		</>
@@ -1149,65 +1151,68 @@ function App( { option } ) {
 					def.type === 'note' ? (
 						<Note key={ def.id } def={ def } />
 					) : (
-					<Card
-						key={ def.id }
-						className="memorial-plugin-settings__card"
-					>
-						<CardHeader>
-							<h2 className="memorial-plugin-settings__card-title">
-								{ def.label || def.id }
-								{ String( def.help ?? '' ).length >
-									HINT_FROM && <Hint text={ def.help } /> }
-							</h2>
-						</CardHeader>
-						<CardBody>
-							{ def.type === 'group' ? (
-								<>
-									{ String( def.help ?? '' ).length <=
+						<Card
+							key={ def.id }
+							className="memorial-plugin-settings__card"
+						>
+							<CardHeader>
+								<h2 className="memorial-plugin-settings__card-title">
+									{ def.label || def.id }
+									{ String( def.help ?? '' ).length >
 										HINT_FROM && (
-										<Help text={ def.help } />
+										<Hint text={ def.help } />
 									) }
+								</h2>
+							</CardHeader>
+							<CardBody>
+								{ def.type === 'group' ? (
+									<>
+										{ String( def.help ?? '' ).length <=
+											HINT_FROM && (
+											<Help text={ def.help } />
+										) }
+										<FieldsForm
+											defs={ def.fields || [] }
+											data={ value[ def.id ] || {} }
+											onChange={ ( edits ) => {
+												setValue( ( v ) => ( {
+													...v,
+													[ def.id ]: {
+														...( v[ def.id ] ||
+															{} ),
+														...edits,
+													},
+												} ) );
+												setDirty( true );
+											} }
+										/>
+									</>
+								) : (
 									<FieldsForm
-										defs={ def.fields || [] }
-										data={ value[ def.id ] || {} }
+										defs={ [
+											{
+												...def,
+												hideLabel: true,
+												// A long explanation is behind “?” next to the card title.
+												help:
+													String( def.help ?? '' )
+														.length > HINT_FROM
+														? ''
+														: def.help,
+											},
+										] }
+										data={ value }
 										onChange={ ( edits ) => {
 											setValue( ( v ) => ( {
 												...v,
-												[ def.id ]: {
-													...( v[ def.id ] || {} ),
-													...edits,
-												},
+												...edits,
 											} ) );
 											setDirty( true );
 										} }
 									/>
-								</>
-							) : (
-								<FieldsForm
-									defs={ [
-										{
-											...def,
-											hideLabel: true,
-											// A long explanation is behind “?” next to the card title.
-											help:
-												String( def.help ?? '' )
-													.length > HINT_FROM
-													? ''
-													: def.help,
-										},
-									] }
-									data={ value }
-									onChange={ ( edits ) => {
-										setValue( ( v ) => ( {
-											...v,
-											...edits,
-										} ) );
-										setDirty( true );
-									} }
-								/>
-							) }
-						</CardBody>
-					</Card>
+								) }
+							</CardBody>
+						</Card>
 					)
 				) }
 				<div

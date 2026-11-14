@@ -259,7 +259,9 @@ function toField( def ) {
 function fixedValue( f, item ) {
 	const v = item[ f.id ];
 	if ( f.elements ) {
-		const el = f.elements.find( ( e ) => String( e.value ) === String( v ) );
+		const el = f.elements.find(
+			( e ) => String( e.value ) === String( v )
+		);
 		return el ? el.label : v;
 	}
 	return f.render && ! f.isLong ? f.render( { item } ) : v;
@@ -314,9 +316,7 @@ function EditModal( { name, size, data, fields, onClose, onSaved } ) {
 					{ fixed.map( ( f ) => (
 						<div key={ f.id }>
 							<dt>{ f.label }</dt>
-							<dd>
-								{ fixedValue( f, item ) }
-							</dd>
+							<dd>{ fixedValue( f, item ) }</dd>
 						</div>
 					) ) }
 				</dl>
