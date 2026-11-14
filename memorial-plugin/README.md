@@ -88,7 +88,7 @@
 ### 2.0.0-alpha.1 — этап 1
 - Плагин переименован: Memorial Plugin, папка `memorial-plugin`, text domain `memorial-plugin`, префикс кода `memorial_plugin_`. Данные в базе не менялись.
 - Требуется WordPress 7.1+ и PHP 8.1+.
-- При включении сам выключает старый Memorial Core и включает тему `memorial-theme` (MIGRATION.md).
+- При включении сам выключал старый Memorial Core и включал тему `memorial-theme` (убрано в 2.1.0).
 - «Аналитика»: режим загрузки Яндекс Метрики — после согласия, всегда или выключено; при обновлении выбирается по тому, как сайт работал.
 - Каркас сборки (@wordpress/scripts, Composer classmap), линтеры и CI.
 

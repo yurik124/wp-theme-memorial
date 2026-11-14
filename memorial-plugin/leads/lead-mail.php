@@ -234,30 +234,3 @@ add_action(
 		);
 	}
 );
-
-/**
- * Once: the address from «Контакты → Кнопка «Позвонить» → Куда отправлять заявки» moves to the tab.
- */
-function memorial_plugin_lead_mail_move() {
-	if ( get_option( 'memorial_plugin_lead_mail_moved' ) ) {
-		return;
-	}
-	update_option( 'memorial_plugin_lead_mail_moved', 1 );
-	$old = (string) ( get_option( 'mem_contacts' )['call']['email'] ?? '' );
-	if ( '' === trim( $old ) ) {
-		return;
-	}
-	$page = get_option( 'mem_modules_page' );
-	$page = is_array( $page ) ? $page : array();
-	// The features switched on stay as they are (the option also holds them).
-	if ( ! isset( $page['on'] ) ) {
-		$on         = get_option( 'mem_modules' );
-		$page['on'] = is_array( $on ) ? $on : array_fill_keys( array_keys( memorial_plugin_optional() ), 1 );
-	}
-	if ( '' === trim( (string) ( $page['mail']['to'] ?? '' ) ) ) {
-		$page['mail']       = (array) ( $page['mail'] ?? array() );
-		$page['mail']['to'] = $old;
-		update_option( 'mem_modules_page', $page );
-	}
-}
-add_action( 'init', 'memorial_plugin_lead_mail_move', 30 );

@@ -1,7 +1,7 @@
 <?php
 /**
- * Home sections as block markup (from the mem_home setting) and the one-time transfer into the
- * front-page template. See blocks/home/home.php.
+ * Home sections as block markup (from the mem_home setting): the content a new site gets on its front
+ * page (blocks/home/pages-to-content.php) and the hidden theme pattern memorial-theme/home.
  *
  * @package memorial-plugin
  */
@@ -378,46 +378,3 @@ function memorial_plugin_home_markup( $o = null ) {
 	}
 	return implode( "\n\n", $out );
 }
-
-/**
- * One-time transfer: save the theme’s front-page template with the sections as the site’s template.
- */
-function memorial_plugin_home_migrate() {
-	if ( get_option( 'memorial_plugin_home_migrated' ) || ! current_user_can( 'edit_theme_options' ) || ! wp_is_block_theme() ) {
-		return;
-	}
-	$log   = array(
-		'time'   => time(),
-		'theme'  => get_stylesheet(),
-		'result' => 'no-template',
-	);
-	$theme = get_block_template( get_stylesheet() . '//front-page', 'wp_template' );
-	if ( $theme && false !== strpos( (string) $theme->content, 'memorial-theme/home' ) ) {
-		if ( 'custom' === $theme->source ) {
-			$log['result'] = 'skipped-user-template-exists';
-		} else {
-			$content = preg_replace( '~<!-- wp:pattern \{"slug":"memorial-theme/home"\} /-->~', memorial_plugin_home_markup(), (string) $theme->content );
-			$id      = wp_insert_post(
-				array(
-					'post_type'    => 'wp_template',
-					'post_status'  => 'publish',
-					'post_name'    => 'front-page',
-					'post_title'   => $theme->title,
-					'post_excerpt' => $theme->description,
-					'post_content' => wp_slash( $content ),
-				),
-				true
-			);
-			if ( is_wp_error( $id ) ) {
-				$log['result'] = 'error: ' . $id->get_error_message();
-			} else {
-				// Done directly: the wp_theme term is set by tax_input only for users who may assign terms.
-				wp_set_object_terms( $id, array( get_stylesheet() ), 'wp_theme' );
-				$log['result']      = 'migrated';
-				$log['template_id'] = (int) $id;
-			}
-		}
-	}
-	update_option( 'memorial_plugin_home_migrated', $log, false );
-}
-add_action( 'admin_init', 'memorial_plugin_home_migrate' );

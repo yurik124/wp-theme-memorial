@@ -64,6 +64,7 @@ jobs:
         env:
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
+          if [ -f after/tests/probe/run.env ]; then set -a; . after/tests/probe/run.env; set +a; fi
           # paramiko из PyPI, а не lftp из apt: зеркала apt на раннерах бывают недоступны
           pip install -q paramiko
           mkdir -p data uploads

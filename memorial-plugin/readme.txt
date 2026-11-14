@@ -4,7 +4,7 @@ Tags: funeral, catalog, blocks, dataviews, abilities
 Requires at least: 7.1
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,25 +14,26 @@ Site features for the Memorial funeral services site: catalog, prices, reviews, 
 
 The plugin holds what the site can do; the Memorial Modern theme holds how it looks. The blocks work in any block theme: colours and fonts come from the theme’s presets, with fallbacks.
 
-* Blocks: catalog, catalog tiles and sub-sections, product, prices and packages, cremation, works, reviews (sites, Yandex Maps, Rewio, guest book), questions and answers, “Good to know”, cemeteries, memorial meal halls, contacts, maps, header and footer parts, call-to-action, laurel and icons.
-* Site values inside text: starting price, number of models, prices, years in business, phone, company details.
-* Admin screens on DataViews and DataForm (@wordpress/admin-ui): products, types and categories, works, call requests, guest book, search statistics, all settings.
-* Abilities API: 12 abilities (list and update products, change prices, show or hide, create from photos, export to CSV, call requests, convert content, search statistics) — used by the screens, the Command Palette (Ctrl/Cmd + K) and REST.
+* Blocks: catalog, catalog section cards and sub-sections, product parts, prices and funeral packages, cremation prices, works, reviews (sites, Yandex Maps, Rewio, guest book), questions and answers, “Good to know”, cemeteries, memorial meal halls, contacts, maps, header and footer parts, call-to-action, laurel and icons.
+* Shared texts: phones, addresses and other values from the settings can be bound to paragraphs, headings and buttons (Block Bindings) and are edited right on the page.
+* Site values inside text: starting price, number of models, prices (`{price:code}`), years in business, phone, company details; SEOPress variables.
+* Admin screens on DataViews and DataForm (@wordpress/admin-ui): products, types and categories, works, call requests, Rewio reviews list, guest book, search statistics and all settings (contacts, prices, reviews, halls, cemeteries, documents, analytics, mail, permissions).
+* Abilities API: 13 abilities (list and update products, change prices, show or hide, create from photos, export to CSV, call requests, hide a review, convert shortcodes and roll a conversion back, search statistics) — used by the screens, the Command Palette (Ctrl/Cmd + K) and REST.
 * Interactivity API for the behaviour of blocks; scripts and styles load only on pages with the plugin’s blocks.
 * Floating parts (phone bar, “Call me back” window, cookie banner) join the footer by Block Hooks.
-* Yandex Metrica with a cookie consent banner (152-FZ), SEOPress variables.
+* The footer menu columns, the breadcrumbs and the order of “Questions and answers” follow the site’s Navigation menu (Appearance → Editor → Navigation).
+* Yandex Metrica with a cookie consent banner (152-FZ); request notifications by the hosting mail (wp_mail).
 * Translation ready; Russian translation included.
 
-Old [mem_…] shortcodes still work until 3.0.0; Memorial → Convert to blocks moves pages to blocks with a preview and a rollback.
+Old [mem_…] shortcodes still work until 3.0.0 and report a deprecation; the editor command “Convert shortcodes to blocks” converts one post, with a rollback.
 
 == Installation ==
 
-1. Upload the `memorial-plugin` folder to `wp-content/plugins/` (the GitHub workflow “Деплой на сайт” does it).
-2. Activate the plugin. If Memorial Core 1.x is active, the plugin turns it off and switches the theme to `memorial-theme` (see MIGRATION.md).
+1. Upload the `memorial-plugin` folder to `wp-content/plugins/` (the GitHub workflow “Деплой на сайт” does it) and activate it.
+2. Activate the Memorial Modern theme (`memorial-theme`).
 3. Open Memorial → Analytics and save to confirm the Yandex Metrica mode.
-4. Optional: Memorial → Convert to blocks for pages that still use shortcodes.
 
-Building from the repository: `npm install && npm run build` (JS into `build/`).
+Building from the repository: `npm install && npm run build` (JS into `build/`), `composer dump-autoload --working-dir=memorial-plugin`.
 
 == Frequently Asked Questions ==
 
@@ -42,7 +43,7 @@ Scheduled events, temporary data and the cached Rewio reviews. Products, works, 
 
 = How do I roll back? =
 
-Deactivate Memorial Plugin, activate Memorial Core 1.15 and the theme from the `memorial_speshu` folder. The data is shared, nothing is lost. Pages converted to blocks are rolled back on Memorial → Convert to blocks.
+Restore the backup of the site made before the update (UpdraftPlus: database and the plugins and themes folders). Since 2.1.0 the plugin no longer keeps the old Memorial Core 1.15 and its settings next to it.
 
 = Where are the translations? =
 
@@ -50,15 +51,17 @@ Deactivate Memorial Plugin, activate Memorial Core 1.15 and the theme from the `
 
 == Changelog ==
 
-= Unreleased =
-* Fix: “Error loading block” in the editor for plugin blocks with an extra CSS class or style (blocks are registered before the block supports).
-* The [mem_…] shortcodes report a deprecation and name the block that replaces them; the dashboard shows how many posts still use them.
-* All blocks: colour, typography, spacing and border supports, keywords and previews.
-* The home page and the Contacts page keep their blocks in the page content (one-time move with a revision and a rollback ability).
-* The line under the site title is the site tagline (Settings → General).
-* “Moving the catalog from pages” removed; test pages and empty “New product” items moved to the trash once.
-* Admin fixes: Prices layout, full-width Reviews and Cemeteries, no default filter in What people search for, the Rewio key as a password field, translated list controls; no jQuery in the Rewio panel; inline scripts through the WordPress API.
-* WordPress Coding Standards for all the code.
+= 2.1.0 =
+* Final release of the block version: the way back to Memorial Core 1.15 is removed. On the first admin visit the plugin deletes the settings of the removed screens, the logs of the one-time moves of 2.0 and the folders of the old plugin and theme (only if they are not active); the WebP choice is kept.
+* Removed the one-time moves that have done their work: switching over from Memorial Core, cleaning after the speed modules, test pages, the home template, catalog tiles, the cremation package, the request mail address, the Metrica mode, the model tables of the catalog, the work and gallery cards and others.
+* The footer menu columns, the breadcrumbs, the section cards and the order of “Questions and answers” use the Navigation menu of the site instead of the classic menu.
+* Settings → Mail: the request notification template and a test message; Settings → Permissions for the Editor and Author roles.
+* Reviews: the Rewio reviews list on DataViews, changed and removed reviews are marked, hiding by the Editor.
+* Prices: packages in one list (cremation is a package), number of columns, `{price:code}` in texts.
+* Fix: a `{price:…}` code that referred to itself made the home page fail.
+* Fix: “Error loading block” in the editor for plugin blocks with an extra CSS class or style.
+* The home page and the Contacts page keep their blocks in the page content; the line under the site title is the site tagline.
+* All blocks: block.json, colour, typography, spacing and border supports, keywords and previews; WordPress Coding Standards for all the code.
 
 = 2.0.0 =
 * Block architecture for WordPress 7.1: blocks instead of shortcodes, admin on DataViews / DataForm, Abilities API and Command Palette, Interactivity API, theme presets with fallbacks, Block Hooks.
@@ -73,5 +76,5 @@ Deactivate Memorial Plugin, activate Memorial Core 1.15 and the theme from the `
 
 == Upgrade Notice ==
 
-= 2.0.0 =
-Make a backup first. Activating the plugin turns off Memorial Core and switches the theme to Memorial Modern 5.0 — see MIGRATION.md for the steps and the rollback.
+= 2.1.0 =
+Make a backup first: after this update the old Memorial Core and the old theme are deleted and the only way back is the backup.

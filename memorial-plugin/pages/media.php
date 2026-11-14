@@ -3,8 +3,8 @@
  * Фото на страницах:
  * — в галереях и рядах из нескольких фото все снимки одного размера (общие пропорции по большинству фото);
  * — фото в галереях открываются крупно, даже если в редакторе не указана ссылка;
- * — современный формат WebP: прежняя галочка «Оформления» (mem_design → img → webp); экрана больше нет,
- *   модуль убирается вместе с функциями скорости (решение по этапу 1, п. 5).
+ * — современный формат WebP: прежняя галочка «Оформления», с 2.1.0 — опция memorial_plugin_webp (core/upgrade.php);
+ *   экрана нет.
  *
  * @package memorial-plugin
  */
@@ -153,7 +153,7 @@ add_filter(
  * Webp on.
  */
 function memorial_plugin_webp_on() {
-	return ! empty( memorial_plugin_settings( 'mem_design' )['img']['webp'] ) && wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) );
+	return (bool) get_option( 'memorial_plugin_webp' ) && wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) );
 }
 
 /* Новые фото: уменьшенные копии (их и показывает сайт) сохраняются в WebP; оригинал остаётся как есть */

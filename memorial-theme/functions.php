@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MEMORIAL_THEME_VER', '5.0.2' );
+define( 'MEMORIAL_THEME_VER', '5.1.0' );
 
 /*
  * Translations of the theme (languages/memorial-theme-<locale>.mo / .l10n.php) — on init, before anything
@@ -24,12 +24,6 @@ add_action(
 	'init',
 	function () {
 		load_theme_textdomain( 'memorial-theme', get_template_directory() . '/languages' );
-		register_nav_menus(
-			array(
-				'primary' => __( 'Main menu', 'memorial-theme' ),
-				'footer'  => __( 'Footer menu', 'memorial-theme' ),
-			)
-		);
 	},
 	0
 );
@@ -167,6 +161,20 @@ add_action(
 	1
 );
 
+/*
+ * Pages open with their template (header, footer, title) in the page editor and in Appearance → Editor, so
+ * the preview of the site in the Site Editor shows the whole page, not only its content. After the post
+ * types are registered (init, 0): registering “page” resets its supports.
+ */
+add_action(
+	'init',
+	static function () {
+		add_post_type_support( 'page', 'editor', array( 'default-mode' => 'template-locked' ) );
+	},
+	20
+);
+add_filter( 'post_type_page_default_rendering_mode', static fn() => 'template-locked' );
+
 /* Чистка head */
 add_action(
 	'init',
@@ -208,12 +216,38 @@ add_action(
 	}
 );
 
-require get_template_directory() . '/inc/design.php';
-require get_template_directory() . '/inc/design-migrate.php';
 require get_template_directory() . '/inc/laurel.php';
 require get_template_directory() . '/inc/logo-sync.php';
-require get_template_directory() . '/inc/navigation-migrate.php';
-require get_template_directory() . '/inc/tagline-migrate.php';
+require get_template_directory() . '/inc/navigation.php';
+require get_template_directory() . '/inc/upgrade.php';
+
+/**
+ * Colour of the palette of the site styles (with the user's changes), or the fallback.
+ *
+ * @param string $slug     Slug.
+ * @param string $fallback Fallback.
+ * @return string
+ */
+function memorial_theme_palette_color( $slug, $fallback = '' ) {
+	$palette = wp_get_global_settings( array( 'color', 'palette' ) );
+	foreach ( array( 'custom', 'theme' ) as $origin ) {
+		foreach ( (array) ( $palette[ $origin ] ?? array() ) as $c ) {
+			if ( ( $c['slug'] ?? '' ) === $slug && ! empty( $c['color'] ) ) {
+				return $c['color'];
+			}
+		}
+	}
+	return $fallback;
+}
+
+/**
+ * Colour of the browser bar on phones — the page background.
+ *
+ * @return string
+ */
+function memorial_theme_theme_color() {
+	return memorial_theme_palette_color( 'base', '#fbfaf6' );
+}
 
 /**
  * Script of the header (assets/js/header-fit.js) right after the Header template part: it measures the menu

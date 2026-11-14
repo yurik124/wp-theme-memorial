@@ -9,11 +9,7 @@ msgstr ""
 "X-Domain: memorial-theme\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: inc/design.php:72
-msgid " (custom)"
-msgstr ""
-
-#: functions.php:197
+#: functions.php:205
 msgid " — to the home page"
 msgstr ""
 
@@ -33,45 +29,13 @@ msgstr ""
 msgid "A short explanation: terms, conditions or what to bring."
 msgstr ""
 
-#: inc/design.php:22
-msgid "Accent: buttons, icons, laurel"
-msgstr ""
-
 #: patterns/footer.php:36
 msgid "Back to top"
 msgstr ""
 
-#: inc/design.php:26
-msgid "Background of alternating blocks"
-msgstr ""
-
-#: inc/design.php:21
-msgid "Background of the bars — second shade"
-msgstr ""
-
-#: inc/design.php:20
-msgid "Background of the header bars and the footer (light in the light scheme)"
-msgstr ""
-
 #. Description of the theme
 #: style.css
-msgid "Block theme for the Memorial funeral services site (Belgorod), \"Bright Memory\": light header and footer, laurel graphics, warm paper and sage green; style variations Laurel, Bronze, Stone and Dark. Site data (contacts, catalog, prices) comes from blocks of the Memorial Plugin."
-msgstr ""
-
-#: inc/design.php:29
-msgid "Borders and dividers"
-msgstr ""
-
-#: inc/design.php:45
-msgid "Bright memory — bronze"
-msgstr ""
-
-#: inc/design.php:44
-msgid "Bright memory — laurel (main)"
-msgstr ""
-
-#: inc/design.php:31
-msgid "Bronze: thin lines, laurel berries (in small doses)"
+msgid "Block theme for the Memorial funeral services site (Belgorod), \"Bright Memory\": light header and footer, laurel graphics, warm paper and sage green; style variations Laurel, Bronze, Stone and Dark. Pages, templates, the menu and the styles are edited in Appearance → Editor. Site data (contacts, catalog, prices) comes from blocks of the Memorial Plugin."
 msgstr ""
 
 #: patterns/steps-icons.php:17
@@ -133,8 +97,9 @@ msgctxt "Color name"
 msgid "Text on a filled button"
 msgstr ""
 
-#: inc/design.php:24
-msgid "Dark accent: links, eyebrows, hover"
+#: theme.json
+msgctxt "Custom template name"
+msgid "Contacts page"
 msgstr ""
 
 #: patterns/steps-icons.php:27
@@ -142,7 +107,7 @@ msgid "Documents"
 msgstr ""
 
 #. translators: %s: menu item
-#: functions.php:134
+#: functions.php:128
 #, php-format
 msgid "Expand: %s"
 msgstr ""
@@ -200,14 +165,6 @@ msgctxt "Font size name"
 msgid "Small"
 msgstr ""
 
-#: functions.php:30
-msgid "Footer menu"
-msgstr ""
-
-#: inc/design.php:59
-msgid "Georgia (system serif)"
-msgstr ""
-
 #: patterns/note.php:15
 msgid "Good to know"
 msgstr ""
@@ -216,20 +173,8 @@ msgstr ""
 msgid "Introduction: one or two sentences — what we offer, from what price, how we differ."
 msgstr ""
 
-#: inc/design.php:23
-msgid "Light accent: ornament, dividers"
-msgstr ""
-
-#: inc/design.php:46
-msgid "Light stone (grey-blue)"
-msgstr ""
-
-#: functions.php:29 inc/navigation-migrate.php:99
+#: inc/navigation.php:86
 msgid "Main menu"
-msgstr ""
-
-#: inc/design.php:27
-msgid "Main text"
 msgstr ""
 
 #. Theme Name of the theme
@@ -237,7 +182,7 @@ msgstr ""
 msgid "Memorial Modern"
 msgstr ""
 
-#: functions.php:207
+#: functions.php:215
 msgid "Memorial: text layouts"
 msgstr ""
 
@@ -247,10 +192,6 @@ msgstr ""
 
 #: patterns/no-results.php:15
 msgid "Nothing found."
-msgstr ""
-
-#: inc/design.php:25
-msgid "Page background"
 msgstr ""
 
 #: patterns/note.php
@@ -363,16 +304,8 @@ msgctxt "Pattern title"
 msgid "Steps with icons"
 msgstr ""
 
-#: inc/design.php:30
-msgid "Sage backing: “What to do”, numbers, footer"
-msgstr ""
-
 #: patterns/note.php:28
 msgid "Second item"
-msgstr ""
-
-#: inc/design.php:28
-msgid "Secondary text"
 msgstr ""
 
 #: styles/dark.json theme.json
@@ -430,10 +363,6 @@ msgctxt "Style variation name"
 msgid "Light stone"
 msgstr ""
 
-#: inc/design.php:60
-msgid "System sans-serif (as in Windows/phone)"
-msgstr ""
-
 #: patterns/steps-icons.php:21
 msgid "Tell us what happened — we will tell you what to do right now."
 msgstr ""
@@ -448,22 +377,12 @@ msgctxt "Template part name"
 msgid "Header"
 msgstr ""
 
-#. translators: %s: colour key
-#: inc/design-migrate.php:86
-#, php-format
-msgid "The custom colour “%s” (the former dark bars) is not moved: in the light schemes it matches the section background."
-msgstr ""
-
 #: patterns/steps-icons.php:41
 msgid "We will arrange the farewell and the last journey."
 msgstr ""
 
 #: patterns/steps-icons.php:31
 msgid "We will help to get the certificates and arrange the documents."
-msgstr ""
-
-#: inc/tagline-migrate.php:26
-msgid "funeral company"
 msgstr ""
 
 #. Theme URI of the theme
@@ -475,6 +394,6 @@ msgstr ""
 msgid "logo"
 msgstr ""
 
-#: functions.php:135
+#: functions.php:129
 msgid "submenu"
 msgstr ""

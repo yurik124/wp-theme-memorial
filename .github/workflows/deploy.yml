@@ -4,8 +4,8 @@ name: Деплой на сайт
 #  1. Сборка: npm run build (JS плагина) и composer dump-autoload (автозагрузка классов плагина).
 #  2. В пакет попадает только то, что нужно сайту: без src/, node_modules/, тестов и конфигов разработки.
 #  3. Выгрузка во временную папку (.memorial-plugin-new), затем переименование одной операцией:
-#     сайт не видит полузалитый плагин. Предыдущая версия остаётся рядом как .memorial-plugin-old до следующей выгрузки.
-#  Старые папки memorial_speshu и memorial-core этот процесс не трогает (откат — см. MIGRATION.md).
+#     сайт не видит полузалитый плагин. Прежняя версия на время подмены — .memorial-plugin-old, после подмены удаляется.
+#  Откат — из резервной копии сайта (UpdraftPlus), см. MIGRATION.md.
 #
 # Перед выгрузкой — все проверки, включая WordPress 7.1.4 (ci.yml). Не прошли — выгрузки нет.
 # Запуск: push в main или вручную (Actions → «Деплой на сайт» → Run workflow → выбрать ветку).
@@ -106,4 +106,10 @@ jobs:
               open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
               mv $SITE_DIR/$dir/.$name-new $SITE_DIR/$dir/$name;
             "
+            # прежняя версия больше не нужна
+            lftp -c "
+              set sftp:auto-confirm yes; set cmd:fail-exit no;
+              open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
+              rm -r -f $SITE_DIR/$dir/.$name-old;
+            " || true
           done

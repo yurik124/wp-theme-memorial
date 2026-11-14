@@ -1,0 +1,108 @@
+<?php
+/**
+ * Update of the site data to 2.1.0 — once, on the first admin visit of an administrator after the update.
+ *
+ * 2.0 kept everything needed to roll back to Memorial Core 1.15 and the old theme (memorial_speshu): the
+ * old folders, the settings of the removed screens and the logs of the one-time moves. The moves are done
+ * on the site and 2.1.0 has no rollback any more (the way back is a backup of the site), so:
+ *  - the WebP choice of the removed “Memorial → Design” screen moves to its own option
+ *    (memorial_plugin_webp), then the old settings and the logs of the moves are deleted;
+ *  - the folders of the old plugin and theme (memorial-core, memorial_speshu) and the copies the
+ *    deployment kept next to the new ones (.memorial-plugin-old, .memorial-theme-old) are deleted —
+ *    only when the old plugin and theme are not active and WordPress can write the files directly.
+ * The result is in the memorial_plugin_upgrade_210 option.
+ *
+ * @package memorial-plugin
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+/** Options of the removed screens and the logs of the one-time moves of 2.0. */
+const MEMORIAL_PLUGIN_OLD_OPTIONS = array(
+	'mem_speed',
+	'mem_design',
+	'mem_ver_15',
+	'mem_home_texts_v2',
+	'mem_desc_cleaned',
+	'mem_specs_migrated',
+	'mem_wcards_migrated',
+	'mem_cards_seeded',
+	'mem_photos_migrated',
+	'memorial_plugin_switchover',
+	'memorial_plugin_after_switch',
+	'memorial_plugin_speed_removed',
+	'memorial_plugin_cleanup',
+	'memorial_plugin_home_migrated',
+	'memorial_plugin_tiles_to_cards',
+	'memorial_plugin_prices_pkg_merge',
+	'memorial_plugin_lead_ip_removed',
+	'memorial_plugin_lead_mail_moved',
+	'memorial_plugin_metrika_load_migrated',
+	'memorial_plugin_metrika_confirm',
+	'memorial_plugin_types_setup_1113',
+);
+
+/**
+ * Run the update once.
+ */
+function memorial_plugin_upgrade() {
+	if ( version_compare( (string) get_option( 'memorial_plugin_db', '0' ), '2.1.0', '>=' ) || ! current_user_can( 'manage_options' ) || wp_doing_ajax() ) {
+		return;
+	}
+	$log = array( 'time' => time() );
+
+	// WebP: the only value of the old “Design” screen still in use (pages/media.php).
+	$design = get_option( 'mem_design' );
+	if ( false === get_option( 'memorial_plugin_webp', false ) ) {
+		update_option( 'memorial_plugin_webp', empty( $design['img']['webp'] ) ? 0 : 1, false );
+	}
+
+	foreach ( MEMORIAL_PLUGIN_OLD_OPTIONS as $name ) {
+		if ( false !== get_option( $name, false ) ) {
+			delete_option( $name );
+			$log['options'][] = $name;
+		}
+	}
+
+	$log['folders'] = memorial_plugin_upgrade_old_folders();
+
+	update_option( 'memorial_plugin_upgrade_210', $log, false );
+	update_option( 'memorial_plugin_db', '2.1.0', false );
+}
+add_action( 'admin_init', 'memorial_plugin_upgrade', 5 );
+
+/**
+ * Delete the folders of the old plugin and theme and the copies the deployment kept.
+ *
+ * @return array<string,string> Folder => what happened.
+ */
+function memorial_plugin_upgrade_old_folders() {
+	global $wp_filesystem;
+	$plugins = WP_PLUGIN_DIR;
+	$themes  = get_theme_root();
+	$folders = array(
+		$plugins . '/memorial-core'         => 'memorial-core/memorial-core.php',
+		$themes . '/memorial_speshu'        => 'memorial_speshu',
+		$plugins . '/.memorial-plugin-old'  => '',
+		$themes . '/.memorial-theme-old'    => '',
+	);
+	$out     = array();
+	$present = array_filter( array_keys( $folders ), 'is_dir' );
+	if ( ! $present ) {
+		return $out;
+	}
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	if ( 'direct' !== get_filesystem_method( array(), WP_CONTENT_DIR ) || ! WP_Filesystem() ) {
+		return array( 'all' => 'no direct file access' );
+	}
+	$active_plugins = (array) get_option( 'active_plugins', array() );
+	foreach ( $present as $dir ) {
+		$what = $folders[ $dir ];
+		if ( '' !== $what && ( in_array( $what, $active_plugins, true ) || get_stylesheet() === $what || get_template() === $what ) ) {
+			$out[ basename( $dir ) ] = 'active, kept';
+			continue;
+		}
+		$out[ basename( $dir ) ] = $wp_filesystem->delete( $dir, true ) ? 'deleted' : 'not deleted';
+	}
+	return $out;
+}

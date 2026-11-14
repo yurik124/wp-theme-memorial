@@ -1,0 +1,37 @@
+name: Уборка веток
+
+# Удаляет служебные ветки (probe/*, autofix/*, shots/*, stage-*, fixes-*, plan-*, diag/* и т. п.),
+# оставляя основные: main, block-migration, ci-probe и ветки из списка KEEP.
+# Запуск: push ветки cleanup/<что угодно> — она удаляется последней.
+
+on:
+  push:
+    branches: ['cleanup/**']
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Удалить служебные ветки
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SELF: ${{ github.ref_name }}
+          KEEP: 'main block-migration ci-probe'
+        run: |
+          gh api --paginate "repos/$REPO/branches?per_page=100" -q '.[].name' > branches.txt
+          deleted=0
+          while read -r b; do
+            case " $KEEP " in *" $b "*) continue ;; esac
+            [ "$b" = "$SELF" ] && continue
+            if gh api -X DELETE "repos/$REPO/git/refs/heads/$b" >/dev/null; then
+              echo "удалена: $b"; deleted=$((deleted+1))
+            else
+              echo "::warning::не удалена: $b"
+            fi
+          done < branches.txt
+          echo "Удалено веток: $deleted"
+          gh api -X DELETE "repos/$REPO/git/refs/heads/$SELF" >/dev/null || true

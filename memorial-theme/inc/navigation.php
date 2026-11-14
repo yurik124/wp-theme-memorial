@@ -1,11 +1,13 @@
 <?php
 /**
- * Меню → блок «Навигация».
+ * Main menu of the site: the Navigation menu (wp_navigation) shown in the header.
  *
- * Один раз (при включении темы или в админке) главное меню сайта (область «primary» классических меню)
- * копируется в меню блоков (запись wp_navigation «Главное меню»). Блок «Навигация» в шапке без выбранного
- * меню показывает именно его. Классическое меню не удаляется: из него строятся колонки меню в подвале
- * (до этапа 3) и его можно вернуть при откате. Журнал — опция memorial_theme_nav_migrated.
+ * The Navigation block of the header has no fixed menu in the pattern (the theme cannot know its ID):
+ * on the site it shows the menu chosen here — the option memorial_theme_main_nav, otherwise the most recent
+ * published Navigation menu, which is also what the Site Editor shows for a block without a menu.
+ * Memorial Plugin builds the footer columns, the breadcrumbs and the order of “Questions and answers” from
+ * the same menu (filter memorial_plugin_main_nav_id), so one edit in Appearance → Editor → Navigation
+ * changes all of them.
  *
  * @package memorial-theme
  */
@@ -13,53 +15,39 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Перенос главного меню в меню блоков.
+ * ID of the main Navigation menu, 0 if there is none.
+ *
+ * @return int
  */
-function memorial_theme_nav_migrate() {
-	if ( get_option( 'memorial_theme_nav_migrated' ) || get_stylesheet() !== get_template() ) {
-		return;
+function memorial_theme_main_nav_id() {
+	static $id = null;
+	if ( null !== $id ) {
+		return $id;
 	}
-	$log  = array(
-		'time'   => time(),
-		'result' => 'no-menu',
+	$id = (int) get_option( 'memorial_theme_main_nav' );
+	if ( $id && 'publish' === get_post_status( $id ) && 'wp_navigation' === get_post_type( $id ) ) {
+		return $id;
+	}
+	$latest = get_posts(
+		array(
+			'post_type'      => 'wp_navigation',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		)
 	);
-	$locs = get_nav_menu_locations();
-	if ( empty( $locs['primary'] ) ) {
-		$old  = get_option( 'theme_mods_memorial_speshu' );
-		$locs = (array) ( is_array( $old ) ? ( $old['nav_menu_locations'] ?? array() ) : array() );
-	}
-	$menu = isset( $locs['primary'] ) ? wp_get_nav_menu_object( (int) $locs['primary'] ) : false;
-
-	if ( $menu && class_exists( 'WP_Classic_To_Block_Menu_Converter' ) ) {
-		$content = WP_Classic_To_Block_Menu_Converter::convert( $menu );
-		if ( is_string( $content ) && '' !== $content ) {
-			$id = wp_insert_post(
-				array(
-					'post_type'    => 'wp_navigation',
-					'post_status'  => 'publish',
-					'post_title'   => 'Главное меню',
-					'post_content' => $content,
-				),
-				true
-			);
-			if ( ! is_wp_error( $id ) ) {
-				$log['result']  = 'migrated';
-				$log['nav_id']  = (int) $id;
-				$log['menu_id'] = (int) $menu->term_id;
-			} else {
-				$log['result'] = 'error: ' . $id->get_error_message();
-			}
-		}
-	}
-	update_option( 'memorial_theme_nav_migrated', $log, false );
+	$id = (int) ( $latest[0] ?? 0 );
+	return $id;
 }
-add_action( 'after_switch_theme', 'memorial_theme_nav_migrate' );
-add_action( 'admin_init', 'memorial_theme_nav_migrate' );
+add_filter( 'memorial_plugin_main_nav_id', fn( $id ) => $id ? $id : memorial_theme_main_nav_id() );
 
 /**
- * Блок «Навигация» в шапке без выбранного меню — показывает перенесённое главное меню.
+ * The Navigation block of the header without a chosen menu shows the main menu.
  *
- * @param array $block Разобранный блок.
+ * @param array $block Parsed block.
  * @return array
  */
 function memorial_theme_nav_default_ref( $block ) {
@@ -69,9 +57,8 @@ function memorial_theme_nav_default_ref( $block ) {
 	if ( ! preg_match( '/(^|\s)nav(\s|$)/', (string) ( $block['attrs']['className'] ?? '' ) ) ) {
 		return $block;
 	}
-	$log = get_option( 'memorial_theme_nav_migrated' );
-	$id  = is_array( $log ) ? (int) ( $log['nav_id'] ?? 0 ) : 0;
-	if ( $id && 'publish' === get_post_status( $id ) ) {
+	$id = memorial_theme_main_nav_id();
+	if ( $id ) {
 		$block['attrs']['ref'] = $id;
 	}
 	return $block;

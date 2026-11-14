@@ -452,22 +452,128 @@ endwhile;
 	wp_reset_postdata();
 }
 
-/* ---------- Структура главного меню ---------- */
+/** Название модели для сравнения: без кавычек, пробелов и регистра
+ *
+ * @param string $s Name.
+ */
+function memorial_plugin_norm_name( $s ) {
+	$s = mb_strtolower( html_entity_decode( wp_strip_all_tags( (string) $s ), ENT_QUOTES, 'UTF-8' ) );
+	return preg_replace( '/[\s«»"\'„“”‹›\-–—.,№#]+/u', '', $s );
+}
 
-/** Пункты главного меню: [id пункта => пункт] */
+/** Товары категории страницы (с подкатегориями), по нормализованному названию
+ *
+ * @param int $page_id Page ID.
+ */
+function memorial_plugin_page_products( $page_id ) {
+	$cat = (int) get_post_meta( $page_id, '_mem_cat', true );
+	if ( ! $cat ) {
+		return array();
+	}
+	$map = array();
+	foreach ( get_posts(
+		array(
+			'post_type'      => 'mem_product',
+			'post_status'    => 'any',
+			'posts_per_page' => -1,
+			'tax_query'      => array(
+				array(
+					'taxonomy'         => 'mem_cat',
+					'terms'            => $cat,
+					'include_children' => true,
+				),
+			),
+		)
+	) as $p ) {
+		$map[ memorial_plugin_norm_name( $p->post_title ) ] = $p;
+	}
+	return $map;
+}
+
+/* ---------- Структура главного меню (блок «Навигация») ---------- */
+
+/**
+ * ID of the site's main menu — a Navigation menu (wp_navigation). The theme names it (filter
+ * memorial_plugin_main_nav_id); in another theme it is the most recent published Navigation menu,
+ * the one the Navigation block shows when no menu is chosen.
+ *
+ * @return int
+ */
+function memorial_plugin_main_nav_id() {
+	$id = (int) apply_filters( 'memorial_plugin_main_nav_id', 0 );
+	if ( $id ) {
+		return $id;
+	}
+	$latest = get_posts(
+		array(
+			'post_type'      => 'wp_navigation',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		)
+	);
+	return (int) ( $latest[0] ?? 0 );
+}
+
+/**
+ * Items of the main menu, in order: [item id => item]. Each item has the fields of a classic menu item
+ * that the plugin uses — ID, menu_item_parent, title, url, target, type (post_type / taxonomy / custom),
+ * object (page, post…), object_id — built from the Navigation links and submenus of the menu.
+ *
+ * @return array<int,object>
+ */
 function memorial_plugin_menu_items() {
 	static $items = null;
 	if ( null !== $items ) {
 		return $items;
 	}
 	$items = array();
-	$loc   = get_nav_menu_locations();
-	if ( empty( $loc['primary'] ) ) {
+	$nav   = get_post( memorial_plugin_main_nav_id() );
+	if ( ! $nav instanceof WP_Post || 'wp_navigation' !== $nav->post_type ) {
 		return $items;
 	}
-	foreach ( (array) wp_get_nav_menu_items( $loc['primary'] ) as $it ) {
-		$items[ $it->ID ] = $it;
-	}
+	$next = 0;
+	$walk = static function ( $blocks, $parent ) use ( &$walk, &$items, &$next ) {
+		foreach ( $blocks as $b ) {
+			$name = (string) ( $b['blockName'] ?? '' );
+			$a    = (array) ( $b['attrs'] ?? array() );
+			if ( in_array( $name, array( 'core/navigation-link', 'core/navigation-submenu', 'core/home-link' ), true ) ) {
+				$kind = (string) ( $a['kind'] ?? '' );
+				$oid  = (int) ( $a['id'] ?? 0 );
+				$url  = (string) ( $a['url'] ?? '' );
+				if ( 'core/home-link' === $name ) {
+					$url = home_url( '/' );
+				} elseif ( $oid && 'post-type' === $kind && get_post_status( $oid ) ) {
+					$url = (string) get_permalink( $oid );
+				} elseif ( $oid && 'taxonomy' === $kind ) {
+					$link = get_term_link( $oid );
+					$url  = is_wp_error( $link ) ? $url : $link;
+				}
+				$label = (string) ( $a['label'] ?? '' );
+				if ( '' === $label && 'core/home-link' === $name ) {
+					$label = __( 'Home', 'memorial-plugin' );
+				}
+				$id           = ++$next;
+				$items[ $id ] = (object) array(
+					'ID'               => $id,
+					'menu_item_parent' => $parent,
+					'title'            => trim( wp_strip_all_tags( html_entity_decode( $label, ENT_QUOTES, 'UTF-8' ) ) ),
+					'url'              => $url,
+					'target'           => empty( $a['opensInNewTab'] ) ? '' : '_blank',
+					'type'             => 'post-type' === $kind ? 'post_type' : ( 'taxonomy' === $kind ? 'taxonomy' : 'custom' ),
+					'object'           => (string) ( $a['type'] ?? '' ),
+					'object_id'        => $oid,
+				);
+				$walk( (array) ( $b['innerBlocks'] ?? array() ), $id );
+			} elseif ( ! empty( $b['innerBlocks'] ) ) {
+				$walk( $b['innerBlocks'], $parent );
+			}
+		}
+	};
+	$walk( parse_blocks( (string) $nav->post_content ), 0 );
 	return $items;
 }
 

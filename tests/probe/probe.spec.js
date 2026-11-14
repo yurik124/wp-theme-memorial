@@ -1107,3 +1107,235 @@ test.describe( 'отзывы и разрешения', () => {
 		log( 'reviews', report );
 	} );
 } );
+
+test.describe( 'редактор сайта', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'аудит редактора сайта', async ( { page, browser } ) => {
+		test.setTimeout( 1_500_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = { screens: {}, canvas: {}, menu: {} };
+		// Картинка темы: главная рабочего сайта 1200×900 (screenshot.png)
+		const ctx = await browser.newContext( { viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 } );
+		const p2 = await ctx.newPage();
+		await p2.goto( 'https://memorialbel.ru/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
+		await p2.addStyleTag( { content: NO_FLOAT + '.consent-banner,.memorial-plugin-cookie,[class*=cookie],[class*=mobile-bar]{display:none !important}' } ).catch( () => {} );
+		await p2.waitForTimeout( 3000 );
+		await p2.screenshot( { path: `${ DIR }/theme-screenshot.png` } );
+		await p2.screenshot( { path: `${ DIR }/theme-home-full.png`, fullPage: true } );
+		await ctx.close();
+		const errs = errorsOf( page );
+		const bad = [];
+		page.on( 'response', ( r ) => {
+			if ( r.status() >= 400 && /wp-json|rest_route/.test( r.url() ) ) {
+				bad.push( r.status() + ' ' + decodeURIComponent( r.url() ).replace( /^https?:\/\/[^/]+/, '' ).slice( 0, 200 ) );
+			}
+		} );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+
+		// Меню «Внешний вид»: что в нём есть (Customizer, Меню, Виджеты быть не должно)
+		await page.goto( '/wp-admin/themes.php' );
+		report.menu.appearance = await page.locator( '#menu-appearance .wp-submenu a' ).evaluateAll( ( a ) => a.map( ( x ) => x.textContent.trim() + ' → ' + x.getAttribute( 'href' ) ) );
+		await shot( page, 'se-themes' ).catch( () => {} );
+		report.menu.themeCard = await page.locator( '.theme.active' ).first().innerText( { timeout: 5000 } ).catch( () => '' );
+		report.menu.themeShot = await page.locator( '.theme.active .theme-screenshot img' ).first().getAttribute( 'src', { timeout: 5000 } ).catch( () => null );
+		log( 'site-editor', report );
+
+		const editorReady = async () => {
+			await page.waitForSelector( '.edit-site-layout, .edit-site', { timeout: 60000 } ).catch( () => {} );
+			await page.waitForTimeout( 4000 );
+		};
+		const canvasCheck = async () => {
+			const fr = page.frameLocator( 'iframe[name="editor-canvas"]' );
+			await page.waitForSelector( 'iframe[name="editor-canvas"]', { timeout: 30000 } ).catch( () => {} );
+			await page.waitForTimeout( 5000 );
+			const frame = page.frame( { name: 'editor-canvas' } );
+			if ( ! frame ) {
+				return { canvas: false };
+			}
+			return frame.evaluate( () => {
+				const txt = ( el ) => el.textContent.trim().replace( /\s+/g, ' ' ).slice( 0, 220 );
+				return {
+					canvas: true,
+					warnings: [ ...document.querySelectorAll( '.block-editor-warning' ) ].map( ( el ) => ( el.closest( '[data-type]' )?.getAttribute( 'data-type' ) || '?' ) + ': ' + txt( el ) ),
+					loadErrors: [ ...document.querySelectorAll( '[data-type]' ) ].filter( ( el ) => /Ошибка загрузки блока|Error loading block|encountered an error|возникла ошибка/i.test( el.textContent ) && ! el.querySelector( '[data-type]' ) ).map( ( el ) => el.getAttribute( 'data-type' ) + ': ' + txt( el ) ),
+					missing: [ ...document.querySelectorAll( '.wp-block-missing, [data-type="core/missing"]' ) ].map( txt ),
+					placeholders: [ ...document.querySelectorAll( '.components-placeholder' ) ].map( ( el ) => ( el.closest( '[data-type]' )?.getAttribute( 'data-type' ) || '?' ) + ': ' + txt( el ) ),
+					blocks: document.querySelectorAll( '[data-type]' ).length,
+					types: [ ...new Set( [ ...document.querySelectorAll( '[data-type]' ) ].map( ( el ) => el.getAttribute( 'data-type' ) ) ) ],
+					landmarks: [ 'header', 'main', 'footer', 'nav' ].map( ( t ) => t + ':' + document.querySelectorAll( t ).length ).join( ' ' ),
+				};
+			} ).catch( ( e ) => ( { error: String( e ) } ) );
+		};
+
+		// Корень «Дизайн» — тот самый экран с подписью «Настройте внешний вид вашего сайта с помощью редактора блоков»
+		const routes = {
+			root: '/wp-admin/site-editor.php',
+			navigation: '/wp-admin/site-editor.php?p=%2Fnavigation',
+			styles: '/wp-admin/site-editor.php?p=%2Fstyles',
+			pages: '/wp-admin/site-editor.php?p=%2Fpage',
+			templates: '/wp-admin/site-editor.php?p=%2Ftemplate',
+			patterns: '/wp-admin/site-editor.php?p=%2Fpattern',
+			parts: '/wp-admin/site-editor.php?p=%2Fpattern&postType=wp_template_part',
+		};
+		for ( const [ k, url ] of Object.entries( routes ) ) {
+			await page.goto( url );
+			await editorReady();
+			report.screens[ k ] = {
+				url: page.url().replace( /^https?:\/\/[^/]+/, '' ),
+				sidebar: await page.locator( '.edit-site-sidebar__content, .edit-site-layout__sidebar' ).first().innerText().catch( () => '' ),
+				notices: await page.locator( '.components-notice, .components-snackbar' ).allTextContents(),
+			};
+			await shot( page, 'se-' + k ).catch( () => {} );
+			log( 'site-editor', report );
+		}
+		// Список шаблонов и частей (данные REST)
+		report.templates = await page.evaluate( async () => {
+			const t = await window.wp.apiFetch( { path: '/wp/v2/templates?context=edit&per_page=100' } ).catch( ( e ) => [ { error: e.message } ] );
+			const p = await window.wp.apiFetch( { path: '/wp/v2/template-parts?context=edit&per_page=100' } ).catch( ( e ) => [ { error: e.message } ] );
+			const n = await window.wp.apiFetch( { path: '/wp/v2/navigation?context=edit&per_page=100&status=publish,draft' } ).catch( ( e ) => [ { error: e.message } ] );
+			const gs = await window.wp.apiFetch( { path: '/wp/v2/global-styles/themes/memorial-theme/variations' } ).catch( ( e ) => [ { error: e.message } ] );
+			const pat = await window.wp.apiFetch( { path: '/wp/v2/block-patterns/patterns' } ).catch( ( e ) => [ { error: e.message } ] );
+			const cats = await window.wp.apiFetch( { path: '/wp/v2/block-patterns/categories' } ).catch( ( e ) => [ { error: e.message } ] );
+			const one = ( x ) => ( { id: x.id, title: x.title?.rendered ?? x.title, source: x.source, origin: x.origin, modified: x.modified, has_theme_file: x.has_theme_file, area: x.area, error: x.error } );
+			return {
+				templates: t.map( one ),
+				parts: p.map( one ),
+				navigation: n.map( ( x ) => ( { id: x.id, title: x.title?.raw, status: x.status, blocks: ( x.content?.raw || '' ).match( /<!-- wp:[a-z/-]+/g )?.length || 0 } ) ),
+				variations: gs.map( ( x ) => x.title || x.error ),
+				themePatterns: pat.filter( ( x ) => /^memorial/.test( x.name ) ).map( ( x ) => x.name + ' [' + ( x.categories || [] ).join( ',' ) + ']' + ( x.inserter === false ? ' (скрыт)' : '' ) ),
+				patternCats: cats.map( ( x ) => x.name + ': ' + x.label ).filter( ( x ) => /memorial/.test( x ) ),
+			};
+		} );
+
+		// Каждый шаблон и часть — в режиме правки: ошибки блоков на холсте
+		const ids = [ ...( report.templates.templates || [] ), ...( report.templates.parts || [] ) ].filter( ( x ) => x.id ).map( ( x ) => [ x.area ? 'wp_template_part' : 'wp_template', x.id ] );
+		for ( const [ type, id ] of ids ) {
+			await page.goto( '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/' + type + '/' + id ) + '&canvas=edit' );
+			await editorReady();
+			report.canvas[ id ] = await canvasCheck();
+			report.canvas[ id ].notices = await page.locator( '.components-notice' ).allTextContents();
+			await shot( page, 'se-edit-' + id.replace( /[^a-z0-9-]+/gi, '_' ) ).catch( () => {} );
+			log( 'site-editor', report );
+		}
+
+		// Стили: варианты, книга стилей
+		await page.goto( '/wp-admin/site-editor.php?p=%2Fstyles&canvas=edit' );
+		await editorReady();
+		await shot( page, 'se-styles-edit' );
+		await page.getByRole( 'button', { name: /Обзор стилей|Browse styles/ } ).first().click( { timeout: 8000 } ).catch( () => {} );
+		await page.waitForTimeout( 2500 );
+		await shot( page, 'se-styles-variations' );
+		report.styleVariationsUI = await page.locator( '.edit-site-global-styles-variations_item, .global-styles-ui-variations_item, [class*="variations_item"]' ).count();
+		await page.getByRole( 'button', { name: /Книга стилей|Style Book/ } ).first().click( { timeout: 8000 } ).catch( () => {} );
+		await page.waitForTimeout( 4000 );
+		await shot( page, 'se-stylebook' );
+
+		// Меню «Навигация»: открыть первое меню
+		await page.goto( '/wp-admin/site-editor.php?p=%2Fnavigation' );
+		await editorReady();
+		await page.locator( '.edit-site-sidebar-navigation-screen a, .edit-site-sidebar-navigation-item' ).first().click( { timeout: 8000 } ).catch( () => {} );
+		await page.waitForTimeout( 4000 );
+		report.screens.navigationOpen = { url: page.url().replace( /^https?:\/\/[^/]+/, '' ), sidebar: await page.locator( '.edit-site-layout__sidebar' ).first().innerText().catch( () => '' ) };
+		await shot( page, 'se-navigation-open' );
+
+		report.restErrors = bad;
+		report.errors = errs;
+		log( 'site-editor', report );
+
+	} );
+} );
+
+test.describe( 'итог 2.1', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'итог 2.1: редактор сайта, меню, обновление', async ( { page, browser } ) => {
+		test.setTimeout( 900_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		const BASE = 'http://localhost:8888';
+		// Картинка темы (screenshot.png 1200×900) — главная копии сайта с фото
+		const ctx = await browser.newContext( { viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 } );
+		const p2 = await ctx.newPage();
+		await p2.goto( BASE + '/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
+		await p2.addStyleTag( { content: NO_FLOAT + '.mbar,dialog{display:none !important} *{animation:none !important;transition:none !important}' } ).catch( () => {} );
+		report.bodyClass = await p2.evaluate( () => document.documentElement.className + ' | ' + document.body.className ).catch( () => '' );
+		await p2.waitForTimeout( 3000 );
+		await p2.screenshot( { path: `${ DIR }/theme-screenshot.png` } );
+		await p2.screenshot( { path: `${ DIR }/front-full.png`, fullPage: true } );
+		// Подвал и крошки — из «Навигации»
+		report.footerCols = await p2.locator( '.fnav .fnav__title' ).allTextContents().catch( () => [] );
+		report.footerLinks = await p2.locator( '.fnav a' ).count().catch( () => 0 );
+		const faq = PAGES.find( ( x ) => /вопрос/i.test( x.post_title ) );
+		const sub = PAGES.find( ( x ) => /оградк|венки|гроб/i.test( x.post_title ) );
+		for ( const pg of [ faq, sub ].filter( Boolean ) ) {
+			await p2.goto( BASE + new URL( pg.url ).pathname, { waitUntil: 'domcontentloaded' } ).catch( () => {} );
+			report[ 'crumbs ' + pg.post_title ] = ( await p2.locator( '.crumbs, .breadcrumbs, nav[aria-label*="крошк" i], [class*=crumb]' ).first().innerText().catch( () => '' ) ).replace( /\s+/g, ' ' );
+		}
+		await ctx.close();
+
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		report.appearance = await page.locator( '#menu-appearance .wp-submenu a' ).evaluateAll( ( a ) => a.map( ( x ) => x.textContent.trim() ) );
+		// журналы обновления — со страницы всех настроек
+		await page.goto( '/wp-admin/options.php' );
+		report.options = await page.evaluate( () => {
+			const out = {};
+			for ( const k of [ 'memorial_plugin_upgrade_210', 'memorial_theme_upgrade_510', 'memorial_plugin_db', 'memorial_theme_db', 'memorial_theme_main_nav', 'memorial_plugin_webp', 'mem_design', 'mem_speed', 'theme_mods_memorial_speshu', 'memorial_theme_nav_migrated' ] ) {
+				const el = document.querySelector( '#' + k );
+				out[ k ] = el ? ( el.value || el.textContent || '' ).slice( 0, 400 ) : '(нет)';
+			}
+			return out;
+		} );
+		await page.goto( '/wp-admin/site-editor.php' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } ).catch( () => {} );
+		report.navs = await page.evaluate( async () => ( await window.wp.apiFetch( { path: '/wp/v2/navigation?context=edit&per_page=50&status=publish,draft,trash' } ).catch( ( e ) => [ { id: e.message } ] ) ).map( ( x ) => x.id + ' ' + x.status + ' ' + ( x.title?.raw || '' ) ) );
+		report.types = await page.evaluate( async () => {
+			await new Promise( ( r ) => setTimeout( r, 500 ) );
+			const t = await fetch( '/wp-json/wp/v2/types/page?context=edit', { headers: { 'X-WP-Nonce': window.wpApiSettings?.nonce || '' } } ).then( ( r ) => r.json() ).catch( () => ( {} ) );
+			const n = await fetch( '/wp-json/wp/v2/navigation?context=edit&per_page=50&status=publish,draft,trash', { headers: { 'X-WP-Nonce': window.wpApiSettings?.nonce || '' } } ).then( ( r ) => r.json() ).catch( () => [] );
+			return { mode: t.default_rendering_mode, nav: Array.isArray( n ) ? n.map( ( x ) => x.id + ' ' + x.status + ' ' + x.title?.raw ) : n };
+		} );
+		const probeOne = async ( name, url ) => {
+			await page.goto( url );
+			await page.waitForSelector( '.edit-site-layout, .edit-site, .editor-header', { timeout: 60000 } ).catch( () => {} );
+			await page.evaluate( () => {
+				try {
+					for ( const k of [ 'welcomeGuide', 'welcomeGuideStyles', 'welcomeGuidePage', 'welcomeGuideTemplate' ] ) {
+						window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', k, false );
+						window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-post', k, false );
+					}
+				} catch ( e ) {}
+			} );
+			await page.waitForTimeout( 6000 );
+			const st = await page.evaluate( () => ( { mode: window.wp.data.select( 'core/editor' ).getRenderingMode?.() } ) ).catch( ( e ) => ( { e: String( e ) } ) );
+			const frame = page.frame( { name: 'editor-canvas' } );
+			st.canvas = frame ? await frame.evaluate( () => ( {
+				parts: [ ...document.querySelectorAll( '.wp-block-template-part' ) ].map( ( e ) => e.tagName + ':' + getComputedStyle( e ).display ),
+				title: [ ...document.querySelectorAll( '.editor-visual-editor__post-title-wrapper' ) ].map( ( e ) => getComputedStyle( e ).display ),
+				warnings: [ ...document.querySelectorAll( '.block-editor-warning' ) ].length,
+			} ) ).catch( ( e ) => String( e ) ) : null;
+			report[ name ] = st;
+			await shot( page, 'fin-' + name ).catch( () => {} );
+			log( 'final', report );
+		};
+		const front = PAGES.find( ( x ) => /главн/i.test( x.post_title ) );
+		await probeOne( 'se-root', '/wp-admin/site-editor.php' );
+		await probeOne( 'se-styles', '/wp-admin/site-editor.php?p=%2Fstyles' );
+		if ( faq ) {
+			await probeOne( 'se-page-faq', '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/page/' + faq.ID ) );
+			await probeOne( 'edit-faq', '/wp-admin/post.php?post=' + faq.ID + '&action=edit' );
+		}
+		if ( front ) {
+			await probeOne( 'edit-front', '/wp-admin/post.php?post=' + front.ID + '&action=edit' );
+		}
+		await probeOne( 'se-templates', '/wp-admin/site-editor.php?p=%2Ftemplate' );
+		await probeOne( 'se-footer', '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/wp_template_part/memorial-theme//footer' ) + '&canvas=edit' );
+		log( 'final', report );
+	} );
+} );

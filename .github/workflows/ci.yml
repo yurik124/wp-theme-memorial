@@ -68,7 +68,6 @@ jobs:
       - name: Дымовые тесты без WordPress
         if: ${{ !cancelled() }}
         run: |
-          php tests/smoke/switch.php
           php tests/smoke/metrika.php
           php tests/smoke/settings.php
           php tests/smoke/seo.php
@@ -204,8 +203,6 @@ jobs:
       - name: Запуск WordPress
         run: |
           npx wp-env start --debug
-          # «Оформление» как на сайте со своей схемой: проверка переноса в стили сайта (tests/e2e/site.spec.js)
-          npx wp-env run cli wp option update mem_design '{"colors":{"preset":"stone"},"text":{"scale":"110","head":"100"}}' --format=json
           npx wp-env run cli wp theme activate memorial-theme
           # Страница со всеми блоками плагина: проверка, что каждый выводится без ошибок (tests/e2e/blocks.spec.js)
           npx wp-env run cli wp eval-file wp-content/plugins/memorial-plugin/tools/create-blocks-check-page.php
@@ -236,7 +233,7 @@ jobs:
         run: |
           npx wp-env run cli sh -c 'cat wp-content/debug.log 2>/dev/null || true' > artifacts-debug.log
           echo "---- журналы переносов ----"
-          npx wp-env run cli sh -c 'for o in memorial_theme_design_migrated memorial_theme_nav_migrated memorial_plugin_switchover; do echo "$o: $(wp option get $o --format=json 2>/dev/null)"; done' || true
+          npx wp-env run cli sh -c 'for o in memorial_plugin_upgrade_210 memorial_theme_upgrade_510; do echo "$o: $(wp option get $o --format=json 2>/dev/null)"; done' || true
           npx wp-env run cli wp eval 'echo "global styles post: ", WP_Theme_JSON_Resolver::get_user_global_styles_post_id(), "\n"; echo substr( wp_get_global_stylesheet( array( "variables" ) ), 0, 400 ), "\n";' || true
           echo "---- debug.log (до 200 строк) ----"; head -n 200 artifacts-debug.log
           if grep -E "PHP (Fatal error|Parse error)|Uncaught" artifacts-debug.log; then

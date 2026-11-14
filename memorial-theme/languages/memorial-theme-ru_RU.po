@@ -56,8 +56,8 @@ msgstr "Фон шапки-плашек и подвала (в светлой сх
 
 #. Description of the theme
 #: style.css
-msgid "Block theme for the Memorial funeral services site (Belgorod), \"Bright Memory\": light header and footer, laurel graphics, warm paper and sage green; style variations Laurel, Bronze, Stone and Dark. Site data (contacts, catalog, prices) comes from blocks of the Memorial Plugin."
-msgstr "Блоковая тема сайта ритуальной службы «Мемориал» (Белгород), «Светлая память»: светлые шапка и подвал, лавровая графика, тёплая бумага и шалфейный зелёный; варианты стиля «Лавр», «Бронза», «Камень» и «Тёмная». Данные сайта (контакты, каталог, цены) выводят блоки Memorial Plugin."
+msgid "Block theme for the Memorial funeral services site (Belgorod), \"Bright Memory\": light header and footer, laurel graphics, warm paper and sage green; style variations Laurel, Bronze, Stone and Dark. Pages, templates, the menu and the styles are edited in Appearance → Editor. Site data (contacts, catalog, prices) comes from blocks of the Memorial Plugin."
+msgstr "Блоковая тема сайта ритуальной службы «Мемориал» (Белгород), «Светлая память»: светлые шапка и подвал, лавровая графика, тёплая бумага и шалфейный зелёный; варианты стиля «Лавр», «Бронза», «Камень» и «Тёмная». Страницы, шаблоны, меню и стили правятся во «Внешний вид → Редактор». Данные сайта (контакты, каталог, цены) выводят блоки Memorial Plugin."
 
 #: inc/design.php:26
 msgid "Borders and dividers"
@@ -533,3 +533,8 @@ msgstr "логотип"
 
 msgid "Memorial: text layouts"
 msgstr "Мемориал: оформление текста"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Contacts page"
+msgstr "Страница «Контакты»"

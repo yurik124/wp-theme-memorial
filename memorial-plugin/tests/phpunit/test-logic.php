@@ -136,56 +136,6 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( 2501, (int) get_post_meta( $a, '_mem_price', true ) );
 	}
 
-	public function test_cremation_becomes_a_package_once() {
-		delete_option( 'memorial_plugin_prices_pkg_merge' );
-		delete_option( 'memorial_plugin_cremation_pkg' );
-		update_option(
-			'mem_prices',
-			array(
-				'packages'  => array(
-					'items' => array(
-						array(
-							'name' => 'Эконом',
-							'rows' => array(
-								array(
-									'name'  => 'Гроб',
-									'price' => 7000,
-								),
-							),
-						),
-					),
-				),
-				'cremation' => array(
-					'rows'       => array(
-						array(
-							'name'  => 'Кремирование',
-							'price' => 21500,
-							'key'   => 1,
-						),
-						array(
-							'name'  => 'Урна',
-							'price' => 4500,
-						),
-					),
-					'total'      => 'Итого с доставкой',
-					'card_title' => '',
-				),
-			)
-		);
-		memorial_plugin_prices_cremation_to_packages();
-		memorial_plugin_prices_cremation_to_packages(); // the second call changes nothing.
-		$saved = get_option( 'mem_prices' );
-		$items = $saved['packages']['items'];
-		$this->assertCount( 2, $items );
-		$this->assertSame( 1, $items[0]['show'], 'old packages are shown' );
-		$this->assertSame( 'Итого с доставкой', $items[1]['total'] );
-		$this->assertSame( (string) get_option( 'memorial_plugin_cremation_pkg' ), $items[1]['_id'] );
-		$this->assertArrayHasKey( 'cremation', $saved, 'the old group stays for a rollback' );
-		$this->assertSame( 26000, memorial_plugin_cremation_total() );
-		$this->assertStringContainsString( 'Итого с доставкой', (string) call_user_func( memorial_plugin_shortcode_impl( 'mem_cremation' ), array() ) );
-		$this->assertCount( 2, memorial_plugin_packages_shown() );
-	}
-
 	public function test_hidden_package_is_not_on_the_site() {
 		update_option(
 			'mem_prices',
@@ -423,19 +373,5 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( 'Звонок: +7 900 111-22-33', $mail->subject, 'an empty name leaves no brackets' );
 		$this->assertStringContainsString( 'имя —', $mail->body );
 		$this->assertStringContainsString( 'site@example.com', $mail->header );
-	}
-
-	public function test_moving_the_address_keeps_the_features() {
-		if ( ! function_exists( 'memorial_plugin_lead_mail_move' ) ) {
-			$this->markTestSkipped( 'Call-back is off.' );
-		}
-		delete_option( 'memorial_plugin_lead_mail_moved' );
-		delete_option( 'mem_modules_page' );
-		$on = array_fill_keys( array_keys( memorial_plugin_optional() ), 1 );
-		update_option( 'mem_modules', $on );
-		update_option( 'mem_contacts', array( 'call' => array( 'email' => 'calls@example.com' ) ) );
-		memorial_plugin_lead_mail_move();
-		$this->assertSame( 'calls@example.com', get_option( 'mem_modules_page' )['mail']['to'] );
-		$this->assertSame( $on, get_option( 'mem_modules' ), 'no feature is switched off' );
 	}
 }
