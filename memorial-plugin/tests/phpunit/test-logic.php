@@ -417,7 +417,7 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 				'subject'    => 'Звонок',
 				'body'       => 'Со страницы: {page} | {url}',
 				'from_name'  => '',
-				'from_email' => '',
+				'from_email' => 'site@example.com',
 			)
 		);
 		$body = tests_retrieve_phpmailer_instance()->get_sent()->body;
@@ -428,6 +428,8 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		if ( ! function_exists( 'memorial_plugin_reviews_mail_send' ) ) {
 			$this->markTestSkipped( 'Rewio is off.' );
 		}
+		// The sender is the one of the request email (the test site has no valid default address).
+		update_option( 'mem_modules_page', array( 'mail' => array( 'from_email' => 'site@example.com' ) ) );
 		reset_phpmailer_instance();
 		$res = memorial_plugin_reviews_mail_send(
 			array(
@@ -453,5 +455,6 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( 'Новых 1, удалённых 0', $mail->subject );
 		$this->assertStringContainsString( 'Ирина, ★ 5, Яндекс Карты, 30.10.2026', $mail->body );
 		$this->assertStringContainsString( 'Спасибо за помощь', $mail->body );
+		delete_option( 'mem_modules_page' );
 	}
 }
