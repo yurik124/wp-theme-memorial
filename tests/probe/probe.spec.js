@@ -1577,7 +1577,11 @@ test.describe( 'заказать', () => {
 				return 'bad json';
 			}
 		} ) );
-		const card = page.locator( '.mcard' ).first();
+		await page.evaluate( () => document.querySelectorAll( '.mcard img' ).forEach( ( i ) => ( i.loading = 'eager' ) ) );
+		await page.waitForTimeout( 3000 );
+		const good = await page.evaluate( () => [ ...document.querySelectorAll( '.mcard' ) ].findIndex( ( c ) => c.querySelector( 'a[data-lb-card]' ) && c.querySelector( 'img' )?.naturalWidth > 0 ) );
+		report.cardIndex = good;
+		const card = page.locator( '.mcard' ).nth( Math.max( 0, good ) );
 		await card.scrollIntoViewIfNeeded();
 		await card.hover();
 		await shot( page, 'order-cards' );
@@ -1586,8 +1590,8 @@ test.describe( 'заказать', () => {
 			const cs = getComputedStyle( l );
 			return cs.outlineStyle + ' ' + cs.borderRadius;
 		} );
-		await card.locator( 'a[data-lb]' ).click();
-		await page.waitForTimeout( 1500 );
+		await card.locator( 'a[data-lb]' ).first().click();
+		await page.waitForTimeout( 3000 );
 		report.lbCard = await page.locator( '#lb.lb--card' ).count();
 		report.lbInfo = await page.locator( '#lb .lb__info' ).innerText().catch( () => '' );
 		report.firstScreen = await page.evaluate( () => [ 'figure img', '.lb__price', '.lb__order', '.lb__title' ].map( ( q ) => {
@@ -1611,8 +1615,10 @@ test.describe( 'заказать', () => {
 		const ph = await ctx.newPage();
 		await ph.goto( new URL( pg.url ).pathname );
 		await ph.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
-		await ph.locator( '.mcard a[data-lb]' ).first().click();
-		await ph.waitForTimeout( 1500 );
+		await ph.evaluate( () => document.querySelectorAll( '.mcard img' ).forEach( ( i ) => ( i.loading = 'eager' ) ) );
+		await ph.waitForTimeout( 3000 );
+		await ph.locator( '.mcard' ).nth( Math.max( 0, good ) ).locator( 'a[data-lb]' ).first().click();
+		await ph.waitForTimeout( 3000 );
 		await ph.screenshot( { path: `${ DIR }/order-window-phone.png` } );
 		await ph.locator( '#lb' ).evaluate( ( d ) => ( d.scrollTop = 99999 ) );
 		await ph.waitForTimeout( 400 );
