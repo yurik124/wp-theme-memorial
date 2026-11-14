@@ -1248,3 +1248,76 @@ test.describe( 'редактор сайта', () => {
 
 	} );
 } );
+
+test.describe( 'редактор сайта 2', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'редактор сайта 2: превью главной', async ( { page, browser } ) => {
+		test.setTimeout( 900_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		// Картинка темы с копии сайта (с фото)
+		const ctx = await browser.newContext( { viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 } );
+		const p2 = await ctx.newPage();
+		await p2.goto( '/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
+		await p2.addStyleTag( { content: NO_FLOAT + '[class*=cookie],[class*=consent],[class*=mobile-bar],[class*=mbar]{display:none !important}' } ).catch( () => {} );
+		await p2.evaluate( () => document.querySelectorAll( '[class*=reveal], .is-hidden-reveal' ).forEach( ( e ) => e.classList.add( 'is-visible', 'in' ) ) ).catch( () => {} );
+		await p2.waitForTimeout( 3000 );
+		await p2.screenshot( { path: `${ DIR }/theme-screenshot.png` } );
+		await p2.setViewportSize( { width: 1440, height: 1080 } );
+		await p2.waitForTimeout( 1500 );
+		await p2.screenshot( { path: `${ DIR }/theme-screenshot-1440.png` } );
+		await ctx.close();
+
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		const pages = PAGES;
+		const faq = pages.find( ( x ) => /вопрос/i.test( x.post_title ) );
+		const contacts = pages.find( ( x ) => /контакт/i.test( x.post_title ) );
+		const probeOne = async ( name, url ) => {
+			await page.goto( url );
+			await page.waitForSelector( '.edit-site-layout, .edit-site', { timeout: 60000 } ).catch( () => {} );
+			await page.evaluate( () => {
+				try {
+					window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', 'welcomeGuide', false );
+					window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', 'welcomeGuideStyles', false );
+					window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', 'welcomeGuidePage', false );
+					window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-site', 'welcomeGuideTemplate', false );
+				} catch ( e ) {}
+			} );
+			await page.waitForTimeout( 6000 );
+			const st = await page.evaluate( () => {
+				const s = window.wp.data.select( 'core/editor' );
+				return {
+					mode: s.getRenderingMode?.(),
+					postType: s.getCurrentPostType?.(),
+					postId: s.getCurrentPostId?.(),
+					tpl: window.wp.data.select( 'core/edit-site' )?.getEditedPostId?.(),
+				};
+			} ).catch( ( e ) => ( { e: String( e ) } ) );
+			const frame = page.frame( { name: 'editor-canvas' } );
+			st.canvas = frame ? await frame.evaluate( () => ( {
+				ownLayoutCss: !! document.querySelector( '#memorial-plugin-own-layout-css, link[href*="editor-own-layout"]' ),
+				parts: [ ...document.querySelectorAll( '.wp-block-template-part' ) ].map( ( e ) => e.tagName + ':' + getComputedStyle( e ).display ),
+				titleWrapper: [ ...document.querySelectorAll( '.editor-visual-editor__post-title-wrapper' ) ].map( ( e ) => getComputedStyle( e ).display ),
+			} ) ).catch( ( e ) => String( e ) ) : null;
+			report[ name ] = st;
+			await shot( page, 'se2-' + name ).catch( () => {} );
+			log( 'site-editor-2', report );
+		};
+		await probeOne( 'root', '/wp-admin/site-editor.php' );
+		await probeOne( 'styles', '/wp-admin/site-editor.php?p=%2Fstyles' );
+		if ( faq ) {
+			await probeOne( 'page-faq', '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/page/' + faq.ID ) );
+		}
+		if ( contacts ) {
+			await probeOne( 'page-contacts', '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/page/' + contacts.ID ) );
+		}
+		await probeOne( 'page-front-edit', '/wp-admin/post.php?post=' + ( pages.find( ( x ) => /главн/i.test( x.post_title ) )?.ID || 0 ) + '&action=edit' );
+		// Без файла стилей плагина — так ли выглядит превью главной
+		await page.route( /editor-own-layout/, ( r ) => r.abort() );
+		await probeOne( 'root-no-css', '/wp-admin/site-editor.php' );
+	} );
+} );
