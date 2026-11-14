@@ -267,7 +267,12 @@ export default function Works() {
 			// A new work gets the photos and the year of the window even if they were not changed.
 			const values = item.id
 				? { ...edits }
-				: { photos: item.photos, year: item.year, status: item.status, ...edits };
+				: {
+						photos: item.photos,
+						year: item.year,
+						status: item.status,
+						...edits,
+					};
 			if ( values.photos ) {
 				values.photos = values.photos.map( ( p ) => p.id );
 			}

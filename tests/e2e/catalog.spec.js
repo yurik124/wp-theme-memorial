@@ -181,18 +181,28 @@ test( 'новая работа создаётся одним запросом с
 } ) => {
 	await login( page );
 	await page.goto( '/wp-admin/edit.php?post_type=mem_work&page=mem-works' );
-	const before = await api( page, { path: '/memorial-plugin/v1/catalog/works' } );
+	const before = await api( page, {
+		path: '/memorial-plugin/v1/catalog/works',
+	} );
 	const res = await api( page, {
 		path: '/memorial-plugin/v1/catalog/works',
 		method: 'POST',
-		data: { values: { title: 'Работа из окна', year: 2025, size: '2 × 3 м' } },
+		data: {
+			values: { title: 'Работа из окна', year: 2025, size: '2 × 3 м' },
+		},
 	} );
 	expect( res.items[ 0 ].title ).toBe( 'Работа из окна' );
 	expect( res.items[ 0 ].year ).toBe( 2025 );
 	expect( res.items[ 0 ].size ).toBe( '2 × 3 м' );
-	const after = await api( page, { path: '/memorial-plugin/v1/catalog/works' } );
+	const after = await api( page, {
+		path: '/memorial-plugin/v1/catalog/works',
+	} );
 	expect( after.items.length ).toBe( before.items.length + 1 );
 	// the button opens the window only: nothing is created until “Save”
 	await page.reload();
-	await expect( page.getByRole( 'button', { name: /New work from photos|Новая работа из фото/ } ) ).toBeVisible();
+	await expect(
+		page.getByRole( 'button', {
+			name: /New work from photos|Новая работа из фото/,
+		} )
+	).toBeVisible();
 } );
