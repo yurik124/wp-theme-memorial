@@ -178,6 +178,7 @@ $memorial_plugin_modules = array(
 	'reviews/reviews.php',
 	'reviews/rewio.php',
 	'reviews/rewio-archive.php',
+	'reviews/rewio-mail.php',
 	'reviews/bookreviews.php',
 	// ещё блоки и фото.
 	'content/faq.php',
