@@ -533,3 +533,8 @@ msgstr "логотип"
 
 msgid "Memorial: text layouts"
 msgstr "Мемориал: оформление текста"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Contacts page"
+msgstr "Страница «Контакты»"

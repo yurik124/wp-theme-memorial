@@ -188,8 +188,8 @@ function memorial_plugin_prices_defaults() {
 			// A package without the “Show on the site” mark (saved before it appeared) is shown.
 			'items' => array_map( static fn( $p ) => is_array( $p ) ? $p + array( 'show' => 1 ) : $p, (array) ( $src['items'] ?? $home['items'] ) ),
 		),
-		// Before 2.0 cremation was a separate group; it stays in the base (to roll back) and is the source of
-		// the cremation package made from it once (memorial_plugin_prices_cremation_to_packages()).
+		// Before 2.0 cremation was a separate group; 2.0 made a package of it. The group is still read by
+		// {price:…} codes of its rows and by the price check of the texts.
 		'cremation' => array(
 			'head_l'     => __( 'What is included', 'memorial-plugin' ),
 			'head_r'     => __( 'Cost', 'memorial-plugin' ),
