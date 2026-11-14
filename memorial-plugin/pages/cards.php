@@ -220,4 +220,3 @@ add_shortcode(
 		return $h . '</div>';
 	}
 );
-

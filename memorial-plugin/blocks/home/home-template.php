@@ -378,4 +378,3 @@ function memorial_plugin_home_markup( $o = null ) {
 	}
 	return implode( "\n\n", $out );
 }
-

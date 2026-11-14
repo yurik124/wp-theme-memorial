@@ -234,4 +234,3 @@ function memorial_plugin_sc_readable( $html ) {
 		$html
 	);
 }
-
