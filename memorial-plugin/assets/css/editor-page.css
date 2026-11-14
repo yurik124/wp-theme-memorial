@@ -1,0 +1,9 @@
+/*
+ * Page editor only (blocks/home/pages-to-content.php): a page opens with its template so the sections
+ * keep the width and look of the site, but the header and the footer of the template are not shown —
+ * they are edited in Appearance → Editor. The Site Editor shows the whole page.
+ */
+.editor-styles-wrapper .is-root-container > .wp-block-template-part,
+.editor-styles-wrapper .is-root-container > .wp-block-memorial-plugin-mobile-bar {
+	display: none;
+}

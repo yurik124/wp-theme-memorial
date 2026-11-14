@@ -268,8 +268,8 @@ function memorial_plugin_pages_rendering_mode( $settings, $context ) {
 add_filter( 'block_editor_settings_all', 'memorial_plugin_pages_rendering_mode', 10, 2 );
 
 /**
- * The home page and “Contacts” in the editor: no header and footer of the template, no separate title field
- * (the H1 is a block of the content).
+ * Pages in the page editor: no header and footer of the template (they are edited in Appearance → Editor);
+ * the home page and “Contacts” also have no separate title field (the H1 is a block of the content).
  */
 function memorial_plugin_pages_hide_title() {
 	if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
@@ -277,11 +277,15 @@ function memorial_plugin_pages_hide_title() {
 	}
 	$screen = get_current_screen();
 	$post   = get_post();
-	if ( ! $screen || 'page' !== $screen->post_type || ! $post instanceof WP_Post || ! memorial_plugin_pages_own_layout( $post ) ) {
+	if ( ! $screen || 'page' !== $screen->post_type || 'post' !== $screen->base || ! $post instanceof WP_Post ) {
 		return;
 	}
-	$path = '/assets/css/editor-own-layout.css';
-	wp_enqueue_style( 'memorial-plugin-own-layout', MEMORIAL_PLUGIN_URL . $path, array(), (string) filemtime( MEMORIAL_PLUGIN_DIR . $path ) );
+	foreach ( array( 'page' => true, 'own-layout' => memorial_plugin_pages_own_layout( $post ) ) as $name => $on ) {
+		if ( $on ) {
+			$path = '/assets/css/editor-' . $name . '.css';
+			wp_enqueue_style( 'memorial-plugin-editor-' . $name, MEMORIAL_PLUGIN_URL . $path, array(), (string) filemtime( MEMORIAL_PLUGIN_DIR . $path ) );
+		}
+	}
 }
 add_action( 'enqueue_block_assets', 'memorial_plugin_pages_hide_title' );
 
