@@ -1487,3 +1487,50 @@ test.describe( 'отзывы и почта', () => {
 		log( 'reviews-mail', report );
 	} );
 } );
+
+test.describe( 'новая работа', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'новая работа: создаётся только по «Сохранить»', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_work&page=mem-works' );
+		await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } ).catch( () => {} );
+		const count = () => page.evaluate( async () => ( await window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/works' } ) ).items.length );
+		const pick = async () => {
+			await page.getByRole( 'button', { name: /Новая работа из фото/ } ).click();
+			await page.locator( '.media-modal' ).waitFor();
+			await page.locator( '.media-modal .media-menu-item, .media-modal [id^="menu-item-browse"]' ).filter( { hasText: /Библиотека/ } ).first().click().catch( () => {} );
+			await page.locator( '.media-modal li.attachment' ).first().waitFor( { timeout: 30000 } );
+			await page.locator( '.media-modal li.attachment' ).nth( 0 ).click();
+			await page.locator( '.media-modal li.attachment' ).nth( 1 ).click( { modifiers: [ 'Control' ] } ).catch( () => {} );
+			await page.locator( '.media-modal .media-button-select' ).click();
+			await page.locator( '.components-modal__frame' ).waitFor();
+			await page.waitForTimeout( 800 );
+		};
+		report.before = await count();
+		await pick();
+		report.modalTitle = await page.locator( '.components-modal__header h1' ).innerText().catch( () => '' );
+		report.photosInModal = await page.locator( '.components-modal__frame img' ).count();
+		report.afterOpen = await count();
+		await shot( page, 'work-new-modal' );
+		await page.getByRole( 'button', { name: 'Отмена' } ).click();
+		report.afterCancel = await count();
+		await pick();
+		await page.locator( '.components-modal__frame input[type="text"]' ).first().fill( 'Проверка: новая работа' );
+		await page.getByRole( 'button', { name: 'Сохранить' } ).click();
+		await page.waitForTimeout( 2500 );
+		report.afterSave = await count();
+		report.saved = await page.evaluate( async () => ( await window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/works' } ) ).items.filter( ( i ) => /Проверка: новая работа/.test( i.title ) ).map( ( i ) => ( { title: i.title, photos: i.photos.length, year: i.year, status: i.status } ) ) );
+		report.notice = await page.locator( '.components-notice' ).allTextContents();
+		await shot( page, 'work-new-saved' );
+		report.errors = errs;
+		log( 'work-new', report );
+	} );
+} );
