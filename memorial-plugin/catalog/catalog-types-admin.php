@@ -68,6 +68,7 @@ function memorial_plugin_types_cats( $parent, $depth = 0 ) {
 			'count'  => memorial_plugin_cat_count( $c->term_id ),
 			'desc'   => $c->description,
 			'sort'   => (string) get_term_meta( $c->term_id, 'mem_sort', true ),
+			'view'   => (string) get_term_meta( $c->term_id, 'mem_photo_view', true ),
 			'pos'    => $i,
 		);
 		$out   = array_merge( $out, memorial_plugin_types_cats( (int) $c->term_id, $depth + 1 ) );
@@ -103,6 +104,9 @@ function memorial_plugin_types_data( $type_id ) {
 		'colsPhone' => memorial_plugin_type_cols_phone( $type_id ),
 		'showSub'   => memorial_plugin_type_show_sub( $type_id ),
 		'sort'      => (string) get_term_meta( $type_id, 'mem_sort', true ),
+		'orderBtn'  => memorial_plugin_type_order_button( $type_id )['on'],
+		'orderText' => (string) get_term_meta( $type_id, 'mem_order_text', true ),
+		'view'      => memorial_plugin_cat_photo_view( $type_id ),
 		'sorts'    => array_map(
 			static fn( $k, $v ) => array(
 				'value' => $k,
@@ -193,6 +197,16 @@ function memorial_plugin_types_save( $type, $values ) {
 	if ( isset( $values['showSub'] ) ) {
 		update_term_meta( $type, 'mem_show_sub', empty( $values['showSub'] ) ? '0' : '1' );
 	}
+	if ( isset( $values['orderBtn'] ) ) {
+		update_term_meta( $type, 'mem_order_btn', empty( $values['orderBtn'] ) ? '0' : '1' );
+	}
+	if ( isset( $values['orderText'] ) ) {
+		$t = trim( sanitize_text_field( (string) $values['orderText'] ) );
+		'' !== $t ? update_term_meta( $type, 'mem_order_text', mb_substr( $t, 0, 40 ) ) : delete_term_meta( $type, 'mem_order_text' );
+	}
+	if ( isset( $values['view'] ) ) {
+		memorial_plugin_types_set_view( $type, (string) $values['view'] );
+	}
 	if ( isset( $values['defaults'] ) ) {
 		$d = (array) $values['defaults'];
 		update_term_meta(
@@ -246,6 +260,16 @@ function memorial_plugin_types_save( $type, $values ) {
 		}
 	}
 	return true;
+}
+
+/**
+ * View of the photos of a type or a category; '' — as in the type (a category) / the photo alone (a type).
+ *
+ * @param int    $term_id Type or category.
+ * @param string $view    photo|card|''.
+ */
+function memorial_plugin_types_set_view( $term_id, $view ) {
+	in_array( $view, MEMORIAL_PLUGIN_PHOTO_VIEWS, true ) ? update_term_meta( $term_id, 'mem_photo_view', $view ) : delete_term_meta( $term_id, 'mem_photo_view' );
 }
 
 /**
@@ -438,6 +462,9 @@ function memorial_plugin_types_rest() {
 				if ( null !== $request['sort'] ) {
 					memorial_plugin_types_set_sort( (int) $r['term_id'], (string) $request['sort'] );
 				}
+				if ( null !== $request['view'] ) {
+					memorial_plugin_types_set_view( (int) $r['term_id'], (string) $request['view'] );
+				}
 				return $all();
 			},
 		)
@@ -467,6 +494,9 @@ function memorial_plugin_types_rest() {
 					}
 					if ( null !== $request['sort'] ) {
 						memorial_plugin_types_set_sort( (int) $request['id'], (string) $request['sort'] );
+					}
+					if ( null !== $request['view'] ) {
+						memorial_plugin_types_set_view( (int) $request['id'], (string) $request['view'] );
 					}
 					return $all();
 				},

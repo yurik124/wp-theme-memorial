@@ -495,4 +495,59 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( 'post_type', $items[1]->type );
 		$this->assertSame( (int) $items[0]->ID, (int) $items[1]->menu_item_parent );
 	}
+
+	public function test_product_schema_has_the_offer_and_the_seller() {
+		$id = self::factory()->post->create(
+			array(
+				'post_type'   => 'mem_product',
+				'post_title'  => 'Венок № 41',
+				'post_status' => 'publish',
+			)
+		);
+		update_post_meta( $id, '_mem_price', 6800 );
+		$ld = memorial_plugin_product_ld( $id, 'https://example.com/venki/#p-' . $id );
+		$this->assertSame( 'Product', $ld['@type'] );
+		$this->assertSame( 'Offer', $ld['offers']['@type'] );
+		$this->assertSame( 6800, $ld['offers']['price'] );
+		$this->assertSame( 'RUB', $ld['offers']['priceCurrency'] );
+		$this->assertSame( home_url( '/#organization' ), $ld['offers']['seller']['@id'] );
+		update_post_meta( $id, '_mem_price', 0 );
+		$this->assertArrayNotHasKey( 'offers', memorial_plugin_product_ld( $id, 'https://example.com/' ), 'price on request — no offer' );
+	}
+
+	public function test_order_button_settings_of_the_type_and_the_photo_view() {
+		$type = self::factory()->term->create( array( 'taxonomy' => 'mem_cat', 'name' => 'Венки' ) );
+		$cat  = self::factory()->term->create( array( 'taxonomy' => 'mem_cat', 'name' => 'Ритуальные', 'parent' => $type ) );
+		$this->assertFalse( memorial_plugin_type_order_button( $type )['on'] );
+		update_term_meta( $type, 'mem_order_btn', '1' );
+		$this->assertTrue( memorial_plugin_type_order_button( $type )['on'] );
+		$this->assertSame( 'photo', memorial_plugin_cat_photo_view( $cat ), 'nothing chosen — the photo alone' );
+		memorial_plugin_types_set_view( $type, 'card' );
+		$this->assertSame( 'card', memorial_plugin_cat_photo_view( $cat ), 'a category without its own choice — as in the type' );
+		memorial_plugin_types_set_view( $cat, 'photo' );
+		$this->assertSame( 'photo', memorial_plugin_cat_photo_view( $cat ) );
+	}
+
+	public function test_lead_mail_has_the_ordered_product() {
+		if ( ! function_exists( 'memorial_plugin_lead_mail_send' ) ) {
+			$this->markTestSkipped( 'Call-back is off.' );
+		}
+		reset_phpmailer_instance();
+		memorial_plugin_lead_mail_send(
+			array(
+				'phone'   => '+7 900 111-22-33',
+				'name'    => '',
+				'page'    => '',
+				'product' => 'Венок № 41',
+			),
+			array(
+				'to'         => 'a@example.com',
+				'subject'    => 'Звонок',
+				'body'       => 'Телефон: {phone}',
+				'from_name'  => '',
+				'from_email' => 'site@example.com',
+			)
+		);
+		$this->assertStringContainsString( 'Венок № 41', tests_retrieve_phpmailer_instance()->get_sent()->body );
+	}
 }

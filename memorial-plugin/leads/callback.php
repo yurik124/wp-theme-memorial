@@ -85,6 +85,8 @@ function memorial_plugin_callback_receive( WP_REST_Request $r ) {
 	set_transient( $key, $n + 1, 15 * MINUTE_IN_SECONDS );
 
 	$name = mb_substr( sanitize_text_field( (string) $r->get_param( 'name' ) ), 0, 80 );
+	// The “Order” button of a product card: the name of the product.
+	$product = mb_substr( sanitize_text_field( (string) $r->get_param( 'product' ) ), 0, 150 );
 	$page = esc_url_raw( (string) $r->get_param( 'page' ) );
 	if ( $page && wp_parse_url( $page, PHP_URL_HOST ) !== wp_parse_url( home_url(), PHP_URL_HOST ) ) {
 		$page = '';
@@ -100,6 +102,9 @@ function memorial_plugin_callback_receive( WP_REST_Request $r ) {
 	if ( $id && ! is_wp_error( $id ) ) {
 		update_post_meta( $id, '_name', $name );
 		update_post_meta( $id, '_page', $page );
+		if ( '' !== $product ) {
+			update_post_meta( $id, '_product', $product );
+		}
 		// IP-адрес не сохраняется (минимум персональных данных): он нужен только для ограничения частоты выше.
 	}
 
@@ -109,8 +114,9 @@ function memorial_plugin_callback_receive( WP_REST_Request $r ) {
 			$id && ! is_wp_error( $id ) ? (int) $id : 0,
 			array(
 				'phone' => $phone,
-				'name'  => $name,
-				'page'  => $page,
+				'name'    => $name,
+				'page'    => $page,
+				'product' => $product,
 			)
 		);
 	}

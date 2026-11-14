@@ -48,6 +48,12 @@ function memorial_plugin_collections() {
 					'source'   => 'meta:_name',
 					'readonly' => true,
 				),
+				'product' => array(
+					'label'    => __( 'Product', 'memorial-plugin' ),
+					'type'     => 'text',
+					'source'   => 'meta:_product',
+					'readonly' => true,
+				),
 				'page'  => array(
 					'label'    => __( 'From page', 'memorial-plugin' ),
 					'type'     => 'pagelink',

@@ -170,6 +170,69 @@ function memorial_plugin_ld( $data ) {
 	wp_print_inline_script_tag( wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG ), array( 'type' => 'application/ld+json' ) );
 }
 
+/**
+ * Schema.org Product of a product: name, description, photo, category, brand, specifications and the
+ * offer (a product “price on request” has no offer — the price is not made up for search engines).
+ * The seller is the company of the site (FuneralHome on the home page, seo/schema.php).
+ *
+ * @param int    $id  Product.
+ * @param string $url Address of the product: its page or its place in the catalog section.
+ * @return array
+ */
+function memorial_plugin_product_ld( $id, $url ) {
+	$post = get_post( $id );
+	$desc = has_excerpt( $id ) ? get_the_excerpt( $id ) : wp_trim_words( wp_strip_all_tags( strip_shortcodes( excerpt_remove_blocks( (string) $post->post_content ) ) ), 40, '…' );
+	$p    = array(
+		'@type' => 'Product',
+		'name'  => wp_strip_all_tags( get_the_title( $id ) ),
+		'url'   => $url,
+	);
+	if ( $desc ) {
+		$p['description'] = $desc;
+	}
+	$img = get_the_post_thumbnail_url( $id, 'large' );
+	if ( $img ) {
+		$p['image'] = $img;
+	}
+	$cat = memorial_plugin_product_cat( $id );
+	if ( $cat ) {
+		$p['category'] = implode( ' > ', array_column( memorial_plugin_cat_chain( $cat ), 0 ) );
+	}
+	$p['brand'] = array(
+		'@type' => 'Brand',
+		'name'  => get_bloginfo( 'name' ),
+	);
+	// Характеристики — как в карточке (материал, размер…).
+	$props = array();
+	foreach ( memorial_plugin_product_specs_shown( $id ) as [$k, $v] ) {
+		$props[] = array(
+			'@type' => 'PropertyValue',
+			'name'  => '' !== $k ? $k : __( 'Size', 'memorial-plugin' ),
+			'value' => $v,
+		);
+	}
+	if ( $props ) {
+		$p['additionalProperty'] = $props;
+	}
+	$price = (int) get_post_meta( $id, '_mem_price', true );
+	if ( $price > 0 ) {
+		$offer       = array(
+			'@type'         => get_post_meta( $id, '_mem_price_from', true ) ? 'AggregateOffer' : 'Offer',
+			'priceCurrency' => 'RUB',
+			'availability'  => get_post_meta( $id, '_mem_on_order', true ) ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
+			'url'           => $url,
+			'seller'        => array(
+				'@type' => 'Organization',
+				'@id'   => home_url( '/#organization' ),
+				'name'  => get_bloginfo( 'name' ),
+			),
+		);
+		$offer[ 'AggregateOffer' === $offer['@type'] ? 'lowPrice' : 'price' ] = $price;
+		$p['offers'] = $offer;
+	}
+	return $p;
+}
+
 add_action(
 	'wp_head',
 	function () {
@@ -203,74 +266,7 @@ add_action(
 
 		// Товар.
 		if ( is_singular( 'mem_product' ) ) {
-			$id   = get_queried_object_id();
-			$post = get_post( $id );
-			$desc = has_excerpt( $id ) ? get_the_excerpt( $id ) : wp_trim_words( wp_strip_all_tags( strip_shortcodes( $post->post_content ) ), 40, '…' );
-			$p    = array(
-				'@context' => 'https://schema.org',
-				'@type'    => 'Product',
-				'name'     => get_the_title( $id ),
-				'url'      => get_permalink( $id ),
-			);
-			if ( $desc ) {
-				$p['description'] = $desc;
-			}
-			$img = get_the_post_thumbnail_url( $id, 'large' );
-			if ( $img ) {
-				$p['image'] = $img;
-			}
-			$cat = memorial_plugin_product_cat( $id );
-			if ( $cat ) {
-				$p['category'] = implode( ' > ', array_column( memorial_plugin_cat_chain( $cat ), 0 ) );
-			}
-			$p['brand'] = array(
-				'@type' => 'Brand',
-				'name'  => get_bloginfo( 'name' ),
-			);
-
-			// Характеристики (материал, цвет…).
-			$props = array();
-			foreach ( memorial_plugin_attrs() as $k => $label ) {
-				$t = get_the_terms( $id, 'mem_' . $k );
-				if ( $t && ! is_wp_error( $t ) ) {
-					$props[] = array(
-						'@type' => 'PropertyValue',
-						'name'  => $label,
-						'value' => implode( ', ', wp_list_pluck( $t, 'name' ) ),
-					);
-				}
-			}
-			if ( $props ) {
-				$p['additionalProperty'] = $props;
-			}
-
-			// Цена: товары «по запросу» публикуем без предложения — цену поисковикам не выдумываем.
-			$price = (int) get_post_meta( $id, '_mem_price', true );
-			if ( $price > 0 ) {
-				$avail       = get_post_meta( $id, '_mem_on_order', true ) ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock';
-				$seller      = array(
-					'@type' => 'Organization',
-					'name'  => get_bloginfo( 'name' ),
-				);
-				$p['offers'] = get_post_meta( $id, '_mem_price_from', true )
-				? array(
-					'@type'         => 'AggregateOffer',
-					'lowPrice'      => $price,
-					'priceCurrency' => 'RUB',
-					'availability'  => $avail,
-					'url'           => get_permalink( $id ),
-					'seller'        => $seller,
-				)
-				: array(
-					'@type'         => 'Offer',
-					'price'         => $price,
-					'priceCurrency' => 'RUB',
-					'availability'  => $avail,
-					'url'           => get_permalink( $id ),
-					'seller'        => $seller,
-				);
-			}
-			memorial_plugin_ld( $p );
+			memorial_plugin_ld( array( '@context' => 'https://schema.org' ) + memorial_plugin_product_ld( get_queried_object_id(), (string) get_permalink( get_queried_object_id() ) ) );
 		}
 	},
 	6
@@ -288,4 +284,38 @@ add_filter(
 		}
 		return array_values( array_filter( $graphs, fn( $g ) => ( $g['@type'] ?? '' ) !== 'BreadcrumbList' ) );
 	}
+);
+
+/*
+ * Schema.org on the pages of catalog sections: the products the page shows, as a list of Product
+ * (catalog/catalog-front.php notes them while the cards are drawn).
+ */
+add_action(
+	'wp_footer',
+	static function () {
+		$ids = array_keys( (array) ( $GLOBALS['memorial_plugin_ld_products'] ?? array() ) );
+		if ( ! $ids || is_singular( 'mem_product' ) ) {
+			return;
+		}
+		$page = (string) get_permalink();
+		$list = array();
+		foreach ( array_values( $ids ) as $i => $id ) {
+			$url    = memorial_plugin_product_has_page( $id ) ? (string) get_permalink( $id ) : $page . '#' . memorial_plugin_product_anchor( $id );
+			$list[] = array(
+				'@type'    => 'ListItem',
+				'position' => $i + 1,
+				'item'     => memorial_plugin_product_ld( $id, $url ),
+			);
+		}
+		memorial_plugin_ld(
+			array(
+				'@context'        => 'https://schema.org',
+				'@type'           => 'ItemList',
+				'name'            => wp_strip_all_tags( get_the_title() ),
+				'numberOfItems'   => count( $list ),
+				'itemListElement' => $list,
+			)
+		);
+	},
+	30
 );

@@ -238,6 +238,39 @@ function memorial_plugin_sort_products( array $posts, $sort ) {
 }
 
 /**
+ * “Order” button under the product cards of a type: on/off and its text (Catalog → Types and categories).
+ *
+ * @param int $type_id Type (top category).
+ * @return array{on:bool,text:string}
+ */
+function memorial_plugin_type_order_button( $type_id ) {
+	$text = trim( (string) get_term_meta( $type_id, 'mem_order_text', true ) );
+	return array(
+		'on'   => '1' === (string) get_term_meta( $type_id, 'mem_order_btn', true ),
+		'text' => '' !== $text ? $text : _x( 'Order', 'button: order a product', 'memorial-plugin' ),
+	);
+}
+
+/** What a click on the photo of a product card opens: the photo alone or the product window. */
+const MEMORIAL_PLUGIN_PHOTO_VIEWS = array( 'photo', 'card' );
+
+/**
+ * View of the photos of a category: its own choice, else the one of its type; “photo” by default.
+ *
+ * @param int $term_id Category or type.
+ * @return string photo|card
+ */
+function memorial_plugin_cat_photo_view( $term_id ) {
+	$own = (string) get_term_meta( $term_id, 'mem_photo_view', true );
+	if ( in_array( $own, MEMORIAL_PLUGIN_PHOTO_VIEWS, true ) ) {
+		return $own;
+	}
+	$type = memorial_plugin_type_root( $term_id );
+	$v    = $type && $type !== (int) $term_id ? (string) get_term_meta( $type, 'mem_photo_view', true ) : '';
+	return in_array( $v, MEMORIAL_PLUGIN_PHOTO_VIEWS, true ) ? $v : 'photo';
+}
+
+/**
  * Columns of products on a phone: 1 or 2 (2 by default, as before).
  *
  * @param int $type_id Type ID.

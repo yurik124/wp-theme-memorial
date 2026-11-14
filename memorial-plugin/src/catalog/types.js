@@ -3,7 +3,7 @@
  * specifications and categories (DataViews).
  */
 import { useCallback, useEffect, useMemo, useState } from '@wordpress/element';
-import { __, _n, sprintf } from '@wordpress/i18n';
+import { __, _n, _x, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
@@ -64,7 +64,27 @@ const typeForm = ( t ) => ( {
 	cols: t.cols || '',
 	colsPhone: String( t.colsPhone || 2 ),
 	sort: t.sort || '',
+	view: t.view || 'photo',
+	orderBtn: !! t.orderBtn,
+	orderText: t.orderText || '',
 } );
+
+// What a click on the photo of a product card opens (a category can keep the choice of its type).
+const viewElements = ( inherit ) => [
+	...( inherit
+		? [ { value: '', label: __( 'As in the type', 'memorial-plugin' ) } ]
+		: [] ),
+	{ value: 'photo', label: __( 'Only the photo', 'memorial-plugin' ) },
+	{
+		value: 'card',
+		label: __( 'Product window', 'memorial-plugin' ),
+	},
+];
+const VIEW_HINT = () =>
+	__(
+		'“Only the photo” — a large photo with arrows. “Product window” — photos, name, specifications, price, description and the “Order” button, if it is on.',
+		'memorial-plugin'
+	);
 
 // How the products go on the site: '' is kept only for types made before this setting.
 const sortElements = ( sorts, own, inherit ) => [
@@ -208,6 +228,38 @@ function TypeSettings( { type, ratios, save } ) {
 				Edit: HintedEdit,
 				look: true,
 			},
+			{
+				id: 'view',
+				label: __( 'A click on the photo opens', 'memorial-plugin' ),
+				description: VIEW_HINT(),
+				type: 'text',
+				elements: viewElements( false ),
+				Edit: HintedEdit,
+				order: true,
+			},
+			{
+				id: 'orderBtn',
+				label: __(
+					'“Order” button under the product cards',
+					'memorial-plugin'
+				),
+				description: __(
+					'Opens the “Call me back” window; the request shows which product was ordered.',
+					'memorial-plugin'
+				),
+				type: 'boolean',
+				Edit: BooleanEdit,
+				order: true,
+			},
+			{
+				id: 'orderText',
+				label: __( 'Text of the button', 'memorial-plugin' ),
+				placeholder: _x( 'Order', 'button: order a product', 'memorial-plugin' ),
+				type: 'text',
+				Edit: HintedEdit,
+				order: true,
+				isVisible: ( item ) => !! item.orderBtn,
+			},
 		],
 		[ ratios, type ]
 	);
@@ -227,7 +279,7 @@ function TypeSettings( { type, ratios, save } ) {
 					form={ {
 						layout: { type: 'regular' },
 						fields: fields
-							.filter( ( f ) => ! f.look )
+							.filter( ( f ) => ! f.look && ! f.order )
 							.map( ( f ) => f.id ),
 					} }
 					onChange={ change }
@@ -244,6 +296,22 @@ function TypeSettings( { type, ratios, save } ) {
 							layout: { type: 'regular' },
 							fields: fields
 								.filter( ( f ) => f.look )
+								.map( ( f ) => f.id ),
+						} }
+						onChange={ change }
+					/>
+				</div>
+				<h3 className="memorial-plugin-catalog__subhead">
+					{ __( 'Photo and order', 'memorial-plugin' ) }
+				</h3>
+				<div className="memorial-plugin-catalog__look">
+					<DataForm
+						data={ data }
+						fields={ fields }
+						form={ {
+							layout: { type: 'regular' },
+							fields: fields
+								.filter( ( f ) => f.order )
 								.map( ( f ) => f.id ),
 						} }
 						onChange={ change }
@@ -267,6 +335,9 @@ function TypeSettings( { type, ratios, save } ) {
 								colsPhone: Number( data.colsPhone ) || 2,
 								showSub: data.showSub,
 								sort: data.sort,
+								view: data.view,
+								orderBtn: data.orderBtn,
+								orderText: data.orderText,
 								defaults: {
 									price: data.price,
 									from: data.from,
@@ -559,6 +630,7 @@ function CatForm( { cat, parents, sorts, onCancel, onOk } ) {
 		parent: parents[ 0 ]?.value,
 		// A new category: newest products first.
 		sort: cat ? cat.sort || '' : 'new',
+		view: cat?.view || '',
 	} );
 	const [ busy, setBusy ] = useState( false );
 	const fields = [
@@ -588,6 +660,14 @@ function CatForm( { cat, parents, sorts, onCancel, onOk } ) {
 			label: __( 'Order of products on the site', 'memorial-plugin' ),
 			type: 'text',
 			elements: sortElements( sorts, data.sort, true ),
+		},
+		{
+			id: 'view',
+			label: __( 'A click on the photo opens', 'memorial-plugin' ),
+			description: VIEW_HINT(),
+			type: 'text',
+			elements: viewElements( true ),
+			Edit: HintedEdit,
 		},
 	];
 	return (
@@ -713,6 +793,7 @@ function Cats( { type, call } ) {
 								name: d.name,
 								desc: d.desc,
 								sort: d.sort,
+								view: d.view,
 							} );
 							closeModal();
 						} }
@@ -813,6 +894,7 @@ function Cats( { type, call } ) {
 									parent: d.parent,
 									desc: d.desc,
 									sort: d.sort,
+									view: d.view,
 								} );
 								setAdding( false );
 							} }
