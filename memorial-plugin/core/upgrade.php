@@ -106,3 +106,112 @@ function memorial_plugin_upgrade_old_folders() {
 	}
 	return $out;
 }
+
+/**
+ * Once: the old codes of catalog prices in the descriptions of catalog sections ([mem_cat_price …],
+ * [mem_cat_count …]) become site values {price:code}. A code is a row of “Memorial → Prices → Separate
+ * prices” (the existing one with the same section and kind, otherwise a new row). A code whose form has
+ * no site value (“from” without ₽ and the like) stays as it is. The old descriptions are in the log
+ * memorial_plugin_desc_values.
+ */
+function memorial_plugin_upgrade_descriptions() {
+	if ( get_option( 'memorial_plugin_desc_values' ) || ! current_user_can( 'manage_options' ) || wp_doing_ajax() || ! taxonomy_exists( 'mem_cat' ) ) {
+		return;
+	}
+	$log   = array( 'time' => time() );
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'mem_cat',
+			'hide_empty' => false,
+		)
+	);
+	$opt   = get_option( 'mem_prices' );
+	$opt   = is_array( $opt ) ? $opt : array();
+	$items = (array) ( $opt['other']['items'] ?? memorial_plugin_prices( 'other' )['items'] ?? array() );
+	$codes = array_filter( array_map( static fn( $r ) => is_array( $r ) ? strtolower( trim( (string) ( $r['code'] ?? '' ) ) ) : '', $items ) );
+	$added = false;
+	$regex = '/' . get_shortcode_regex( array( 'mem_cat_price', 'mem_cat_count' ) ) . '/s';
+	foreach ( is_wp_error( $terms ) ? array() : $terms as $term ) {
+		if ( false === strpos( $term->description, '[mem_cat_' ) ) {
+			continue;
+		}
+		$desc = preg_replace_callback(
+			$regex,
+			static function ( $m ) use ( $term, &$items, &$codes, &$added ) {
+				$tag = $m[2];
+				$a   = shortcode_parse_atts( $m[3] );
+				$a   = is_array( $a ) ? $a : array();
+				$val = trim( (string) ( $a['cat'] ?? '' ) );
+				$t   = '' === $val ? $term : memorial_plugin_resolve_cat( $val );
+				if ( ! $t && '' !== $val ) {
+					$t = get_term_by( 'name', $val, 'mem_cat' );
+				}
+				if ( ! $t || is_wp_error( $t ) ) {
+					return $m[0];
+				}
+				$no = static fn( $k, $def ) => function_exists( 'memorial_plugin_sc_no' ) && memorial_plugin_sc_no( $a[ $k ] ?? $def );
+				if ( 'mem_cat_count' === $tag ) {
+					$what = 'cat-count';
+					$bare = $no( 'slovo', 'да' ) || $no( 'word', '1' );
+				} else {
+					$what     = preg_match( '/^(макс|max)/u', mb_strtolower( (string) ( $a['cena'] ?? '' ) ) ) || ! $no( 'max', '0' ) ? 'cat-max' : 'cat-min';
+					$no_word  = $no( 'ot', 'да' ) || $no( 'prefix', '1' );
+					$no_rub   = $no( 'rub', 'да' );
+					if ( $no_word !== $no_rub ) {
+						return $m[0]; // No site value prints that form.
+					}
+					$bare = $no_word;
+				}
+				foreach ( $items as $r ) {
+					if ( is_array( $r ) && ( $r['what'] ?? '' ) === $what && ( $r['section'] ?? '' ) === $t->slug && (bool) ( $r['bare'] ?? false ) === $bare && '' !== trim( (string) ( $r['code'] ?? '' ) ) ) {
+						return '{price:' . trim( (string) $r['code'] ) . '}';
+					}
+				}
+				$suffix = array(
+					'cat-min'   => 'ot',
+					'cat-max'   => 'do',
+					'cat-count' => 'modeli',
+				)[ $what ];
+				$base   = str_replace( '-', '_', sanitize_title( $t->slug ) ) . '_' . $suffix . ( $bare ? '_chislo' : '' );
+				$code   = $base;
+				for ( $i = 2; in_array( $code, $codes, true ); $i++ ) {
+					$code = $base . $i;
+				}
+				$codes[] = $code;
+				$names   = array(
+					/* translators: %s: catalog section. */
+					'cat-min'   => __( '%s — lowest price', 'memorial-plugin' ),
+					/* translators: %s: catalog section. */
+					'cat-max'   => __( '%s — highest price', 'memorial-plugin' ),
+					/* translators: %s: catalog section. */
+					'cat-count' => __( '%s — number of models', 'memorial-plugin' ),
+				);
+				$items[] = array(
+					'name'    => sprintf( $names[ $what ], $t->name ),
+					'what'    => $what,
+					'section' => $t->slug,
+					'bare'    => $bare ? 1 : 0,
+					'seo'     => 0,
+					'code'    => $code,
+					'_id'     => memorial_plugin_row_id(),
+				);
+				$added   = true;
+				return '{price:' . $code . '}';
+			},
+			$term->description
+		);
+		// The old code printed “₽” itself, so a “₽” written after it was doubled on the site (“2 100 ₽ ₽”).
+		$desc = (string) preg_replace( '/(\{price:(?![a-z0-9_]*_chislo)[a-z0-9_]+\})(?:\s|&nbsp;|\x{00A0})*₽/u', '$1', (string) $desc );
+		if ( $desc !== $term->description ) {
+			$log['terms'][ $term->term_id ] = $term->description;
+			wp_update_term( $term->term_id, 'mem_cat', array( 'description' => $desc ) );
+		}
+	}
+	if ( $added ) {
+		$opt['other']          = (array) ( $opt['other'] ?? array() );
+		$opt['other']['items'] = array_values( $items );
+		update_option( 'mem_prices', $opt );
+	}
+	update_option( 'memorial_plugin_desc_values', $log, false );
+}
+add_action( 'admin_init', 'memorial_plugin_upgrade_descriptions', 6 );

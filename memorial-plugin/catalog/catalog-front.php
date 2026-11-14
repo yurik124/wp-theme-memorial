@@ -352,7 +352,7 @@ add_shortcode(
 			if ( trim( $t->description ) !== '' && $with_head ) {
 				// в описании раздела можно писать [mem_cat_count], [mem_cat_price] — они считают этот раздел.
 				$GLOBALS['memorial_plugin_cat_ctx'] = $t->term_id;
-				echo '<div class="mcat__desc">' . do_shortcode( wp_kses_post( wpautop( $t->description ) ) ) . '</div>';
+				echo '<div class="mcat__desc">' . do_shortcode( wp_kses_post( wpautop( memorial_plugin_t( $t->description ) ) ) ) . '</div>';
 				unset( $GLOBALS['memorial_plugin_cat_ctx'] );
 			}
 			// много товаров — сначала 3 ряда, остальные по кнопке «Показать ещё» (pokazat="20" — своё число, pokazat="все" — все сразу).

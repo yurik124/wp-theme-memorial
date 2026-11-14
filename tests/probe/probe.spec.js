@@ -1389,3 +1389,41 @@ test.describe( 'тексты админки', () => {
 		fs.writeFileSync( `${ DIR }/admin-rest.json`, JSON.stringify( json ) );
 	} );
 } );
+
+test.describe( 'описания и крошки', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'описания и крошки: значения сайта в описаниях, крошки в редакторе', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-types' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } ).catch( () => {} );
+		report.types = await page.evaluate( async () => {
+			const t = await window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types' } ).catch( ( e ) => ( { e: e.message } ) );
+			return JSON.stringify( t ).match( /[^"]{0,80}(\{price:|\[mem_)[^"]{0,80}/g );
+		} );
+		report.prices = await page.evaluate( async () => {
+			const s = await window.wp.apiFetch( { path: '/memorial-plugin/v1/settings/mem_prices' } ).catch( ( e ) => ( { e: e.message } ) );
+			return ( s?.value?.other?.items || [] ).map( ( r ) => r.name + ' | ' + r.what + ' | ' + r.section + ' | ' + r.code );
+		} );
+		const fences = PAGES.find( ( x ) => /оградк/i.test( x.post_title ) );
+		if ( fences ) {
+			await page.goto( new URL( fences.url ).pathname );
+			report.fencesDesc = await page.locator( '.mcat__desc, .cat-desc' ).allInnerTexts().catch( () => [] );
+		}
+		const faq = PAGES.find( ( x ) => /вопрос/i.test( x.post_title ) );
+		if ( faq ) {
+			await page.goto( '/wp-admin/post.php?post=' + faq.ID + '&action=edit' );
+			await page.waitForTimeout( 9000 );
+			const frame = page.frame( { name: 'editor-canvas' } );
+			report.crumbsEditor = frame ? await frame.locator( '.crumbs' ).first().innerText().catch( () => '' ) : 'no canvas';
+			await shot( page, 'crumbs-editor' ).catch( () => {} );
+		}
+		log( 'desc', report );
+	} );
+} );
