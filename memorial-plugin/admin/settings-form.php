@@ -33,7 +33,7 @@ function memorial_plugin_settings_describe( $schema ) {
 			'type'  => $type,
 			'label' => (string) ( $f['label'] ?? '' ),
 		);
-		foreach ( array( 'help', 'placeholder', 'add', 'collapse' ) as $prop ) {
+		foreach ( array( 'help', 'placeholder', 'add', 'collapse', 'path' ) as $prop ) {
 			if ( isset( $f[ $prop ] ) && is_string( $f[ $prop ] ) && '' !== $f[ $prop ] ) {
 				$field[ $prop ] = $f[ $prop ];
 			}
