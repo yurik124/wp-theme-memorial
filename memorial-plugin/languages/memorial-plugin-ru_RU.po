@@ -7067,3 +7067,90 @@ msgstr[2] "%d отзывов снова показано на сайте."
 
 msgid "In a text field or a block write:"
 msgstr "В текстовом поле или в блоке пишите:"
+
+msgid "Better an address of the site’s own domain, otherwise mail services may put the email into spam."
+msgstr "Лучше адрес на домене самого сайта, иначе почтовые службы могут положить письмо в «Спам»."
+
+msgid "Call back: {phone} ({name})"
+msgstr "Звонок: {phone} ({name})"
+
+msgid "Call-back request from the site {site}"
+msgstr "Заявка на обратный звонок с сайта {site}"
+
+msgid "Email about a call-back request"
+msgstr "Письмо о заявке на обратный звонок"
+
+msgid "Empty — as the hosting sends"
+msgstr "Пусто — как отправляет хостинг"
+
+msgid "Empty — to the first email of “Contacts”"
+msgstr "Пусто — на первый e-mail из «Контактов»"
+
+msgid "Every request from the “Call me back” window comes by email and stays in “Memorial → Call-back requests”. In the subject and the text: {phone} — phone, {name} — name, {page} — the page it was sent from, {time} — date and time, {site} — the site address, {link} — all requests in the admin."
+msgstr "Каждая заявка из окна «Перезвоните мне» приходит письмом и остаётся в «Мемориал → Заявки на обратный звонок». В теме и тексте: {phone} — телефон, {name} — имя, {page} — страница, с которой отправили, {time} — дата и время, {site} — адрес сайта, {link} — все заявки в админке."
+
+msgid "Not sent"
+msgstr "Не отправлено"
+
+msgid "On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email (where — “Memorial → Settings → Email”) and are kept in “Memorial → Requests”."
+msgstr "На телефоне кнопка просто звонит. На компьютере сначала открывается MAX по ссылке выше; окно «Перезвоните мне» появляется, если MAX не открылся (браузер заблокировал вкладку или посетитель быстро вернулся на сайт). Заявки приходят письмом (куда — «Мемориал → Настройки → Почта») и хранятся в «Мемориал → Заявки»."
+
+msgid "Photos, year, size, prices and the description of a work are changed right here."
+msgstr "Фото, год, размер, цены и описание работы меняются прямо здесь."
+
+msgid "Send a test email"
+msgstr "Отправить тестовое письмо"
+
+msgid "Sender address"
+msgstr "Адрес отправителя"
+
+msgid "Sender name"
+msgstr "Имя отправителя"
+
+msgid "Sends an email with these settings (also unsaved) to the addresses above."
+msgstr "Отправляет письмо с этими настройками (даже несохранёнными) на адреса выше."
+
+msgid "Sent"
+msgstr "Отправлено"
+
+msgid "Several addresses — separated by commas."
+msgstr "Несколько адресов — через запятую."
+
+msgid "Subject"
+msgstr "Тема"
+
+msgid "Test"
+msgstr "Проверка"
+
+msgid "Text of the email"
+msgstr "Текст письма"
+
+msgid "The email was handed to the hosting for %s. If it does not come in a few minutes, look in “Spam”; if it is not there either, the hosting does not deliver mail — ask its support."
+msgstr "Письмо передано хостингу для %s. Если через несколько минут его нет, посмотрите в «Спаме»; если нет и там — хостинг не доставляет почту, спросите его поддержку."
+
+msgid "The email was not accepted."
+msgstr "Письмо не принято."
+
+msgid "The email was not sent: %s"
+msgstr "Письмо не отправлено: %s"
+
+msgid "The hosting did not accept the email (wp_mail() returned false)."
+msgstr "Хостинг не принял письмо (wp_mail() вернула false)."
+
+msgid "Why the email was not sent"
+msgstr "Почему письмо не отправлено"
+
+msgid "not sent (an older request)"
+msgstr "не отправлялось (старая заявка)"
+
+msgctxt "person"
+msgid "Name"
+msgstr "Имя"
+
+msgctxt "settings tab"
+msgid "Mail"
+msgstr "Почта"
+
+msgctxt "request column"
+msgid "Email"
+msgstr "Письмо"

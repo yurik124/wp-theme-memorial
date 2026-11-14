@@ -9,9 +9,10 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
+	TextareaControl,
 	TextControl,
 } from '@wordpress/components';
-import Photos, { PhotoViewer } from '../shared/photos';
+import Photos, { PhotoViewer, rememberPhotos } from '../shared/photos';
 
 /**
  * Price in roubles: 12 500 ₽.
@@ -95,7 +96,9 @@ export function photosField( label, logo = '' ) {
 		enableHiding: false,
 		filterBy: false,
 		render: ( { item } ) => <PhotoCell item={ item } logo={ logo } />,
-		Edit: ( { data, field, onChange } ) => (
+		Edit: ( { data, field, onChange } ) => {
+			rememberPhotos( data.photos );
+			return (
 			<Photos
 				label={ field.label }
 				value={ ( data.photos || [] )
@@ -111,7 +114,8 @@ export function photosField( label, logo = '' ) {
 					} )
 				}
 			/>
-		),
+			);
+		},
 	};
 }
 
@@ -308,5 +312,36 @@ export function RowsEdit( { data, field, onChange } ) {
 				</span>
 			</Flex>
 		</fieldset>
+	);
+}
+
+/**
+ * Description of a product or a work: plain text, an empty line starts a paragraph.
+ *
+ * @param {Object}   props
+ * @param {Object}   props.data     Item (desc, rich).
+ * @param {Object}   props.field    Field.
+ * @param {Function} props.onChange Receives { desc }.
+ */
+export function DescEdit( { data, field, onChange } ) {
+	return (
+		<TextareaControl
+			__nextHasNoMarginBottom
+			label={ field.label }
+			help={
+				data.rich
+					? __(
+							'This description had lists or photos: after a change it is saved as plain text.',
+							'memorial-plugin'
+						)
+					: __(
+							'An empty line starts a new paragraph.',
+							'memorial-plugin'
+						)
+			}
+			rows={ 6 }
+			value={ data.desc || '' }
+			onChange={ ( v ) => onChange( { desc: v } ) }
+		/>
 	);
 }

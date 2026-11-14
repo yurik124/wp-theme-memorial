@@ -103,14 +103,17 @@ function memorial_plugin_callback_receive( WP_REST_Request $r ) {
 		// IP-адрес не сохраняется (минимум персональных данных): он нужен только для ограничения частоты выше.
 	}
 
-	$to = memorial_plugin_contacts()['call']['email'] ?? '';
-	$to = $to ? $to : ( memorial_plugin_emails()[0] ?? get_option( 'admin_email' ) );
-	/* translators: %s: site address */
-	$body = sprintf( __( 'Call-back request from the site %s', 'memorial-plugin' ), home_url( '/' ) ) . "\n\n"
-			. __( 'Phone:', 'memorial-plugin' ) . " $phone\n" . ( $name ? __( 'Name:', 'memorial-plugin' ) . " $name\n" : '' )
-			. ( $page ? __( 'Page:', 'memorial-plugin' ) . ' ' . urldecode( $page ) . "\n" : '' )
-			. __( 'Time:', 'memorial-plugin' ) . ' ' . wp_date( 'd.m.Y H:i' ) . "\n\n" . __( 'All requests:', 'memorial-plugin' ) . ' ' . admin_url( 'admin.php?page=memorial-plugin-leads' );
-	wp_mail( $to, __( 'Call back: ', 'memorial-plugin' ) . $phone . ( $name ? " ($name)" : '' ), $body );
+	// Email (template and addresses — «Мемориал → Настройки → Почта», leads/lead-mail.php).
+	if ( function_exists( 'memorial_plugin_lead_mail' ) ) {
+		memorial_plugin_lead_mail(
+			$id && ! is_wp_error( $id ) ? (int) $id : 0,
+			array(
+				'phone' => $phone,
+				'name'  => $name,
+				'page'  => $page,
+			)
+		);
+	}
 
 	return array( 'ok' => true );
 }

@@ -729,7 +729,58 @@ function GroupEdit( { def, value, onChange } ) {
 	);
 }
 
-function ControlFor( { def, value, onChange } ) {
+/**
+ * An action of a screen (“Send a test email”): POST to def.path with the values of its group, also unsaved;
+ * the answer is shown under the button.
+ *
+ * @param {Object} props
+ * @param {Object} props.def Field: label, path, help.
+ * @param {Object} props.row Values of the group.
+ */
+function ActionEdit( { def, row } ) {
+	const [ busy, setBusy ] = useState( false );
+	const [ result, setResult ] = useState( null );
+	const run = async () => {
+		setBusy( true );
+		setResult( null );
+		try {
+			const res = await apiFetch( {
+				path: def.path,
+				method: 'POST',
+				data: { values: row || {} },
+			} );
+			setResult( {
+				status: res.ok ? 'success' : 'error',
+				text: res.message,
+			} );
+		} catch ( e ) {
+			setResult( { status: 'error', text: e.message } );
+		}
+		setBusy( false );
+	};
+	return (
+		<div className="memorial-plugin-settings__action">
+			<Flex justify="flex-start" align="center" gap={ 2 }>
+				<Button
+					variant="secondary"
+					isBusy={ busy }
+					disabled={ busy }
+					onClick={ run }
+				>
+					{ def.label }
+				</Button>
+				{ def.help && <Hint text={ def.help } /> }
+			</Flex>
+			{ result && (
+				<Notice status={ result.status } isDismissible={ false }>
+					{ result.text }
+				</Notice>
+			) }
+		</div>
+	);
+}
+
+function ControlFor( { def, value, onChange, row } ) {
 	const text = labelOf(
 		def,
 		! [ 'textarea', 'code', 'map' ].includes( def.type )
@@ -800,6 +851,8 @@ function ControlFor( { def, value, onChange } ) {
 					onChange={ onChange }
 				/>
 			);
+		case 'button':
+			return <ActionEdit def={ def } row={ row } />;
 		case 'perms':
 			return (
 				<PermsEdit def={ def } value={ value } onChange={ onChange } />
@@ -885,6 +938,7 @@ function FieldsForm( { defs: all, data, onChange } ) {
 				Edit: ( { data: item, onChange: change } ) => (
 					<ControlFor
 						def={ def }
+						row={ item }
 						value={ item[ def.id ] }
 						onChange={ ( v ) => change( { [ def.id ]: v } ) }
 					/>

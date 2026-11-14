@@ -641,7 +641,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .pkg__key li{display:flex;gap:.65rem;align-items:baseline}
 .pkg__key .ico{color:var(--memorial-plugin-gold);flex:none;margin-top:.2em}
 .pkg__list{border-top:1px solid var(--memorial-plugin-line)}
-.pkg__list summary{cursor:pointer;font-weight:500;list-style:none;padding:.75rem 0;color:var(--memorial-plugin-gold3);min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.pkg__list summary{cursor:pointer;font-weight:500;list-style:none;padding:.75rem 0;color:var(--memorial-plugin-gold3);min-height:44px;display:flex;align-items:center;justify-content:center;gap:.6rem;text-align:center}
 .pkg__list summary::-webkit-details-marker{display:none}
 .pkg__list summary::after{content:"+";font:300 1.5rem/1 var(--memorial-plugin-sans);color:var(--memorial-plugin-gold)}
 .pkg__list[open] summary::after{content:"−"}

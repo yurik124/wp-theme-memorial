@@ -42,14 +42,14 @@ function memorial_plugin_collections() {
 					'readonly' => true,
 				),
 				'name'  => array(
-					'label'    => __( 'Name', 'memorial-plugin' ),
+					'label'    => _x( 'Name', 'person', 'memorial-plugin' ),
 					'type'     => 'text',
 					'source'   => 'meta:_name',
 					'readonly' => true,
 				),
 				'page'  => array(
 					'label'    => __( 'From page', 'memorial-plugin' ),
-					'type'     => 'url',
+					'type'     => 'pagelink',
 					'source'   => 'meta:_page',
 					'readonly' => true,
 				),
@@ -58,6 +58,24 @@ function memorial_plugin_collections() {
 					'type'     => 'datetime',
 					'source'   => 'date',
 					'readonly' => true,
+				),
+				'mail'  => array(
+					'label'    => _x( 'Email', 'request column', 'memorial-plugin' ),
+					'type'     => 'select',
+					'source'   => 'meta:_mem_mail',
+					'readonly' => true,
+					'options'  => array(
+						''       => __( 'not sent (an older request)', 'memorial-plugin' ),
+						'sent'   => __( 'Sent', 'memorial-plugin' ),
+						'failed' => __( 'Not sent', 'memorial-plugin' ),
+					),
+				),
+				'mailerr' => array(
+					'label'    => __( 'Why the email was not sent', 'memorial-plugin' ),
+					'type'     => 'textarea',
+					'source'   => 'meta:_mem_mail_error',
+					'readonly' => true,
+					'hidden'   => true,
 				),
 				'done'  => array(
 					'label'  => __( 'Called back', 'memorial-plugin' ),
@@ -150,7 +168,7 @@ function memorial_plugin_collection_get( $post, $field ) {
 		case 'date':
 			return get_post_time( 'c', false, $post );
 		case 'status':
-			return $post->post_status;
+			return 'visible' === $field['type'] ? 'publish' === $post->post_status : $post->post_status;
 		case 'menu_order':
 			return (int) $post->menu_order;
 		case 'thumbnail':
@@ -161,10 +179,35 @@ function memorial_plugin_collection_get( $post, $field ) {
 			) : null;
 	}
 	$value = get_post_meta( $post->ID, substr( $source, 5 ), true );
+	if ( 'pagelink' === $field['type'] ) {
+		return memorial_plugin_collection_pagelink( (string) $value );
+	}
 	if ( 'integer' === $field['type'] ) {
 		return '' === (string) $value ? null : (int) round( (float) $value );
 	}
 	return 'boolean' === $field['type'] ? (bool) $value : (string) $value;
+}
+
+/**
+ * Address of a page of the site → its title and address (a long title is shortened in the list).
+ *
+ * @param string $url Address.
+ * @return array{url:string,title:string}|null
+ */
+function memorial_plugin_collection_pagelink( $url ) {
+	if ( '' === $url ) {
+		return null;
+	}
+	$id    = url_to_postid( $url );
+	$title = $id ? html_entity_decode( get_the_title( $id ), ENT_QUOTES, 'UTF-8' ) : '';
+	if ( '' === $title ) {
+		$path  = trim( (string) wp_parse_url( $url, PHP_URL_PATH ), '/' );
+		$title = '' === $path ? __( 'Home page', 'memorial-plugin' ) : urldecode( $path );
+	}
+	return array(
+		'url'   => $url,
+		'title' => $title,
+	);
 }
 
 /**
@@ -202,6 +245,9 @@ function memorial_plugin_collection_save( $id, $col, $values ) {
 		switch ( $field['type'] ) {
 			case 'boolean':
 				$v = empty( $v ) ? '' : '1';
+				break;
+			case 'visible': // “Shown on the site” as a checkbox: the status of the record.
+				$v = empty( $v ) ? 'draft' : 'publish';
 				break;
 			case 'integer':
 				$v = (int) $v;

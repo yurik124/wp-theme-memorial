@@ -85,7 +85,7 @@ function memorial_plugin_part( $name, $args = array() ) {
  */
 function memorial_plugin_optional() {
 	return array(
-		'callback' => array( 'callback', '', array( 'leads/callback.php' ), array() ),
+		'callback' => array( 'callback', '', array( 'leads/callback.php', 'leads/lead-mail.php' ), array() ),
 		'metrika'  => array( 'metrika', '', array( 'seo/metrika.php' ), array() ),
 		'seoplug'  => array( 'seoplug', '', array( 'seo/seo-plugins.php' ), array() ),
 		'rewio'    => array( 'rewio', '', array( 'reviews/rewio.php', 'reviews/rewio-archive.php' ), array( 'mem_rewio' ) ),
@@ -177,6 +177,7 @@ $memorial_plugin_modules = array(
 	'seo/metrika.php',
 	'legal/legal.php',
 	'leads/callback.php',
+	'leads/lead-mail.php',
 	// блоки для текста страниц.
 	'content/content.php',
 	'content/search.php',

@@ -86,10 +86,44 @@ export function photoIds( value ) {
 	return list.map( ( v ) => parseInt( v, 10 ) ).filter( ( v ) => v > 0 );
 }
 
+// Addresses of photos already known (from the list, or just chosen in the media library): such a photo
+// is shown at once, without asking the server for it (one request per photo made the window slow).
+const KNOWN = new Map();
+
+/**
+ * Remember the addresses of photos: [{ id, url, big }].
+ *
+ * @param {Object[]} list Photos of a list item.
+ */
+export function rememberPhotos( list ) {
+	( list || [] ).forEach( ( p ) => {
+		if ( p && p.id && p.url ) {
+			KNOWN.set( Number( p.id ), { thumb: p.url, big: p.big || p.url } );
+		}
+	} );
+}
+
+// Media objects of the media library → remembered addresses.
+function rememberMedia( media ) {
+	( Array.isArray( media ) ? media : [ media ] ).forEach( ( m ) => {
+		const sizes = m?.sizes || m?.media_details?.sizes || {};
+		const url = ( s ) => s?.url || s?.source_url;
+		if ( m?.id ) {
+			KNOWN.set( Number( m.id ), {
+				thumb: url( sizes.thumbnail ) || m.url || m.source_url,
+				big: url( sizes.large ) || m.url || m.source_url,
+			} );
+		}
+	} );
+}
+
 // Thumbnail and large URL of a photo from the media library.
 function useMediaUrls( id ) {
 	return useSelect(
 		( select ) => {
+			if ( KNOWN.has( Number( id ) ) ) {
+				return KNOWN.get( Number( id ) );
+			}
 			const media = select( coreStore ).getMedia( id, {
 				context: 'view',
 			} );
@@ -129,6 +163,9 @@ function Viewer( { ids, start, title, onClose } ) {
 	const urls = useSelect(
 		( select ) =>
 			ids.map( ( id ) => {
+				if ( KNOWN.has( Number( id ) ) ) {
+					return KNOWN.get( Number( id ) ).big;
+				}
 				const m = select( coreStore ).getMedia( id, {
 					context: 'view',
 				} );
@@ -234,14 +271,15 @@ export default function Photos( { label, value, onChange } ) {
 				allowedTypes={ [ 'image' ] }
 				multiple
 				value={ ids }
-				onSelect={ ( media ) =>
+				onSelect={ ( media ) => {
+					rememberMedia( media );
 					save( [
 						...ids,
 						...( Array.isArray( media ) ? media : [ media ] )
 							.map( ( m ) => m.id )
 							.filter( ( id ) => ! ids.includes( id ) ),
-					] )
-				}
+					] );
+				} }
 				render={ ( { open } ) => (
 					<Button variant="secondary" onClick={ open }>
 						{ __( 'Add photos', 'memorial-plugin' ) }

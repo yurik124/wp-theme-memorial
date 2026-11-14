@@ -29,6 +29,7 @@ function memorial_plugin_modules_schema() {
 			'help'   => __( 'Untick a feature and it turns off: its menu items disappear, its blocks on pages show nothing. The data is not deleted. The catalog, prices, contacts, documents and SEO are the base of the site, they always work.', 'memorial-plugin' ),
 			'fields' => $f,
 		),
+		'mail'  => function_exists( 'memorial_plugin_lead_mail_schema' ) ? memorial_plugin_lead_mail_schema() : array( 'type' => 'hidden' ),
 		'perms' => array(
 			'type'  => 'perms',
 			'tab'   => __( 'Permissions', 'memorial-plugin' ),
@@ -44,6 +45,7 @@ function memorial_plugin_modules_page_defaults() {
 	return array(
 		'on'    => array_fill_keys( array_keys( memorial_plugin_optional() ), 1 ),
 		'perms' => memorial_plugin_perm_defaults(),
+		'mail'  => function_exists( 'memorial_plugin_lead_mail_defaults' ) ? memorial_plugin_lead_mail_defaults() : array(),
 	);
 }
 
@@ -70,6 +72,9 @@ add_action( 'add_option_mem_modules_page', fn( $n, $v ) => memorial_plugin_modul
  * @param mixed $new New.
  */
 function memorial_plugin_modules_sync( $old, $new ) {
+	if ( ! is_array( $new ) || ! isset( $new['on'] ) || ! is_array( $new['on'] ) ) {
+		return; // written without the features (a one-time move of another tab) — nothing to switch.
+	}
 	$on = array();
 	foreach ( array_keys( memorial_plugin_optional() ) as $k ) {
 		$on[ $k ] = (int) ! empty( $new['on'][ $k ] );
