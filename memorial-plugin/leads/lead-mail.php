@@ -123,12 +123,18 @@ function memorial_plugin_lead_mail_send( $lead, $settings ) {
 		'{name}'  => '' !== $name ? $name : '—',
 		'{page}'  => '' === $page ? '—' : ( $link ? $link['title'] : urldecode( $page ) ),
 		'{url}'   => '' === $page ? '—' : urldecode( $page ),
+		// The “Order” button of a product card; empty for a usual request.
+		'{product}' => trim( (string) ( $lead['product'] ?? '' ) ),
 		'{time}'  => wp_date( 'd.m.Y H:i' ),
 		'{site}'  => home_url( '/' ),
 		'{link}'  => admin_url( 'admin.php?page=memorial-plugin-leads' ),
 	);
 	$subject = str_replace( ' ()', '', strtr( (string) $settings['subject'], '' !== $name ? $vars : array( '{name}' => '' ) + $vars ) );
 	$body    = strtr( (string) $settings['body'], $vars );
+	// An order from a product card reaches the email even if the text has no {product}.
+	if ( '' !== $vars['{product}'] && false === strpos( (string) $settings['body'], '{product}' ) ) {
+		$body = __( 'Order:', 'memorial-plugin' ) . ' ' . $vars['{product}'] . "\n\n" . $body;
+	}
 	return memorial_plugin_mail_send( memorial_plugin_mail_to( (string) $settings['to'] ), $subject, $body, (string) $settings['from_email'], (string) $settings['from_name'] );
 }
 

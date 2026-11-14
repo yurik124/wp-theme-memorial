@@ -120,6 +120,7 @@ function memorial_plugin_mail_codes_html() {
 			. $row( '{name}', __( 'name (“—” if not given)', 'memorial-plugin' ) )
 			. $row( '{page}', __( 'title of the page the request was sent from, as in “Call-back requests”', 'memorial-plugin' ) )
 			. $row( '{url}', __( 'address of that page', 'memorial-plugin' ) )
+			. $row( '{product}', __( 'the product of the “Order” button (empty for a usual request)', 'memorial-plugin' ) )
 			. $row( '{time}', __( 'date and time of the request', 'memorial-plugin' ) )
 			. $row( '{site}', __( 'address of the site', 'memorial-plugin' ) )
 			. $row( '{link}', __( 'link to “Call-back requests” in the admin', 'memorial-plugin' ) )

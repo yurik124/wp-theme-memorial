@@ -73,12 +73,18 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 	const cfg = window.memCall || {};
 	const dlg = d.getElementById( 'callback' );
 	let openedAt = 0,
-		from = '';
-	const openCallback = ( status, src ) => {
+		from = '',
+		product = '';
+	const openCallback = ( status, src, what ) => {
 		if ( ! dlg ) {
 			return;
 		}
 		from = src || '';
+		// the “Order” button of a product card: the product goes with the request
+		product = what || '';
+		if ( product && ! status ) {
+			status = T( 'order' ).replace( '%s', product );
+		}
 		const st = dlg.querySelector( '[data-cb-status]' );
 		st.textContent = status || '';
 		st.hidden = ! status;
@@ -159,6 +165,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 						website: form.elements.website.value,
 						consent: 1,
 						page: window.location.href,
+						product,
 						elapsed: Math.round( ( Date.now() - openedAt ) / 1000 ),
 					} ),
 				} );
@@ -190,8 +197,10 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			return;
 		}
 		e.preventDefault();
+		// from the product window: it closes, the request window takes its place
+		b.closest( 'dialog[open]:not(#callback)' )?.close();
 		if ( dlg ) {
-			openCallback( '', place( b ) );
+			openCallback( '', place( b ), b.dataset.product || '' );
 		} else {
 			const t = d.querySelector( 'a[href^="tel:"]' );
 			if ( t ) {
@@ -474,7 +483,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			idx = 0;
 		const img = lb.querySelector( 'img' ),
 			cap = lb.querySelector( 'figcaption' ),
-			count = lb.querySelector( '.lb__count' );
+			count = lb.querySelector( '.lb__count' ),
+			info = lb.querySelector( '.lb__info' );
+		let shownInfo = null;
 		const loaded = new Set(),
 			loading = new Map();
 		const preload = ( it ) => {
@@ -515,6 +526,19 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			}
 			img.alt = it.alt || '';
 			cap.textContent = it.cap || '';
+			// “Product window”: under the photo — the price and “Order”, below — the name, specifications and description
+			if ( info ) {
+				const tpl = it.info || null;
+				lb.classList.toggle( 'lb--card', !! tpl );
+				info.hidden = ! tpl;
+				if ( tpl !== shownInfo ) {
+					info.replaceChildren(
+						...( tpl ? [ tpl.content.cloneNode( true ) ] : [] )
+					);
+					lb.scrollTop = 0;
+					shownInfo = tpl;
+				}
+			}
 			const many = group.length > 1;
 			lb.querySelectorAll( '.lb__nav' ).forEach(
 				( b ) => ( b.hidden = ! many )
@@ -545,6 +569,12 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					?.textContent.trim() ||
 				'';
 			const phs = [ ...a.querySelectorAll( 'img' ) ];
+			const tpl =
+				a.dataset.lbCard !== undefined
+					? a
+							.closest( '.mcard' )
+							?.querySelector( 'template.mcard__info' )
+					: null;
 			if ( ! set ) {
 				return [
 					{
@@ -557,6 +587,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 						cap: caption,
 						alt: phs[ 0 ]?.alt || '',
 						a,
+						info: tpl,
 					},
 				];
 			}
@@ -573,6 +604,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 						: '' ),
 				alt: phs[ k ]?.alt || '',
 				a,
+				info: tpl,
 			} ) );
 		};
 		d.addEventListener( 'click', ( e ) => {
@@ -663,7 +695,8 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		lb.addEventListener(
 			'touchmove',
 			( e ) => {
-				if ( e.cancelable ) {
+				// the product window scrolls (its text on a phone); the photo view keeps the page still
+				if ( e.cancelable && ! lb.classList.contains( 'lb--card' ) ) {
 					e.preventDefault();
 				}
 			},
@@ -681,6 +714,12 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		} );
 		lb.addEventListener( 'close', () => {
 			img.removeAttribute( 'src' );
+			lb.classList.remove( 'lb--card' );
+			if ( info ) {
+				info.hidden = true;
+				info.replaceChildren();
+				shownInfo = null;
+			}
 			d.documentElement.classList.remove( 'lb-open' );
 		} );
 	}

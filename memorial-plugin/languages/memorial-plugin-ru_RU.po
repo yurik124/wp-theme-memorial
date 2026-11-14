@@ -7290,3 +7290,43 @@ msgstr "отзывы списком: новый или удалён, автор,
 
 msgid "title of the page the request was sent from, as in “Call-back requests”"
 msgstr "название страницы, с которой отправили заявку, — как в «Заявках на обратный звонок»"
+
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+msgid "A click on the photo opens"
+msgstr "По щелчку на фото открывается"
+
+msgid "Only the photo"
+msgstr "Только фото"
+
+msgid "Opens the “Call me back” window; the request shows which product was ordered."
+msgstr "Открывает окно «Перезвоните мне»; в заявке видно, какой товар заказали."
+
+msgid "Order:"
+msgstr "Заказ:"
+
+msgid "Order: %s. Leave your phone number — we will call you back."
+msgstr "Заказ: %s. Оставьте номер телефона — мы перезвоним."
+
+msgid "Photo and order"
+msgstr "Фото и заказ"
+
+msgid "Product window"
+msgstr "Окно товара"
+
+msgid "Text of the button"
+msgstr "Текст кнопки"
+
+msgid "the product of the “Order” button (empty for a usual request)"
+msgstr "товар кнопки «Заказать» (пусто у обычной заявки)"
+
+msgid "“Only the photo” — a large photo with arrows. “Product window” — photos, name, specifications, price, description and the “Order” button, if it is on."
+msgstr "«Только фото» — крупное фото со стрелками. «Окно товара» — фото, название, характеристики, цена, описание и кнопка «Заказать», если она включена."
+
+msgid "“Order” button under the product cards"
+msgstr "Кнопка «Заказать» под карточками товаров"
+
+msgctxt "button: order a product"
+msgid "Order"
+msgstr "Заказать"

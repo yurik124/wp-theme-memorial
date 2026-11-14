@@ -343,7 +343,7 @@ a.mem-wcard:hover{box-shadow:0 10px 26px -12px rgba(0,0,0,.25);transform:transla
 
 /* Переход к товару по ссылке #p-123 (старые адреса /tovar/…): карточка не под панелью и подсвечена */
 .mcard,.card{scroll-margin-top:calc(var(--hh,70px) + 90px)}
-.mcard:target .mcard__link,.card:target{outline:2px solid var(--wp--preset--color--primary,#b39a5b);outline-offset:3px;border-radius:12px}
+.mcard:target .mcard__link,.card:target{outline:2px solid var(--wp--preset--color--primary,#b39a5b);outline-offset:3px}
 
 /* Галерея с одинаковыми пропорциями: фото другой формы — целиком, поля размыты (pages/media.php → mem_fit_odd_photos) */
 .mem-eq figure.mem-fit img,.mem-eq-cols figure.mem-fit img{object-fit:contain!important}
@@ -849,7 +849,8 @@ a.svc__item:hover{box-shadow:var(--memorial-plugin-sh2);outline:1px solid var(--
 a.svc__item:hover h3,.cat:hover h3{color:var(--memorial-plugin-gold3)}
 .cat:hover{box-shadow:var(--memorial-plugin-sh2);outline:1px solid var(--memorial-plugin-gold2)}
 .cat:hover .cat__more{color:var(--memorial-plugin-gold)}
-.mcard:hover,.mem-card:hover{outline:1px solid var(--memorial-plugin-gold2)}
+/* обводка повторяет скругление карточки (на .mcard — пункте списка без скругления — она была квадратной) */
+.mcard:hover .mcard__link,.mem-card:hover{outline:1px solid var(--memorial-plugin-gold2);outline-offset:0}
 .link-more:hover,.kaddr__route:hover,.svc__more:hover{color:var(--memorial-plugin-gold);text-decoration:underline;text-underline-offset:4px}
 .clist a:hover,.kphones a:hover,.kmail a:hover,.fnav a:hover{color:var(--memorial-plugin-gold)}
 .maps__tab:hover:not([aria-selected=true]),.chip:hover:not(.is-on){border-color:var(--memorial-plugin-gold);color:var(--memorial-plugin-gold3);background:color-mix(in srgb,var(--memorial-plugin-gold) 8%,#fff)}
@@ -971,3 +972,36 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .mem-cards{display:flex;flex-wrap:wrap;justify-content:center}
 .mem-cards>*{flex:0 1 calc((100% - 3 * .9rem) / 4);min-width:min(230px,100%);box-sizing:border-box}
 @media (max-width:600px){.mem-cards>*{flex-basis:100%}}
+
+/* «Заказать» под карточкой товара (Каталог → Типы и категории → кнопка «Заказать») */
+.mcard{flex-direction:column;gap:.5rem}
+.mcard>.mcard__link{flex:1 1 auto}
+.mcard__order{width:100%;min-height:44px}
+
+/* Окно товара: на первом экране фото, под ним цена, под ценой «Заказать»; ниже — название, характеристики, описание (вид фото «Окно товара») */
+.lb__info[hidden]{display:none}
+.lb.lb--card[open]{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;overscroll-behavior:contain;padding:64px 84px 32px;box-sizing:border-box}
+.lb--card figure{flex:none;width:100%;max-width:900px;height:auto;padding:0}
+.lb--card img{max-height:calc(100dvh - 270px)}
+.lb--card figcaption{display:none}
+.lb__info{flex:none;width:100%;max-width:720px;box-sizing:border-box;color:#fff}
+.lb__buy{display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:12px 0 18px}
+.lb__price{margin:0;color:#fff}
+.lb__price .price{font-size:1.6rem;color:#fff}
+.lb__price .price small,.lb__price .price--ask,.lb__price .price-old{color:#d8d3c8}
+.lb__order{min-width:240px;min-height:48px}
+.lb__about{padding:1.4rem 1.5rem;border-radius:14px;background:#fff;color:var(--memorial-plugin-ink,#2a2c28)}
+.lb__title{margin:0 0 .3rem;font:600 1.5rem/1.25 var(--memorial-plugin-lora,Georgia,serif);color:inherit}
+.lb__sub{margin:0 0 .9rem;color:var(--memorial-plugin-mute,#5f625a)}
+.lb__specs{display:grid;gap:.35rem;margin:0 0 1rem}
+.lb__specs div{display:flex;justify-content:space-between;gap:1rem;padding-bottom:.3rem;border-bottom:1px dotted var(--memorial-plugin-line,#e2ded2)}
+.lb__specs dt{color:var(--memorial-plugin-mute,#5f625a)}
+.lb__specs dd{margin:0;font-weight:600;text-align:right}
+.lb__desc{line-height:1.55}
+.lb__desc p{margin:0 0 .6em}
+.lb__about>:last-child,.lb__desc>:last-child{margin-bottom:0}
+@media (max-width:700px){
+.lb.lb--card[open]{padding:60px 12px 84px}
+.lb--card img{max-height:calc(100dvh - 310px)}
+.lb__order{width:100%;min-width:0}
+}
