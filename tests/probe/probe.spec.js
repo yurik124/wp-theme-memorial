@@ -1111,8 +1111,18 @@ test.describe( 'отзывы и разрешения', () => {
 test.describe( 'редактор сайта', () => {
 	test.use( { viewport: { width: 1440, height: 900 } } );
 	test( 'аудит редактора сайта', async ( { page, browser } ) => {
-		test.setTimeout( 900_000 );
+		test.setTimeout( 1_500_000 );
+		page.setDefaultTimeout( 20000 );
 		const report = { screens: {}, canvas: {}, menu: {} };
+		// Картинка темы: главная рабочего сайта 1200×900 (screenshot.png)
+		const ctx = await browser.newContext( { viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 } );
+		const p2 = await ctx.newPage();
+		await p2.goto( 'https://memorialbel.ru/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
+		await p2.addStyleTag( { content: NO_FLOAT + '.consent-banner,.memorial-plugin-cookie,[class*=cookie],[class*=mobile-bar]{display:none !important}' } ).catch( () => {} );
+		await p2.waitForTimeout( 3000 );
+		await p2.screenshot( { path: `${ DIR }/theme-screenshot.png` } );
+		await p2.screenshot( { path: `${ DIR }/theme-home-full.png`, fullPage: true } );
+		await ctx.close();
 		const errs = errorsOf( page );
 		const bad = [];
 		page.on( 'response', ( r ) => {
@@ -1129,9 +1139,10 @@ test.describe( 'редактор сайта', () => {
 		// Меню «Внешний вид»: что в нём есть (Customizer, Меню, Виджеты быть не должно)
 		await page.goto( '/wp-admin/themes.php' );
 		report.menu.appearance = await page.locator( '#menu-appearance .wp-submenu a' ).evaluateAll( ( a ) => a.map( ( x ) => x.textContent.trim() + ' → ' + x.getAttribute( 'href' ) ) );
-		report.menu.themeCard = await page.locator( '.theme.active' ).innerText().catch( () => '' );
-		report.menu.themeShot = await page.locator( '.theme.active .theme-screenshot img' ).getAttribute( 'src' ).catch( () => null );
-		await shot( page, 'se-themes' );
+		await shot( page, 'se-themes' ).catch( () => {} );
+		report.menu.themeCard = await page.locator( '.theme.active' ).first().innerText( { timeout: 5000 } ).catch( () => '' );
+		report.menu.themeShot = await page.locator( '.theme.active .theme-screenshot img' ).first().getAttribute( 'src', { timeout: 5000 } ).catch( () => null );
+		log( 'site-editor', report );
 
 		const editorReady = async () => {
 			await page.waitForSelector( '.edit-site-layout, .edit-site', { timeout: 60000 } ).catch( () => {} );
@@ -1178,7 +1189,8 @@ test.describe( 'редактор сайта', () => {
 				sidebar: await page.locator( '.edit-site-sidebar__content, .edit-site-layout__sidebar' ).first().innerText().catch( () => '' ),
 				notices: await page.locator( '.components-notice, .components-snackbar' ).allTextContents(),
 			};
-			await shot( page, 'se-' + k );
+			await shot( page, 'se-' + k ).catch( () => {} );
+			log( 'site-editor', report );
 		}
 		// Список шаблонов и частей (данные REST)
 		report.templates = await page.evaluate( async () => {
@@ -1206,7 +1218,8 @@ test.describe( 'редактор сайта', () => {
 			await editorReady();
 			report.canvas[ id ] = await canvasCheck();
 			report.canvas[ id ].notices = await page.locator( '.components-notice' ).allTextContents();
-			await shot( page, 'se-edit-' + id.replace( /[^a-z0-9-]+/gi, '_' ) );
+			await shot( page, 'se-edit-' + id.replace( /[^a-z0-9-]+/gi, '_' ) ).catch( () => {} );
+			log( 'site-editor', report );
 		}
 
 		// Стили: варианты, книга стилей
@@ -1233,14 +1246,5 @@ test.describe( 'редактор сайта', () => {
 		report.errors = errs;
 		log( 'site-editor', report );
 
-		// Картинка темы: главная рабочего сайта 1200×900 (screenshot.png)
-		const ctx = await browser.newContext( { viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 } );
-		const p2 = await ctx.newPage();
-		await p2.goto( 'https://memorialbel.ru/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
-		await p2.addStyleTag( { content: NO_FLOAT + '.consent-banner,.memorial-plugin-cookie,[class*=cookie],[class*=mobile-bar]{display:none !important}' } ).catch( () => {} );
-		await p2.waitForTimeout( 3000 );
-		await p2.screenshot( { path: `${ DIR }/theme-screenshot.png` } );
-		await p2.screenshot( { path: `${ DIR }/theme-home-full.png`, fullPage: true } );
-		await ctx.close();
 	} );
 } );
