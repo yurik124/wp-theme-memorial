@@ -1590,6 +1590,10 @@ test.describe( 'заказать', () => {
 		await page.waitForTimeout( 1500 );
 		report.lbCard = await page.locator( '#lb.lb--card' ).count();
 		report.lbInfo = await page.locator( '#lb .lb__info' ).innerText().catch( () => '' );
+		report.firstScreen = await page.evaluate( () => [ 'figure img', '.lb__price', '.lb__order', '.lb__title' ].map( ( q ) => {
+			const r = document.querySelector( '#lb ' + q )?.getBoundingClientRect();
+			return q + ': ' + ( r ? Math.round( r.top ) + '–' + Math.round( r.bottom ) + ( r.bottom <= innerHeight ? ' в экране' : ' ниже' ) : 'нет' );
+		} ) );
 		await shot( page, 'order-window' );
 		await page.locator( '#lb .lb__order' ).click().catch( () => {} );
 		await page.waitForTimeout( 800 );
@@ -1610,6 +1614,9 @@ test.describe( 'заказать', () => {
 		await ph.locator( '.mcard a[data-lb]' ).first().click();
 		await ph.waitForTimeout( 1500 );
 		await ph.screenshot( { path: `${ DIR }/order-window-phone.png` } );
+		await ph.locator( '#lb' ).evaluate( ( d ) => ( d.scrollTop = 99999 ) );
+		await ph.waitForTimeout( 400 );
+		await ph.screenshot( { path: `${ DIR }/order-window-phone-below.png` } );
 		await ctx.close();
 		// заявка в списке
 		await page.goto( '/wp-login.php' );

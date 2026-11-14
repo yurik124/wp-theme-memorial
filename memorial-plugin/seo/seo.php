@@ -222,7 +222,7 @@ function memorial_plugin_product_ld( $id, $url ) {
 			'availability'  => get_post_meta( $id, '_mem_on_order', true ) ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
 			'url'           => $url,
 			'seller'        => array(
-				'@type' => 'Organization',
+				'@type' => 'FuneralHome', // the same node as the organization on the home page and “Contacts” (seo/schema.php).
 				'@id'   => home_url( '/#organization' ),
 				'name'  => get_bloginfo( 'name' ),
 			),

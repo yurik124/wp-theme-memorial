@@ -282,7 +282,10 @@ function memorial_plugin_catalog_card( $p, $i, $opts = array() ) {
 	echo $button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_attr()/esc_html().
 	// “Product window”: what the large view shows next to the photos (assets/js/view/site.js).
 	if ( 'card' === $view && ! $page && $big ) {
-		echo '<template class="mcard__info"><h2 class="lb__title">' . esc_html( $title ) . '</h2>';
+		// first screen: the photo, the price under it, “Order” under the price; the name and description are below.
+		echo '<template class="mcard__info"><div class="lb__buy"><p class="lb__price">' . wp_kses_post( memorial_plugin_price_html( $id ) ) . '</p>';
+		echo str_replace( 'btn--line mcard__order', 'btn--gold lb__order', $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the same escaped button.
+		echo '</div><div class="lb__about"><h2 class="lb__title">' . esc_html( $title ) . '</h2>';
 		if ( $sub ) {
 			echo '<p class="lb__sub">' . esc_html( $sub ) . '</p>';
 		}
@@ -293,12 +296,11 @@ function memorial_plugin_catalog_card( $p, $i, $opts = array() ) {
 			}
 			echo '</dl>';
 		}
-		echo '<p class="lb__price">' . wp_kses_post( memorial_plugin_price_html( $id ) ) . '</p>';
 		$desc = trim( (string) get_post_field( 'post_content', $id ) );
 		if ( '' !== wp_strip_all_tags( $desc ) ) {
 			echo '<div class="lb__desc">' . wp_kses_post( wpautop( strip_shortcodes( excerpt_remove_blocks( $desc ) ) ) ) . '</div>';
 		}
-		echo str_replace( 'btn--line mcard__order', 'btn--gold lb__order', $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the same escaped button.
+		echo '</div>';
 		echo '</template>';
 	}
 	echo '</li>';

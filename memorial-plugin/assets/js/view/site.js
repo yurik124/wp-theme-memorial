@@ -526,7 +526,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			}
 			img.alt = it.alt || '';
 			cap.textContent = it.cap || '';
-			// “Product window”: the name, specifications, price, description and “Order” of this product
+			// “Product window”: under the photo — the price and “Order”, below — the name, specifications and description
 			if ( info ) {
 				const tpl = it.info || null;
 				lb.classList.toggle( 'lb--card', !! tpl );
@@ -535,7 +535,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					info.replaceChildren(
 						...( tpl ? [ tpl.content.cloneNode( true ) ] : [] )
 					);
-					info.scrollTop = 0;
+					lb.scrollTop = 0;
 					shownInfo = tpl;
 				}
 			}
