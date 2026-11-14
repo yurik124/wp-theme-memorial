@@ -13,28 +13,6 @@ defined( 'ABSPATH' ) || exit;
 
 define( 'MEMORIAL_PLUGIN_MAX_URL', 'https://max.ru/u/f9LHodD0cOLf3sDsVZFTsBTdONk3kEAboq9CfefPcekCM_KZnnErTEhejHM' );
 
-/* Разовое обновление 1.5: MAX вместо Telegram в уже сохранённых контактах */
-add_action(
-	'init',
-	function () {
-		if ( get_option( 'mem_ver_15' ) ) {
-			return;
-		}
-		$c = get_option( 'mem_contacts' );
-		if ( is_array( $c ) && isset( $c['messengers'] ) ) {
-			if ( empty( $c['messengers']['max'] ) ) {
-				$c['messengers']['max'] = MEMORIAL_PLUGIN_MAX_URL;
-			}
-			if ( trim( $c['messengers']['telegram'] ?? '' ) === '@memorialbel' ) {
-				$c['messengers']['telegram'] = '';
-			}
-			update_option( 'mem_contacts', $c );
-		}
-		update_option( 'mem_ver_15', 1, false );
-	}
-);
-
-
 /*
 =========================================================
  * Схемы
@@ -576,53 +554,6 @@ function memorial_plugin_home_help_link() {
 	$text = trim( $h['help_text'] ?? '' );
 	return array( get_permalink( $id ), '' !== $text ? $text : __( 'What to do when someone dies', 'memorial-plugin' ) );
 }
-
-/* Разово: старые «продающие» тексты главной, если их не меняли, заменяем на новые (прежние — в истории не нужны, они из шаблона) */
-add_action(
-	'admin_init',
-	function () {
-		if ( get_option( 'mem_home_texts_v2' ) || ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-		update_option( 'mem_home_texts_v2', 1, false );
-		$o = get_option( 'mem_home' );
-		if ( ! is_array( $o ) ) {
-			return;
-		}
-		$ch     = array();
-		$old_em = array( 'Свой траурный зал, венки собственного производства', 'для прощания и панихиды' );
-		if ( in_array( trim( $o['hero']['title_em'] ?? '' ), $old_em, true ) ) {
-			$o['hero']['title_em'] = 'Поможем на каждом шаге';
-			$ch[]                  = __( 'second line of the title', 'memorial-plugin' ); }
-		if ( trim( $o['hero']['title'] ?? '' ) === 'Собственный траурный зал' ) {
-			$o['hero']['title'] = 'Ритуальные услуги в Белгороде';
-			$ch[]               = __( 'title', 'memorial-plugin' ); }
-		if ( trim( $o['hero']['lead'] ?? '' ) === 'Возьмём на себя все хлопоты: организация похорон, документы, транспорт, венки собственного производства.' ) {
-			$o['hero']['lead'] = MEMORIAL_PLUGIN_HERO_LEAD;
-			$ch[]              = __( 'text under the title', 'memorial-plugin' ); }
-		$tr = array_map( fn( $t ) => trim( $t['text'] ?? '' ), (array) ( $o['hero']['trust'] ?? array() ) );
-		if ( in_array( 'Собственное здание — не фирма-однодневка', $tr, true ) ) {
-			$o['hero']['trust'] = MEMORIAL_PLUGIN_HERO_TRUST;
-			$ch[]               = __( 'items with ticks', 'memorial-plugin' ); }
-		if ( strpos( (string) ( $o['about']['text'] ?? '' ), 'предлагает качественные ритуальные услуги' ) !== false ) {
-			$o['about']['text'] = MEMORIAL_PLUGIN_ABOUT_TEXT;
-			$ch[]               = __( '“About the company” text', 'memorial-plugin' ); }
-		if ( ! $ch ) {
-			return;
-		}
-		update_option( 'mem_home', $o );
-		set_transient(
-			'mem_places_report',
-			array_merge(
-				array_filter( (array) get_transient( 'mem_places_report' ) ),
-				array(
-					__( 'Home page: updated ', 'memorial-plugin' ) . implode( ', ', $ch ) . __( ' — calmer and more specific. You can change it in “Memorial → Home page”.', 'memorial-plugin' ),
-				)
-			),
-			DAY_IN_SECONDS
-		);
-	}
-);
 
 /**
  * Home defaults.
@@ -1292,12 +1223,6 @@ function memorial_plugin_row_empty( $r, $fields ) {
  * =======================================================
  */
 
-/** Главная перенесена в блоки (blocks/home): на экране остаётся только список услуг */
-function memorial_plugin_home_migrated() {
-	$log = get_option( 'memorial_plugin_home_migrated' );
-	return is_array( $log ) && ( $log['result'] ?? '' ) === 'migrated';
-}
-
 /**
  * Home services schema.
  */
@@ -1317,14 +1242,13 @@ function memorial_plugin_home_services_schema() {
  * Admin pages.
  */
 function memorial_plugin_admin_pages() {
-	$home = memorial_plugin_home_migrated()
-		? array(
-			'slug'   => 'mem-home',
-			'title'  => __( 'Services', 'memorial-plugin' ),
-			'schema' => 'memorial_plugin_home_services_schema',
-			'intro'  => __( 'Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited like any page: “Pages → Home”.', 'memorial-plugin' ),
-		)
-		: null;
+	// The texts of the home page are its content; this screen keeps only the service cards.
+	$home = array(
+		'slug'   => 'mem-home',
+		'title'  => __( 'Services', 'memorial-plugin' ),
+		'schema' => 'memorial_plugin_home_services_schema',
+		'intro'  => __( 'Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited like any page: “Pages → Home”.', 'memorial-plugin' ),
+	);
 	return apply_filters(
 		'memorial_plugin_admin_pages',
 		array(
@@ -1334,13 +1258,7 @@ function memorial_plugin_admin_pages() {
 				'schema' => 'memorial_plugin_contacts_schema',
 				'intro'  => __( 'Phones, email, addresses and opening hours. Changes appear at once in the header, the footer, on the home page and in the product cards.', 'memorial-plugin' ),
 			),
-			'mem_home'     => $home ?? array(
-				'slug'   => 'mem-home',
-				'title'  => __( 'Home page', 'memorial-plugin' ),
-				'schema' => 'memorial_plugin_home_schema',
-				'intro'  => __( 'Texts and items of the home page blocks. Items can be dragged by ⋮⋮, removed with the cross and added with the button under the list. Empty items are not saved.<br>', 'memorial-plugin' )
-						. __( 'In the text you can write <code>{years}</code> — how many years the company has worked, <code>{founded}</code> — the year it was founded, <code>{addr}</code> — the first address, <code>{phone}</code> — the main phone.', 'memorial-plugin' ),
-			),
+			'mem_home'     => $home,
 		)
 	);
 }

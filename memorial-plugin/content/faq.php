@@ -47,12 +47,10 @@ function memorial_plugin_faq_all() {
 
 	// порядок разделов — как в главном меню, остальные страницы — по названию.
 	$order = array();
-	$locs  = get_nav_menu_locations();
-	if ( ! empty( $locs['primary'] ) ) {
-		foreach ( (array) wp_get_nav_menu_items( $locs['primary'] ) as $i => $it ) {
-			if ( 'page' === $it->object ) {
-				$order[ (int) $it->object_id ] = $i;
-			}
+	$i     = 0;
+	foreach ( memorial_plugin_menu_items() as $it ) {
+		if ( 'page' === $it->object && ! isset( $order[ (int) $it->object_id ] ) ) {
+			$order[ (int) $it->object_id ] = $i++;
 		}
 	}
 	$pages = get_posts(
@@ -100,7 +98,7 @@ function memorial_plugin_faq_all() {
 
 add_action( 'save_post_page', fn() => delete_transient( 'mem_faq_all' ) );
 add_action( 'deleted_post', fn() => delete_transient( 'mem_faq_all' ) );
-add_action( 'wp_update_nav_menu', fn() => delete_transient( 'mem_faq_all' ) );
+add_action( 'save_post_wp_navigation', fn() => delete_transient( 'mem_faq_all' ) );
 
 add_shortcode(
 	'mem_faq',

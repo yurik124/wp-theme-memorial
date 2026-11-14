@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Memorial Plugin
  * Description: Site features for Memorial funeral services: catalog, prices, reviews, works, leads, settings, SEO, analytics. Design lives in the Memorial Modern theme.
- * Version: 2.0.0
+ * Version: 2.1.0
  * Requires at least: 7.1
  * Tested up to: 7.1
  * Requires PHP: 8.1
@@ -19,16 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/* Переход со старого Memorial Core: пока он активен, новый плагин ничего не загружает (core/switchover.php) */
-require __DIR__ . '/core/switchover.php';
-register_activation_hook( __FILE__, 'memorial_plugin_switchover' );
-if ( memorial_plugin_legacy_active() ) {
-	add_action( 'admin_notices', 'memorial_plugin_legacy_notice' );
-	return;
-}
-add_action( 'wp_loaded', 'memorial_plugin_after_switch' );
-
-define( 'MEMORIAL_PLUGIN_VER', '2.0.0' );
+define( 'MEMORIAL_PLUGIN_VER', '2.1.0' );
 define( 'MEMORIAL_PLUGIN_FILE', __FILE__ );
 define( 'MEMORIAL_PLUGIN_DIR', __DIR__ );                          // без «/» в конце: MEMORIAL_PLUGIN_DIR . '/assets/…'.
 define( 'MEMORIAL_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -169,8 +160,6 @@ $memorial_plugin_modules = array(
 	// «Наши работы»
 	'works/works.php',
 	'works/works-manager.php',
-	// разовые переносы данных.
-	'catalog/catalog-migrate.php',
 	// SEO, аналитика, заявки.
 	'seo/seo.php',
 	'seo/seo-plugins.php',
@@ -197,9 +186,6 @@ $memorial_plugin_modules = array(
 	'pages/cards.php',
 	'pages/photos.php',
 	'places/places.php',
-	// справка в админке
-	// уборка после удалённых модулей скорости (этап 3).
-	'core/speed-removed.php',
 	// стили и скрипты блоков на сайте.
 	'core/assets.php',
 );
@@ -245,7 +231,7 @@ require MEMORIAL_PLUGIN_DIR . '/blocks/floating/floating.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/home.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/home-template.php';
 require MEMORIAL_PLUGIN_DIR . '/blocks/home/pages-to-content.php';
-require MEMORIAL_PLUGIN_DIR . '/core/cleanup.php';
+require MEMORIAL_PLUGIN_DIR . '/core/upgrade.php';
 
 /* Включение: адреса товаров/работ заработают после пересборки ссылок (на следующем запросе, когда типы записей уже есть) */
 register_activation_hook(
@@ -268,7 +254,7 @@ add_action(
 register_deactivation_hook(
 	__FILE__,
 	function () {
-		foreach ( array( 'mem_rewio_cron', 'mem_rewio_cron_once', 'mem_logos_cron', 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron' ) as $h ) {
+		foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron' ) as $h ) {
 			wp_clear_scheduled_hook( $h );
 		}
 	}

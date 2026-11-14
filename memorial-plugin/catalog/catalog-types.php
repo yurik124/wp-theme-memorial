@@ -260,61 +260,6 @@ function memorial_plugin_type_show_sub( $type_id ) {
 }
 
 /**
- * Once, for the types made before these settings: products newest first (as the owner asked), and
- * “a line under the name” on only where at least one product has it filled in. Nothing is deleted.
- */
-function memorial_plugin_types_setup_once() {
-	if ( get_option( 'memorial_plugin_types_setup_1113' ) ) {
-		return;
-	}
-	$types = get_terms(
-		array(
-			'taxonomy'   => 'mem_cat',
-			'parent'     => 0,
-			'hide_empty' => false,
-			'fields'     => 'ids',
-		)
-	);
-	$log = array();
-	foreach ( is_wp_error( $types ) ? array() : $types as $t ) {
-		$t   = (int) $t;
-		$row = array( 'sort' => (string) get_term_meta( $t, 'mem_sort', true ) );
-		if ( '' === $row['sort'] ) {
-			update_term_meta( $t, 'mem_sort', 'new' );
-		}
-		if ( '' === (string) get_term_meta( $t, 'mem_show_sub', true ) ) {
-			$filled = get_posts(
-				array(
-					'post_type'      => 'mem_product',
-					'post_status'    => 'any',
-					'posts_per_page' => 1,
-					'fields'         => 'ids',
-					'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- once.
-						array(
-							'key'     => '_mem_sub',
-							'value'   => '',
-							'compare' => '!=',
-						),
-					),
-					'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- once.
-						array(
-							'taxonomy'         => 'mem_cat',
-							'terms'            => $t,
-							'include_children' => true,
-						),
-					),
-				)
-			);
-			update_term_meta( $t, 'mem_show_sub', $filled ? '1' : '0' );
-			$row['sub'] = $filled ? '1' : '0';
-		}
-		$log[ $t ] = $row; // The former values: for a rollback by hand.
-	}
-	update_option( 'memorial_plugin_types_setup_1113', $log, false );
-}
-add_action( 'admin_init', 'memorial_plugin_types_setup_once', 30 );
-
-/**
  * A new type or category shows its newest products first.
  *
  * @param int $term_id Term ID.

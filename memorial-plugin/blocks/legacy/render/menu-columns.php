@@ -1,19 +1,13 @@
 <?php
 /**
  * Меню в подвале колонками: пункты с подпунктами — колонки с заголовком, одиночные пункты — колонка «Информация».
- * Меню — область «footer», иначе «primary» (классические меню WordPress; на этапе 3 — навигация из блоков).
+ * Меню — главное меню сайта (блок «Навигация», memorial_plugin_menu_items()): одна правка в редакторе сайта меняет и шапку, и подвал.
  *
  * @package memorial-plugin
  */
 
 defined( 'ABSPATH' ) || exit;
-$locs = get_nav_menu_locations();
-$menu = ! empty( $locs['footer'] ) ? $locs['footer'] : ( $locs['primary'] ?? 0 );
-if ( ! $menu ) { // у блоковой темы областей меню нет — берём меню, которое было в подвале у прежней темы.
-	$old  = (array) ( get_option( 'theme_mods_memorial_speshu' )['nav_menu_locations'] ?? array() );
-	$menu = ! empty( $old['footer'] ) ? $old['footer'] : ( $old['primary'] ?? 0 );
-}
-$items = $menu ? wp_get_nav_menu_items( $menu ) : array();
+$items = function_exists( 'memorial_plugin_menu_items' ) ? memorial_plugin_menu_items() : array();
 if ( ! $items ) {
 	return;
 }

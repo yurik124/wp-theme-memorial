@@ -289,5 +289,11 @@
 			"area": "footer"
 		}
 	],
-	"customTemplates": []
+	"customTemplates": [
+		{
+			"name": "page-kontakty",
+			"title": "Contacts page",
+			"postTypes": [ "page" ]
+		}
+	]
 }
