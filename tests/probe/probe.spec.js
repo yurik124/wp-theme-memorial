@@ -1522,8 +1522,9 @@ test.describe( 'новая работа', () => {
 		await shot( page, 'work-new-modal' );
 		await page.getByRole( 'button', { name: 'Отмена' } ).click();
 		report.afterCancel = await count();
+		log( 'work-new', report );
 		await pick();
-		await page.locator( '.components-modal__frame input[type="text"]' ).first().fill( 'Проверка: новая работа' );
+		await page.locator( '.components-modal__frame input:not([type=checkbox]):not([type=number]):not([type=hidden])' ).first().fill( 'Проверка: новая работа' );
 		await page.getByRole( 'button', { name: 'Сохранить' } ).click();
 		await page.waitForTimeout( 2500 );
 		report.afterSave = await count();

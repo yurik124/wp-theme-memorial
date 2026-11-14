@@ -191,9 +191,11 @@ test( 'новая работа создаётся одним запросом с
 			values: { title: 'Работа из окна', year: 2025, size: '2 × 3 м' },
 		},
 	} );
-	expect( res.items[ 0 ].title ).toBe( 'Работа из окна' );
+	// The titles get non-breaking spaces after short words (typography of the site).
+	const plain = ( t ) => String( t ).replace( /[\u00a0\u202f]/g, ' ' );
+	expect( plain( res.items[ 0 ].title ) ).toBe( 'Работа из окна' );
 	expect( res.items[ 0 ].year ).toBe( 2025 );
-	expect( res.items[ 0 ].size ).toBe( '2 × 3 м' );
+	expect( plain( res.items[ 0 ].size ) ).toBe( '2 × 3 м' );
 	const after = await api( page, {
 		path: '/memorial-plugin/v1/catalog/works',
 	} );
