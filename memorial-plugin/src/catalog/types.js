@@ -254,7 +254,11 @@ function TypeSettings( { type, ratios, save } ) {
 			{
 				id: 'orderText',
 				label: __( 'Text of the button', 'memorial-plugin' ),
-				placeholder: _x( 'Order', 'button: order a product', 'memorial-plugin' ),
+				placeholder: _x(
+					'Order',
+					'button: order a product',
+					'memorial-plugin'
+				),
 				type: 'text',
 				Edit: HintedEdit,
 				order: true,

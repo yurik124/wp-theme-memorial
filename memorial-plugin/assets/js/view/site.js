@@ -571,7 +571,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			const phs = [ ...a.querySelectorAll( 'img' ) ];
 			const tpl =
 				a.dataset.lbCard !== undefined
-					? a.closest( '.mcard' )?.querySelector( 'template.mcard__info' )
+					? a
+							.closest( '.mcard' )
+							?.querySelector( 'template.mcard__info' )
 					: null;
 			if ( ! set ) {
 				return [
