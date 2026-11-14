@@ -1,0 +1,78 @@
+name: Диагностика сайта
+
+# Только чтение: кладёт на сайт временный PHP-файл со случайным именем и ключом, получает от него
+# отчёт (tests/diag/report.php — что именно смотрим) и сразу удаляет файл. Отчёт — в журнале запуска
+# и в ветке ci-probe (diag/report.json). Запуск: push ветки diag/<что угодно>.
+
+on:
+  push:
+    branches: ['diag/**']
+
+permissions:
+  contents: write
+
+env:
+  SFTP_HOST: ${{ secrets.SFTP_HOST }}
+  SFTP_PORT: ${{ secrets.SFTP_PORT }}
+  SFTP_USER: ${{ secrets.SFTP_USER }}
+  SITE_DIR: ${{ secrets.SITE_DIR }}
+
+jobs:
+  diag:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Отчёт с сайта
+        env:
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          pip install -q paramiko requests
+          python3 - <<'PY'
+          import os, re, gzip, secrets, paramiko, requests, json
+          t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+          t.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
+          sf = paramiko.SFTPClient.from_transport(t)
+          site = os.environ['SITE_DIR'].rstrip('/')
+          # адрес сайта — из последней копии базы UpdraftPlus
+          dbs = sorted(f for f in sf.listdir(site + '/updraft') if f.endswith('-db.gz'))
+          url = ''
+          with sf.open(site + '/updraft/' + dbs[-1], 'rb') as raw, gzip.GzipFile(fileobj=raw) as g:
+              for line in g:
+                  m = re.search(rb"'siteurl',\s*'([^']+)'", line)
+                  if m:
+                      url = m.group(1).decode().rstrip('/')
+                      break
+          print('сайт:', url)
+          name = 'mem-diag-' + secrets.token_hex(8) + '.php'
+          key = secrets.token_hex(16)
+          body = open('tests/diag/report.php', encoding='utf-8').read().replace('__KEY__', key)
+          with sf.open(site + '/' + name, 'w') as f:
+              f.write(body)
+          try:
+              r = requests.get(url + '/wp-content/' + name, params={'k': key}, timeout=60)
+              print('HTTP', r.status_code)
+              text = r.text
+          finally:
+              sf.remove(site + '/' + name)
+              print('временный файл удалён')
+          os.makedirs('out', exist_ok=True)
+          open('out/report.json', 'w', encoding='utf-8').write(text)
+          try:
+              print(json.dumps(json.loads(text), ensure_ascii=False, indent=1)[:60000])
+          except Exception:
+              print(text[:20000])
+          PY
+
+      - name: В ветку ci-probe
+        if: always()
+        run: |
+          mkdir -p probe/diag && cp out/report.json probe/diag/ 2>/dev/null || true
+          cd probe
+          git init -q -b ci-probe
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Диагностика сайта (прогон ${{ github.run_id }})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" ci-probe
