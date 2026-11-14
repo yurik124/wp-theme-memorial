@@ -577,7 +577,7 @@ msgstr ""
 msgid "All questions and answers"
 msgstr ""
 
-#: memorial-plugin.php:108
+#: memorial-plugin.php:109
 msgid "All questions of the site on one page with a search."
 msgstr ""
 
@@ -641,7 +641,7 @@ msgstr ""
 msgid "Article"
 msgstr ""
 
-#: memorial-plugin.php:109
+#: memorial-plugin.php:110
 msgid "Article cards with a search, the “Good to know” field of pages."
 msgstr ""
 
@@ -1159,7 +1159,7 @@ msgstr ""
 msgid "Company’s reply"
 msgstr ""
 
-#: memorial-plugin.php:103
+#: memorial-plugin.php:104
 msgid "Compatibility with SEO plugins"
 msgstr ""
 
@@ -1861,7 +1861,7 @@ msgstr ""
 msgid "Goals"
 msgstr ""
 
-#: src/catalog/search-stats.js:11 src/editor-meta/index.js:324 memorial-plugin.php:109
+#: src/catalog/search-stats.js:11 src/editor-meta/index.js:324 memorial-plugin.php:110
 msgid "Good to know"
 msgstr ""
 
@@ -1885,7 +1885,7 @@ msgstr ""
 msgid "Guest"
 msgstr ""
 
-#: reviews/bookreviews.php:118 memorial-plugin.php:105
+#: reviews/bookreviews.php:118 memorial-plugin.php:106
 msgid "Guest book"
 msgstr ""
 
@@ -2287,7 +2287,7 @@ msgstr ""
 msgid "Load reviews now"
 msgstr ""
 
-#: memorial-plugin.php:104
+#: memorial-plugin.php:105
 msgid "Loading reviews on schedule, the Rewio reviews block."
 msgstr ""
 
@@ -2397,7 +2397,7 @@ msgstr ""
 msgid "Memorial meal halls"
 msgstr ""
 
-#: memorial-plugin.php:111
+#: memorial-plugin.php:112
 msgid "Memorial meal halls and cemeteries"
 msgstr ""
 
@@ -3144,7 +3144,7 @@ msgstr ""
 msgid "Photo 4:3 (coffins, examples of works)"
 msgstr ""
 
-#: memorial-plugin.php:107
+#: memorial-plugin.php:108
 msgid "Photo blocks of products and works — the photos are picked up automatically."
 msgstr ""
 
@@ -3152,7 +3152,7 @@ msgstr ""
 msgid "Photo for the review"
 msgstr ""
 
-#: memorial-plugin.php:107
+#: memorial-plugin.php:108
 msgid "Photo gallery: photos of products and works"
 msgstr ""
 
@@ -3472,7 +3472,7 @@ msgstr ""
 msgid "Question?"
 msgstr ""
 
-#: src/catalog/search-stats.js:10 memorial-plugin.php:108
+#: src/catalog/search-stats.js:10 memorial-plugin.php:109
 msgid "Questions and answers"
 msgstr ""
 
@@ -3518,7 +3518,7 @@ msgstr ""
 msgid "Read the answer"
 msgstr ""
 
-#: memorial-plugin.php:112
+#: memorial-plugin.php:113
 msgid "Ready-made blocks in the editor"
 msgstr ""
 
@@ -3650,7 +3650,7 @@ msgstr ""
 msgid "Reviews by branch"
 msgstr ""
 
-#: memorial-plugin.php:104
+#: memorial-plugin.php:105
 msgid "Reviews from Yandex Maps (Rewio)"
 msgstr ""
 
@@ -3670,7 +3670,7 @@ msgstr ""
 msgid "Reviews from the guest book (3 latest)"
 msgstr ""
 
-#: memorial-plugin.php:105
+#: memorial-plugin.php:106
 msgid "Reviews left on the site, the guest book block."
 msgstr ""
 
@@ -3826,7 +3826,7 @@ msgstr ""
 msgid "Search field"
 msgstr ""
 
-#: memorial-plugin.php:110
+#: memorial-plugin.php:111
 msgid "Search statistics"
 msgstr ""
 
@@ -4347,7 +4347,7 @@ msgstr ""
 msgid "The cookie banner mode (ask for consent or only notify) — in “Memorial → Analytics”."
 msgstr ""
 
-#: memorial-plugin.php:102
+#: memorial-plugin.php:103
 msgid "The counter, goals, cleaning the address of UTM tags, the cookie banner."
 msgstr ""
 
@@ -4383,7 +4383,7 @@ msgstr ""
 msgid "The full contents and prices"
 msgstr ""
 
-#: memorial-plugin.php:111
+#: memorial-plugin.php:112
 msgid "The halls and cemeteries blocks and their settings."
 msgstr ""
 
@@ -4445,7 +4445,7 @@ msgstr ""
 msgid "The section of this page"
 msgstr ""
 
-#: memorial-plugin.php:106
+#: memorial-plugin.php:107
 msgid "The section of works with photos and prices, the works manager, the works blocks."
 msgstr ""
 
@@ -4475,7 +4475,7 @@ msgstr ""
 msgid "The whole catalog"
 msgstr ""
 
-#: memorial-plugin.php:101
+#: memorial-plugin.php:102
 msgid "The window with the call-back form and notifications about requests. Off — the “Call me back” buttons simply call the phone."
 msgstr ""
 
@@ -5003,7 +5003,7 @@ msgstr ""
 msgid "Yandex Maps reviews"
 msgstr ""
 
-#: memorial-plugin.php:102
+#: memorial-plugin.php:103
 msgid "Yandex Metrica and the cookie notice"
 msgstr ""
 
@@ -5043,7 +5043,7 @@ msgstr ""
 msgid "You can send a photo, the text for a wreath ribbon or questions about documents — we will answer during working hours."
 msgstr ""
 
-#: memorial-plugin.php:103
+#: memorial-plugin.php:104
 msgid "[mem_…] shortcodes in the titles and descriptions of AIOSEO, Yoast, Rank Math, SEOPress."
 msgstr ""
 
@@ -6624,7 +6624,7 @@ msgstr ""
 msgid "“All articles” link"
 msgstr ""
 
-#: memorial-plugin.php:101
+#: memorial-plugin.php:102
 msgid "“Call me back” request"
 msgstr ""
 
@@ -6680,7 +6680,7 @@ msgstr ""
 msgid "“Leave a review” and “We are on Yandex Maps” buttons."
 msgstr ""
 
-#: memorial-plugin.php:112
+#: memorial-plugin.php:113
 msgid "“Memorial” patterns in the block inserter of the editor."
 msgstr ""
 
@@ -6692,7 +6692,7 @@ msgstr ""
 msgid "“Our services” block"
 msgstr ""
 
-#: memorial-plugin.php:106
+#: memorial-plugin.php:107
 msgid "“Our works”"
 msgstr ""
 
@@ -6708,7 +6708,7 @@ msgstr ""
 msgid "“Service packages” block"
 msgstr ""
 
-#: memorial-plugin.php:110
+#: memorial-plugin.php:111
 msgid "“What people search for on the site” and the automatic “Frequent searches”."
 msgstr ""
 

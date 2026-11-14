@@ -35,7 +35,7 @@ msgstr ""
 
 #. Description of the theme
 #: style.css
-msgid "Block theme for the Memorial funeral services site (Belgorod), \"Bright Memory\": light header and footer, laurel graphics, warm paper and sage green; style variations Laurel, Bronze, Stone and Dark. Site data (contacts, catalog, prices) comes from blocks of the Memorial Plugin."
+msgid "Block theme for the Memorial funeral services site (Belgorod), \"Bright Memory\": light header and footer, laurel graphics, warm paper and sage green; style variations Laurel, Bronze, Stone and Dark. Pages, templates, the menu and the styles are edited in Appearance → Editor. Site data (contacts, catalog, prices) comes from blocks of the Memorial Plugin."
 msgstr ""
 
 #: patterns/steps-icons.php:17
