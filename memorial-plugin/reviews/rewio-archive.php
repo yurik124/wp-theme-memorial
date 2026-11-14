@@ -197,6 +197,10 @@ function memorial_plugin_rewio_archive( $groups, $fetch, $common ) {
 	$names  = memorial_plugin_rewio_site_names();
 	$now    = time();
 	$seen   = array();
+	$found  = array(
+		'new'  => array(),
+		'gone' => array(),
+	);
 	foreach ( $groups as $gi => $g ) {
 		$ids = array();
 		foreach ( $g['reviews'] as $r ) {
@@ -209,6 +213,9 @@ function memorial_plugin_rewio_archive( $groups, $fetch, $common ) {
 			$site         = $names[ (int) $r['src'] ] ?? '';
 			if ( ! isset( $copies[ $rid ] ) ) {
 				$pid = memorial_plugin_rewio_write( 0, $r, $site, in_array( $rid, $hidden, true ) );
+				if ( $pid ) {
+					$found['new'][] = (int) $pid;
+				}
 			} else {
 				$pid = $copies[ $rid ]->ID;
 				$old = memorial_plugin_rewio_copy_data( $pid );
@@ -238,7 +245,12 @@ function memorial_plugin_rewio_archive( $groups, $fetch, $common ) {
 		if ( isset( $fetch[ $obj ] ) && memorial_plugin_rewio_was_asked( memorial_plugin_rewio_copy_data( $p->ID ), $fetch[ $obj ], $common ) ) {
 			update_post_meta( $p->ID, '_rw_gone', $now );
 			memorial_plugin_rewio_state_update( $p->ID );
+			$found['gone'][] = (int) $p->ID;
 		}
+	}
+	// New and deleted reviews (reviews/rewio-mail.php); the very first loading has nothing to compare with.
+	if ( $copies ) {
+		do_action( 'memorial_plugin_rewio_found', $found['new'], $found['gone'] );
 	}
 	return memorial_plugin_rewio_fill( $groups );
 }
@@ -265,7 +277,7 @@ function memorial_plugin_rewio_fill( $groups ) {
 	}
 	$copies = memorial_plugin_rewio_copies();
 	$gone   = array();
-	if ( get_option( 'mem_rewio_show_gone' ) ) {
+	if ( ! empty( memorial_plugin_rewio()['filter']['gone'] ) ) {
 		foreach ( $copies as $rid => $p ) {
 			if ( get_post_meta( $p->ID, '_rw_gone', true ) ) {
 				$gone[ (string) get_post_meta( $p->ID, '_rw_group', true ) ][] = $rid;
@@ -419,14 +431,10 @@ function memorial_plugin_rewio_collection( $cols ) {
 		'cap'       => 'memorial_plugin_reviews',
 		'create'    => false,
 		'trash'     => false,
+		'modal'     => 'large', // Long reviews and their first version side by side with the labels.
 		'sort'      => array(
 			'field'     => 'date',
 			'direction' => 'desc',
-		),
-		'toggle'    => array(
-			'option' => 'mem_rewio_show_gone',
-			'label'  => __( 'Show reviews deleted on the review site', 'memorial-plugin' ),
-			'cap'    => 'manage_options',
 		),
 		'fields'    => array(
 			'author' => array(
@@ -559,9 +567,18 @@ function memorial_plugin_rewio_saved( $name, $post_id, $values ) {
 }
 add_action( 'memorial_plugin_collection_saved', 'memorial_plugin_rewio_saved', 10, 3 );
 
-// The gone setting changed — the shown set follows at once.
-add_action( 'update_option_mem_rewio_show_gone', 'memorial_plugin_rewio_rebuild' );
-add_action( 'add_option_mem_rewio_show_gone', 'memorial_plugin_rewio_rebuild' );
+// “Show reviews deleted on the review site” changed (Reviews → Rewio reviews) — the shown set follows at once.
+// After the settings cache of the plugin is cleared (updated_option, core/settings.php).
+add_action(
+	'updated_option',
+	static function ( $name, $old, $new ) {
+		if ( 'mem_rewio' === $name && ! empty( $old['filter']['gone'] ) !== ! empty( $new['filter']['gone'] ) ) {
+			memorial_plugin_rewio_rebuild();
+		}
+	},
+	30,
+	3
+);
 
 /* ---------- Способность: скрыть / показать отзыв (кнопки списка, палитра) ---------- */
 add_action(

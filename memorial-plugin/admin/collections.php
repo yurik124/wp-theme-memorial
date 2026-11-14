@@ -21,7 +21,8 @@ defined( 'ABSPATH' ) || exit;
  * (title, content, date, status, menu_order, thumbnail or meta:<key>), readonly, options, help,
  * cap (who may change it; others see it read-only), hidden (not a column of the list by default).
  * Collection: also trash (false — no “Move to trash”), sort (field, direction of the list),
- * toggle (option, label, cap — one switch of the whole list above it).
+ * toggle (option, label, cap — one switch of the whole list above it), modal (size of the edit window:
+ * medium — default, large, fill).
  *
  * @return array<string,array>
  */
@@ -396,6 +397,7 @@ function memorial_plugin_collections_rest() {
 							'create' => ! empty( $col['create'] ),
 							'trash'  => ! isset( $col['trash'] ) || $col['trash'],
 							'sort'   => $col['sort'] ?? null,
+							'modal'  => in_array( $col['modal'] ?? '', array( 'medium', 'large', 'fill' ), true ) ? $col['modal'] : 'medium',
 							'toggle' => empty( $col['toggle'] ) ? null : array(
 								'label' => $col['toggle']['label'],
 								'value' => (bool) get_option( $col['toggle']['option'] ),

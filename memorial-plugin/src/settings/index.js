@@ -995,16 +995,42 @@ function withTabs( defs, card ) {
 	if ( ! tabbed.length ) {
 		return defs.map( card );
 	}
+	// Fields with the same tab title stand together on one tab («Почта»: codes, two emails).
+	const titles = [ ...new Set( tabbed.map( ( d ) => d.tab ) ) ];
 	return (
 		<>
 			{ defs.filter( ( d ) => ! d.tab ).map( card ) }
 			<TabPanel
 				className="memorial-plugin-settings__tabs"
-				tabs={ tabbed.map( ( d ) => ( { name: d.id, title: d.tab } ) ) }
+				tabs={ titles.map( ( t ) => ( {
+					name: tabbed.find( ( d ) => d.tab === t ).id,
+					title: t,
+				} ) ) }
 			>
-				{ ( tab ) => card( tabbed.find( ( d ) => d.id === tab.name ) ) }
+				{ ( tab ) => {
+					const title = tabbed.find( ( d ) => d.id === tab.name ).tab;
+					return tabbed
+						.filter( ( d ) => d.tab === title )
+						.map( card );
+				} }
 			</TabPanel>
 		</>
+	);
+}
+
+/**
+ * A folded hint of a screen (“Codes for the emails”): the label opens the text.
+ *
+ * @param {Object} props
+ * @param {Object} props.def Field: label, help (HTML).
+ * @return {*} Element.
+ */
+function Note( { def } ) {
+	return (
+		<details className="memorial-plugin-settings__more memorial-plugin-settings__note">
+			<summary>{ def.label }</summary>
+			<RawHTML>{ def.help }</RawHTML>
+		</details>
 	);
 }
 
@@ -1121,67 +1147,74 @@ function App( { option } ) {
 					</Notice>
 				) }
 				<div ref={ extraRef } />
-				{ withTabs( page.fields, ( def ) => (
-					<Card
-						key={ def.id }
-						className="memorial-plugin-settings__card"
-					>
-						<CardHeader>
-							<h2 className="memorial-plugin-settings__card-title">
-								{ def.label || def.id }
-								{ String( def.help ?? '' ).length >
-									HINT_FROM && <Hint text={ def.help } /> }
-							</h2>
-						</CardHeader>
-						<CardBody>
-							{ def.type === 'group' ? (
-								<>
-									{ String( def.help ?? '' ).length <=
+				{ withTabs( page.fields, ( def ) =>
+					def.type === 'note' ? (
+						<Note key={ def.id } def={ def } />
+					) : (
+						<Card
+							key={ def.id }
+							className="memorial-plugin-settings__card"
+						>
+							<CardHeader>
+								<h2 className="memorial-plugin-settings__card-title">
+									{ def.label || def.id }
+									{ String( def.help ?? '' ).length >
 										HINT_FROM && (
-										<Help text={ def.help } />
+										<Hint text={ def.help } />
 									) }
+								</h2>
+							</CardHeader>
+							<CardBody>
+								{ def.type === 'group' ? (
+									<>
+										{ String( def.help ?? '' ).length <=
+											HINT_FROM && (
+											<Help text={ def.help } />
+										) }
+										<FieldsForm
+											defs={ def.fields || [] }
+											data={ value[ def.id ] || {} }
+											onChange={ ( edits ) => {
+												setValue( ( v ) => ( {
+													...v,
+													[ def.id ]: {
+														...( v[ def.id ] ||
+															{} ),
+														...edits,
+													},
+												} ) );
+												setDirty( true );
+											} }
+										/>
+									</>
+								) : (
 									<FieldsForm
-										defs={ def.fields || [] }
-										data={ value[ def.id ] || {} }
+										defs={ [
+											{
+												...def,
+												hideLabel: true,
+												// A long explanation is behind “?” next to the card title.
+												help:
+													String( def.help ?? '' )
+														.length > HINT_FROM
+														? ''
+														: def.help,
+											},
+										] }
+										data={ value }
 										onChange={ ( edits ) => {
 											setValue( ( v ) => ( {
 												...v,
-												[ def.id ]: {
-													...( v[ def.id ] || {} ),
-													...edits,
-												},
+												...edits,
 											} ) );
 											setDirty( true );
 										} }
 									/>
-								</>
-							) : (
-								<FieldsForm
-									defs={ [
-										{
-											...def,
-											hideLabel: true,
-											// A long explanation is behind “?” next to the card title.
-											help:
-												String( def.help ?? '' )
-													.length > HINT_FROM
-													? ''
-													: def.help,
-										},
-									] }
-									data={ value }
-									onChange={ ( edits ) => {
-										setValue( ( v ) => ( {
-											...v,
-											...edits,
-										} ) );
-										setDirty( true );
-									} }
-								/>
-							) }
-						</CardBody>
-					</Card>
-				) ) }
+								) }
+							</CardBody>
+						</Card>
+					)
+				) }
 				<div
 					className={
 						'memorial-plugin-settings__bar' +

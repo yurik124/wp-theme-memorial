@@ -244,12 +244,24 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		delete_option( 'mem_modules_page' );
 	}
 
+	/**
+	 * “Show reviews deleted on the review site” (Reviews → Rewio reviews → 3).
+	 *
+	 * @param int $on 1 or 0.
+	 */
+	private function set_rewio_gone( $on ) {
+		$o                   = get_option( 'mem_rewio' );
+		$o                   = is_array( $o ) ? $o : array();
+		$o['filter']['gone'] = $on;
+		update_option( 'mem_rewio', $o );
+	}
+
 	public function test_rewio_copy_marks_changed_and_gone() {
 		if ( ! function_exists( 'memorial_plugin_rewio_archive' ) ) {
 			$this->markTestSkipped( 'Rewio is off.' );
 		}
 		update_option( 'memorial_plugin_rewio_archive', 1 );
-		update_option( 'mem_rewio_show_gone', 0 );
+		$this->set_rewio_gone( 0 );
 		$review = static fn( $id, $text, $date, $url = 'https://yandex.ru/maps/org/1/reviews?r=1' ) => array(
 			'id'     => $id,
 			'author' => 'Анна',
@@ -290,7 +302,14 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 				'reviews' => array( $review( 101, 'Спасибо большое', '2026-03-01', '' ) ),
 			),
 		);
+		$found         = null;
+		$listen        = static function ( $new, $gone ) use ( &$found ) {
+			$found = array( count( $new ), count( $gone ) );
+		};
+		add_action( 'memorial_plugin_rewio_found', $listen, 5, 2 );
 		$shown         = memorial_plugin_rewio_archive( $groups, $fetch, $common );
+		remove_action( 'memorial_plugin_rewio_found', $listen, 5 );
+		$this->assertSame( array( 0, 1 ), $found, 'one review deleted on the review site, none new' );
 		$copies        = memorial_plugin_rewio_copies();
 		$this->assertSame( 'changed', get_post_meta( $copies[101]->ID, '_rw_state', true ) );
 		$this->assertSame( 'Спасибо', memorial_plugin_rewio_copy_data( $copies[101]->ID, 'first' )['text'], 'the first version is kept' );
@@ -298,7 +317,7 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( array( 101 ), array_column( $shown[0]['reviews'], 'id' ), 'gone reviews are not shown by default' );
 		$this->assertSame( 'Спасибо большое', $shown[0]['reviews'][0]['text'], 'the new version is shown by default' );
 		update_post_meta( $copies[101]->ID, '_rw_use', 'first' );
-		update_option( 'mem_rewio_show_gone', 1 );
+		$this->set_rewio_gone( 1 );
 		$shown = memorial_plugin_rewio_fill(
 			array(
 				array(
@@ -373,5 +392,69 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( 'Звонок: +7 900 111-22-33', $mail->subject, 'an empty name leaves no brackets' );
 		$this->assertStringContainsString( 'имя —', $mail->body );
 		$this->assertStringContainsString( 'site@example.com', $mail->header );
+	}
+
+	public function test_lead_mail_page_is_the_title() {
+		if ( ! function_exists( 'memorial_plugin_lead_mail_send' ) ) {
+			$this->markTestSkipped( 'Call-back is off.' );
+		}
+		$page = self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_title'  => 'Венки',
+				'post_status' => 'publish',
+			)
+		);
+		reset_phpmailer_instance();
+		memorial_plugin_lead_mail_send(
+			array(
+				'phone' => '+7 900 111-22-33',
+				'name'  => 'Анна',
+				'page'  => get_permalink( $page ),
+			),
+			array(
+				'to'         => 'a@example.com',
+				'subject'    => 'Звонок',
+				'body'       => 'Со страницы: {page} | {url}',
+				'from_name'  => '',
+				'from_email' => 'site@example.com',
+			)
+		);
+		$body = tests_retrieve_phpmailer_instance()->get_sent()->body;
+		$this->assertStringContainsString( 'Со страницы: Венки | ' . get_permalink( $page ), $body );
+	}
+
+	public function test_reviews_mail_lists_new_and_deleted() {
+		if ( ! function_exists( 'memorial_plugin_reviews_mail_send' ) ) {
+			$this->markTestSkipped( 'Rewio is off.' );
+		}
+		// The sender is the one of the request email (the test site has no valid default address).
+		update_option( 'mem_modules_page', array( 'mail' => array( 'from_email' => 'site@example.com' ) ) );
+		reset_phpmailer_instance();
+		$res = memorial_plugin_reviews_mail_send(
+			array(
+				array(
+					array(
+						'author' => 'Ирина',
+						'rating' => 5,
+						'date'   => '2026-10-30 12:00:00',
+						'text'   => 'Спасибо за помощь',
+					),
+					'Яндекс Карты',
+				),
+			),
+			array(),
+			array(
+				'to'      => 'r@example.com',
+				'subject' => 'Новых {new}, удалённых {gone}',
+				'body'    => '{list}',
+			)
+		);
+		$this->assertTrue( $res['ok'] );
+		$mail = tests_retrieve_phpmailer_instance()->get_sent();
+		$this->assertSame( 'Новых 1, удалённых 0', $mail->subject );
+		$this->assertStringContainsString( 'Ирина, ★ 5, Яндекс Карты, 30.10.2026', $mail->body );
+		$this->assertStringContainsString( 'Спасибо за помощь', $mail->body );
+		delete_option( 'mem_modules_page' );
 	}
 }

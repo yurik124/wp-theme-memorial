@@ -1136,6 +1136,7 @@ function memorial_plugin_sanitize( $schema, $in ) {
 			case 'page':
 				$out[ $k ] = absint( $v ) ? absint( $v ) : '';
 				break;
+			case 'note': // a folded hint of the screen (codes of the emails): nothing to keep.
 			case 'button': // an action of the screen (a test email): nothing to keep.
 			case 'hidden': // a field of a switched-off feature: its saved value stays as it is.
 				break;

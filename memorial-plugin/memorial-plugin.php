@@ -80,7 +80,7 @@ function memorial_plugin_optional() {
 		'callback' => array( 'callback', '', array( 'leads/callback.php', 'leads/lead-mail.php' ), array() ),
 		'metrika'  => array( 'metrika', '', array( 'seo/metrika.php' ), array() ),
 		'seoplug'  => array( 'seoplug', '', array( 'seo/seo-plugins.php' ), array() ),
-		'rewio'    => array( 'rewio', '', array( 'reviews/rewio.php', 'reviews/rewio-archive.php' ), array( 'mem_rewio' ) ),
+		'rewio'    => array( 'rewio', '', array( 'reviews/rewio.php', 'reviews/rewio-archive.php', 'reviews/rewio-mail.php' ), array( 'mem_rewio' ) ),
 		'book'     => array( 'book', '', array( 'reviews/bookreviews.php' ), array( 'mem_bookreviews' ) ),
 		'works'    => array( 'works', '', array( 'works/works.php', 'works/works-manager.php' ), array( 'mem_works' ) ),
 		'photos'   => array( 'photos', '', array( 'pages/photos.php' ), array( 'mem_cat_photos' ) ),
@@ -143,6 +143,7 @@ $memorial_plugin_modules = array(
 	'core/settings.php',
 	'core/permissions.php',
 	'core/data.php',
+	'core/mail.php',
 	// каталог и страницы.
 	'catalog/catalog.php',
 	'pages/pages.php',
@@ -177,6 +178,7 @@ $memorial_plugin_modules = array(
 	'reviews/reviews.php',
 	'reviews/rewio.php',
 	'reviews/rewio-archive.php',
+	'reviews/rewio-mail.php',
 	'reviews/bookreviews.php',
 	// ещё блоки и фото.
 	'content/faq.php',
