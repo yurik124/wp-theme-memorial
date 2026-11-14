@@ -94,6 +94,11 @@ function memorial_plugin_rewio_schema() {
 					'type'  => 'number',
 					'label' => __( 'How many latest reviews to load from every branch (up to 1000)', 'memorial-plugin' ),
 				),
+				'gone'   => array(
+					'type'  => 'checkbox',
+					'label' => __( 'Show reviews deleted on the review site', 'memorial-plugin' ),
+					'help'  => __( 'The site keeps its copy of a review that disappeared from the review site; in “Review list” it is marked “Deleted on the review site”. Off — such reviews are not shown on the site.', 'memorial-plugin' ),
+				),
 			),
 		),
 		'view'   => array(
@@ -180,6 +185,17 @@ function memorial_plugin_rewio_schema() {
 				),
 			),
 		),
+		'notify' => array(
+			'type'   => 'group',
+			'label'  => __( '6. Notifications', 'memorial-plugin' ),
+			'fields' => array(
+				'on' => array(
+					'type'  => 'checkbox',
+					'label' => __( 'Notify about new or deleted reviews by email', 'memorial-plugin' ),
+					'help'  => __( 'After a loading that found new reviews or reviews that disappeared from the review site. Where to and the text of the email — “Memorial → Settings → Mail”.', 'memorial-plugin' ),
+				),
+			),
+		),
 	);
 }
 
@@ -205,6 +221,8 @@ function memorial_plugin_rewio_defaults() {
 			'months' => 0,
 			'stop'   => '',
 			'fetch'  => 100,
+			// Before 2.1 the switch stood above the review list (option mem_rewio_show_gone).
+			'gone'   => (int) (bool) get_option( 'mem_rewio_show_gone' ),
 		),
 		'view'   => array(
 			'title'    => __( 'Customer reviews', 'memorial-plugin' ),
@@ -221,6 +239,7 @@ function memorial_plugin_rewio_defaults() {
 			'date'     => 1,
 		),
 		'cache'  => array( 'every' => '6' ),
+		'notify' => array( 'on' => 0 ),
 	);
 }
 

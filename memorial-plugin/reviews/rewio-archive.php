@@ -265,7 +265,7 @@ function memorial_plugin_rewio_fill( $groups ) {
 	}
 	$copies = memorial_plugin_rewio_copies();
 	$gone   = array();
-	if ( get_option( 'mem_rewio_show_gone' ) ) {
+	if ( ! empty( memorial_plugin_rewio()['filter']['gone'] ) ) {
 		foreach ( $copies as $rid => $p ) {
 			if ( get_post_meta( $p->ID, '_rw_gone', true ) ) {
 				$gone[ (string) get_post_meta( $p->ID, '_rw_group', true ) ][] = $rid;
@@ -419,14 +419,10 @@ function memorial_plugin_rewio_collection( $cols ) {
 		'cap'       => 'memorial_plugin_reviews',
 		'create'    => false,
 		'trash'     => false,
+		'modal'     => 'large', // Long reviews and their first version side by side with the labels.
 		'sort'      => array(
 			'field'     => 'date',
 			'direction' => 'desc',
-		),
-		'toggle'    => array(
-			'option' => 'mem_rewio_show_gone',
-			'label'  => __( 'Show reviews deleted on the review site', 'memorial-plugin' ),
-			'cap'    => 'manage_options',
 		),
 		'fields'    => array(
 			'author' => array(
@@ -559,9 +555,18 @@ function memorial_plugin_rewio_saved( $name, $post_id, $values ) {
 }
 add_action( 'memorial_plugin_collection_saved', 'memorial_plugin_rewio_saved', 10, 3 );
 
-// The gone setting changed — the shown set follows at once.
-add_action( 'update_option_mem_rewio_show_gone', 'memorial_plugin_rewio_rebuild' );
-add_action( 'add_option_mem_rewio_show_gone', 'memorial_plugin_rewio_rebuild' );
+// “Show reviews deleted on the review site” changed (Reviews → Rewio reviews) — the shown set follows at once.
+// After the settings cache of the plugin is cleared (updated_option, core/settings.php).
+add_action(
+	'updated_option',
+	static function ( $name, $old, $new ) {
+		if ( 'mem_rewio' === $name && ! empty( $old['filter']['gone'] ) !== ! empty( $new['filter']['gone'] ) ) {
+			memorial_plugin_rewio_rebuild();
+		}
+	},
+	30,
+	3
+);
 
 /* ---------- Способность: скрыть / показать отзыв (кнопки списка, палитра) ---------- */
 add_action(

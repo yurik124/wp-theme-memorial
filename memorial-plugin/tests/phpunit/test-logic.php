@@ -244,12 +244,24 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		delete_option( 'mem_modules_page' );
 	}
 
+	/**
+	 * “Show reviews deleted on the review site” (Reviews → Rewio reviews → 3).
+	 *
+	 * @param int $on 1 or 0.
+	 */
+	private function set_rewio_gone( $on ) {
+		$o                   = get_option( 'mem_rewio' );
+		$o                   = is_array( $o ) ? $o : array();
+		$o['filter']['gone'] = $on;
+		update_option( 'mem_rewio', $o );
+	}
+
 	public function test_rewio_copy_marks_changed_and_gone() {
 		if ( ! function_exists( 'memorial_plugin_rewio_archive' ) ) {
 			$this->markTestSkipped( 'Rewio is off.' );
 		}
 		update_option( 'memorial_plugin_rewio_archive', 1 );
-		update_option( 'mem_rewio_show_gone', 0 );
+		$this->set_rewio_gone( 0 );
 		$review = static fn( $id, $text, $date, $url = 'https://yandex.ru/maps/org/1/reviews?r=1' ) => array(
 			'id'     => $id,
 			'author' => 'Анна',
@@ -298,7 +310,7 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( array( 101 ), array_column( $shown[0]['reviews'], 'id' ), 'gone reviews are not shown by default' );
 		$this->assertSame( 'Спасибо большое', $shown[0]['reviews'][0]['text'], 'the new version is shown by default' );
 		update_post_meta( $copies[101]->ID, '_rw_use', 'first' );
-		update_option( 'mem_rewio_show_gone', 1 );
+		$this->set_rewio_gone( 1 );
 		$shown = memorial_plugin_rewio_fill(
 			array(
 				array(

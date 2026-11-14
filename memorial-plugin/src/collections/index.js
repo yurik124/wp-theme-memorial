@@ -249,7 +249,23 @@ function toField( def ) {
 	}
 }
 
-function EditModal( { name, data, fields, onClose, onSaved } ) {
+/**
+ * A read-only value of the edit window: a list value by its label, a long text whole, others as in the list.
+ *
+ * @param {Object} f    Field.
+ * @param {Object} item Record.
+ * @return {*} Value.
+ */
+function fixedValue( f, item ) {
+	const v = item[ f.id ];
+	if ( f.elements ) {
+		const el = f.elements.find( ( e ) => String( e.value ) === String( v ) );
+		return el ? el.label : v;
+	}
+	return f.render && ! f.isLong ? f.render( { item } ) : v;
+}
+
+function EditModal( { name, size, data, fields, onClose, onSaved } ) {
 	const [ item, setItem ] = useState( data );
 	const [ error, setError ] = useState( '' );
 	const [ busy, setBusy ] = useState( false );
@@ -286,7 +302,7 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 					: __( 'Add', 'memorial-plugin' )
 			}
 			onRequestClose={ onClose }
-			size="medium"
+			size={ size }
 		>
 			{ error && (
 				<Notice status="error" isDismissible={ false }>
@@ -299,9 +315,7 @@ function EditModal( { name, data, fields, onClose, onSaved } ) {
 						<div key={ f.id }>
 							<dt>{ f.label }</dt>
 							<dd>
-								{ f.render && ! f.isLong
-									? f.render( { item } )
-									: item[ f.id ] }
+								{ fixedValue( f, item ) }
 							</dd>
 						</div>
 					) ) }
@@ -614,6 +628,7 @@ function App( { name } ) {
 			{ editing && (
 				<EditModal
 					name={ name }
+					size={ meta.modal || 'medium' }
 					data={ editing }
 					fields={ fields }
 					onClose={ () => setEditing( null ) }
