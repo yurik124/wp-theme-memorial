@@ -1339,3 +1339,53 @@ test.describe( 'итог 2.1', () => {
 		log( 'final', report );
 	} );
 } );
+
+test.describe( 'тексты админки', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'тексты админки: меню, экраны, схемы', async ( { page } ) => {
+		test.setTimeout( 1_200_000 );
+		page.setDefaultTimeout( 20000 );
+		const out = { menu: [], screens: {} };
+		const json = [];
+		page.on( 'response', async ( r ) => {
+			const u = decodeURIComponent( r.url() );
+			if ( /memorial-plugin\/v1|wp-abilities/.test( u ) && r.request().method() === 'GET' && r.status() < 300 ) {
+				const body = await r.text().catch( () => '' );
+				if ( body.length < 2_000_000 ) {
+					json.push( { url: u.replace( /^https?:\/\/[^/]+/, '' ), body } );
+				}
+			}
+		} );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		out.menu = await page.locator( '#adminmenu > li.menu-top' ).evaluateAll( ( lis ) => lis.map( ( li ) => ( {
+			top: li.querySelector( '.wp-menu-name' )?.textContent.trim(),
+			items: [ ...li.querySelectorAll( '.wp-submenu a' ) ].map( ( a ) => [ a.textContent.trim(), a.getAttribute( 'href' ) ] ),
+		} ) ) );
+		const links = [ ...new Set( out.menu.filter( ( m ) => /Мемориал|Каталог|работ|Товар|Отзыв|Заявк/i.test( m.top ) ).flatMap( ( m ) => m.items.map( ( i ) => i[ 1 ] ) ) ) ];
+		for ( const href of links ) {
+			const url = href.startsWith( 'http' ) || href.startsWith( '/' ) ? href : '/wp-admin/' + href;
+			await page.goto( url ).catch( () => {} );
+			await page.waitForTimeout( 5000 );
+			// раскрыть свёрнутое: «Развернуть все», вступления
+			for ( const b of await page.getByRole( 'button', { name: /Развернуть все|Подробнее|Показать/ } ).all() ) {
+				await b.click( { timeout: 2000 } ).catch( () => {} );
+			}
+			await page.waitForTimeout( 800 );
+			const tabs = await page.getByRole( 'tab' ).all();
+			const texts = [ await page.locator( '#wpbody-content' ).innerText().catch( () => '' ) ];
+			for ( const t of tabs ) {
+				await t.click( { timeout: 3000 } ).catch( () => {} );
+				await page.waitForTimeout( 1200 );
+				texts.push( await page.locator( '#wpbody-content' ).innerText().catch( () => '' ) );
+			}
+			const attrs = await page.evaluate( () => [ ...new Set( [ ...document.querySelectorAll( '#wpbody-content [title], #wpbody-content [aria-label], #wpbody-content [data-hint], #wpbody-content [aria-description]' ) ].map( ( e ) => e.getAttribute( 'data-hint' ) || e.getAttribute( 'aria-description' ) || e.getAttribute( 'title' ) || e.getAttribute( 'aria-label' ) ) ) ] );
+			out.screens[ url ] = { title: await page.title(), texts, attrs };
+			fs.writeFileSync( `${ DIR }/admin-texts.json`, JSON.stringify( out, null, 1 ) );
+		}
+		fs.writeFileSync( `${ DIR }/admin-rest.json`, JSON.stringify( json ) );
+	} );
+} );
