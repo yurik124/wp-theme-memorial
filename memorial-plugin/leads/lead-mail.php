@@ -153,8 +153,14 @@ function memorial_plugin_lead_mail_send( $lead, $settings ) {
 		$error = $e instanceof WP_Error ? $e->get_error_message() : __( 'The email was not accepted.', 'memorial-plugin' );
 	};
 	add_action( 'wp_mail_failed', $catch );
-	$ok = wp_mail( $to, wp_specialchars_decode( $subject ), $body, $headers );
+	// What the mail program of the hosting prints (warnings) must not get into the answer of the site.
+	ob_start();
+	$ok    = wp_mail( $to, wp_specialchars_decode( $subject ), $body, $headers );
+	$noise = trim( (string) ob_get_clean() );
 	remove_action( 'wp_mail_failed', $catch );
+	if ( ! $ok && '' === $error && '' !== $noise ) {
+		$error = wp_strip_all_tags( $noise );
+	}
 	remove_filter( 'wp_mail_from_name', $name_filter );
 	if ( ! $ok && '' === $error ) {
 		$error = __( 'The hosting did not accept the email (wp_mail() returned false).', 'memorial-plugin' );

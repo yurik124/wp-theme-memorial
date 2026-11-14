@@ -1087,6 +1087,10 @@ test.describe( 'отзывы и разрешения', () => {
 		await page.getByRole( 'button', { name: /тестовое письмо/ } ).click( { timeout: 8000 } ).catch( () => {} );
 		await page.waitForTimeout( 3000 );
 		report.mailTest = await page.locator( '.memorial-plugin-settings__action .components-notice' ).allTextContents();
+		report.mailRaw = await page.evaluate( async () => {
+			const r = await window.wp.apiFetch( { path: '/memorial-plugin/v1/lead-mail-test', method: 'POST', data: { values: {} }, parse: false } ).catch( ( e ) => e );
+			return r && r.text ? r.status + ' ' + ( await r.text() ).slice( 0, 1500 ) : String( r?.message || r );
+		} );
 		await page.goto( '/wp-admin/admin.php?page=memorial-plugin-leads' );
 		await page.waitForTimeout( 4000 );
 		await page.screenshot( { path: `${ DIR }/rv-leads.png`, fullPage: true } );
