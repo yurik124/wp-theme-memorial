@@ -519,15 +519,50 @@ function memorial_plugin_main_nav_id() {
 }
 
 /**
+ * The post an address of the site leads to (a menu link that keeps only the address), 0 if none.
+ * Also an address whose page was renamed to Latin (Cyr To Lat): the path is decoded and looked up.
+ *
+ * @param string $url Address.
+ * @return int
+ */
+function memorial_plugin_menu_url_post( $url ) {
+	static $cache = null;
+	if ( null === $cache ) {
+		$cache = get_transient( 'memorial_plugin_menu_urls' );
+		$cache = is_array( $cache ) ? $cache : array();
+	}
+	if ( isset( $cache[ $url ] ) ) {
+		return (int) $cache[ $url ];
+	}
+	$id = 0;
+	if ( '' !== $url && '#' !== $url[0] ) {
+		$own  = str_starts_with( $url, '/' ) || wp_parse_url( $url, PHP_URL_HOST ) === wp_parse_url( home_url(), PHP_URL_HOST );
+		$id   = $own ? (int) url_to_postid( $url ) : 0;
+		$path = trim( urldecode( (string) wp_parse_url( $url, PHP_URL_PATH ) ), '/' );
+		if ( ! $id && '' !== $path ) {
+			$page = get_page_by_path( $path );
+			$id   = $page ? (int) $page->ID : 0;
+		}
+	}
+	$cache[ $url ] = $id;
+	// Kept for a day; a page or the menu saved — looked up again.
+	set_transient( 'memorial_plugin_menu_urls', $cache, DAY_IN_SECONDS );
+	return $id;
+}
+add_action( 'save_post_page', static fn() => delete_transient( 'memorial_plugin_menu_urls' ) );
+add_action( 'save_post_wp_navigation', static fn() => delete_transient( 'memorial_plugin_menu_urls' ) );
+
+/**
  * Items of the main menu, in order: [item id => item]. Each item has the fields of a classic menu item
  * that the plugin uses — ID, menu_item_parent, title, url, target, type (post_type / taxonomy / custom),
  * object (page, post…), object_id — built from the Navigation links and submenus of the menu.
  *
+ * @param bool $fresh Build again (not the copy of this request).
  * @return array<int,object>
  */
-function memorial_plugin_menu_items() {
+function memorial_plugin_menu_items( $fresh = false ) {
 	static $items = null;
-	if ( null !== $items ) {
+	if ( null !== $items && ! $fresh ) {
 		return $items;
 	}
 	$items = array();
@@ -544,6 +579,15 @@ function memorial_plugin_menu_items() {
 				$kind = (string) ( $a['kind'] ?? '' );
 				$oid  = (int) ( $a['id'] ?? 0 );
 				$url  = (string) ( $a['url'] ?? '' );
+				// A link without the page ID (only its address) — the page by the address of the site.
+				if ( ! $oid && '' !== $url && 'core/home-link' !== $name ) {
+					$found = memorial_plugin_menu_url_post( $url );
+					if ( $found ) {
+						$oid  = $found;
+						$kind = 'post-type';
+						$a   += array( 'type' => (string) get_post_type( $found ) );
+					}
+				}
 				if ( 'core/home-link' === $name ) {
 					$url = home_url( '/' );
 				} elseif ( $oid && 'post-type' === $kind && get_post_status( $oid ) ) {
