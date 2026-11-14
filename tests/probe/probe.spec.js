@@ -1260,7 +1260,8 @@ test.describe( 'итог 2.1', () => {
 		const ctx = await browser.newContext( { viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 } );
 		const p2 = await ctx.newPage();
 		await p2.goto( BASE + '/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
-		await p2.addStyleTag( { content: NO_FLOAT + '[class*=cookie],[class*=consent],.mbar{display:none !important} *{animation:none !important;transition:none !important} .reveal,[data-reveal],.js-reveal{opacity:1 !important;transform:none !important}' } ).catch( () => {} );
+		await p2.addStyleTag( { content: NO_FLOAT + '.mbar,dialog{display:none !important} *{animation:none !important;transition:none !important}' } ).catch( () => {} );
+		report.bodyClass = await p2.evaluate( () => document.documentElement.className + ' | ' + document.body.className ).catch( () => '' );
 		await p2.waitForTimeout( 3000 );
 		await p2.screenshot( { path: `${ DIR }/theme-screenshot.png` } );
 		await p2.screenshot( { path: `${ DIR }/front-full.png`, fullPage: true } );
@@ -1291,6 +1292,9 @@ test.describe( 'итог 2.1', () => {
 			}
 			return out;
 		} );
+		await page.goto( '/wp-admin/site-editor.php' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } ).catch( () => {} );
+		report.navs = await page.evaluate( async () => ( await window.wp.apiFetch( { path: '/wp/v2/navigation?context=edit&per_page=50&status=publish,draft,trash' } ).catch( ( e ) => [ { id: e.message } ] ) ).map( ( x ) => x.id + ' ' + x.status + ' ' + ( x.title?.raw || '' ) ) );
 		report.types = await page.evaluate( async () => {
 			await new Promise( ( r ) => setTimeout( r, 500 ) );
 			const t = await fetch( '/wp-json/wp/v2/types/page?context=edit', { headers: { 'X-WP-Nonce': window.wpApiSettings?.nonce || '' } } ).then( ( r ) => r.json() ).catch( () => ( {} ) );
