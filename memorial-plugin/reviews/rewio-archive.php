@@ -197,6 +197,10 @@ function memorial_plugin_rewio_archive( $groups, $fetch, $common ) {
 	$names  = memorial_plugin_rewio_site_names();
 	$now    = time();
 	$seen   = array();
+	$found  = array(
+		'new'  => array(),
+		'gone' => array(),
+	);
 	foreach ( $groups as $gi => $g ) {
 		$ids = array();
 		foreach ( $g['reviews'] as $r ) {
@@ -209,6 +213,9 @@ function memorial_plugin_rewio_archive( $groups, $fetch, $common ) {
 			$site         = $names[ (int) $r['src'] ] ?? '';
 			if ( ! isset( $copies[ $rid ] ) ) {
 				$pid = memorial_plugin_rewio_write( 0, $r, $site, in_array( $rid, $hidden, true ) );
+				if ( $pid ) {
+					$found['new'][] = (int) $pid;
+				}
 			} else {
 				$pid = $copies[ $rid ]->ID;
 				$old = memorial_plugin_rewio_copy_data( $pid );
@@ -238,7 +245,12 @@ function memorial_plugin_rewio_archive( $groups, $fetch, $common ) {
 		if ( isset( $fetch[ $obj ] ) && memorial_plugin_rewio_was_asked( memorial_plugin_rewio_copy_data( $p->ID ), $fetch[ $obj ], $common ) ) {
 			update_post_meta( $p->ID, '_rw_gone', $now );
 			memorial_plugin_rewio_state_update( $p->ID );
+			$found['gone'][] = (int) $p->ID;
 		}
+	}
+	// New and deleted reviews (reviews/rewio-mail.php); the very first loading has nothing to compare with.
+	if ( $copies ) {
+		do_action( 'memorial_plugin_rewio_found', $found['new'], $found['gone'] );
 	}
 	return memorial_plugin_rewio_fill( $groups );
 }

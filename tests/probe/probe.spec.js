@@ -1427,3 +1427,63 @@ test.describe( 'описания и крошки', () => {
 		log( 'desc', report );
 	} );
 } );
+
+test.describe( 'отзывы и почта', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'отзывы и почта: окно отзыва, вкладка Rewio, письма', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/admin.php?page=memorial-plugin-rewio' );
+		await page.waitForSelector( '.dataviews-view-table tbody tr', { timeout: 60000 } ).catch( () => {} );
+		report.toggleOnList = await page.locator( '.memorial-plugin-collection__toggle' ).count();
+		// a review with a first version (changed on the review site), otherwise the first one
+		const rows = page.locator( '.dataviews-view-table tbody tr' );
+		let row = rows.filter( { hasText: /Изменён/ } ).first();
+		if ( ! ( await row.count() ) ) {
+			row = rows.first();
+		}
+		await row.getByRole( 'button', { name: /Изменить/ } ).first().click( { timeout: 8000 } ).catch( async () => {
+			await row.hover();
+			await row.locator( 'button[aria-label="Действия"]' ).first().click().catch( () => {} );
+			await page.getByRole( 'menuitem', { name: /Изменить/ } ).click().catch( () => {} );
+		} );
+		await page.waitForTimeout( 1500 );
+		report.modal = await page.evaluate( () => {
+			const c = document.querySelector( '.components-modal__content' );
+			const f = document.querySelector( '.components-modal__frame' );
+			return c ? { width: f.getBoundingClientRect().width, scrollW: c.scrollWidth, clientW: c.clientWidth, state: [ ...c.querySelectorAll( 'dd' ) ].map( ( d ) => d.textContent.slice( 0, 40 ) ) } : null;
+		} );
+		await shot( page, 'rv2-modal' );
+		await page.keyboard.press( 'Escape' );
+		await page.goto( '/wp-admin/admin.php?page=mem-rewio' );
+		await page.waitForTimeout( 5000 );
+		report.rewioTab = ( await page.locator( '#wpbody-content' ).innerText() ).match( /(3\. Какие[\s\S]{0,900})/ )?.[ 1 ] || '';
+		report.notify = await page.getByText( /Уведомлять о новых или удалённых/ ).count();
+		report.gone = await page.getByText( /Показывать отзывы, удалённые на площадке/ ).count();
+		await shot( page, 'rv2-rewio', { fullPage: true } );
+		await page.goto( '/wp-admin/admin.php?page=mem-modules' );
+		await page.waitForTimeout( 4000 );
+		await page.getByRole( 'tab', { name: /Почта/ } ).click().catch( () => {} );
+		await page.waitForTimeout( 1000 );
+		report.tabs = await page.getByRole( 'tab' ).allTextContents();
+		await page.locator( '.memorial-plugin-settings__note summary' ).click().catch( () => {} );
+		await page.waitForTimeout( 500 );
+		report.codes = await page.locator( '.memorial-plugin-settings__note' ).innerText().catch( () => '' );
+		report.cards = await page.locator( '.memorial-plugin-settings__card-title' ).allTextContents();
+		for ( const b of await page.getByRole( 'button', { name: /тестовое письмо/ } ).all() ) {
+			await b.click().catch( () => {} );
+			await page.waitForTimeout( 3000 );
+		}
+		report.testNotices = await page.locator( '.memorial-plugin-settings__action .components-notice' ).allTextContents();
+		await shot( page, 'rv2-mail', { fullPage: true } );
+		report.errors = errs;
+		log( 'reviews-mail', report );
+	} );
+} );

@@ -22,15 +22,23 @@ function memorial_plugin_modules_schema() {
 		);
 	}
 	return array(
-		'on'    => array(
+		'on'        => array(
 			'type'   => 'group',
 			'tab'    => __( 'Features', 'memorial-plugin' ),
 			'label'  => __( 'Plugin features', 'memorial-plugin' ),
 			'help'   => __( 'Untick a feature and it turns off: its menu items disappear, its blocks on pages show nothing. The data is not deleted. The catalog, prices, contacts, documents and SEO are the base of the site, they always work.', 'memorial-plugin' ),
 			'fields' => $f,
 		),
-		'mail'  => function_exists( 'memorial_plugin_lead_mail_schema' ) ? memorial_plugin_lead_mail_schema() : array( 'type' => 'hidden' ),
-		'perms' => array(
+		// «Почта»: the codes (a folded hint), the email about a request, the email about reviews.
+		'mailcodes' => array(
+			'type'  => function_exists( 'memorial_plugin_lead_mail_schema' ) || function_exists( 'memorial_plugin_reviews_mail_schema' ) ? 'note' : 'hidden',
+			'tab'   => _x( 'Mail', 'settings tab', 'memorial-plugin' ),
+			'label' => __( 'Codes for the emails', 'memorial-plugin' ),
+			'help'  => memorial_plugin_mail_codes_html(),
+		),
+		'mail'      => function_exists( 'memorial_plugin_lead_mail_schema' ) ? memorial_plugin_lead_mail_schema() : array( 'type' => 'hidden' ),
+		'rmail'     => function_exists( 'memorial_plugin_reviews_mail_schema' ) ? memorial_plugin_reviews_mail_schema() : array( 'type' => 'hidden' ),
+		'perms'     => array(
 			'type'  => 'perms',
 			'tab'   => __( 'Permissions', 'memorial-plugin' ),
 			'label' => __( 'What editors and authors may do', 'memorial-plugin' ),
@@ -46,6 +54,7 @@ function memorial_plugin_modules_page_defaults() {
 		'on'    => array_fill_keys( array_keys( memorial_plugin_optional() ), 1 ),
 		'perms' => memorial_plugin_perm_defaults(),
 		'mail'  => function_exists( 'memorial_plugin_lead_mail_defaults' ) ? memorial_plugin_lead_mail_defaults() : array(),
+		'rmail' => function_exists( 'memorial_plugin_reviews_mail_defaults' ) ? memorial_plugin_reviews_mail_defaults() : array(),
 	);
 }
 

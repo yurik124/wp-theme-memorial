@@ -13,7 +13,7 @@ msgstr ""
 msgid " (draft)"
 msgstr ""
 
-#: reviews/rewio.php:1132
+#: reviews/rewio.php:1151
 msgid " (hidden: "
 msgstr ""
 
@@ -21,15 +21,15 @@ msgstr ""
 msgid " and the map"
 msgstr ""
 
-#: reviews/rewio.php:879
+#: reviews/rewio.php:898
 msgid " at "
 msgstr ""
 
-#: reviews/rewio.php:800
+#: reviews/rewio.php:819
 msgid " h"
 msgstr ""
 
-#: reviews/rewio.php:595
+#: reviews/rewio.php:614
 msgid " of "
 msgstr ""
 
@@ -37,11 +37,11 @@ msgstr ""
 msgid " on the map of Belgorod — Yandex Maps"
 msgstr ""
 
-#: reviews/rewio.php:1115
+#: reviews/rewio.php:1134
 msgid " · next check: "
 msgstr ""
 
-#: reviews/rewio.php:1103
+#: reviews/rewio.php:1122
 msgid " — but showing is off (the tick in “1. Connection”)"
 msgstr ""
 
@@ -122,7 +122,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of records.
-#: src/collections/index.js:390
+#: src/collections/index.js:398
 #, php-format
 msgid "%d record moved to the trash."
 msgid_plural "%d records moved to the trash."
@@ -130,7 +130,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of reviews.
-#: src/collections/index.js:420
+#: src/collections/index.js:428
 #, php-format
 msgid "%d review hidden on the site."
 msgid_plural "%d reviews hidden on the site."
@@ -138,7 +138,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of reviews.
-#: src/collections/index.js:430
+#: src/collections/index.js:438
 #, php-format
 msgid "%d review shown on the site."
 msgid_plural "%d reviews shown on the site."
@@ -203,7 +203,7 @@ msgstr ""
 msgid "(this text is no longer in the settings)"
 msgstr ""
 
-#: reviews/rewio.php:691
+#: reviews/rewio.php:710
 msgid "), but were not saved in the site’s database. Tell the site developer."
 msgstr ""
 
@@ -235,7 +235,7 @@ msgstr ""
 msgid "0 — “price on request”."
 msgstr ""
 
-#: reviews/rewio.php:127
+#: reviews/rewio.php:132
 msgid "1 (a full-width feed)"
 msgstr ""
 
@@ -267,7 +267,7 @@ msgstr ""
 msgid "3★ and higher"
 msgstr ""
 
-#: reviews/rewio.php:101
+#: reviews/rewio.php:106
 msgid "4. How it looks on the site"
 msgstr ""
 
@@ -279,8 +279,12 @@ msgstr ""
 msgid "4★ and higher"
 msgstr ""
 
-#: reviews/rewio.php:166
+#: reviews/rewio.php:171
 msgid "5. Updating"
+msgstr ""
+
+#: reviews/rewio.php:190
+msgid "6. Notifications"
 msgstr ""
 
 #: content/patterns.php:55
@@ -557,6 +561,10 @@ msgstr ""
 msgid "Advantages (with laurel leaves)"
 msgstr ""
 
+#: reviews/rewio.php:195
+msgid "After a loading that found new reviews or reviews that disappeared from the review site. Where to and the text of the email — “Memorial → Settings → Mail”."
+msgstr ""
+
 #: admin/convert.php:331
 msgid "After converting"
 msgstr ""
@@ -577,12 +585,12 @@ msgstr ""
 msgid "All categories (tiles)"
 msgstr ""
 
-#: src/settings/index.js:1126
+#: src/settings/index.js:1148
 msgid "All changes are saved"
 msgstr ""
 
 #. translators: %s: folder name
-#: reviews/rewio.php:926
+#: reviews/rewio.php:945
 #, php-format
 msgid "All from the folder “%s”"
 msgstr ""
@@ -615,7 +623,7 @@ msgstr ""
 msgid "All ratings"
 msgstr ""
 
-#: leads/lead-mail.php:77
+#: leads/lead-mail.php:76
 msgid "All requests:"
 msgstr ""
 
@@ -641,6 +649,14 @@ msgstr ""
 
 #: core/settings.php:408
 msgid "An empty line — a new paragraph. You can use <b>, <a> and other simple markup."
+msgstr ""
+
+#: reviews/rewio-mail.php:205
+msgid "An example of a new review."
+msgstr ""
+
+#: reviews/rewio-mail.php:206
+msgid "An example of a review deleted on the review site."
 msgstr ""
 
 #: blocks/home/home.php:41
@@ -691,11 +707,11 @@ msgstr ""
 msgid "As in the type"
 msgstr ""
 
-#: reviews/rewio-archive.php:469
+#: reviews/rewio-archive.php:477
 msgid "As loaded"
 msgstr ""
 
-#: reviews/rewio-archive.php:493
+#: reviews/rewio-archive.php:501
 msgid "As on the review site now"
 msgstr ""
 
@@ -703,7 +719,7 @@ msgstr ""
 msgid "As the price is called in the lists, for example “Wreath delivery in Belgorod”."
 msgstr ""
 
-#: admin/collections.php:109
+#: admin/collections.php:110
 msgid "As written in the book."
 msgstr ""
 
@@ -711,11 +727,11 @@ msgstr ""
 msgid "Ask for consent: Metrica and the codes below start after “Accept” (the strict reading of 152-FZ)"
 msgstr ""
 
-#: reviews/rewio.php:1074
+#: reviews/rewio.php:1093
 msgid "At least one site must stay — otherwise untick the branch itself"
 msgstr ""
 
-#: admin/collections.php:100 reviews/rewio-archive.php:433
+#: admin/collections.php:101 reviews/rewio-archive.php:441
 msgid "Author"
 msgstr ""
 
@@ -723,7 +739,7 @@ msgstr ""
 msgid "Availability"
 msgstr ""
 
-#: reviews/rewio.php:136
+#: reviews/rewio.php:141
 msgid "Average rating and the number of reviews at the top"
 msgstr ""
 
@@ -747,11 +763,11 @@ msgstr ""
 msgid "Belgorod district, village of …"
 msgstr ""
 
-#: reviews/rewio.php:113
+#: reviews/rewio.php:118
 msgid "Best first"
 msgstr ""
 
-#: leads/lead-mail.php:51
+#: leads/lead-mail.php:50
 msgid "Better an address of the site’s own domain, otherwise mail services may put the email into spam."
 msgstr ""
 
@@ -759,7 +775,7 @@ msgstr ""
 msgid "Block on the page"
 msgstr ""
 
-#: reviews/rewio.php:105
+#: reviews/rewio.php:110
 msgid "Block title"
 msgstr ""
 
@@ -779,7 +795,7 @@ msgstr ""
 msgid "Branch"
 msgstr ""
 
-#: reviews/rewio.php:1339
+#: reviews/rewio.php:1358
 msgid "Branch "
 msgstr ""
 
@@ -787,7 +803,7 @@ msgstr ""
 msgid "Branch list from Rewio:"
 msgstr ""
 
-#: reviews/rewio.php:917
+#: reviews/rewio.php:936
 msgid "Branches and their sites"
 msgstr ""
 
@@ -827,7 +843,7 @@ msgstr ""
 msgid "Cafe “…”"
 msgstr ""
 
-#: src/collections/index.js:509 blocks/legacy/render/mobile-bar.php:15 blocks/legacy/render/parts/contacts-cards.php:23
+#: src/collections/index.js:517 blocks/legacy/render/mobile-bar.php:15 blocks/legacy/render/parts/contacts-cards.php:23
 msgid "Call"
 msgstr ""
 
@@ -845,7 +861,7 @@ msgstr ""
 msgid "Call back requests, catalog, works, content conversion and search statistics of the funeral services site."
 msgstr ""
 
-#: leads/lead-mail.php:71
+#: leads/lead-mail.php:70
 msgid "Call back: {phone} ({name})"
 msgstr ""
 
@@ -873,15 +889,15 @@ msgstr ""
 msgid "Call — we will tell you where to start"
 msgstr ""
 
-#: leads/lead-mail.php:72
+#: leads/lead-mail.php:71
 msgid "Call-back request from the site {site}"
 msgstr ""
 
-#: admin/collections.php:33 core/permissions.php:33
+#: admin/collections.php:34 core/permissions.php:33
 msgid "Call-back requests"
 msgstr ""
 
-#: admin/collections.php:81
+#: admin/collections.php:82
 msgid "Called back"
 msgstr ""
 
@@ -897,7 +913,7 @@ msgstr ""
 msgid "Can be left empty: it is made from the name when you save. By the code the price is put into texts and SEO titles, so do not change it once it is used."
 msgstr ""
 
-#: src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:318
+#: src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:326
 msgid "Cancel"
 msgstr ""
 
@@ -1061,7 +1077,7 @@ msgstr ""
 msgid "Change prices…"
 msgstr ""
 
-#: reviews/rewio-archive.php:470
+#: reviews/rewio-archive.php:478
 msgid "Changed on the review site"
 msgstr ""
 
@@ -1149,11 +1165,15 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
+#: core/modules.php:36
+msgid "Codes for the emails"
+msgstr ""
+
 #: core/assets.php:98
 msgid "Collapse"
 msgstr ""
 
-#: reviews/rewio.php:132
+#: reviews/rewio.php:137
 msgid "Collapse long text after, characters"
 msgstr ""
 
@@ -1165,12 +1185,16 @@ msgstr ""
 msgid "Columns (0 — from settings)"
 msgstr ""
 
-#: catalog/catalog-admin.php:29 src/catalog/types.js:181 reviews/rewio.php:123 prices/prices.php:36
+#: catalog/catalog-admin.php:29 src/catalog/types.js:181 reviews/rewio.php:128 prices/prices.php:36
 msgid "Columns on a computer"
 msgstr ""
 
 #: src/catalog/types.js:190
 msgid "Columns on a phone"
+msgstr ""
+
+#: reviews/rewio-mail.php:25
+msgid "Comes after a loading of the Rewio reviews that found new reviews or reviews deleted on the review site — if “Notify about new or deleted reviews by email” is ticked in “Memorial → Reviews → Rewio reviews”."
 msgstr ""
 
 #: core/assets.php:331
@@ -1189,7 +1213,7 @@ msgstr ""
 msgid "Company details (personal data operator)"
 msgstr ""
 
-#: reviews/rewio.php:148 reviews/rewio.php:1406 reviews/rewio-archive.php:532
+#: reviews/rewio.php:153 reviews/rewio.php:1425 reviews/rewio-archive.php:540
 msgid "Company’s reply"
 msgstr ""
 
@@ -1221,7 +1245,7 @@ msgstr ""
 msgid "Contact cards"
 msgstr ""
 
-#: core/settings.php:527 core/settings.php:766 core/settings.php:1257
+#: core/settings.php:527 core/settings.php:766 core/settings.php:1258
 msgid "Contacts"
 msgstr ""
 
@@ -1293,15 +1317,15 @@ msgstr ""
 msgid "Could not create the work."
 msgstr ""
 
-#: reviews/rewio.php:904
+#: reviews/rewio.php:923
 msgid "Could not get the list of branches:"
 msgstr ""
 
-#: reviews/rewio.php:1018
+#: reviews/rewio.php:1037
 msgid "Could not get the list of branches: "
 msgstr ""
 
-#: reviews/rewio.php:1102
+#: reviews/rewio.php:1121
 msgid "Could not load the reviews: "
 msgstr ""
 
@@ -1361,7 +1385,7 @@ msgstr ""
 msgid "Cross"
 msgstr ""
 
-#: reviews/rewio.php:106 reviews/rewio.php:210
+#: reviews/rewio.php:111 reviews/rewio.php:228
 msgid "Customer reviews"
 msgstr ""
 
@@ -1377,11 +1401,11 @@ msgstr ""
 msgid "Daily from 9:00 to 18:00"
 msgstr ""
 
-#: reviews/rewio-archive.php:458
+#: reviews/rewio-archive.php:466
 msgid "Date"
 msgstr ""
 
-#: admin/collections.php:112
+#: admin/collections.php:113
 msgid "Date in the book"
 msgstr ""
 
@@ -1434,8 +1458,16 @@ msgstr ""
 msgid "Delete “%s”?"
 msgstr ""
 
-#: reviews/rewio-archive.php:471
+#: reviews/rewio-archive.php:479
 msgid "Deleted on the review site"
+msgstr ""
+
+#: reviews/rewio-mail.php:63
+msgid "Deleted on the review site:"
+msgstr ""
+
+#: reviews/rewio-mail.php:106
+msgid "Deleted:"
 msgstr ""
 
 #: admin/abilities.php:689
@@ -1498,7 +1530,7 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-#: reviews/rewio.php:1208
+#: reviews/rewio.php:1227
 msgid "Done: loaded "
 msgstr ""
 
@@ -1514,7 +1546,7 @@ msgstr ""
 msgid "Each branch on its own tab"
 msgstr ""
 
-#: src/catalog/works.js:274 src/catalog/products.js:583 src/catalog/types.js:694 src/collections/index.js:276 src/collections/index.js:451
+#: src/catalog/works.js:274 src/catalog/products.js:583 src/catalog/types.js:694 src/collections/index.js:286 src/collections/index.js:459
 msgid "Edit"
 msgstr ""
 
@@ -1534,19 +1566,27 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: leads/lead-mail.php:24
+#: leads/lead-mail.php:23 core/mail.php:118
 msgid "Email about a call-back request"
 msgstr ""
 
-#: leads/lead-mail.php:50
+#: reviews/rewio-mail.php:24 core/mail.php:129
+msgid "Email about new and deleted reviews"
+msgstr ""
+
+#: leads/lead-mail.php:49
 msgid "Empty — as the hosting sends"
 msgstr ""
 
-#: reviews/rewio-archive.php:503
+#: reviews/rewio-archive.php:511
 msgid "Empty — the link of the review site (or the company page there)."
 msgstr ""
 
-#: leads/lead-mail.php:30
+#: reviews/rewio-mail.php:30
+msgid "Empty — to the addresses of the request email"
+msgstr ""
+
+#: leads/lead-mail.php:29
 msgid "Empty — to the first email of “Contacts”"
 msgstr ""
 
@@ -1568,7 +1608,7 @@ msgstr ""
 msgid "Enter the full number: +7 and 10 digits."
 msgstr ""
 
-#: reviews/rewio.php:1069
+#: reviews/rewio.php:1088
 msgid "Error"
 msgstr ""
 
@@ -1576,19 +1616,19 @@ msgstr ""
 msgid "Even over the whole photo"
 msgstr ""
 
-#: reviews/rewio.php:174
+#: reviews/rewio.php:179
 msgid "Every 3 hours"
 msgstr ""
 
-#: reviews/rewio.php:175
+#: reviews/rewio.php:180
 msgid "Every 6 hours"
 msgstr ""
 
-#: reviews/rewio.php:982
+#: reviews/rewio.php:1001
 msgid "Every branch in its own tab (otherwise all reviews in one feed)"
 msgstr ""
 
-#: reviews/rewio.php:173
+#: reviews/rewio.php:178
 msgid "Every hour"
 msgstr ""
 
@@ -1596,8 +1636,8 @@ msgstr ""
 msgid "Every product has its own address, even one without a description."
 msgstr ""
 
-#: leads/lead-mail.php:25
-msgid "Every request from the “Call me back” window comes by email and stays in “Memorial → Call-back requests”. In the subject and the text: {phone} — phone, {name} — name, {page} — the page it was sent from, {time} — date and time, {site} — the site address, {link} — all requests in the admin."
+#: leads/lead-mail.php:24
+msgid "Every request from the “Call me back” window comes by email and stays in “Memorial → Call-back requests”. The codes for the subject and the text are in “Codes for the emails” above."
 msgstr ""
 
 #: src/catalog/types.js:313
@@ -1681,7 +1721,7 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: reviews/rewio.php:144
+#: reviews/rewio.php:149
 msgid "Filter by site: clicking a site in the rating summary shows only its reviews"
 msgstr ""
 
@@ -1689,11 +1729,11 @@ msgstr ""
 msgid "Finish the page (draft)"
 msgstr ""
 
-#: reviews/rewio.php:896
+#: reviews/rewio.php:915
 msgid "First paste the API key into “1. Connection” and click “Save” — your branches will appear here."
 msgstr ""
 
-#: reviews/rewio.php:1010
+#: reviews/rewio.php:1029
 msgid "First paste the API key into “1. Connection” and save — your branches will appear here."
 msgstr ""
 
@@ -1705,7 +1745,7 @@ msgstr ""
 msgid "First step"
 msgstr ""
 
-#: reviews/rewio-archive.php:480
+#: reviews/rewio-archive.php:488
 msgid "First version"
 msgstr ""
 
@@ -1765,7 +1805,7 @@ msgstr ""
 msgid "For example “height 90 cm”: a field in the products table and in the product window, a line under the name on the site. When it is off, the lines already typed are kept, only not shown."
 msgstr ""
 
-#: admin/collections.php:103
+#: admin/collections.php:104
 msgid "For example: Elena V."
 msgstr ""
 
@@ -1847,7 +1887,7 @@ msgstr ""
 msgid "From 2 to 6; empty — 4."
 msgstr ""
 
-#: admin/collections.php:51
+#: admin/collections.php:52
 msgid "From page"
 msgstr ""
 
@@ -1915,7 +1955,7 @@ msgstr ""
 msgid "Gradient: lighter at the top, darker at the bottom"
 msgstr ""
 
-#: reviews/rewio.php:780
+#: reviews/rewio.php:799
 msgid "Guest"
 msgstr ""
 
@@ -1971,7 +2011,7 @@ msgstr ""
 msgid "Heart — care"
 msgstr ""
 
-#: admin/collections.php:134 src/catalog/fields.js:164 src/catalog/fields.js:185 src/collections/index.js:125 src/collections/index.js:135
+#: admin/collections.php:135 src/catalog/fields.js:164 src/catalog/fields.js:185 src/collections/index.js:125 src/collections/index.js:135
 msgid "Hidden"
 msgstr ""
 
@@ -1983,11 +2023,11 @@ msgstr ""
 msgid "Hide from the site"
 msgstr ""
 
-#: src/collections/index.js:470
+#: src/collections/index.js:478
 msgid "Hide on the site"
 msgstr ""
 
-#: reviews/rewio-archive.php:576
+#: reviews/rewio-archive.php:593
 msgid "Hide or show a review"
 msgstr ""
 
@@ -1999,7 +2039,7 @@ msgstr ""
 msgid "Hide the key"
 msgstr ""
 
-#: reviews/rewio-archive.php:577
+#: reviews/rewio-archive.php:594
 msgid "Hides a Rewio review on the site or shows it again; the review stays in the list."
 msgstr ""
 
@@ -2019,7 +2059,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: admin/collections.php:205
+#: admin/collections.php:206
 msgid "Home page"
 msgstr ""
 
@@ -2059,11 +2099,11 @@ msgstr ""
 msgid "How many to show (0 — default)"
 msgstr ""
 
-#: reviews/rewio.php:119
+#: reviews/rewio.php:124
 msgid "How many to show at once (the rest — with the “Show more” button)"
 msgstr ""
 
-#: reviews/rewio.php:171
+#: reviews/rewio.php:176
 msgid "How often to check for new reviews"
 msgstr ""
 
@@ -2105,7 +2145,7 @@ msgstr ""
 msgid "I give my %1$s in accordance with %2$s"
 msgstr ""
 
-#: reviews/rewio-archive.php:585
+#: reviews/rewio-archive.php:602
 msgid "ID of the review in the list."
 msgstr ""
 
@@ -2117,7 +2157,7 @@ msgstr ""
 msgid "Icon in a circle"
 msgstr ""
 
-#: admin/collections.php:115
+#: admin/collections.php:116
 msgid "If the day cannot be read, use the 1st: the site shows only month and year."
 msgstr ""
 
@@ -2321,7 +2361,7 @@ msgstr ""
 msgid "List products"
 msgstr ""
 
-#: reviews/rewio.php:1127
+#: reviews/rewio.php:1146
 msgid "Load reviews now"
 msgstr ""
 
@@ -2329,7 +2369,7 @@ msgstr ""
 msgid "Loading reviews on schedule, the Rewio reviews block."
 msgstr ""
 
-#: reviews/rewio.php:1068
+#: reviews/rewio.php:1087
 msgid "Loading reviews… usually it takes 10–30 seconds"
 msgstr ""
 
@@ -2413,7 +2453,7 @@ msgstr ""
 msgid "Mark a request as called back"
 msgstr ""
 
-#: src/collections/index.js:490
+#: src/collections/index.js:498
 msgid "Mark as called back"
 msgstr ""
 
@@ -2422,7 +2462,7 @@ msgid "Material"
 msgstr ""
 
 #. Author of the plugin
-#: memorial-plugin.php admin/abilities.php:33 core/settings.php:1272 core/icons-api.php:51
+#: memorial-plugin.php admin/abilities.php:33 core/settings.php:1273 core/icons-api.php:51
 msgid "Memorial"
 msgstr ""
 
@@ -2572,7 +2612,7 @@ msgstr ""
 msgid "Move row %d up"
 msgstr ""
 
-#: src/catalog/works.js:361 src/catalog/products.js:653 src/collections/index.js:460
+#: src/catalog/works.js:361 src/catalog/products.js:653 src/collections/index.js:468
 msgid "Move to trash"
 msgstr ""
 
@@ -2600,7 +2640,7 @@ msgstr ""
 msgid "Name “Call”, identifier"
 msgstr ""
 
-#: leads/lead-mail.php:74
+#: leads/lead-mail.php:73
 msgid "Name:"
 msgstr ""
 
@@ -2632,6 +2672,10 @@ msgstr ""
 msgid "New products show “from”"
 msgstr ""
 
+#: reviews/rewio-mail.php:62
+msgid "New reviews:"
+msgstr ""
+
 #: src/catalog/types.js:919
 msgid "New type"
 msgstr ""
@@ -2648,7 +2692,11 @@ msgstr ""
 msgid "New work from photos"
 msgstr ""
 
-#: catalog/catalog-types.php:175 reviews/rewio.php:112 works/works.php:181
+#: reviews/rewio-mail.php:106
+msgid "New:"
+msgstr ""
+
+#: catalog/catalog-types.php:175 reviews/rewio.php:117 works/works.php:181
 msgid "Newest first"
 msgstr ""
 
@@ -2712,7 +2760,7 @@ msgstr ""
 msgid "Northern cemetery"
 msgstr ""
 
-#: reviews/rewio.php:1166 reviews/rewio.php:1198
+#: reviews/rewio.php:1185 reviews/rewio.php:1217
 msgid "Not allowed."
 msgstr ""
 
@@ -2732,7 +2780,7 @@ msgstr ""
 msgid "Not chosen — the block has its own text, only on this page."
 msgstr ""
 
-#: reviews/rewio.php:1101
+#: reviews/rewio.php:1120
 msgid "Not connected — paste the API key below and save."
 msgstr ""
 
@@ -2740,19 +2788,19 @@ msgstr ""
 msgid "Not older than, months (0 — all time)"
 msgstr ""
 
-#: reviews/rewio.php:1072
+#: reviews/rewio.php:1091
 msgid "Not saved"
 msgstr ""
 
-#: reviews/rewio.php:1073
+#: reviews/rewio.php:1092
 msgid "Not saved — click “Save” at the bottom"
 msgstr ""
 
-#: admin/collections.php:70
+#: admin/collections.php:71
 msgid "Not sent"
 msgstr ""
 
-#: admin/collections.php:86 content/content.php:21
+#: admin/collections.php:87 content/content.php:21
 msgid "Note"
 msgstr ""
 
@@ -2774,6 +2822,10 @@ msgstr ""
 
 #: src/inline-value/index.js:108
 msgid "Nothing to choose from yet."
+msgstr ""
+
+#: reviews/rewio.php:194
+msgid "Notify about new or deleted reviews by email"
 msgstr ""
 
 #: admin/convert.php:330
@@ -2864,23 +2916,23 @@ msgstr ""
 msgid "On the home page the reviews are blocks of the page content: edit them in Pages → Home."
 msgstr ""
 
-#: reviews/rewio-archive.php:464
+#: reviews/rewio-archive.php:472
 msgid "On the review site"
 msgstr ""
 
-#: admin/collections.php:129 admin/abilities.php:767 src/catalog/fields.js:160
+#: admin/collections.php:130 admin/abilities.php:767 src/catalog/fields.js:160
 msgid "On the site"
 msgstr ""
 
-#: reviews/rewio.php:1103
+#: reviews/rewio.php:1122
 msgid "On the site "
 msgstr ""
 
-#: reviews/rewio.php:177
+#: reviews/rewio.php:182
 msgid "Once a day"
 msgstr ""
 
-#: reviews/rewio.php:178
+#: reviews/rewio.php:183
 msgid "Once a week"
 msgstr ""
 
@@ -2946,7 +2998,7 @@ msgstr ""
 msgid "Open photo %d large"
 msgstr ""
 
-#: src/settings/index.js:1016
+#: src/settings/index.js:1034
 msgid "Open site"
 msgstr ""
 
@@ -2990,7 +3042,7 @@ msgstr ""
 msgid "Or these pages, in this order"
 msgstr ""
 
-#: admin/collections.php:138 src/catalog/fields.js:195 src/catalog/types.js:662 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:85
+#: admin/collections.php:139 src/catalog/fields.js:195 src/catalog/types.js:662 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:85
 msgid "Order"
 msgstr ""
 
@@ -3042,7 +3094,7 @@ msgstr ""
 msgid "Our works (photos): there are no photos in “Our works” yet."
 msgstr ""
 
-#: reviews/rewio-archive.php:498
+#: reviews/rewio-archive.php:506
 msgid "Own link to the source"
 msgstr ""
 
@@ -3100,7 +3152,7 @@ msgstr ""
 msgid "Page with products"
 msgstr ""
 
-#: leads/lead-mail.php:75
+#: leads/lead-mail.php:74
 msgid "Page:"
 msgstr ""
 
@@ -3116,7 +3168,7 @@ msgstr ""
 msgid "Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags."
 msgstr ""
 
-#: reviews/rewio.php:237
+#: reviews/rewio.php:256
 msgid "Paste the key and save, tick the branches — the reviews load by themselves. They are shown on a page by the “Rewio reviews” block."
 msgstr ""
 
@@ -3128,7 +3180,7 @@ msgstr ""
 msgid "Percent"
 msgstr ""
 
-#: core/modules.php:35
+#: core/modules.php:43
 msgid "Permissions"
 msgstr ""
 
@@ -3136,7 +3188,7 @@ msgstr ""
 msgid "Personal data processing policy"
 msgstr ""
 
-#: admin/collections.php:39 leads/callback.php:163 blocks/content/inline-values.php:326 core/icons-api.php:23 core/icons-fallback.php:23
+#: admin/collections.php:40 leads/callback.php:163 blocks/content/inline-values.php:326 core/icons-api.php:23 core/icons-fallback.php:23
 msgid "Phone"
 msgstr ""
 
@@ -3148,7 +3200,7 @@ msgstr ""
 msgid "Phone number"
 msgstr ""
 
-#: leads/lead-mail.php:73
+#: leads/lead-mail.php:72
 msgid "Phone:"
 msgstr ""
 
@@ -3164,7 +3216,7 @@ msgstr ""
 msgid "Phones, email and addresses are taken from the “Memorial → Contacts” page."
 msgstr ""
 
-#: core/settings.php:1259
+#: core/settings.php:1260
 msgid "Phones, email, addresses and opening hours. Changes appear at once in the header, the footer, on the home page and in the product cards."
 msgstr ""
 
@@ -3194,7 +3246,7 @@ msgstr ""
 msgid "Photo blocks of products and works — the photos are picked up automatically."
 msgstr ""
 
-#: reviews/rewio.php:1401
+#: reviews/rewio.php:1420
 msgid "Photo for the review"
 msgstr ""
 
@@ -3222,7 +3274,7 @@ msgstr ""
 msgid "Photo of the hall"
 msgstr ""
 
-#: admin/collections.php:124
+#: admin/collections.php:125
 msgid "Photo of the page"
 msgstr ""
 
@@ -3250,7 +3302,7 @@ msgstr ""
 msgid "Photos"
 msgstr ""
 
-#: reviews/rewio.php:152
+#: reviews/rewio.php:157
 msgid "Photos from the reviews"
 msgstr ""
 
@@ -3534,7 +3586,7 @@ msgstr ""
 msgid "Questions from all pages (Details blocks) on one page, with search."
 msgstr ""
 
-#: reviews/rewio.php:919
+#: reviews/rewio.php:938
 msgid "Quickly:"
 msgstr ""
 
@@ -3542,12 +3594,12 @@ msgstr ""
 msgid "Random order (different on every visit)"
 msgstr ""
 
-#: reviews/rewio.php:67 reviews/rewio-archive.php:445
+#: reviews/rewio.php:67 reviews/rewio-archive.php:453
 msgid "Rating"
 msgstr ""
 
 #. translators: %s: rating, for example 4,8
-#: reviews/rewio.php:1253
+#: reviews/rewio.php:1272
 #, php-format
 msgid "Rating %s out of 5"
 msgstr ""
@@ -3556,7 +3608,7 @@ msgstr ""
 msgid "Rating (optional)"
 msgstr ""
 
-#: reviews/rewio.php:1396 reviews/bookreviews.php:124 core/assets.php:99
+#: reviews/rewio.php:1415 reviews/bookreviews.php:124 core/assets.php:99
 msgid "Read more"
 msgstr ""
 
@@ -3652,7 +3704,7 @@ msgstr ""
 msgid "Requests from the “Call me back” form: phone, name, page, time and whether someone has called back. Newest first."
 msgstr ""
 
-#: admin/collections.php:34
+#: admin/collections.php:35
 msgid "Requests from the “Call me back” window. Each one also comes by email; here they are kept even if the email is lost."
 msgstr ""
 
@@ -3660,15 +3712,15 @@ msgstr ""
 msgid "Restores the text and SEO fields of a post from before its conversion to blocks."
 msgstr ""
 
-#: admin/collections.php:106 reviews/rewio-archive.php:439
+#: admin/collections.php:107 reviews/rewio-archive.php:447
 msgid "Review"
 msgstr ""
 
-#: reviews/rewio.php:160
+#: reviews/rewio.php:165
 msgid "Review date"
 msgstr ""
 
-#: admin/commands.php:25 reviews/rewio-archive.php:26 reviews/rewio-archive.php:417
+#: admin/commands.php:25 reviews/rewio-archive.php:26 reviews/rewio-archive.php:429
 msgid "Review list"
 msgstr ""
 
@@ -3684,11 +3736,11 @@ msgstr ""
 msgid "Review widgets and links to review sites (Memorial → Reviews)."
 msgstr ""
 
-#: reviews/rewio.php:233 reviews/reviews.php:125 reviews/reviews.php:190 core/settings.php:526 core/settings.php:759
+#: reviews/rewio.php:252 reviews/reviews.php:125 reviews/reviews.php:190 core/settings.php:526 core/settings.php:759
 msgid "Reviews"
 msgstr ""
 
-#: reviews/rewio.php:167
+#: reviews/rewio.php:172
 msgid "Reviews are loaded in the background and kept on the site. If Rewio is temporarily unavailable, the last loaded reviews stay on the site."
 msgstr ""
 
@@ -3696,7 +3748,7 @@ msgstr ""
 msgid "Reviews block: add the review services in “Memorial → Reviews”."
 msgstr ""
 
-#: reviews/rewio.php:1336 reviews/reviews.php:234
+#: reviews/rewio.php:1355 reviews/reviews.php:234
 msgid "Reviews by branch"
 msgstr ""
 
@@ -3704,7 +3756,7 @@ msgstr ""
 msgid "Reviews from Yandex Maps (Rewio)"
 msgstr ""
 
-#: reviews/rewio.php:236
+#: reviews/rewio.php:255
 msgid "Reviews from Yandex Maps, 2GIS, Zoon and other sites through the <a href=\"https://rewio.ru/\" target=\"_blank\" rel=\"noopener\">Rewio</a> service — as cards in the site’s design. "
 msgstr ""
 
@@ -3712,7 +3764,7 @@ msgstr ""
 msgid "Reviews from review sites"
 msgstr ""
 
-#: admin/collections.php:94 core/permissions.php:34
+#: admin/collections.php:95 core/permissions.php:34
 msgid "Reviews from the guest book"
 msgstr ""
 
@@ -3732,7 +3784,7 @@ msgstr ""
 msgid "Reviews loaded from Yandex Maps and other sites by Rewio (Memorial → Reviews → Rewio reviews)."
 msgstr ""
 
-#: reviews/rewio-archive.php:418
+#: reviews/rewio-archive.php:430
 msgid "Reviews loaded from Yandex Maps, 2GIS and other sites through Rewio. A hidden review is not shown on the site; the site keeps its copy, so a review changed or deleted on the review site stays here with a mark."
 msgstr ""
 
@@ -3740,11 +3792,15 @@ msgstr ""
 msgid "Reviews of our customers"
 msgstr ""
 
+#: reviews/rewio-mail.php:60
+msgid "Reviews of {site}: new — {new}, deleted — {gone}"
+msgstr ""
+
 #: core/assets.php:155
 msgid "Reviews on Yandex Maps"
 msgstr ""
 
-#: admin/collections.php:95
+#: admin/collections.php:96
 msgid "Reviews retyped from the paper guest book, with a photo of the page. Before uploading a photo, cover the surname, phone and signature of the author unless they agreed to publication."
 msgstr ""
 
@@ -3752,7 +3808,7 @@ msgstr ""
 msgid "Reviews that customers left in the paper guest book in our office. Reprinted without changes, with the photo of the page next to them."
 msgstr ""
 
-#: reviews/rewio.php:691
+#: reviews/rewio.php:710
 msgid "Reviews were received ("
 msgstr ""
 
@@ -3762,7 +3818,7 @@ msgstr ""
 msgid "Reviews: %s"
 msgstr ""
 
-#: reviews/rewio.php:365
+#: reviews/rewio.php:384
 msgid "Rewio does not respond ("
 msgstr ""
 
@@ -3770,27 +3826,31 @@ msgstr ""
 msgid "Rewio example"
 msgstr ""
 
-#: reviews/rewio.php:961
+#: reviews/rewio.php:980
 msgid "Rewio is still collecting reviews"
 msgstr ""
 
-#: reviews/rewio.php:387
+#: reviews/rewio.php:406
 msgid "Rewio returned an unclear response."
 msgstr ""
 
-#: reviews/rewio.php:232 reviews/reviews.php:276
+#: reviews/rewio.php:251 reviews/reviews.php:276
 msgid "Rewio reviews"
 msgstr ""
 
-#: reviews/rewio.php:1277
+#: reviews/rewio-mail.php:61
+msgid "Rewio reviews were loaded on the site {site} ({time})."
+msgstr ""
+
+#: reviews/rewio.php:1296
 msgid "Rewio reviews: showing the reviews is off — the tick in “Memorial → Reviews → Rewio reviews → 1. Connection”. Only you see this message."
 msgstr ""
 
-#: reviews/rewio.php:1289
+#: reviews/rewio.php:1308
 msgid "Rewio reviews: the reviews are not loaded yet — “Memorial → Reviews → Rewio reviews” → “Load reviews now”. Only you see this message."
 msgstr ""
 
-#: reviews/rewio.php:800
+#: reviews/rewio.php:819
 msgid "Rewio: every "
 msgstr ""
 
@@ -3832,7 +3892,7 @@ msgstr ""
 msgid "SEO title (SEOPress)"
 msgstr ""
 
-#: src/catalog/product-pages.js:152 src/catalog/types.js:272 src/catalog/types.js:599 src/catalog/list-screen.js:125 src/settings/index.js:1024 src/settings/index.js:1134
+#: src/catalog/product-pages.js:152 src/catalog/types.js:272 src/catalog/types.js:599 src/catalog/list-screen.js:125 src/settings/index.js:1042 src/settings/index.js:1156
 msgid "Save"
 msgstr ""
 
@@ -3844,19 +3904,19 @@ msgstr ""
 msgid "Save the page first."
 msgstr ""
 
-#: reviews/rewio.php:1071
+#: reviews/rewio.php:1090
 msgid "Saved ✓ The reviews will update within a minute"
 msgstr ""
 
-#: src/catalog/works.js:252 src/catalog/product-pages.js:138 src/catalog/products.js:569 src/catalog/types.js:872 src/catalog/work-types.js:71 src/collections/index.js:534
+#: src/catalog/works.js:252 src/catalog/product-pages.js:138 src/catalog/products.js:569 src/catalog/types.js:872 src/catalog/work-types.js:71 src/collections/index.js:542
 msgid "Saved."
 msgstr ""
 
-#: src/settings/index.js:992
+#: src/settings/index.js:1010
 msgid "Saved. The changes are already on the site."
 msgstr ""
 
-#: reviews/rewio.php:1070
+#: reviews/rewio.php:1089
 msgid "Saving…"
 msgstr ""
 
@@ -3930,23 +3990,27 @@ msgstr ""
 msgid "Select at least two products."
 msgstr ""
 
-#: leads/lead-mail.php:55
+#: reviews/rewio-mail.php:44 leads/lead-mail.php:54
 msgid "Send a test email"
 msgstr ""
 
-#: leads/lead-mail.php:49
+#: leads/lead-mail.php:48
 msgid "Sender address"
 msgstr ""
 
-#: leads/lead-mail.php:44
+#: leads/lead-mail.php:43
 msgid "Sender name"
 msgstr ""
 
-#: leads/lead-mail.php:57
+#: leads/lead-mail.php:56
 msgid "Sends an email with these settings (also unsaved) to the addresses above."
 msgstr ""
 
-#: admin/collections.php:69
+#: reviews/rewio-mail.php:46
+msgid "Sends an example with two reviews with these settings (also unsaved) to the addresses above."
+msgstr ""
+
+#: admin/collections.php:70
 msgid "Sent"
 msgstr ""
 
@@ -3962,7 +4026,7 @@ msgstr ""
 msgid "Service cards of the home page (Memorial → Services), full width."
 msgstr ""
 
-#: core/settings.php:1250
+#: core/settings.php:1251
 msgid "Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited like any page: “Pages → Home”."
 msgstr ""
 
@@ -3978,7 +4042,7 @@ msgstr ""
 msgid "Service packages"
 msgstr ""
 
-#: core/settings.php:276 core/settings.php:1234 core/settings.php:1248
+#: core/settings.php:276 core/settings.php:1235 core/settings.php:1249
 msgid "Services"
 msgstr ""
 
@@ -4002,11 +4066,11 @@ msgstr ""
 msgid "Sets or clears “Called back” of a call back request."
 msgstr ""
 
-#: core/modules.php:57
+#: core/modules.php:66
 msgid "Settings"
 msgstr ""
 
-#: leads/lead-mail.php:31
+#: reviews/rewio-mail.php:31 leads/lead-mail.php:30
 msgid "Several addresses — separated by commas."
 msgstr ""
 
@@ -4058,16 +4122,20 @@ msgstr ""
 msgid "Show in examples"
 msgstr ""
 
-#: reviews/rewio.php:1419
+#: reviews/rewio.php:1438
 msgid "Show more reviews"
 msgstr ""
 
-#: src/catalog/works.js:317 src/catalog/products.js:613 src/collections/index.js:478 reviews/rewio-archive.php:475 prices/prices.php:60
+#: src/catalog/works.js:317 src/catalog/products.js:613 src/collections/index.js:486 reviews/rewio-archive.php:483 prices/prices.php:60
 msgid "Show on the site"
 msgstr ""
 
-#: reviews/rewio.php:1365
+#: reviews/rewio.php:1384
 msgid "Show only the reviews of: "
+msgstr ""
+
+#: reviews/rewio-mail.php:65
+msgid "Show or hide a review on the site:"
 msgstr ""
 
 #: admin/abilities.php:409
@@ -4086,7 +4154,7 @@ msgstr ""
 msgid "Show reviews"
 msgstr ""
 
-#: reviews/rewio-archive.php:428
+#: reviews/rewio.php:99
 msgid "Show reviews deleted on the review site"
 msgstr ""
 
@@ -4098,7 +4166,7 @@ msgstr ""
 msgid "Show the map"
 msgstr ""
 
-#: reviews/rewio.php:1360
+#: reviews/rewio.php:1379
 msgid "Show the reviews of a site"
 msgstr ""
 
@@ -4114,7 +4182,7 @@ msgstr ""
 msgid "Show “from”"
 msgstr ""
 
-#: admin/collections.php:133 src/catalog/fields.js:163 src/catalog/fields.js:181 src/collections/index.js:124 src/collections/index.js:131
+#: admin/collections.php:134 src/catalog/fields.js:163 src/catalog/fields.js:181 src/collections/index.js:124 src/collections/index.js:131
 msgid "Shown"
 msgstr ""
 
@@ -4150,11 +4218,11 @@ msgstr ""
 msgid "Similar products"
 msgstr ""
 
-#: reviews/rewio.php:912 reviews/rewio-archive.php:451 blocks/content/inline-values.php:327
+#: reviews/rewio.php:931 reviews/rewio-archive.php:459 blocks/content/inline-values.php:327
 msgid "Site"
 msgstr ""
 
-#: reviews/rewio.php:462
+#: reviews/rewio.php:481
 msgid "Site "
 msgstr ""
 
@@ -4163,11 +4231,11 @@ msgstr ""
 msgid "Site features for Memorial funeral services: catalog, prices, reviews, works, leads, settings, SEO, analytics. Design lives in the Memorial Modern theme."
 msgstr ""
 
-#: reviews/rewio.php:156
+#: reviews/rewio.php:161
 msgid "Site name with a link to the review"
 msgstr ""
 
-#: core/settings.php:1272
+#: core/settings.php:1273
 msgid "Site settings"
 msgstr ""
 
@@ -4187,7 +4255,7 @@ msgstr ""
 msgid "Smaller first. The arrows in the row menu move the item one place."
 msgstr ""
 
-#: admin/collections.php:141
+#: admin/collections.php:142
 msgid "Smaller first; equal — newer first."
 msgstr ""
 
@@ -4195,27 +4263,27 @@ msgstr ""
 msgid "Soft card"
 msgstr ""
 
-#: reviews/rewio.php:1377 core/assets.php:101
+#: reviews/rewio.php:1396 core/assets.php:101
 msgid "Sort by date"
 msgstr ""
 
-#: reviews/rewio.php:1378 core/assets.php:103
+#: reviews/rewio.php:1397 core/assets.php:103
 msgid "Sort by rating"
 msgstr ""
 
-#: reviews/rewio.php:110
+#: reviews/rewio.php:115
 msgid "Sort order"
 msgstr ""
 
-#: reviews/rewio.php:1376 blocks/content/content-blocks.php:98 blocks/legacy/render/catalog-archive.php:54 pages/pages.php:416
+#: reviews/rewio.php:1395 blocks/content/content-blocks.php:98 blocks/legacy/render/catalog-archive.php:54 pages/pages.php:416
 msgid "Sorting"
 msgstr ""
 
-#: reviews/rewio.php:140
+#: reviews/rewio.php:145
 msgid "Sorting for visitors: by date and by rating (on the right above the reviews)"
 msgstr ""
 
-#: catalog/catalog-front.php:335 reviews/rewio.php:1376 works/works.php:179
+#: catalog/catalog-front.php:335 reviews/rewio.php:1395 works/works.php:179
 msgid "Sorting:"
 msgstr ""
 
@@ -4273,7 +4341,7 @@ msgstr ""
 msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
 msgstr ""
 
-#: leads/lead-mail.php:35
+#: reviews/rewio-mail.php:35 leads/lead-mail.php:34
 msgid "Subject"
 msgstr ""
 
@@ -4317,7 +4385,7 @@ msgstr ""
 msgid "Templates are a sample under 152-FZ; check them for your business before publishing (better with a lawyer)."
 msgstr ""
 
-#: leads/lead-mail.php:217
+#: reviews/rewio-mail.php:205 reviews/rewio-mail.php:206 leads/lead-mail.php:177
 msgid "Test"
 msgstr ""
 
@@ -4345,7 +4413,7 @@ msgstr ""
 msgid "Text next to the reviews"
 msgstr ""
 
-#: leads/lead-mail.php:40
+#: reviews/rewio-mail.php:40 leads/lead-mail.php:39
 msgid "Text of the email"
 msgstr ""
 
@@ -4365,7 +4433,7 @@ msgstr ""
 msgid "Thank you! The request is accepted — we will call you back soon."
 msgstr ""
 
-#: reviews/rewio.php:342
+#: reviews/rewio.php:361
 msgid "The API key is not set."
 msgstr ""
 
@@ -4373,11 +4441,11 @@ msgstr ""
 msgid "The JavaScript build is missing. Run npm run build."
 msgstr ""
 
-#: reviews/rewio.php:979
+#: reviews/rewio.php:998
 msgid "The Rewio account has no branches yet — add them in the app.rewio.ru account and click “Update the list”."
 msgstr ""
 
-#: reviews/rewio.php:551
+#: reviews/rewio.php:570
 msgid "The Rewio account has no branches — add them in the app.rewio.ru account."
 msgstr ""
 
@@ -4402,17 +4470,17 @@ msgid "The counter, goals, cleaning the address of UTM tags, the cookie banner."
 msgstr ""
 
 #. translators: %s: email addresses.
-#: leads/lead-mail.php:227
+#: core/mail.php:102
 #, php-format
 msgid "The email was handed to the hosting for %s. If it does not come in a few minutes, look in “Spam”; if it is not there either, the hosting does not deliver mail — ask its support."
 msgstr ""
 
-#: leads/lead-mail.php:153
+#: core/mail.php:68
 msgid "The email was not accepted."
 msgstr ""
 
 #. translators: %s: the error.
-#: leads/lead-mail.php:229
+#: core/mail.php:104
 #, php-format
 msgid "The email was not sent: %s"
 msgstr ""
@@ -4425,7 +4493,7 @@ msgstr ""
 msgid "The first number is the main one by itself: it is in the header, on the “Call” and “Order” buttons, in the “Site value → Main phone” of texts and in SEO titles as %%mem_phone%%. To make another number the main one, move it to the top with the arrows."
 msgstr ""
 
-#: reviews/rewio-archive.php:494
+#: reviews/rewio-archive.php:502
 msgid "The first version"
 msgstr ""
 
@@ -4437,7 +4505,7 @@ msgstr ""
 msgid "The halls and cemeteries blocks and their settings."
 msgstr ""
 
-#: leads/lead-mail.php:166
+#: core/mail.php:81
 msgid "The hosting did not accept the email (wp_mail() returned false)."
 msgstr ""
 
@@ -4479,7 +4547,7 @@ msgstr ""
 msgid "The products become one: “%s” gets the photos of all of them, the missing fields and all categories; the others go to the trash and their addresses lead to it."
 msgstr ""
 
-#: reviews/rewio.php:1104
+#: reviews/rewio.php:1123
 msgid "The reviews are not loaded yet — click “Load reviews now”."
 msgstr ""
 
@@ -4499,8 +4567,12 @@ msgstr ""
 msgid "The shared texts were not saved."
 msgstr ""
 
-#: reviews/rewio.php:1064
+#: reviews/rewio.php:1083
 msgid "The site did not respond"
+msgstr ""
+
+#: reviews/rewio.php:100
+msgid "The site keeps its copy of a review that disappeared from the review site; in “Review list” it is marked “Deleted on the review site”. Off — such reviews are not shown on the site."
 msgstr ""
 
 #. translators: %d: number of characters.
@@ -4545,7 +4617,7 @@ msgstr ""
 msgid "There are no products in this section yet. Call — we will find what you need."
 msgstr ""
 
-#: src/settings/index.js:1122
+#: src/settings/index.js:1144
 msgid "There are unsaved changes"
 msgstr ""
 
@@ -4609,11 +4681,11 @@ msgstr ""
 msgid "Three works with photos, year and prices."
 msgstr ""
 
-#: reviews/rewio.php:1008
+#: reviews/rewio.php:1027
 msgid "Tick the branches whose reviews to show (nothing ticked — all of them), and the sites of each branch."
 msgstr ""
 
-#: reviews/rewio.php:917
+#: reviews/rewio.php:936
 msgid "Tick the branches whose reviews to show (nothing ticked — all of them). Unneeded sites can be unticked for every branch."
 msgstr ""
 
@@ -4621,7 +4693,7 @@ msgstr ""
 msgid "Tick the consent to the data processing."
 msgstr ""
 
-#: core/modules.php:37
+#: core/modules.php:45
 msgid "Tick what a role may open and change. An administrator may do everything. “Settings” (this screen) is only for administrators."
 msgstr ""
 
@@ -4629,7 +4701,7 @@ msgstr ""
 msgid "Ticks"
 msgstr ""
 
-#: leads/lead-mail.php:76
+#: leads/lead-mail.php:75
 msgid "Time:"
 msgstr ""
 
@@ -4689,15 +4761,15 @@ msgstr ""
 msgid "Trash"
 msgstr ""
 
-#: reviews/rewio.php:905
+#: reviews/rewio.php:924
 msgid "Try again"
 msgstr ""
 
-#: reviews/rewio.php:1067
+#: reviews/rewio.php:1086
 msgid "Try again in a minute."
 msgstr ""
 
-#: reviews/rewio.php:176
+#: reviews/rewio.php:181
 msgid "Twice a day"
 msgstr ""
 
@@ -4757,7 +4829,7 @@ msgstr ""
 msgid "Unknown action."
 msgstr ""
 
-#: admin/collections.php:329
+#: admin/collections.php:330
 msgid "Unknown list."
 msgstr ""
 
@@ -4789,11 +4861,11 @@ msgstr ""
 msgid "Update a product"
 msgstr ""
 
-#: reviews/rewio.php:984
+#: reviews/rewio.php:1003
 msgid "Update the list of branches"
 msgstr ""
 
-#: reviews/rewio.php:1112
+#: reviews/rewio.php:1131
 msgid "Updated:"
 msgstr ""
 
@@ -4825,7 +4897,7 @@ msgstr ""
 msgid "View on the site"
 msgstr ""
 
-#: reviews/rewio.php:1132
+#: reviews/rewio.php:1151
 msgid "View the loaded reviews and hide unneeded ones"
 msgstr ""
 
@@ -4873,7 +4945,7 @@ msgstr ""
 msgid "What"
 msgstr ""
 
-#: core/modules.php:36
+#: core/modules.php:44
 msgid "What editors and authors may do"
 msgstr ""
 
@@ -4881,7 +4953,7 @@ msgstr ""
 msgid "What is included"
 msgstr ""
 
-#: core/modules.php:59
+#: core/modules.php:68
 msgid "What of the “Memorial” plugin works on the site, and what editors and authors may do."
 msgstr ""
 
@@ -4925,7 +4997,7 @@ msgstr ""
 msgid "WhatsApp — number"
 msgstr ""
 
-#: admin/collections.php:57
+#: admin/collections.php:58
 msgid "When"
 msgstr ""
 
@@ -4941,7 +5013,7 @@ msgstr ""
 msgid "Where people write reviews about us"
 msgstr ""
 
-#: admin/collections.php:118
+#: admin/collections.php:119
 msgid "Where the book is kept"
 msgstr ""
 
@@ -4953,7 +5025,11 @@ msgstr ""
 msgid "Where the price comes from"
 msgstr ""
 
-#: leads/lead-mail.php:29
+#: reviews/rewio-mail.php:29
+msgid "Where to send"
+msgstr ""
+
+#: leads/lead-mail.php:28
 msgid "Where to send requests"
 msgstr ""
 
@@ -4969,7 +5045,7 @@ msgstr ""
 msgid "Which one"
 msgstr ""
 
-#: reviews/rewio-archive.php:487
+#: reviews/rewio-archive.php:495
 msgid "Which version to show"
 msgstr ""
 
@@ -4985,7 +5061,7 @@ msgstr ""
 msgid "Why people trust us"
 msgstr ""
 
-#: admin/collections.php:74
+#: admin/collections.php:75
 msgid "Why the email was not sent"
 msgstr ""
 
@@ -5001,7 +5077,7 @@ msgstr ""
 msgid "Window title"
 msgstr ""
 
-#: reviews/rewio.php:114
+#: reviews/rewio.php:119
 msgid "With photos first, then newest"
 msgstr ""
 
@@ -5099,6 +5175,14 @@ msgstr ""
 
 #: blocks/block-meta.php:138 blocks/block-meta.php:139 blocks/block-meta.php:142 blocks/block-meta.php:166
 msgid "address"
+msgstr ""
+
+#: core/mail.php:122
+msgid "address of that page"
+msgstr ""
+
+#: core/mail.php:124 core/mail.php:134
+msgid "address of the site"
 msgstr ""
 
 #: seo/metrika.php:121 core/assets.php:95
@@ -6031,11 +6115,11 @@ msgstr ""
 msgid "button"
 msgstr ""
 
-#: reviews/rewio.php:1377
+#: reviews/rewio.php:1396
 msgid "by date"
 msgstr ""
 
-#: reviews/rewio.php:1378
+#: reviews/rewio.php:1397
 msgid "by rating"
 msgstr ""
 
@@ -6087,11 +6171,11 @@ msgstr ""
 msgid "cm, mm, kg"
 msgstr ""
 
-#: reviews/rewio.php:965
+#: reviews/rewio.php:984
 msgid "collection error in Rewio"
 msgstr ""
 
-#: reviews/rewio.php:957
+#: reviews/rewio.php:976
 msgid "collection is off"
 msgstr ""
 
@@ -6131,6 +6215,14 @@ msgstr ""
 msgid "cremation"
 msgstr ""
 
+#: core/mail.php:133
+msgid "date and time of the loading"
+msgstr ""
+
+#: core/mail.php:123
+msgid "date and time of the request"
+msgstr ""
+
 #: blocks/block-meta.php:130
 msgid "decoration"
 msgstr ""
@@ -6147,15 +6239,15 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: reviews/rewio.php:1065
+#: reviews/rewio.php:1084
 msgid "error"
 msgstr ""
 
-#: reviews/rewio.php:384
+#: reviews/rewio.php:403
 msgid "error "
 msgstr ""
 
-#: reviews/rewio.php:953
+#: reviews/rewio.php:972
 msgid "example from Rewio"
 msgstr ""
 
@@ -6245,12 +6337,20 @@ msgstr ""
 msgid "hidden on the site"
 msgstr ""
 
-#: reviews/rewio.php:1142
+#: reviews/rewio.php:1161
 msgid "hide"
 msgstr ""
 
 #: blocks/block-meta.php:134 blocks/block-meta.php:141 blocks/block-meta.php:166
 msgid "hours"
+msgstr ""
+
+#: core/mail.php:130
+msgid "how many new reviews"
+msgstr ""
+
+#: core/mail.php:131
+msgid "how many reviews disappeared from the review site"
 msgstr ""
 
 #: blocks/block-meta.php:131
@@ -6273,8 +6373,16 @@ msgstr ""
 msgid "link"
 msgstr ""
 
+#: core/mail.php:125
+msgid "link to “Call-back requests” in the admin"
+msgstr ""
+
+#: core/mail.php:135
+msgid "link to “Review list” in the admin"
+msgstr ""
+
 #. translators: %s: when the list was received
-#: reviews/rewio.php:990
+#: reviews/rewio.php:1009
 #, php-format
 msgid "list from Rewio: %s"
 msgstr ""
@@ -6305,8 +6413,12 @@ msgid_plural "models"
 msgstr[0] ""
 msgstr[1] ""
 
-#: reviews/rewio.php:1066
+#: reviews/rewio.php:1085
 msgid "most likely, the server ran out of time"
+msgstr ""
+
+#: core/mail.php:120
+msgid "name (“—” if not given)"
 msgstr ""
 
 #: blocks/block-meta.php:173
@@ -6325,11 +6437,11 @@ msgstr ""
 msgid "not chosen"
 msgstr ""
 
-#: reviews/rewio.php:381 blocks/block-meta.php:178
+#: reviews/rewio.php:400 blocks/block-meta.php:178
 msgid "not found"
 msgstr ""
 
-#: admin/collections.php:68
+#: admin/collections.php:69
 msgid "not sent (an older request)"
 msgstr ""
 
@@ -6377,13 +6489,17 @@ msgstr ""
 msgid "per piece"
 msgstr ""
 
-#: admin/collections.php:45
+#: admin/collections.php:46
 msgctxt "person"
 msgid "Name"
 msgstr ""
 
 #: blocks/block-meta.php:132 blocks/block-meta.php:134 blocks/block-meta.php:138 blocks/block-meta.php:142 blocks/block-meta.php:157 blocks/block-meta.php:167
 msgid "phone"
+msgstr ""
+
+#: core/mail.php:119
+msgid "phone of the visitor"
 msgstr ""
 
 #. translators: 1: number of the photo, 2: number of photos
@@ -6396,7 +6512,7 @@ msgstr ""
 msgid "photos"
 msgstr ""
 
-#: reviews/rewio.php:1147
+#: reviews/rewio.php:1166
 msgid "photos:"
 msgstr ""
 
@@ -6446,12 +6562,12 @@ msgstr ""
 msgid "rating"
 msgstr ""
 
-#: admin/collections.php:63
+#: admin/collections.php:64
 msgctxt "request column"
 msgid "Email"
 msgstr ""
 
-#: reviews/rewio.php:949 reviews/rewio.php:1103 reviews/rewio.php:1208 reviews/rewio.php:1349 reviews/reviews.php:177
+#: reviews/rewio.php:968 reviews/rewio.php:1122 reviews/rewio.php:1227 reviews/rewio.php:1368 reviews/reviews.php:177
 msgid "review"
 msgid_plural "reviews"
 msgstr[0] ""
@@ -6493,7 +6609,7 @@ msgstr ""
 msgid "settings"
 msgstr ""
 
-#: leads/lead-mail.php:23
+#: reviews/rewio-mail.php:23 leads/lead-mail.php:22 core/modules.php:35
 msgctxt "settings tab"
 msgid "Mail"
 msgstr ""
@@ -6514,15 +6630,15 @@ msgstr ""
 msgid "symbol"
 msgstr ""
 
-#: reviews/rewio.php:382
+#: reviews/rewio.php:401
 msgid "the API did not accept the request parameters"
 msgstr ""
 
-#: reviews/rewio.php:379
+#: reviews/rewio.php:398
 msgid "the key did not fit"
 msgstr ""
 
-#: reviews/rewio.php:380
+#: reviews/rewio.php:399
 msgid "the key has no access"
 msgstr ""
 
@@ -6542,19 +6658,27 @@ msgstr ""
 msgid "the personal data processing policy"
 msgstr ""
 
-#: reviews/rewio.php:874
+#: core/mail.php:132
+msgid "the reviews one per line: new or deleted, author, rating, review site, date and the beginning of the text"
+msgstr ""
+
+#: core/mail.php:121
+msgid "title of the page the request was sent from, as in “Call-back requests”"
+msgstr ""
+
+#: reviews/rewio.php:893
 msgid "today"
 msgstr ""
 
-#: reviews/rewio.php:876
+#: reviews/rewio.php:895
 msgid "tomorrow"
 msgstr ""
 
-#: reviews/rewio.php:383
+#: reviews/rewio.php:402
 msgid "too many requests, we will try later"
 msgstr ""
 
-#: reviews/rewio.php:932
+#: reviews/rewio.php:951
 msgid "untick all"
 msgstr ""
 
@@ -6592,11 +6716,11 @@ msgstr ""
 msgid "years"
 msgstr ""
 
-#: reviews/rewio.php:875
+#: reviews/rewio.php:894
 msgid "yesterday"
 msgstr ""
 
-#: reviews/rewio.php:595
+#: reviews/rewio.php:614
 msgid "»: loaded "
 msgstr ""
 
@@ -6638,7 +6762,7 @@ msgstr ""
 msgid "— not selected —"
 msgstr ""
 
-#: admin/collections.php:121
+#: admin/collections.php:122
 msgid "— not specified —"
 msgstr ""
 
@@ -6766,7 +6890,7 @@ msgstr ""
 msgid "→ type"
 msgstr ""
 
-#: core/settings.php:1366
+#: core/settings.php:1367
 msgid "✎ Texts and contacts"
 msgstr ""
 

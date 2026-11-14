@@ -7194,3 +7194,99 @@ msgstr "%s — цена «от»"
 
 msgid "%s — number of models"
 msgstr "%s — число моделей"
+
+msgid "6. Notifications"
+msgstr "6. Уведомления"
+
+msgid "After a loading that found new reviews or reviews that disappeared from the review site. Where to and the text of the email — “Memorial → Settings → Mail”."
+msgstr "После загрузки, в которой нашлись новые отзывы или отзывы, пропавшие с площадки. Куда и какой текст — «Мемориал → Настройки → Почта»."
+
+msgid "An example of a new review."
+msgstr "Пример нового отзыва."
+
+msgid "An example of a review deleted on the review site."
+msgstr "Пример отзыва, удалённого на площадке."
+
+msgid "Codes for the emails"
+msgstr "Коды для писем"
+
+msgid "Comes after a loading of the Rewio reviews that found new reviews or reviews deleted on the review site — if “Notify about new or deleted reviews by email” is ticked in “Memorial → Reviews → Rewio reviews”."
+msgstr "Приходит после загрузки отзывов Rewio, если нашлись новые отзывы или удалённые на площадке, — когда в «Мемориал → Отзывы → Отзывы Rewio» отмечено «Уведомлять о новых или удалённых отзывах»."
+
+msgid "Deleted on the review site:"
+msgstr "Удалено на площадке:"
+
+msgid "Deleted:"
+msgstr "Удалён:"
+
+msgid "Email about new and deleted reviews"
+msgstr "Письмо о новых и удалённых отзывах"
+
+msgid "Empty — to the addresses of the request email"
+msgstr "Пусто — на адреса письма о заявке"
+
+msgid "Every request from the “Call me back” window comes by email and stays in “Memorial → Call-back requests”. The codes for the subject and the text are in “Codes for the emails” above."
+msgstr "Каждая заявка из окна «Перезвоните мне» приходит письмом и остаётся в «Мемориал → Заявки на обратный звонок». Коды для темы и текста — выше, в «Коды для писем»."
+
+msgid "New reviews:"
+msgstr "Новых отзывов:"
+
+msgid "New:"
+msgstr "Новый:"
+
+msgid "Notify about new or deleted reviews by email"
+msgstr "Уведомлять о новых или удалённых отзывах"
+
+msgid "Reviews of {site}: new — {new}, deleted — {gone}"
+msgstr "Отзывы {site}: новых — {new}, удалённых — {gone}"
+
+msgid "Rewio reviews were loaded on the site {site} ({time})."
+msgstr "На сайт {site} загружены отзывы Rewio ({time})."
+
+msgid "Sends an example with two reviews with these settings (also unsaved) to the addresses above."
+msgstr "Отправляет пример с двумя отзывами с этими настройками (даже несохранёнными) на адреса выше."
+
+msgid "Show or hide a review on the site:"
+msgstr "Показать или скрыть отзыв на сайте:"
+
+msgid "The site keeps its copy of a review that disappeared from the review site; in “Review list” it is marked “Deleted on the review site”. Off — such reviews are not shown on the site."
+msgstr "Сайт хранит свою копию отзыва, пропавшего с площадки; в «Списке отзывов» он помечен «Удалён на площадке». Выключено — такие отзывы на сайте не показываются."
+
+msgid "Where to send"
+msgstr "Куда отправлять"
+
+msgid "address of that page"
+msgstr "адрес этой страницы"
+
+msgid "address of the site"
+msgstr "адрес сайта"
+
+msgid "date and time of the loading"
+msgstr "дата и время загрузки"
+
+msgid "date and time of the request"
+msgstr "дата и время заявки"
+
+msgid "how many new reviews"
+msgstr "сколько новых отзывов"
+
+msgid "how many reviews disappeared from the review site"
+msgstr "сколько отзывов пропало с площадки"
+
+msgid "link to “Call-back requests” in the admin"
+msgstr "ссылка на «Заявки на обратный звонок» в админке"
+
+msgid "link to “Review list” in the admin"
+msgstr "ссылка на «Список отзывов» в админке"
+
+msgid "name (“—” if not given)"
+msgstr "имя («—», если не указано)"
+
+msgid "phone of the visitor"
+msgstr "телефон посетителя"
+
+msgid "the reviews one per line: new or deleted, author, rating, review site, date and the beginning of the text"
+msgstr "отзывы списком: новый или удалён, автор, оценка, площадка, дата и начало текста"
+
+msgid "title of the page the request was sent from, as in “Call-back requests”"
+msgstr "название страницы, с которой отправили заявку, — как в «Заявках на обратный звонок»"

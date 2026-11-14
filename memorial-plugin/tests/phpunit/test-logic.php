@@ -302,7 +302,14 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 				'reviews' => array( $review( 101, 'Спасибо большое', '2026-03-01', '' ) ),
 			),
 		);
+		$found         = null;
+		$listen        = static function ( $new, $gone ) use ( &$found ) {
+			$found = array( count( $new ), count( $gone ) );
+		};
+		add_action( 'memorial_plugin_rewio_found', $listen, 5, 2 );
 		$shown         = memorial_plugin_rewio_archive( $groups, $fetch, $common );
+		remove_action( 'memorial_plugin_rewio_found', $listen, 5 );
+		$this->assertSame( array( 0, 1 ), $found, 'one review deleted on the review site, none new' );
 		$copies        = memorial_plugin_rewio_copies();
 		$this->assertSame( 'changed', get_post_meta( $copies[101]->ID, '_rw_state', true ) );
 		$this->assertSame( 'Спасибо', memorial_plugin_rewio_copy_data( $copies[101]->ID, 'first' )['text'], 'the first version is kept' );
@@ -385,5 +392,66 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertSame( 'Звонок: +7 900 111-22-33', $mail->subject, 'an empty name leaves no brackets' );
 		$this->assertStringContainsString( 'имя —', $mail->body );
 		$this->assertStringContainsString( 'site@example.com', $mail->header );
+	}
+
+	public function test_lead_mail_page_is_the_title() {
+		if ( ! function_exists( 'memorial_plugin_lead_mail_send' ) ) {
+			$this->markTestSkipped( 'Call-back is off.' );
+		}
+		$page = self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_title'  => 'Венки',
+				'post_status' => 'publish',
+			)
+		);
+		reset_phpmailer_instance();
+		memorial_plugin_lead_mail_send(
+			array(
+				'phone' => '+7 900 111-22-33',
+				'name'  => 'Анна',
+				'page'  => get_permalink( $page ),
+			),
+			array(
+				'to'         => 'a@example.com',
+				'subject'    => 'Звонок',
+				'body'       => 'Со страницы: {page} | {url}',
+				'from_name'  => '',
+				'from_email' => '',
+			)
+		);
+		$body = tests_retrieve_phpmailer_instance()->get_sent()->body;
+		$this->assertStringContainsString( 'Со страницы: Венки | ' . get_permalink( $page ), $body );
+	}
+
+	public function test_reviews_mail_lists_new_and_deleted() {
+		if ( ! function_exists( 'memorial_plugin_reviews_mail_send' ) ) {
+			$this->markTestSkipped( 'Rewio is off.' );
+		}
+		reset_phpmailer_instance();
+		$res = memorial_plugin_reviews_mail_send(
+			array(
+				array(
+					array(
+						'author' => 'Ирина',
+						'rating' => 5,
+						'date'   => '2026-10-30 12:00:00',
+						'text'   => 'Спасибо за помощь',
+					),
+					'Яндекс Карты',
+				),
+			),
+			array(),
+			array(
+				'to'      => 'r@example.com',
+				'subject' => 'Новых {new}, удалённых {gone}',
+				'body'    => '{list}',
+			)
+		);
+		$this->assertTrue( $res['ok'] );
+		$mail = tests_retrieve_phpmailer_instance()->get_sent();
+		$this->assertSame( 'Новых 1, удалённых 0', $mail->subject );
+		$this->assertStringContainsString( 'Ирина, ★ 5, Яндекс Карты, 30.10.2026', $mail->body );
+		$this->assertStringContainsString( 'Спасибо за помощь', $mail->body );
 	}
 }

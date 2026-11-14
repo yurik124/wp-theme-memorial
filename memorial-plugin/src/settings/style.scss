@@ -49,6 +49,21 @@
 		}
 	}
 
+	// «Почта»: the codes of the emails above the cards.
+	&__note {
+		max-width: none;
+		margin-bottom: 16px;
+
+		ul {
+			margin: 4px 0 12px 1.2em;
+			list-style: disc;
+		}
+
+		code {
+			font-size: 13px;
+		}
+	}
+
 	&__label {
 		display: block;
 		margin-bottom: 8px;
