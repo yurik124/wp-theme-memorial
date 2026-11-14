@@ -280,7 +280,11 @@ function memorial_plugin_pages_hide_title() {
 	if ( ! $screen || 'page' !== $screen->post_type || 'post' !== $screen->base || ! $post instanceof WP_Post ) {
 		return;
 	}
-	foreach ( array( 'page' => true, 'own-layout' => memorial_plugin_pages_own_layout( $post ) ) as $name => $on ) {
+	$files = array(
+		'page'       => true,
+		'own-layout' => memorial_plugin_pages_own_layout( $post ),
+	);
+	foreach ( $files as $name => $on ) {
 		if ( $on ) {
 			$path = '/assets/css/editor-' . $name . '.css';
 			wp_enqueue_style( 'memorial-plugin-editor-' . $name, MEMORIAL_PLUGIN_URL . $path, array(), (string) filemtime( MEMORIAL_PLUGIN_DIR . $path ) );
