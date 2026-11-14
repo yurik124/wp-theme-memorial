@@ -1088,7 +1088,8 @@ test.describe( 'отзывы и разрешения', () => {
 		await page.waitForTimeout( 3000 );
 		report.mailTest = await page.locator( '.memorial-plugin-settings__action .components-notice' ).allTextContents();
 		report.mailRaw = await page.evaluate( async () => {
-			const r = await window.wp.apiFetch( { path: '/memorial-plugin/v1/lead-mail-test', method: 'POST', data: { values: {} }, parse: false } ).catch( ( e ) => e );
+			const st = await window.wp.apiFetch( { path: '/memorial-plugin/v1/settings/mem_modules_page' } ).catch( () => ( {} ) );
+			const r = await window.wp.apiFetch( { path: '/memorial-plugin/v1/lead-mail-test', method: 'POST', data: { values: st?.value?.mail || {} }, parse: false } ).catch( ( e ) => e );
 			return r && r.text ? r.status + ' ' + ( await r.text() ).slice( 0, 1500 ) : String( r?.message || r );
 		} );
 		await page.goto( '/wp-admin/admin.php?page=memorial-plugin-leads' );
