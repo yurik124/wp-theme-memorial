@@ -202,7 +202,7 @@ add_action(
 					'post_status'  => 'draft',
 					'post_title'   => $title,
 					'post_name'    => $slug,
-					'post_content' => memorial_plugin_legal_template( $k ),
+					'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( memorial_plugin_legal_template( $k ) ) ),
 				)
 			);
 			if ( $id && ! is_wp_error( $id ) ) {

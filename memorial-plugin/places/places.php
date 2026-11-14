@@ -479,7 +479,7 @@ add_action(
 					'post_status'  => 'draft',
 					'post_title'   => 'Прижизненный договор на ритуальные услуги',
 					'post_name'    => 'prizhiznennyj-dogovor',
-					'post_content' => memorial_plugin_places_tpl( 'dogovor' ),
+					'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( memorial_plugin_places_tpl( 'dogovor' ) ) ),
 				)
 			);
 			if ( $id && ! is_wp_error( $id ) ) {
@@ -524,7 +524,7 @@ add_action(
 				'post_status'  => 'draft',
 				'post_title'   => 'Кладбища Белгорода и района',
 				'post_name'    => 'kladbishha',
-				'post_content' => memorial_plugin_places_tpl( 'cem' ),
+				'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( memorial_plugin_places_tpl( 'cem' ) ) ),
 			)
 		);
 		if ( $id && ! is_wp_error( $id ) ) {

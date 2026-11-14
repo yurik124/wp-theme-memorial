@@ -25,7 +25,7 @@ The plugin holds what the site can do; the Memorial Modern theme holds how it lo
 * Yandex Metrica with a cookie consent banner (152-FZ); request notifications by the hosting mail (wp_mail).
 * Translation ready; Russian translation included.
 
-Old [mem_…] shortcodes still work until 3.0.0 and report a deprecation; the editor command “Convert shortcodes to blocks” converts one post, with a rollback.
+Old [mem_…] shortcodes still work until 3.0.0 and report a deprecation; the editor command “Convert old codes to blocks” converts one post, with a rollback.
 
 == Installation ==
 

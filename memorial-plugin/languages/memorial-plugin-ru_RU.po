@@ -166,8 +166,8 @@ msgid ") the old “N models, price from … ₽” were removed — the catalog
 msgstr ") убраны старые «N моделей, цена от … ₽» — эти цифры каталог показывает сам и обновляет автоматически."
 
 #: reviews/rewio.php:241
-msgid "), but were not saved in the site’s database. Tell the theme developer."
-msgstr "), но не сохранились в базе сайта. Сообщите разработчику темы."
+msgid "), but were not saved in the site’s database. Tell the site developer."
+msgstr "), но не сохранились в базе сайта. Сообщите разработчику сайта."
 
 #: seo/metrika.php:58
 msgid ", choose the “Call” goal at the top — you will see where the callers came from (Yandex, Google, maps, ads)."
@@ -543,7 +543,7 @@ msgstr "Все вопросы и ответы"
 
 #: memorial-plugin.php:90
 msgid "All questions of the site on one page with a search."
-msgstr "Все вопросы сайта на одной странице с поиском [mem_faq]."
+msgstr "Все вопросы сайта на одной странице с поиском."
 
 #: reviews/rewio.php:26
 msgid "All ratings"
@@ -595,7 +595,7 @@ msgstr "Статья"
 
 #: memorial-plugin.php:91
 msgid "Article cards with a search, the “Good to know” field of pages."
-msgstr "Статьи-карточки с поиском [mem_guide], поле «Полезно знать» у страниц."
+msgstr "Статьи-карточки с поиском, поле «Полезно знать» у страниц."
 
 #: blocks/content/content-blocks.php:257
 msgid "Article cards with search: child pages of this or another page, or chosen pages."
@@ -1122,12 +1122,12 @@ msgid "Convert"
 msgstr "Перевести"
 
 #: admin/abilities.php:537
-msgid "Convert shortcodes to blocks"
-msgstr "Перевести шорткоды в блоки"
+msgid "Convert old codes to blocks"
+msgstr "Перевести старые коды в блоки"
 
 #: src/commands/index.js:158
-msgid "Convert the shortcodes of this page to blocks"
-msgstr "Перевести шорткоды этой страницы в блоки"
+msgid "Convert the old codes of this page to blocks"
+msgstr "Перевести старые коды этой страницы в блоки"
 
 #: admin/commands.php:24 admin/convert.php:505 admin/convert.php:506 src/convert/index.js:322
 msgid "Convert to blocks"
@@ -1588,8 +1588,8 @@ msgid "Footer: copyright and documents"
 msgstr "Подвал: годы работы и документы"
 
 #: reviews/reviews.php:28
-msgid "For Yandex Maps the theme shows the review feed by the link itself. For 2GIS and others — the “Read reviews” and “Leave a review” buttons."
-msgstr "Для Яндекс Карт по ссылке тема сама покажет ленту отзывов. Для 2ГИС и других — кнопки «Читать отзывы» и «Оставить отзыв»."
+msgid "For Yandex Maps the “Reviews” block shows the review feed by the link itself. For 2GIS and others — the “Read reviews” and “Leave a review” buttons."
+msgstr "Для Яндекс Карт блок «Отзывы» сам покажет ленту отзывов по ссылке. Для 2ГИС и других — кнопки «Читать отзывы» и «Оставить отзыв»."
 
 #: src/catalog/product-pages.js:42
 msgid "For every product — as before."
@@ -1756,8 +1756,8 @@ msgid "Halls and restaurants for the memorial meal. The block is the “Memorial
 msgstr "Залы и рестораны для поминального обеда. Блок выводится шорткодом <code>[mem_restaurants]</code> (он уже стоит на странице «Поминальный обед»). "
 
 #: blocks/content/content-blocks.php:168
-msgid "Halls for memorial meals with photos and an order button (Memorial → Halls)."
-msgstr "Залы для поминок с фото и кнопкой заказа («Мемориал → Залы»)."
+msgid "Halls for memorial meals with photos and an order button (Memorial → Halls for the memorial meal)."
+msgstr "Залы для поминок с фото и кнопкой заказа («Мемориал → Залы для поминок»)."
 
 #: places/places.php:69
 msgid "Halls for the memorial meal"
@@ -2071,7 +2071,7 @@ msgstr "Загрузить отзывы сейчас"
 
 #: memorial-plugin.php:86
 msgid "Loading reviews on schedule, the Rewio reviews block."
-msgstr "Загрузка отзывов по расписанию, блок отзывов [mem_rewio]."
+msgstr "Загрузка отзывов по расписанию, блок «Отзывы Rewio»."
 
 #: reviews/rewio.php:527
 msgid "Loading reviews… usually it takes 10–30 seconds"
@@ -2736,8 +2736,8 @@ msgid "Parent page (ID or path; empty — this page)"
 msgstr "Родительская страница (ID или адрес; пусто — эта страница)"
 
 #: seo/metrika.php:33
-msgid "Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags. After moving them, remove them from the “Simple Custom CSS and JS” plugin."
-msgstr "Вставьте сюда целиком коды пикселя VK, подмены номеров (Gudok) и т.п. — вместе с тегами <script>. После переноса удалите их из плагина «Simple Custom CSS and JS»."
+msgid "Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags."
+msgstr "Вставьте сюда целиком коды пикселя VK, подмены номеров (Gudok) и т.п. — вместе с тегами <script>."
 
 #: reviews/rewio.php:68
 msgid "Paste the key and save, tick the branches — the reviews load by themselves. They are shown on a page by the “Rewio reviews” block (or the <code>[mem_rewio]</code> shortcode)."
@@ -2809,7 +2809,7 @@ msgstr "Фото 4:3 (гробы, примеры работ)"
 
 #: memorial-plugin.php:89
 msgid "Photo blocks of products and works — the photos are picked up automatically."
-msgstr "Блоки [mem_cat_photos] и [mem_works vid=\"фото\"] — фото подтягиваются сами."
+msgstr "Блоки с фото товаров и работ — фото подтягиваются сами."
 
 #: reviews/rewio.php:750
 msgid "Photo for the review"
@@ -3025,8 +3025,8 @@ msgstr "Создано товаров: %1$d, работ: %2$d. Пропущен�
 #. translators: 1: products, 2: products with their own page.
 #: src/catalog/product-pages.js:57
 #, php-format
-msgid "Products now: %1$d, with their own page: %2$d. To give a product a page, write its description in the editor. Attachment pages always lead to the post with the image or to the file."
-msgstr "Товаров сейчас: %1$d, со своей страницей: %2$d. Чтобы у товара была страница, напишите его описание в редакторе. Страницы вложений всегда ведут на запись с изображением или на файл."
+msgid "Products now: %1$d, with their own page: %2$d. To give a product a page, write its description in the product window (Catalog → Products → Edit). Attachment pages always lead to the post with the image or to the file."
+msgstr "Товаров сейчас: %1$d, со своей страницей: %2$d. Чтобы у товара была страница, напишите его описание в окне товара («Каталог → Товары» → «Изменить»). Страницы вложений всегда ведут на запись с изображением или на файл."
 
 #: blocks/content/content-blocks.php:82
 msgid "Products of a catalog section with section links and sorting."
@@ -3187,8 +3187,8 @@ msgid "Replace the galleries on the page with the catalog from the admin (the ol
 msgstr "Заменить на странице галереи каталогом из админки (старый вариант останется в «Редакциях» страницы)"
 
 #: admin/abilities.php:538
-msgid "Replaces the [mem_…] shortcodes of posts with blocks and site values, and SEOPress shortcodes with variables. The text before the conversion is saved as a revision."
-msgstr "Заменяет шорткоды [mem_…] в записях блоками и значениями сайта, а шорткоды в SEOPress — переменными. Текст до перевода сохраняется как редакция."
+msgid "Replaces the old codes in square brackets in a post with blocks and site values, and in SEOPress fields with variables. The text before the conversion is saved as a revision."
+msgstr "Заменяет старые коды в квадратных скобках в записи блоками и значениями сайта, а в полях SEOPress — переменными. Текст до перевода сохраняется как редакция."
 
 #: seo/metrika.php:59
 msgid "Reports → Content → Visit parameters"
@@ -3271,16 +3271,16 @@ msgid "Reviews from the guest book (3 latest)"
 msgstr "Отзывы из книги (3 последних)"
 
 #: memorial-plugin.php:87
-msgid "Reviews left on the site, the guest book block."
-msgstr "Отзывы, оставленные на сайте, [mem_bookreviews]."
+msgid "Reviews from the paper guest book with photos of the pages: the list in Memorial → Reviews → From the guest book and the guest book block."
+msgstr "Отзывы из бумажной книги отзывов с фото страниц: список в «Мемориал → Отзывы → Из книги отзывов» и блок книги отзывов."
 
 #: blocks/content/content-blocks.php:185
 msgid "Reviews left on this site."
 msgstr "Отзывы, оставленные на этом сайте."
 
 #: blocks/content/content-blocks.php:200
-msgid "Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews)."
-msgstr "Отзывы с Яндекс Карт, загруженные через Rewio («Мемориал → Отзывы Rewio»)."
+msgid "Reviews loaded from Yandex Maps and other sites by Rewio (Memorial → Reviews → Rewio reviews)."
+msgstr "Отзывы с Яндекс Карт и других площадок, загруженные через Rewio («Мемориал → Отзывы → Отзывы Rewio»)."
 
 #: content/patterns.php:40
 msgid "Reviews of our customers"
@@ -3467,16 +3467,16 @@ msgid "Service"
 msgstr "Сервис"
 
 #: blocks/home/home.php:149
-msgid "Service cards of the home page (Memorial → Home page → Services), full width."
-msgstr "Карточки услуг главной («Мемориал → Главная страница → Услуги»), на всю ширину."
+msgid "Service cards of the home page (Memorial → Services), full width."
+msgstr "Карточки услуг главной («Мемориал → Услуги»), на всю ширину."
 
 #: core/settings.php:572
 msgid "Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited right on it: “Appearance → Editor → Templates → Home”."
 msgstr "Карточки услуг с фото и ценами — на главной и в блоке «Наши услуги» на других страницах. Тексты главной правятся прямо на ней: «Внешний вид → Редактор → Шаблоны → Главная»."
 
 #: blocks/content/content-blocks.php:221
-msgid "Service cards with photos and starting prices (Memorial → Home page → Services)."
-msgstr "Карточки услуг с фото и ценами «от» («Мемориал → Главная страница → Услуги»)."
+msgid "Service cards with photos and starting prices (Memorial → Services)."
+msgstr "Карточки услуг с фото и ценами «от» («Мемориал → Услуги»)."
 
 #: reviews/reviews.php:25
 msgid "Service name (only for “Another service”)"
@@ -3887,7 +3887,7 @@ msgstr "Весь состав и цены"
 
 #: memorial-plugin.php:93
 msgid "The halls and cemeteries blocks and their settings."
-msgstr "Блоки [mem_restaurants] и [mem_cemeteries], их настройки."
+msgstr "Блоки «Залы для поминок» и «Кладбища» и их настройки."
 
 #: reviews/rewio.php:15
 msgid "The key is in the app.rewio.ru account (it starts with hrev_). A read-only key is enough. The key is kept on the site’s server, visitors do not see it."
@@ -3924,12 +3924,12 @@ msgid "The reviews are not loaded yet — click “Load reviews now”."
 msgstr "Отзывы ещё не загружены — нажмите «Загрузить отзывы сейчас»."
 
 #: reviews/reviews.php:59
-msgid "The reviews block on the home page is set up separately: “Home page → “Reviews” block”."
-msgstr "Блок отзывов на главной настраивается отдельно: «Главная страница → Блок «Отзывы»»."
+msgid "On the home page the reviews are blocks of the page content: edit them in Pages → Home."
+msgstr "На главной отзывы — блоки в содержимом страницы: правьте их в «Страницы → Главная»."
 
 #: memorial-plugin.php:88
-msgid "The section of works with photos and prices, the works manager, the works blocks."
-msgstr "Раздел работ с фото и ценами, менеджер работ, блоки [mem_works]."
+msgid "The section of works with photos and prices, the “Our works” screens and the works blocks."
+msgstr "Раздел работ с фото и ценами, экраны «Наши работы» и блоки работ."
 
 #: reviews/rewio.php:523
 msgid "The site did not respond"
@@ -3940,8 +3940,8 @@ msgid "The table on the cremation page — the “Cremation” block ([mem_crema
 msgstr "Таблица на странице кремации — шорткод [mem_cremation]. Итог считается сам; на других страницах его выводит [mem_price id=\"kremaciya\"]."
 
 #: core/settings.php:134
-msgid "The tiles are the sub-items of the “Funeral goods” menu item (Appearance → Menus): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category."
-msgstr "Плитки — это подпункты пункта «Ритуальные товары» в меню (Внешний вид → Меню): названия и порядок берутся оттуда. Фото плитки — «Изображение записи» страницы, на которую ведёт пункт; если его нет — фото первого товара этой категории."
+msgid "The tiles are the sub-items of the “Funeral goods” item of the main menu (Appearance → Editor → Navigation): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category."
+msgstr "Плитки — это подпункты пункта «Ритуальные товары» главного меню («Внешний вид → Редактор → Навигация»): названия и порядок берутся оттуда. Фото плитки — «Изображение записи» страницы, на которую ведёт пункт; если его нет — фото первого товара этой категории."
 
 #: catalog/catalog-types-admin.php:320
 msgid "The type has products — move or delete them first."
@@ -3996,8 +3996,8 @@ msgid "Third step"
 msgstr "Третий шаг"
 
 #: admin/abilities.php:435
-msgid "This part of the site is switched off in Memorial → Features."
-msgstr "Эта часть сайта выключена в «Мемориал → Функции»."
+msgid "This part of the site is switched off in Memorial → Settings → Features."
+msgstr "Эта часть сайта выключена в «Мемориал → Настройки → Функции»."
 
 #: src/inline-value/index.js:43
 msgid "This value is empty — check the parameter."
@@ -4488,8 +4488,8 @@ msgid "[mem_works vid=\"фото\"]: there are no photos in “Our works” yet.
 msgstr "[mem_works vid=\"фото\"]: в «Наших работах» пока нет фото."
 
 #: memorial-plugin.php:85
-msgid "[mem_…] shortcodes in the titles and descriptions of AIOSEO, Yoast, Rank Math, SEOPress."
-msgstr "Шорткоды [mem_…] в заголовках и описаниях AIOSEO, Yoast, Rank Math, SEOPress."
+msgid "Old codes in square brackets in the titles and descriptions of AIOSEO, Yoast, Rank Math and SEOPress become text (until 3.0.0). New SEO titles use variables like %%mem_phone%% (Memorial → Prices)."
+msgstr "Старые коды в квадратных скобках в заголовках и описаниях AIOSEO, Yoast, Rank Math и SEOPress превращаются в текст (до версии 3.0.0). В новых SEO-заголовках — переменные вида %%mem_phone%% («Мемориал → Цены»)."
 
 #: places/places.php:235
 msgid "a draft with text; check the terms and publish it"
@@ -5010,7 +5010,7 @@ msgstr "Кнопки «Оставить отзыв» и «Мы на Яндекс
 
 #: memorial-plugin.php:94
 msgid "“Memorial” patterns in the block inserter of the editor."
-msgstr "Шаблоны блоков «Мемориал» во вставке блоков редактора."
+msgstr "Готовые разделы «Мемориал» (паттерны) во вставке блоков редактора."
 
 #: blocks/content/content-blocks.php:74
 msgid "“Often searched” words, comma separated (empty — from search statistics)"
@@ -7092,8 +7092,8 @@ msgstr "Каждая заявка из окна «Перезвоните мне�
 msgid "Not sent"
 msgstr "Не отправлено"
 
-msgid "On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email (where — “Memorial → Settings → Email”) and are kept in “Memorial → Requests”."
-msgstr "На телефоне кнопка просто звонит. На компьютере сначала открывается MAX по ссылке выше; окно «Перезвоните мне» появляется, если MAX не открылся (браузер заблокировал вкладку или посетитель быстро вернулся на сайт). Заявки приходят письмом (куда — «Мемориал → Настройки → Почта») и хранятся в «Мемориал → Заявки»."
+msgid "On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email (where — “Memorial → Settings → Email”) and are kept in “Memorial → Call-back requests”."
+msgstr "На телефоне кнопка просто звонит. На компьютере сначала открывается MAX по ссылке выше; окно «Перезвоните мне» появляется, если MAX не открылся (браузер заблокировал вкладку или посетитель быстро вернулся на сайт). Заявки приходят письмом (куда — «Мемориал → Настройки → Почта») и хранятся в «Мемориал → Заявки на обратный звонок»."
 
 msgid "Photos, year, size, prices and the description of a work are changed right here."
 msgstr "Фото, год, размер, цены и описание работы меняются прямо здесь."
@@ -7154,3 +7154,34 @@ msgstr "Почта"
 msgctxt "request column"
 msgid "Email"
 msgstr "Письмо"
+
+msgid "%1$s: the catalog section “%2$s” was not found — choose another one in the block settings."
+msgstr "%1$s: раздел каталога «%2$s» не найден — выберите другой в настройках блока."
+
+msgid "%s: the page has no catalog section — choose the section in the block settings."
+msgstr "%s: у страницы нет раздела каталога — выберите раздел в настройках блока."
+
+msgid "Catalog price"
+msgstr "Цена каталога"
+
+msgid "List of sub-sections"
+msgstr "Список подразделов"
+
+msgid "Product photos"
+msgstr "Фото товаров"
+
+msgctxt "block description"
+msgid "Halls for memorial meals with photos and an order button (Memorial → Halls for the memorial meal)."
+msgstr "Залы для поминок с фото и кнопкой заказа («Мемориал → Залы для поминок»)."
+
+msgctxt "block description"
+msgid "Reviews loaded from Yandex Maps and other sites by Rewio (Memorial → Reviews → Rewio reviews)."
+msgstr "Отзывы с Яндекс Карт и других площадок, загруженные через Rewio («Мемориал → Отзывы → Отзывы Rewio»)."
+
+msgctxt "block description"
+msgid "Service cards of the home page (Memorial → Services), full width."
+msgstr "Карточки услуг главной («Мемориал → Услуги»), на всю ширину."
+
+msgctxt "block description"
+msgid "Service cards with photos and starting prices (Memorial → Services)."
+msgstr "Карточки услуг с фото и ценами «от» («Мемориал → Услуги»)."

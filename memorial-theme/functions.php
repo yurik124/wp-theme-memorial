@@ -162,8 +162,9 @@ add_action(
 );
 
 /*
- * Pages open with their template (header, footer, title) in the page editor and in Appearance → Editor, so
- * the preview of the site in the Site Editor shows the whole page, not only its content. After the post
+ * Pages open with their template in Appearance → Editor, so the preview of the site in the Site Editor shows
+ * the whole page, not only its content. In the page editor Memorial Plugin hides the header and the footer
+ * (they are edited in the Site Editor) and keeps the widths and the look of the sections. After the post
  * types are registered (init, 0): registering “page” resets its supports.
  */
 add_action(

@@ -319,7 +319,7 @@ add_action(
 				'post_status'  => 'draft',
 				'post_title'   => 'Полезно знать',
 				'post_name'    => 'poleznoe',
-				'post_content' => $c,
+				'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( $c ) ),
 			)
 		);
 		if ( $id && ! is_wp_error( $id ) ) {

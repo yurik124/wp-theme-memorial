@@ -117,7 +117,7 @@ function memorial_plugin_contacts_schema() {
 		'call'       => array(
 			'type'   => 'group',
 			'label'  => __( '“Call” button on a computer', 'memorial-plugin' ),
-			'help'   => __( 'On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email (where — “Memorial → Settings → Email”) and are kept in “Memorial → Requests”.', 'memorial-plugin' ),
+			'help'   => __( 'On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email (where — “Memorial → Settings → Email”) and are kept in “Memorial → Call-back requests”.', 'memorial-plugin' ),
 			'fields' => array(
 				'title'   => array(
 					'type'  => 'text',
@@ -344,7 +344,7 @@ function memorial_plugin_home_schema() {
 		'catalog'  => array(
 			'type'   => 'group',
 			'label'  => __( '“Catalog” block', 'memorial-plugin' ),
-			'help'   => __( 'The tiles are the sub-items of the “Funeral goods” menu item (Appearance → Menus): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category.', 'memorial-plugin' ),
+			'help'   => __( 'The tiles are the sub-items of the “Funeral goods” item of the main menu (Appearance → Editor → Navigation): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category.', 'memorial-plugin' ),
 			'fields' => array(
 				'show'    => $show,
 				'eyebrow' => $eyebrow,

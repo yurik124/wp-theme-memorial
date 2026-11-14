@@ -158,14 +158,26 @@ add_shortcode(
 
 /** Раздел не найден: посетителю — ничего, редактору — подсказка
  *
- * @param string $tag Tag.
+ * @param string $tag Former shortcode of the block or the site value.
  * @param mixed  $cat Cat.
  */
 function memorial_plugin_sc_missing( $tag, $cat ) {
 	if ( ! current_user_can( 'edit_pages' ) ) {
 		return '';
 	}
-	return ( '<mark title="' . esc_html__( 'Only you see this', 'memorial-plugin' ) . '">[' ) . $tag . ': ' . ( '' !== $cat ? __( 'section “', 'memorial-plugin' ) . esc_html( $cat ) . __( '” not found', 'memorial-plugin' ) : __( 'the page has no catalog section — add cat="Section name"', 'memorial-plugin' ) ) . ']</mark>';
+	$names = array(
+		'mem_cat_count'  => __( 'Number of models', 'memorial-plugin' ),
+		'mem_cat_price'  => __( 'Catalog price', 'memorial-plugin' ),
+		'mem_cat_list'   => __( 'List of sub-sections', 'memorial-plugin' ),
+		'mem_cat_photos' => __( 'Product photos', 'memorial-plugin' ),
+	);
+	$name = $names[ $tag ] ?? __( 'Catalog', 'memorial-plugin' );
+	$text = '' !== (string) $cat
+		/* translators: 1: block or site value, 2: catalog section. */
+		? sprintf( __( '%1$s: the catalog section “%2$s” was not found — choose another one in the block settings.', 'memorial-plugin' ), $name, $cat )
+		/* translators: %s: block or site value. */
+		: sprintf( __( '%s: the page has no catalog section — choose the section in the block settings.', 'memorial-plugin' ), $name );
+	return '<mark title="' . esc_attr__( 'Only you see this', 'memorial-plugin' ) . '">' . esc_html( $text ) . '</mark>';
 }
 
 /** Как сослаться на раздел в шорткоде: по названию, если оно не повторяется, иначе по адресу (slug), в крайнем случае по номеру

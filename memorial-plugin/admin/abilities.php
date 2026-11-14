@@ -432,7 +432,7 @@ function memorial_plugin_abilities_catalog( $edit, $meta_public ) {
 			'execute_callback'    => static function ( $input ) {
 				$cb = 'works' === $input['kind'] ? 'memorial_plugin_works_bulk' : 'memorial_plugin_products_bulk';
 				if ( ! function_exists( $cb ) ) {
-					return new WP_Error( 'memorial_plugin_off', __( 'This part of the site is switched off in Memorial → Features.', 'memorial-plugin' ) );
+					return new WP_Error( 'memorial_plugin_off', __( 'This part of the site is switched off in Memorial → Settings → Features.', 'memorial-plugin' ) );
 				}
 				$res = memorial_plugin_ability_rest(
 					$cb,
@@ -534,8 +534,8 @@ function memorial_plugin_abilities_convert() {
 	wp_register_ability(
 		'memorial-plugin/convert-content',
 		array(
-			'label'               => __( 'Convert shortcodes to blocks', 'memorial-plugin' ),
-			'description'         => __( 'Replaces the [mem_…] shortcodes of posts with blocks and site values, and SEOPress shortcodes with variables. The text before the conversion is saved as a revision.', 'memorial-plugin' ),
+			'label'               => __( 'Convert old codes to blocks', 'memorial-plugin' ),
+			'description'         => __( 'Replaces the old codes in square brackets in a post with blocks and site values, and in SEOPress fields with variables. The text before the conversion is saved as a revision.', 'memorial-plugin' ),
 			'category'            => 'memorial',
 			'input_schema'        => array(
 				'type'                 => 'object',
