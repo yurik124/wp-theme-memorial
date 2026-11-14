@@ -99,21 +99,21 @@ export function photosField( label, logo = '' ) {
 		Edit: ( { data, field, onChange } ) => {
 			rememberPhotos( data.photos );
 			return (
-			<Photos
-				label={ field.label }
-				value={ ( data.photos || [] )
-					.map( ( p ) => ( p.id ? p.id : p ) )
-					.join( ',' ) }
-				onChange={ ( v ) =>
-					onChange( {
-						photos: v
-							? v
-									.split( ',' )
-									.map( ( id ) => ( { id: Number( id ) } ) )
-							: [],
-					} )
-				}
-			/>
+				<Photos
+					label={ field.label }
+					value={ ( data.photos || [] )
+						.map( ( p ) => ( p.id ? p.id : p ) )
+						.join( ',' ) }
+					onChange={ ( v ) =>
+						onChange( {
+							photos: v
+								? v.split( ',' ).map( ( id ) => ( {
+										id: Number( id ),
+									} ) )
+								: [],
+						} )
+					}
+				/>
 			);
 		},
 	};

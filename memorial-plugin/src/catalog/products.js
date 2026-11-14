@@ -24,13 +24,7 @@ import {
 	ListPage,
 	arrayFilters,
 } from './list-screen';
-import {
-	photosField,
-	termsField,
-	statusField,
-	rub,
-	DescEdit,
-} from './fields';
+import { photosField, termsField, statusField, rub, DescEdit } from './fields';
 
 const API = '/memorial-plugin/v1/catalog/products';
 const catsFilter = arrayFilters( [ 'cats' ] );

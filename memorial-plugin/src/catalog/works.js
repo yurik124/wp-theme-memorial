@@ -190,8 +190,7 @@ export default function Works() {
 	);
 	// The window: no total (it is counted) and no place in the list (“Move up / down” change it).
 	const formFields = useMemo(
-		() =>
-			fields.filter( ( f ) => ! [ 'total', 'order' ].includes( f.id ) ),
+		() => fields.filter( ( f ) => ! [ 'total', 'order' ].includes( f.id ) ),
 		[ fields ]
 	);
 
