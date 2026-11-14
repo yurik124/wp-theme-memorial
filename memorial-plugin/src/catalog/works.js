@@ -217,19 +217,44 @@ export default function Works() {
 		[ merge ]
 	);
 
+	// “New work from photos”: the window of a work that does not exist yet; it is created only by “Save”.
+	const blank = useCallback(
+		( media ) => ( {
+			id: 0,
+			title: '',
+			status: 'publish',
+			year: new Date().getFullYear(),
+			size: '',
+			rows: [],
+			total: 0,
+			photos: media.map( ( m ) => ( {
+				id: m.id,
+				url: m.sizes?.thumbnail?.url || m.url,
+				big: m.sizes?.large?.url || m.url,
+			} ) ),
+			kinds: [],
+			example: false,
+			order: 0,
+			desc: '',
+			rich: false,
+		} ),
+		[]
+	);
+
 	const create = useCallback(
-		async ( photos = [] ) => {
+		async ( values ) => {
 			setBusy( true );
 			try {
 				const res = await apiFetch( {
 					path: API,
 					method: 'POST',
-					data: { photos },
+					data: { values },
 				} );
 				merge( res );
-				setEditing( res.items[ 0 ] );
-			} catch ( e ) {
-				setNotice( { status: 'error', text: e.message } );
+				setNotice( {
+					status: 'success',
+					text: __( 'Saved.', 'memorial-plugin' ),
+				} );
 			} finally {
 				setBusy( false );
 			}
@@ -239,9 +264,16 @@ export default function Works() {
 
 	const save = useCallback(
 		async ( item, edits ) => {
-			const values = { ...edits };
+			// A new work gets the photos and the year of the window even if they were not changed.
+			const values = item.id
+				? { ...edits }
+				: { photos: item.photos, year: item.year, status: item.status, ...edits };
 			if ( values.photos ) {
 				values.photos = values.photos.map( ( p ) => p.id );
+			}
+			if ( ! item.id ) {
+				await create( values ); // An error stays in the window, which stays open.
+				return;
 			}
 			const res = await apiFetch( {
 				path: API + '/' + item.id,
@@ -254,7 +286,7 @@ export default function Works() {
 				text: __( 'Saved.', 'memorial-plugin' ),
 			} );
 		},
-		[ merge ]
+		[ merge, create ]
 	);
 
 	const actions = useMemo( () => {
@@ -391,11 +423,12 @@ export default function Works() {
 								allowedTypes={ [ 'image' ] }
 								multiple
 								onSelect={ ( media ) =>
-									create(
-										( Array.isArray( media )
-											? media
-											: [ media ]
-										).map( ( m ) => m.id )
+									setEditing(
+										blank(
+											Array.isArray( media )
+												? media
+												: [ media ]
+										)
 									)
 								}
 								render={ ( { open } ) => (
@@ -440,11 +473,16 @@ export default function Works() {
 			/>
 			{ editing && (
 				<EditModal
-					title={ editing.title }
+					title={
+						editing.id
+							? editing.title
+							: __( 'New work', 'memorial-plugin' )
+					}
 					item={ editing }
 					fields={ formFields }
 					onSave={ ( edits ) => save( editing, edits ) }
 					onClose={ () => setEditing( null ) }
+					isNew={ ! editing.id }
 				/>
 			) }
 		</>

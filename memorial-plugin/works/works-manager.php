@@ -374,9 +374,19 @@ function memorial_plugin_works_rest() {
 						'type'    => 'integer',
 						'default' => 0,
 					),
+					// The fields of the “New work” window: the work is created only by “Save”, with them.
+					'values' => array(
+						'type'    => 'object',
+						'default' => array(),
+					),
 				),
 				'callback'            => static function ( WP_REST_Request $request ) {
-					$id = memorial_plugin_wm_create( (array) $request['photos'], (int) $request['kind'] );
+					$values = (array) $request['values'];
+					$photos = isset( $values['photos'] ) ? (array) $values['photos'] : (array) $request['photos'];
+					$id     = memorial_plugin_wm_create( $photos, (int) $request['kind'] );
+					if ( $id && $values ) {
+						memorial_plugin_wm_save( $id, $values );
+					}
 					return $id ? rest_ensure_response( array( 'items' => array( memorial_plugin_wm_item( get_post( $id ) ) ) ) )
 						: new WP_Error( 'memorial_plugin_create', __( 'Could not create the work.', 'memorial-plugin' ), array( 'status' => 500 ) );
 				},

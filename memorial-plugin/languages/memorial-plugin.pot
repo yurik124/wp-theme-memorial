@@ -433,7 +433,7 @@ msgstr ""
 msgid "Add a kind"
 msgstr ""
 
-#: src/catalog/works.js:291
+#: src/catalog/works.js:323
 msgid "Add a kind of work…"
 msgstr ""
 
@@ -585,7 +585,7 @@ msgstr ""
 msgid "All categories (tiles)"
 msgstr ""
 
-#: src/settings/index.js:1148
+#: src/settings/index.js:1153
 msgid "All changes are saved"
 msgstr ""
 
@@ -1293,7 +1293,7 @@ msgstr ""
 msgid "Cookie settings"
 msgstr ""
 
-#: src/catalog/works.js:355 src/catalog/products.js:637
+#: src/catalog/works.js:387 src/catalog/products.js:637
 msgid "Copy"
 msgstr ""
 
@@ -1313,7 +1313,7 @@ msgstr ""
 msgid "Could not create the page."
 msgstr ""
 
-#: works/works-manager.php:381
+#: works/works-manager.php:391
 msgid "Could not create the work."
 msgstr ""
 
@@ -1546,7 +1546,7 @@ msgstr ""
 msgid "Each branch on its own tab"
 msgstr ""
 
-#: src/catalog/works.js:274 src/catalog/products.js:583 src/catalog/types.js:694 src/collections/index.js:286 src/collections/index.js:459
+#: src/catalog/works.js:306 src/catalog/products.js:583 src/catalog/types.js:694 src/collections/index.js:288 src/collections/index.js:459
 msgid "Edit"
 msgstr ""
 
@@ -2019,7 +2019,7 @@ msgstr ""
 msgid "Hidden window with the call back form; opens from “Call me back” buttons."
 msgstr ""
 
-#: src/catalog/works.js:336 src/catalog/products.js:625
+#: src/catalog/works.js:368 src/catalog/products.js:625
 msgid "Hide from the site"
 msgstr ""
 
@@ -2237,7 +2237,7 @@ msgstr ""
 msgid "Kind of work"
 msgstr ""
 
-#: admin/commands.php:22 src/catalog/works.js:36 src/catalog/works.js:152 src/catalog/works.js:417 src/catalog/work-types.js:199 works/works-manager.php:25
+#: admin/commands.php:22 src/catalog/works.js:36 src/catalog/works.js:152 src/catalog/works.js:450 src/catalog/work-types.js:199 works/works-manager.php:25
 msgid "Kinds of works"
 msgstr ""
 
@@ -2585,7 +2585,7 @@ msgstr ""
 msgid "Most expensive first"
 msgstr ""
 
-#: src/catalog/works.js:286 src/catalog/types.js:463 src/catalog/types.js:721 src/catalog/work-types.js:145 src/block-controls/index.js:246
+#: src/catalog/works.js:318 src/catalog/types.js:463 src/catalog/types.js:721 src/catalog/work-types.js:145 src/block-controls/index.js:246
 msgid "Move down"
 msgstr ""
 
@@ -2612,7 +2612,7 @@ msgstr ""
 msgid "Move row %d up"
 msgstr ""
 
-#: src/catalog/works.js:361 src/catalog/products.js:653 src/collections/index.js:468
+#: src/catalog/works.js:393 src/catalog/products.js:653 src/collections/index.js:468
 msgid "Move to trash"
 msgstr ""
 
@@ -2624,7 +2624,7 @@ msgstr ""
 msgid "Move type later"
 msgstr ""
 
-#: src/catalog/works.js:281 src/catalog/types.js:454 src/catalog/types.js:716 src/catalog/work-types.js:140 src/block-controls/index.js:239
+#: src/catalog/works.js:313 src/catalog/types.js:454 src/catalog/types.js:716 src/catalog/work-types.js:140 src/block-controls/index.js:239
 msgid "Move up"
 msgstr ""
 
@@ -2684,11 +2684,11 @@ msgstr ""
 msgid "New type of product"
 msgstr ""
 
-#: works/works-manager.php:203 works/works.php:42
+#: src/catalog/works.js:477 works/works-manager.php:203 works/works.php:42
 msgid "New work"
 msgstr ""
 
-#: src/catalog/works.js:405
+#: src/catalog/works.js:438
 msgid "New work from photos"
 msgstr ""
 
@@ -2998,7 +2998,7 @@ msgstr ""
 msgid "Open photo %d large"
 msgstr ""
 
-#: src/settings/index.js:1034
+#: src/settings/index.js:1036
 msgid "Open site"
 msgstr ""
 
@@ -3078,7 +3078,7 @@ msgstr ""
 msgid "Our services"
 msgstr ""
 
-#: admin/commands.php:21 src/catalog/works.js:380 works/works.php:37 works/works.php:39 blocks/content/content-blocks.php:342
+#: admin/commands.php:21 src/catalog/works.js:412 works/works.php:37 works/works.php:39 blocks/content/content-blocks.php:342
 msgid "Our works"
 msgstr ""
 
@@ -3318,7 +3318,7 @@ msgstr ""
 msgid "Photos, size and prices"
 msgstr ""
 
-#: src/catalog/works.js:381
+#: src/catalog/works.js:413
 msgid "Photos, year, size, prices and the description of a work are changed right here."
 msgstr ""
 
@@ -3628,7 +3628,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: src/catalog/works.js:304
+#: src/catalog/works.js:336
 msgid "Remove a kind of work…"
 msgstr ""
 
@@ -3892,7 +3892,7 @@ msgstr ""
 msgid "SEO title (SEOPress)"
 msgstr ""
 
-#: src/catalog/product-pages.js:152 src/catalog/types.js:272 src/catalog/types.js:599 src/catalog/list-screen.js:125 src/settings/index.js:1042 src/settings/index.js:1156
+#: src/catalog/product-pages.js:152 src/catalog/types.js:272 src/catalog/types.js:599 src/catalog/list-screen.js:125 src/settings/index.js:1044 src/settings/index.js:1161
 msgid "Save"
 msgstr ""
 
@@ -3908,11 +3908,11 @@ msgstr ""
 msgid "Saved ✓ The reviews will update within a minute"
 msgstr ""
 
-#: src/catalog/works.js:252 src/catalog/product-pages.js:138 src/catalog/products.js:569 src/catalog/types.js:872 src/catalog/work-types.js:71 src/collections/index.js:542
+#: src/catalog/works.js:254 src/catalog/works.js:284 src/catalog/product-pages.js:138 src/catalog/products.js:569 src/catalog/types.js:872 src/catalog/work-types.js:71
 msgid "Saved."
 msgstr ""
 
-#: src/settings/index.js:1010
+#: src/settings/index.js:1012
 msgid "Saved. The changes are already on the site."
 msgstr ""
 
@@ -4126,7 +4126,7 @@ msgstr ""
 msgid "Show more reviews"
 msgstr ""
 
-#: src/catalog/works.js:317 src/catalog/products.js:613 src/collections/index.js:486 reviews/rewio-archive.php:483 prices/prices.php:60
+#: src/catalog/works.js:349 src/catalog/products.js:613 src/collections/index.js:486 reviews/rewio-archive.php:483 prices/prices.php:60
 msgid "Show on the site"
 msgstr ""
 
@@ -4617,7 +4617,7 @@ msgstr ""
 msgid "There are no products in this section yet. Call — we will find what you need."
 msgstr ""
 
-#: src/settings/index.js:1144
+#: src/settings/index.js:1149
 msgid "There are unsaved changes"
 msgstr ""
 
@@ -4757,7 +4757,7 @@ msgstr ""
 msgid "Total: %s ₽"
 msgstr ""
 
-#: src/catalog/works.js:424 src/catalog/products.js:791
+#: src/catalog/works.js:457 src/catalog/products.js:791
 msgid "Trash"
 msgstr ""
 
