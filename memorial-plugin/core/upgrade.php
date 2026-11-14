@@ -200,6 +200,8 @@ function memorial_plugin_upgrade_descriptions() {
 			},
 			$term->description
 		);
+		// The old code printed “₽” itself, so a “₽” written after it was doubled on the site (“2 100 ₽ ₽”).
+		$desc = (string) preg_replace( '/(\{price:(?![a-z0-9_]*_chislo)[a-z0-9_]+\})(?:\s|&nbsp;|\x{00A0})*₽/u', '$1', (string) $desc );
 		if ( $desc !== $term->description ) {
 			$log['terms'][ $term->term_id ] = $term->description;
 			wp_update_term( $term->term_id, 'mem_cat', array( 'description' => $desc ) );
