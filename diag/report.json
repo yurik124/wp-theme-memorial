@@ -1,0 +1,343 @@
+{
+    "plugin": "2.1.0",
+    "theme": "5.1.0",
+    "db": [
+        "2.1.0",
+        "5.1.0"
+    ],
+    "nav_id": 3540,
+    "navs": [
+        "3540 publish Главное меню"
+    ],
+    "nav_blocks": [
+        "core\/navigation-link | Что делать, если умер человек | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/chto-delat-esli-umer-chelovek\/",
+        "core\/navigation-submenu | Услуги | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ritualnye-uslugi\/",
+        "  core\/navigation-link | Организация похорон | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/pomoshh-v-organizaczii-pohoron\/",
+        "  core\/navigation-link | Траурный зал | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ritualnye-uslugi\/traurnyj-zal\/",
+        "  core\/navigation-link | Кремация | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ritualnye-uslugi\/kremacziya\/",
+        "  core\/navigation-link | Перевозка умерших (груз 200) | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ritualnye-uslugi\/gruz-200\/",
+        "  core\/navigation-link | Поминальный обед | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ritualnye-uslugi\/pominalnyj-obed\/",
+        "  core\/navigation-link | Прижизненный договор | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ritualnye-uslugi\/prizhiznennyj-dogovor\/",
+        "  core\/navigation-link | Похороны участников СВО | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ritualnye-uslugi\/pohorony-uchastnikov-svo\/",
+        "core\/navigation-submenu | Ритуальные товары | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ritualnye-tovary\/",
+        "  core\/navigation-link | Венки | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/venki\/",
+        "  core\/navigation-link | Гробы | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/groby\/",
+        "  core\/navigation-link | Кресты | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/metallicheskie-kresty\/",
+        "core\/navigation-link | Цены | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ceny\/",
+        "core\/navigation-submenu | Благоустройство захоронения | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/blagoustrojstvo-zahoroneniya\/",
+        "  core\/navigation-link | Памятники | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/pamyatniki\/",
+        "  core\/navigation-link | Оградки | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/ogradki-2\/",
+        "  core\/navigation-link | Укладка плитки | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/blagoustrojstvo-zahoroneniya\/ukladka-plitki-na-kladbishhe-v-belgorode\/",
+        "core\/navigation-submenu | О нас | id= kind=custom type=custom | #",
+        "  core\/navigation-link | Фотогалерея | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/fotogalereia\/",
+        "  core\/navigation-link | Отзывы | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/otzyvy\/",
+        "core\/navigation-link | Контакты | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/kontakty\/",
+        "core\/navigation-submenu | Полезно знать | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/poleznoe\/",
+        "  core\/navigation-link | Пособие на погребение | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/poleznoe\/posobie-na-pogrebenie\/",
+        "  core\/navigation-link | Кладбища Белгорода и района | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/poleznoe\/kladbishha\/",
+        "  core\/navigation-link | Вопрос–ответ | id= kind=post-type type=page | https:\/\/memorialbel.test-handyhost.ru\/poleznoe\/vopros-otvet\/"
+    ],
+    "menu_items": [
+        "1 ←0 post_type\/page#0 Что делать, если умер человек",
+        "2 ←0 post_type\/page#0 Услуги",
+        "3 ←2 post_type\/page#0 Организация похорон",
+        "4 ←2 post_type\/page#0 Траурный зал",
+        "5 ←2 post_type\/page#0 Кремация",
+        "6 ←2 post_type\/page#0 Перевозка умерших (груз 200)",
+        "7 ←2 post_type\/page#0 Поминальный обед",
+        "8 ←2 post_type\/page#0 Прижизненный договор",
+        "9 ←2 post_type\/page#0 Похороны участников СВО",
+        "10 ←0 post_type\/page#0 Ритуальные товары",
+        "11 ←10 post_type\/page#0 Венки",
+        "12 ←10 post_type\/page#0 Гробы",
+        "13 ←10 post_type\/page#0 Кресты",
+        "14 ←0 post_type\/page#0 Цены",
+        "15 ←0 post_type\/page#0 Благоустройство захоронения",
+        "16 ←15 post_type\/page#0 Памятники",
+        "17 ←15 post_type\/page#0 Оградки",
+        "18 ←15 post_type\/page#0 Укладка плитки",
+        "19 ←0 custom\/custom#0 О нас",
+        "20 ←19 post_type\/page#0 Фотогалерея",
+        "21 ←19 post_type\/page#0 Отзывы",
+        "22 ←0 post_type\/page#0 Контакты",
+        "23 ←0 post_type\/page#0 Полезно знать",
+        "24 ←23 post_type\/page#0 Пособие на погребение",
+        "25 ←23 post_type\/page#0 Кладбища Белгорода и района",
+        "26 ←23 post_type\/page#0 Вопрос–ответ"
+    ],
+    "pages": [
+        {
+            "id": 3521,
+            "title": "Кладбища Белгорода и района",
+            "slug": "kladbishha",
+            "parent": 3520,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3520,
+            "title": "Полезно знать",
+            "slug": "poleznoe",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3516,
+            "title": "Прижизненный договор на ритуальные услуги",
+            "slug": "prizhiznennyj-dogovor",
+            "parent": 190,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3501,
+            "title": "Политика использования cookie",
+            "slug": "politika-cookie",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3500,
+            "title": "Согласие на обработку персональных данных",
+            "slug": "soglasie-na-obrabotku-personalnyh-dannyh",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3440,
+            "title": "Главная",
+            "slug": "glavnaya",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0,
+            "cards_blocks": [
+                " {\"parent\":1871}"
+            ],
+            "cards_pages_self": 0
+        },
+        {
+            "id": 3325,
+            "title": "Отзывы",
+            "slug": "otzyvy",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3322,
+            "title": "Вопрос–ответ",
+            "slug": "vopros-otvet",
+            "parent": 3520,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3319,
+            "title": "Цены",
+            "slug": "ceny",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3316,
+            "title": "Пособие на погребение",
+            "slug": "posobie-na-pogrebenie",
+            "parent": 3520,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3314,
+            "title": "Поминальный обед",
+            "slug": "pominalnyj-obed",
+            "parent": 190,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3312,
+            "title": "Похороны участников СВО",
+            "slug": "pohorony-uchastnikov-svo",
+            "parent": 190,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 3302,
+            "title": "Помощь в организации похорон",
+            "slug": "pomoshh-v-organizaczii-pohoron",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 2315,
+            "title": "Металлические кресты на могилу",
+            "slug": "metallicheskie-kresty",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 2084,
+            "title": "Укладка плитки и установка памятника на кладбище в Белгороде",
+            "slug": "ukladka-plitki-na-kladbishhe-v-belgorode",
+            "parent": 1900,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 1900,
+            "title": "Благоустройство захоронения",
+            "slug": "blagoustrojstvo-zahoroneniya",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0,
+            "cards_blocks": [
+                ""
+            ],
+            "cards_pages_self": 1
+        },
+        {
+            "id": 1871,
+            "title": "Ритуальные товары",
+            "slug": "ritualnye-tovary",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0,
+            "cards_blocks": [
+                ""
+            ],
+            "cards_pages_self": 0
+        },
+        {
+            "id": 1818,
+            "title": "Что делать если умер человек?",
+            "slug": "chto-delat-esli-umer-chelovek",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 1679,
+            "title": "Траурный зал",
+            "slug": "traurnyj-zal",
+            "parent": 190,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 1654,
+            "title": "Перевозка умерших (груз 200)",
+            "slug": "gruz-200",
+            "parent": 190,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 1652,
+            "title": "Кремация в Белгороде",
+            "slug": "kremacziya",
+            "parent": 190,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 190,
+            "title": "Ритуальные услуги",
+            "slug": "ritualnye-uslugi",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 166,
+            "title": "Оградки",
+            "slug": "ogradki-2",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 49,
+            "title": "Ритуальные венки и корзины",
+            "slug": "venki",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 20,
+            "title": "Фотогалерея",
+            "slug": "fotogalereia",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 17,
+            "title": "Контакты",
+            "slug": "kontakty",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 15,
+            "title": "Гробы",
+            "slug": "groby",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 14,
+            "title": "Памятники и надгробия",
+            "slug": "pamyatniki",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        },
+        {
+            "id": 10,
+            "title": "Политика конфиденциальности",
+            "slug": "politika-konfidencialnosti",
+            "parent": 0,
+            "products": "",
+            "in_menu": 0,
+            "children": 0
+        }
+    ]
+}
