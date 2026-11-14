@@ -9,7 +9,7 @@
  * (memorial_plugin_shortcode_impl()). In the content a shortcode keeps working until 3.0.0, but:
  *  - every use reports a deprecation (_deprecated_function(), visible with WP_DEBUG) that names the block
  *    which replaces it;
- *  - a post that still has shortcodes is converted from its editor (command “Convert shortcodes to blocks”),
+ *  - a post that still has shortcodes is converted from its editor (command “Convert old codes to blocks”),
  *    with a rollback (admin/convert.php). The conversion is never started automatically.
  *
  * New content written by the plugin itself (page drafts, legal documents, price replacement) is

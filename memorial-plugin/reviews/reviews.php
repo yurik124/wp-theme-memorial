@@ -53,7 +53,7 @@ function memorial_plugin_reviews_schema() {
 					'type'        => 'text',
 					'label'       => __( 'Link to your card in the service', 'memorial-plugin' ),
 					'placeholder' => 'https://yandex.ru/maps/org/…/1234567890/',
-					'help'        => __( 'For Yandex Maps the theme shows the review feed by the link itself. For 2GIS and others — the “Read reviews” and “Leave a review” buttons.', 'memorial-plugin' ),
+					'help'        => __( 'For Yandex Maps the “Reviews” block shows the review feed by the link itself. For 2GIS and others — the “Read reviews” and “Leave a review” buttons.', 'memorial-plugin' ),
 				),
 				'rating'  => array(
 					'type'        => 'text',
@@ -126,7 +126,7 @@ add_filter(
 			'schema'    => 'memorial_plugin_reviews_schema',
 			'intro_tab' => true,
 			'intro'     => __( 'Review services for the “Reviews” page: on the page they are shown by the “Reviews” block. ', 'memorial-plugin' )
-					. __( 'The reviews block on the home page is set up separately: “Home page → “Reviews” block”.', 'memorial-plugin' ),
+					. __( 'On the home page the reviews are blocks of the page content: edit them in Pages → Home.', 'memorial-plugin' ),
 		);
 		return $pages;
 	}

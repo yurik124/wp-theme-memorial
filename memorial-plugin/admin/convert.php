@@ -3,7 +3,7 @@
  * Content converter: [mem_…] shortcodes in posts → blocks and inline values. Never run automatically.
  *
  * There is no admin screen for it: the content the plugin writes itself is converted before saving, and a
- * post that still has shortcodes is converted from its editor (command “Convert shortcodes to blocks”,
+ * post that still has shortcodes is converted from its editor (command “Convert old codes to blocks”,
  * ability memorial-plugin/convert-content), with a rollback.
  *
  * What changes:

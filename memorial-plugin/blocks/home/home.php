@@ -136,7 +136,7 @@ function memorial_plugin_home_blocks_list() {
 		),
 		'services-grid'   => array(
 			'title'  => __( 'Services grid', 'memorial-plugin' ),
-			'desc'   => __( 'Service cards of the home page (Memorial → Home page → Services), full width.', 'memorial-plugin' ),
+			'desc'   => __( 'Service cards of the home page (Memorial → Services), full width.', 'memorial-plugin' ),
 			'icon'   => 'screenoptions',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_services',

@@ -158,7 +158,7 @@ if ( data.can.convert ) {
 		dispatch( commandsStore ).registerCommand( {
 			name: 'memorial-plugin/convert-this',
 			label: __(
-				'Convert the shortcodes of this page to blocks',
+				'Convert the old codes of this page to blocks',
 				'memorial-plugin'
 			),
 			icon: blockDefault,

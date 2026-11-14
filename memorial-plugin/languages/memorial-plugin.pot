@@ -59,6 +59,12 @@ msgid_plural "%1$s of %2$s items"
 msgstr[0] ""
 msgstr[1] ""
 
+#. translators: 1: block or site value, 2: catalog section.
+#: catalog/catalog-summary.php:177
+#, php-format
+msgid "%1$s: the catalog section “%2$s” was not found — choose another one in the block settings."
+msgstr ""
+
 #. translators: %d: number of answers.
 #: src/catalog/search-stats.js:91
 #, php-format
@@ -157,6 +163,12 @@ msgstr ""
 msgid "%s ₽"
 msgstr ""
 
+#. translators: %s: block or site value.
+#: catalog/catalog-summary.php:179
+#, php-format
+msgid "%s: the page has no catalog section — choose the section in the block settings."
+msgstr ""
+
 #: prices/prices.php:810
 msgid "(check whether they are up to date; replace them with a site value if you like):"
 msgstr ""
@@ -174,7 +186,7 @@ msgid "(this text is no longer in the settings)"
 msgstr ""
 
 #: reviews/rewio.php:691
-msgid "), but were not saved in the site’s database. Tell the theme developer."
+msgid "), but were not saved in the site’s database. Tell the site developer."
 msgstr ""
 
 #: seo/metrika.php:119
@@ -923,7 +935,7 @@ msgstr ""
 msgid "Cards: these works by title, comma separated"
 msgstr ""
 
-#: catalog/catalog.php:33 catalog/catalog.php:35 content/patterns.php:46 seo/seo.php:70 blocks/legacy/legacy.php:194 blocks/legacy/render/catalog-archive.php:25
+#: catalog/catalog.php:33 catalog/catalog.php:35 catalog/catalog-summary.php:174 content/patterns.php:46 seo/seo.php:70 blocks/legacy/legacy.php:194
 msgid "Catalog"
 msgstr ""
 
@@ -943,6 +955,10 @@ msgstr ""
 
 #: content/patterns.php:44
 msgid "Catalog of the page with a summary"
+msgstr ""
+
+#: catalog/catalog-summary.php:170
+msgid "Catalog price"
 msgstr ""
 
 #: prices/prices.php:141 blocks/content/content-blocks.php:36 blocks/content/inline-values.php:30 blocks/content/inline-values.php:37 blocks/content/inline-values.php:43 blocks/legacy/legacy.php:78
@@ -1208,11 +1224,11 @@ msgid "Contents of the package — the total is counted automatically. “On the
 msgstr ""
 
 #: admin/abilities.php:537
-msgid "Convert shortcodes to blocks"
+msgid "Convert old codes to blocks"
 msgstr ""
 
 #: src/commands/index.js:157
-msgid "Convert the shortcodes of this page to blocks"
+msgid "Convert the old codes of this page to blocks"
 msgstr ""
 
 #: src/commands/index.js:186
@@ -1716,7 +1732,7 @@ msgid "Footer: menu in columns"
 msgstr ""
 
 #: reviews/reviews.php:56
-msgid "For Yandex Maps the theme shows the review feed by the link itself. For 2GIS and others — the “Read reviews” and “Leave a review” buttons."
+msgid "For Yandex Maps the “Reviews” block shows the review feed by the link itself. For 2GIS and others — the “Read reviews” and “Leave a review” buttons."
 msgstr ""
 
 #: src/catalog/product-pages.js:45
@@ -1906,7 +1922,7 @@ msgid "Halls and restaurants for the memorial meal. On a page they are shown by 
 msgstr ""
 
 #: blocks/content/content-blocks.php:176
-msgid "Halls for memorial meals with photos and an order button (Memorial → Halls)."
+msgid "Halls for memorial meals with photos and an order button (Memorial → Halls for the memorial meal)."
 msgstr ""
 
 #: places/places.php:179
@@ -2273,6 +2289,10 @@ msgstr ""
 
 #: admin/abilities.php:149
 msgid "List call back requests"
+msgstr ""
+
+#: catalog/catalog-summary.php:171
+msgid "List of sub-sections"
 msgstr ""
 
 #: blocks/content/content-blocks.php:120
@@ -2750,7 +2770,7 @@ msgstr ""
 msgid "Number (01, 02…)"
 msgstr ""
 
-#: blocks/content/content-blocks.php:433
+#: catalog/catalog-summary.php:169 blocks/content/content-blocks.php:433
 msgid "Number of models"
 msgstr ""
 
@@ -2798,6 +2818,10 @@ msgstr ""
 msgid "Official Yandex Maps reviews widget; loads after cookie consent or on a click."
 msgstr ""
 
+#: memorial-plugin.php:104
+msgid "Old codes in square brackets in the titles and descriptions of AIOSEO, Yoast, Rank Math and SEOPress become text (until 3.0.0). New SEO titles use variables like %%mem_phone%% (Memorial → Prices)."
+msgstr ""
+
 #: src/editor-meta/index.js:67
 msgid "Old price, ₽"
 msgstr ""
@@ -2811,11 +2835,15 @@ msgid "On a phone"
 msgstr ""
 
 #: core/settings.php:120
-msgid "On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email (where — “Memorial → Settings → Email”) and are kept in “Memorial → Requests”."
+msgid "On a phone the button simply calls. On a computer MAX opens first by the link above; the “Call me back” window appears if MAX did not open (the browser blocked the tab or the visitor came back to the site quickly). Requests come by email (where — “Memorial → Settings → Email”) and are kept in “Memorial → Call-back requests”."
 msgstr ""
 
 #: prices/prices.php:85
 msgid "On the card"
+msgstr ""
+
+#: reviews/reviews.php:129
+msgid "On the home page the reviews are blocks of the page content: edit them in Pages → Home."
 msgstr ""
 
 #: reviews/rewio-archive.php:464
@@ -2890,7 +2918,7 @@ msgstr ""
 msgid "Only with text (not just stars)"
 msgstr ""
 
-#: catalog/catalog-summary.php:168
+#: catalog/catalog-summary.php:180
 msgid "Only you see this"
 msgstr ""
 
@@ -3067,7 +3095,7 @@ msgid "Pages set to show catalog tiles or products."
 msgstr ""
 
 #: seo/metrika.php:78
-msgid "Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags. After moving them, remove them from the “Simple Custom CSS and JS” plugin."
+msgid "Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags."
 msgstr ""
 
 #: reviews/rewio.php:237
@@ -3362,6 +3390,10 @@ msgstr ""
 msgid "Product pages"
 msgstr ""
 
+#: catalog/catalog-summary.php:172
+msgid "Product photos"
+msgstr ""
+
 #: blocks/content/content-blocks.php:136
 msgid "Product photos from the catalog"
 msgstr ""
@@ -3405,7 +3437,7 @@ msgstr ""
 #. translators: 1: products, 2: products with their own page.
 #: src/catalog/product-pages.js:69
 #, php-format
-msgid "Products now: %1$d, with their own page: %2$d. To give a product a page, write its description in the editor. Attachment pages always lead to the post with the image or to the file."
+msgid "Products now: %1$d, with their own page: %2$d. To give a product a page, write its description in the product window (Catalog → Products → Edit). Attachment pages always lead to the post with the image or to the file."
 msgstr ""
 
 #: blocks/content/content-blocks.php:84
@@ -3575,7 +3607,7 @@ msgid "Replace photo"
 msgstr ""
 
 #: admin/abilities.php:538
-msgid "Replaces the [mem_…] shortcodes of posts with blocks and site values, and SEOPress shortcodes with variables. The text before the conversion is saved as a revision."
+msgid "Replaces the old codes in square brackets in a post with blocks and site values, and in SEOPress fields with variables. The text before the conversion is saved as a revision."
 msgstr ""
 
 #: seo/metrika.php:120
@@ -3671,7 +3703,7 @@ msgid "Reviews from the guest book (3 latest)"
 msgstr ""
 
 #: memorial-plugin.php:106
-msgid "Reviews left on the site, the guest book block."
+msgid "Reviews from the paper guest book with photos of the pages: the list in Memorial → Reviews → From the guest book and the guest book block."
 msgstr ""
 
 #: blocks/content/content-blocks.php:193
@@ -3679,7 +3711,7 @@ msgid "Reviews left on this site."
 msgstr ""
 
 #: blocks/content/content-blocks.php:208
-msgid "Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews)."
+msgid "Reviews loaded from Yandex Maps and other sites by Rewio (Memorial → Reviews → Rewio reviews)."
 msgstr ""
 
 #: reviews/rewio-archive.php:418
@@ -3909,7 +3941,7 @@ msgid "Service"
 msgstr ""
 
 #: blocks/home/home.php:139
-msgid "Service cards of the home page (Memorial → Home page → Services), full width."
+msgid "Service cards of the home page (Memorial → Services), full width."
 msgstr ""
 
 #: core/settings.php:1250
@@ -3917,7 +3949,7 @@ msgid "Service cards with photos and prices — on the home page and in the “O
 msgstr ""
 
 #: blocks/content/content-blocks.php:229
-msgid "Service cards with photos and starting prices (Memorial → Home page → Services)."
+msgid "Service cards with photos and starting prices (Memorial → Services)."
 msgstr ""
 
 #: reviews/reviews.php:45
@@ -4433,10 +4465,6 @@ msgstr ""
 msgid "The reviews are not loaded yet — click “Load reviews now”."
 msgstr ""
 
-#: reviews/reviews.php:129
-msgid "The reviews block on the home page is set up separately: “Home page → “Reviews” block”."
-msgstr ""
-
 #: blocks/content/inline-values.php:289
 msgid "The section of the page where the text is"
 msgstr ""
@@ -4446,7 +4474,7 @@ msgid "The section of this page"
 msgstr ""
 
 #: memorial-plugin.php:107
-msgid "The section of works with photos and prices, the works manager, the works blocks."
+msgid "The section of works with photos and prices, the “Our works” screens and the works blocks."
 msgstr ""
 
 #: src/bindings/index.js:206
@@ -4464,7 +4492,7 @@ msgid "The text is too long: up to %d characters."
 msgstr ""
 
 #: core/settings.php:347
-msgid "The tiles are the sub-items of the “Funeral goods” menu item (Appearance → Menus): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category."
+msgid "The tiles are the sub-items of the “Funeral goods” item of the main menu (Appearance → Editor → Navigation): names and order are taken from there. The photo of a tile is the “Featured image” of the page the item leads to; if there is none — the photo of the first product of that category."
 msgstr ""
 
 #: catalog/catalog-types-admin.php:357
@@ -4540,7 +4568,7 @@ msgid "This page"
 msgstr ""
 
 #: admin/abilities.php:435
-msgid "This part of the site is switched off in Memorial → Features."
+msgid "This part of the site is switched off in Memorial → Settings → Features."
 msgstr ""
 
 #: src/bindings/index.js:295
@@ -5043,10 +5071,6 @@ msgstr ""
 msgid "You can send a photo, the text for a wreath ribbon or questions about documents — we will answer during working hours."
 msgstr ""
 
-#: memorial-plugin.php:104
-msgid "[mem_…] shortcodes in the titles and descriptions of AIOSEO, Yoast, Rank Math, SEOPress."
-msgstr ""
-
 #: places/places.php:486
 msgid "a draft with text; check the terms and publish it"
 msgstr ""
@@ -5154,7 +5178,7 @@ msgstr ""
 
 #: blocks/types/restaurants/block.json
 msgctxt "block description"
-msgid "Halls for memorial meals with photos and an order button (Memorial → Halls)."
+msgid "Halls for memorial meals with photos and an order button (Memorial → Halls for the memorial meal)."
 msgstr ""
 
 #: blocks/types/cta/block.json
@@ -5279,17 +5303,17 @@ msgstr ""
 
 #: blocks/types/rewio-reviews/block.json
 msgctxt "block description"
-msgid "Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews)."
+msgid "Reviews loaded from Yandex Maps and other sites by Rewio (Memorial → Reviews → Rewio reviews)."
 msgstr ""
 
 #: blocks/types/services-grid/block.json
 msgctxt "block description"
-msgid "Service cards of the home page (Memorial → Home page → Services), full width."
+msgid "Service cards of the home page (Memorial → Services), full width."
 msgstr ""
 
 #: blocks/types/services/block.json
 msgctxt "block description"
-msgid "Service cards with photos and starting prices (Memorial → Home page → Services)."
+msgid "Service cards with photos and starting prices (Memorial → Services)."
 msgstr ""
 
 #: blocks/types/product-specs/block.json
@@ -6443,10 +6467,6 @@ msgstr ""
 msgid "section description"
 msgstr ""
 
-#: catalog/catalog-summary.php:168
-msgid "section “"
-msgstr ""
-
 #: blocks/block-meta.php:136 blocks/block-meta.php:154
 msgid "services"
 msgstr ""
@@ -6498,10 +6518,6 @@ msgstr ""
 
 #: legal/legal.php:22
 msgid "the link in the footer and in the “Call me back” window; it is also the WordPress privacy policy page"
-msgstr ""
-
-#: catalog/catalog-summary.php:168
-msgid "the page has no catalog section — add cat=\"Section name\""
 msgstr ""
 
 #: leads/callback.php:175
@@ -6718,10 +6734,6 @@ msgstr ""
 
 #: core/settings.php:308
 msgid "“Why people trust us” block"
-msgstr ""
-
-#: catalog/catalog-summary.php:168
-msgid "” not found"
 msgstr ""
 
 #: places/places.php:66

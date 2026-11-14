@@ -173,7 +173,7 @@ function memorial_plugin_content_blocks() {
 		'restaurants'     => array(
 			'tag'   => 'mem_restaurants',
 			'title' => __( 'Memorial meal halls', 'memorial-plugin' ),
-			'desc'  => __( 'Halls for memorial meals with photos and an order button (Memorial → Halls).', 'memorial-plugin' ),
+			'desc'  => __( 'Halls for memorial meals with photos and an order button (Memorial → Halls for the memorial meal).', 'memorial-plugin' ),
 			'icon'  => 'food',
 			'attrs' => array(
 				'title' => $title,
@@ -205,7 +205,7 @@ function memorial_plugin_content_blocks() {
 		'rewio-reviews'   => array(
 			'tag'   => 'mem_rewio',
 			'title' => __( 'Yandex Maps reviews', 'memorial-plugin' ),
-			'desc'  => __( 'Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews).', 'memorial-plugin' ),
+			'desc'  => __( 'Reviews loaded from Yandex Maps and other sites by Rewio (Memorial → Reviews → Rewio reviews).', 'memorial-plugin' ),
 			'icon'  => 'star-half',
 			'attrs' => array(
 				'count' => array(
@@ -226,7 +226,7 @@ function memorial_plugin_content_blocks() {
 		'services'        => array(
 			'tag'   => 'mem_services',
 			'title' => __( 'Our services', 'memorial-plugin' ),
-			'desc'  => __( 'Service cards with photos and starting prices (Memorial → Home page → Services).', 'memorial-plugin' ),
+			'desc'  => __( 'Service cards with photos and starting prices (Memorial → Services).', 'memorial-plugin' ),
 			'icon'  => 'screenoptions',
 			'attrs' => array(
 				'more' => array(

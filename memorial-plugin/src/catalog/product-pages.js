@@ -69,7 +69,7 @@ export default function ProductPages() {
 				sprintf(
 					/* translators: 1: products, 2: products with their own page. */
 					__(
-						'Products now: %1$d, with their own page: %2$d. To give a product a page, write its description in the editor. Attachment pages always lead to the post with the image or to the file.',
+						'Products now: %1$d, with their own page: %2$d. To give a product a page, write its description in the product window (Catalog → Products → Edit). Attachment pages always lead to the post with the image or to the file.',
 						'memorial-plugin'
 					),
 					data.total,

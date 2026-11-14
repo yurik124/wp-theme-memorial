@@ -2122,7 +2122,7 @@ return array (
     'title' => 'Memorial meal halls',
     'category' => 'memorial-services',
     'icon' => 'food',
-    'description' => 'Halls for memorial meals with photos and an order button (Memorial → Halls).',
+    'description' => 'Halls for memorial meals with photos and an order button (Memorial → Halls for the memorial meal).',
     'keywords' => 
     array (
       0 => 'memorial meal',
@@ -2352,7 +2352,7 @@ return array (
     'title' => 'Yandex Maps reviews',
     'category' => 'memorial-reviews',
     'icon' => 'star-half',
-    'description' => 'Reviews loaded from Yandex Maps by Rewio (Memorial → Rewio reviews).',
+    'description' => 'Reviews loaded from Yandex Maps and other sites by Rewio (Memorial → Reviews → Rewio reviews).',
     'keywords' => 
     array (
       0 => 'reviews',
@@ -2427,7 +2427,7 @@ return array (
     'title' => 'Our services',
     'category' => 'memorial-services',
     'icon' => 'screenoptions',
-    'description' => 'Service cards with photos and starting prices (Memorial → Home page → Services).',
+    'description' => 'Service cards with photos and starting prices (Memorial → Services).',
     'keywords' => 
     array (
       0 => 'services',
@@ -2489,7 +2489,7 @@ return array (
     'title' => 'Services grid',
     'category' => 'memorial-services',
     'icon' => 'screenoptions',
-    'description' => 'Service cards of the home page (Memorial → Home page → Services), full width.',
+    'description' => 'Service cards of the home page (Memorial → Services), full width.',
     'keywords' => 
     array (
       0 => 'services',

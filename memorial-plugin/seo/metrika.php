@@ -75,7 +75,7 @@ function memorial_plugin_metrika_schema() {
 					'type'  => 'code',
 					'label' => __( 'Other counters — start only after consent', 'memorial-plugin' ),
 					'rows'  => 8,
-					'help'  => __( 'Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags. After moving them, remove them from the “Simple Custom CSS and JS” plugin.', 'memorial-plugin' ),
+					'help'  => __( 'Paste here the whole codes of the VK pixel, call tracking (Gudok) and so on — together with the <script> tags.', 'memorial-plugin' ),
 				),
 			),
 		),

@@ -87,7 +87,7 @@ function memorial_plugin_type_page_create( $type_id ) {
 			'post_status'  => 'draft',
 			'post_title'   => $t->name,
 			'post_parent'  => $parent && 'publish' === $parent->post_status ? $parent->ID : 0,
-			'post_content' => wp_slash( memorial_plugin_type_page_content( $type_id ) ),
+			'post_content' => wp_slash( memorial_plugin_blocks_from_shortcodes( memorial_plugin_type_page_content( $type_id ) ) ),
 		)
 	);
 	if ( is_wp_error( $id ) || ! $id ) {

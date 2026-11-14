@@ -101,10 +101,10 @@ function memorial_plugin_optional_labels() {
 	return array(
 		'callback' => array( __( '“Call me back” request', 'memorial-plugin' ), __( 'The window with the call-back form and notifications about requests. Off — the “Call me back” buttons simply call the phone.', 'memorial-plugin' ) ),
 		'metrika'  => array( __( 'Yandex Metrica and the cookie notice', 'memorial-plugin' ), __( 'The counter, goals, cleaning the address of UTM tags, the cookie banner.', 'memorial-plugin' ) ),
-		'seoplug'  => array( __( 'Compatibility with SEO plugins', 'memorial-plugin' ), __( '[mem_…] shortcodes in the titles and descriptions of AIOSEO, Yoast, Rank Math, SEOPress.', 'memorial-plugin' ) ),
+		'seoplug'  => array( __( 'Compatibility with SEO plugins', 'memorial-plugin' ), __( 'Old codes in square brackets in the titles and descriptions of AIOSEO, Yoast, Rank Math and SEOPress become text (until 3.0.0). New SEO titles use variables like %%mem_phone%% (Memorial → Prices).', 'memorial-plugin' ) ),
 		'rewio'    => array( __( 'Reviews from Yandex Maps (Rewio)', 'memorial-plugin' ), __( 'Loading reviews on schedule, the Rewio reviews block.', 'memorial-plugin' ) ),
-		'book'     => array( __( 'Guest book', 'memorial-plugin' ), __( 'Reviews left on the site, the guest book block.', 'memorial-plugin' ) ),
-		'works'    => array( __( '“Our works”', 'memorial-plugin' ), __( 'The section of works with photos and prices, the works manager, the works blocks.', 'memorial-plugin' ) ),
+		'book'     => array( __( 'Guest book', 'memorial-plugin' ), __( 'Reviews from the paper guest book with photos of the pages: the list in Memorial → Reviews → From the guest book and the guest book block.', 'memorial-plugin' ) ),
+		'works'    => array( __( '“Our works”', 'memorial-plugin' ), __( 'The section of works with photos and prices, the “Our works” screens and the works blocks.', 'memorial-plugin' ) ),
 		'photos'   => array( __( 'Photo gallery: photos of products and works', 'memorial-plugin' ), __( 'Photo blocks of products and works — the photos are picked up automatically.', 'memorial-plugin' ) ),
 		'faq'      => array( __( 'Questions and answers', 'memorial-plugin' ), __( 'All questions of the site on one page with a search.', 'memorial-plugin' ) ),
 		'guide'    => array( __( 'Good to know', 'memorial-plugin' ), __( 'Article cards with a search, the “Good to know” field of pages.', 'memorial-plugin' ) ),
