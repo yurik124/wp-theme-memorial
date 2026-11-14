@@ -363,4 +363,38 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$this->assertContains( 102, array_map( 'intval', (array) get_option( 'mem_rewio_hidden' ) ) );
 		$this->assertSame( 'draft', get_post_status( $copies[102]->ID ) );
 	}
+
+	public function test_price_token_does_not_loop() {
+		// A service whose price is “{price:<the price of that service>}” — nothing instead of an endless loop.
+		update_option(
+			'mem_home',
+			array(
+				'services' => array(
+					'items' => array(
+						array(
+							'title' => 'Кремация',
+							'price' => '{price:krem_svc}',
+						),
+					),
+				),
+			)
+		);
+		update_option(
+			'mem_prices',
+			array(
+				'other' => array(
+					'items' => array(
+						array(
+							'name'    => 'Кремация (услуга)',
+							'what'    => 'service',
+							'service' => 'Кремация',
+							'code'    => 'krem_svc',
+						),
+					),
+				),
+			)
+		);
+		wp_set_current_user( 0 );
+		$this->assertSame( 'от ', memorial_plugin_t( 'от {price:krem_svc}' ) );
+	}
 }

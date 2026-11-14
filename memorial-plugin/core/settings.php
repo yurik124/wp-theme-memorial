@@ -1036,7 +1036,14 @@ function memorial_plugin_price_tokens( $s ) {
 	if ( false === strpos( (string) $s, '{price:' ) || ! function_exists( 'memorial_plugin_price_value' ) ) {
 		return (string) $s;
 	}
-	return (string) preg_replace_callback(
+	// A price that takes its value from a text with {price:…} of itself (a service whose price is
+	// “{price:<that service>}”) would loop for ever: inside a substitution no other one is made.
+	static $depth = 0;
+	if ( $depth > 0 ) {
+		return (string) preg_replace( '/\{price:[^{}]{1,80}\}/u', '', (string) $s );
+	}
+	++$depth;
+	$out = (string) preg_replace_callback(
 		'/\{price:([^{}]{1,80})\}/u',
 		static function ( $m ) {
 			$code = trim( html_entity_decode( $m[1], ENT_QUOTES, 'UTF-8' ) );
@@ -1051,6 +1058,8 @@ function memorial_plugin_price_tokens( $s ) {
 		},
 		(string) $s
 	);
+	--$depth;
+	return $out;
 }
 
 /**
