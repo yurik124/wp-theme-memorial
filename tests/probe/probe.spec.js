@@ -1107,3 +1107,140 @@ test.describe( 'отзывы и разрешения', () => {
 		log( 'reviews', report );
 	} );
 } );
+
+test.describe( 'редактор сайта', () => {
+	test.use( { viewport: { width: 1440, height: 900 } } );
+	test( 'аудит редактора сайта', async ( { page, browser } ) => {
+		test.setTimeout( 900_000 );
+		const report = { screens: {}, canvas: {}, menu: {} };
+		const errs = errorsOf( page );
+		const bad = [];
+		page.on( 'response', ( r ) => {
+			if ( r.status() >= 400 && /wp-json|rest_route/.test( r.url() ) ) {
+				bad.push( r.status() + ' ' + decodeURIComponent( r.url() ).replace( /^https?:\/\/[^/]+/, '' ).slice( 0, 200 ) );
+			}
+		} );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+
+		// Меню «Внешний вид»: что в нём есть (Customizer, Меню, Виджеты быть не должно)
+		await page.goto( '/wp-admin/themes.php' );
+		report.menu.appearance = await page.locator( '#menu-appearance .wp-submenu a' ).evaluateAll( ( a ) => a.map( ( x ) => x.textContent.trim() + ' → ' + x.getAttribute( 'href' ) ) );
+		report.menu.themeCard = await page.locator( '.theme.active' ).innerText().catch( () => '' );
+		report.menu.themeShot = await page.locator( '.theme.active .theme-screenshot img' ).getAttribute( 'src' ).catch( () => null );
+		await shot( page, 'se-themes' );
+
+		const editorReady = async () => {
+			await page.waitForSelector( '.edit-site-layout, .edit-site', { timeout: 60000 } ).catch( () => {} );
+			await page.waitForTimeout( 4000 );
+		};
+		const canvasCheck = async () => {
+			const fr = page.frameLocator( 'iframe[name="editor-canvas"]' );
+			await page.waitForSelector( 'iframe[name="editor-canvas"]', { timeout: 30000 } ).catch( () => {} );
+			await page.waitForTimeout( 5000 );
+			const frame = page.frame( { name: 'editor-canvas' } );
+			if ( ! frame ) {
+				return { canvas: false };
+			}
+			return frame.evaluate( () => {
+				const txt = ( el ) => el.textContent.trim().replace( /\s+/g, ' ' ).slice( 0, 220 );
+				return {
+					canvas: true,
+					warnings: [ ...document.querySelectorAll( '.block-editor-warning' ) ].map( ( el ) => ( el.closest( '[data-type]' )?.getAttribute( 'data-type' ) || '?' ) + ': ' + txt( el ) ),
+					loadErrors: [ ...document.querySelectorAll( '[data-type]' ) ].filter( ( el ) => /Ошибка загрузки блока|Error loading block|encountered an error|возникла ошибка/i.test( el.textContent ) && ! el.querySelector( '[data-type]' ) ).map( ( el ) => el.getAttribute( 'data-type' ) + ': ' + txt( el ) ),
+					missing: [ ...document.querySelectorAll( '.wp-block-missing, [data-type="core/missing"]' ) ].map( txt ),
+					placeholders: [ ...document.querySelectorAll( '.components-placeholder' ) ].map( ( el ) => ( el.closest( '[data-type]' )?.getAttribute( 'data-type' ) || '?' ) + ': ' + txt( el ) ),
+					blocks: document.querySelectorAll( '[data-type]' ).length,
+					types: [ ...new Set( [ ...document.querySelectorAll( '[data-type]' ) ].map( ( el ) => el.getAttribute( 'data-type' ) ) ) ],
+					landmarks: [ 'header', 'main', 'footer', 'nav' ].map( ( t ) => t + ':' + document.querySelectorAll( t ).length ).join( ' ' ),
+				};
+			} ).catch( ( e ) => ( { error: String( e ) } ) );
+		};
+
+		// Корень «Дизайн» — тот самый экран с подписью «Настройте внешний вид вашего сайта с помощью редактора блоков»
+		const routes = {
+			root: '/wp-admin/site-editor.php',
+			navigation: '/wp-admin/site-editor.php?p=%2Fnavigation',
+			styles: '/wp-admin/site-editor.php?p=%2Fstyles',
+			pages: '/wp-admin/site-editor.php?p=%2Fpage',
+			templates: '/wp-admin/site-editor.php?p=%2Ftemplate',
+			patterns: '/wp-admin/site-editor.php?p=%2Fpattern',
+			parts: '/wp-admin/site-editor.php?p=%2Fpattern&postType=wp_template_part',
+		};
+		for ( const [ k, url ] of Object.entries( routes ) ) {
+			await page.goto( url );
+			await editorReady();
+			report.screens[ k ] = {
+				url: page.url().replace( /^https?:\/\/[^/]+/, '' ),
+				sidebar: await page.locator( '.edit-site-sidebar__content, .edit-site-layout__sidebar' ).first().innerText().catch( () => '' ),
+				notices: await page.locator( '.components-notice, .components-snackbar' ).allTextContents(),
+			};
+			await shot( page, 'se-' + k );
+		}
+		// Список шаблонов и частей (данные REST)
+		report.templates = await page.evaluate( async () => {
+			const t = await window.wp.apiFetch( { path: '/wp/v2/templates?context=edit&per_page=100' } ).catch( ( e ) => [ { error: e.message } ] );
+			const p = await window.wp.apiFetch( { path: '/wp/v2/template-parts?context=edit&per_page=100' } ).catch( ( e ) => [ { error: e.message } ] );
+			const n = await window.wp.apiFetch( { path: '/wp/v2/navigation?context=edit&per_page=100&status=publish,draft' } ).catch( ( e ) => [ { error: e.message } ] );
+			const gs = await window.wp.apiFetch( { path: '/wp/v2/global-styles/themes/memorial-theme/variations' } ).catch( ( e ) => [ { error: e.message } ] );
+			const pat = await window.wp.apiFetch( { path: '/wp/v2/block-patterns/patterns' } ).catch( ( e ) => [ { error: e.message } ] );
+			const cats = await window.wp.apiFetch( { path: '/wp/v2/block-patterns/categories' } ).catch( ( e ) => [ { error: e.message } ] );
+			const one = ( x ) => ( { id: x.id, title: x.title?.rendered ?? x.title, source: x.source, origin: x.origin, modified: x.modified, has_theme_file: x.has_theme_file, area: x.area, error: x.error } );
+			return {
+				templates: t.map( one ),
+				parts: p.map( one ),
+				navigation: n.map( ( x ) => ( { id: x.id, title: x.title?.raw, status: x.status, blocks: ( x.content?.raw || '' ).match( /<!-- wp:[a-z/-]+/g )?.length || 0 } ) ),
+				variations: gs.map( ( x ) => x.title || x.error ),
+				themePatterns: pat.filter( ( x ) => /^memorial/.test( x.name ) ).map( ( x ) => x.name + ' [' + ( x.categories || [] ).join( ',' ) + ']' + ( x.inserter === false ? ' (скрыт)' : '' ) ),
+				patternCats: cats.map( ( x ) => x.name + ': ' + x.label ).filter( ( x ) => /memorial/.test( x ) ),
+			};
+		} );
+
+		// Каждый шаблон и часть — в режиме правки: ошибки блоков на холсте
+		const ids = [ ...( report.templates.templates || [] ), ...( report.templates.parts || [] ) ].filter( ( x ) => x.id ).map( ( x ) => [ x.area ? 'wp_template_part' : 'wp_template', x.id ] );
+		for ( const [ type, id ] of ids ) {
+			await page.goto( '/wp-admin/site-editor.php?p=' + encodeURIComponent( '/' + type + '/' + id ) + '&canvas=edit' );
+			await editorReady();
+			report.canvas[ id ] = await canvasCheck();
+			report.canvas[ id ].notices = await page.locator( '.components-notice' ).allTextContents();
+			await shot( page, 'se-edit-' + id.replace( /[^a-z0-9-]+/gi, '_' ) );
+		}
+
+		// Стили: варианты, книга стилей
+		await page.goto( '/wp-admin/site-editor.php?p=%2Fstyles&canvas=edit' );
+		await editorReady();
+		await shot( page, 'se-styles-edit' );
+		await page.getByRole( 'button', { name: /Обзор стилей|Browse styles/ } ).first().click( { timeout: 8000 } ).catch( () => {} );
+		await page.waitForTimeout( 2500 );
+		await shot( page, 'se-styles-variations' );
+		report.styleVariationsUI = await page.locator( '.edit-site-global-styles-variations_item, .global-styles-ui-variations_item, [class*="variations_item"]' ).count();
+		await page.getByRole( 'button', { name: /Книга стилей|Style Book/ } ).first().click( { timeout: 8000 } ).catch( () => {} );
+		await page.waitForTimeout( 4000 );
+		await shot( page, 'se-stylebook' );
+
+		// Меню «Навигация»: открыть первое меню
+		await page.goto( '/wp-admin/site-editor.php?p=%2Fnavigation' );
+		await editorReady();
+		await page.locator( '.edit-site-sidebar-navigation-screen a, .edit-site-sidebar-navigation-item' ).first().click( { timeout: 8000 } ).catch( () => {} );
+		await page.waitForTimeout( 4000 );
+		report.screens.navigationOpen = { url: page.url().replace( /^https?:\/\/[^/]+/, '' ), sidebar: await page.locator( '.edit-site-layout__sidebar' ).first().innerText().catch( () => '' ) };
+		await shot( page, 'se-navigation-open' );
+
+		report.restErrors = bad;
+		report.errors = errs;
+		log( 'site-editor', report );
+
+		// Картинка темы: главная рабочего сайта 1200×900 (screenshot.png)
+		const ctx = await browser.newContext( { viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 } );
+		const p2 = await ctx.newPage();
+		await p2.goto( 'https://memorialbel.ru/', { waitUntil: 'networkidle', timeout: 90000 } ).catch( () => {} );
+		await p2.addStyleTag( { content: NO_FLOAT + '.consent-banner,.memorial-plugin-cookie,[class*=cookie],[class*=mobile-bar]{display:none !important}' } ).catch( () => {} );
+		await p2.waitForTimeout( 3000 );
+		await p2.screenshot( { path: `${ DIR }/theme-screenshot.png` } );
+		await p2.screenshot( { path: `${ DIR }/theme-home-full.png`, fullPage: true } );
+		await ctx.close();
+	} );
+} );
