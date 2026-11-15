@@ -216,4 +216,41 @@ foreach ( $wpdb->get_results( "SELECT ID, post_content FROM {$wpdb->posts} WHERE
 $out['fix_dry']     = $dry;
 $out['fix_flag']    = get_option( 'memorial_plugin_fix_uploads_2' );
 $out['ritual_used'] = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name = 'memorial_ritual_services_options'" );
+// Импорт и выгрузка каталога: что есть на хостинге и холостой прогон артикулов.
+$out['io_env'] = array(
+	'zip'        => class_exists( 'ZipArchive' ),
+	'simplexml'  => function_exists( 'simplexml_load_string' ),
+	'xmlreader'  => class_exists( 'XMLReader' ),
+	'mbstring'   => function_exists( 'mb_convert_encoding' ),
+	'iconv'      => function_exists( 'iconv' ),
+	'upload_max' => ini_get( 'upload_max_filesize' ),
+	'post_max'   => ini_get( 'post_max_size' ),
+	'max_exec'   => ini_get( 'max_execution_time' ),
+	'memory'     => ini_get( 'memory_limit' ),
+	'max_files'  => ini_get( 'max_file_uploads' ),
+	'wp_max'     => wp_max_upload_size(),
+	'php'        => PHP_VERSION,
+);
+$sku_all  = get_posts( array( 'post_type' => 'mem_product', 'post_status' => array( 'publish', 'draft', 'pending', 'private' ), 'posts_per_page' => -1, 'fields' => 'ids' ) );
+$sku_have = array();
+foreach ( $sku_all as $pid ) {
+	$v = (string) get_post_meta( $pid, '_mem_sku', true );
+	if ( '' !== $v ) {
+		$sku_have[ $pid ] = $v;
+	}
+}
+$out['sku_dry'] = array(
+	'products' => count( $sku_all ),
+	'have'     => count( $sku_have ),
+	'would'    => array_slice( array_map( fn( $pid ) => $pid . ' → M-' . $pid . ' ' . get_the_title( $pid ), array_diff( $sku_all, array_keys( $sku_have ) ) ), 0, 15 ),
+	'flag'     => get_option( 'memorial_plugin_sku_1' ),
+);
+$photo_names = array();
+foreach ( array_slice( $sku_all, 0, 25 ) as $pid ) {
+	$t = (int) get_post_thumbnail_id( $pid );
+	if ( $t ) {
+		$photo_names[] = basename( (string) get_attached_file( $t ) ) . ' | alt=' . get_post_meta( $t, '_wp_attachment_image_alt', true ) . ' | title=' . get_the_title( $t );
+	}
+}
+$out['photo_names'] = $photo_names;
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );

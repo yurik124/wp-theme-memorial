@@ -174,6 +174,7 @@ function memorial_plugin_manager_product( $p ) {
 		'title'  => html_entity_decode( get_the_title( $p ), ENT_QUOTES, 'UTF-8' ),
 		'status' => 'publish' === $p->post_status ? 'publish' : 'draft',
 		'type'   => $type,
+		'sku'    => $m( '_mem_sku' ),
 		'photos' => memorial_plugin_catalog_photos( memorial_plugin_product_photos( $p->ID ) ),
 		'price'  => (int) $m( '_mem_price' ),
 		'from'   => '1' === $m( '_mem_price_from' ),
@@ -363,6 +364,13 @@ function memorial_plugin_product_save( $id, $values ) {
 				break;
 			case 'from':
 				update_post_meta( $id, '_mem_price_from', empty( $v ) ? '' : '1' );
+				break;
+			case 'sku':
+				// Empty — the SKU stays; one of another product is refused before saving (memorial_plugin_sku_error).
+				$v = memorial_plugin_sku_clean( $v );
+				if ( '' !== $v && ! memorial_plugin_product_by_sku( $v, $id ) ) {
+					update_post_meta( $id, '_mem_sku', $v );
+				}
 				break;
 			case 'unit':
 			case 'sub':
@@ -682,6 +690,10 @@ function memorial_plugin_products_rest() {
 					if ( ! $type || ! term_exists( $type, 'mem_cat' ) || memorial_plugin_type_root( $type ) !== $type ) {
 						return new WP_Error( 'memorial_plugin_type', __( 'Unknown product type.', 'memorial-plugin' ), array( 'status' => 400 ) );
 					}
+					$err = is_array( $request['values'] ) && isset( $request['values']['sku'] ) ? memorial_plugin_sku_error( $request['values']['sku'] ) : null;
+					if ( $err ) {
+						return $err;
+					}
 					$out    = array();
 					$photos = array_filter( array_map( 'absint', (array) $request['photos'] ), 'wp_attachment_is_image' );
 					foreach ( $photos ? $photos : array( 0 ) as $att ) {
@@ -711,7 +723,12 @@ function memorial_plugin_products_rest() {
 				),
 			),
 			'callback'            => static function ( WP_REST_Request $request ) {
-				memorial_plugin_product_save( (int) $request['id'], (array) $request['values'] );
+				$values = (array) $request['values'];
+				$err    = isset( $values['sku'] ) ? memorial_plugin_sku_error( $values['sku'], (int) $request['id'] ) : null;
+				if ( $err ) {
+					return $err;
+				}
+				memorial_plugin_product_save( (int) $request['id'], $values );
 				return rest_ensure_response( memorial_plugin_manager_product( get_post( (int) $request['id'] ) ) );
 			},
 		)
