@@ -19,6 +19,7 @@ const PNG = [
 	'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg==',
 ].map( ( b ) => Buffer.from( b, 'base64' ) );
 
+/* eslint-disable no-bitwise -- CRC-32 of a ZIP entry. */
 function crc32( buf ) {
 	let c = -1;
 	for ( const b of buf ) {
@@ -29,6 +30,7 @@ function crc32( buf ) {
 	}
 	return ( c ^ -1 ) >>> 0;
 }
+/* eslint-enable no-bitwise */
 
 // ZIP без сжатия (метод 0), имена в UTF-8.
 function zip( files ) {

@@ -1899,4 +1899,97 @@ test.describe( 'анимация', () => {
 		report.errors = errs;
 		log( 'sku-export', report );
 	} );
+
+	test( 'импорт: весь каталог туда и обратно без изменений, пример ZIP через окно, откат', async ( { page } ) => {
+		test.setTimeout( 900_000 );
+		page.setDefaultTimeout( 60000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		// Выгрузка всего каталога → проверка импорта этим же файлом: ничего не должно меняться.
+		for ( const format of [ 'xlsx', 'csv' ] ) {
+			report[ 'roundtrip ' + format ] = await page.evaluate( async ( f ) => {
+				const exp = await window.wp.apiFetch( { path: '/wp-abilities/v1/abilities/memorial-plugin/export-catalog/run?input[format]=' + f } );
+				const bin = atob( exp.file );
+				const bytes = new Uint8Array( bin.length );
+				for ( let i = 0; i < bin.length; i++ ) {
+					bytes[ i ] = bin.charCodeAt( i );
+				}
+				const body = new FormData();
+				body.append( 'table', new Blob( [ bytes ] ), exp.filename );
+				body.append( 'files', '[]' );
+				const t0 = performance.now();
+				const res = await window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/import/preview', method: 'POST', body } );
+				return {
+					exported: exp.count,
+					ms: Math.round( performance.now() - t0 ),
+					count: res.count,
+					unknown: res.unknown,
+					notSame: res.rows.filter( ( r ) => r.action !== 'same' ).slice( 0, 15 ).map( ( r ) => r.n + ' ' + r.sku + ' ' + r.title + ' | ' + r.action + ' | ' + r.changes.join( ',' ) + ' | ' + r.errors.join( ' ' ) ),
+				};
+			}, format );
+		}
+		// Пример ZIP — через окно, как сделает владелец.
+		const zipB64 = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/import/sample?format=zip' } ).then( ( r ) => r.file ) );
+		await page.getByRole( 'button', { name: /^(Импорт|Import)$/ } ).click();
+		const modal = page.locator( '.memorial-plugin-import' );
+		await modal.waitFor();
+		await page.waitForTimeout( 500 );
+		await page.screenshot( { path: `${ DIR }/import-1-files.png` } );
+		await modal.locator( 'input[type=file]' ).first().setInputFiles( { name: 'catalog-import-example.zip', mimeType: 'application/zip', buffer: Buffer.from( zipB64, 'base64' ) } );
+		await page.waitForTimeout( 1000 );
+		report.files = await modal.locator( '.memorial-plugin-import__files' ).innerText();
+		await page.screenshot( { path: `${ DIR }/import-2-chosen.png` } );
+		await modal.getByRole( 'button', { name: /Проверить файл|Check the file/ } ).click();
+		await page.waitForTimeout( 3000 );
+		report.preview = await modal.locator( '.components-notice' ).first().innerText().catch( () => '' );
+		await page.screenshot( { path: `${ DIR }/import-3-preview.png` } );
+		await page.setViewportSize( { width: 782, height: 900 } );
+		await page.waitForTimeout( 500 );
+		await page.screenshot( { path: `${ DIR }/import-3-preview-782.png` } );
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await modal.getByRole( 'button', { name: /Импортировать|Import \d/ } ).click();
+		await modal.getByRole( 'button', { name: /Откатить этот импорт|Roll back this import/ } ).waitFor( { timeout: 180000 } );
+		report.done = await modal.locator( '.components-notice' ).first().innerText().catch( () => '' );
+		await page.screenshot( { path: `${ DIR }/import-4-done.png` } );
+		report.created = await page.evaluate( async () => {
+			const d = await window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/products' } );
+			const items = d.items.filter( ( i ) => /^OBR-/.test( i.sku ) );
+			const out = [];
+			for ( const i of items ) {
+				const alts = [];
+				for ( const ph of i.photos ) {
+					const m = await window.wp.apiFetch( { path: '/wp/v2/media/' + ph.id + '?context=edit' } );
+					alts.push( m.alt_text + ' / ' + m.title.raw );
+				}
+				out.push( i.sku + ' ' + i.status + ' ' + i.price + ' ' + i.title + ' | ' + JSON.stringify( i.specs ) + ' | ' + alts.join( ' ; ' ) );
+			}
+			return out;
+		} );
+		// Повторная проверка того же архива: фото не загружаются заново.
+		await modal.getByRole( 'button', { name: /Закрыть|Close/ } ).click();
+		await page.getByRole( 'button', { name: /^(Импорт|Import)$/ } ).click();
+		await modal.locator( 'input[type=file]' ).first().setInputFiles( { name: 'catalog-import-example.zip', mimeType: 'application/zip', buffer: Buffer.from( zipB64, 'base64' ) } );
+		await page.waitForTimeout( 800 );
+		await modal.getByRole( 'button', { name: /Проверить файл|Check the file/ } ).click();
+		await page.waitForTimeout( 3000 );
+		report.again = await modal.locator( '.components-notice' ).first().innerText().catch( () => '' );
+		await page.screenshot( { path: `${ DIR }/import-5-again.png` } );
+		// Откат из окна (последний импорт).
+		await modal.getByRole( 'button', { name: /Назад|Back/ } ).click();
+		await modal.getByRole( 'button', { name: /Откатить последний импорт|Roll back the last import/ } ).click();
+		await page.waitForTimeout( 3000 );
+		report.rollback = await modal.locator( '.components-notice' ).first().innerText().catch( () => '' );
+		report.afterRollback = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/products' } ).then( ( d ) => d.items.filter( ( i ) => /^OBR-/.test( i.sku ) ).length ) );
+		await page.screenshot( { path: `${ DIR }/import-6-rollback.png` } );
+		report.errors = errs;
+		log( 'import', report );
+	} );
 } );

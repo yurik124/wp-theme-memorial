@@ -1076,7 +1076,6 @@ function memorial_plugin_import_apply( $plan, $state, &$log ) {
 		if ( ! isset( $log['media'][ $att ] ) ) {
 			$a = get_post( $att );
 
-
 			$log['media'][ $att ] = array(
 				'alt'     => $now,
 				'title'   => $a ? $a->post_title : '',
