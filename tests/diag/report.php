@@ -119,8 +119,8 @@ foreach ( $wpdb->get_results( "SELECT ID, post_content FROM {$wpdb->posts} WHERE
 $out['broken_uploads'] = array_slice( $broken, 0, 60 );
 $out['broken_count']   = count( $broken );
 // холостой прогон исправления адресов фото (core/fix-uploads.php): что нашлось бы, без записи
-if ( ! function_exists( 'memorial_plugin_fixed_upload_url' ) ) {
-function memorial_plugin_fixed_upload_url( $url ) {
+if ( true ) {
+function diag_fixed_upload_url( $url ) {
 	if ( ! is_string( $url ) || ! preg_match( '~/wp-content/uploads/(.+)$~u', $url, $m ) ) {
 		return '';
 	}
@@ -181,10 +181,10 @@ function memorial_plugin_fixed_upload_url( $url ) {
  * @param string $where Where the value is (for the log).
  * @return mixed
  */
-function memorial_plugin_fix_upload_urls( $value, &$log, $where = '' ) {
+function diag_fix_upload_urls( $value, &$log, $where = '' ) {
 	if ( is_array( $value ) ) {
 		foreach ( $value as $k => $v ) {
-			$value[ $k ] = memorial_plugin_fix_upload_urls( $v, $log, $where . '/' . $k );
+			$value[ $k ] = diag_fix_upload_urls( $v, $log, $where . '/' . $k );
 		}
 		return $value;
 	}
@@ -194,7 +194,7 @@ function memorial_plugin_fix_upload_urls( $value, &$log, $where = '' ) {
 	return preg_replace_callback(
 		'~(?:https?://[^\s"\'()<>,]+)?/wp-content/uploads/[^\s"\'()<>,]+\.(?:jpe?g|png|webp|gif)~iu',
 		function ( $m ) use ( &$log, $where ) {
-			$new = memorial_plugin_fixed_upload_url( $m[0] );
+			$new = diag_fixed_upload_url( $m[0] );
 			if ( '' === $new ) {
 				return $m[0];
 			}
@@ -208,10 +208,10 @@ function memorial_plugin_fix_upload_urls( $value, &$log, $where = '' ) {
 }
 $dry = array();
 foreach ( array( 'mem_home', 'memorial_ritual_services_options' ) as $o ) {
-	memorial_plugin_fix_upload_urls( get_option( $o ), $dry, $o );
+	diag_fix_upload_urls( get_option( $o ), $dry, $o );
 }
 foreach ( $wpdb->get_results( "SELECT ID, post_content FROM {$wpdb->posts} WHERE post_status IN ( 'publish', 'private', 'future', 'draft' ) AND post_type NOT IN ( 'revision', 'attachment' ) AND post_content LIKE '%/wp-content/uploads/%'" ) as $row ) {
-	memorial_plugin_fix_upload_urls( $row->post_content, $dry, 'post ' . $row->ID . ' ' . get_post_type( $row->ID ) . ' ' . get_post_status( $row->ID ) . ' ' . get_the_title( $row->ID ) );
+	diag_fix_upload_urls( $row->post_content, $dry, 'post ' . $row->ID . ' ' . get_post_type( $row->ID ) . ' ' . get_post_status( $row->ID ) . ' ' . get_the_title( $row->ID ) );
 }
 $out['fix_dry']     = $dry;
 $out['fix_flag']    = get_option( 'memorial_plugin_fix_uploads_2' );
