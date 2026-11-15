@@ -157,7 +157,6 @@ function memorial_plugin_front_i18n() {
 		'scrollLeft'   => __( 'Scroll left', 'memorial-plugin' ),
 		'scrollRight'  => __( 'Scroll right', 'memorial-plugin' ),
 		/* translators: 1: number of the photo, 2: number of photos */
-		'photoOf'      => __( 'photo %1$d of %2$d', 'memorial-plugin' ),
 		/* translators: %s: product name. */
 		'order'        => __( 'Order: %s. Leave your phone number — we will call you back.', 'memorial-plugin' ),
 	);

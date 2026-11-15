@@ -205,16 +205,13 @@ function memorial_plugin_catalog_card( $p, $i, $opts = array() ) {
 	$big    = $thumb ? wp_get_attachment_image_url( $thumb, 'large' ) : '';
 	$page   = memorial_plugin_product_has_page( $id ) ? get_permalink( $id ) : '';
 	$title  = get_the_title( $id );
-	$cap    = $title . ( $sub ? ' · ' . $sub : '' ) . implode( '', array_map( fn( $x ) => ' · ' . ( '' !== $x[0] ? $x[0] . ' ' : '' ) . $x[1], memorial_plugin_product_specs_shown( $id ) ) )
-			. ( $price ? ' · ' . wp_strip_all_tags( memorial_plugin_price_html( $id ) ) : '' );
 
 	echo '<li class="mcard" id="' . memorial_plugin_product_anchor( $id ) . '" data-price="' . (int) $price . '" data-i="' . (int) $i . '">';
 	if ( $page ) {
 		echo '<a class="mcard__link" href="' . esc_url( $page ) . '">';
 	} elseif ( $big ) {
-		// несколько фото: в крупном просмотре листаются все фото товара, затем — следующий товар.
-		$set = count( $photos ) > 1 ? ' data-lb-set="' . esc_attr( wp_json_encode( array_map( fn( $p ) => wp_get_attachment_image_url( $p, 'large' ), $photos ) ) ) . '"' : '';
-		echo '<a class="mcard__link" href="' . esc_url( $big ) . '" data-lb data-cap="' . esc_attr( $cap ) . '"' . $set . ( 'card' === $view ? ' data-lb-card' : '' ) . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $set is an attribute built with esc_attr().
+		// крупный просмотр каталога (assets/js/view/site.js): листаются товары, фото товара — стрелками и точками на фото.
+		echo '<a class="mcard__link" href="' . esc_url( $big ) . '" data-pv="' . esc_attr( $view ) . '">';
 	} else {
 		echo '<div class="mcard__link">';
 	}
@@ -256,51 +253,47 @@ function memorial_plugin_catalog_card( $p, $i, $opts = array() ) {
 	}
 	echo '</span>';
 	echo '<span class="mcard__body"><span class="mcard__name">' . esc_html( $title ) . '</span>';
-	$specs = memorial_plugin_product_specs_shown( $id );
-	// подпись повторяет характеристику («700 × 2050» и «Ширина × высота: 700 × 2050 мм») — не дублируем.
-	if ( $sub && $specs ) {
-		$num = fn( $t ) => preg_replace( '/\D+/', ' ', $t );
-		$all = ' ' . $num( implode( ' ', array_column( $specs, 1 ) ) ) . ' ';
-		$sn  = trim( $num( $sub ) );
-		if ( '' !== $sn && false !== strpos( $all, ' ' . $sn . ' ' ) ) {
-			$sub = '';
-		}
-	}
+	// характеристики в списке каталога не показываются — они в крупном просмотре.
 	if ( $sub ) {
 		echo '<span class="mcard__sub">' . esc_html( $sub ) . '</span>';
-	}
-	if ( $specs ) {
-		echo '<span class="mcard__specs">';
-		foreach ( $specs as [$k, $v] ) {
-			echo '<span>' . ( '' !== $k ? '<i>' . esc_html( $k ) . '</i> ' : '' ) . '<b>' . esc_html( $v ) . '</b></span>';
-		}
-		echo '</span>';
 	}
 	echo '<span class="mcard__price">' . wp_kses_post( memorial_plugin_price_html( $id ) ) . '</span></span>';
 	echo ( $page || $big ) ? '</a>' : '</div>';
 	$button = ! empty( $order['on'] ) ? memorial_plugin_order_button( $title, (string) $order['text'], 'btn--line mcard__order' ) : '';
 	echo $button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_attr()/esc_html().
-	// “Product window”: what the large view shows next to the photos (assets/js/view/site.js).
-	if ( 'card' === $view && ! $page && $big ) {
-		// first screen: the photo, the price under it, “Order” under the price; the name and description are below.
-		echo '<template class="mcard__info"><div class="lb__buy"><p class="lb__price">' . wp_kses_post( memorial_plugin_price_html( $id ) ) . '</p>';
-		echo str_replace( 'btn--line mcard__order', 'btn--gold lb__order', $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the same escaped button.
-		echo '</div><div class="lb__about"><h2 class="lb__title">' . esc_html( $title ) . '</h2>';
-		if ( $sub ) {
-			echo '<p class="lb__sub">' . esc_html( $sub ) . '</p>';
+	// что крупный просмотр показывает рядом с фото: «Только фото» — название, цена, характеристики;
+	// «Окно товара» — ещё описание (характеристики под ним) и «Заказать» под ценой.
+	if ( ! $page && $big ) {
+		$specs = memorial_plugin_product_specs_shown( $id );
+		// подпись повторяет характеристику («700 × 2050» и «Ширина × высота: 700 × 2050 мм») — не дублируем.
+		$psub = $sub;
+		if ( $psub && $specs ) {
+			$num = fn( $t ) => preg_replace( '/\D+/', ' ', $t );
+			$all = ' ' . $num( implode( ' ', array_column( $specs, 1 ) ) ) . ' ';
+			$sn  = trim( $num( $psub ) );
+			if ( '' !== $sn && false !== strpos( $all, ' ' . $sn . ' ' ) ) {
+				$psub = '';
+			}
+		}
+		echo '<template class="mcard__info"><h2 class="pv__title">' . esc_html( $title ) . '</h2>';
+		if ( $psub ) {
+			echo '<p class="pv__sub">' . esc_html( $psub ) . '</p>';
+		}
+		echo '<p class="pv__price">' . wp_kses_post( memorial_plugin_price_html( $id ) ) . '</p>';
+		$desc = 'card' === $view ? trim( (string) get_post_field( 'post_content', $id ) ) : '';
+		if ( '' !== wp_strip_all_tags( $desc ) ) {
+			echo '<div class="pv__desc">' . wp_kses_post( wpautop( strip_shortcodes( excerpt_remove_blocks( $desc ) ) ) ) . '</div>';
 		}
 		if ( $specs ) {
-			echo '<dl class="lb__specs">';
+			echo '<dl class="pv__specs">';
 			foreach ( $specs as [$k, $v] ) {
 				echo '<div><dt>' . esc_html( '' !== $k ? $k : __( 'Size', 'memorial-plugin' ) ) . '</dt><dd>' . esc_html( $v ) . '</dd></div>';
 			}
 			echo '</dl>';
 		}
-		$desc = trim( (string) get_post_field( 'post_content', $id ) );
-		if ( '' !== wp_strip_all_tags( $desc ) ) {
-			echo '<div class="lb__desc">' . wp_kses_post( wpautop( strip_shortcodes( excerpt_remove_blocks( $desc ) ) ) ) . '</div>';
+		if ( 'card' === $view && $button ) {
+			echo str_replace( 'btn--line mcard__order', 'btn--gold pv__order', $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the same escaped button.
 		}
-		echo '</div>';
 		echo '</template>';
 	}
 	echo '</li>';
@@ -439,13 +432,21 @@ function memorial_plugin_term_anchor( $t ) {
 add_action(
 	'wp_footer',
 	function () {
-		echo ( '<dialog class="lb" id="lb" aria-label="' . esc_html__( 'Photo', 'memorial-plugin' ) . '"><button class="lb__x" type="button" aria-label="' . esc_attr__( 'Close', 'memorial-plugin' ) . '">' )
-		. '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>'
+		$x = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+		echo ( '<dialog class="lb" id="lb" aria-label="' . esc_html__( 'Photo', 'memorial-plugin' ) . '"><button class="lb__x" type="button" aria-label="' . esc_attr__( 'Close', 'memorial-plugin' ) . '">' ) . $x . '</button>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
 		. ( '<button class="lb__nav lb__prev" type="button" aria-label="' . esc_html__( 'Previous', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron( 'l' ) . '</button>'
 		. '<figure><div class="lb__stage"><img alt=""></div><figcaption></figcaption><p class="lb__count" aria-live="polite"></p></figure>'
-		// “Product window”: name, specifications, price, description and the “Order” button of the product.
-		. '<div class="lb__info" hidden></div>'
 		. ( '<button class="lb__nav lb__next" type="button" aria-label="' . esc_html__( 'Next', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron( 'r' ) . '</button></dialog>';
+		// крупный просмотр каталога: товар за товаром («Только фото» или «Окно товара»), assets/js/view/site.js.
+		if ( ! empty( $GLOBALS['memorial_plugin_ld_products'] ) ) {
+			echo ( '<dialog class="pv" id="pv" aria-label="' . esc_attr__( 'Product', 'memorial-plugin' ) . '"><button class="pv__x" type="button" aria-label="' . esc_attr__( 'Close', 'memorial-plugin' ) . '">' ) . $x . '</button>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+			. '<div class="pv__box"><div class="pv__media"><div class="pv__stage"><img class="pv__img" alt=""></div>'
+			. ( '<button class="pv__arr pv__arr--l" type="button" aria-label="' . esc_attr__( 'Previous photo', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron( 'l' ) . '</button>'
+			. ( '<button class="pv__arr pv__arr--r" type="button" aria-label="' . esc_attr__( 'Next photo', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron( 'r' ) . '</button>'
+			. '<div class="pv__dots" aria-hidden="true"></div></div><div class="pv__main"></div><div class="pv__buy"></div>'
+			. ( '<button class="pv__nav pv__prev" type="button" aria-label="' . esc_attr__( 'Previous product', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron( 'l' ) . '</button>'
+			. ( '<button class="pv__nav pv__next" type="button" aria-label="' . esc_attr__( 'Next product', 'memorial-plugin' ) . '">' ) . memorial_plugin_chevron( 'r' ) . '</button></div></dialog>';
+		}
 	},
 	20
 );

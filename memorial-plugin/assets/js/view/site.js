@@ -465,148 +465,149 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		);
 	} );
 
-	// Крупное фото с листанием: карточки каталога, работы и фото в тексте страниц со ссылкой на файл.
-	// У товара с несколькими фото (data-lb-set) листаются все его фото, затем — следующий товар.
+	// Крупное фото с листанием: «Наши работы», фото в тексте страниц со ссылкой на файл, фото одного товара.
 	// Пока крупное фото грузится, видно уже загруженную уменьшенную копию; соседние фото подгружаются заранее.
 	const lb = d.getElementById( 'lb' );
+	const pv = d.getElementById( 'pv' );
+	// страница под открытым просмотром не прокручивается
+	const lockPage = () => {
+		d.documentElement.classList.toggle(
+			'lb-open',
+			!! ( lb?.open || pv?.open )
+		);
+	};
+	// загрузка крупных фото: [href] → готово
+	const loaded = new Set(),
+		loading = new Map();
+	const preload = ( href, done ) => {
+		if ( ! href || loaded.has( href ) ) {
+			return;
+		}
+		if ( loading.has( href ) ) {
+			loading.get( href ).push( done );
+			return;
+		}
+		loading.set( href, [ done ] );
+		const im = new window.Image();
+		im.onload = () => {
+			loaded.add( href );
+			( loading.get( href ) || [] ).forEach( ( f ) => f && f() );
+			loading.delete( href );
+		};
+		im.onerror = () => loading.delete( href );
+		im.decoding = 'async';
+		im.src = href;
+	};
+	// фото в окне: сначала уменьшенная копия (если есть), крупное — когда загрузится
+	const putPhoto = ( im, it, still ) => {
+		im.alt = it.alt || '';
+		if ( loaded.has( it.href ) ) {
+			im.src = it.href;
+			im.classList.remove( 'is-low' );
+			return;
+		}
+		if ( it.low ) {
+			im.src = it.low;
+			im.classList.add( 'is-low' );
+		} else {
+			im.removeAttribute( 'src' );
+		}
+		preload( it.href, () => {
+			if ( still() ) {
+				im.src = it.href;
+				im.classList.remove( 'is-low' );
+			}
+		} );
+	};
+	const idle =
+		window.requestIdleCallback || ( ( f ) => setTimeout( f, 120 ) );
+	// горизонтальный свайп (вертикальный — прокрутка, ничего не листает)
+	const swipe = ( el, onSwipe ) => {
+		let x0 = null,
+			y0 = 0,
+			t0 = null;
+		el.addEventListener(
+			'touchstart',
+			( e ) => {
+				x0 = e.touches[ 0 ].clientX;
+				y0 = e.touches[ 0 ].clientY;
+				t0 = e.target;
+			},
+			{ passive: true }
+		);
+		el.addEventListener( 'touchend', ( e ) => {
+			if ( x0 === null ) {
+				return;
+			}
+			const dx = e.changedTouches[ 0 ].clientX - x0,
+				dy = e.changedTouches[ 0 ].clientY - y0;
+			if ( Math.abs( dx ) > 50 && Math.abs( dx ) > Math.abs( dy ) * 1.5 ) {
+				onSwipe( dx < 0 ? 1 : -1, t0 );
+			}
+			x0 = null;
+		} );
+	};
+
+	let lbOpen = null; // открыть фото: (список [{href, low, cap, alt}], с какого, { count })
 	if ( lb && lb.showModal ) {
 		const isImg = ( a ) =>
 			/\.(jpe?g|png|webp|gif|avif)(\?.*)?$/i.test(
 				a.getAttribute( 'href' ) || ''
 			);
-		d.querySelectorAll( '.content a:not(.work__thumb)' ).forEach( ( a ) => {
-			if ( isImg( a ) && a.querySelector( 'img' ) ) {
-				a.setAttribute( 'data-lb', '' );
+		d.querySelectorAll( '.content a:not(.work__thumb):not([data-pv])' ).forEach(
+			( a ) => {
+				if ( isImg( a ) && a.querySelector( 'img' ) ) {
+					a.setAttribute( 'data-lb', '' );
+				}
 			}
-		} );
+		);
 		let group = [],
-			idx = 0;
+			idx = 0,
+			withCount = true;
 		const img = lb.querySelector( 'img' ),
 			cap = lb.querySelector( 'figcaption' ),
-			count = lb.querySelector( '.lb__count' ),
-			info = lb.querySelector( '.lb__info' );
-		let shownInfo = null;
-		const loaded = new Set(),
-			loading = new Map();
-		const preload = ( it ) => {
-			if ( ! it || loaded.has( it.href ) || loading.has( it.href ) ) {
-				return;
-			}
-			const im = new window.Image();
-			loading.set( it.href, im );
-			im.onload = () => {
-				loaded.add( it.href );
-				loading.delete( it.href );
-				if ( group[ idx ] === it ) {
-					img.src = it.href;
-					img.classList.remove( 'is-low' );
-				}
-			};
-			im.onerror = () => loading.delete( it.href );
-			im.decoding = 'async';
-			im.src = it.href;
-		};
-		const idle =
-			window.requestIdleCallback || ( ( f ) => setTimeout( f, 120 ) );
+			count = lb.querySelector( '.lb__count' );
 		const show = ( i ) => {
 			idx = ( i + group.length ) % group.length;
 			const it = group[ idx ];
-			// a product under “Show more”: its part of the list opens, so it is there after the view closes
-			const li = it.a?.closest( '[data-more-hidden]' );
-			li?.parentElement?.memReveal?.( li );
-			if ( loaded.has( it.href ) ) {
-				img.src = it.href;
-				img.classList.remove( 'is-low' );
-			} else {
-				if ( it.low ) {
-					img.src = it.low;
-					img.classList.add( 'is-low' );
-				}
-				preload( it );
-			}
-			img.alt = it.alt || '';
+			putPhoto( img, it, () => group[ idx ] === it && lb.open );
 			cap.textContent = it.cap || '';
-			// “Product window”: under the photo — the price and “Order”, below — the name, specifications and description
-			if ( info ) {
-				const tpl = it.info || null;
-				lb.classList.toggle( 'lb--card', !! tpl );
-				info.hidden = ! tpl;
-				if ( tpl !== shownInfo ) {
-					info.replaceChildren(
-						...( tpl ? [ tpl.content.cloneNode( true ) ] : [] )
-					);
-					lb.scrollTop = 0;
-					shownInfo = tpl;
-				}
-			}
 			const many = group.length > 1;
 			lb.querySelectorAll( '.lb__nav' ).forEach(
 				( b ) => ( b.hidden = ! many )
 			);
 			if ( count ) {
-				count.hidden = ! many;
+				count.hidden = ! many || ! withCount;
 				count.textContent = idx + 1 + ' / ' + group.length;
 			}
 			idle( () =>
 				[ 1, -1, 2 ].forEach( ( k ) =>
 					preload(
 						group[ ( idx + k + group.length ) % group.length ]
+							?.href
 					)
 				)
 			);
 		};
-		// ссылка → список фото: [{href, low (уже загруженная копия), cap, alt}]
-		const itemsOf = ( a ) => {
-			let set = null;
-			try {
-				set = a.dataset.lbSet ? JSON.parse( a.dataset.lbSet ) : null;
-			} catch {}
-			const caption =
-				a.dataset.cap ||
-				a
+		lbOpen = ( items, start, opts = {} ) => {
+			group = items;
+			withCount = opts.count !== false;
+			show( start );
+			lb.showModal();
+			lockPage();
+		};
+		const itemOf = ( x ) => ( {
+			href: x.href,
+			low: x.querySelector( 'img' )?.currentSrc || '',
+			cap:
+				x.dataset.cap ||
+				x
 					.closest( 'figure' )
 					?.querySelector( 'figcaption' )
 					?.textContent.trim() ||
-				'';
-			const phs = [ ...a.querySelectorAll( 'img' ) ];
-			const tpl =
-				a.dataset.lbCard !== undefined
-					? a
-							.closest( '.mcard' )
-							?.querySelector( 'template.mcard__info' )
-					: null;
-			if ( ! set ) {
-				return [
-					{
-						href: a.href,
-						low:
-							phs.find( ( x ) => x.classList.contains( 'is-on' ) )
-								?.currentSrc ||
-							phs[ 0 ]?.currentSrc ||
-							'',
-						cap: caption,
-						alt: phs[ 0 ]?.alt || '',
-						a,
-						info: tpl,
-					},
-				];
-			}
-			return set.map( ( h, k ) => ( {
-				href: new URL( h, window.location.href ).href,
-				low: phs[ k ]?.currentSrc || '',
-				cap:
-					caption +
-					( set.length > 1
-						? ' · ' +
-							T( 'photoOf' )
-								.replace( '%1$d', k + 1 )
-								.replace( '%2$d', set.length )
-						: '' ),
-				alt: phs[ k ]?.alt || '',
-				a,
-				info: tpl,
-			} ) );
-		};
+				'',
+			alt: x.querySelector( 'img' )?.alt || '',
+		} );
 		d.addEventListener( 'click', ( e ) => {
 			const a = e.target.closest( 'a[data-lb]' );
 			if ( ! a || e.ctrlKey || e.metaKey || e.shiftKey ) {
@@ -616,48 +617,24 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			const items = a
 				.closest( '.work' )
 				?.querySelectorAll( '[data-lb-item]' );
-			let start = 0;
-			if ( items && items.length ) {
-				group = [ ...items ].map( ( x ) => ( {
-					href: x.href,
-					low: x.querySelector( 'img' )?.currentSrc || '',
-					cap: x.dataset.cap || '',
-					alt: x.querySelector( 'img' )?.alt || '',
-				} ) );
-				start = Math.max(
+			const list =
+				items && items.length
+					? [ ...items ]
+					: [
+							...(
+								a.closest(
+									'.wp-block-gallery, .works__list, .mem-photos'
+								) || a.parentElement
+							).querySelectorAll( 'a[data-lb]' ),
+					  ].filter( ( x ) => x.offsetParent !== null || x === a );
+			const all = list.map( itemOf );
+			lbOpen(
+				all,
+				Math.max(
 					0,
-					group.findIndex( ( x ) => x.href === a.href )
-				);
-			} else {
-				const scope =
-					a.closest(
-						'.mcat__grid, .wp-block-gallery, .works__list, .mem-photos'
-					) || a.parentElement;
-				group = [];
-				[ ...scope.querySelectorAll( 'a[data-lb]' ) ]
-					// visible products and those waiting under “Show more” (not the ones filtered out)
-					.filter(
-						( x ) =>
-							x.offsetParent !== null ||
-							( x.closest( '[data-more-hidden]' ) &&
-								scope.offsetParent !== null )
-					)
-					.forEach( ( x ) => {
-						const its = itemsOf( x );
-						if ( x === a ) {
-							start =
-								group.length +
-								Math.max(
-									0,
-									its.findIndex( ( t ) => t.href === a.href )
-								);
-						}
-						group.push( ...its );
-					} );
-			}
-			show( start );
-			d.documentElement.classList.add( 'lb-open' ); // страница под фото не прокручивается
-			lb.showModal();
+					all.findIndex( ( x ) => x.href === a.href )
+				)
+			);
 		} );
 		lb.querySelector( '.lb__x' ).addEventListener( 'click', () =>
 			lb.close()
@@ -684,43 +661,209 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				show( idx + 1 );
 			}
 		} );
-		let x0 = null;
-		lb.addEventListener(
-			'touchstart',
-			( e ) => {
-				x0 = e.touches[ 0 ].clientX;
-			},
-			{ passive: true }
-		);
 		lb.addEventListener(
 			'touchmove',
 			( e ) => {
-				// the product window scrolls (its text on a phone); the photo view keeps the page still
-				if ( e.cancelable && ! lb.classList.contains( 'lb--card' ) ) {
+				if ( e.cancelable ) {
 					e.preventDefault();
 				}
 			},
 			{ passive: false }
 		); // без прокрутки страницы
-		lb.addEventListener( 'touchend', ( e ) => {
-			if ( x0 === null ) {
-				return;
-			}
-			const dx = e.changedTouches[ 0 ].clientX - x0;
-			if ( Math.abs( dx ) > 50 && group.length > 1 ) {
-				show( idx + ( dx < 0 ? 1 : -1 ) );
-			}
-			x0 = null;
-		} );
+		swipe( lb, ( dir ) => group.length > 1 && show( idx + dir ) );
 		lb.addEventListener( 'close', () => {
 			img.removeAttribute( 'src' );
-			lb.classList.remove( 'lb--card' );
-			if ( info ) {
-				info.hidden = true;
-				info.replaceChildren();
-				shownInfo = null;
+			lockPage();
+		} );
+	}
+
+	// Крупный просмотр каталога: листаются товары (стрелки по бокам, ← →, свайп вбок),
+	// фото одного товара — стрелками и точками на фото или свайпом по фото.
+	// «Только фото» (pv--photo): фото, рядом название, цена, характеристики.
+	// «Окно товара» (pv--card): белое окно — фото | название, описание, характеристики | цена и «Заказать»;
+	// щелчок по фото открывает крупно только фото этого товара.
+	if ( pv && pv.showModal ) {
+		const box = pv.querySelector( '.pv__box' ),
+			media = pv.querySelector( '.pv__media' ),
+			pimg = pv.querySelector( '.pv__img' ),
+			dots = pv.querySelector( '.pv__dots' ),
+			main = pv.querySelector( '.pv__main' ),
+			buy = pv.querySelector( '.pv__buy' );
+		let prods = [],
+			pi = 0,
+			ph = 0;
+		// товар из карточки: фото (крупные адреса — data-big), что показать рядом (template)
+		const prodOf = ( a ) => {
+			const li = a.closest( '.mcard' );
+			const imgs = [ ...li.querySelectorAll( '.mcard__ph' ) ];
+			const photos = imgs.length
+				? imgs.map( ( x ) => ( {
+						href: new URL(
+							x.dataset.big || x.currentSrc || x.src,
+							window.location.href
+						).href,
+						low: x.complete && x.naturalWidth ? x.currentSrc : '',
+						alt: x.alt || '',
+				  } ) )
+				: [ { href: a.href, low: '', alt: '' } ];
+			return {
+				a,
+				li,
+				mode: a.dataset.pv === 'card' ? 'card' : 'photo',
+				photos,
+				tpl: li.querySelector( 'template.mcard__info' ),
+			};
+		};
+		const showPhoto = ( k ) => {
+			const p = prods[ pi ];
+			ph = ( k + p.photos.length ) % p.photos.length;
+			const it = p.photos[ ph ];
+			putPhoto(
+				pimg,
+				it,
+				() => prods[ pi ] === p && p.photos[ ph ] === it && pv.open
+			);
+			[ ...dots.children ].forEach( ( x, n ) =>
+				x.classList.toggle( 'is-on', n === ph )
+			);
+			idle( () => preload( p.photos[ ( ph + 1 ) % p.photos.length ].href ) );
+		};
+		// стрелки товаров на телефоне — на уровне строки под фото
+		const placeNav = () =>
+			box.style.setProperty(
+				'--pv-under',
+				media.offsetTop + media.offsetHeight + 'px'
+			);
+		const showProd = ( i ) => {
+			pi = ( i + prods.length ) % prods.length;
+			const p = prods[ pi ];
+			// товар под «Показать ещё»: эта часть списка раскрывается, чтобы он был виден после закрытия
+			const hid = p.li.closest( '[data-more-hidden]' );
+			hid?.parentElement?.memReveal?.( hid );
+			pv.classList.toggle( 'pv--card', p.mode === 'card' );
+			pv.classList.toggle( 'pv--photo', p.mode !== 'card' );
+			pv.setAttribute(
+				'aria-label',
+				p.li.querySelector( '.mcard__name' )?.textContent || ''
+			);
+			const parts = p.tpl
+				? [ ...p.tpl.content.cloneNode( true ).children ]
+				: [];
+			const pick = ( q ) => parts.filter( ( x ) => x.matches( q ) );
+			if ( p.mode === 'card' ) {
+				main.replaceChildren(
+					...pick( '.pv__title, .pv__sub, .pv__desc, .pv__specs' )
+				);
+				buy.replaceChildren( ...pick( '.pv__price, .pv__order' ) );
+			} else {
+				main.replaceChildren(
+					...pick( '.pv__title, .pv__sub, .pv__price, .pv__specs' )
+				);
+				buy.replaceChildren();
 			}
-			d.documentElement.classList.remove( 'lb-open' );
+			buy.hidden = ! buy.children.length;
+			const many = p.photos.length > 1;
+			media.classList.toggle( 'is-many', many );
+			dots.replaceChildren(
+				...( many ? p.photos.map( () => d.createElement( 'i' ) ) : [] )
+			);
+			pv.querySelectorAll( '.pv__nav' ).forEach(
+				( b ) => ( b.hidden = prods.length < 2 )
+			);
+			showPhoto( 0 );
+			pv.scrollTop = 0;
+			main.scrollTop = 0;
+			placeNav();
+			idle( () =>
+				[ 1, -1 ].forEach( ( k ) =>
+					preload(
+						prods[ ( pi + k + prods.length ) % prods.length ]
+							.photos[ 0 ].href
+					)
+				)
+			);
+		};
+		pimg.addEventListener( 'load', placeNav );
+		window.addEventListener( 'resize', () => pv.open && placeNav() );
+		d.addEventListener( 'click', ( e ) => {
+			const a = e.target.closest( 'a[data-pv]' );
+			if ( ! a || e.ctrlKey || e.metaKey || e.shiftKey ) {
+				return;
+			}
+			e.preventDefault();
+			const scope = a.closest( '.mcat__grid' ) || a.parentElement;
+			// видимые товары и те, что ждут под «Показать ещё» (не отфильтрованные)
+			prods = [ ...scope.querySelectorAll( 'a[data-pv]' ) ]
+				.filter(
+					( x ) =>
+						x === a ||
+						x.offsetParent !== null ||
+						( x.closest( '[data-more-hidden]' ) &&
+							scope.offsetParent !== null )
+				)
+				.map( prodOf );
+			pv.showModal();
+			lockPage();
+			showProd( Math.max( 0, prods.findIndex( ( p ) => p.a === a ) ) );
+		} );
+		pv.querySelector( '.pv__x' ).addEventListener( 'click', () =>
+			pv.close()
+		);
+		pv.querySelector( '.pv__prev' ).addEventListener( 'click', () =>
+			showProd( pi - 1 )
+		);
+		pv.querySelector( '.pv__next' ).addEventListener( 'click', () =>
+			showProd( pi + 1 )
+		);
+		pv.querySelector( '.pv__arr--l' ).addEventListener( 'click', () =>
+			showPhoto( ph - 1 )
+		);
+		pv.querySelector( '.pv__arr--r' ).addEventListener( 'click', () =>
+			showPhoto( ph + 1 )
+		);
+		// «Окно товара»: щелчок по фото — крупно только фото этого товара, без счётчика
+		pimg.addEventListener( 'click', () => {
+			const p = prods[ pi ];
+			if ( p.mode === 'card' && lbOpen ) {
+				lbOpen(
+					p.photos.map( ( x ) => ( {
+						...x,
+						low: x.low || ( loaded.has( x.href ) ? x.href : '' ),
+						cap: '',
+					} ) ),
+					ph,
+					{ count: false }
+				);
+			}
+		} );
+		pv.addEventListener( 'click', ( e ) => {
+			if ( e.target === pv ) {
+				pv.close();
+			}
+		} );
+		pv.addEventListener( 'keydown', ( e ) => {
+			if ( e.key === 'ArrowLeft' ) {
+				showProd( pi - 1 );
+			}
+			if ( e.key === 'ArrowRight' ) {
+				showProd( pi + 1 );
+			}
+		} );
+		swipe( pv, ( dir, t ) => {
+			const p = prods[ pi ];
+			if ( media.contains( t ) ) {
+				if ( p.photos.length > 1 ) {
+					showPhoto( ph + dir );
+				}
+			} else if ( prods.length > 1 ) {
+				showProd( pi + dir );
+			}
+		} );
+		pv.addEventListener( 'close', () => {
+			pimg.removeAttribute( 'src' );
+			main.replaceChildren();
+			buy.replaceChildren();
+			lockPage();
 		} );
 	}
 
