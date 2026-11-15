@@ -954,9 +954,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				}
 				const hOf = ( q ) => {
 					const el = d.querySelector( q );
-					return el && el.offsetParent !== null
-						? el.offsetHeight
-						: 0;
+					return el && el.offsetParent !== null ? el.offsetHeight : 0;
 				};
 				const bottom =
 					getComputedStyle( d.querySelector( '.mbar' ) || d.body )
