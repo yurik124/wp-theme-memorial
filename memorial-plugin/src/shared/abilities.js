@@ -80,3 +80,19 @@ export function download( filename, text, type = 'text/csv;charset=utf-8' ) {
 	a.remove();
 	window.setTimeout( () => URL.revokeObjectURL( url ), 1000 );
 }
+
+/**
+ * Give the browser a file that came as base64 (an Excel workbook from the server).
+ *
+ * @param {string} filename File name.
+ * @param {string} base64   Contents, base64.
+ * @param {string} type     MIME type.
+ */
+export function downloadBase64( filename, base64, type ) {
+	const bin = window.atob( base64 );
+	const bytes = new Uint8Array( bin.length );
+	for ( let i = 0; i < bin.length; i++ ) {
+		bytes[ i ] = bin.charCodeAt( i );
+	}
+	download( filename, bytes, type );
+}

@@ -7336,3 +7336,69 @@ msgstr "Следующий товар"
 
 msgid "Previous product"
 msgstr "Предыдущий товар"
+
+msgid "All products (or of one type, or the given ones) as an Excel or CSV file in the format of the import: SKU, type, categories, title, prices, description, photos with alt texts, specifications, visibility."
+msgstr "Все товары (или одного типа, или указанные) файлом Excel или CSV в формате импорта: артикул, тип, категории, название, цены, описание, фото с alt, характеристики, видимость."
+
+msgid "Alt"
+msgstr "Alt"
+
+msgid "Could not make the file."
+msgstr "Не удалось создать файл."
+
+msgid "Export"
+msgstr "Выгрузить"
+
+msgid "Export the catalog to Excel"
+msgstr "Выгрузить каталог в Excel"
+
+msgid "Export the catalog to Excel products prices CSV"
+msgstr "Выгрузить каталог в Excel товары цены CSV"
+
+msgid "Export the catalog to a file"
+msgstr "Выгрузить каталог в файл"
+
+msgid "Export to Excel"
+msgstr "Выгрузить в Excel"
+
+msgid "Old price"
+msgstr "Старая цена"
+
+msgid "Only “%s” — Excel"
+msgstr "Только «%s» — Excel"
+
+msgid "Price “from”"
+msgstr "Цена «от»"
+
+msgid "SKU"
+msgstr "Артикул"
+
+msgid "Spec: %s"
+msgstr "Характеристика: %s"
+
+msgid "The SKU %1$s is already used by “%2$s”."
+msgstr "Артикул %1$s уже есть у товара «%2$s»."
+
+msgid "The file, base64."
+msgstr "Файл в base64."
+
+msgid "The key of the product in the import file: a file row with this SKU updates the product. Empty — the SKU is given automatically (M-number)."
+msgstr "По артикулу импорт находит товар: строка файла с этим артикулом обновляет товар. Пусто — артикул назначится сам (M-номер)."
+
+msgid "The server cannot make Excel files (no ZIP support). Export to CSV."
+msgstr "Сервер не может создать файл Excel (нет поддержки ZIP). Выгрузите в CSV."
+
+msgid "Whole catalog — CSV"
+msgstr "Весь каталог — CSV"
+
+msgid "Whole catalog — Excel"
+msgstr "Весь каталог — Excel"
+
+msgid "automatically"
+msgstr "автоматически"
+
+msgid "no"
+msgstr "нет"
+
+msgid "yes"
+msgstr "да"

@@ -498,16 +498,29 @@ function memorial_plugin_abilities_catalog( $edit, $meta_public ) {
 		'memorial-plugin/export-catalog',
 		array(
 			'label'               => __( 'Export the catalog', 'memorial-plugin' ),
-			'description'         => __( 'All products (or of one type) as CSV: type, title, price, “from”, unit, line under the title, categories, specifications, visibility.', 'memorial-plugin' ),
+			'description'         => __( 'All products (or of one type, or the given ones) as an Excel or CSV file in the format of the import: SKU, type, categories, title, prices, description, photos with alt texts, specifications, visibility.', 'memorial-plugin' ),
 			'category'            => 'memorial',
 			'input_schema'        => array(
 				'type'                 => 'object',
 				'default'              => array(),
 				'properties'           => array(
-					'type' => array(
+					'type'   => array(
 						'type'    => 'integer',
 						'minimum' => 0,
 						'default' => 0,
+					),
+					'ids'    => array(
+						'type'    => 'array',
+						'items'   => array(
+							'type'    => 'integer',
+							'minimum' => 1,
+						),
+						'default' => array(),
+					),
+					'format' => array(
+						'type'    => 'string',
+						'enum'    => array( 'csv', 'xlsx' ),
+						'default' => 'csv',
 					),
 				),
 				'additionalProperties' => false,
@@ -517,6 +530,11 @@ function memorial_plugin_abilities_catalog( $edit, $meta_public ) {
 				'properties' => array(
 					'filename' => array( 'type' => 'string' ),
 					'count'    => array( 'type' => 'integer' ),
+					'mime'     => array( 'type' => 'string' ),
+					'file'     => array(
+						'type'        => 'string',
+						'description' => __( 'The file, base64.', 'memorial-plugin' ),
+					),
 					'csv'      => array( 'type' => 'string' ),
 				),
 			),
@@ -731,85 +749,11 @@ function memorial_plugin_abilities_search( $admin, $meta_public ) {
 }
 
 /**
- * The catalog as CSV (semicolon, UTF-8 with BOM — opens in Excel as is).
+ * The catalog as a file in the format of the import (catalog/catalog-io.php).
  *
- * @param array $input Input: type.
- * @return array{filename:string,count:int,csv:string}
+ * @param array $input Input: type, ids, format.
+ * @return array|WP_Error
  */
 function memorial_plugin_export_catalog( $input = array() ) {
-	$data  = memorial_plugin_products_data();
-	$type  = (int) ( $input['type'] ?? 0 );
-	$names = array();
-	$specs = array();
-	$cats  = array();
-	foreach ( $data['types'] as $t ) {
-		$names[ $t['id'] ] = $t['name'];
-		foreach ( $t['fields'] as $f ) {
-			$specs[ $f['label'] ] = true;
-		}
-		foreach ( $t['cats'] as $c ) {
-			$cats[ $c['id'] ] = preg_replace( '/^(— )+/u', '', $c['name'] );
-		}
-	}
-	$specs = array_keys( $specs );
-	$rows  = array(
-		array_merge(
-			array(
-				__( 'Type', 'memorial-plugin' ),
-				__( 'Title', 'memorial-plugin' ),
-				__( 'Price', 'memorial-plugin' ),
-				__( 'From', 'memorial-plugin' ),
-				__( 'Unit', 'memorial-plugin' ),
-				__( 'Line under the title', 'memorial-plugin' ),
-				__( 'Categories', 'memorial-plugin' ),
-			),
-			$specs,
-			array( __( 'On the site', 'memorial-plugin' ), 'ID' )
-		),
-	);
-	$count = 0;
-	foreach ( $data['items'] as $p ) {
-		if ( $type && $p['type'] !== $type ) {
-			continue;
-		}
-		$row = array(
-			$names[ $p['type'] ] ?? '',
-			$p['title'],
-			$p['price'] ? (string) $p['price'] : '',
-			$p['from'] ? '1' : '',
-			$p['unit'],
-			$p['sub'],
-			implode( ', ', array_filter( array_map( static fn( $c ) => $cats[ $c ] ?? '', $p['cats'] ) ) ),
-		);
-		$map = (array) $p['specs'];
-		foreach ( $specs as $s ) {
-			$row[] = (string) ( $map[ $s ] ?? '' );
-		}
-		$row[]  = 'publish' === $p['status'] ? __( 'shown', 'memorial-plugin' ) : __( 'hidden', 'memorial-plugin' );
-		$row[]  = (string) $p['id'];
-		$rows[] = $row;
-		++$count;
-	}
-	$csv = "\xEF\xBB\xBF";
-	foreach ( $rows as $row ) {
-		$csv .= implode(
-			';',
-			array_map(
-				static function ( $v ) {
-					$v = (string) $v;
-					// A value starting with = + - @ is not run as a formula in Excel.
-					if ( '' !== $v && in_array( $v[0], array( '=', '+', '-', '@' ), true ) ) {
-						$v = "'" . $v;
-					}
-					return '"' . str_replace( '"', '""', $v ) . '"';
-				},
-				$row
-			)
-		) . "\r\n";
-	}
-	return array(
-		'filename' => 'catalog-' . gmdate( 'Y-m-d' ) . '.csv',
-		'count'    => $count,
-		'csv'      => $csv,
-	);
+	return memorial_plugin_io_export( (array) $input );
 }

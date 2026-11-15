@@ -6,6 +6,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import {
 	Button,
+	DropdownMenu,
 	Flex,
 	Notice,
 	RadioControl,
@@ -15,7 +16,7 @@ import {
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
 import BooleanEdit from '../shared/boolean-edit';
-import { runAbility, download } from '../shared/abilities';
+import { runAbility, downloadBase64 } from '../shared/abilities';
 import {
 	useListData,
 	bySiteOrder,
@@ -246,7 +247,7 @@ export default function Products() {
 		type: 'table',
 		titleField: 'title',
 		mediaField: 'photos',
-		fields: [ 'price', 'sub', 'cats', 'status' ],
+		fields: [ 'sku', 'price', 'sub', 'cats', 'status' ],
 		// New products first: a product just added is at the top of the list.
 		sort: { field: 'date', direction: 'desc' },
 		perPage: 50,
@@ -297,6 +298,18 @@ export default function Products() {
 				enableGlobalSearch: true,
 				enableHiding: false,
 				filterBy: false, // The title is found by the search field.
+			},
+			{
+				id: 'sku',
+				label: __( 'SKU', 'memorial-plugin' ),
+				type: 'text',
+				enableGlobalSearch: true,
+				filterBy: false,
+				placeholder: __( 'automatically', 'memorial-plugin' ),
+				description: __(
+					'The key of the product in the import file: a file row with this SKU updates the product. Empty — the SKU is given automatically (M-number).',
+					'memorial-plugin'
+				),
 			},
 			{
 				id: 'price',
@@ -459,19 +472,21 @@ export default function Products() {
 		[ reload ]
 	);
 
-	const exportCsv = useCallback( async () => {
+	// Export in the format of the import: the whole catalog, one type or the selected products.
+	const exportFile = useCallback( async ( input ) => {
 		setBusy( true );
 		try {
-			const res = await runAbility( 'memorial-plugin/export-catalog', {
-				type: type?.id || 0,
-			} );
-			download( res.filename, res.csv );
+			const res = await runAbility(
+				'memorial-plugin/export-catalog',
+				input
+			);
+			downloadBase64( res.filename, res.file, res.mime );
 		} catch ( e ) {
 			setNotice( { status: 'error', text: e.message } );
 		} finally {
 			setBusy( false );
 		}
-	}, [ type ] );
+	}, [] );
 
 	const create = useCallback(
 		async ( photos = [], values = null ) => {
@@ -641,6 +656,16 @@ export default function Products() {
 					} ),
 			},
 			{
+				id: 'export',
+				label: __( 'Export to Excel', 'memorial-plugin' ),
+				supportsBulk: true,
+				callback: ( list2 ) =>
+					exportFile( {
+						format: 'xlsx',
+						ids: list2.map( ( i ) => i.id ),
+					} ),
+			},
+			{
 				id: 'copy',
 				label: __( 'Copy', 'memorial-plugin' ),
 				supportsBulk: true,
@@ -697,7 +722,7 @@ export default function Products() {
 			);
 		}
 		return list;
-	}, [ type, run, ability ] );
+	}, [ type, run, ability, exportFile ] );
 
 	if ( error ) {
 		return (
@@ -788,13 +813,55 @@ export default function Products() {
 									) }
 								</Button>
 							) }
-							<Button
-								variant="tertiary"
-								onClick={ exportCsv }
-								disabled={ busy }
-							>
-								{ __( 'Export to CSV', 'memorial-plugin' ) }
-							</Button>
+							<DropdownMenu
+								icon={ null }
+								text={ __( 'Export', 'memorial-plugin' ) }
+								label={ __(
+									'Export the catalog to a file',
+									'memorial-plugin'
+								) }
+								toggleProps={ {
+									variant: 'tertiary',
+									disabled: busy,
+								} }
+								controls={ [
+									{
+										title: __(
+											'Whole catalog — Excel',
+											'memorial-plugin'
+										),
+										onClick: () =>
+											exportFile( { format: 'xlsx' } ),
+									},
+									...( type && type.id > 0
+										? [
+												{
+													title: sprintf(
+														/* translators: %s: product type, e.g. Wreaths. */
+														__(
+															'Only “%s” — Excel',
+															'memorial-plugin'
+														),
+														type.name
+													),
+													onClick: () =>
+														exportFile( {
+															format: 'xlsx',
+															type: type.id,
+														} ),
+												},
+										  ]
+										: [] ),
+									{
+										title: __(
+											'Whole catalog — CSV',
+											'memorial-plugin'
+										),
+										onClick: () =>
+											exportFile( { format: 'csv' } ),
+									},
+								] }
+							/>
 							<Button variant="tertiary" href={ data.trashUrl }>
 								{ __( 'Trash', 'memorial-plugin' ) }
 							</Button>

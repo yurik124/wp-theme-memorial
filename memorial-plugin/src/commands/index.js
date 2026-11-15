@@ -22,7 +22,7 @@ import {
 	chartBar,
 	mobile,
 } from '@wordpress/icons';
-import { runAbility, download } from '../shared/abilities';
+import { runAbility, downloadBase64 } from '../shared/abilities';
 import toast from '../shared/toast';
 import './style.scss';
 
@@ -65,9 +65,9 @@ const commands = data.screens.map( ( s ) => ( {
 if ( data.can.export ) {
 	commands.push( {
 		name: 'memorial-plugin/export-catalog',
-		label: __( 'Export the catalog to CSV', 'memorial-plugin' ),
+		label: __( 'Export the catalog to Excel', 'memorial-plugin' ),
 		searchLabel: __(
-			'Export the catalog to CSV products prices Excel',
+			'Export the catalog to Excel products prices CSV',
 			'memorial-plugin'
 		),
 		icon: downloadIcon,
@@ -75,9 +75,10 @@ if ( data.can.export ) {
 			close();
 			try {
 				const res = await runAbility(
-					'memorial-plugin/export-catalog'
+					'memorial-plugin/export-catalog',
+					{ format: 'xlsx' }
 				);
-				download( res.filename, res.csv );
+				downloadBase64( res.filename, res.file, res.mime );
 				notice(
 					'success',
 					sprintf(

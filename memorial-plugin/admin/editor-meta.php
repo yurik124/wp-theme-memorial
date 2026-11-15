@@ -35,6 +35,7 @@ function memorial_plugin_editor_meta() {
 			'_mem_sub'        => array( 'string', $text ),
 			'_mem_specs'      => array( 'string', 'memorial_plugin_clean_specs' ),
 			'_mem_gallery'    => array( 'string', $ids ),
+			'_mem_sku'        => array( 'string', 'memorial_plugin_sku_clean' ),
 		),
 		'mem_work'    => array(
 			'_mem_photos'  => array( 'string', $ids ),

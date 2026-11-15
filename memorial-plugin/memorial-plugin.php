@@ -158,6 +158,7 @@ $memorial_plugin_modules = array(
 	'catalog/catalog-admin.php',
 	'catalog/catalog-types.php',
 	'catalog/catalog-manager.php',
+	'catalog/catalog-io.php',
 	'catalog/catalog-summary.php',
 	'catalog/catalog-type-page.php',
 	'catalog/catalog-types-admin.php',
