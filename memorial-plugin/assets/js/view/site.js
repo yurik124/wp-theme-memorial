@@ -551,6 +551,27 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		} );
 	};
 
+	// высота экрана без адресной строки браузера (100lvh): по ней подгоняются фото на телефоне;
+	// не меняется, когда строка прячется или появляется при прокрутке
+	let lvh = 0,
+		lvhW = 0;
+	const screenH = () => {
+		if ( ! lvh || lvhW !== window.innerWidth ) {
+			const m = d.createElement( 'div' );
+			m.style.cssText =
+				'position:fixed;top:0;left:0;width:1px;height:100lvh;visibility:hidden;pointer-events:none';
+			d.body.appendChild( m );
+			lvh = Math.max(
+				m.offsetHeight,
+				window.innerHeight,
+				d.documentElement.clientHeight
+			);
+			m.remove();
+			lvhW = window.innerWidth;
+		}
+		return lvh;
+	};
+
 	// закрытие с анимацией (крестик, Esc, щелчок мимо); без анимации, если в системе «уменьшить движение»
 	const still = window.matchMedia( '(prefers-reduced-motion: reduce)' );
 	const shut = ( modal ) => {
@@ -774,7 +795,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 							.reduce( ( h, x ) => h + x.offsetHeight + 8, 14 );
 			const top = media.offsetTop,
 				dotsH = dots.children.length ? 26 : 0;
-			const h = d.documentElement.clientHeight - top - dotsH - under - 16;
+			const h = screenH() - top - dotsH - under - 16;
 			box.style.setProperty(
 				'--pv-ph',
 				Math.max( 220, Math.round( h ) ) + 'px'
@@ -979,7 +1000,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				}
 				const rest = li.offsetHeight - imgBox.offsetHeight;
 				const h =
-					d.documentElement.clientHeight - top - bottom - rest - 24;
+					screenH() - top - bottom - rest - 24;
 				g.style.setProperty(
 					'--mcard-ph',
 					Math.max( 200, Math.round( h ) ) + 'px'

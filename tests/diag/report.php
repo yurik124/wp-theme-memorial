@@ -91,4 +91,31 @@ $out['missing_ref'] = array(
 	'opts'  => $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_value LIKE '%котляров%' LIMIT 10" ),
 	'att'   => $wpdb->get_results( "SELECT ID, guid FROM {$wpdb->posts} WHERE post_type='attachment' AND (guid LIKE '%котляров%' OR post_name LIKE '%kotlyarov%' OR post_title LIKE '%котляров%') LIMIT 10" ),
 );
+// где в настройках главной адреса загрузок, которых нет на диске
+$up = wp_get_upload_dir();
+$broken = array();
+$scan = function ( $v, $path ) use ( &$scan, &$broken, $up ) {
+	if ( is_array( $v ) ) {
+		foreach ( $v as $k => $x ) {
+			$scan( $x, $path . '/' . $k );
+		}
+		return;
+	}
+	if ( is_string( $v ) && preg_match_all( '~(?:https?://[^/"\'\s]+)?/wp-content/uploads/[^"\'\s)]+~u', $v, $m ) ) {
+		foreach ( $m[0] as $u ) {
+			$rel = rawurldecode( preg_replace( '~^.*?/wp-content/uploads/~', '', $u ) );
+			if ( ! is_file( $up['basedir'] . '/' . $rel ) ) {
+				$broken[] = array( $path, $u );
+			}
+		}
+	}
+};
+foreach ( $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE 'mem\_%' OR option_name LIKE 'memorial\_%'" ) as $o ) {
+	$scan( get_option( $o ), $o );
+}
+foreach ( $wpdb->get_results( "SELECT ID, post_content FROM {$wpdb->posts} WHERE post_status='publish' AND post_content LIKE '%/wp-content/uploads/%'" ) as $row ) {
+	$scan( $row->post_content, 'post ' . $row->ID );
+}
+$out['broken_uploads'] = array_slice( $broken, 0, 60 );
+$out['broken_count']   = count( $broken );
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );

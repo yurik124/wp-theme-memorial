@@ -44,7 +44,7 @@ function memorial_plugin_register_front_assets() {
  * Script module of the blocks (Interactivity API).
  */
 function memorial_plugin_register_view_module() {
-	$js = '/assets/js/view/blocks.js';
+	$js = memorial_plugin_asset( '/assets/js/view/blocks.js' ); // сжатая копия (tools/minify.php)
 	wp_register_script_module( 'memorial-plugin-view', MEMORIAL_PLUGIN_URL . $js, array( '@wordpress/interactivity' ), (string) filemtime( MEMORIAL_PLUGIN_DIR . $js ) );
 }
 add_action( 'init', 'memorial_plugin_register_view_module', 5 );
@@ -134,7 +134,7 @@ add_action( 'wp_enqueue_scripts', 'memorial_plugin_register_front_assets', 21 );
  * back” window and the phone links are on every page (header, footer, floating blocks).
  */
 function memorial_plugin_site_module() {
-	$js = '/assets/js/view/site.js';
+	$js = memorial_plugin_asset( '/assets/js/view/site.js' ); // сжатая копия (tools/minify.php)
 	wp_enqueue_script_module( 'memorial-plugin-site', MEMORIAL_PLUGIN_URL . $js, array( '@wordpress/interactivity' ), (string) filemtime( MEMORIAL_PLUGIN_DIR . $js ) );
 }
 add_action( 'wp_enqueue_scripts', 'memorial_plugin_site_module', 21 );
