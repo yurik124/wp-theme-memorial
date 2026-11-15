@@ -1954,6 +1954,7 @@ test.describe( 'анимация', () => {
 		await page.setViewportSize( { width: 782, height: 900 } );
 		await page.waitForTimeout( 500 );
 		await page.screenshot( { path: `${ DIR }/import-3-preview-782.png` } );
+		log( 'import', report );
 		await page.setViewportSize( { width: 1440, height: 900 } );
 		await modal.getByRole( 'button', { name: /Импортировать|Import \d/ } ).click();
 		await modal.getByRole( 'button', { name: /Откатить этот импорт|Roll back this import/ } ).waitFor( { timeout: 180000 } );
@@ -1974,7 +1975,8 @@ test.describe( 'анимация', () => {
 			return out;
 		} );
 		// Повторная проверка того же архива: фото не загружаются заново.
-		await modal.getByRole( 'button', { name: /Закрыть|Close/ } ).click();
+		log( 'import', report );
+		await modal.getByRole( 'button', { name: /Закрыть|Close/ } ).last().click();
 		await page.getByRole( 'button', { name: /^(Импорт|Import)$/ } ).click();
 		await modal.locator( 'input[type=file]' ).first().setInputFiles( { name: 'catalog-import-example.zip', mimeType: 'application/zip', buffer: Buffer.from( zipB64, 'base64' ) } );
 		await page.waitForTimeout( 800 );

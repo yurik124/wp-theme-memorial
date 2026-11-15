@@ -7735,3 +7735,6 @@ msgstr[2] "Импортировать %d товаров"
 
 msgid "Product title"
 msgstr "Название"
+
+msgid "Done. New products: %1$d, updated: %2$d, without changes: %3$d, skipped with errors: %4$d."
+msgstr "Готово. Новых товаров: %1$d, обновлено: %2$d, без изменений: %3$d, пропущено с ошибками: %4$d."

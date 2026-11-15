@@ -51,7 +51,7 @@ msgstr ""
 msgid "#%d (no title)"
 msgstr ""
 
-#: src/catalog/import.js:772
+#: src/catalog/import.js:781
 #, php-format
 msgid "%1$d of %2$d"
 msgstr ""
@@ -127,7 +127,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of photos.
-#: src/catalog/import.js:570
+#: src/catalog/import.js:569
 #, php-format
 msgid "%d photo"
 msgid_plural "%d photos"
@@ -826,7 +826,7 @@ msgstr ""
 msgid "Avito"
 msgstr ""
 
-#: src/catalog/import.js:670
+#: src/catalog/import.js:669
 msgid "Back"
 msgstr ""
 
@@ -996,7 +996,7 @@ msgstr ""
 msgid "Can be left empty: it is made from the name when you save. By the code the price is put into texts and SEO titles, so do not change it once it is used."
 msgstr ""
 
-#: src/catalog/import.js:610 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:326
+#: src/catalog/import.js:609 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:326
 msgid "Cancel"
 msgstr ""
 
@@ -1192,7 +1192,7 @@ msgstr ""
 msgid "Check mark"
 msgstr ""
 
-#: src/catalog/import.js:618
+#: src/catalog/import.js:617
 msgid "Check the file"
 msgstr ""
 
@@ -1216,7 +1216,7 @@ msgstr ""
 msgid "Choose photo"
 msgstr ""
 
-#: src/catalog/import.js:547
+#: src/catalog/import.js:546
 msgid "Choose photos"
 msgstr ""
 
@@ -1228,11 +1228,11 @@ msgstr ""
 msgid "Choose the table file (.xlsx or .csv)."
 msgstr ""
 
-#: src/catalog/import.js:528
+#: src/catalog/import.js:527
 msgid "Choose the table or an archive"
 msgstr ""
 
-#: src/catalog/import.js:587 src/catalog/search-stats.js:219
+#: src/catalog/import.js:586 src/catalog/search-stats.js:219
 msgid "Clear"
 msgstr ""
 
@@ -1256,7 +1256,7 @@ msgstr ""
 msgid "Clock — round the clock"
 msgstr ""
 
-#: catalog/catalog-front.php:436 catalog/catalog-front.php:442 src/catalog/import.js:754 leads/callback.php:163
+#: catalog/catalog-front.php:436 catalog/catalog-front.php:442 src/catalog/import.js:763 leads/callback.php:163
 msgid "Close"
 msgstr ""
 
@@ -1649,6 +1649,12 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
+#. translators: 1: new, 2: updated, 3: without changes, 4: skipped with errors.
+#: src/catalog/import.js:703
+#, php-format
+msgid "Done. New products: %1$d, updated: %2$d, without changes: %3$d, skipped with errors: %4$d."
+msgstr ""
+
 #: reviews/rewio.php:1227
 msgid "Done: loaded "
 msgstr ""
@@ -1657,7 +1663,7 @@ msgstr ""
 msgid "Down"
 msgstr ""
 
-#: src/catalog/import.js:734
+#: src/catalog/import.js:743
 msgid "Download the report"
 msgstr ""
 
@@ -1665,11 +1671,11 @@ msgstr ""
 msgid "Drag a row (or a block card below by ⋮⋮) with the mouse or a finger, or press ↑ ↓, then “Save order”. The first screen is always at the top. Blocks marked “hidden” are not visible on the site — turn on “Show this block” in their settings below."
 msgstr ""
 
-#: src/catalog/import.js:511
+#: src/catalog/import.js:510
 msgid "Drag the table (Excel or CSV) and the photos or a ZIP archive here, or choose them:"
 msgstr ""
 
-#: src/catalog/import.js:504
+#: src/catalog/import.js:503
 msgid "Drop the table, photos or a ZIP archive here"
 msgstr ""
 
@@ -2349,14 +2355,14 @@ msgid "Import"
 msgstr ""
 
 #. translators: %d: number of products.
-#: src/catalog/import.js:679
+#: src/catalog/import.js:678
 #, php-format
 msgid "Import %d product"
 msgid_plural "Import %d products"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/catalog/import.js:449
+#: src/catalog/import.js:448
 msgid "Import products"
 msgstr ""
 
@@ -2453,7 +2459,7 @@ msgid "Large"
 msgstr ""
 
 #. translators: 1: date and time, 2: number of new products, 3: number of updated products.
-#: src/catalog/import.js:475
+#: src/catalog/import.js:474
 #, php-format
 msgid "Last import %1$s: new — %2$d, updated — %3$d."
 msgstr ""
@@ -2885,7 +2891,7 @@ msgstr ""
 msgid "New product"
 msgstr ""
 
-#: src/catalog/import.js:600
+#: src/catalog/import.js:599
 msgid "New products are shown on the site at once. Otherwise they are hidden until you check them."
 msgstr ""
 
@@ -3049,7 +3055,7 @@ msgstr ""
 msgid "Nothing found."
 msgstr ""
 
-#: src/catalog/import.js:632
+#: src/catalog/import.js:631
 #, php-format
 msgid "Nothing is saved yet. New: %1$d, to update: %2$d, without changes: %3$d, with errors (will be skipped): %4$d."
 msgstr ""
@@ -3609,7 +3615,7 @@ msgid "Photos in the cards"
 msgstr ""
 
 #. translators: %d: number of photos.
-#: src/catalog/import.js:645
+#: src/catalog/import.js:644
 #, php-format
 msgid "Photos to upload: %d."
 msgstr ""
@@ -3784,7 +3790,7 @@ msgstr ""
 msgid "Product photos from the catalog"
 msgstr ""
 
-#: catalog/catalog-io.php:140
+#: catalog/catalog-io.php:140 src/catalog/import.js:90
 msgid "Product title"
 msgstr ""
 
@@ -3882,7 +3888,7 @@ msgstr ""
 msgid "Products: %d"
 msgstr ""
 
-#: src/catalog/import.js:599
+#: src/catalog/import.js:598
 msgid "Publish at once"
 msgstr ""
 
@@ -4202,11 +4208,11 @@ msgstr ""
 msgid "Roll back a conversion"
 msgstr ""
 
-#: src/catalog/import.js:493
+#: src/catalog/import.js:492
 msgid "Roll back the last import"
 msgstr ""
 
-#: src/catalog/import.js:747
+#: src/catalog/import.js:756
 msgid "Roll back this import"
 msgstr ""
 
@@ -4239,7 +4245,7 @@ msgid "Row %d"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/catalog/import.js:713
+#: src/catalog/import.js:722
 #, php-format
 msgid "Row %d:"
 msgstr ""
@@ -4748,7 +4754,7 @@ msgstr ""
 msgid "TIN (INN)"
 msgstr ""
 
-#: src/catalog/import.js:557
+#: src/catalog/import.js:556
 msgid "Table:"
 msgstr ""
 
@@ -5131,7 +5137,7 @@ msgid "There is no such question on the site yet. Call or leave your number — 
 msgstr ""
 
 #. translators: %s: list of columns.
-#: src/catalog/import.js:656
+#: src/catalog/import.js:655
 #, php-format
 msgid "These columns are not known and are skipped: %s."
 msgstr ""
@@ -5228,7 +5234,7 @@ msgstr ""
 msgid "Tint strength, % (not used in the light theme 4.0)"
 msgstr ""
 
-#: places/places.php:34 src/catalog/import.js:90 src/catalog/import.js:209 src/catalog/works.js:101 src/catalog/products.js:295 core/settings.php:272
+#: places/places.php:34 src/catalog/import.js:209 src/catalog/works.js:101 src/catalog/products.js:295 core/settings.php:272 core/settings.php:314
 msgid "Title"
 msgstr ""
 
@@ -7019,7 +7025,7 @@ msgstr ""
 msgid "no"
 msgstr ""
 
-#: src/catalog/import.js:561 legal/legal.php:154
+#: src/catalog/import.js:560 legal/legal.php:154
 msgid "not chosen"
 msgstr ""
 

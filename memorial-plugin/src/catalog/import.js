@@ -101,7 +101,7 @@ function PreviewTable( { rows } ) {
 			},
 			{
 				id: 'title',
-				label: __( 'Title', 'memorial-plugin' ),
+				label: __( 'Product title', 'memorial-plugin' ),
 				type: 'text',
 				enableGlobalSearch: true,
 				filterBy: false,
@@ -458,7 +458,6 @@ export default function ImportModal( { onClose, onDone, last } ) {
 		}
 	};
 
-	const labels = actionLabels();
 	const count = ( list, action ) =>
 		list.filter( ( r ) => r.action === action ).length;
 	const todo = preview ? preview.count.create + preview.count.update : 0;
@@ -468,10 +467,10 @@ export default function ImportModal( { onClose, onDone, last } ) {
 			title={ __( 'Import products', 'memorial-plugin' ) }
 			onRequestClose={ step === 'run' ? () => {} : onClose }
 			isDismissible={ step !== 'run' }
-			size="fill"
+			size="large"
 			className="memorial-plugin-import"
 		>
-			<Flex direction="column" gap={ 4 }>
+			<Flex direction="column" gap={ 4 } justify="flex-start">
 				{ error && (
 					<Notice status="error" onRemove={ () => setError( '' ) }>
 						{ error }
@@ -712,16 +711,23 @@ export default function ImportModal( { onClose, onDone, last } ) {
 
 				{ step === 'done' && (
 					<>
-						<Notice status="success" isDismissible={ false }>
-							{ [ 'create', 'update', 'same', 'error' ]
-								.map(
-									( a ) =>
-										`${ labels[ a ] }: ${ count(
-											results,
-											a
-										) }`
-								)
-								.join( ' · ' ) }
+						<Notice
+							status={
+								count( results, 'error' ) ? 'warning' : 'success'
+							}
+							isDismissible={ false }
+						>
+							{ sprintf(
+								/* translators: 1: new, 2: updated, 3: without changes, 4: skipped with errors. */
+								__(
+									'Done. New products: %1$d, updated: %2$d, without changes: %3$d, skipped with errors: %4$d.',
+									'memorial-plugin'
+								),
+								count( results, 'create' ),
+								count( results, 'update' ),
+								count( results, 'same' ),
+								count( results, 'error' )
+							) }
 						</Notice>
 						<ul className="memorial-plugin-import__errors">
 							{ results

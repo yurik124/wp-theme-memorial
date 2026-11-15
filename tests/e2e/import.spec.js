@@ -115,7 +115,9 @@ test( 'импорт: ZIP с таблицей и фото, проверка, за
 	await modal.getByRole( 'button', { name: 'Check the file' } ).click();
 	await expect( modal ).toContainText( 'New: 2' );
 	await modal.getByRole( 'button', { name: 'Import 2 products' } ).click();
-	await expect( modal ).toContainText( 'New: 2', { timeout: 90_000 } );
+	await expect( modal ).toContainText( 'New products: 2', {
+		timeout: 90_000,
+	} );
 	await expect(
 		modal.getByRole( 'button', { name: 'Roll back this import' } )
 	).toBeVisible();
