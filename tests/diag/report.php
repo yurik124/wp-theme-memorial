@@ -253,18 +253,4 @@ foreach ( array_slice( $sku_all, 0, 25 ) as $pid ) {
 	}
 }
 $out['photo_names'] = $photo_names;
-// Фото товаров, у которых выгрузка → импорт показала изменение фото.
-$out['photo_cases'] = array();
-foreach ( array( 3263, 3220, 3270, 3276 ) as $pid ) {
-	$thumb = (int) get_post_thumbnail_id( $pid );
-	$row   = array( 'thumb' => $thumb, 'gallery' => get_post_meta( $pid, '_mem_gallery', true ), 'photos' => array() );
-	$ids   = function_exists( 'memorial_plugin_product_photos' ) ? memorial_plugin_product_photos( $pid ) : array();
-	foreach ( $ids as $att ) {
-		$file = (string) get_attached_file( $att );
-		$name = basename( $file );
-		$same = $wpdb->get_col( $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s", '%' . $wpdb->esc_like( preg_replace( '/(-(scaled|e\d{10,}))+(\.[a-z]+)$/i', '', $name ) ) . '%' ) );
-		$row['photos'][] = $att . ' ' . get_post_type( $att ) . ' ' . ( wp_attachment_is_image( $att ) ? 'img' : 'NOT-IMG' ) . ' ' . $name . ' title=' . get_the_title( $att ) . ' similar=' . implode( ',', $same );
-	}
-	$out['photo_cases'][ $pid ] = $row;
-}
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
