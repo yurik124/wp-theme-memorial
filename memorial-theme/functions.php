@@ -97,13 +97,6 @@ add_filter(
 		return max( (int) $limit, 200000 );
 	}
 );
-		$size = 0;
-		foreach ( array( '/assets/css/main.css', '/assets/css/content.css' ) as $css ) {
-			$size += (int) wp_filesize( $dir . memorial_theme_asset( $css ) );
-		}
-		return (int) $limit + $size;
-	}
-);
 
 /*
  * Styles of core blocks (card group, media and text, card gallery): each file loads only on pages that
