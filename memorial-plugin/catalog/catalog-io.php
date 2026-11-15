@@ -4,7 +4,7 @@
  *
  * SKU (_mem_sku) — the key of a product in the file: the import finds a product by it and updates it
  * instead of creating a copy. Every product has one: a new product gets “M-<ID>” when it is saved for
- * the first time, the products made before 2.2 get it once (memorial_plugin_sku_1, log of the products in
+ * the first time, the products made before the SKU appeared get it once (memorial_plugin_sku_1, log of the products in
  * memorial_plugin_sku_log — for a rollback). The owner can change it in the product window.
  *
  * The table: one row per product; lists (categories, photos, alt texts) — one value per line of a cell

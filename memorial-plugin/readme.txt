@@ -52,6 +52,7 @@ Restore the backup of the site made before the update (UpdraftPlus: database and
 == Changelog ==
 
 = 2.1.0 =
+* Catalog: the SKU of a product; export to Excel (.xlsx) or CSV and import from them with photos (files or a ZIP archive opened by the browser): a check without writing, photos one per request, rows in portions, a log and a rollback of the last import.
 * Final release of the block version: the way back to Memorial Core 1.15 is removed. On the first admin visit the plugin deletes the settings of the removed screens, the logs of the one-time moves of 2.0 and the folders of the old plugin and theme (only if they are not active); the WebP choice is kept.
 * Removed the one-time moves that have done their work: switching over from Memorial Core, cleaning after the speed modules, test pages, the home template, catalog tiles, the cremation package, the request mail address, the Metrica mode, the model tables of the catalog, the work and gallery cards and others.
 * The footer menu columns, the breadcrumbs, the section cards and the order of “Questions and answers” use the Navigation menu of the site instead of the classic menu.
