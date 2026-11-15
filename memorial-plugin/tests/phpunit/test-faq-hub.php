@@ -80,7 +80,7 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		update_post_meta(
 			$hub,
 			'_mem_faq_sections',
-			wp_json_encode(
+			wp_slash( wp_json_encode(
 				array(
 					'order' => array( 'h:oplata', 'p' . $svc ),
 					'items' => array(
@@ -95,7 +95,7 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 						),
 					),
 				)
-			)
+			) )
 		);
 		$s = memorial_plugin_faq_sections( $hub );
 		$this->assertSame( array( 'h:oplata', 'p' . $svc ), array_column( $s, 'key' ) );
