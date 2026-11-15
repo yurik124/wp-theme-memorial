@@ -199,7 +199,7 @@ function memorial_plugin_import_read_xlsx( $path ) {
 	if ( true !== $zip->open( $path ) ) {
 		return $bad;
 	}
-	$get  = static function ( $name ) use ( $zip ) {
+	$get   = static function ( $name ) use ( $zip ) {
 		$xml = $zip->getFromName( $name );
 		if ( false === $xml ) {
 			return null;
@@ -249,7 +249,7 @@ function memorial_plugin_import_read_xlsx( $path ) {
 			} else {
 				$v = (string) $c->v;
 				// A whole number Excel keeps as 4500 or 4.5E3 — as typed.
-				if ( is_numeric( $v ) && (float) $v === round( (float) $v ) && abs( (float) $v ) < 1e15 ) {
+				if ( is_numeric( $v ) && round( (float) $v ) === (float) $v && abs( (float) $v ) < 1e15 ) {
 					$v = (string) (int) round( (float) $v );
 				}
 			}
@@ -484,16 +484,20 @@ function memorial_plugin_import_terms( $reset = false ) {
 		'fields' => array(),
 	);
 	foreach ( memorial_plugin_manager_types() as $t ) {
-		$tid                            = (int) $t->term_id;
+		$tid = (int) $t->term_id;
+
 		$out['types'][ memorial_plugin_import_norm( html_entity_decode( $t->name, ENT_QUOTES, 'UTF-8' ) ) ] = $tid;
-		$out['fields'][ $tid ]          = array_column( memorial_plugin_type_fields( $tid, false ), 'label' );
-		$out['cats'][ $tid ]            = array(
+
+		$out['fields'][ $tid ] = array_column( memorial_plugin_type_fields( $tid, false ), 'label' );
+		$out['cats'][ $tid ]   = array(
 			'path' => array(),
 			'leaf' => array(),
 		);
 		foreach ( memorial_plugin_io_cat_paths( $tid ) as $cid => $path ) {
 			$out['cats'][ $tid ]['path'][ memorial_plugin_import_norm( preg_replace( '~\s*/\s*~u', '/', $path ) ) ] = $cid;
-			$leaf                                    = memorial_plugin_import_norm( preg_replace( '~^.*/\s*~u', '', $path ) );
+
+			$leaf = memorial_plugin_import_norm( preg_replace( '~^.*/\s*~u', '', $path ) );
+
 			$out['cats'][ $tid ]['leaf'][ $leaf ][] = $cid;
 		}
 	}
@@ -714,6 +718,7 @@ function memorial_plugin_import_plan( $cells, $ctx ) {
 	// Alt texts in the order of the photos: one per line (a semicolon inside a text stays) or separated by “;”.
 	$alt_cell = trim( (string) ( $cells['alts'] ?? '' ) );
 	$alts     = '' === $alt_cell ? array() : array_map( 'trim', preg_split( str_contains( $alt_cell, "\n" ) ? '/\R/u' : '/;/u', $alt_cell ) );
+
 	$now_ids = $p ? array_map( 'intval', memorial_plugin_product_photos( $id ) ) : array();
 	if ( null !== $photos ) {
 		foreach ( $photos as $ph ) {
@@ -818,10 +823,10 @@ function memorial_plugin_import_files( $list ) {
 /**
  * Preview of an import: the plan of every row; the table waits for the import under a token.
  *
- * @param array $rows    Rows of the table.
- * @param array $files   Files: path => [size, hash].
- * @param bool  $publish Publish new products at once.
- * @param string $name   Name of the table file.
+ * @param array  $rows    Rows of the table.
+ * @param array  $files   Files: path => [size, hash].
+ * @param bool   $publish Publish new products at once.
+ * @param string $name    Name of the table file.
  * @return array|WP_Error
  */
 function memorial_plugin_import_preview( $rows, $files, $publish, $name = '' ) {
@@ -832,20 +837,20 @@ function memorial_plugin_import_preview( $rows, $files, $publish, $name = '' ) {
 	if ( ! in_array( 'sku', $map['cols'], true ) && ! in_array( 'title', $map['cols'], true ) ) {
 		return new WP_Error( 'memorial_plugin_import_head', __( 'The first row of the table must be the headers: SKU, Type, Title… Download the example file.', 'memorial-plugin' ), array( 'status' => 400 ) );
 	}
-	$ctx    = array(
+	$ctx   = array(
 		'files'   => $files,
 		'publish' => $publish,
 		'labels'  => $map['labels'],
 	);
-	$out    = array();
-	$need   = array();
-	$count  = array(
+	$out   = array();
+	$need  = array();
+	$count = array(
 		'create' => 0,
 		'update' => 0,
 		'same'   => 0,
 		'error'  => 0,
 	);
-	$seen   = array();
+	$seen  = array();
 	foreach ( $table['items'] as $item ) {
 		$plan = memorial_plugin_import_plan( $item['cells'], $ctx );
 		if ( '' !== $plan['sku'] ) {
@@ -912,7 +917,7 @@ function memorial_plugin_import_preview( $rows, $files, $publish, $name = '' ) {
  */
 function memorial_plugin_import_state( $token ) {
 	$state = preg_match( '/^[A-Za-z0-9]{24}$/', (string) $token ) ? get_transient( 'memorial_plugin_import_' . $token ) : false;
-	if ( ! is_array( $state ) || (int) $state['user'] !== get_current_user_id() ) {
+	if ( ! is_array( $state ) || get_current_user_id() !== (int) $state['user'] ) {
 		return new WP_Error( 'memorial_plugin_import_token', __( 'The check of the file is out of date. Check the file again.', 'memorial-plugin' ), array( 'status' => 400 ) );
 	}
 	return $state;
@@ -1069,7 +1074,9 @@ function memorial_plugin_import_apply( $plan, $state, &$log ) {
 			continue;
 		}
 		if ( ! isset( $log['media'][ $att ] ) ) {
-			$a                     = get_post( $att );
+			$a = get_post( $att );
+
+
 			$log['media'][ $att ] = array(
 				'alt'     => $now,
 				'title'   => $a ? $a->post_title : '',
@@ -1174,12 +1181,12 @@ function memorial_plugin_import_last() {
 		return null;
 	}
 	return array(
-		'time'     => (int) $log['time'],
-		'name'     => (string) ( $log['name'] ?? '' ),
-		'created'  => count( (array) ( $log['created'] ?? array() ) ),
-		'updated'  => count( (array) ( $log['updated'] ?? array() ) ),
-		'rolled'   => ! empty( $log['rolled'] ),
-		'canUndo'  => empty( $log['rolled'] ) && ( $log['created'] || $log['updated'] || $log['media'] ),
+		'time'    => (int) $log['time'],
+		'name'    => (string) ( $log['name'] ?? '' ),
+		'created' => count( (array) ( $log['created'] ?? array() ) ),
+		'updated' => count( (array) ( $log['updated'] ?? array() ) ),
+		'rolled'  => ! empty( $log['rolled'] ),
+		'canUndo' => empty( $log['rolled'] ) && ( $log['created'] || $log['updated'] || $log['media'] ),
 	);
 }
 
