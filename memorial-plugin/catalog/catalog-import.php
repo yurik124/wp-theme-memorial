@@ -51,7 +51,7 @@ function memorial_plugin_import_aliases() {
 		'sku'    => array( 'sku', 'артикул', 'код', 'код товара' ),
 		'type'   => array( 'type', 'тип', 'тип товара' ),
 		'cats'   => array( 'categories', 'category', 'категории', 'категория' ),
-		'title'  => array( 'title', 'name', 'название', 'наименование' ),
+		'title'  => array( 'title', 'name', 'название', 'наименование', 'заголовок' ),
 		'price'  => array( 'price', 'цена', 'цена, ₽', 'цена, руб' ),
 		'from'   => array( 'price “from”', 'from', 'цена от', 'цена «от»', 'от' ),
 		'old'    => array( 'old price', 'старая цена' ),
@@ -1626,6 +1626,9 @@ function memorial_plugin_import_ability() {
 			),
 			'permission_callback' => 'memorial_plugin_import_can',
 			'execute_callback'    => static function ( $input ) {
+				if ( ! function_exists( 'wp_tempnam' ) ) {
+					require_once ABSPATH . 'wp-admin/includes/file.php';
+				}
 				$tmp = wp_tempnam( 'memorial-import' );
 				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode, WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- the file of the ability.
 				file_put_contents( $tmp, (string) base64_decode( (string) $input['file'], true ) );

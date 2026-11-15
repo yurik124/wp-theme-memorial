@@ -7732,3 +7732,6 @@ msgid_plural "Import %d products"
 msgstr[0] "Импортировать %d товар"
 msgstr[1] "Импортировать %d товара"
 msgstr[2] "Импортировать %d товаров"
+
+msgid "Product title"
+msgstr "Название"

@@ -137,7 +137,7 @@ function memorial_plugin_io_columns() {
 		'sku'    => __( 'SKU', 'memorial-plugin' ),
 		'type'   => __( 'Type', 'memorial-plugin' ),
 		'cats'   => __( 'Categories', 'memorial-plugin' ),
-		'title'  => __( 'Title', 'memorial-plugin' ),
+		'title'  => __( 'Product title', 'memorial-plugin' ),
 		'price'  => __( 'Price', 'memorial-plugin' ),
 		'from'   => __( 'Price “from”', 'memorial-plugin' ),
 		'old'    => __( 'Old price', 'memorial-plugin' ),
@@ -427,6 +427,9 @@ function memorial_plugin_io_xlsx( $sheets ) {
  * @return string|WP_Error Bytes of the archive.
  */
 function memorial_plugin_io_zip( $files ) {
+	if ( ! function_exists( 'wp_tempnam' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
 	$tmp = wp_tempnam( 'memorial-io' );
 	$zip = new ZipArchive();
 	if ( true !== $zip->open( $tmp, ZipArchive::OVERWRITE ) ) {
