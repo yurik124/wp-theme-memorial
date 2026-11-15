@@ -631,7 +631,7 @@ function memorial_plugin_places_tpl( $k ) {
 add_action(
 	'init',
 	function () {
-		$f = memorial_plugin_asset( '/assets/js/view/cemeteries.js' ); // сжатая копия (tools/minify.php)
+		$f = memorial_plugin_asset( '/assets/js/view/cemeteries.js' ); // сжатая копия (tools/minify.php).
 		wp_register_script_module( 'memorial-plugin-cemeteries', MEMORIAL_PLUGIN_URL . $f, array( '@wordpress/interactivity' ), (string) filemtime( MEMORIAL_PLUGIN_DIR . $f ) );
 		wp_interactivity_state(
 			'memorial-plugin/cemeteries',

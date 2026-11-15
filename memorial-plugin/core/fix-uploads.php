@@ -25,12 +25,12 @@ function memorial_plugin_fixed_upload_url( $url ) {
 		return '';
 	}
 	$new = '';
-	// the same file in WebP
+	// the same file in WebP.
 	$webp = preg_replace( '/\.(jpe?g|png)$/i', '.webp', $rel );
 	if ( $webp !== $rel && is_file( $dir['basedir'] . '/' . $webp ) ) {
 		$new = $dir['baseurl'] . '/' . $webp;
 	} else {
-		// the file renamed: the attachment still keeps the first address in its guid
+		// the file renamed: the attachment still keeps the first address in its guid.
 		global $wpdb;
 		$name = pathinfo( $rel, PATHINFO_FILENAME );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- one-time repair.
@@ -43,7 +43,7 @@ function memorial_plugin_fixed_upload_url( $url ) {
 	if ( '' === $new ) {
 		return '';
 	}
-	// keep the form of the stored address (the home settings keep it relative to the site)
+	// keep the form of the stored address (the home settings keep it relative to the site).
 	return str_starts_with( $url, '/' ) ? wp_make_link_relative( $new ) : $new;
 }
 

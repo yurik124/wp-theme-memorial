@@ -72,7 +72,7 @@ add_action(
 		wp_enqueue_style( 'memorial-theme', $uri . $css, array( 'global-styles' ), filemtime( $dir . $css ) );
 		$f = memorial_theme_asset( '/assets/css/content.css' );
 		wp_enqueue_style( 'memorial-theme-content', $uri . $f, array( 'memorial-theme' ), filemtime( $dir . $f ) );
-		// два небольших файла темы встраиваются в страницу (wp_maybe_inline_styles): меньше запросов, блокирующих отрисовку
+		// два небольших файла темы встраиваются в страницу (wp_maybe_inline_styles): меньше запросов, блокирующих отрисовку.
 		wp_style_add_data( 'memorial-theme', 'path', $dir . $css );
 		wp_style_add_data( 'memorial-theme-content', 'path', $dir . $f );
 		wp_enqueue_script(
@@ -149,7 +149,7 @@ add_action(
 		$head = wp_get_global_styles( array( 'elements', 'heading', 'typography', 'fontFamily' ) );
 		$head = is_string( $head ) ? $head : '';
 		$file = str_contains( $head, 'font-family--lora' ) ? 'lora-500' : ( ( '' === $head || str_contains( $head, 'cormorant' ) ) ? 'cormorant-garamond-500' : '' );
-		// заголовки Lora — оба начертания первого экрана (500 и 600), иначе второе находится только после разбора стилей
+		// заголовки Lora — оба начертания первого экрана (500 и 600), иначе второе находится только после разбора стилей.
 		foreach ( 'lora-500' === $file ? array( 'lora-500', 'lora-600' ) : array_filter( array( $file ) ) as $font ) {
 			echo '<link rel="preload" href="' . esc_url( $uri . '/assets/fonts/' . $font . '.woff2' ) . '" as="font" type="font/woff2" crossorigin>' . "\n";
 		}

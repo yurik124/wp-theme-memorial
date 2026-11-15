@@ -50,7 +50,7 @@ function memorial_plugin_card_size_missing( $limit ) {
 	$out = array();
 	foreach ( array_keys( $ids ) as $id ) {
 		$meta = wp_get_attachment_metadata( $id );
-		// a photo narrower than the copy does not need it; a broken one is skipped
+		// a photo narrower than the copy does not need it; a broken one is skipped.
 		if ( ! is_array( $meta ) || empty( $meta['width'] ) || (int) $meta['width'] <= 360 || isset( $meta['sizes'][ MEMORIAL_PLUGIN_CARD_SIZE ] ) || ! empty( $meta['memorial_card_failed'] ) ) {
 			continue;
 		}
@@ -81,7 +81,7 @@ function memorial_plugin_card_size_batch() {
 			)
 		) : null;
 		if ( is_array( $made ) && ! empty( $made['file'] ) ) {
-			// the copy lies next to the attached file (the folder of the year and month)
+			// the copy lies next to the attached file (the folder of the year and month).
 			$meta['sizes'][ MEMORIAL_PLUGIN_CARD_SIZE ] = $made;
 		} else {
 			$meta['memorial_card_failed'] = 1;
