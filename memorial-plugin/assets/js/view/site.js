@@ -551,6 +551,28 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		} );
 	};
 
+	// закрытие с анимацией (крестик, Esc, щелчок мимо); без анимации, если в системе «уменьшить движение»
+	const still = window.matchMedia( '(prefers-reduced-motion: reduce)' );
+	const shut = ( dlg ) => {
+		if ( ! dlg.open || dlg.classList.contains( 'is-closing' ) ) {
+			return;
+		}
+		if ( still.matches ) {
+			dlg.close();
+			return;
+		}
+		dlg.classList.add( 'is-closing' );
+		setTimeout( () => {
+			dlg.classList.remove( 'is-closing' );
+			dlg.close();
+		}, 180 );
+	};
+	const animateEsc = ( dlg ) =>
+		dlg.addEventListener( 'cancel', ( e ) => {
+			e.preventDefault();
+			shut( dlg );
+		} );
+
 	let lbOpen = null; // открыть фото: (список [{href, low, cap, alt}], с какого, { count })
 	if ( lb && lb.showModal ) {
 		const isImg = ( a ) =>
@@ -639,8 +661,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			);
 		} );
 		lb.querySelector( '.lb__x' ).addEventListener( 'click', () =>
-			lb.close()
+			shut( lb )
 		);
+		animateEsc( lb );
 		lb.querySelector( '.lb__prev' ).addEventListener( 'click', () =>
 			show( idx - 1 )
 		);
@@ -652,7 +675,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				e.target === lb ||
 				e.target.classList.contains( 'lb__stage' )
 			) {
-				lb.close();
+				shut( lb );
 			}
 		} );
 		lb.addEventListener( 'keydown', ( e ) => {
@@ -732,6 +755,31 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				preload( p.photos[ ( ph + 1 ) % p.photos.length ].href )
 			);
 		};
+		// телефон: фото как можно крупнее, но под ним на экране видны цена и «Заказать»
+		// («Только фото» — название и цена). Высота — постоянная высота окна, а не текущая
+		// видимая часть: иначе фото растёт, когда браузер прячет адресную строку.
+		const phone = window.matchMedia( '(max-width: 700px)' );
+		const fit = () => {
+			if ( ! phone.matches ) {
+				box.style.removeProperty( '--pv-ph' );
+				return;
+			}
+			const under =
+				prods[ pi ]?.mode === 'card'
+					? buy.offsetHeight
+					: [ ...main.children ]
+							.filter( ( x ) =>
+								x.matches( '.pv__title, .pv__sub, .pv__price' )
+							)
+							.reduce( ( h, x ) => h + x.offsetHeight + 8, 14 );
+			const top = media.offsetTop,
+				dotsH = dots.children.length ? 26 : 0;
+			const h = d.documentElement.clientHeight - top - dotsH - under - 16;
+			box.style.setProperty(
+				'--pv-ph',
+				Math.max( 220, Math.round( h ) ) + 'px'
+			);
+		};
 		// стрелки товаров на телефоне — на уровне строки под фото
 		const placeNav = () =>
 			box.style.setProperty(
@@ -774,6 +822,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			pv.querySelectorAll( '.pv__nav' ).forEach(
 				( b ) => ( b.hidden = prods.length < 2 )
 			);
+			fit();
 			showPhoto( 0 );
 			pv.scrollTop = 0;
 			main.scrollTop = 0;
@@ -788,7 +837,15 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			);
 		};
 		pimg.addEventListener( 'load', placeNav );
-		window.addEventListener( 'resize', () => pv.open && placeNav() );
+		let pvW = window.innerWidth;
+		window.addEventListener( 'resize', () => {
+			// прокрутка на телефоне меняет только высоту (адресная строка) — размер фото не трогаем
+			if ( pv.open && window.innerWidth !== pvW ) {
+				pvW = window.innerWidth;
+				fit();
+				placeNav();
+			}
+		} );
 		d.addEventListener( 'click', ( e ) => {
 			const a = e.target.closest( 'a[data-pv]' );
 			if ( ! a || e.ctrlKey || e.metaKey || e.shiftKey ) {
@@ -816,8 +873,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			);
 		} );
 		pv.querySelector( '.pv__x' ).addEventListener( 'click', () =>
-			pv.close()
+			shut( pv )
 		);
+		animateEsc( pv );
 		pv.querySelector( '.pv__prev' ).addEventListener( 'click', () =>
 			showProd( pi - 1 )
 		);
@@ -847,7 +905,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		} );
 		pv.addEventListener( 'click', ( e ) => {
 			if ( e.target === pv ) {
-				pv.close();
+				shut( pv );
 			}
 		} );
 		pv.addEventListener( 'keydown', ( e ) => {
@@ -873,6 +931,58 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			main.replaceChildren();
 			buy.replaceChildren();
 			lockPage();
+		} );
+	}
+
+	// Каталог в одну колонку на телефоне: фото карточки по высоте экрана, чтобы под ним были видны
+	// название, цена и «Заказать» (с учётом шапки, строки разделов и нижней панели «Позвонить»).
+	const grids = d.querySelectorAll( '.mcat__grid' );
+	if ( grids.length ) {
+		const fitCards = () =>
+			grids.forEach( ( g ) => {
+				g.style.removeProperty( '--mcard-ph' );
+				const one =
+					window.innerWidth <= 600 &&
+					getComputedStyle( g ).gridTemplateColumns.split( ' ' )
+						.length === 1;
+				const li = [ ...g.children ].find(
+					( x ) => x.offsetParent !== null
+				);
+				const imgBox = li?.querySelector( '.mcard__img' );
+				if ( ! one || ! imgBox ) {
+					return;
+				}
+				const hOf = ( q ) => {
+					const el = d.querySelector( q );
+					return el && el.offsetParent !== null
+						? el.offsetHeight
+						: 0;
+				};
+				const bottom =
+					getComputedStyle( d.querySelector( '.mbar' ) || d.body )
+						.position === 'fixed'
+						? hOf( '.mbar' )
+						: 0;
+				const top =
+					hOf( '.header' ) +
+					( g.closest( '.mcat' )?.querySelector( '.mcat__bar' )
+						?.offsetHeight || 0 );
+				const rest = li.offsetHeight - imgBox.offsetHeight;
+				const h =
+					d.documentElement.clientHeight - top - bottom - rest - 24;
+				g.style.setProperty(
+					'--mcard-ph',
+					Math.max( 200, Math.round( h ) ) + 'px'
+				);
+			} );
+		fitCards();
+		window.addEventListener( 'load', fitCards );
+		let cw = window.innerWidth;
+		window.addEventListener( 'resize', () => {
+			if ( window.innerWidth !== cw ) {
+				cw = window.innerWidth;
+				fitCards();
+			}
 		} );
 	}
 

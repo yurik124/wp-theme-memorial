@@ -1651,3 +1651,67 @@ test.describe( 'просмотр', () => {
 		log( 'pv', report );
 	} );
 } );
+
+test.describe( 'анимация', () => {
+	test( 'телефон: одна колонка, окно товара при прокрутке, анимация', async ( { page, browser } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-types' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		const types = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types' } ) );
+		const list = types.types || types.items || types;
+		const venki = ( Array.isArray( list ) ? list : [] ).find( ( t ) => /венк/i.test( t.name ) );
+		await page.evaluate( ( id ) => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types/' + id, method: 'PUT', data: { values: { colsPhone: 1, orderBtn: true, orderText: 'Заказать', view: 'card' } } } ), venki.id );
+		const pg = PAGES.find( ( x ) => /венк/i.test( x.post_title ) );
+		const path = new URL( pg.url ).pathname;
+		for ( const [ w, h ] of [ [ 390, 844 ], [ 360, 640 ] ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: h }, isMobile: true, hasTouch: true, baseURL: 'http://localhost:8888' } );
+			const ph = await ctx.newPage();
+			await ph.goto( path );
+			await ph.waitForTimeout( 2500 );
+			// карточка под шапкой и строкой разделов: видны ли название, цена, «Заказать»
+			await ph.evaluate( () => {
+				const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
+				const bar = document.querySelector( '.mcat__bar' ).getBoundingClientRect().bottom;
+				window.scrollBy( 0, li.getBoundingClientRect().top - bar - 8 );
+			} );
+			await ph.waitForTimeout( 800 );
+			report[ `list ${ w }×${ h }` ] = await ph.evaluate( () => {
+				const g = document.querySelector( '.mcat__grid' );
+				const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
+				const r = ( q ) => Math.round( li.querySelector( q )?.getBoundingClientRect().bottom || -1 );
+				const mbar = document.querySelector( '.mbar' )?.getBoundingClientRect().top;
+				return { var: g.style.getPropertyValue( '--mcard-ph' ), img: Math.round( li.querySelector( '.mcard__img' ).getBoundingClientRect().height ), name: r( '.mcard__name' ), price: r( '.mcard__price' ), order: r( '.mcard__order' ), mbarTop: Math.round( mbar ), screen: innerHeight };
+			} );
+			await ph.screenshot( { path: `${ DIR }/anim-list-${ w }.png` } );
+			await ph.locator( '.mcat__grid > .mcard' ).nth( 2 ).locator( 'a[data-pv]' ).click();
+			await ph.waitForTimeout( 90 );
+			report[ `opening ${ w }` ] = await ph.locator( '#pv .pv__box' ).evaluate( ( e ) => getComputedStyle( e ).transform + ' ' + getComputedStyle( e ).animationName );
+			await ph.waitForTimeout( 2000 );
+			const g = () => ph.evaluate( () => {
+				const q = ( x ) => document.querySelector( '#pv ' + x )?.getBoundingClientRect();
+				return { img: Math.round( q( '.pv__img' ).height ), price: Math.round( q( '.pv__price' )?.left || 0 ) + '…' + Math.round( q( '.pv__price' )?.right || 0 ), order: Math.round( q( '.pv__order' )?.left || 0 ) + '…' + Math.round( q( '.pv__order' )?.right || 0 ) + ' bottom ' + Math.round( q( '.pv__order' )?.bottom || 0 ), screen: innerHeight };
+			} );
+			report[ `window ${ w }` ] = await g();
+			await ph.screenshot( { path: `${ DIR }/anim-window-${ w }.png` } );
+			await ph.locator( '#pv' ).evaluate( ( dd ) => ( dd.scrollTop = 300 ) );
+			await ph.setViewportSize( { width: w, height: h + 56 } ); // браузер спрятал адресную строку
+			await ph.waitForTimeout( 600 );
+			report[ `window ${ w } scrolled` ] = await g();
+			await ph.locator( '#pv .pv__x' ).click();
+			await ph.waitForTimeout( 60 );
+			report[ `closing ${ w }` ] = await ph.locator( '#pv' ).evaluate( ( e ) => e.open + ' ' + e.className );
+			await ph.waitForTimeout( 400 );
+			report[ `closed ${ w }` ] = await ph.locator( '#pv' ).evaluate( ( e ) => e.open );
+			await ctx.close();
+		}
+		await page.evaluate( ( id ) => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types/' + id, method: 'PUT', data: { values: { colsPhone: 2 } } } ), venki.id );
+		log( 'anim', report );
+	} );
+} );
