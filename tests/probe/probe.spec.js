@@ -1860,4 +1860,43 @@ test.describe( 'анимация', () => {
 		await setType( { colsPhone: 2 } );
 		log( 'phone-polish', report );
 	} );
+
+	test( 'артикул и выгрузка: перенос, таблица товаров, Excel и CSV', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 30000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products' ).catch( () => {} );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		const data = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/products' } ) );
+		report.products = data.items.length;
+		report.withSku = data.items.filter( ( i ) => i.sku ).length;
+		report.skuIsId = data.items.filter( ( i ) => i.sku === 'M-' + i.id ).length;
+		report.dupSku = data.items.length - new Set( data.items.map( ( i ) => i.sku ) ).size;
+		// чужой артикул не сохраняется
+		const [ a, b ] = data.items;
+		report.taken = await page.evaluate( ( [ id, sku ] ) => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/products/' + id, method: 'POST', data: { values: { sku } } } ).then( () => 'saved', ( e ) => e.code + ' ' + e.message ), [ b.id, a.sku ] );
+		for ( const format of [ 'xlsx', 'csv' ] ) {
+			report[ format ] = await page.evaluate( ( f ) => window.wp.apiFetch( { path: '/wp-abilities/v1/abilities/memorial-plugin/export-catalog/run?input[format]=' + f } ).then( ( r ) => ( { filename: r.filename, count: r.count, mime: r.mime, size: r.file.length, head: f === 'csv' ? r.csv.split( '\r\n' )[ 0 ].slice( 0, 400 ) : atob( r.file ).slice( 0, 2 ) } ), ( e ) => e.message ), format );
+		}
+		await page.waitForTimeout( 2000 );
+		await page.screenshot( { path: `${ DIR }/sku-list.png`, fullPage: false } );
+		await page.getByRole( 'button', { name: /Выгрузить|Export/ } ).first().click().catch( ( e ) => ( report.dropdown = e.message ) );
+		await page.waitForTimeout( 500 );
+		await page.screenshot( { path: `${ DIR }/sku-export-menu.png` } );
+		const dl = page.waitForEvent( 'download', { timeout: 60000 } ).catch( () => null );
+		await page.getByRole( 'menuitem', { name: /Весь каталог — Excel|Whole catalog — Excel/ } ).click().catch( ( e ) => ( report.menuitem = e.message ) );
+		const file = await dl;
+		report.download = file ? file.suggestedFilename() : 'нет';
+		if ( file ) {
+			await file.saveAs( `${ DIR }/sku-catalog.xlsx` );
+		}
+		report.errors = errs;
+		log( 'sku-export', report );
+	} );
 } );
