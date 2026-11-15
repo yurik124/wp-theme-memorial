@@ -45,7 +45,7 @@ test( 'способности плагина зарегистрированы и
 		path: '/wp-abilities/v1/abilities/memorial-plugin/export-catalog/run',
 	} );
 	expect( csv.filename ).toMatch( /^catalog-\d{4}-\d\d-\d\d\.csv$/ );
-	expect( csv.csv ).toContain( 'Title' );
+	expect( csv.csv ).toContain( 'SKU' );
 
 	// a product type and a product through abilities, then the price through change-prices
 	const type = await api( page, {

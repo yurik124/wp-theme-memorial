@@ -7402,3 +7402,339 @@ msgstr "нет"
 
 msgid "yes"
 msgstr "да"
+
+msgid "%1$d of %2$d"
+msgstr "%1$d из %2$d"
+
+msgid "%1$s — photo %2$d"
+msgstr "%1$s — фото %2$d"
+
+msgid "%1$s “%2$s” is not a number."
+msgstr "%1$s «%2$s» — не число."
+
+msgid "%1$s: “%2$s” — write “yes” or “no”."
+msgstr "%1$s: «%2$s» — напишите «да» или «нет»."
+
+msgid "A new product needs a title."
+msgstr "Для нового товара нужно название."
+
+msgid "A new product needs a type."
+msgstr "Для нового товара нужен тип."
+
+msgid "A ribbon with an inscription is made on request."
+msgstr "Лента с надписью — по желанию."
+
+msgid "Alt texts: %1$d, photos: %2$d — they are matched in order."
+msgstr "Alt: %1$d, фото: %2$d — сопоставлены по порядку."
+
+msgid "An empty cell does not change the field of a product of the site; “-” clears it. Products that are not in the file are not changed."
+msgstr "Пустая ячейка не меняет поле товара на сайте; «-» очищает его. Товары, которых нет в файле, не меняются."
+
+msgid "An oval funeral wreath of artificial roses and greenery."
+msgstr "Ритуальный венок овальной формы из искусственных роз и зелени."
+
+msgid "Archive"
+msgstr "Архив"
+
+msgid "Archive with photos (ZIP)"
+msgstr "Архив с фото (ZIP)"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Categories of the type, one per line (Alt+Enter) or separated by “;”. A nested one — with its parent: Live / Roses."
+msgstr "Категории типа, каждая с новой строки (Alt+Enter) или через «;». Вложенная — вместе с родительской: Живые / Розы."
+
+msgid "Check an import file"
+msgstr "Проверить файл импорта"
+
+msgid "Check the file"
+msgstr "Проверить файл"
+
+msgid "Choose photos"
+msgstr "Выбрать фото"
+
+msgid "Choose the table file (.xlsx or .csv)."
+msgstr "Выберите файл таблицы (.xlsx или .csv)."
+
+msgid "Choose the table or an archive"
+msgstr "Выбрать таблицу или архив"
+
+msgid "Column"
+msgstr "Колонка"
+
+msgid "Description of each photo for the blind and search engines, one per line in the order of the photos. Empty — the title of the product."
+msgstr "Описание каждого фото для незрячих и поисковиков, по одному в строке, в порядке фото. Пусто — название товара."
+
+msgid "Download the report"
+msgstr "Скачать отчёт"
+
+msgid "Drag the table (Excel or CSV) and the photos or a ZIP archive here, or choose them:"
+msgstr "Перетащите сюда таблицу (Excel или CSV) и фото или ZIP-архив, или выберите их:"
+
+msgid "Drop the table, photos or a ZIP archive here"
+msgstr "Отпустите таблицу, фото или ZIP-архив здесь"
+
+msgid "Error — skipped"
+msgstr "Ошибка — пропущен"
+
+msgid "Errors and notes"
+msgstr "Ошибки и замечания"
+
+msgid "Example"
+msgstr "Пример"
+
+msgid "Example file:"
+msgstr "Пример файла:"
+
+msgid "Example: oval wreath"
+msgstr "Образец: венок овальный"
+
+msgid "Example: photos from the folder OBR-3"
+msgstr "Образец: фото из папки OBR-3"
+
+msgid "Example: price on request"
+msgstr "Образец: цена по запросу"
+
+msgid "File name with the extension: .xlsx or .csv."
+msgstr "Имя файла с расширением: .xlsx или .csv."
+
+msgid "File names, one per line or separated by “;”; the first is the main photo. Files are taken from the archive (or the selected files), otherwise from the media library by name. Empty — the files of the folder named as the SKU: foto/M-1024/1.jpg, 2.jpg…"
+msgstr "Имена файлов, каждое с новой строки или через «;»; первое — главное фото. Файлы берутся из архива (или выбранных файлов), иначе из медиатеки по имени. Пусто — файлы из папки с именем артикула: foto/M-1024/1.jpg, 2.jpg…"
+
+msgid "Guide"
+msgstr "Памятка"
+
+msgid "Height"
+msgstr "Высота"
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "Import products"
+msgstr "Импорт товаров"
+
+msgid "Import products from Excel or CSV"
+msgstr "Импорт товаров из Excel или CSV"
+
+msgid "Import products from Excel or CSV catalog photos ZIP"
+msgstr "Импорт товаров из Excel или CSV каталог фото ZIP загрузить"
+
+msgid "Last import %1$s: new — %2$d, updated — %3$d."
+msgstr "Последний импорт %1$s: новых — %2$d, обновлено — %3$d."
+
+msgid "Made to order in 2–3 days."
+msgstr "Изготовление под заказ за 2–3 дня."
+
+msgid "New"
+msgstr "Новый"
+
+msgid "New products are shown on the site at once. Otherwise they are hidden until you check them."
+msgstr "Новые товары сразу появятся на сайте. Иначе они скрыты, пока вы их не проверите."
+
+msgid "No change"
+msgstr "Без изменений"
+
+msgid "Nothing is saved yet. New: %1$d, to update: %2$d, without changes: %3$d, with errors (will be skipped): %4$d."
+msgstr "Пока ничего не сохранено. Новых: %1$d, обновить: %2$d, без изменений: %3$d, с ошибками (будут пропущены): %4$d."
+
+msgid "One column per specification, the name after the colon as in the type."
+msgstr "Каждая характеристика — своей колонкой, название после двоеточия — как у типа."
+
+msgid "Only photos can be uploaded (JPEG, PNG, WebP, GIF)."
+msgstr "Загружать можно только фото (JPEG, PNG, WebP, GIF)."
+
+msgid "Oval"
+msgstr "Овальные"
+
+msgid "Oval wreath, front view"
+msgstr "Овальный венок, вид спереди"
+
+msgid "Oval wreath, side view"
+msgstr "Овальный венок, вид сбоку"
+
+msgid "Photo %s was not found among the files or in the media library."
+msgstr "Фото %s не найдено ни среди файлов, ни в медиатеке."
+
+msgid "Photo %s was not uploaded."
+msgstr "Фото %s не загрузилось."
+
+msgid "Photos to upload: %d."
+msgstr "Фото для загрузки: %d."
+
+msgid "Plain text; an empty line starts a new paragraph."
+msgstr "Простой текст; пустая строка начинает новый абзац."
+
+msgid "Product type exactly as in “Catalog → Types and categories” (the sheet “Types and categories”). Needed for a new product."
+msgstr "Тип товара точно как в «Каталог → Типы и категории» (лист «Типы и категории»). Нужен для нового товара."
+
+msgid "Publish at once"
+msgstr "Сразу опубликовать"
+
+msgid "Reading the photos…"
+msgstr "Читаю фото…"
+
+msgid "Reads a table of products (Excel or CSV, base64) and tells what the import would do with each row: create, update, no change or an error. Nothing is written."
+msgstr "Читает таблицу товаров (Excel или CSV, base64) и сообщает, что импорт сделает с каждой строкой: создаст, обновит, без изменений или ошибка. Ничего не записывает."
+
+msgid "Roll back the last import"
+msgstr "Откатить последний импорт"
+
+msgid "Roll back this import"
+msgstr "Откатить этот импорт"
+
+msgid "Rolled back: %1$d new products moved to the trash, %2$d products returned as they were."
+msgstr "Откат выполнен: новых товаров в корзину — %1$d, товаров возвращено как было — %2$d."
+
+msgid "Row"
+msgstr "Строка"
+
+msgid "Row %d:"
+msgstr "Строка %d:"
+
+msgid "Saving the products…"
+msgstr "Сохраняю товары…"
+
+msgid "Short text."
+msgstr "Короткий текст."
+
+msgid "Table:"
+msgstr "Таблица:"
+
+msgid "The Excel file could not be read. Save it again in Excel as “Excel Workbook (.xlsx)” or as CSV."
+msgstr "Не удалось прочитать файл Excel. Сохраните его заново в Excel как «Книга Excel (.xlsx)» или как CSV."
+
+msgid "The Photos column is empty: the photos are taken from the folder foto/OBR-3 of the archive, in the order of the file names."
+msgstr "Колонка «Фото» пустая: фото берутся из папки foto/OBR-3 архива, по порядку имён файлов."
+
+msgid "The archive could not be opened. Make it again as a ZIP (not RAR or 7z)."
+msgstr "Не удалось открыть архив. Сделайте его заново в формате ZIP (не RAR и не 7z)."
+
+msgid "The archive is too large (more than 4 GB). Split the photos into several archives."
+msgstr "Архив слишком большой (больше 4 ГБ). Разделите фото на несколько архивов."
+
+msgid "The check of the file is out of date. Check the file again."
+msgstr "Проверка файла устарела. Проверьте файл ещё раз."
+
+msgid "The first row of the table must be the headers: SKU, Type, Title… Download the example file."
+msgstr "Первая строка таблицы — заголовки: Артикул, Тип, Название… Скачайте пример файла."
+
+msgid "The first row of the table — the headers, one product per row. The archive (ZIP): the table in the root and the folder “foto” with the photos named in the “Photos” column. Or folders named as the SKUs (foto/M-1024/1.jpg, 2.jpg) with the “Photos” cell empty. The example Excel file has the guide to every column and the types and categories of the site."
+msgstr "Первая строка таблицы — заголовки, дальше по товару в строке. Архив (ZIP): таблица в корне и папка «foto» с фото, имена которых указаны в колонке «Фото». Или папки с именами артикулов (foto/M-1024/1.jpg, 2.jpg) — тогда ячейку «Фото» оставьте пустой. В примере Excel есть памятка по каждой колонке и типы и категории вашего сайта."
+
+msgid "The key of the product. A row with the SKU of a product of the site updates it; a new or empty SKU makes a new product."
+msgstr "Ключ товара. Строка с артикулом товара сайта обновляет его; новый или пустой артикул создаёт новый товар."
+
+msgid "The photo was not received."
+msgstr "Фото не получено."
+
+msgid "The product could not be created."
+msgstr "Не удалось создать товар."
+
+msgid "The same SKU is in row %d."
+msgstr "Такой же артикул — в строке %d."
+
+msgid "The table file could not be read or is larger than 10 MB."
+msgstr "Файл таблицы не читается или больше 10 МБ."
+
+msgid "The table must be an Excel file (.xlsx) or CSV."
+msgstr "Таблица должна быть файлом Excel (.xlsx) или CSV."
+
+msgid "The title cannot be cleared."
+msgstr "Название нельзя очистить."
+
+msgid "The type has no specification “%s” — it is kept as an extra one."
+msgstr "У типа нет характеристики «%s» — она сохранится как дополнительная."
+
+msgid "There are several categories “%s” — write the path, e.g. Live / Roses."
+msgstr "Категорий «%s» несколько — укажите путь, например: Живые / Розы."
+
+msgid "There are several files named %s — write the folder too, e.g. foto/M-1/1.jpg."
+msgstr "Файлов с именем %s несколько — укажите и папку, например foto/M-1/1.jpg."
+
+msgid "There is no category “%s” in this type."
+msgstr "У этого типа нет категории «%s»."
+
+msgid "There is no import to roll back."
+msgstr "Нет импорта для отката."
+
+msgid "There is no product type “%s”. Add it in “Catalog → Types and categories” or correct the name."
+msgstr "Типа товара «%s» нет. Добавьте его в «Каталог → Типы и категории» или исправьте название."
+
+msgid "These columns are not known and are skipped: %s."
+msgstr "Эти колонки не распознаны и пропущены: %s."
+
+msgid "This file is not needed by the import."
+msgstr "Этот файл импорту не нужен."
+
+msgid "Title of the product. Needed for a new product."
+msgstr "Название товара. Нужно для нового товара."
+
+msgid "Update"
+msgstr "Обновить"
+
+msgid "Uploading the photos…"
+msgstr "Загружаю фото…"
+
+msgid "What changes"
+msgstr "Что изменится"
+
+msgid "What happened"
+msgstr "Результат"
+
+msgid "What happens"
+msgstr "Что будет"
+
+msgid "What to write"
+msgstr "Что писать"
+
+msgid "Whole roubles. Empty or 0 — “price on request”."
+msgstr "Целые рубли. Пусто или 0 — «цена по запросу»."
+
+msgid "Wreath “Tenderness”"
+msgstr "Венок «Нежность»"
+
+msgid "Wreath, front view"
+msgstr "Венок, вид спереди"
+
+msgid "Wreaths"
+msgstr "Венки"
+
+msgid "ZIP: the table in the root and the folder foto with the photos (or folders named as the SKUs)."
+msgstr "ZIP: таблица в корне и папка foto с фото (или папки с именами артикулов)."
+
+msgid "example"
+msgstr "пример"
+
+msgid "in the library: %d"
+msgstr "в медиатеке: %d"
+
+msgid "not found: %d"
+msgstr "не найдено: %d"
+
+msgid "pcs"
+msgstr "шт"
+
+msgid "to upload: %d"
+msgstr "загрузить: %d"
+
+msgid "“yes” or “no”. On the site empty — a new product is hidden, unless “Publish at once” is on."
+msgstr "«да» или «нет». Если «На сайте» пусто — новый товар скрыт, если не отмечено «Сразу опубликовать»."
+
+msgid "%d photo"
+msgid_plural "%d photos"
+msgstr[0] "%d фото"
+msgstr[1] "%d фото"
+msgstr[2] "%d фото"
+
+msgid "Import %d product"
+msgid_plural "Import %d products"
+msgstr[0] "Импортировать %d товар"
+msgstr[1] "Импортировать %d товара"
+msgstr[2] "Импортировать %d товаров"
+
+msgid "Product title"
+msgstr "Название"
+
+msgid "Done. New products: %1$d, updated: %2$d, without changes: %3$d, skipped with errors: %4$d."
+msgstr "Готово. Новых товаров: %1$d, обновлено: %2$d, без изменений: %3$d, пропущено с ошибками: %4$d."

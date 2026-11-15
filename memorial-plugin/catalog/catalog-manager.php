@@ -277,6 +277,8 @@ function memorial_plugin_products_data() {
 		'canManage' => current_user_can( 'manage_categories' ),
 		'typesUrl'  => admin_url( 'edit.php?post_type=mem_product&page=mem-types' ),
 		'trashUrl'  => admin_url( 'edit.php?post_status=trash&post_type=mem_product' ),
+		'canImport'  => function_exists( 'memorial_plugin_import_can' ) && memorial_plugin_import_can(),
+		'importLast' => function_exists( 'memorial_plugin_import_last' ) ? memorial_plugin_import_last() : null,
 	);
 }
 

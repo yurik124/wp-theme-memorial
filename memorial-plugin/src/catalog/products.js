@@ -26,6 +26,7 @@ import {
 	arrayFilters,
 } from './list-screen';
 import { photosField, termsField, statusField, rub, DescEdit } from './fields';
+import ImportModal from './import';
 
 const API = '/memorial-plugin/v1/catalog/products';
 const catsFilter = arrayFilters( [ 'cats' ] );
@@ -237,6 +238,12 @@ export default function Products() {
 	const selected = useRef( 0 );
 	selected.current = selection.length;
 	const [ busy, setBusy ] = useState( false );
+	// Catalog → Products → Import; ?import=1 (the Command Palette) opens it at once.
+	const [ importing, setImporting ] = useState(
+		() =>
+			new URLSearchParams( window.location.search ).get( 'import' ) ===
+			'1'
+	);
 	const [ typeId, setTypeId ] = useState(
 		() =>
 			Number(
@@ -813,6 +820,15 @@ export default function Products() {
 									) }
 								</Button>
 							) }
+							{ data.canImport && (
+								<Button
+									variant="secondary"
+									onClick={ () => setImporting( true ) }
+									disabled={ busy }
+								>
+									{ __( 'Import', 'memorial-plugin' ) }
+								</Button>
+							) }
 							<DropdownMenu
 								icon={ null }
 								text={ __( 'Export', 'memorial-plugin' ) }
@@ -892,6 +908,18 @@ export default function Products() {
 				selection={ selection }
 				setSelection={ setSelection }
 			/>
+			{ importing && data?.canImport && (
+				<ImportModal
+					last={ data.importLast }
+					onDone={ reload }
+					onClose={ () => {
+						setImporting( false );
+						const url = new URL( window.location.href );
+						url.searchParams.delete( 'import' );
+						window.history.replaceState( null, '', url );
+					} }
+				/>
+			) }
 			{ editing && (
 				<EditModal
 					title={

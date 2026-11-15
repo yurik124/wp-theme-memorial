@@ -4,7 +4,7 @@
  *
  * SKU (_mem_sku) — the key of a product in the file: the import finds a product by it and updates it
  * instead of creating a copy. Every product has one: a new product gets “M-<ID>” when it is saved for
- * the first time, the products made before 2.2 get it once (memorial_plugin_sku_1, log of the products in
+ * the first time, the products made before the SKU appeared get it once (memorial_plugin_sku_1, log of the products in
  * memorial_plugin_sku_log — for a rollback). The owner can change it in the product window.
  *
  * The table: one row per product; lists (categories, photos, alt texts) — one value per line of a cell
@@ -137,7 +137,7 @@ function memorial_plugin_io_columns() {
 		'sku'    => __( 'SKU', 'memorial-plugin' ),
 		'type'   => __( 'Type', 'memorial-plugin' ),
 		'cats'   => __( 'Categories', 'memorial-plugin' ),
-		'title'  => __( 'Title', 'memorial-plugin' ),
+		'title'  => __( 'Product title', 'memorial-plugin' ),
 		'price'  => __( 'Price', 'memorial-plugin' ),
 		'from'   => __( 'Price “from”', 'memorial-plugin' ),
 		'old'    => __( 'Old price', 'memorial-plugin' ),
@@ -185,7 +185,7 @@ function memorial_plugin_io_cat_paths( $type ) {
 				'taxonomy'   => 'mem_cat',
 				'parent'     => $parent,
 				'hide_empty' => false,
-				'orderby'    => 'term_order',
+				'orderby'    => 'name',
 			)
 		);
 		foreach ( is_wp_error( $terms ) ? array() : $terms as $t ) {
@@ -277,7 +277,7 @@ function memorial_plugin_io_table( $args = array() ) {
 			'sku'    => $m( '_mem_sku' ),
 			'type'   => $names[ $type ] ?? '',
 			'cats'   => implode( "\n", array_filter( array_map( static fn( $c ) => $paths[ $type ][ (int) $c ] ?? '', is_wp_error( $cats ) ? array() : $cats ) ) ),
-			'title'  => html_entity_decode( get_the_title( $p ), ENT_QUOTES, 'UTF-8' ),
+			'title'  => html_entity_decode( $p->post_title, ENT_QUOTES, 'UTF-8' ),
 			'price'  => (int) $m( '_mem_price' ) ? (int) $m( '_mem_price' ) : '',
 			'from'   => '1' === $m( '_mem_price_from' ) ? $yes : '',
 			'old'    => (int) $m( '_mem_price_old' ) ? (int) $m( '_mem_price_old' ) : '',
@@ -427,6 +427,9 @@ function memorial_plugin_io_xlsx( $sheets ) {
  * @return string|WP_Error Bytes of the archive.
  */
 function memorial_plugin_io_zip( $files ) {
+	if ( ! function_exists( 'wp_tempnam' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
 	$tmp = wp_tempnam( 'memorial-io' );
 	$zip = new ZipArchive();
 	if ( true !== $zip->open( $tmp, ZipArchive::OVERWRITE ) ) {
