@@ -961,8 +961,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 						: 0;
 				};
 				const bottom =
-					window.getComputedStyle( d.querySelector( '.mbar' ) || d.body )
-						.position === 'fixed'
+					window.getComputedStyle(
+						d.querySelector( '.mbar' ) || d.body
+					).position === 'fixed'
 						? hOf( '.mbar' )
 						: 0;
 				// верхняя граница — низ прилипшей строки разделов (её высота — в прилипшем виде)
