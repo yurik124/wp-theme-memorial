@@ -1995,3 +1995,55 @@ test.describe( 'анимация', () => {
 		log( 'import', report );
 	} );
 } );
+
+test.describe( 'ширина', () => {
+	test( 'ширина ПК: горизонтальная прокрутка', async ( { browser } ) => {
+		test.setTimeout( 900_000 );
+		const report = {};
+		const paths = [ ...new Set( PAGES.map( ( p ) => new URL( p.url ).pathname ) ) ].slice( 0, 60 );
+		for ( const w of [ 1280, 1366, 1440, 1920 ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: 900 }, baseURL: 'http://localhost:8888' } );
+			const page = await ctx.newPage();
+			for ( const path of paths ) {
+				await page.goto( path, { waitUntil: 'load' } ).catch( () => {} );
+				await page.waitForTimeout( 400 );
+				const r = await page.evaluate( () => {
+					const de = document.documentElement;
+					const cw = de.clientWidth;
+					// Windows: полоса прокрутки ~17 px съедает ширину, а 100vw её не учитывает
+					const win = cw === window.innerWidth ? cw - 17 : cw;
+					const path = ( el ) => {
+						const out = [];
+						for ( let e = el; e && e !== document.body && out.length < 4; e = e.parentElement ) {
+							out.unshift( e.tagName.toLowerCase() + ( e.id ? '#' + e.id : '' ) + ( e.className && typeof e.className === 'string' ? '.' + e.className.trim().split( /\s+/ ).slice( 0, 2 ).join( '.' ) : '' ) );
+						}
+						return out.join( ' > ' );
+					};
+					const over = [];
+					const overWin = [];
+					for ( const el of document.body.querySelectorAll( '*' ) ) {
+						const cs = getComputedStyle( el );
+						if ( cs.position === 'fixed' || cs.display === 'none' || el.closest( 'dialog:not([open])' ) ) {
+							continue;
+						}
+						const rc = el.getBoundingClientRect();
+						if ( ! rc.width ) {
+							continue;
+						}
+						if ( rc.right > cw + 0.5 ) {
+							over.push( path( el ) + ' right=' + Math.round( rc.right ) + ' w=' + Math.round( rc.width ) );
+						} else if ( rc.right > win + 0.5 ) {
+							overWin.push( path( el ) + ' right=' + Math.round( rc.right ) + ' w=' + Math.round( rc.width ) + ' css-w=' + cs.width );
+						}
+					}
+					return { sw: de.scrollWidth, cw, iw: window.innerWidth, over: over.slice( 0, 6 ), overWin: overWin.slice( 0, 6 ) };
+				} ).catch( ( e ) => ( { error: e.message } ) );
+				if ( r.error || r.sw > r.cw || r.over?.length || r.overWin?.length ) {
+					report[ w + ' ' + path ] = r;
+				}
+			}
+			await ctx.close();
+		}
+		log( 'width', report );
+	} );
+} );
