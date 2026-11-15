@@ -713,7 +713,9 @@ export default function ImportModal( { onClose, onDone, last } ) {
 					<>
 						<Notice
 							status={
-								count( results, 'error' ) ? 'warning' : 'success'
+								count( results, 'error' )
+									? 'warning'
+									: 'success'
 							}
 							isDismissible={ false }
 						>
