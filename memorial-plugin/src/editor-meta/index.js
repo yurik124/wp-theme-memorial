@@ -20,7 +20,9 @@ import {
 	TextareaControl,
 	ToggleControl,
 } from '@wordpress/components';
+import { store as blockEditorStore } from '@wordpress/block-editor';
 import Photos from '../shared/photos';
+import FaqSections from './faq-sections';
 import './style.scss';
 
 const settings = window.memorialPluginEditorMeta || {};
@@ -292,10 +294,41 @@ function WorkPanel() {
 	);
 }
 
+/**
+ * Does the page have the “All questions and answers” block (at any depth)?
+ *
+ * @param {Object[]} blocks Blocks.
+ * @return {boolean} Yes or no.
+ */
+const hasFaq = ( blocks ) =>
+	blocks.some(
+		( b ) =>
+			b.name === 'memorial-plugin/faq' || hasFaq( b.innerBlocks || [] )
+	);
+
 function PagePanel() {
 	const [ meta, set ] = useMeta( 'page' );
+	const { postId, faq } = useSelect(
+		( select ) => ( {
+			postId: select( editorStore ).getCurrentPostId(),
+			faq: hasFaq( select( blockEditorStore ).getBlocks() ),
+		} ),
+		[]
+	);
 	return (
 		<>
+			{ faq && (
+				<PluginDocumentSettingPanel
+					name="memorial-plugin-page-faq"
+					title={ __( 'Question sections', 'memorial-plugin' ) }
+				>
+					<FaqSections
+						postId={ postId }
+						value={ meta._mem_faq_sections || '' }
+						onChange={ ( v ) => set( '_mem_faq_sections', v ) }
+					/>
+				</PluginDocumentSettingPanel>
+			) }
 			<PluginDocumentSettingPanel
 				name="memorial-plugin-page-products"
 				title={ __( 'Products on the page', 'memorial-plugin' ) }

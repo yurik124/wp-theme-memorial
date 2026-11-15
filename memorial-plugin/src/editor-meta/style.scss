@@ -1,1 +1,27 @@
 @use "../shared/photos";
+
+// Page “Questions and answers” → “Question sections” (faq-sections.js).
+.memorial-plugin-faq-sections {
+
+	&__row {
+		padding: 12px 14px;
+		border: 1px solid #e2ded2;
+		border-radius: 12px;
+		background: #fff;
+	}
+
+	&__meta,
+	&__note {
+		color: #5f625a;
+	}
+
+	&__fields {
+		display: grid;
+		gap: 10px;
+		margin-top: 10px;
+	}
+
+	&__note {
+		margin: 0;
+	}
+}

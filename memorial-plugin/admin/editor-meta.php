@@ -56,9 +56,11 @@ function memorial_plugin_editor_meta() {
 			),
 		),
 		'page'        => array(
-			'_mem_products' => array( 'string', 'memorial_plugin_page_products_value' ),
-			'_mem_q'        => array( 'string', $text ),
-			'_mem_qa'       => array( 'string', static fn( $v ) => trim( sanitize_textarea_field( (string) $v ) ) ),
+			'_mem_products'     => array( 'string', 'memorial_plugin_page_products_value' ),
+			'_mem_q'            => array( 'string', $text ),
+			'_mem_qa'           => array( 'string', static fn( $v ) => trim( sanitize_textarea_field( (string) $v ) ) ),
+			// Разделы страницы «Вопрос–ответ»: порядок, кнопка, заголовок, якорь, текст ссылки (content/faq.php).
+			'_mem_faq_sections' => array( 'string', static fn( $v ) => function_exists( 'memorial_plugin_faq_settings_clean' ) ? (string) wp_json_encode( memorial_plugin_faq_settings_clean( $v ), JSON_UNESCAPED_UNICODE ) : (string) $v ),
 		),
 	);
 }

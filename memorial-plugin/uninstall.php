@@ -27,7 +27,7 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 function memorial_plugin_uninstall_site( $everything ) {
 	global $wpdb;
 
-	foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron', 'memorial_plugin_card_sizes' ) as $hook ) {
+	foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron', 'memorial_plugin_card_sizes', 'memorial_plugin_llms' ) as $hook ) {
 		wp_clear_scheduled_hook( $hook );
 	}
 
@@ -37,7 +37,11 @@ function memorial_plugin_uninstall_site( $everything ) {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- one-time cleanup of the plugin’s own rows.
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $pattern ) );
 	}
-	foreach ( array( 'mem_rewio_cache', 'mem_rewio_catalog', 'mem_rewio_status', 'mem_logos_queue', 'mem_core_flush', 'memorial_plugin_pages_to_content', 'memorial_plugin_upgrade_210', 'memorial_plugin_reviews_mail_last', 'memorial_plugin_card_sizes_done', 'memorial_plugin_fix_uploads_2', 'memorial_plugin_fix_uploads_log', 'memorial_plugin_sku_1', 'memorial_plugin_sku_log', 'memorial_plugin_import_log' ) as $option ) {
+	// llms.txt in the root of the site — only the one the plugin made.
+	if ( get_option( 'memorial_plugin_llms_file' ) && file_exists( ABSPATH . 'llms.txt' ) ) {
+		wp_delete_file( ABSPATH . 'llms.txt' );
+	}
+	foreach ( array( 'mem_rewio_cache', 'mem_rewio_catalog', 'mem_rewio_status', 'mem_logos_queue', 'mem_core_flush', 'memorial_plugin_pages_to_content', 'memorial_plugin_upgrade_210', 'memorial_plugin_reviews_mail_last', 'memorial_plugin_card_sizes_done', 'memorial_plugin_fix_uploads_2', 'memorial_plugin_fix_uploads_log', 'memorial_plugin_sku_1', 'memorial_plugin_sku_log', 'memorial_plugin_import_log', 'memorial_plugin_llms_file' ) as $option ) {
 		delete_option( $option );
 	}
 

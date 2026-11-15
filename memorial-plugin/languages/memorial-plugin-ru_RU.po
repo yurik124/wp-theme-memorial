@@ -7738,3 +7738,69 @@ msgstr "Название"
 
 msgid "Done. New products: %1$d, updated: %2$d, without changes: %3$d, skipped with errors: %4$d."
 msgstr "Готово. Новых товаров: %1$d, обновлено: %2$d, без изменений: %3$d, пропущено с ошибками: %4$d."
+
+msgid "Anchor"
+msgstr "Якорь"
+
+msgid "Button"
+msgstr "Кнопка"
+
+msgid "Button, heading, anchor, link text and the order of the sections."
+msgstr "Кнопка, заголовок, якорь, текст ссылки и порядок разделов."
+
+msgid "Changes are kept with the page: press “Save” of the page. A section just added to the page appears here after saving. Empty fields — the gray text."
+msgstr "Изменения сохраняются вместе со страницей — нажмите «Сохранить» страницы. Только что добавленный раздел появится здесь после сохранения. Пустое поле — как серый текст."
+
+msgid "Do not use personal data from reviews and requests."
+msgstr "Не используйте персональные данные из отзывов и заявок."
+
+msgid "Funeral services company in Belgorod: arranging funerals and cremation, transportation of the deceased, mourning hall, memorial meals, funeral goods, monuments and grave improvement."
+msgstr "Ритуальная компания в Белгороде: организация похорон и кремации, перевозка умерших, траурный зал, поминальные обеды, ритуальные товары, памятники и благоустройство захоронений."
+
+msgid "Heading"
+msgstr "Заголовок"
+
+msgid "Link to the page"
+msgstr "Ссылка на страницу"
+
+msgid "Loading…"
+msgstr "Загрузка…"
+
+msgid "Long — a short word or two reads easier."
+msgstr "Длинно — одно-два слова читаются легче."
+
+msgid "Prices are given in roubles and may change; the exact cost is confirmed by phone."
+msgstr "Цены указаны в рублях и могут меняться; точную стоимость подтверждаем по телефону."
+
+msgid "Question sections"
+msgstr "Разделы вопросов"
+
+msgid "Set up the sections"
+msgstr "Настроить разделы"
+
+msgid "Site pages"
+msgstr "Страницы сайта"
+
+msgid "The heading and the anchor are those of the heading of the section on this page (Advanced → HTML anchor)."
+msgstr "Заголовок и якорь — у самого заголовка раздела на этой странице (Дополнительно → Якорь HTML)."
+
+msgid "The texts and prices of the site may be used by search engines and AI assistants, including for training language models, with a link to the site."
+msgstr "Тексты и цены сайта можно использовать поисковым системам и ИИ-помощникам, в том числе для обучения языковых моделей, со ссылкой на сайт."
+
+msgid "This anchor is already used — the site will add a number."
+msgstr "Такой якорь уже есть — сайт добавит к нему номер."
+
+msgid "Use of the content"
+msgstr "Использование материалов"
+
+msgid "Your own section: on this page add a Heading (H2) and right under it “Details” blocks — a question and its answer each. The section is shown among the others, is found by the search and is marked up for search engines (FAQPage). Sections of other pages show the first paragraph of an answer and “Read more”."
+msgstr "Свой раздел: добавьте на эту страницу «Заголовок» (H2) и сразу под ним блоки «Подробности» — в каждом вопрос и ответ. Раздел покажется среди остальных, найдётся поиском и будет размечен для поисковиков (FAQPage). В разделах других страниц — первый абзац ответа и «Подробнее»."
+
+msgid "answers to frequent questions, by topic"
+msgstr "ответы на частые вопросы по темам"
+
+msgid "own section on this page, questions: %d"
+msgstr "свой раздел этой страницы, вопросов: %d"
+
+msgid "page “%1$s”, questions: %2$d"
+msgstr "страница «%1$s», вопросов: %2$d"

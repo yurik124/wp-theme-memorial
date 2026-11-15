@@ -130,6 +130,8 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 .mfaq__group{scroll-margin-top:90px;margin-top:2rem}
 .mfaq__title{margin:0 0 .8rem}
 .mfaq__more{margin:.4rem 0 0;font-size:1rem}
+.mfaq__qmore{margin:.5rem 0 0;font-size:1rem}
+.mfaq__qmore a{font-weight:600}
 .mfaq [hidden]{display:none!important}
 /* Карточки услуг внутри текста страницы: [mem_services] */
 .mem-svc{margin:1.5rem 0 2.5rem}

@@ -128,6 +128,10 @@ add_action(
 		if ( ! $post || strpos( $post->post_content, 'wp:details' ) === false ) {
 			return;
 		}
+		// Страница «Вопрос–ответ» размечает свои вопросы сама (content/faq.php) — второй FAQPage не нужен.
+		if ( function_exists( 'memorial_plugin_faq_own' ) && memorial_plugin_has_content_block( $post->post_content, 'mem_faq' ) ) {
+			return;
+		}
 		$faq = array();
 		memorial_plugin_collect_faq( parse_blocks( $post->post_content ), $faq );
 		if ( count( $faq ) >= 2 ) {
