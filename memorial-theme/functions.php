@@ -72,6 +72,9 @@ add_action(
 		wp_enqueue_style( 'memorial-theme', $uri . $css, array( 'global-styles' ), filemtime( $dir . $css ) );
 		$f = memorial_theme_asset( '/assets/css/content.css' );
 		wp_enqueue_style( 'memorial-theme-content', $uri . $f, array( 'memorial-theme' ), filemtime( $dir . $f ) );
+		// два небольших файла темы встраиваются в страницу (wp_maybe_inline_styles): меньше запросов, блокирующих отрисовку.
+		wp_style_add_data( 'memorial-theme', 'path', $dir . $css );
+		wp_style_add_data( 'memorial-theme-content', 'path', $dir . $f );
 		wp_enqueue_script(
 			'memorial-theme',
 			$uri . $js,
@@ -85,6 +88,14 @@ add_action(
 		wp_add_inline_script( 'memorial-theme', 'window.memorialThemeI18n = ' . wp_json_encode( memorial_theme_js_i18n() ) . ';', 'before' );
 	},
 	20
+);
+
+/* Предел встраивания стилей: стили блоков ядра (их встраивает WordPress) + два файла темы — с запасом, чтобы файлы темы не вытеснялись мелкими стилями блоков */
+add_filter(
+	'styles_inline_size_limit',
+	function ( $limit ) {
+		return max( (int) $limit, 200000 );
+	}
 );
 
 /*
@@ -138,8 +149,9 @@ add_action(
 		$head = wp_get_global_styles( array( 'elements', 'heading', 'typography', 'fontFamily' ) );
 		$head = is_string( $head ) ? $head : '';
 		$file = str_contains( $head, 'font-family--lora' ) ? 'lora-500' : ( ( '' === $head || str_contains( $head, 'cormorant' ) ) ? 'cormorant-garamond-500' : '' );
-		if ( $file ) {
-			echo '<link rel="preload" href="' . esc_url( $uri . '/assets/fonts/' . $file . '.woff2' ) . '" as="font" type="font/woff2" crossorigin>' . "\n";
+		// заголовки Lora — оба начертания первого экрана (500 и 600), иначе второе находится только после разбора стилей.
+		foreach ( 'lora-500' === $file ? array( 'lora-500', 'lora-600' ) : array_filter( array( $file ) ) as $font ) {
+			echo '<link rel="preload" href="' . esc_url( $uri . '/assets/fonts/' . $font . '.woff2' ) . '" as="font" type="font/woff2" crossorigin>' . "\n";
 		}
 		$img = is_front_page() && function_exists( 'memorial_plugin_home' ) && function_exists( 'memorial_plugin_hero_srcs' ) ? ( memorial_plugin_home( 'hero' )['img'] ?? '' ) : '';
 		if ( $img ) {

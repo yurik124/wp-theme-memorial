@@ -100,14 +100,14 @@ test( 'поведение блоков — модуль Interactivity API вме
 	const errors = collectJsErrors( page );
 	await page.goto( '/' );
 	await expect(
-		page.locator( 'script[type="module"][src*="assets/js/view/blocks.js"]' )
+		page.locator( 'script[type="module"][src*="assets/js/view/blocks."]' )
 	).toHaveCount( 1 );
 	await expect(
 		page.locator( 'script[src*="assets/js/front"]' )
 	).toHaveCount( 0 );
 	// General behaviour of the plugin markup (call-back window, phones, maps…) — also a module.
 	await expect(
-		page.locator( 'script[type="module"][src*="assets/js/view/site.js"]' )
+		page.locator( 'script[type="module"][src*="assets/js/view/site."]' )
 	).toHaveCount( 1 );
 	const importMap = await page
 		.locator( 'script[type="importmap"]' )

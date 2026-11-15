@@ -1718,6 +1718,18 @@ test.describe( 'анимация', () => {
 			await ctx.close();
 		}
 		await page.evaluate( ( id ) => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types/' + id, method: 'PUT', data: { values: { colsPhone: 2 } } } ), venki.id );
+		// PageSpeed: стили темы встроены, скрипты — сжатые копии, шрифты предзагружены
+		await page.context().clearCookies();
+		await page.goto( '/' );
+		report.speed = await page.evaluate( () => ( {
+			inlineCss: [ ...document.querySelectorAll( 'style[id^="memorial-theme"]' ) ].map( ( x ) => x.id + ' ' + x.textContent.length ),
+			cssLinks: [ ...document.querySelectorAll( 'link[rel=stylesheet]' ) ].map( ( x ) => x.href.replace( /^.*\/wp-content\//, '' ).replace( /\?.*$/, '' ) ),
+			modules: [ ...document.querySelectorAll( 'script[type=module][src]' ) ].map( ( x ) => x.src.replace( /^.*\/wp-content\//, '' ).replace( /\?.*$/, '' ) ),
+			preload: [ ...document.querySelectorAll( 'link[rel=preload]' ) ].map( ( x ) => x.href.replace( /^.*\//, '' ) ),
+			fontsOk: document.fonts.status,
+			brokenImgs: [ ...document.images ].filter( ( i ) => i.complete && ! i.naturalWidth && i.src ).map( ( i ) => decodeURI( i.src ) ),
+		} ) );
+		await shot( page, 'speed-home' );
 		log( 'anim', report );
 	} );
 } );

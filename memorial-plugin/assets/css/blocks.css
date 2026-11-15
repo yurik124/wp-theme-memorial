@@ -1011,7 +1011,7 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv__desc{margin:0 0 1.2rem;line-height:1.55}
 .pv__desc p{margin:0 0 .6em}
 .pv__desc>:last-child{margin-bottom:0}
-.pv__specs{display:grid;gap:.4rem;margin:0}
+.pv__specs{display:grid;gap:.4rem;margin:0;padding:0 .75rem}
 .pv__specs div{display:flex;justify-content:space-between;gap:1rem;padding-bottom:.35rem;border-bottom:1px dotted rgba(255,255,255,.3)}
 .pv__specs dt{opacity:.8}
 .pv__specs dd{margin:0;font-weight:600;text-align:right}
@@ -1053,22 +1053,22 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv--photo .pv__box{align-items:stretch;justify-content:flex-start}
 .pv--photo .pv__main{flex:none}
 .pv__box{display:flex;flex-direction:column;gap:0;max-height:none;min-height:100%;padding:64px 12px 28px}
-.pv__img{max-height:var(--pv-ph,66svh);width:auto}
+.pv__img{max-height:var(--pv-ph,66lvh);width:auto}
 .pv__media{order:0}
 .pv__main{order:2;padding-top:14px}
 .pv--photo .pv__title,.pv--photo .pv__sub,.pv--photo .pv__price{padding:0 52px;text-align:center}
-.pv__nav{position:absolute;top:calc(var(--pv-under,66svh) + 10px);margin-top:0;width:44px;height:44px}
+.pv__nav{position:absolute;top:calc(var(--pv-under,66lvh) + 10px);margin-top:0;width:44px;height:44px}
 .pv__prev{left:6px}
 .pv__next{right:6px}
 .pv--card{background:#fff}
 .pv--card .pv__box{padding:64px 12px 28px;border-radius:0;max-height:none}
-.pv--card .pv__img{max-height:var(--pv-ph,56svh)}
+.pv--card .pv__img{max-height:var(--pv-ph,56lvh)}
 .pv--card .pv__buy{order:1;padding:10px 52px 4px;border:0;text-align:center}
 .pv--card .pv__main{max-height:none;overflow:visible;padding-right:0}
 .pv--card .pv__x,.pv--card .pv__nav{background:rgba(42,44,40,.08);color:var(--memorial-plugin-ink,#2a2c28)}
 }
 /* Одна колонка на телефоне: фото карточки по высоте экрана так, чтобы под ним были видны название, цена и «Заказать» (--mcard-ph считает site.js) */
-@media (max-width:600px){.mcat__grid .mcard__img{max-height:var(--mcard-ph,none)}.mcat__grid .mcard__img img{margin-inline:auto;object-position:center}}
+@media (max-width:600px){.mcat__grid .mcard__img{width:100%;max-height:var(--mcard-ph,none)}.mcat__grid .mcard__img img{margin-inline:auto;object-position:center}}
 /* Открытие и закрытие окна товара и крупного фото */
 @keyframes mem-fade{from{opacity:0}}
 @keyframes mem-pop{from{opacity:0;transform:translateY(14px) scale(.96)}}

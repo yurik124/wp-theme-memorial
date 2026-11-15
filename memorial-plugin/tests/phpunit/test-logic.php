@@ -550,4 +550,32 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		);
 		$this->assertStringContainsString( 'Венок № 41', tests_retrieve_phpmailer_instance()->get_sent()->body );
 	}
+
+	public function test_broken_photo_address_is_repaired_after_renaming() {
+		$up = wp_get_upload_dir();
+		wp_mkdir_p( $up['basedir'] . '/2020/04' );
+		file_put_contents( $up['basedir'] . '/2020/04/kotlyarov-kompl-1.webp', 'x' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		$id = self::factory()->post->create(
+			array(
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+				'guid'        => 'http://example.org/wp-content/uploads/2020/04/котляров-компл-1.jpg',
+			)
+		);
+		update_post_meta( $id, '_wp_attached_file', '2020/04/kotlyarov-kompl-1.webp' );
+		$this->assertSame( '/wp-content/uploads/2020/04/kotlyarov-kompl-1.webp', wp_make_link_relative( memorial_plugin_fixed_upload_url( '/wp-content/uploads/2020/04/котляров-компл-1.webp' ) ) );
+		$this->assertSame( '', memorial_plugin_fixed_upload_url( '/wp-content/uploads/2020/04/kotlyarov-kompl-1.webp' ), 'the file exists — nothing to change' );
+		$this->assertSame( '', memorial_plugin_fixed_upload_url( '/wp-content/uploads/2020/04/net-takogo.jpg' ), 'nothing found — the address stays' );
+		$fixed = 0;
+		$home  = memorial_plugin_fix_upload_urls( array( 'services' => array( 'items' => array( array( 'img' => '/wp-content/uploads/2020/04/котляров-компл-1.webp', 'title' => 'Комплекс' ) ) ) ), $fixed );
+		$this->assertSame( 1, $fixed );
+		$this->assertSame( 'Комплекс', $home['services']['items'][0]['title'] );
+		wp_delete_file( $up['basedir'] . '/2020/04/kotlyarov-kompl-1.webp' );
+	}
+
+	public function test_card_size_is_registered_and_missing_copies_are_found() {
+		$this->assertArrayHasKey( 'memorial-card', wp_get_registered_image_subsizes() );
+		$this->assertSame( 360, wp_get_registered_image_subsizes()['memorial-card']['width'] );
+		$this->assertIsArray( memorial_plugin_card_size_missing( 5 ) );
+	}
 }

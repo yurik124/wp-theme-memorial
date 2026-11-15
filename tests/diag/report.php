@@ -59,4 +59,63 @@ foreach ( get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', '
 	$pages[] = $row;
 }
 $out['pages'] = $pages;
+// фото главной (LCP): путь блоков до изображения
+global $wpdb;
+$img_path = function ( $blocks, $trail ) use ( &$img_path ) {
+	foreach ( $blocks as $b ) {
+		$name = ( $b['blockName'] ?? '' ) . ' ' . wp_json_encode( array_intersect_key( $b['attrs'] ?? array(), array_flip( array( 'className', 'layout', 'width', 'sizeSlug', 'id', 'tagName', 'columns', 'style' ) ) ) );
+		if ( 'core/image' === ( $b['blockName'] ?? '' ) && false !== strpos( $b['innerHTML'] ?? '', 'traurnyy' ) ) {
+			return array_merge( $trail, array( $name, trim( $b['innerHTML'] ) ) );
+		}
+		$r = $img_path( $b['innerBlocks'] ?? array(), array_merge( $trail, array( $name ) ) );
+		if ( $r ) {
+			return $r;
+		}
+	}
+	return null;
+};
+foreach ( $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE post_status='publish' AND post_content LIKE '%traurnyy-zal%'" ) as $pid ) {
+	$out['lcp'][ $pid ] = $img_path( parse_blocks( get_post( $pid )->post_content ), array() );
+}
+// размеры фото товаров
+$prod = get_posts( array( 'post_type' => 'mem_product', 'posts_per_page' => 3, 'post_status' => 'publish' ) );
+foreach ( $prod as $p ) {
+	$m = wp_get_attachment_metadata( get_post_thumbnail_id( $p ) );
+	$out['thumb_sizes'][ $p->ID ] = $m ? array( $m['width'] ?? 0, $m['height'] ?? 0, array_map( fn( $x ) => $x['width'] . 'x' . $x['height'], $m['sizes'] ?? array() ) ) : null;
+}
+$out['image_sizes'] = wp_get_registered_image_subsizes();
+// ссылка на отсутствующее фото (404 в консоли)
+$out['missing_ref'] = array(
+	'posts' => $wpdb->get_results( "SELECT ID, post_type, post_title FROM {$wpdb->posts} WHERE post_content LIKE '%котляров%' OR post_content LIKE '%D0%BA%D0%BE%D1%82%D0%BB%D1%8F%D1%80%D0%BE%D0%B2%' LIMIT 10" ),
+	'meta'  => $wpdb->get_results( "SELECT post_id, meta_key, LEFT(meta_value,200) v FROM {$wpdb->postmeta} WHERE meta_value LIKE '%котляров%' LIMIT 10" ),
+	'opts'  => $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_value LIKE '%котляров%' LIMIT 10" ),
+	'att'   => $wpdb->get_results( "SELECT ID, guid FROM {$wpdb->posts} WHERE post_type='attachment' AND (guid LIKE '%котляров%' OR post_name LIKE '%kotlyarov%' OR post_title LIKE '%котляров%') LIMIT 10" ),
+);
+// где в настройках главной адреса загрузок, которых нет на диске
+$up = wp_get_upload_dir();
+$broken = array();
+$scan = function ( $v, $path ) use ( &$scan, &$broken, $up ) {
+	if ( is_array( $v ) ) {
+		foreach ( $v as $k => $x ) {
+			$scan( $x, $path . '/' . $k );
+		}
+		return;
+	}
+	if ( is_string( $v ) && preg_match_all( '~(?:https?://[^/"\'\s]+)?/wp-content/uploads/[^"\'\s)]+~u', $v, $m ) ) {
+		foreach ( $m[0] as $u ) {
+			$rel = rawurldecode( preg_replace( '~^.*?/wp-content/uploads/~', '', $u ) );
+			if ( ! is_file( $up['basedir'] . '/' . $rel ) ) {
+				$broken[] = array( $path, $u );
+			}
+		}
+	}
+};
+foreach ( $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE 'mem\_%' OR option_name LIKE 'memorial\_%'" ) as $o ) {
+	$scan( get_option( $o ), $o );
+}
+foreach ( $wpdb->get_results( "SELECT ID, post_content FROM {$wpdb->posts} WHERE post_status='publish' AND post_content LIKE '%/wp-content/uploads/%'" ) as $row ) {
+	$scan( $row->post_content, 'post ' . $row->ID );
+}
+$out['broken_uploads'] = array_slice( $broken, 0, 60 );
+$out['broken_count']   = count( $broken );
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );

@@ -138,6 +138,7 @@ function memorial_plugin_disabled_files() {
 $memorial_plugin_modules = array(
 	// основа: помощники, рамка настроек «Мемориал → …», контакты и главная.
 	'core/helpers.php',
+	'core/fix-uploads.php',
 	'core/presentation.php',
 	'seo/schema.php',
 	'core/settings.php',
@@ -148,6 +149,7 @@ $memorial_plugin_modules = array(
 	'catalog/catalog.php',
 	'pages/pages.php',
 	'catalog/catalog-front.php',
+	'catalog/catalog-images.php',
 	'catalog/product-pages.php',
 	// цены.
 	'prices/packages.php',
@@ -257,7 +259,7 @@ add_action(
 register_deactivation_hook(
 	__FILE__,
 	function () {
-		foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron' ) as $h ) {
+		foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron', 'memorial_plugin_card_sizes' ) as $h ) {
 			wp_clear_scheduled_hook( $h );
 		}
 	}
