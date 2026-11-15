@@ -943,8 +943,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				g.style.removeProperty( '--mcard-ph' );
 				const one =
 					window.innerWidth <= 600 &&
-					window.getComputedStyle( g ).gridTemplateColumns.split( ' ' )
-						.length === 1;
+					window
+						.getComputedStyle( g )
+						.gridTemplateColumns.split( ' ' ).length === 1;
 				const li = [ ...g.children ].find(
 					( x ) => x.offsetParent !== null
 				);
@@ -957,8 +958,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					return el && el.offsetParent !== null ? el.offsetHeight : 0;
 				};
 				const bottom =
-					window.getComputedStyle( d.querySelector( '.mbar' ) || d.body )
-						.position === 'fixed'
+					window.getComputedStyle(
+						d.querySelector( '.mbar' ) || d.body
+					).position === 'fixed'
 						? hOf( '.mbar' )
 						: 0;
 				const top =
