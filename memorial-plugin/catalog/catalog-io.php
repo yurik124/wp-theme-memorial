@@ -185,7 +185,7 @@ function memorial_plugin_io_cat_paths( $type ) {
 				'taxonomy'   => 'mem_cat',
 				'parent'     => $parent,
 				'hide_empty' => false,
-				'orderby'    => 'term_order',
+				'orderby'    => 'name',
 			)
 		);
 		foreach ( is_wp_error( $terms ) ? array() : $terms as $t ) {
@@ -277,7 +277,7 @@ function memorial_plugin_io_table( $args = array() ) {
 			'sku'    => $m( '_mem_sku' ),
 			'type'   => $names[ $type ] ?? '',
 			'cats'   => implode( "\n", array_filter( array_map( static fn( $c ) => $paths[ $type ][ (int) $c ] ?? '', is_wp_error( $cats ) ? array() : $cats ) ) ),
-			'title'  => html_entity_decode( get_the_title( $p ), ENT_QUOTES, 'UTF-8' ),
+			'title'  => html_entity_decode( $p->post_title, ENT_QUOTES, 'UTF-8' ),
 			'price'  => (int) $m( '_mem_price' ) ? (int) $m( '_mem_price' ) : '',
 			'from'   => '1' === $m( '_mem_price_from' ) ? $yes : '',
 			'old'    => (int) $m( '_mem_price_old' ) ? (int) $m( '_mem_price_old' ) : '',

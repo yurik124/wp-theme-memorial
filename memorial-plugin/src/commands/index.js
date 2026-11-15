@@ -97,6 +97,22 @@ if ( data.can.export ) {
 	} );
 }
 
+if ( data.can.import ) {
+	commands.push( {
+		name: 'memorial-plugin/import-products',
+		label: __( 'Import products from Excel or CSV', 'memorial-plugin' ),
+		searchLabel: __(
+			'Import products from Excel or CSV catalog photos ZIP',
+			'memorial-plugin'
+		),
+		icon: ICONS.products,
+		callback: ( { close } ) => {
+			close();
+			go( data.importUrl )();
+		},
+	} );
+}
+
 if ( data.can.leads ) {
 	commands.push( {
 		name: 'memorial-plugin/new-leads',
