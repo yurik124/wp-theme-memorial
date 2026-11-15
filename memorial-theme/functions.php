@@ -90,11 +90,13 @@ add_action(
 	20
 );
 
-/* Предел встраивания стилей: обычный предел для стилей блоков ядра + два файла темы (их размер — по самим файлам) */
+/* Предел встраивания стилей: стили блоков ядра (их встраивает WordPress) + два файла темы — с запасом, чтобы файлы темы не вытеснялись мелкими стилями блоков */
 add_filter(
 	'styles_inline_size_limit',
 	function ( $limit ) {
-		$dir  = get_template_directory();
+		return max( (int) $limit, 200000 );
+	}
+);
 		$size = 0;
 		foreach ( array( '/assets/css/main.css', '/assets/css/content.css' ) as $css ) {
 			$size += (int) wp_filesize( $dir . memorial_theme_asset( $css ) );
