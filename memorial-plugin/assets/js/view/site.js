@@ -998,12 +998,21 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 						bar.offsetHeight;
 					bar.classList.toggle( 'is-stuck', was );
 				}
-				const rest = li.offsetHeight - imgBox.offsetHeight;
-				const h = screenH() - top - bottom - rest - 24;
-				g.style.setProperty(
-					'--mcard-ph',
-					Math.max( 200, Math.round( h ) ) + 'px'
-				);
+				const avail = screenH() - top - bottom - 24;
+				const setH = () => {
+					const rest = li.offsetHeight - imgBox.offsetHeight;
+					g.style.setProperty(
+						'--mcard-ph',
+						Math.max( 200, Math.round( avail - rest ) ) + 'px'
+					);
+					return rest;
+				};
+				// карточка сужается под ширину фото — название может перенестись на другую строку,
+				// поэтому меряем ещё раз уже в узкой карточке
+				const rest = setH();
+				if ( li.offsetHeight - imgBox.offsetHeight !== rest ) {
+					setH();
+				}
 			} );
 		fitCards();
 		window.addEventListener( 'load', fitCards );

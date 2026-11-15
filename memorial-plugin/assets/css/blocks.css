@@ -1052,7 +1052,8 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv__media{width:auto;align-self:stretch}
 .pv--photo .pv__box{align-items:stretch;justify-content:flex-start}
 .pv--photo .pv__main{flex:none}
-.pv__box{display:flex;flex-direction:column;gap:0;max-height:none;min-height:100%;padding:64px 12px 28px}
+/* снизу запас под плавающие кнопки (наша «Наверх» и кнопка браузера), чтобы последняя строка характеристик не пряталась под ними */
+.pv__box{display:flex;flex-direction:column;gap:0;max-height:none;min-height:100%;padding:64px 12px calc(88px + env(safe-area-inset-bottom))}
 .pv__img{max-height:var(--pv-ph,66lvh);width:auto}
 .pv__media{order:0}
 .pv__main{order:2;padding-top:14px}
@@ -1061,14 +1062,25 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv__prev{left:6px}
 .pv__next{right:6px}
 .pv--card{background:#fff}
-.pv--card .pv__box{padding:64px 12px 28px;border-radius:0;max-height:none}
+.pv--card .pv__box{padding:64px 12px calc(88px + env(safe-area-inset-bottom));border-radius:0;max-height:none}
 .pv--card .pv__img{max-height:var(--pv-ph,56lvh)}
 .pv--card .pv__buy{order:1;padding:10px 52px 4px;border:0;text-align:center}
 .pv--card .pv__main{max-height:none;overflow:visible;padding-right:0}
-.pv--card .pv__x,.pv--card .pv__nav{background:rgba(42,44,40,.08);color:var(--memorial-plugin-ink,#2a2c28)}
+/* «Окно товара»: закрыть и листать — белый круг с тенью, как кнопка «Наверх»; непрозрачный, чтобы не терялся над текстом */
+.pv--card .pv__x,.pv--card .pv__nav{background:#fff;border:1px solid var(--memorial-plugin-line,#e2ded2);box-shadow:0 1px 3px rgba(42,44,40,.14),0 4px 14px rgba(42,44,40,.18);color:var(--memorial-plugin-ink,#2a2c28)}
+.pv--card .pv__x:hover,.pv--card .pv__nav:hover{background:var(--memorial-plugin-sage,#e6ebdf);border-color:var(--memorial-plugin-gold,#5e7052)}
 }
-/* Одна колонка на телефоне: фото карточки по высоте экрана так, чтобы под ним были видны название, цена и «Заказать» (--mcard-ph считает site.js) */
-@media (max-width:600px){.mcat__grid .mcard__img{width:100%;max-height:var(--mcard-ph,none)}.mcat__grid .mcard__img img{margin-inline:auto;object-position:center}}
+/* Одна колонка на телефоне: фото карточки по высоте экрана так, чтобы под ним были видны название, цена и «Заказать» (--mcard-ph считает site.js).
+   Рамка фото сохраняет пропорцию (фото заполняет её, углы скруглены, как на ПК), а карточка и «Заказать» сужаются под ширину фото. */
+@media (max-width:600px){
+.mcat__grid{--mcard-ar:1.3333}
+.mcat__grid.mcat--portrait{--mcard-ar:.75}
+.mcat__grid.mcat--square{--mcard-ar:1}
+.mcat__grid.mcat--tall{--mcard-ar:.6}
+.mcat__grid.mcat--land{--mcard-ar:1.6667}
+.mcat__grid .mcard{width:100%;max-width:calc(var(--mcard-ph,9999px) * var(--mcard-ar) + 1rem + 2px);margin-inline:auto;box-sizing:border-box}
+.mcat__grid .mcard__img{width:100%}
+}
 /* Открытие и закрытие окна товара и крупного фото */
 @keyframes mem-fade{from{opacity:0}}
 @keyframes mem-pop{from{opacity:0;transform:translateY(14px) scale(.96)}}

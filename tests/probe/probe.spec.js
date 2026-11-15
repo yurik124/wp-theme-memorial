@@ -1732,4 +1732,132 @@ test.describe( 'анимация', () => {
 		await shot( page, 'speed-home' );
 		log( 'anim', report );
 	} );
+
+	test( 'телефон-карточки: скругление фото, ширина карточки, крестик, запас снизу', async ( { page, browser } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-types' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		const types = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types' } ) );
+		const list = types.types || types.items || types;
+		const venki = ( Array.isArray( list ) ? list : [] ).find( ( t ) => /венк/i.test( t.name ) );
+		const setType = ( values ) => page.evaluate( ( [ id, v ] ) => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types/' + id, method: 'PUT', data: { values: v } } ), [ venki.id, values ] );
+		const pg = PAGES.find( ( x ) => /венк/i.test( x.post_title ) );
+		const path = new URL( pg.url ).pathname;
+		// карточка: рамка фото держит пропорцию и скруглена, карточка и «Заказать» — по ширине фото
+		const cardInfo = ( ph ) => ph.evaluate( () => {
+			const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
+			const box = li.querySelector( '.mcard__img' ).getBoundingClientRect();
+			const link = li.querySelector( '.mcard__link' ).getBoundingClientRect();
+			const order = li.querySelector( '.mcard__order' )?.getBoundingClientRect();
+			const cs = getComputedStyle( li.querySelector( '.mcard__img' ) );
+			const img = li.querySelector( '.mcard__img img.is-on' ) || li.querySelector( '.mcard__img img' );
+			return {
+				ph: document.querySelector( '.mcat__grid' ).style.getPropertyValue( '--mcard-ph' ),
+				box: Math.round( box.width ) + '×' + Math.round( box.height ) + ' ratio ' + ( box.width / box.height ).toFixed( 3 ),
+				photo: img ? img.naturalWidth + '×' + img.naturalHeight : '-',
+				radius: cs.borderRadius + ' ' + cs.overflow,
+				gapL: Math.round( box.left - link.left ),
+				gapR: Math.round( link.right - box.right ),
+				card: Math.round( link.left ) + '…' + Math.round( link.right ),
+				order: order ? Math.round( order.left ) + '…' + Math.round( order.right ) + ' h' + Math.round( order.height ) : '-',
+				screen: innerWidth,
+			};
+		} );
+		const scrollTo3 = async ( ph ) => {
+			for ( let pass = 0; pass < 3; pass++ ) {
+				await ph.evaluate( () => {
+					document.documentElement.style.scrollBehavior = 'auto';
+					const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
+					const bar = document.querySelector( '.mcat__bar' ).getBoundingClientRect().bottom;
+					window.scrollTo( 0, window.scrollY + li.getBoundingClientRect().top - bar - 6 );
+				} );
+				await ph.waitForTimeout( 500 );
+			}
+		};
+		for ( const cols of [ 1, 2 ] ) {
+			await setType( { colsPhone: cols, orderBtn: true, orderText: 'Заказать', view: 'card' } );
+			for ( const [ w, h ] of [ [ 390, 844 ], [ 360, 640 ] ] ) {
+				const ctx = await browser.newContext( { viewport: { width: w, height: h }, isMobile: true, hasTouch: true, baseURL: 'http://localhost:8888' } );
+				const ph = await ctx.newPage();
+				const errs = errorsOf( ph );
+				await ph.goto( path );
+				await ph.waitForTimeout( 2500 );
+				await ph.locator( '.consent button' ).first().click().catch( () => {} );
+				await scrollTo3( ph );
+				await ph.waitForTimeout( 800 );
+				report[ `card ${ cols }col ${ w }×${ h }` ] = await cardInfo( ph );
+				report[ `card ${ cols }col ${ w } bottoms` ] = await ph.evaluate( () => {
+					const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
+					const b = ( q ) => Math.round( li.querySelector( q )?.getBoundingClientRect().bottom || -1 );
+					return { name: b( '.mcard__name' ), price: b( '.mcard__price' ), order: b( '.mcard__order' ), mbarTop: Math.round( document.querySelector( '.mbar' )?.getBoundingClientRect().top || -1 ) };
+				} );
+				await ph.screenshot( { path: `${ DIR }/pp-list-${ cols }col-${ w }.png` } );
+				if ( cols === 1 ) {
+					await ph.locator( '.mcat__grid > .mcard' ).nth( 2 ).locator( 'a[data-pv]' ).click();
+					await ph.waitForTimeout( 1500 );
+					report[ `close ${ w }` ] = await ph.locator( '#pv .pv__x' ).evaluate( ( e ) => {
+						const c = getComputedStyle( e );
+						const r = e.getBoundingClientRect();
+						return c.backgroundColor + ' | ' + c.color + ' | ' + c.borderTopColor + ' | ' + c.boxShadow.slice( 0, 60 ) + ' | ' + Math.round( r.width ) + '×' + Math.round( r.height );
+					} );
+					await ph.screenshot( { path: `${ DIR }/pp-window-top-${ w }.png` } );
+					// в середину — текст под крестиком
+					await ph.locator( '#pv' ).evaluate( ( dd ) => ( dd.scrollTop = Math.max( 0, ( dd.scrollHeight - dd.clientHeight ) / 2 ) ) );
+					await ph.waitForTimeout( 400 );
+					await ph.screenshot( { path: `${ DIR }/pp-window-mid-${ w }.png` } );
+					await ph.locator( '#pv' ).evaluate( ( dd ) => ( dd.scrollTop = dd.scrollHeight ) );
+					await ph.waitForTimeout( 400 );
+					report[ `window bottom ${ w }` ] = await ph.evaluate( () => {
+						const rows = document.querySelectorAll( '#pv .pv__specs > div' );
+						const last = rows[ rows.length - 1 ] || document.querySelector( '#pv .pv__main' ).lastElementChild;
+						const r = last.getBoundingClientRect();
+						return { lastBottom: Math.round( r.bottom ), screen: innerHeight, free: Math.round( innerHeight - r.bottom ), pad: getComputedStyle( document.querySelector( '#pv .pv__box' ) ).paddingBottom };
+					} );
+					await ph.screenshot( { path: `${ DIR }/pp-window-bottom-${ w }.png` } );
+					await ph.locator( '#pv .pv__x' ).click();
+					await ph.waitForTimeout( 400 );
+					// «Только фото»: тот же запас снизу
+					await setType( { view: 'photo' } );
+					await ph.reload();
+					await ph.waitForTimeout( 2000 );
+					await scrollTo3( ph );
+					await ph.locator( '.mcat__grid > .mcard' ).nth( 2 ).locator( 'a[data-pv]' ).click();
+					await ph.waitForTimeout( 1500 );
+					await ph.locator( '#pv' ).evaluate( ( dd ) => ( dd.scrollTop = dd.scrollHeight ) );
+					await ph.waitForTimeout( 400 );
+					report[ `photo bottom ${ w }` ] = await ph.evaluate( () => {
+						const rows = document.querySelectorAll( '#pv .pv__specs > div' );
+						const last = rows[ rows.length - 1 ];
+						return last ? Math.round( innerHeight - last.getBoundingClientRect().bottom ) : 'нет характеристик';
+					} );
+					await ph.screenshot( { path: `${ DIR }/pp-photo-bottom-${ w }.png` } );
+					await setType( { view: 'card' } );
+				}
+				report[ `errors ${ cols }col ${ w }` ] = errs;
+				await ctx.close();
+			}
+		}
+		// ПК — как было
+		const ctx = await browser.newContext( { viewport: { width: 1440, height: 900 }, baseURL: 'http://localhost:8888' } );
+		const pc = await ctx.newPage();
+		await pc.goto( path );
+		await pc.waitForTimeout( 2500 );
+		await pc.locator( '.consent button' ).first().click().catch( () => {} );
+		report[ 'card pc' ] = await cardInfo( pc );
+		await pc.screenshot( { path: `${ DIR }/pp-list-pc.png` } );
+		await pc.locator( '.mcat__grid > .mcard' ).nth( 2 ).locator( 'a[data-pv]' ).click();
+		await pc.waitForTimeout( 1500 );
+		report[ 'close pc' ] = await pc.locator( '#pv .pv__x' ).evaluate( ( e ) => getComputedStyle( e ).backgroundColor + ' | ' + getComputedStyle( e ).color );
+		await pc.screenshot( { path: `${ DIR }/pp-window-pc.png` } );
+		await ctx.close();
+		await setType( { colsPhone: 2 } );
+		log( 'phone-polish', report );
+	} );
 } );
