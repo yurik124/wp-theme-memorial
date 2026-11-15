@@ -553,24 +553,24 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 
 	// закрытие с анимацией (крестик, Esc, щелчок мимо); без анимации, если в системе «уменьшить движение»
 	const still = window.matchMedia( '(prefers-reduced-motion: reduce)' );
-	const shut = ( dlg ) => {
-		if ( ! dlg.open || dlg.classList.contains( 'is-closing' ) ) {
+	const shut = ( modal ) => {
+		if ( ! modal.open || modal.classList.contains( 'is-closing' ) ) {
 			return;
 		}
 		if ( still.matches ) {
-			dlg.close();
+			modal.close();
 			return;
 		}
-		dlg.classList.add( 'is-closing' );
+		modal.classList.add( 'is-closing' );
 		setTimeout( () => {
-			dlg.classList.remove( 'is-closing' );
-			dlg.close();
+			modal.classList.remove( 'is-closing' );
+			modal.close();
 		}, 180 );
 	};
-	const animateEsc = ( dlg ) =>
-		dlg.addEventListener( 'cancel', ( e ) => {
+	const animateEsc = ( modal ) =>
+		modal.addEventListener( 'cancel', ( e ) => {
 			e.preventDefault();
-			shut( dlg );
+			shut( modal );
 		} );
 
 	let lbOpen = null; // открыть фото: (список [{href, low, cap, alt}], с какого, { count })
@@ -943,7 +943,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				g.style.removeProperty( '--mcard-ph' );
 				const one =
 					window.innerWidth <= 600 &&
-					getComputedStyle( g ).gridTemplateColumns.split( ' ' )
+					window.getComputedStyle( g ).gridTemplateColumns.split( ' ' )
 						.length === 1;
 				const li = [ ...g.children ].find(
 					( x ) => x.offsetParent !== null
@@ -957,7 +957,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					return el && el.offsetParent !== null ? el.offsetHeight : 0;
 				};
 				const bottom =
-					getComputedStyle( d.querySelector( '.mbar' ) || d.body )
+					window.getComputedStyle( d.querySelector( '.mbar' ) || d.body )
 						.position === 'fixed'
 						? hOf( '.mbar' )
 						: 0;
