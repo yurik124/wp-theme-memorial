@@ -1675,6 +1675,8 @@ test.describe( 'анимация', () => {
 			const ph = await ctx.newPage();
 			await ph.goto( path );
 			await ph.waitForTimeout( 2500 );
+			await ph.locator( '.consent button' ).first().click().catch( () => {} );
+			await ph.addStyleTag( { content: 'html{scroll-behavior:auto!important}' } );
 			// карточка под шапкой и строкой разделов: видны ли название, цена, «Заказать»
 			await ph.evaluate( () => {
 				const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
