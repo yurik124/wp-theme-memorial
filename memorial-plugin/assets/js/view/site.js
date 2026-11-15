@@ -963,10 +963,17 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					).position === 'fixed'
 						? hOf( '.mbar' )
 						: 0;
-				const top =
-					hOf( '.header' ) +
-					( g.closest( '.mcat' )?.querySelector( '.mcat__bar' )
-						?.offsetHeight || 0 );
+				// верхняя граница — низ прилипшей строки разделов (её высота — в прилипшем виде)
+				const bar = g.closest( '.mcat' )?.querySelector( '.mcat__bar' );
+				let top = hOf( '.header' );
+				if ( bar ) {
+					const was = bar.classList.contains( 'is-stuck' );
+					bar.classList.add( 'is-stuck' );
+					top =
+						parseFloat( window.getComputedStyle( bar ).top ) +
+						bar.offsetHeight;
+					bar.classList.toggle( 'is-stuck', was );
+				}
 				const rest = li.offsetHeight - imgBox.offsetHeight;
 				const h =
 					d.documentElement.clientHeight - top - bottom - rest - 24;

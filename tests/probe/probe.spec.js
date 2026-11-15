@@ -1678,11 +1678,15 @@ test.describe( 'анимация', () => {
 			await ph.locator( '.consent button' ).first().click().catch( () => {} );
 			await ph.addStyleTag( { content: 'html{scroll-behavior:auto!important}' } );
 			// карточка под шапкой и строкой разделов: видны ли название, цена, «Заказать»
-			await ph.evaluate( () => {
-				const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
-				const bar = document.querySelector( '.mcat__bar' ).getBoundingClientRect().bottom;
-				window.scrollBy( 0, li.getBoundingClientRect().top - bar - 8 );
-			} );
+			for ( let pass = 0; pass < 3; pass++ ) {
+				await ph.evaluate( () => {
+					document.documentElement.style.scrollBehavior = 'auto';
+					const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
+					const bar = document.querySelector( '.mcat__bar' ).getBoundingClientRect().bottom;
+					window.scrollTo( 0, window.scrollY + li.getBoundingClientRect().top - bar - 6 );
+				} );
+				await ph.waitForTimeout( 500 );
+			}
 			await ph.waitForTimeout( 800 );
 			report[ `list ${ w }×${ h }` ] = await ph.evaluate( () => {
 				const g = document.querySelector( '.mcat__grid' );
