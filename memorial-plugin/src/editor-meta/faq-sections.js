@@ -78,7 +78,7 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 										'memorial-plugin'
 									),
 									s.count
-							  )
+								)
 							: sprintf(
 									/* translators: 1: page title, 2: number of questions. */
 									__(
@@ -87,7 +87,7 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 									),
 									s.page,
 									s.count
-							  ) }
+								) }
 					</span>
 				</FlexBlock>
 				<Button
@@ -112,7 +112,7 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 							? __(
 									'Long — a short word or two reads easier.',
 									'memorial-plugin'
-							  )
+								)
 							: '',
 				} ) }
 				{ own ? (
@@ -130,7 +130,7 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 								? __(
 										'This anchor is already used — the site will add a number.',
 										'memorial-plugin'
-								  )
+									)
 								: '',
 						} ) }
 						{ field(
@@ -167,8 +167,10 @@ export default function FaqSections( { postId, value, onChange } ) {
 				...settings.order
 					.map( ( k ) => sections.find( ( s ) => s.key === k ) )
 					.filter( Boolean ),
-				...sections.filter( ( s ) => ! settings.order.includes( s.key ) ),
-		  ]
+				...sections.filter(
+					( s ) => ! settings.order.includes( s.key )
+				),
+			]
 		: [];
 	const move = ( i, d ) => {
 		const keys = ordered.map( ( s ) => s.key );

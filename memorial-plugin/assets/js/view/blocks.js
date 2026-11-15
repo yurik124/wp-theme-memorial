@@ -499,7 +499,9 @@ store( 'memorial-plugin/faq', {
 					html: s.innerHTML,
 					q: s.textContent.trim(),
 					// the hub shows the start of an answer — the search looks through all of it
-					t: el.dataset.t ? s.textContent + ' ' + el.dataset.t : el.textContent,
+					t: el.dataset.t
+						? s.textContent + ' ' + el.dataset.t
+						: el.textContent,
 					g: el.dataset.g || '',
 				};
 			} );
