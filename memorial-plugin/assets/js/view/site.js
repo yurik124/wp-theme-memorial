@@ -541,7 +541,10 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			}
 			const dx = e.changedTouches[ 0 ].clientX - x0,
 				dy = e.changedTouches[ 0 ].clientY - y0;
-			if ( Math.abs( dx ) > 50 && Math.abs( dx ) > Math.abs( dy ) * 1.5 ) {
+			if (
+				Math.abs( dx ) > 50 &&
+				Math.abs( dx ) > Math.abs( dy ) * 1.5
+			) {
 				onSwipe( dx < 0 ? 1 : -1, t0 );
 			}
 			x0 = null;
@@ -554,13 +557,13 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			/\.(jpe?g|png|webp|gif|avif)(\?.*)?$/i.test(
 				a.getAttribute( 'href' ) || ''
 			);
-		d.querySelectorAll( '.content a:not(.work__thumb):not([data-pv])' ).forEach(
-			( a ) => {
-				if ( isImg( a ) && a.querySelector( 'img' ) ) {
-					a.setAttribute( 'data-lb', '' );
-				}
+		d.querySelectorAll(
+			'.content a:not(.work__thumb):not([data-pv])'
+		).forEach( ( a ) => {
+			if ( isImg( a ) && a.querySelector( 'img' ) ) {
+				a.setAttribute( 'data-lb', '' );
 			}
-		);
+		} );
 		let group = [],
 			idx = 0,
 			withCount = true;
@@ -583,8 +586,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			idle( () =>
 				[ 1, -1, 2 ].forEach( ( k ) =>
 					preload(
-						group[ ( idx + k + group.length ) % group.length ]
-							?.href
+						group[ ( idx + k + group.length ) % group.length ]?.href
 					)
 				)
 			);
@@ -626,7 +628,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 									'.wp-block-gallery, .works__list, .mem-photos'
 								) || a.parentElement
 							).querySelectorAll( 'a[data-lb]' ),
-					  ].filter( ( x ) => x.offsetParent !== null || x === a );
+						].filter( ( x ) => x.offsetParent !== null || x === a );
 			const all = list.map( itemOf );
 			lbOpen(
 				all,
@@ -704,7 +706,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 						).href,
 						low: x.complete && x.naturalWidth ? x.currentSrc : '',
 						alt: x.alt || '',
-				  } ) )
+					} ) )
 				: [ { href: a.href, low: '', alt: '' } ];
 			return {
 				a,
@@ -726,7 +728,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			[ ...dots.children ].forEach( ( x, n ) =>
 				x.classList.toggle( 'is-on', n === ph )
 			);
-			idle( () => preload( p.photos[ ( ph + 1 ) % p.photos.length ].href ) );
+			idle( () =>
+				preload( p.photos[ ( ph + 1 ) % p.photos.length ].href )
+			);
 		};
 		// стрелки товаров на телефоне — на уровне строки под фото
 		const placeNav = () =>
@@ -804,7 +808,12 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				.map( prodOf );
 			pv.showModal();
 			lockPage();
-			showProd( Math.max( 0, prods.findIndex( ( p ) => p.a === a ) ) );
+			showProd(
+				Math.max(
+					0,
+					prods.findIndex( ( p ) => p.a === a )
+				)
+			);
 		} );
 		pv.querySelector( '.pv__x' ).addEventListener( 'click', () =>
 			pv.close()
