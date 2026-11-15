@@ -10,7 +10,11 @@ test( 'сайт открывается на новой теме', async ( { page
 	expect( res.status() ).toBeLessThan( 400 );
 	expect( await page.content() ).not.toMatch( PHP_ERROR );
 	// стили темы встроены в страницу (style#memorial-theme-inline-css) или подключены файлом.
-	await expect( page.locator( 'link#memorial-theme-css, style#memorial-theme-inline-css' ) ).toHaveCount( 1 );
+	await expect(
+		page.locator(
+			'link#memorial-theme-css, style#memorial-theme-inline-css'
+		)
+	).toHaveCount( 1 );
 	// блоковая тема: шапка с «Навигацией», подвал, нижняя панель — из частей шаблона
 	const nav = page.locator( '#header nav.wp-block-navigation' );
 	await expect( nav ).toHaveCount( 1 );
