@@ -73,7 +73,7 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		$s             = memorial_plugin_faq_sections( $hub );
 		$keys          = array_column( $s, 'key' );
 		$this->assertSame( array( 'p' . $svc, 'h:oplata' ), $keys );
-		$this->assertSame( 'Кремация в Белгороде', $s[0]['label'] );
+		$this->assertSame( 'Кремация в Белгороде', str_replace( "\u{00A0}", ' ', $s[0]['label'] ) );
 		$this->assertSame( 'oplata', $s[1]['anchor'] );
 		$this->assertSame( 'cena-kremacii', $s[0]['qs'][0][2] );
 
@@ -114,7 +114,8 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		$html = apply_filters( 'the_content', get_post( $hub )->post_content );
 		// The page section: the first paragraph and “Read more” to the question on its page.
 		$this->assertStringContainsString( 'Первый абзац ответа.', $html );
-		$this->assertStringNotContainsString( 'Второй абзац с подробностями.', $html );
+		// The full answer is only in data-t (for the search), not on the screen.
+		$this->assertStringNotContainsString( 'Второй абзац с подробностями.', preg_replace( '/\sdata-t="[^"]*"/', '', $html ) );
 		$this->assertStringContainsString( get_permalink( $svc ) . '#cena-kremacii', $html );
 		// The own section is in the block, not twice; other text of the page stays.
 		$this->assertSame( 1, substr_count( $html, 'Можно ли картой?' ) );
