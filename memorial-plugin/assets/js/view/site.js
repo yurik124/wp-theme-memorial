@@ -977,6 +977,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				const rest = li.offsetHeight - imgBox.offsetHeight;
 				const h =
 					d.documentElement.clientHeight - top - bottom - rest - 24;
+				g.dataset.fitDebug = [ top, bottom, rest, d.documentElement.clientHeight, window.innerHeight, li.offsetHeight, imgBox.offsetHeight ].join( '|' );
 				g.style.setProperty(
 					'--mcard-ph',
 					Math.max( 200, Math.round( h ) ) + 'px'

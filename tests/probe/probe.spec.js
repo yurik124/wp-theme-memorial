@@ -1693,7 +1693,7 @@ test.describe( 'анимация', () => {
 				const li = document.querySelectorAll( '.mcat__grid > .mcard' )[ 2 ];
 				const r = ( q ) => Math.round( li.querySelector( q )?.getBoundingClientRect().bottom || -1 );
 				const mbar = document.querySelector( '.mbar' )?.getBoundingClientRect().top;
-				return { var: g.style.getPropertyValue( '--mcard-ph' ), img: Math.round( li.querySelector( '.mcard__img' ).getBoundingClientRect().height ), name: r( '.mcard__name' ), price: r( '.mcard__price' ), order: r( '.mcard__order' ), mbarTop: Math.round( mbar ), screen: innerHeight };
+				return { dbg: g.dataset.fitDebug, li: Math.round( li.getBoundingClientRect().height ), barB: Math.round( document.querySelector( '.mcat__bar' ).getBoundingClientRect().bottom ), var: g.style.getPropertyValue( '--mcard-ph' ), img: Math.round( li.querySelector( '.mcard__img' ).getBoundingClientRect().height ), name: r( '.mcard__name' ), price: r( '.mcard__price' ), order: r( '.mcard__order' ), mbarTop: Math.round( mbar ), screen: innerHeight };
 			} );
 			await ph.screenshot( { path: `${ DIR }/anim-list-${ w }.png` } );
 			await ph.locator( '.mcat__grid > .mcard' ).nth( 2 ).locator( 'a[data-pv]' ).click();
