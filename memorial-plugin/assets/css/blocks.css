@@ -985,7 +985,7 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv::backdrop{background:rgba(42,44,40,.92)}
 .pv[open]{display:flex;align-items:center;justify-content:center;padding:24px 88px;box-sizing:border-box}
 .pv__box{position:relative;display:grid;gap:28px;width:100%;max-width:1240px;max-height:100%;box-sizing:border-box}
-.pv__media{position:relative;min-width:0}
+.pv__media{position:relative;min-width:0;width:fit-content;max-width:100%;justify-self:center}
 .pv__stage{display:flex;align-items:center;justify-content:center}
 .pv__img{display:block;max-width:100%;max-height:calc(100dvh - 110px);object-fit:contain;border-radius:8px;background:#fff;transition:filter .2s}
 .pv__img.is-low{filter:blur(1.5px)}
@@ -1006,6 +1006,7 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv__sub{margin:0 0 .8rem;opacity:.8}
 .pv__price{margin:0 0 1rem}
 .pv__price .price{font-size:1.6rem;color:inherit}
+.pv__price .price--ask{font-size:1.15rem}
 .pv__price .price small,.pv__price .price--ask,.pv__price .price-old{color:inherit;opacity:.8}
 .pv__desc{margin:0 0 1.2rem;line-height:1.55}
 .pv__desc p{margin:0 0 .6em}
@@ -1024,7 +1025,8 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv__prev{left:20px}
 .pv__next{right:20px}
 /* «Только фото»: фото и столбец справа */
-.pv--photo .pv__box{grid-template-columns:minmax(0,1fr) 300px;align-items:center}
+.pv--photo .pv__box{display:flex;align-items:center;justify-content:center}
+.pv--photo .pv__main{flex:0 0 300px}
 /* «Окно товара»: белое окно */
 .pv--card .pv__box{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) 230px;align-items:start;padding:28px;border-radius:16px;background:#fff;color:var(--memorial-plugin-ink,#2a2c28);max-height:calc(100dvh - 48px)}
 .pv--card .pv__img{max-height:calc(100dvh - 150px);cursor:zoom-in}
@@ -1045,6 +1047,9 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 /* Телефон: всё столбиком, окно прокручивается вниз; стрелки товаров — по бокам на уровне строки под фото */
 @media (max-width:700px){
 .pv[open]{display:block;padding:0}
+.pv__media{width:auto;align-self:stretch}
+.pv--photo .pv__box{align-items:stretch;justify-content:flex-start}
+.pv--photo .pv__main{flex:none}
 .pv__box{display:flex;flex-direction:column;gap:0;max-height:none;min-height:100%;padding:64px 12px 28px}
 .pv__img{max-height:66dvh;width:auto}
 .pv__media{order:0}
