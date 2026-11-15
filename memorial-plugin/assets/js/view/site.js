@@ -953,14 +953,16 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				if ( ! one || ! imgBox ) {
 					return;
 				}
+				// у закреплённых (position: fixed) элементов нет offsetParent — видимость по getClientRects
 				const hOf = ( q ) => {
 					const el = d.querySelector( q );
-					return el && el.offsetParent !== null ? el.offsetHeight : 0;
+					return el && el.getClientRects().length
+						? el.offsetHeight
+						: 0;
 				};
 				const bottom =
-					window.getComputedStyle(
-						d.querySelector( '.mbar' ) || d.body
-					).position === 'fixed'
+					window.getComputedStyle( d.querySelector( '.mbar' ) || d.body )
+						.position === 'fixed'
 						? hOf( '.mbar' )
 						: 0;
 				// верхняя граница — низ прилипшей строки разделов (её высота — в прилипшем виде)
@@ -977,7 +979,6 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				const rest = li.offsetHeight - imgBox.offsetHeight;
 				const h =
 					d.documentElement.clientHeight - top - bottom - rest - 24;
-				g.dataset.fitDebug = [ top, bottom, rest, d.documentElement.clientHeight, window.innerHeight, li.offsetHeight, imgBox.offsetHeight ].join( '|' );
 				g.style.setProperty(
 					'--mcard-ph',
 					Math.max( 200, Math.round( h ) ) + 'px'
