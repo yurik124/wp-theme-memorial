@@ -103,14 +103,11 @@ test( 'импорт: ZIP с таблицей и фото, проверка, за
 	await page.getByRole( 'button', { name: 'Import', exact: true } ).click();
 	const modal = page.locator( '.memorial-plugin-import' );
 	await expect( modal ).toBeVisible();
-	await modal
-		.locator( 'input[type=file]' )
-		.first()
-		.setInputFiles( {
-			name: 'import.zip',
-			mimeType: 'application/zip',
-			buffer: archive,
-		} );
+	await modal.locator( 'input[type=file]' ).first().setInputFiles( {
+		name: 'import.zip',
+		mimeType: 'application/zip',
+		buffer: archive,
+	} );
 	await expect( modal ).toContainText( 'catalog.csv' );
 	await expect( modal ).toContainText( '2 photos' );
 	await modal.getByRole( 'button', { name: 'Check the file' } ).click();
@@ -121,7 +118,9 @@ test( 'импорт: ZIP с таблицей и фото, проверка, за
 		modal.getByRole( 'button', { name: 'Roll back this import' } )
 	).toBeVisible();
 
-	const data = await api( page, { path: '/memorial-plugin/v1/catalog/products' } );
+	const data = await api( page, {
+		path: '/memorial-plugin/v1/catalog/products',
+	} );
 	const p1 = data.items.find( ( i ) => i.sku === sku1 );
 	const p2 = data.items.find( ( i ) => i.sku === sku2 );
 	expect( p1 ).toBeTruthy();
