@@ -208,6 +208,39 @@ class Test_Memorial_Plugin_Catalog_Import extends WP_UnitTestCase {
 		$this->assertSame( 'Венок спереди', get_post_meta( $att, '_wp_attachment_image_alt', true ) );
 	}
 
+	/**
+	 * A photo of the library without a file (the name is enough for finding it).
+	 *
+	 * @param string $file  Path in uploads.
+	 * @param string $title Title.
+	 * @return int
+	 */
+	private function photo( $file, $title ) {
+		return self::factory()->attachment->create(
+			array(
+				'file'           => $file,
+				'post_mime_type' => 'image/webp',
+				'post_title'     => $title,
+			)
+		);
+	}
+
+	public function test_same_names_in_the_library_and_twice_in_a_product_change_nothing() {
+		// As on the site: venki8.webp in two folders; one product has the same photo twice; a name with two tails.
+		$a  = $this->photo( '2021/11/venki8.webp', 'venki8' );
+		$b  = $this->photo( '2024/05/venki8.webp', 'venki8' );
+		$c  = $this->photo( '2024/05/venki9.webp', 'venki9' );
+		$d  = $this->photo( '2021/11/20211112_130501-1-e1641470811619-scaled.webp', '20211112_130501' );
+		$p1 = memorial_plugin_cm_create( $this->type, 0, 'Первый' );
+		$p2 = memorial_plugin_cm_create( $this->type, 0, 'Второй' );
+		memorial_plugin_product_set_photos( $p1, array( $b, $c, $a ) );
+		memorial_plugin_product_set_photos( $p2, array( $d ) );
+		$t       = memorial_plugin_io_table( array( 'ids' => array( $p1, $p2 ) ) );
+		$rows    = array_merge( array( $t['head'] ), array_map( static fn( $r ) => array_map( 'strval', $r ), $t['rows'] ) );
+		$preview = memorial_plugin_import_preview( $rows, array(), false );
+		$this->assertSame( array( 'same', 'same' ), array_column( $preview['rows'], 'action' ), wp_json_encode( $preview['rows'], JSON_UNESCAPED_UNICODE ) );
+	}
+
 	public function test_missing_photo_is_an_error_and_files_are_matched_by_folder() {
 		$res = memorial_plugin_import_preview(
 			array(

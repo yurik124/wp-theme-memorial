@@ -414,7 +414,8 @@ function memorial_plugin_import_path( $path ) {
  * @param string $name   Name from the cell.
  * @param array  $files  Files sent: path => [size, hash].
  * @param string $sku    SKU of the row (a file in a folder named so is preferred).
- * @param int[]  $prefer Photos of the product now: of several photos with one name in the library — this one.
+ * @param int[]  $prefer Photos of the product not matched yet: of several photos with one name in the library —
+ *                       the first of these.
  * @return array{source:string,path?:string,id?:int,error?:string}
  */
 function memorial_plugin_import_find_photo( $name, $files, $sku, $prefer = array() ) {
@@ -457,7 +458,7 @@ function memorial_plugin_import_find_photo( $name, $files, $sku, $prefer = array
 		);
 	}
 	if ( ! empty( $index[ $key ] ) ) {
-		$same = array_values( array_intersect( $index[ $key ], $prefer ) );
+		$same = array_values( array_intersect( $prefer, $index[ $key ] ) );
 		return array(
 			'source' => 'media',
 			'id'     => (int) ( $same ? $same[0] : $index[ $key ][0] ),
@@ -701,6 +702,18 @@ function memorial_plugin_import_plan( $cells, $ctx ) {
 	// Photos.
 	$now_ids = $p ? array_map( 'intval', memorial_plugin_product_photos( $id ) ) : array();
 	$photos  = null;
+	$free    = $now_ids;
+	// One photo of the product for one line: the same file may be in the library twice and in a product twice.
+	$take = static function ( $ph ) use ( &$free ) {
+		if ( 'media' === $ph['source'] ) {
+			$i = array_search( (int) $ph['id'], $free, true );
+			if ( false !== $i ) {
+				unset( $free[ $i ] );
+				$free = array_values( $free );
+			}
+		}
+		return $ph;
+	};
 	$names  = memorial_plugin_import_list( $cell( 'photos' ) );
 	$files  = $ctx['files'] ?? array();
 	if ( '-' === $cell( 'photos' ) ) {
@@ -708,14 +721,14 @@ function memorial_plugin_import_plan( $cells, $ctx ) {
 	} elseif ( $names ) {
 		$photos = array();
 		foreach ( $names as $name ) {
-			$photos[] = array( 'name' => $name ) + memorial_plugin_import_find_photo( $name, $files, $sku, $now_ids );
+			$photos[] = $take( array( 'name' => $name ) + memorial_plugin_import_find_photo( $name, $files, $sku, $free ) );
 		}
 	} elseif ( '' !== $sku ) {
 		// The column is empty: the files in a folder named as the SKU, by name.
 		$in = array_values( array_filter( array_keys( $files ), static fn( $path ) => in_array( mb_strtolower( $sku ), array_slice( explode( '/', $path ), 0, -1 ), true ) ) );
 		natsort( $in );
 		foreach ( $in as $path ) {
-			$photos[] = array( 'name' => wp_basename( $path ) ) + memorial_plugin_import_find_photo( $path, $files, $sku, $now_ids );
+			$photos[] = $take( array( 'name' => wp_basename( $path ) ) + memorial_plugin_import_find_photo( $path, $files, $sku, $free ) );
 		}
 		$photos = $photos ? $photos : null;
 	}
