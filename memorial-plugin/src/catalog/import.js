@@ -30,7 +30,10 @@ const API = '/memorial-plugin/v1/catalog/import';
  * @return {string} Lower case, forward slashes.
  */
 const norm = ( p ) =>
-	p.replace( /\\/g, '/' ).replace( /^\.?\//, '' ).toLowerCase();
+	p
+		.replace( /\\/g, '/' )
+		.replace( /^\.?\//, '' )
+		.toLowerCase();
 
 const isTable = ( name ) => /\.(xlsx|csv)$/i.test( name );
 const isPhoto = ( name ) => /\.(jpe?g|png|webp|gif|avif)$/i.test( name );
@@ -114,10 +117,12 @@ function PreviewTable( { rows } ) {
 				id: 'action',
 				label: __( 'What happens', 'memorial-plugin' ),
 				type: 'text',
-				elements: Object.entries( labels ).map( ( [ value, label ] ) => ( {
-					value,
-					label,
-				} ) ),
+				elements: Object.entries( labels ).map(
+					( [ value, label ] ) => ( {
+						value,
+						label,
+					} )
+				),
 				filterBy: { operators: [ 'isAny' ] },
 				render: ( { item } ) => labels[ item.action ],
 			},
@@ -141,22 +146,31 @@ function PreviewTable( { rows } ) {
 								item.photos.media &&
 									sprintf(
 										/* translators: %d: number of photos. */
-										__( 'in the library: %d', 'memorial-plugin' ),
+										__(
+											'in the library: %d',
+											'memorial-plugin'
+										),
 										item.photos.media
 									),
 								item.photos.file &&
 									sprintf(
 										/* translators: %d: number of photos. */
-										__( 'to upload: %d', 'memorial-plugin' ),
+										__(
+											'to upload: %d',
+											'memorial-plugin'
+										),
 										item.photos.file
 									),
 								item.photos.missing &&
 									sprintf(
 										/* translators: %d: number of photos. */
-										__( 'not found: %d', 'memorial-plugin' ),
+										__(
+											'not found: %d',
+											'memorial-plugin'
+										),
 										item.photos.missing
 									),
-						  ]
+							]
 								.filter( Boolean )
 								.join( ', ' )
 						: '—',
@@ -217,13 +231,16 @@ function report( rows ) {
 	];
 	return (
 		'﻿' +
-		[ head, ...rows.map( ( r ) => [
-			r.n,
-			r.sku,
-			r.title,
-			labels[ r.action ] || r.action,
-			( r.errors || [] ).join( ' ' ),
-		] ) ]
+		[
+			head,
+			...rows.map( ( r ) => [
+				r.n,
+				r.sku,
+				r.title,
+				labels[ r.action ] || r.action,
+				( r.errors || [] ).join( ' ' ),
+			] ),
+		]
 			.map( ( r ) => r.map( cell ).join( ';' ) )
 			.join( '\r\n' )
 	);
@@ -288,11 +305,11 @@ export default function ImportModal( { onClose, onDone, last } ) {
 					? __(
 							'The archive is too large (more than 4 GB). Split the photos into several archives.',
 							'memorial-plugin'
-					  )
+						)
 					: __(
 							'The archive could not be opened. Make it again as a ZIP (not RAR or 7z).',
 							'memorial-plugin'
-					  )
+						)
 			);
 		}
 		if ( tbl ) {
@@ -300,7 +317,9 @@ export default function ImportModal( { onClose, onDone, last } ) {
 		}
 		if ( add.length ) {
 			setPhotos( ( prev ) => {
-				const map = new Map( prev.map( ( p ) => [ norm( p.path ), p ] ) );
+				const map = new Map(
+					prev.map( ( p ) => [ norm( p.path ), p ] )
+				);
 				add.forEach( ( p ) => map.set( norm( p.path ), p ) );
 				return [ ...map.values() ];
 			} );
@@ -516,7 +535,9 @@ export default function ImportModal( { onClose, onDone, last } ) {
 							<Flex gap={ 3 } justify="flex-start" wrap>
 								<FormFileUpload
 									accept=".xlsx,.csv,.zip"
-									onChange={ ( e ) => addFiles( e.target.files ) }
+									onChange={ ( e ) =>
+										addFiles( e.target.files )
+									}
 									render={ ( { openFileDialog } ) => (
 										<Button
 											variant="secondary"
@@ -533,7 +554,9 @@ export default function ImportModal( { onClose, onDone, last } ) {
 								<FormFileUpload
 									accept="image/*,.zip"
 									multiple
-									onChange={ ( e ) => addFiles( e.target.files ) }
+									onChange={ ( e ) =>
+										addFiles( e.target.files )
+									}
 									render={ ( { openFileDialog } ) => (
 										<Button
 											variant="secondary"
@@ -554,7 +577,10 @@ export default function ImportModal( { onClose, onDone, last } ) {
 									<strong>
 										{ table
 											? table.name
-											: __( 'not chosen', 'memorial-plugin' ) }
+											: __(
+													'not chosen',
+													'memorial-plugin'
+												) }
 									</strong>
 								</li>
 								<li>
@@ -573,9 +599,14 @@ export default function ImportModal( { onClose, onDone, last } ) {
 											{ ' ' }
 											<Button
 												variant="link"
-												onClick={ () => setPhotos( [] ) }
+												onClick={ () =>
+													setPhotos( [] )
+												}
 											>
-												{ __( 'Clear', 'memorial-plugin' ) }
+												{ __(
+													'Clear',
+													'memorial-plugin'
+												) }
 											</Button>
 										</>
 									) }
@@ -706,7 +737,7 @@ export default function ImportModal( { onClose, onDone, last } ) {
 														'memorial-plugin'
 													),
 													r.n
-											  ) + ' '
+												) + ' '
 											: '' }
 										{ r.title } — { r.errors.join( ' ' ) }
 									</li>
@@ -722,7 +753,10 @@ export default function ImportModal( { onClose, onDone, last } ) {
 									)
 								}
 							>
-								{ __( 'Download the report', 'memorial-plugin' ) }
+								{ __(
+									'Download the report',
+									'memorial-plugin'
+								) }
 							</Button>
 							{ ! undo && (
 								<Button
