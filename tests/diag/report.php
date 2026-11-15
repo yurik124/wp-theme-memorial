@@ -152,7 +152,7 @@ function diag_fixed_upload_url( $url ) {
 			}
 			$new = (string) wp_get_attachment_url( $id );
 			if ( $w ) {
-				// the smallest copy not narrower than the old one; none — the file itself
+				// the smallest copy not narrower than the old one; none — the file itself.
 				$best = 0;
 				$meta = wp_get_attachment_metadata( $id );
 				foreach ( is_array( $meta ) ? (array) ( $meta['sizes'] ?? array() ) : array() as $size ) {
