@@ -118,4 +118,94 @@ foreach ( $wpdb->get_results( "SELECT ID, post_content FROM {$wpdb->posts} WHERE
 }
 $out['broken_uploads'] = array_slice( $broken, 0, 60 );
 $out['broken_count']   = count( $broken );
+// холостой прогон исправления адресов фото (core/fix-uploads.php): что нашлось бы, без записи
+if ( ! function_exists( 'memorial_plugin_fixed_upload_url' ) ) {
+function memorial_plugin_fixed_upload_url( $url ) {
+	if ( ! is_string( $url ) || ! preg_match( '~/wp-content/uploads/(.+)$~u', $url, $m ) ) {
+		return '';
+	}
+	$dir = wp_get_upload_dir();
+	$rel = rawurldecode( $m[1] );
+	if ( is_file( $dir['basedir'] . '/' . $rel ) ) {
+		return '';
+	}
+	$new = '';
+	// The same file in WebP.
+	$webp = preg_replace( '/\.(jpe?g|png)$/i', '.webp', $rel );
+	if ( $webp !== $rel && is_file( $dir['basedir'] . '/' . $webp ) ) {
+		$new = $dir['baseurl'] . '/' . $webp;
+	} else {
+		// The file renamed: the attachment still keeps its first address in the guid.
+		// A copy of a size («-1024x768») — the copy of the same size of that attachment.
+		$name = pathinfo( $rel, PATHINFO_FILENAME );
+		$w    = 0;
+		$h    = 0;
+		if ( preg_match( '/^(.+)-(\d+)x(\d+)$/', $name, $s ) ) {
+			[, $name, $w, $h] = $s;
+		}
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- one-time repair.
+		$id   = (int) $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND ( guid LIKE %s OR guid LIKE %s ) ORDER BY ID LIMIT 1", '%/' . $wpdb->esc_like( $name ) . '.%', '%/' . $wpdb->esc_like( rawurlencode( $name ) ) . '.%' ) );
+		$file = $id ? get_attached_file( $id ) : '';
+		if ( $file && is_file( $file ) ) {
+			$new  = (string) wp_get_attachment_url( $id );
+			$meta = $w ? wp_get_attachment_metadata( $id ) : null;
+			foreach ( is_array( $meta ) ? (array) ( $meta['sizes'] ?? array() ) : array() as $size ) {
+				if ( (int) $size['width'] === (int) $w || (int) $size['height'] === (int) $h ) {
+					$new = dirname( $new ) . '/' . $size['file'];
+					break;
+				}
+			}
+		}
+	}
+	if ( '' === $new ) {
+		return '';
+	}
+	// Keep the form of the stored address (the home settings keep it relative to the site).
+	return str_starts_with( $url, '/' ) ? wp_make_link_relative( $new ) : $new;
+}
+
+/**
+ * Replaces broken photo addresses in a value: a settings array or a text with addresses inside.
+ *
+ * @param mixed  $value Value.
+ * @param array  $log   Replacements: [ where, old, new ].
+ * @param string $where Where the value is (for the log).
+ * @return mixed
+ */
+function memorial_plugin_fix_upload_urls( $value, &$log, $where = '' ) {
+	if ( is_array( $value ) ) {
+		foreach ( $value as $k => $v ) {
+			$value[ $k ] = memorial_plugin_fix_upload_urls( $v, $log, $where . '/' . $k );
+		}
+		return $value;
+	}
+	if ( ! is_string( $value ) || ! str_contains( $value, '/wp-content/uploads/' ) ) {
+		return $value;
+	}
+	return preg_replace_callback(
+		'~(?:https?://[^\s"\'()<>,]+)?/wp-content/uploads/[^\s"\'()<>,]+\.(?:jpe?g|png|webp|gif)~iu',
+		function ( $m ) use ( &$log, $where ) {
+			$new = memorial_plugin_fixed_upload_url( $m[0] );
+			if ( '' === $new ) {
+				return $m[0];
+			}
+			$log[] = array( $where, $m[0], $new );
+			return $new;
+		},
+		$value
+	);
+}
+
+}
+$dry = array();
+foreach ( array( 'mem_home', 'memorial_ritual_services_options' ) as $o ) {
+	memorial_plugin_fix_upload_urls( get_option( $o ), $dry, $o );
+}
+foreach ( $wpdb->get_results( "SELECT ID, post_content FROM {$wpdb->posts} WHERE post_status IN ( 'publish', 'private', 'future', 'draft' ) AND post_type NOT IN ( 'revision', 'attachment' ) AND post_content LIKE '%/wp-content/uploads/%'" ) as $row ) {
+	memorial_plugin_fix_upload_urls( $row->post_content, $dry, 'post ' . $row->ID . ' ' . get_post_type( $row->ID ) . ' ' . get_post_status( $row->ID ) . ' ' . get_the_title( $row->ID ) );
+}
+$out['fix_dry']     = $dry;
+$out['fix_flag']    = get_option( 'memorial_plugin_fix_uploads_2' );
+$out['ritual_used'] = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name = 'memorial_ritual_services_options'" );
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
