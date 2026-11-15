@@ -7330,3 +7330,9 @@ msgstr "Кнопка «Заказать» под карточками товар
 msgctxt "button: order a product"
 msgid "Order"
 msgstr "Заказать"
+
+msgid "Next product"
+msgstr "Следующий товар"
+
+msgid "Previous product"
+msgstr "Предыдущий товар"

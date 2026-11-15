@@ -1536,105 +1536,118 @@ test.describe( 'новая работа', () => {
 	} );
 } );
 
-test.describe( 'заказать', () => {
+test.describe( 'просмотр', () => {
 	test.use( { viewport: { width: 1440, height: 900 } } );
-	test( 'заказать: кнопка, окно товара, заявка, разметка', async ( { page, browser } ) => {
+	test( 'просмотр каталога: окно товара и только фото', async ( { page, browser } ) => {
 		test.setTimeout( 600_000 );
 		page.setDefaultTimeout( 20000 );
 		const report = {};
 		const errs = errorsOf( page );
-		await page.goto( '/wp-login.php' );
-		await page.fill( '#user_login', 'probe' );
-		await page.fill( '#user_pass', 'probe-pass-123' );
-		await page.click( '#wp-submit' );
-		await page.waitForURL( /wp-admin/ );
-		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-types' );
-		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
-		// тип «Венки»: кнопка «Заказать» и окно товара
+		const login = async () => {
+			await page.goto( '/wp-login.php' );
+			await page.fill( '#user_login', 'probe' );
+			await page.fill( '#user_pass', 'probe-pass-123' );
+			await page.click( '#wp-submit' );
+			await page.waitForURL( /wp-admin/ );
+			await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-types' );
+			await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		};
+		await login();
 		const types = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types' } ) );
 		const list = types.types || types.items || types;
 		const venki = ( Array.isArray( list ) ? list : [] ).find( ( t ) => /венк/i.test( t.name ) );
-		report.type = venki ? venki.name + ' #' + venki.id : JSON.stringify( types ).slice( 0, 300 );
-		if ( venki ) {
-			await page.evaluate( ( id ) => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types/' + id, method: 'PUT', data: { values: { orderBtn: true, orderText: 'Заказать', view: 'card' } } } ), venki.id );
-			await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-types' );
-			await page.waitForTimeout( 3000 );
-			await page.getByRole( 'tab', { name: new RegExp( venki.name ) } ).click().catch( () => {} );
-			await page.waitForTimeout( 1500 );
-			await page.getByText( 'Фото и заказ' ).scrollIntoViewIfNeeded().catch( () => {} );
-			await shot( page, 'order-admin-type' );
-		}
+		const setView = ( view ) => page.evaluate( ( [ id, v ] ) => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types/' + id, method: 'PUT', data: { values: { orderBtn: true, orderText: 'Заказать', view: v } } } ), [ venki.id, view ] );
+		await setView( 'card' );
 		await page.context().clearCookies();
 		const pg = PAGES.find( ( x ) => /венк/i.test( x.post_title ) );
-		await page.goto( new URL( pg.url ).pathname );
+		const path = new URL( pg.url ).pathname;
+		// карточка с несколькими загруженными фото
+		const pick = async ( p ) => {
+			await p.evaluate( () => document.querySelectorAll( '.mcard img' ).forEach( ( i ) => ( i.loading = 'eager' ) ) );
+			await p.waitForTimeout( 3000 );
+			return p.evaluate( () => {
+				const c = [ ...document.querySelectorAll( '.mcard' ) ];
+				const ok = ( x ) => x.querySelector( 'a[data-pv]' ) && x.querySelector( 'img' )?.naturalWidth > 0;
+				const k = c.findIndex( ( x ) => ok( x ) && x.querySelectorAll( '.mcard__ph' ).length > 1 );
+				return k >= 0 ? k : c.findIndex( ok );
+			} );
+		};
+		const geo = ( p ) => p.evaluate( () => [ '.pv__img', '.pv__title', '.pv__price', '.pv__order', '.pv__desc', '.pv__specs', '.pv__prev', '.pv__arr--r' ].map( ( q ) => {
+			const el = document.querySelector( '#pv ' + q );
+			const r = el?.getBoundingClientRect();
+			return q + ': ' + ( r && r.width ? `x${ Math.round( r.left ) }–${ Math.round( r.right ) } y${ Math.round( r.top ) }–${ Math.round( r.bottom ) }` : 'нет' );
+		} ) );
+		await page.goto( path );
 		await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
-		report.buttons = await page.locator( '.mcard__order' ).count();
-		report.ld = await page.evaluate( () => [ ...document.querySelectorAll( 'script[type="application/ld+json"]' ) ].map( ( s ) => {
-			try {
-				const j = JSON.parse( s.textContent );
-				return j[ '@type' ] + ( j.itemListElement ? ' ×' + j.itemListElement.length + ' ' + JSON.stringify( j.itemListElement[ 0 ].item ).slice( 0, 400 ) : '' );
-			} catch ( e ) {
-				return 'bad json';
-			}
-		} ) );
-		await page.evaluate( () => document.querySelectorAll( '.mcard img' ).forEach( ( i ) => ( i.loading = 'eager' ) ) );
-		await page.waitForTimeout( 3000 );
-		const good = await page.evaluate( () => [ ...document.querySelectorAll( '.mcard' ) ].findIndex( ( c ) => c.querySelector( 'a[data-lb-card]' ) && c.querySelector( 'img' )?.naturalWidth > 0 ) );
-		report.cardIndex = good;
-		const card = page.locator( '.mcard' ).nth( Math.max( 0, good ) );
-		await card.scrollIntoViewIfNeeded();
-		await card.hover();
-		await shot( page, 'order-cards' );
-		report.outline = await page.evaluate( () => {
-			const l = document.querySelector( '.mcard:hover .mcard__link' ) || document.querySelector( '.mcard__link' );
-			const cs = getComputedStyle( l );
-			return cs.outlineStyle + ' ' + cs.borderRadius;
-		} );
-		await card.locator( 'a[data-lb]' ).first().click();
-		await page.waitForTimeout( 3000 );
-		report.lbCard = await page.locator( '#lb.lb--card' ).count();
-		report.lbInfo = await page.locator( '#lb .lb__info' ).innerText().catch( () => '' );
-		report.firstScreen = await page.evaluate( () => [ 'figure img', '.lb__price', '.lb__order', '.lb__title' ].map( ( q ) => {
-			const r = document.querySelector( '#lb ' + q )?.getBoundingClientRect();
-			return q + ': ' + ( r ? Math.round( r.top ) + '–' + Math.round( r.bottom ) + ( r.bottom <= innerHeight ? ' в экране' : ' ниже' ) : 'нет' );
-		} ) );
-		await shot( page, 'order-window' );
-		await page.locator( '#lb .lb__order' ).click().catch( () => {} );
-		await page.waitForTimeout( 800 );
-		report.lbClosed = ! ( await page.locator( '#lb[open]' ).count() );
-		report.cbStatus = await page.locator( '#callback [data-cb-status]' ).innerText().catch( () => '' );
-		await shot( page, 'order-callback' );
-		await page.locator( '#callback input[name=phone]' ).fill( '9001112233' );
-		await page.locator( '#callback input[name=consent]' ).check().catch( () => {} );
-		await page.waitForTimeout( 3500 ); // «слишком быстро» — защита от ботов
-		await page.locator( '#callback [type=submit]' ).click();
+		report.cardSpecs = await page.locator( '.mcat__grid .mcard__specs' ).count();
+		report.links = await page.locator( 'a[data-pv]' ).count();
+		const k = await pick( page );
+		report.card = k;
+		await page.locator( '.mcard' ).nth( k ).scrollIntoViewIfNeeded();
+		await shot( page, 'pv-list' );
+		await page.locator( '.mcard' ).nth( k ).locator( 'a[data-pv]' ).click();
 		await page.waitForTimeout( 2500 );
-		report.cbDone = await page.locator( '#callback .cb__done' ).isVisible().catch( () => false );
+		report.cardPc = { cls: await page.locator( '#pv' ).getAttribute( 'class' ), geo: await geo( page ), dots: await page.locator( '#pv .pv__dots i' ).count(), bg: await page.locator( '#pv .pv__box' ).evaluate( ( e ) => getComputedStyle( e ).backgroundColor ) };
+		await shot( page, 'pv-card' );
+		const t1 = await page.locator( '#pv .pv__title' ).innerText();
+		if ( report.cardPc.dots ) {
+			await page.locator( '#pv .pv__arr--r' ).click();
+			await page.waitForTimeout( 1200 );
+			report.photoStepKeepsProduct = ( await page.locator( '#pv .pv__title' ).innerText() ) === t1;
+			report.dotOn = await page.locator( '#pv .pv__dots i.is-on' ).evaluate( ( e ) => [ ...e.parentNode.children ].indexOf( e ) );
+		}
+		await page.locator( '#pv .pv__img' ).click();
+		await page.waitForTimeout( 1500 );
+		report.lbFromCard = { open: await page.locator( '#lb[open]' ).count(), count: await page.locator( '#lb .lb__count' ).isVisible(), cap: await page.locator( '#lb figcaption' ).innerText() };
+		await shot( page, 'pv-card-photos' );
+		await page.locator( '#lb .lb__x' ).click();
+		await page.waitForTimeout( 600 );
+		report.backToCard = await page.locator( '#pv[open]' ).count();
+		await page.keyboard.press( 'ArrowRight' );
+		await page.waitForTimeout( 1500 );
+		report.nextProduct = ( await page.locator( '#pv .pv__title' ).innerText() ) + ' (был ' + t1 + ')';
+		await page.locator( '#pv .pv__next' ).click();
+		await page.waitForTimeout( 1500 );
+		await shot( page, 'pv-card-next' );
+		await page.locator( '#pv .pv__order' ).click().catch( () => {} );
+		await page.waitForTimeout( 800 );
+		report.order = { pvClosed: ! ( await page.locator( '#pv[open]' ).count() ), status: await page.locator( '#callback [data-cb-status]' ).innerText().catch( () => '' ) };
 		// телефон: окно товара
-		const ctx = await browser.newContext( { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, baseURL: 'http://localhost:8888' } );
-		const ph = await ctx.newPage();
-		await ph.goto( new URL( pg.url ).pathname );
-		await ph.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
-		await ph.evaluate( () => document.querySelectorAll( '.mcard img' ).forEach( ( i ) => ( i.loading = 'eager' ) ) );
-		await ph.waitForTimeout( 3000 );
-		await ph.locator( '.mcard' ).nth( Math.max( 0, good ) ).locator( 'a[data-lb]' ).first().click();
-		await ph.waitForTimeout( 3000 );
-		await ph.screenshot( { path: `${ DIR }/order-window-phone.png` } );
-		await ph.locator( '#lb' ).evaluate( ( d ) => ( d.scrollTop = 99999 ) );
-		await ph.waitForTimeout( 400 );
-		await ph.screenshot( { path: `${ DIR }/order-window-phone-below.png` } );
-		await ctx.close();
-		// заявка в списке
-		await page.goto( '/wp-login.php' );
-		await page.fill( '#user_login', 'probe' );
-		await page.fill( '#user_pass', 'probe-pass-123' );
-		await page.click( '#wp-submit' );
-		await page.waitForURL( /wp-admin/ );
-		await page.goto( '/wp-admin/admin.php?page=memorial-plugin-leads' );
-		await page.waitForTimeout( 4000 );
-		report.leadRow = ( await page.locator( '.dataviews-view-table tbody tr' ).first().innerText().catch( () => '' ) ).replace( /\s+/g, ' ' );
-		await shot( page, 'order-leads' );
+		const phone = async ( name ) => {
+			const ctx = await browser.newContext( { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, baseURL: 'http://localhost:8888' } );
+			const ph = await ctx.newPage();
+			await ph.goto( path );
+			await ph.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+			const n = await pick( ph );
+			await ph.locator( '.mcard' ).nth( n ).locator( 'a[data-pv]' ).click();
+			await ph.waitForTimeout( 2500 );
+			report[ name ] = await geo( ph );
+			await ph.screenshot( { path: `${ DIR }/${ name }.png` } );
+			await ph.locator( '#pv' ).evaluate( ( dd ) => ( dd.scrollTop = 99999 ) );
+			await ph.waitForTimeout( 400 );
+			await ph.screenshot( { path: `${ DIR }/${ name }-below.png` } );
+			await ctx.close();
+		};
+		await phone( 'pv-card-phone' );
+		// «Только фото»
+		await login();
+		await setView( 'photo' );
+		await page.context().clearCookies();
+		await page.goto( path );
+		await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+		const k2 = await pick( page );
+		await page.locator( '.mcard' ).nth( k2 ).locator( 'a[data-pv]' ).click();
+		await page.waitForTimeout( 2500 );
+		report.photoPc = { cls: await page.locator( '#pv' ).getAttribute( 'class' ), geo: await geo( page ), lbCount: await page.locator( '.lb__count:visible' ).count() };
+		await shot( page, 'pv-photo' );
+		await page.locator( '#pv .pv__img' ).click();
+		await page.waitForTimeout( 600 );
+		report.photoClickOpensNothing = ! ( await page.locator( '#lb[open]' ).count() );
+		await phone( 'pv-photo-phone' );
+		// «Наши работы» и прочие фото — прежний просмотр
 		report.errors = errs.filter( ( x ) => ! /404/.test( x ) );
-		log( 'order', report );
+		await login();
+		await setView( 'card' );
+		log( 'pv', report );
 	} );
 } );
