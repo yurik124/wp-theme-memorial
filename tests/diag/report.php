@@ -135,34 +135,42 @@ function memorial_plugin_fixed_upload_url( $url ) {
 	if ( $webp !== $rel && is_file( $dir['basedir'] . '/' . $webp ) ) {
 		$new = $dir['baseurl'] . '/' . $webp;
 	} else {
-		// The file renamed: the attachment still keeps its first address in the guid.
-		// A copy of a size («-1024x768») — the copy of the same size of that attachment.
-		$name = pathinfo( $rel, PATHINFO_FILENAME );
-		$w    = 0;
-		$h    = 0;
-		if ( preg_match( '/^(.+)-(\d+)x(\d+)$/', $name, $s ) ) {
-			[, $name, $w, $h] = $s;
+		// The file renamed: the attachment still keeps its first address in the guid. First the exact
+		// name; then, for a copy of a size («-1024x768», from 100 px), the attachment without the size.
+		$name  = pathinfo( $rel, PATHINFO_FILENAME );
+		$tries = array( array( $name, 0 ) );
+		if ( preg_match( '/^(.+)-(\d{3,4})x(\d{3,4})$/', $name, $s ) ) {
+			$tries[] = array( $s[1], (int) $s[2] );
 		}
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- one-time repair.
-		$id   = (int) $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND ( guid LIKE %s OR guid LIKE %s ) ORDER BY ID LIMIT 1", '%/' . $wpdb->esc_like( $name ) . '.%', '%/' . $wpdb->esc_like( rawurlencode( $name ) ) . '.%' ) );
-		$file = $id ? get_attached_file( $id ) : '';
-		if ( $file && is_file( $file ) ) {
-			$new  = (string) wp_get_attachment_url( $id );
-			$meta = $w ? wp_get_attachment_metadata( $id ) : null;
-			foreach ( is_array( $meta ) ? (array) ( $meta['sizes'] ?? array() ) : array() as $size ) {
-				if ( (int) $size['width'] === (int) $w || (int) $size['height'] === (int) $h ) {
-					$new = dirname( $new ) . '/' . $size['file'];
-					break;
+		foreach ( $tries as [$base, $w] ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- one-time repair.
+			$id   = (int) $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND ( guid LIKE %s OR guid LIKE %s ) ORDER BY ID LIMIT 1", '%/' . $wpdb->esc_like( $base ) . '.%', '%/' . $wpdb->esc_like( rawurlencode( $base ) ) . '.%' ) );
+			$file = $id ? get_attached_file( $id ) : '';
+			if ( ! $file || ! is_file( $file ) ) {
+				continue;
+			}
+			$new = (string) wp_get_attachment_url( $id );
+			if ( $w ) {
+				// the smallest copy not narrower than the old one; none — the file itself
+				$best = 0;
+				$meta = wp_get_attachment_metadata( $id );
+				foreach ( is_array( $meta ) ? (array) ( $meta['sizes'] ?? array() ) : array() as $size ) {
+					$sw = (int) $size['width'];
+					if ( $sw >= $w && ( ! $best || $sw < $best ) && is_file( dirname( $file ) . '/' . $size['file'] ) ) {
+						$best = $sw;
+						$new  = dirname( $new ) . '/' . $size['file'];
+					}
 				}
 			}
+			break;
 		}
 	}
 	if ( '' === $new ) {
 		return '';
 	}
-	// Keep the form of the stored address (the home settings keep it relative to the site).
-	return str_starts_with( $url, '/' ) ? wp_make_link_relative( $new ) : $new;
+	// Without the domain: works on any address of the site (also after moving to another domain).
+	return wp_make_link_relative( $new );
 }
 
 /**

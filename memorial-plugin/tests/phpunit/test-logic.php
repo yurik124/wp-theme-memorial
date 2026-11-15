@@ -575,7 +575,7 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		$log  = array();
 		$text = memorial_plugin_fix_upload_urls( '<p>Зал</p><img src="https://old.example/wp-content/uploads/2020/04/котляров-компл-1.jpg" alt="">', $log, 'post 1' );
 		$this->assertStringContainsString( '/wp-content/uploads/2020/04/kotlyarov-kompl-1.webp', $text );
-		$this->assertStringStartsWith( '<p>Зал</p><img src="http', $text );
+		$this->assertStringStartsWith( '<p>Зал</p><img src="/wp-content/uploads/', $text );
 		wp_delete_file( $up['basedir'] . '/2020/04/kotlyarov-kompl-1.webp' );
 	}
 
