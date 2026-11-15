@@ -1068,7 +1068,7 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv--card .pv__x,.pv--card .pv__nav{background:rgba(42,44,40,.08);color:var(--memorial-plugin-ink,#2a2c28)}
 }
 /* Одна колонка на телефоне: фото карточки по высоте экрана так, чтобы под ним были видны название, цена и «Заказать» (--mcard-ph считает site.js) */
-@media (max-width:600px){.mcat__grid .mcard__img{max-height:var(--mcard-ph,none)}}
+@media (max-width:600px){.mcat__grid .mcard__img{max-height:var(--mcard-ph,none)}.mcat__grid .mcard__img img{margin-inline:auto;object-position:center}}
 /* Открытие и закрытие окна товара и крупного фото */
 @keyframes mem-fade{from{opacity:0}}
 @keyframes mem-pop{from{opacity:0;transform:translateY(14px) scale(.96)}}
