@@ -850,7 +850,7 @@ export default function Products() {
 															type: type.id,
 														} ),
 												},
-										  ]
+											]
 										: [] ),
 									{
 										title: __(
