@@ -253,4 +253,38 @@ foreach ( array_slice( $sku_all, 0, 25 ) as $pid ) {
 	}
 }
 $out['photo_names'] = $photo_names;
+// Хаб вопросов: ссылки на старые якоря #faq-<номер>, разделы, пункты меню, запись в корень (llms.txt).
+$out['faq_links'] = array();
+foreach ( $wpdb->get_results( "SELECT ID, post_type, post_title FROM {$wpdb->posts} WHERE post_status IN ( 'publish', 'draft', 'private' ) AND post_content LIKE '%#faq-%'" ) as $r ) {
+	$out['faq_links'][] = $r->ID . ' ' . $r->post_type . ' ' . $r->post_title;
+}
+foreach ( $wpdb->get_results( "SELECT option_name FROM {$wpdb->options} WHERE option_value LIKE '%#faq-%'" ) as $r ) {
+	$out['faq_links'][] = 'option ' . $r->option_name;
+}
+foreach ( $wpdb->get_results( "SELECT post_id, meta_key FROM {$wpdb->postmeta} WHERE meta_value LIKE '%#faq-%'" ) as $r ) {
+	$out['faq_links'][] = 'meta ' . $r->post_id . ' ' . $r->meta_key;
+}
+$menu_label = array();
+if ( function_exists( 'memorial_plugin_menu_items' ) ) {
+	foreach ( memorial_plugin_menu_items() as $it ) {
+		if ( 'page' === $it->object && ! isset( $menu_label[ (int) $it->object_id ] ) ) {
+			$menu_label[ (int) $it->object_id ] = $it->title;
+		}
+	}
+}
+$out['faq_sections'] = array();
+if ( function_exists( 'memorial_plugin_faq_all' ) ) {
+	foreach ( memorial_plugin_faq_all() as $g ) {
+		$out['faq_sections'][] = $g['id'] . ' | ' . $g['title'] . ' | menu: ' . ( $menu_label[ $g['id'] ] ?? '—' ) . ' | ' . count( $g['qs'] );
+	}
+}
+$hubs = $wpdb->get_results( "SELECT ID, post_title FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'publish' AND ( post_content LIKE '%memorial-plugin/faq%' OR post_content LIKE '%[mem_faq%' )" );
+$out['faq_hub']    = array_map( fn( $r ) => $r->ID . ' ' . $r->post_title . ' | details on hub: ' . substr_count( get_post( $r->ID )->post_content, 'wp:details' ) . ' | h2: ' . substr_count( get_post( $r->ID )->post_content, '<h2' ), $hubs );
+$out['details_anchor'] = ( $bt = WP_Block_Type_Registry::get_instance()->get_registered( 'core/details' ) ) ? ( $bt->supports['anchor'] ?? null ) : 'no block';
+$out['root'] = array(
+	'writable' => wp_is_writable( ABSPATH ),
+	'llms'     => file_exists( ABSPATH . 'llms.txt' ),
+	'robots'   => file_exists( ABSPATH . 'robots.txt' ),
+	'fs'       => function_exists( 'get_filesystem_method' ) ? get_filesystem_method() : ( require_once ABSPATH . 'wp-admin/includes/file.php' ) && get_filesystem_method(),
+);
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
