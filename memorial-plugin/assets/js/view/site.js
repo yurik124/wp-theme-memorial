@@ -999,8 +999,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 					bar.classList.toggle( 'is-stuck', was );
 				}
 				const rest = li.offsetHeight - imgBox.offsetHeight;
-				const h =
-					screenH() - top - bottom - rest - 24;
+				const h = screenH() - top - bottom - rest - 24;
 				g.style.setProperty(
 					'--mcard-ph',
 					Math.max( 200, Math.round( h ) ) + 'px'
