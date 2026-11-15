@@ -29,7 +29,7 @@ function parse( raw ) {
 			order: Array.isArray( v.order ) ? v.order : [],
 			items: v.items && typeof v.items === 'object' ? v.items : {},
 		};
-	} catch ( e ) {
+	} catch {
 		return { order: [], items: {} };
 	}
 }
