@@ -876,7 +876,7 @@ a.svc__item:hover h3,.cat:hover h3{color:var(--memorial-plugin-gold3)}
 .lb[open]{display:grid;place-items:center}
 .lb figure{margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;width:min(calc(100vw - 150px),1100px);height:100%;padding:64px 0 18px;box-sizing:border-box}
 .lb__stage{min-height:0;max-width:100%;display:flex;align-items:center;justify-content:center}
-.lb img{max-width:100%;max-height:calc(100dvh - 190px);object-fit:contain;border-radius:6px;background:#fff;transition:filter .2s}
+.lb img{max-width:100%;max-height:calc(100svh - 190px);object-fit:contain;border-radius:6px;background:#fff;transition:filter .2s}
 .lb img.is-low{filter:blur(1.5px)}
 .lb figcaption{color:#e6e1d8;font-size:1rem;line-height:1.4;text-align:center;max-width:60ch}
 .lb__count{margin:0;color:#b9b2a6;font-size:1rem}
@@ -889,7 +889,7 @@ a.svc__item:hover h3,.cat:hover h3{color:var(--memorial-plugin-gold3)}
 .lb__prev{left:20px}
 .lb__next{right:20px}
 .lb__x:hover,.lb__nav:hover{background:rgba(255,255,255,.24)}
-@media (max-width:700px){.lb figure{width:calc(100vw - 24px);padding:60px 0 84px}.lb img{max-height:calc(100dvh - 250px)}.lb__nav{top:auto;bottom:16px;margin-top:0}.lb__prev{left:calc(50% - 64px)}.lb__next{right:calc(50% - 64px)}}
+@media (max-width:700px){.lb figure{width:calc(100vw - 24px);padding:60px 0 84px}.lb img{max-height:calc(100svh - 250px)}.lb__nav{top:auto;bottom:16px;margin-top:0}.lb__prev{left:calc(50% - 64px)}.lb__next{right:calc(50% - 64px)}}
 .wp-block-gallery.mem-eq.has-nested-images figure.wp-block-image:not(#individual-image){align-self:flex-start}
 .wp-block-gallery.mem-eq.has-nested-images figure.wp-block-image:not(#individual-image) img{aspect-ratio:var(--mem-ar,4/3);width:100%;height:auto!important;object-fit:cover;flex:none}
 .wp-block-gallery.mem-eq.has-nested-images figure.wp-block-image:not(#individual-image) > a{width:100%;flex:none}
@@ -987,9 +987,9 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv__box{position:relative;display:grid;gap:28px;width:100%;max-width:1240px;max-height:100%;box-sizing:border-box}
 .pv__media{position:relative;min-width:0;width:fit-content;max-width:100%;justify-self:center}
 .pv__stage{display:flex;align-items:center;justify-content:center}
-.pv__img{display:block;max-width:100%;max-height:calc(100dvh - 110px);object-fit:contain;border-radius:8px;background:#fff;transition:filter .2s}
+.pv__img{display:block;max-width:100%;max-height:calc(100svh - 110px);object-fit:contain;border-radius:8px;background:#fff;transition:filter .2s}
 .pv__img.is-low{filter:blur(1.5px)}
-.pv__img:not([src]){min-height:40dvh;min-width:40%}
+.pv__img:not([src]){min-height:40svh;min-width:40%}
 .pv__arr{position:absolute;top:50%;margin-top:-20px;width:40px;height:40px;padding:0;border:0;border-radius:50%;display:none;place-items:center;background:rgba(255,255,255,.92);color:var(--wp--preset--color--secondary,#3f4d36);box-shadow:0 1px 6px rgba(0,0,0,.22);cursor:pointer}
 .pv__arr svg{width:18px;height:18px;display:block}
 .pv__arr:hover{background:#fff}
@@ -1029,7 +1029,7 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv--photo .pv__main{flex:0 0 300px}
 /* «Окно товара»: белое окно */
 .pv--card .pv__box{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) 230px;align-items:start;padding:28px;border-radius:16px;background:#fff;color:var(--memorial-plugin-ink,#2a2c28);max-height:calc(100dvh - 48px)}
-.pv--card .pv__img{max-height:calc(100dvh - 150px);cursor:zoom-in}
+.pv--card .pv__img{max-height:calc(100svh - 150px);cursor:zoom-in}
 .pv--card .pv__main{max-height:calc(100dvh - 104px);overflow:auto;padding-right:4px}
 .pv--card .pv__dots i{background:#d3ccbf}
 .pv--card .pv__dots i.is-on{background:var(--wp--preset--color--secondary,#3f4d36)}
@@ -1047,21 +1047,34 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 /* Телефон: всё столбиком, окно прокручивается вниз; стрелки товаров — по бокам на уровне строки под фото */
 @media (max-width:700px){
 .pv[open]{display:block;padding:0}
+.pv--card .pv__box,.pv--photo .pv__box{align-items:stretch}
+.pv--card .pv__buy{display:flex;flex-direction:column;align-items:center}
 .pv__media{width:auto;align-self:stretch}
 .pv--photo .pv__box{align-items:stretch;justify-content:flex-start}
 .pv--photo .pv__main{flex:none}
 .pv__box{display:flex;flex-direction:column;gap:0;max-height:none;min-height:100%;padding:64px 12px 28px}
-.pv__img{max-height:66dvh;width:auto}
+.pv__img{max-height:var(--pv-ph,66svh);width:auto}
 .pv__media{order:0}
 .pv__main{order:2;padding-top:14px}
 .pv--photo .pv__title,.pv--photo .pv__sub,.pv--photo .pv__price{padding:0 52px;text-align:center}
-.pv__nav{position:absolute;top:calc(var(--pv-under,66dvh) + 10px);margin-top:0;width:44px;height:44px}
+.pv__nav{position:absolute;top:calc(var(--pv-under,66svh) + 10px);margin-top:0;width:44px;height:44px}
 .pv__prev{left:6px}
 .pv__next{right:6px}
 .pv--card{background:#fff}
 .pv--card .pv__box{padding:64px 12px 28px;border-radius:0;max-height:none}
-.pv--card .pv__img{max-height:56dvh}
+.pv--card .pv__img{max-height:var(--pv-ph,56svh)}
 .pv--card .pv__buy{order:1;padding:10px 52px 4px;border:0;text-align:center}
 .pv--card .pv__main{max-height:none;overflow:visible;padding-right:0}
 .pv--card .pv__x,.pv--card .pv__nav{background:rgba(42,44,40,.08);color:var(--memorial-plugin-ink,#2a2c28)}
 }
+/* Одна колонка на телефоне: фото карточки по высоте экрана так, чтобы под ним были видны название, цена и «Заказать» (--mcard-ph считает site.js) */
+@media (max-width:600px){.mcat__grid .mcard__img{max-height:var(--mcard-ph,none)}.mcat__grid .mcard__img img{margin-inline:auto;object-position:center}}
+/* Открытие и закрытие окна товара и крупного фото */
+@keyframes mem-fade{from{opacity:0}}
+@keyframes mem-pop{from{opacity:0;transform:translateY(14px) scale(.96)}}
+.pv[open],.lb[open]{animation:mem-fade .22s ease-out}
+.pv[open]::backdrop,.lb[open]::backdrop{animation:mem-fade .22s ease-out}
+.pv[open] .pv__box,.lb[open] figure{animation:mem-pop .26s cubic-bezier(.2,.8,.3,1)}
+.pv.is-closing,.lb.is-closing,.pv.is-closing::backdrop,.lb.is-closing::backdrop{opacity:0;transition:opacity .18s ease-in}
+.pv.is-closing .pv__box,.lb.is-closing figure{transform:translateY(10px) scale(.97);transition:transform .18s ease-in}
+@media (prefers-reduced-motion:reduce){.pv[open],.lb[open],.pv[open]::backdrop,.lb[open]::backdrop,.pv[open] .pv__box,.lb[open] figure{animation:none}.pv.is-closing,.lb.is-closing,.pv.is-closing::backdrop,.lb.is-closing::backdrop,.pv.is-closing .pv__box,.lb.is-closing figure{transition:none}}
