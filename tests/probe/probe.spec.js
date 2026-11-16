@@ -2095,6 +2095,63 @@ test.describe( 'хаб', () => {
 } );
 
 test.describe( 'ширина', () => {
+	test( 'ширина ПК: шапка в две строки (как со шрифтом Windows)', async () => {
+		test.setTimeout( 900_000 );
+		const report = {};
+		const browser = await require( '@playwright/test' ).chromium.launch( { ignoreDefaultArgs: [ '--hide-scrollbars' ] } );
+		for ( const w of [ 1229, 1280, 1366, 1440, 1536, 1600 ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: 800 }, baseURL: 'http://localhost:8888' } );
+			const page = await ctx.newPage();
+			// Segoe UI уже шрифта Linux: сужаем пункты меню, чтобы скрипт шапки выбрал две строки, как у владельца
+			await page.addInitScript( () => {
+				document.addEventListener( 'DOMContentLoaded', () => {
+					const st = document.createElement( 'style' );
+					st.textContent = '.header .nav>ul>li>a{letter-spacing:-.07em}';
+					document.head.append( st );
+				} );
+			} );
+			for ( const path of [ '/venki/', '/', '/kontakty/' ] ) {
+				await page.goto( path );
+				await page.waitForTimeout( 1500 );
+				const r = await page.evaluate( () => {
+					const de = document.documentElement;
+					const h = document.getElementById( 'header' );
+					const last = document.querySelector( '.header .nav>ul>li.has-child:last-child>.wp-block-navigation__submenu-container' );
+					const lr = last?.getBoundingClientRect();
+					return {
+						mode: h.classList.contains( 'is-compact' ) ? 'compact' : h.classList.contains( 'is-tworow' ) ? 'two rows' : 'one row',
+						sw: de.scrollWidth,
+						cw: de.clientWidth,
+						lastSub: lr ? Math.round( lr.left ) + '…' + Math.round( lr.right ) : '-',
+					};
+				} );
+				report[ w + ' ' + path ] = r;
+				if ( path === '/venki/' ) {
+					await page.locator( '.header .nav>ul>li.has-child' ).last().hover().catch( () => {} );
+					await page.waitForTimeout( 500 );
+					await page.screenshot( { path: `${ DIR }/hdr2-${ w }.png`, clip: { x: 0, y: 0, width: w, height: 520 } } );
+				}
+			}
+			await ctx.close();
+		}
+		// Телефон: меню бургера открывается целиком
+		const ctx = await browser.newContext( { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, baseURL: 'http://localhost:8888' } );
+		const ph = await ctx.newPage();
+		await ph.goto( '/venki/' );
+		await ph.waitForTimeout( 1500 );
+		await ph.locator( '.consent button' ).first().click().catch( () => {} );
+		await ph.locator( '#burger' ).click();
+		await ph.waitForTimeout( 600 );
+		report.phoneMenu = await ph.evaluate( () => {
+			const n = document.querySelector( '.header .nav' ).getBoundingClientRect();
+			return Math.round( n.left ) + '…' + Math.round( n.right ) + ' h=' + Math.round( n.height ) + ' sw=' + document.documentElement.scrollWidth;
+		} );
+		await ph.screenshot( { path: `${ DIR }/hdr2-phone-menu.png` } );
+		await ctx.close();
+		await browser.close();
+		log( 'header2', report );
+	} );
+
 	test( 'ширина ПК: каталог после прокрутки, наведения и просмотра', async () => {
 		test.setTimeout( 900_000 );
 		const report = {};
