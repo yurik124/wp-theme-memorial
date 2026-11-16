@@ -44,7 +44,11 @@ function SpecCode( { value, onChange } ) {
 		window.setTimeout( () => setCopied( false ), 2000 );
 	} );
 	return (
-		<Flex align="flex-end" gap={ 1 } className="memorial-plugin-catalog__code">
+		<Flex
+			align="flex-end"
+			gap={ 1 }
+			className="memorial-plugin-catalog__code"
+		>
 			<TextControl
 				__next40pxDefaultSize
 				__nextHasNoMarginBottom
