@@ -154,6 +154,9 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		$html = apply_filters( 'the_content', get_post( $hub )->post_content );
 		$this->assertStringContainsString( 'Всё о кремации <span aria-hidden="true">→</span>', $html );
 		$this->assertSame( 'Всё о кремации', memorial_plugin_faq_no_arrow( 'Всё о кремации  → ' ) );
+		// The closing quote of the default text stays.
+		$this->assertSame( 'На странице «Кремация»', memorial_plugin_faq_no_arrow( 'На странице «Кремация» →' ) );
+		$this->assertStringContainsString( '«Кремация в Белгороде» <span aria-hidden="true">→</span>', str_replace( "\u{00A0}", ' ', $html ) );
 	}
 
 	public function test_settings_are_cleaned() {

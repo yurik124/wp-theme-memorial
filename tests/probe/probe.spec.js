@@ -2113,10 +2113,10 @@ test.describe( 'правка в таблице', () => {
 		const venki = data.types.find( ( t ) => /венк/i.test( t.name ) );
 		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' + venki.id );
 		await page.waitForTimeout( 4000 );
-		const row = page.getByRole( 'row' ).nth( 2 );
+		const row = page.getByRole( 'row' ).filter( { hasText: '₽' } ).nth( 1 );
 		report.title = await row.innerText().catch( ( e ) => e.message );
 		await page.screenshot( { path: `${ DIR }/inline-1-table.png` } );
-		const price = row.locator( '.memorial-plugin-inline__value' ).filter( { hasText: '₽' } ).first();
+		const price = row.locator( '.memorial-plugin-inline__value' ).filter( { hasText: /\d ₽/ } ).first();
 		await price.hover().catch( () => {} );
 		await page.screenshot( { path: `${ DIR }/inline-2-hover.png` } );
 		await price.click().catch( ( e ) => ( report.priceClick = e.message ) );
@@ -2161,6 +2161,10 @@ test.describe( 'правка в таблице', () => {
 		// Окно «Настроить разделы»: свёрнуто.
 		await page.goto( '/wp-admin/post.php?post=' + hub.ID + '&action=edit' );
 		await page.waitForTimeout( 8000 );
+		const panelBtn = page.locator( '.components-panel__body-toggle' ).filter( { hasText: /Разделы вопросов|Question sections/ } );
+		if ( ( await panelBtn.getAttribute( 'aria-expanded' ).catch( () => 'true' ) ) === 'false' ) {
+			await panelBtn.click().catch( () => {} );
+		}
 		await page.getByRole( 'button', { name: /Настроить разделы|Set up the sections/ } ).click().catch( ( e ) => ( report.setup = e.message ) );
 		await page.waitForTimeout( 2500 );
 		report.fieldsClosed = await page.locator( '.memorial-plugin-faq-sections__fields' ).count();

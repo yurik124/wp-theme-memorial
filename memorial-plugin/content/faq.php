@@ -242,7 +242,8 @@ function memorial_plugin_faq_print( $b ) {
  * @return string
  */
 function memorial_plugin_faq_no_arrow( $v ) {
-	return trim( preg_replace( '/[\s→⟶➝➔›»>-]+$/u', '', (string) $v ) );
+	// Только стрелки: кавычка «» в конце текста остаётся.
+	return trim( preg_replace( '/(\s|→|⟶|➝|➔|->)+$/u', '', (string) $v ) );
 }
 
 /**
