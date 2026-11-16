@@ -2115,9 +2115,9 @@ test.describe( 'правка в таблице', () => {
 		await page.waitForTimeout( 4000 );
 		report.checkboxes = await page.locator( '.memorial-plugin-inline__toggle input[type=checkbox]' ).count();
 		await page.screenshot( { path: `${ DIR }/check-1-table.png` } );
-		const box = page.locator( '.memorial-plugin-inline__toggle input[type=checkbox]' ).first();
+		const row = page.getByRole( 'row' ).filter( { has: page.locator( '.memorial-plugin-inline__toggle' ) } ).first();
+		const box = row.locator( '.memorial-plugin-inline__toggle input[type=checkbox]' );
 		report.label = await box.getAttribute( 'aria-label' );
-		const row = page.getByRole( 'row' ).filter( { has: box } );
 		report.sku = ( ( await row.innerText() ).match( /M-\d+/ ) || [] )[ 0 ];
 		const st = async () => ( await all() ).items.find( ( i ) => i.sku === report.sku )?.status;
 		const save = () => fs.writeFileSync( `${ DIR }/log-check.json`, JSON.stringify( report, null, 1 ) );
