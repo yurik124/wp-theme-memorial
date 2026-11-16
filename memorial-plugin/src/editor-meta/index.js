@@ -314,8 +314,9 @@ function PagePanel() {
 			// The saved page or the blocks of the editor (the page may be shown inside its template).
 			faq:
 				/wp:memorial-plugin\/faq|\[mem_faq/.test(
-					select( editorStore ).getCurrentPostAttribute( 'content' ) ||
-						''
+					select( editorStore ).getCurrentPostAttribute(
+						'content'
+					) || ''
 				) || hasFaq( select( blockEditorStore ).getBlocks() ),
 		} ),
 		[]
