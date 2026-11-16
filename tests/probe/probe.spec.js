@@ -2134,6 +2134,26 @@ test.describe( 'ширина', () => {
 			}
 			await ctx.close();
 		}
+		// Контроль «как было»: подменю последних пунктов от левого края, без страховки — прокрутка должна появиться
+		for ( const w of [ 1366, 1440 ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: 800 }, baseURL: 'http://localhost:8888' } );
+			const page = await ctx.newPage();
+			await page.addInitScript( () => {
+				document.addEventListener( 'DOMContentLoaded', () => {
+					const st = document.createElement( 'style' );
+					st.textContent = '.header .nav>ul>li>a{letter-spacing:-.07em}.header .nav.wp-block-navigation>ul>li.has-child>.wp-block-navigation__submenu-container{left:0;right:auto}.header{overflow-x:visible}';
+					document.head.append( st );
+				} );
+			} );
+			await page.goto( '/venki/' );
+			await page.waitForTimeout( 1500 );
+			report[ 'было ' + w ] = await page.evaluate( () => ( {
+				mode: document.getElementById( 'header' ).className,
+				sw: document.documentElement.scrollWidth,
+				cw: document.documentElement.clientWidth,
+			} ) );
+			await ctx.close();
+		}
 		// Телефон: меню бургера открывается целиком
 		const ctx = await browser.newContext( { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, baseURL: 'http://localhost:8888' } );
 		const ph = await ctx.newPage();
