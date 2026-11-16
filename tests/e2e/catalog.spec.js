@@ -233,7 +233,9 @@ test( 'товары: значения правятся щелчком в таб�
 		'/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' +
 			type.id
 	);
-	const row = page.getByRole( 'row' ).filter( { hasText: 'Табличный венок' } );
+	const row = page
+		.getByRole( 'row' )
+		.filter( { hasText: 'Табличный венок' } );
 
 	// Цена: щелчок → поле в ячейке → Enter.
 	await row.getByRole( 'button', { name: 'Change: Price, ₽' } ).click();

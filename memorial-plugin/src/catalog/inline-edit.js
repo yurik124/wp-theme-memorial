@@ -114,7 +114,10 @@ function Cell( { item, field, shown, onSave } ) {
 				/>
 				{ buttons }
 				{ error && (
-					<span className="memorial-plugin-inline__error" role="alert">
+					<span
+						className="memorial-plugin-inline__error"
+						role="alert"
+					>
 						{ error }
 					</span>
 				) }
@@ -167,7 +170,10 @@ function Cell( { item, field, shown, onSave } ) {
 							}
 						/>
 						{ error && (
-							<p className="memorial-plugin-inline__error" role="alert">
+							<p
+								className="memorial-plugin-inline__error"
+								role="alert"
+							>
 								{ error }
 							</p>
 						) }
@@ -214,14 +220,12 @@ export default function inlineFields( fields, editable, onSave ) {
 			render: ( props ) => {
 				const shown = render
 					? render( props )
-					: props.item[ field.id ] ?? '';
+					: ( props.item[ field.id ] ?? '' );
 				return (
 					<Cell
 						item={ props.item }
 						field={ field }
-						shown={
-							shown === '' || shown === null ? '—' : shown
-						}
+						shown={ shown === '' || shown === null ? '—' : shown }
 						onSave={ onSave }
 					/>
 				);

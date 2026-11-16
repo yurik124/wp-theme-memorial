@@ -115,47 +115,54 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 				/>
 			</Flex>
 			{ open && (
-			<div className="memorial-plugin-faq-sections__fields">
-				{ field( 'label', __( 'Button', 'memorial-plugin' ), {
-					help:
-						label.length > 28
-							? __(
-									'Long — a short word or two reads easier.',
-									'memorial-plugin'
-								)
-							: '',
-				} ) }
-				{ own ? (
-					<p className="memorial-plugin-faq-sections__note">
-						{ __(
-							'The heading and the anchor are those of the heading of the section on this page (Advanced → HTML anchor).',
-							'memorial-plugin'
-						) }
-					</p>
-				) : (
-					<>
-						{ field( 'title', __( 'Heading', 'memorial-plugin' ) ) }
-						{ field( 'anchor', __( 'Anchor', 'memorial-plugin' ), {
-							help: dupAnchor
+				<div className="memorial-plugin-faq-sections__fields">
+					{ field( 'label', __( 'Button', 'memorial-plugin' ), {
+						help:
+							label.length > 28
 								? __(
-										'This anchor is already used — the site will add a number.',
+										'Long — a short word or two reads easier.',
 										'memorial-plugin'
 									)
 								: '',
-						} ) }
-						{ field(
-							'more',
-							__( 'Link to the page', 'memorial-plugin' ),
-							{
-								help: __(
-									'The arrow → is added by the site.',
-									'memorial-plugin'
-								)
-							}
-						) }
-					</>
-				) }
-			</div>
+					} ) }
+					{ own ? (
+						<p className="memorial-plugin-faq-sections__note">
+							{ __(
+								'The heading and the anchor are those of the heading of the section on this page (Advanced → HTML anchor).',
+								'memorial-plugin'
+							) }
+						</p>
+					) : (
+						<>
+							{ field(
+								'title',
+								__( 'Heading', 'memorial-plugin' )
+							) }
+							{ field(
+								'anchor',
+								__( 'Anchor', 'memorial-plugin' ),
+								{
+									help: dupAnchor
+										? __(
+												'This anchor is already used — the site will add a number.',
+												'memorial-plugin'
+											)
+										: '',
+								}
+							) }
+							{ field(
+								'more',
+								__( 'Link to the page', 'memorial-plugin' ),
+								{
+									help: __(
+										'The arrow → is added by the site.',
+										'memorial-plugin'
+									),
+								}
+							) }
+						</>
+					) }
+				</div>
 			) }
 		</div>
 	);
