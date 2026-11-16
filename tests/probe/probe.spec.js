@@ -2095,6 +2095,70 @@ test.describe( 'хаб', () => {
 } );
 
 test.describe( 'ширина', () => {
+	test( 'ширина ПК: каталог после прокрутки, наведения и просмотра', async () => {
+		test.setTimeout( 900_000 );
+		const report = {};
+		const browser = await require( '@playwright/test' ).chromium.launch( { ignoreDefaultArgs: [ '--hide-scrollbars' ] } );
+		const measure = ( page ) =>
+			page.evaluate( () => {
+				const de = document.documentElement;
+				const cw = de.clientWidth;
+				const out = [];
+				if ( de.scrollWidth > cw ) {
+					for ( const el of document.body.querySelectorAll( '*' ) ) {
+						const rc = el.getBoundingClientRect();
+						if ( rc.width && rc.right > cw + 0.5 && getComputedStyle( el ).position !== 'fixed' ) {
+							out.push( el.tagName.toLowerCase() + '.' + String( el.className ).trim().split( /\s+/ ).slice( 0, 3 ).join( '.' ) + ' right=' + Math.round( rc.right ) + ' w=' + Math.round( rc.width ) );
+						}
+					}
+				}
+				return { sw: de.scrollWidth, cw, over: out.slice( 0, 8 ) };
+			} );
+		const cats = [ ...new Set( PAGES.map( ( p ) => new URL( p.url ).pathname ) ) ].filter( ( p ) => /venki|pamyatniki|groby|kresty|ogradki|ritualnye-tovary/.test( p ) ).slice( 0, 6 );
+		for ( const w of [ 1366, 1440, 1536, 1920 ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: 800 }, baseURL: 'http://localhost:8888' } );
+			const page = await ctx.newPage();
+			for ( const path of cats ) {
+				const steps = {};
+				await page.goto( path );
+				await page.waitForTimeout( 1500 );
+				await page.locator( '.consent button' ).first().click().catch( () => {} );
+				steps.top = await measure( page );
+				for ( const f of [ 0.3, 0.6, 1 ] ) {
+					await page.evaluate( ( k ) => window.scrollTo( 0, ( document.documentElement.scrollHeight - innerHeight ) * k ), f );
+					await page.waitForTimeout( 700 );
+					steps[ 'scroll ' + f ] = await measure( page );
+				}
+				await page.evaluate( () => window.scrollTo( 0, document.querySelector( '.mcat__grid' )?.getBoundingClientRect().top + window.scrollY - 200 ) );
+				await page.waitForTimeout( 600 );
+				const cards = page.locator( '.mcat__grid > .mcard' );
+				const n = await cards.count();
+				for ( let i = 0; i < Math.min( n, 8 ); i++ ) {
+					await cards.nth( i ).hover().catch( () => {} );
+					await page.waitForTimeout( 150 );
+					const m = await measure( page );
+					if ( m.sw > m.cw ) {
+						steps[ 'hover ' + i ] = m;
+					}
+				}
+				await cards.nth( 3 ).locator( 'a[data-pv]' ).click().catch( () => {} );
+				await page.waitForTimeout( 900 );
+				steps.pvOpen = await measure( page );
+				await page.keyboard.press( 'Escape' );
+				await page.waitForTimeout( 900 );
+				steps.pvClosed = await measure( page );
+				const bad = Object.fromEntries( Object.entries( steps ).filter( ( [ , m ] ) => m.sw > m.cw ) );
+				report[ w + ' ' + path ] = Object.keys( bad ).length ? bad : 'ок, cw=' + steps.top.cw;
+				if ( Object.keys( bad ).length ) {
+					await page.screenshot( { path: `${ DIR }/hscroll-${ w }-${ path.replace( /\W+/g, '' ) }.png` } );
+				}
+			}
+			await ctx.close();
+		}
+		await browser.close();
+		log( 'hscroll', report );
+	} );
+
 	test( 'ширина ПК: горизонтальная прокрутка', async () => {
 		test.setTimeout( 900_000 );
 		const report = {};
