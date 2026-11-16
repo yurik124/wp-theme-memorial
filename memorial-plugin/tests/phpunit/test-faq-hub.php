@@ -104,7 +104,8 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		$this->assertSame( 'Кремация', $s[1]['label'] );
 		$this->assertSame( 'Кремация', $s[1]['title'] );
 		$this->assertSame( 'kremaciya', $s[1]['anchor'] );
-		$this->assertSame( 'Всё о кремации →', $s[1]['more'] );
+		// The arrow is put by the site: the text is kept without it.
+		$this->assertSame( 'Всё о кремации', $s[1]['more'] );
 		$this->assertSame( 'Оплата', $s[0]['title'] );
 	}
 

@@ -246,8 +246,10 @@ test( 'товары: значения правятся щелчком в таб�
 
 	// Название: Esc — без изменений.
 	await row.getByRole( 'button', { name: 'Change: Title' } ).click();
-	await row.getByRole( 'textbox', { name: 'Title' } ).fill( 'Не то' );
-	await row.getByRole( 'textbox', { name: 'Title' } ).press( 'Escape' );
+	// пока название правится, его текст в поле — строку ищем не по нему
+	const titleBox = page.locator( '.memorial-plugin-inline__form input' );
+	await titleBox.fill( 'Не то' );
+	await titleBox.press( 'Escape' );
 	await expect( row ).toContainText( 'Табличный венок' );
 
 	// «На сайте»: выбор в маленьком окне, кнопка «Сохранить».
