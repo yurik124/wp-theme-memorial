@@ -2117,8 +2117,10 @@ test.describe( 'правка в таблице', () => {
 		await page.screenshot( { path: `${ DIR }/check-1-table.png` } );
 		const box = page.locator( '.memorial-plugin-inline__toggle input[type=checkbox]' ).first();
 		report.label = await box.getAttribute( 'aria-label' );
-		const title = report.label.replace( /^[^:]+:\s*/, '' );
-		const st = async () => ( await all() ).items.find( ( i ) => i.title === title )?.status;
+		const row = page.getByRole( 'row' ).filter( { has: box } );
+		report.sku = ( ( await row.innerText() ).match( /M-\d+/ ) || [] )[ 0 ];
+		const st = async () => ( await all() ).items.find( ( i ) => i.sku === report.sku )?.status;
+		const save = () => fs.writeFileSync( `${ DIR }/log-check.json`, JSON.stringify( report, null, 1 ) );
 		report.before = await st();
 		await box.click();
 		await page.waitForTimeout( 2500 );
@@ -2127,9 +2129,9 @@ test.describe( 'правка в таблице', () => {
 		await box.click();
 		await page.waitForTimeout( 2500 );
 		report.afterBack = await st();
+		save();
 		// Щелчок мимо поля — отмена.
-		const row = page.getByRole( 'row' ).filter( { has: box } );
-		await row.getByRole( 'button', { name: /Изменить: Название|Change: Title/ } ).click();
+		await row.getByRole( 'button', { name: /Изменить: Заголовок|Change: Title/ } ).click();
 		const input = page.locator( '.memorial-plugin-inline__form input' );
 		await input.fill( 'ПРОБА — не сохранять' );
 		report.formButtons = await page.locator( '.memorial-plugin-inline__form button' ).count();
@@ -2137,12 +2139,13 @@ test.describe( 'правка в таблице', () => {
 		await page.locator( '#wpfooter' ).click( { position: { x: 4, y: 4 } } );
 		await page.waitForTimeout( 800 );
 		report.formAfterOutside = await input.count();
-		report.titleKept = ( await st() ) !== undefined;
+		report.titleAfter = ( await all() ).items.find( ( i ) => i.sku === report.sku )?.title;
+		save();
 		await page.setViewportSize( { width: 390, height: 844 } );
 		await page.waitForTimeout( 800 );
 		await page.screenshot( { path: `${ DIR }/check-4-phone-390.png` } );
 		report.errors = errs;
-		fs.writeFileSync( `${ DIR }/log-check.json`, JSON.stringify( report, null, 1 ) );
+		save();
 	} );
 
 	test( 'таблица товаров щелчком и «Вопрос–ответ»: поиск по разделу, стрелка, свёрнутые разделы', async ( { page, browser } ) => {
