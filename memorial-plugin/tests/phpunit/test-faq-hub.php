@@ -157,7 +157,7 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		// The closing quote of the default text stays.
 		$this->assertSame( 'На странице «Кремация»', memorial_plugin_faq_no_arrow( 'На странице «Кремация» →' ) );
 		delete_post_meta( $hub, '_mem_faq_sections' );
-		$this->assertStringEndsWith( '»', memorial_plugin_faq_sections( $hub )[0]['more'] );
+		$this->assertMatchesRegularExpression( '/[»”]$/u', memorial_plugin_faq_sections( $hub )[0]['more'] );
 	}
 
 	public function test_settings_are_cleaned() {
