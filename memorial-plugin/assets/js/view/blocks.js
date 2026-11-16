@@ -499,9 +499,13 @@ store( 'memorial-plugin/faq', {
 					html: s.innerHTML,
 					q: s.textContent.trim(),
 					// the hub shows the start of an answer — the search looks through all of it
-					t: el.dataset.t
-						? s.textContent + ' ' + el.dataset.t
-						: el.textContent,
+					// …and the name of its section: “оплата” finds the questions of the section “Оплата”
+					t:
+						( el.dataset.t
+							? s.textContent + ' ' + el.dataset.t
+							: el.textContent ) +
+						' ' +
+						( el.dataset.g || '' ),
 					g: el.dataset.g || '',
 				};
 			} );

@@ -47,8 +47,9 @@ const cleanAnchor = ( v ) =>
 		.replace( /^-+/, '' )
 		.slice( 0, 80 );
 
-// One section: the fields, ↑ ↓.
+// One section: a row that opens its fields (closed at first), ↑ ↓.
 function Row( { s, item, set, up, down, dupAnchor } ) {
+	const [ open, setOpen ] = useState( false );
 	const own = s.kind === 'own';
 	const field = ( key, label, opts = {} ) => (
 		<TextControl
@@ -68,7 +69,15 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 		<div className="memorial-plugin-faq-sections__row">
 			<Flex align="center" gap={ 2 }>
 				<FlexBlock>
-					<strong>{ label }</strong>{ ' ' }
+					<Button
+						className="memorial-plugin-faq-sections__toggle"
+						icon={ open ? 'arrow-up-alt2' : 'arrow-down-alt2' }
+						iconPosition="right"
+						aria-expanded={ open }
+						onClick={ () => setOpen( ! open ) }
+					>
+						<strong>{ label }</strong>
+					</Button>{ ' ' }
 					<span className="memorial-plugin-faq-sections__meta">
 						{ own
 							? sprintf(
@@ -105,6 +114,7 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 					size="compact"
 				/>
 			</Flex>
+			{ open && (
 			<div className="memorial-plugin-faq-sections__fields">
 				{ field( 'label', __( 'Button', 'memorial-plugin' ), {
 					help:
@@ -135,11 +145,18 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 						} ) }
 						{ field(
 							'more',
-							__( 'Link to the page', 'memorial-plugin' )
+							__( 'Link to the page', 'memorial-plugin' ),
+							{
+								help: __(
+									'The arrow → is added by the site.',
+									'memorial-plugin'
+								)
+							}
 						) }
 					</>
 				) }
 			</div>
+			) }
 		</div>
 	);
 }

@@ -208,3 +208,66 @@ test( 'новая работа создаётся одним запросом с
 		} )
 	).toBeVisible();
 } );
+
+test( 'товары: значения правятся щелчком в таблице', async ( { page } ) => {
+	const errors = collectJsErrors( page );
+	await login( page );
+	await page.goto(
+		'/wp-admin/edit.php?post_type=mem_product&page=mem-products'
+	);
+	const type = await api( page, {
+		path: '/wp/v2/mem_cat',
+		method: 'POST',
+		data: { name: 'E2E таблица ' + Date.now() },
+	} );
+	const created = await api( page, {
+		path: '/memorial-plugin/v1/catalog/products',
+		method: 'POST',
+		data: {
+			type: type.id,
+			values: { title: 'Табличный венок', price: 1000 },
+		},
+	} );
+	const id = created.id || created.items?.[ 0 ]?.id;
+	await page.goto(
+		'/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' +
+			type.id
+	);
+	const row = page.getByRole( 'row' ).filter( { hasText: 'Табличный венок' } );
+
+	// Цена: щелчок → поле в ячейке → Enter.
+	await row.getByRole( 'button', { name: 'Change: Price, ₽' } ).click();
+	const input = row.getByRole( 'textbox', { name: 'Price, ₽' } );
+	await input.fill( '2 500' );
+	await input.press( 'Enter' );
+	await expect( row ).toContainText( '2 500' );
+
+	// Название: Esc — без изменений.
+	await row.getByRole( 'button', { name: 'Change: Title' } ).click();
+	await row.getByRole( 'textbox', { name: 'Title' } ).fill( 'Не то' );
+	await row.getByRole( 'textbox', { name: 'Title' } ).press( 'Escape' );
+	await expect( row ).toContainText( 'Табличный венок' );
+
+	// «На сайте»: выбор в маленьком окне, кнопка «Сохранить».
+	await row.getByRole( 'button', { name: 'Change: On the site' } ).click();
+	await page.getByLabel( 'Visible on the site' ).check();
+	await page
+		.locator( '.memorial-plugin-inline__pop' )
+		.getByRole( 'button', { name: 'Save' } )
+		.click();
+	await expect( row ).toContainText( 'Shown' );
+
+	// Артикул щелчком не меняется.
+	await expect(
+		row.getByRole( 'button', { name: 'Change: SKU' } )
+	).toHaveCount( 0 );
+
+	const data = await api( page, {
+		path: '/memorial-plugin/v1/catalog/products',
+	} );
+	const p = data.items.find( ( i ) => i.title === 'Табличный венок' );
+	expect( p.price ).toBe( 2500 );
+	expect( p.status ).toBe( 'publish' );
+	expect( id || p.id ).toBeTruthy();
+	expect( errors ).toEqual( [] );
+} );

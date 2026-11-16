@@ -144,6 +144,17 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'Сколько стоит кремация?', $head );
 	}
 
+	public function test_link_text_gets_one_arrow() {
+		[ $svc, $hub ] = $this->pages();
+		update_post_meta( $hub, '_mem_faq_sections', wp_slash( wp_json_encode( memorial_plugin_faq_settings_clean( array( 'items' => array( 'p' . $svc => array( 'more' => 'Всё о кремации →' ) ) ) ) ) ) );
+		$this->go_to( get_permalink( $hub ) );
+		$GLOBALS['post'] = get_post( $hub ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- the page being shown.
+		setup_postdata( $GLOBALS['post'] );
+		$html = apply_filters( 'the_content', get_post( $hub )->post_content );
+		$this->assertStringContainsString( 'Всё о кремации <span aria-hidden="true">→</span>', $html );
+		$this->assertSame( 'Всё о кремации', memorial_plugin_faq_no_arrow( 'Всё о кремации  → ' ) );
+	}
+
 	public function test_settings_are_cleaned() {
 		$v = memorial_plugin_faq_settings_clean( '{"order":["p12","bad key","h:ok"],"items":{"p12":{"label":"<b>Кнопка</b>","anchor":"Мой якорь"},"x":{"label":"нет"}}}' );
 		$this->assertSame( array( 'p12', 'h:ok' ), $v['order'] );
