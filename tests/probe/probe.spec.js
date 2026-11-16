@@ -2094,6 +2094,86 @@ test.describe( 'хаб', () => {
 	} );
 } );
 
+test.describe( 'правка в таблице', () => {
+	test( 'таблица товаров щелчком и «Вопрос–ответ»: поиск по разделу, стрелка, свёрнутые разделы', async ( { page, browser } ) => {
+		test.setTimeout( 900_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		// Таблица товаров: тип «Венки».
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		const data = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/products' } ) );
+		const venki = data.types.find( ( t ) => /венк/i.test( t.name ) );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' + venki.id );
+		await page.waitForTimeout( 4000 );
+		const row = page.getByRole( 'row' ).nth( 2 );
+		report.title = await row.innerText().catch( ( e ) => e.message );
+		await page.screenshot( { path: `${ DIR }/inline-1-table.png` } );
+		const price = row.locator( '.memorial-plugin-inline__value' ).filter( { hasText: '₽' } ).first();
+		await price.hover().catch( () => {} );
+		await page.screenshot( { path: `${ DIR }/inline-2-hover.png` } );
+		await price.click().catch( ( e ) => ( report.priceClick = e.message ) );
+		await page.waitForTimeout( 400 );
+		await page.screenshot( { path: `${ DIR }/inline-3-price-edit.png` } );
+		const input = row.locator( '.memorial-plugin-inline__form input' );
+		const old = await input.inputValue().catch( () => '' );
+		await input.fill( String( ( parseInt( old, 10 ) || 1000 ) + 100 ) ).catch( () => {} );
+		await input.press( 'Enter' ).catch( () => {} );
+		await page.waitForTimeout( 2500 );
+		report.priceAfter = await row.innerText().catch( ( e ) => e.message );
+		await page.screenshot( { path: `${ DIR }/inline-4-saved.png` } );
+		// Категории — маленькое окно.
+		const cats = row.locator( '.memorial-plugin-inline__value' ).nth( 3 );
+		await cats.click().catch( () => {} );
+		await page.waitForTimeout( 600 );
+		report.pop = await page.locator( '.memorial-plugin-inline__pop' ).innerText().catch( ( e ) => e.message );
+		await page.screenshot( { path: `${ DIR }/inline-5-popover.png` } );
+		await page.keyboard.press( 'Escape' );
+		report.cells = await page.locator( '.memorial-plugin-inline__value' ).count();
+		// «Вопрос–ответ»: свой раздел, поиск по названию раздела, стрелка.
+		const hub = PAGES.find( ( x ) => /Вопрос/.test( x.post_title ) && /ответ/.test( x.post_title ) );
+		const det = ( q, a ) => `<!-- wp:details -->\n<details class="wp-block-details"><summary>${ q }</summary><!-- wp:paragraph -->\n<p>${ a }</p>\n<!-- /wp:paragraph --></details>\n<!-- /wp:details -->\n`;
+		await page.evaluate( async ( [ id, add ] ) => {
+			const p = await window.wp.apiFetch( { path: '/wp/v2/pages/' + id + '?context=edit' } );
+			await window.wp.apiFetch( { path: '/wp/v2/pages/' + id, method: 'POST', data: { content: p.content.raw + add, meta: { _mem_faq_sections: JSON.stringify( { order: [], items: { p3302: { more: 'Об организации похорон →' } } } ) } } } );
+		}, [ hub.ID, '\n<!-- wp:heading -->\n<h2 class="wp-block-heading">Оплата</h2>\n<!-- /wp:heading -->\n' + det( 'Можно ли наличными?', 'Да.' ) ] );
+		for ( const [ w, h ] of [ [ 1440, 900 ], [ 390, 844 ], [ 360, 640 ] ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: h }, isMobile: w < 500, hasTouch: w < 500, baseURL: 'http://localhost:8888' } );
+			const ph = await ctx.newPage();
+			ph.setDefaultTimeout( 15000 );
+			await ph.goto( new URL( hub.url ).pathname );
+			await ph.waitForTimeout( 2000 );
+			await ph.locator( '.consent button' ).first().click().catch( () => {} );
+			await ph.fill( '#mfaq-q', 'оплата' );
+			await ph.waitForTimeout( 900 );
+			report[ 'search ' + w ] = await ph.evaluate( () => [ ...document.querySelectorAll( '.mfaq details' ) ].filter( ( d ) => d.getClientRects().length ).map( ( d ) => d.querySelector( 'summary' ).textContent ) );
+			await ph.screenshot( { path: `${ DIR }/inline-hub-search-${ w }.png` } );
+			report[ 'more ' + w ] = await ph.evaluate( () => [ ...document.querySelectorAll( '.mfaq__more a' ) ].slice( 0, 3 ).map( ( a ) => a.textContent ) );
+			await ctx.close();
+		}
+		// Окно «Настроить разделы»: свёрнуто.
+		await page.goto( '/wp-admin/post.php?post=' + hub.ID + '&action=edit' );
+		await page.waitForTimeout( 8000 );
+		await page.getByRole( 'button', { name: /Настроить разделы|Set up the sections/ } ).click().catch( ( e ) => ( report.setup = e.message ) );
+		await page.waitForTimeout( 2500 );
+		report.fieldsClosed = await page.locator( '.memorial-plugin-faq-sections__fields' ).count();
+		await page.screenshot( { path: `${ DIR }/inline-sections-closed.png` } );
+		await page.locator( '.memorial-plugin-faq-sections__toggle' ).nth( 1 ).click().catch( () => {} );
+		await page.waitForTimeout( 400 );
+		report.fieldsOpen = await page.locator( '.memorial-plugin-faq-sections__fields' ).count();
+		await page.screenshot( { path: `${ DIR }/inline-sections-open.png` } );
+		report.errors = errs;
+		log( 'inline', report );
+	} );
+} );
+
 test.describe( 'ширина', () => {
 	test( 'стили: правка шапки меняет только подменю последних пунктов', async () => {
 		test.setTimeout( 900_000 );
