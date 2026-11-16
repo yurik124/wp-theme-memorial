@@ -275,3 +275,66 @@ test( 'товары: значения правятся щелчком в таб�
 	expect( id || p.id ).toBeTruthy();
 	expect( errors ).toEqual( [] );
 } );
+
+test( '«Вопрос–ответ»: окно «Настроить разделы» — разделы свёрнуты и раскрываются', async ( {
+	page,
+} ) => {
+	const errors = collectJsErrors( page );
+	await login( page );
+	await page.goto( '/wp-admin/' );
+	await page.waitForFunction( () => window.wp && window.wp.apiFetch );
+	const det = ( q ) =>
+		`<!-- wp:details -->\n<details class="wp-block-details"><summary>${ q }</summary><!-- wp:paragraph -->\n<p>Ответ.</p>\n<!-- /wp:paragraph --></details>\n<!-- /wp:details -->\n`;
+	await api( page, {
+		path: '/wp/v2/pages',
+		method: 'POST',
+		data: {
+			title: 'Страница с вопросами e2e',
+			status: 'publish',
+			content: det( 'Первый вопрос e2e?' ) + det( 'Второй вопрос e2e?' ),
+		},
+	} );
+	const hub = await api( page, {
+		path: '/wp/v2/pages',
+		method: 'POST',
+		data: {
+			title: 'Вопрос–ответ e2e',
+			status: 'publish',
+			content: '<!-- wp:memorial-plugin/faq /-->',
+		},
+	} );
+	await page.goto( '/wp-admin/post.php?action=edit&post=' + hub.id );
+	await page.waitForFunction( () =>
+		window.wp?.data?.select( 'core/preferences' )
+	);
+	await page.evaluate( () =>
+		window.wp.data
+			.dispatch( 'core/preferences' )
+			.set( 'core/edit-post', 'welcomeGuide', false )
+	);
+	await page.reload();
+	const panel = page.getByRole( 'button', { name: 'Question sections' } );
+	await expect( panel ).toBeVisible( { timeout: 30000 } );
+	if ( ( await panel.getAttribute( 'aria-expanded' ) ) === 'false' ) {
+		await panel.click();
+	}
+	await page.getByRole( 'button', { name: 'Set up the sections' } ).click();
+	const modal = page.locator( '.memorial-plugin-faq-sections' );
+	await expect( modal ).toContainText( 'Страница с вопросами e2e' );
+	// по умолчанию свёрнуты: полей нет
+	await expect(
+		modal.locator( '.memorial-plugin-faq-sections__fields' )
+	).toHaveCount( 0 );
+	const toggle = modal.locator( '.memorial-plugin-faq-sections__toggle' ).first();
+	await expect( toggle ).toHaveAttribute( 'aria-expanded', 'false' );
+	await toggle.click();
+	await expect( toggle ).toHaveAttribute( 'aria-expanded', 'true' );
+	await expect(
+		modal.getByLabel( 'Link to the page' )
+	).toBeVisible();
+	await toggle.click();
+	await expect(
+		modal.locator( '.memorial-plugin-faq-sections__fields' )
+	).toHaveCount( 0 );
+	expect( errors ).toEqual( [] );
+} );

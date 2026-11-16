@@ -148,7 +148,8 @@ function memSearch( box, items, opts ) {
 	let pop = box.querySelector( '[data-msearch-pop]' );
 	items.forEach( ( it ) => {
 		it._t = sNorm( it.t || it.q );
-		it._q = sNorm( it.q );
+		// the name of the section counts as the question: “оплата” puts the section “Оплата” on top
+		it._q = sNorm( it.q + ' ' + ( it.g || '' ) );
 	} );
 	const score = ( words ) => {
 		let best = 0;
