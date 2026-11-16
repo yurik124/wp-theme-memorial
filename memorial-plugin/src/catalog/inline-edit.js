@@ -34,7 +34,10 @@ function Toggle( { item, field, onSave } ) {
 	const [ checked, setChecked ] = useState( item[ field.id ] === on );
 	const [ busy, setBusy ] = useState( false );
 	const [ error, setError ] = useState( '' );
-	useEffect( () => setChecked( item[ field.id ] === on ), [ item, field, on ] );
+	useEffect(
+		() => setChecked( item[ field.id ] === on ),
+		[ item, field, on ]
+	);
 	const change = async ( next ) => {
 		setChecked( next );
 		setError( '' );

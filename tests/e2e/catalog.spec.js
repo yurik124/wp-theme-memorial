@@ -268,12 +268,15 @@ test( 'товары: значения правятся щелчком в таб�
 	} );
 	await expect( shown ).not.toBeChecked();
 	await shown.check();
-	await expect.poll( async () => {
-		const d = await api( page, {
-			path: '/memorial-plugin/v1/catalog/products',
-		} );
-		return d.items.find( ( i ) => i.title === 'Табличный венок' )?.status;
-	} ).toBe( 'publish' );
+	await expect
+		.poll( async () => {
+			const d = await api( page, {
+				path: '/memorial-plugin/v1/catalog/products',
+			} );
+			return d.items.find( ( i ) => i.title === 'Табличный венок' )
+				?.status;
+		} )
+		.toBe( 'publish' );
 
 	// Артикул щелчком не меняется.
 	await expect(
