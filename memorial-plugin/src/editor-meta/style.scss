@@ -24,4 +24,11 @@
 	&__note {
 		margin: 0;
 	}
+
+	&__toggle.components-button {
+		height: auto;
+		padding: 4px 6px 4px 0;
+		color: inherit;
+		text-align: left;
+	}
 }

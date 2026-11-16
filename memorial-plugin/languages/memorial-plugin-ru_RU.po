@@ -7810,3 +7810,9 @@ msgstr "Белгород: организация похорон и кремац�
 
 msgid "Funeral services company"
 msgstr "Ритуальная компания"
+
+msgid "Change: %s"
+msgstr "Изменить: %s"
+
+msgid "The arrow → is added by the site."
+msgstr "Стрелку → сайт добавит сам."

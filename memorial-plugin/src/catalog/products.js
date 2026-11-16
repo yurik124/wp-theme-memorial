@@ -27,6 +27,7 @@ import {
 } from './list-screen';
 import { photosField, termsField, statusField, rub, DescEdit } from './fields';
 import ImportModal from './import';
+import inlineFields from './inline-edit';
 
 const API = '/memorial-plugin/v1/catalog/products';
 const catsFilter = arrayFilters( [ 'cats' ] );
@@ -305,6 +306,7 @@ export default function Products() {
 				enableGlobalSearch: true,
 				enableHiding: false,
 				filterBy: false, // The title is found by the search field.
+				render: ( { item } ) => item.title,
 			},
 			{
 				id: 'sku',
@@ -425,6 +427,19 @@ export default function Products() {
 	// The form: everything but the date of adding.
 	const formFields = useMemo(
 		() => fields.filter( ( f ) => f.id !== 'date' ),
+		[ fields ]
+	);
+	// The table: a value is changed by a click on it (not the SKU, photos, description, date).
+	const saveRef = useRef();
+	const tableFields = useMemo(
+		() =>
+			inlineFields(
+				fields,
+				( f ) =>
+					! [ 'sku', 'photos', 'desc', 'date' ].includes( f.id ) &&
+					! f.readOnly,
+				( item, edits ) => saveRef.current( item, edits )
+			),
 		[ fields ]
 	);
 
@@ -601,6 +616,7 @@ export default function Products() {
 		},
 		[ specs, merge, create ]
 	);
+	saveRef.current = save;
 
 	const actions = useMemo( () => {
 		const cats = ( type?.cats || [] ).map( ( c ) => ( {
@@ -899,7 +915,7 @@ export default function Products() {
 				notice={ notice }
 				onNotice={ () => setNotice( null ) }
 				items={ items }
-				fields={ fields }
+				fields={ tableFields }
 				actionsOf={ actions }
 				view={ view }
 				setView={ setView }

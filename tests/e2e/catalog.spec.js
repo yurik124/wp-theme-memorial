@@ -208,3 +208,133 @@ test( 'новая работа создаётся одним запросом с
 		} )
 	).toBeVisible();
 } );
+
+test( 'товары: значения правятся щелчком в таблице', async ( { page } ) => {
+	const errors = collectJsErrors( page );
+	await login( page );
+	await page.goto(
+		'/wp-admin/edit.php?post_type=mem_product&page=mem-products'
+	);
+	const type = await api( page, {
+		path: '/wp/v2/mem_cat',
+		method: 'POST',
+		data: { name: 'E2E таблица ' + Date.now() },
+	} );
+	const created = await api( page, {
+		path: '/memorial-plugin/v1/catalog/products',
+		method: 'POST',
+		data: {
+			type: type.id,
+			values: { title: 'Табличный венок', price: 1000 },
+		},
+	} );
+	const id = created.id || created.items?.[ 0 ]?.id;
+	await page.goto(
+		'/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' +
+			type.id
+	);
+	const row = page
+		.getByRole( 'row' )
+		.filter( { hasText: 'Табличный венок' } );
+
+	// Цена: щелчок → поле в ячейке → Enter.
+	await row.getByRole( 'button', { name: 'Change: Price, ₽' } ).click();
+	const input = row.getByRole( 'textbox', { name: 'Price, ₽' } );
+	await input.fill( '2 500' );
+	await input.press( 'Enter' );
+	await expect( row ).toContainText( '2 500' );
+
+	// Название: Esc — без изменений.
+	await row.getByRole( 'button', { name: 'Change: Title' } ).click();
+	// пока название правится, его текст в поле — строку ищем не по нему
+	const titleBox = page.locator( '.memorial-plugin-inline__form input' );
+	await titleBox.fill( 'Не то' );
+	await titleBox.press( 'Escape' );
+	await expect( row ).toContainText( 'Табличный венок' );
+
+	// «На сайте»: выбор в маленьком окне, кнопка «Сохранить».
+	await row.getByRole( 'button', { name: 'Change: On the site' } ).click();
+	await page.getByLabel( 'Visible on the site' ).check();
+	await page
+		.locator( '.memorial-plugin-inline__pop' )
+		.getByRole( 'button', { name: 'Save' } )
+		.click();
+	await expect( row ).toContainText( 'Shown' );
+
+	// Артикул щелчком не меняется.
+	await expect(
+		row.getByRole( 'button', { name: 'Change: SKU' } )
+	).toHaveCount( 0 );
+
+	const data = await api( page, {
+		path: '/memorial-plugin/v1/catalog/products',
+	} );
+	const p = data.items.find( ( i ) => i.title === 'Табличный венок' );
+	expect( p.price ).toBe( 2500 );
+	expect( p.status ).toBe( 'publish' );
+	expect( id || p.id ).toBeTruthy();
+	expect( errors ).toEqual( [] );
+} );
+
+test( '«Вопрос–ответ»: окно «Настроить разделы» — разделы свёрнуты и раскрываются', async ( {
+	page,
+} ) => {
+	const errors = collectJsErrors( page );
+	await login( page );
+	await page.goto( '/wp-admin/' );
+	await page.waitForFunction( () => window.wp && window.wp.apiFetch );
+	const det = ( q ) =>
+		`<!-- wp:details -->\n<details class="wp-block-details"><summary>${ q }</summary><!-- wp:paragraph -->\n<p>Ответ.</p>\n<!-- /wp:paragraph --></details>\n<!-- /wp:details -->\n`;
+	await api( page, {
+		path: '/wp/v2/pages',
+		method: 'POST',
+		data: {
+			title: 'Страница с вопросами e2e',
+			status: 'publish',
+			content: det( 'Первый вопрос e2e?' ) + det( 'Второй вопрос e2e?' ),
+		},
+	} );
+	const hub = await api( page, {
+		path: '/wp/v2/pages',
+		method: 'POST',
+		data: {
+			title: 'Вопрос–ответ e2e',
+			status: 'publish',
+			content: '<!-- wp:memorial-plugin/faq /-->',
+		},
+	} );
+	await page.goto( '/wp-admin/post.php?action=edit&post=' + hub.id );
+	await page.waitForFunction( () =>
+		window.wp?.data?.select( 'core/preferences' )
+	);
+	await page.evaluate( () =>
+		window.wp.data
+			.dispatch( 'core/preferences' )
+			.set( 'core/edit-post', 'welcomeGuide', false )
+	);
+	await page.reload();
+	const panel = page.getByRole( 'button', { name: 'Question sections' } );
+	await expect( panel ).toBeVisible( { timeout: 30000 } );
+	if ( ( await panel.getAttribute( 'aria-expanded' ) ) === 'false' ) {
+		await panel.click();
+	}
+	await page.getByRole( 'button', { name: 'Set up the sections' } ).click();
+	const modal = page.locator( '.memorial-plugin-faq-sections' );
+	await expect( modal ).toContainText( 'Страница с вопросами e2e' );
+	// по умолчанию свёрнуты: полей нет
+	await expect(
+		modal.locator( '.memorial-plugin-faq-sections__fields' )
+	).toHaveCount( 0 );
+	const toggle = modal
+		.locator( '.memorial-plugin-faq-sections__toggle' )
+		.first();
+	await expect( toggle ).toHaveAttribute( 'aria-expanded', 'false' );
+	await toggle.click();
+	await expect( toggle ).toHaveAttribute( 'aria-expanded', 'true' );
+	await expect( modal.getByLabel( 'Link to the page' ) ).toBeVisible();
+	await toggle.click();
+	await expect(
+		modal.locator( '.memorial-plugin-faq-sections__fields' )
+	).toHaveCount( 0 );
+	expect( errors ).toEqual( [] );
+} );

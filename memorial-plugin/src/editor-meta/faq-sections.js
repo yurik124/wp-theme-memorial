@@ -47,8 +47,9 @@ const cleanAnchor = ( v ) =>
 		.replace( /^-+/, '' )
 		.slice( 0, 80 );
 
-// One section: the fields, ↑ ↓.
+// One section: a row that opens its fields (closed at first), ↑ ↓.
 function Row( { s, item, set, up, down, dupAnchor } ) {
+	const [ open, setOpen ] = useState( false );
 	const own = s.kind === 'own';
 	const field = ( key, label, opts = {} ) => (
 		<TextControl
@@ -68,7 +69,15 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 		<div className="memorial-plugin-faq-sections__row">
 			<Flex align="center" gap={ 2 }>
 				<FlexBlock>
-					<strong>{ label }</strong>{ ' ' }
+					<Button
+						className="memorial-plugin-faq-sections__toggle"
+						icon={ open ? 'arrow-up-alt2' : 'arrow-down-alt2' }
+						iconPosition="right"
+						aria-expanded={ open }
+						onClick={ () => setOpen( ! open ) }
+					>
+						<strong>{ label }</strong>
+					</Button>{ ' ' }
 					<span className="memorial-plugin-faq-sections__meta">
 						{ own
 							? sprintf(
@@ -105,41 +114,56 @@ function Row( { s, item, set, up, down, dupAnchor } ) {
 					size="compact"
 				/>
 			</Flex>
-			<div className="memorial-plugin-faq-sections__fields">
-				{ field( 'label', __( 'Button', 'memorial-plugin' ), {
-					help:
-						label.length > 28
-							? __(
-									'Long — a short word or two reads easier.',
-									'memorial-plugin'
-								)
-							: '',
-				} ) }
-				{ own ? (
-					<p className="memorial-plugin-faq-sections__note">
-						{ __(
-							'The heading and the anchor are those of the heading of the section on this page (Advanced → HTML anchor).',
-							'memorial-plugin'
-						) }
-					</p>
-				) : (
-					<>
-						{ field( 'title', __( 'Heading', 'memorial-plugin' ) ) }
-						{ field( 'anchor', __( 'Anchor', 'memorial-plugin' ), {
-							help: dupAnchor
+			{ open && (
+				<div className="memorial-plugin-faq-sections__fields">
+					{ field( 'label', __( 'Button', 'memorial-plugin' ), {
+						help:
+							label.length > 28
 								? __(
-										'This anchor is already used — the site will add a number.',
+										'Long — a short word or two reads easier.',
 										'memorial-plugin'
 									)
 								: '',
-						} ) }
-						{ field(
-							'more',
-							__( 'Link to the page', 'memorial-plugin' )
-						) }
-					</>
-				) }
-			</div>
+					} ) }
+					{ own ? (
+						<p className="memorial-plugin-faq-sections__note">
+							{ __(
+								'The heading and the anchor are those of the heading of the section on this page (Advanced → HTML anchor).',
+								'memorial-plugin'
+							) }
+						</p>
+					) : (
+						<>
+							{ field(
+								'title',
+								__( 'Heading', 'memorial-plugin' )
+							) }
+							{ field(
+								'anchor',
+								__( 'Anchor', 'memorial-plugin' ),
+								{
+									help: dupAnchor
+										? __(
+												'This anchor is already used — the site will add a number.',
+												'memorial-plugin'
+											)
+										: '',
+								}
+							) }
+							{ field(
+								'more',
+								__( 'Link to the page', 'memorial-plugin' ),
+								{
+									help: __(
+										'The arrow → is added by the site.',
+										'memorial-plugin'
+									),
+								}
+							) }
+						</>
+					) }
+				</div>
+			) }
 		</div>
 	);
 }

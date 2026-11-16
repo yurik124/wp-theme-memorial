@@ -192,7 +192,7 @@ add_shortcode(
 				}
 				$idx[] = array(
 					'q' => $it['q'],
-					't' => $it['q'] . ' ' . mb_substr( trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( memorial_plugin_guide_nosc( $it['t'] ) ) ) ), 0, 300 ),
+					't' => $it['q'] . ' ' . $it['g'] . ' ' . mb_substr( trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( memorial_plugin_guide_nosc( $it['t'] ) ) ) ), 0, 300 ),
 					'u' => $it['u'],
 					'c' => -1,
 					'g' => $it['g'],

@@ -236,6 +236,17 @@ function memorial_plugin_faq_print( $b ) {
 }
 
 /**
+ * Текст ссылки без стрелки в конце: стрелку сайт ставит сам.
+ *
+ * @param string $v Text.
+ * @return string
+ */
+function memorial_plugin_faq_no_arrow( $v ) {
+	// Только стрелки: кавычка «» в конце текста остаётся.
+	return trim( preg_replace( '/(\s|→|⟶|➝|➔|->)+$/u', '', (string) $v ) );
+}
+
+/**
  * Якорь латиницей: буквы, цифры, дефис (кириллица — транслитом).
  *
  * @param string $v Text.
@@ -266,7 +277,7 @@ function memorial_plugin_faq_settings_clean( $raw ) {
 			'label'  => mb_substr( trim( sanitize_text_field( (string) ( $f['label'] ?? '' ) ) ), 0, 60 ),
 			'title'  => mb_substr( trim( sanitize_text_field( (string) ( $f['title'] ?? '' ) ) ), 0, 160 ),
 			'anchor' => mb_substr( memorial_plugin_faq_anchor_clean( (string) ( $f['anchor'] ?? '' ) ), 0, 80 ),
-			'more'   => mb_substr( trim( sanitize_text_field( (string) ( $f['more'] ?? '' ) ) ), 0, 160 ),
+			'more'   => mb_substr( memorial_plugin_faq_no_arrow( sanitize_text_field( (string) ( $f['more'] ?? '' ) ) ), 0, 160 ),
 		);
 		$row = array_filter( $row, 'strlen' );
 		if ( $row ) {
@@ -296,7 +307,7 @@ function memorial_plugin_faq_sections( $hub ) {
 			'title'  => $label,
 			'anchor' => memorial_plugin_slug( $label ),
 			/* translators: %s: page title */
-			'more'   => sprintf( __( 'More — on the page “%s” →', 'memorial-plugin' ), $label ),
+			'more'   => memorial_plugin_faq_no_arrow( sprintf( __( 'More — on the page “%s” →', 'memorial-plugin' ), $label ) ),
 		);
 		$list[ 'p' . $g['id'] ] = array(
 			'kind'     => 'page',
@@ -462,7 +473,7 @@ add_shortcode(
 				echo '<details class="wp-block-details" id="' . esc_attr( $own_id ) . '" data-g="' . esc_attr( $s['label'] ) . '" data-t="' . esc_attr( mb_substr( $full, 0, 1500 ) ) . '"><summary>' . esc_html( $q ) . '</summary>' . $body . '</details>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the answer is post content passed through the_content.
 			}
 			if ( 'page' === $s['kind'] && '' !== $s['more'] ) {
-				echo '<p class="mfaq__more"><a href="' . esc_url( $s['url'] ) . '">' . esc_html( $s['more'] ) . '</a></p>';
+				echo '<p class="mfaq__more"><a href="' . esc_url( $s['url'] ) . '">' . esc_html( memorial_plugin_faq_no_arrow( $s['more'] ) ) . ' <span aria-hidden="true">→</span></a></p>';
 			}
 			echo '</section>';
 		}

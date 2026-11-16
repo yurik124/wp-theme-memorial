@@ -334,3 +334,63 @@ body.folded .memorial-plugin-catalog__float {
 		}
 	}
 }
+
+// Products table: a value changed by a click on it (inline-edit.js).
+.memorial-plugin-inline {
+
+	&__value {
+		display: inline-block;
+		max-width: 100%;
+		margin: -3px -6px;
+		padding: 3px 6px;
+		border: 1px dashed transparent;
+		border-radius: 6px;
+		background: none;
+		color: inherit;
+		font: inherit;
+		text-align: left;
+		cursor: text;
+
+		&:hover {
+			border-color: #a9b796;
+			background: #f6f4ee;
+		}
+
+		&:focus-visible {
+			outline: 2px solid #4f6145;
+			outline-offset: 1px;
+		}
+	}
+
+	&__form {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px;
+		min-width: 180px;
+	}
+
+	&__input {
+		flex: 1 1 140px;
+	}
+
+	&__error {
+		flex-basis: 100%;
+		margin: 2px 0 0;
+		color: #b32d2e;
+	}
+
+	&__popform {
+		display: grid;
+		gap: 12px;
+		min-width: 260px;
+		max-width: 360px;
+		padding: 14px;
+	}
+
+	&__popbtns {
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+	}
+}

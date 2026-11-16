@@ -104,7 +104,8 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		$this->assertSame( 'Кремация', $s[1]['label'] );
 		$this->assertSame( 'Кремация', $s[1]['title'] );
 		$this->assertSame( 'kremaciya', $s[1]['anchor'] );
-		$this->assertSame( 'Всё о кремации →', $s[1]['more'] );
+		// The arrow is put by the site: the text is kept without it.
+		$this->assertSame( 'Всё о кремации', $s[1]['more'] );
 		$this->assertSame( 'Оплата', $s[0]['title'] );
 	}
 
@@ -142,6 +143,21 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		do_action( 'wp_head' );
 		$head = ob_get_clean();
 		$this->assertStringContainsString( 'Сколько стоит кремация?', $head );
+	}
+
+	public function test_link_text_gets_one_arrow() {
+		[ $svc, $hub ] = $this->pages();
+		update_post_meta( $hub, '_mem_faq_sections', wp_slash( wp_json_encode( memorial_plugin_faq_settings_clean( array( 'items' => array( 'p' . $svc => array( 'more' => 'Всё о кремации →' ) ) ) ) ) ) );
+		$this->go_to( get_permalink( $hub ) );
+		$GLOBALS['post'] = get_post( $hub ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- the page being shown.
+		setup_postdata( $GLOBALS['post'] );
+		$html = apply_filters( 'the_content', get_post( $hub )->post_content );
+		$this->assertStringContainsString( 'Всё о кремации <span aria-hidden="true">→</span>', $html );
+		$this->assertSame( 'Всё о кремации', memorial_plugin_faq_no_arrow( 'Всё о кремации  → ' ) );
+		// The closing quote of the default text stays.
+		$this->assertSame( 'На странице «Кремация»', memorial_plugin_faq_no_arrow( 'На странице «Кремация» →' ) );
+		delete_post_meta( $hub, '_mem_faq_sections' );
+		$this->assertMatchesRegularExpression( '/[»”]$/u', memorial_plugin_faq_sections( $hub )[0]['more'] );
 	}
 
 	public function test_settings_are_cleaned() {
