@@ -28,7 +28,7 @@ if ( 'mem_product' !== get_post_type( $id ) ) {
 	</div>
 </div>
 <?php
-$text = (string) get_post_field( 'post_content', $id );
+$text = memorial_plugin_spec_fill( (string) get_post_field( 'post_content', $id ), $id );
 if ( '' !== trim( $text ) ) :
 	?>
 	<div class="content product__desc"><?php echo apply_filters( 'the_content', $text ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- core filter. ?></div>

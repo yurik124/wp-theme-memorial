@@ -171,7 +171,9 @@ function memorial_plugin_manager_product( $p ) {
 	$m    = static fn( $k ) => (string) get_post_meta( $p->ID, $k, true );
 	return array(
 		'id'     => (int) $p->ID,
-		'title'  => html_entity_decode( get_the_title( $p ), ENT_QUOTES, 'UTF-8' ),
+		// Название как записано (с кодами {spec:…}); как на сайте — 'shown'.
+		'title'  => html_entity_decode( $p->post_title, ENT_QUOTES, 'UTF-8' ),
+		'shown'  => false !== strpos( $p->post_title, '{spec:' ) ? html_entity_decode( wp_strip_all_tags( memorial_plugin_spec_fill( $p->post_title, $p->ID ) ), ENT_QUOTES, 'UTF-8' ) : '',
 		'status' => 'publish' === $p->post_status ? 'publish' : 'draft',
 		'type'   => $type,
 		'sku'    => $m( '_mem_sku' ),

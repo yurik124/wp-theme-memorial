@@ -38,7 +38,7 @@ function memorial_plugin_type_fields( $type_id, $guess = true ) {
 	$raw = get_term_meta( $type_id, 'mem_fields', true );
 	$f   = is_string( $raw ) ? json_decode( $raw, true ) : $raw;
 	if ( is_array( $f ) && $f ) {
-		return array_values( array_filter( array_map( 'memorial_plugin_clean_field', $f ) ) );
+		return memorial_plugin_spec_codes_fill( array_values( array_filter( array_map( 'memorial_plugin_clean_field', $f ) ) ) );
 	}
 	if ( ! $guess ) {
 		return array();
@@ -65,15 +65,18 @@ function memorial_plugin_type_fields( $type_id, $guess = true ) {
 			}
 		}
 	}
-	return array_map(
-		fn( $l ) => array(
-			'label'   => $l,
-			'type'    => 'text',
-			'unit'    => '',
-			'options' => array(),
-			'default' => '',
-		),
-		array_keys( $labels )
+	return memorial_plugin_spec_codes_fill(
+		array_map(
+			fn( $l ) => array(
+				'label'   => $l,
+				'type'    => 'text',
+				'unit'    => '',
+				'options' => array(),
+				'default' => '',
+				'code'    => '',
+			),
+			array_keys( $labels )
+		)
 	);
 }
 
@@ -106,6 +109,8 @@ function memorial_plugin_clean_field( $f ) {
 		'unit'    => 'number' === $type ? trim( sanitize_text_field( $f['unit'] ?? '' ) ) : '',
 		'options' => 'list' === $type ? $opts : array(),
 		'default' => $def,
+		// Код для названия и описания товара: {spec:code} (catalog/catalog-spec-codes.php).
+		'code'    => memorial_plugin_spec_code( (string) ( $f['code'] ?? '' ), $label ),
 	);
 }
 

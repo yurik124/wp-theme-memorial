@@ -11,6 +11,19 @@
 		margin-bottom: 16px;
 	}
 
+	// Code of a specification: {spec:…} and “Copy”.
+	&__code input {
+		width: 10em;
+	}
+
+	// Title with codes: under it — as the site shows it.
+	&__shown {
+		display: block;
+		margin-top: 2px;
+		color: #66675e;
+		font-weight: 400;
+	}
+
 	&__photo {
 		position: relative;
 		display: inline-block;

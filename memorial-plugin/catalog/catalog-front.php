@@ -280,7 +280,7 @@ function memorial_plugin_catalog_card( $p, $i, $opts = array() ) {
 			echo '<p class="pv__sub">' . esc_html( $psub ) . '</p>';
 		}
 		echo '<p class="pv__price">' . wp_kses_post( memorial_plugin_price_html( $id ) ) . '</p>';
-		$desc = 'card' === $view ? trim( (string) get_post_field( 'post_content', $id ) ) : '';
+		$desc = 'card' === $view ? trim( memorial_plugin_spec_fill( (string) get_post_field( 'post_content', $id ), $id ) ) : '';
 		if ( '' !== wp_strip_all_tags( $desc ) ) {
 			echo '<div class="pv__desc">' . wp_kses_post( wpautop( strip_shortcodes( excerpt_remove_blocks( $desc ) ) ) ) . '</div>';
 		}

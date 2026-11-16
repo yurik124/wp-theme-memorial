@@ -226,7 +226,7 @@ function memorial_plugin_types_save( $type, $values ) {
 		);
 	}
 	if ( isset( $values['fields'] ) ) {
-		$fields = array_values( array_filter( array_map( 'memorial_plugin_clean_field', (array) $values['fields'] ) ) );
+		$fields = memorial_plugin_spec_codes_fill( array_values( array_filter( array_map( 'memorial_plugin_clean_field', (array) $values['fields'] ) ) ) );
 		update_term_meta( $type, 'mem_fields', wp_json_encode( $fields, JSON_UNESCAPED_UNICODE ) );
 		// A renamed specification is renamed in all products of the type.
 		foreach ( (array) ( $values['renames'] ?? array() ) as $old => $new ) {

@@ -15,6 +15,10 @@ defined( 'ABSPATH' ) || exit;
  * @param array $s Section data.
  */
 function memorial_plugin_seo_sc( $s ) {
+	// Коды характеристик в SEO-заголовке и описании страницы товара.
+	if ( is_string( $s ) && false !== strpos( $s, '{spec:' ) && is_singular( 'mem_product' ) ) {
+		$s = memorial_plugin_spec_fill( $s, get_queried_object_id() );
+	}
 	if ( ! is_string( $s ) || strpos( $s, '[mem_' ) === false ) {
 		return $s;
 	}

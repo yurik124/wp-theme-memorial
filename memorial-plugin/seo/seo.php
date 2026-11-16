@@ -181,7 +181,7 @@ function memorial_plugin_ld( $data ) {
  */
 function memorial_plugin_product_ld( $id, $url ) {
 	$post = get_post( $id );
-	$desc = has_excerpt( $id ) ? get_the_excerpt( $id ) : wp_trim_words( wp_strip_all_tags( strip_shortcodes( excerpt_remove_blocks( (string) $post->post_content ) ) ), 40, '…' );
+	$desc = has_excerpt( $id ) ? get_the_excerpt( $id ) : wp_trim_words( wp_strip_all_tags( strip_shortcodes( excerpt_remove_blocks( memorial_plugin_spec_fill( (string) $post->post_content, $id ) ) ) ), 40, '…' );
 	$p    = array(
 		'@type' => 'Product',
 		'name'  => wp_strip_all_tags( get_the_title( $id ) ),
