@@ -60,7 +60,7 @@ function memorial_plugin_spec_codes_fill( $fields ) {
  */
 function memorial_plugin_spec_values( $post_id ) {
 	$post_id = (int) $post_id;
-	$shown = array();
+	$shown   = array();
 	foreach ( memorial_plugin_product_specs_shown( $post_id ) as [$k, $v] ) {
 		if ( '' !== $k ) {
 			$shown[ mb_strtolower( $k ) ] = $v;
