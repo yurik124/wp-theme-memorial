@@ -7816,3 +7816,6 @@ msgstr "Изменить: %s"
 
 msgid "The arrow → is added by the site."
 msgstr "Стрелку → сайт добавит сам."
+
+msgid "Shown on the site: %s"
+msgstr "На сайте: %s"

@@ -380,6 +380,13 @@ body.folded .memorial-plugin-catalog__float {
 		color: #b32d2e;
 	}
 
+	&__toggle {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px;
+	}
+
 	&__popform {
 		display: grid;
 		gap: 12px;

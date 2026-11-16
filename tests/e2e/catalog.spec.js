@@ -252,14 +252,28 @@ test( 'товары: значения правятся щелчком в таб�
 	await titleBox.press( 'Escape' );
 	await expect( row ).toContainText( 'Табличный венок' );
 
-	// «На сайте»: выбор в маленьком окне, кнопка «Сохранить».
-	await row.getByRole( 'button', { name: 'Change: On the site' } ).click();
-	await page.getByLabel( 'Visible on the site' ).check();
-	await page
-		.locator( '.memorial-plugin-inline__pop' )
-		.getByRole( 'button', { name: 'Save' } )
-		.click();
-	await expect( row ).toContainText( 'Shown' );
+	// Щелчок мимо поля — отмена; кнопки «×» нет.
+	await row.getByRole( 'button', { name: 'Change: Title' } ).click();
+	await titleBox.fill( 'Тоже не то' );
+	await expect(
+		page.locator( '.memorial-plugin-inline__form' ).getByRole( 'button' )
+	).toHaveCount( 1 );
+	await page.locator( '#wpfooter' ).click( { position: { x: 4, y: 4 } } );
+	await expect( titleBox ).toHaveCount( 0 );
+	await expect( row ).toContainText( 'Табличный венок' );
+
+	// «На сайте»: галочка в таблице, сохраняется щелчком.
+	const shown = row.getByRole( 'checkbox', {
+		name: 'Shown on the site: Табличный венок',
+	} );
+	await expect( shown ).not.toBeChecked();
+	await shown.check();
+	await expect.poll( async () => {
+		const d = await api( page, {
+			path: '/memorial-plugin/v1/catalog/products',
+		} );
+		return d.items.find( ( i ) => i.title === 'Табличный венок' )?.status;
+	} ).toBe( 'publish' );
 
 	// Артикул щелчком не меняется.
 	await expect(
