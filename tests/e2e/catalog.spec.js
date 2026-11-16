@@ -325,13 +325,13 @@ test( '«Вопрос–ответ»: окно «Настроить раздел
 	await expect(
 		modal.locator( '.memorial-plugin-faq-sections__fields' )
 	).toHaveCount( 0 );
-	const toggle = modal.locator( '.memorial-plugin-faq-sections__toggle' ).first();
+	const toggle = modal
+		.locator( '.memorial-plugin-faq-sections__toggle' )
+		.first();
 	await expect( toggle ).toHaveAttribute( 'aria-expanded', 'false' );
 	await toggle.click();
 	await expect( toggle ).toHaveAttribute( 'aria-expanded', 'true' );
-	await expect(
-		modal.getByLabel( 'Link to the page' )
-	).toBeVisible();
+	await expect( modal.getByLabel( 'Link to the page' ) ).toBeVisible();
 	await toggle.click();
 	await expect(
 		modal.locator( '.memorial-plugin-faq-sections__fields' )
