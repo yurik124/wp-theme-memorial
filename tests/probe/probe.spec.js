@@ -2095,6 +2095,56 @@ test.describe( 'хаб', () => {
 } );
 
 test.describe( 'правка в таблице', () => {
+	test( 'таблица товаров: галочка «На сайте», отмена щелчком мимо', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		const all = () => page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/products' } ) );
+		const data = await all();
+		const venki = data.types.find( ( t ) => /венк/i.test( t.name ) );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' + venki.id );
+		await page.waitForTimeout( 4000 );
+		report.checkboxes = await page.locator( '.memorial-plugin-inline__toggle input[type=checkbox]' ).count();
+		await page.screenshot( { path: `${ DIR }/check-1-table.png` } );
+		const box = page.locator( '.memorial-plugin-inline__toggle input[type=checkbox]' ).first();
+		report.label = await box.getAttribute( 'aria-label' );
+		const title = report.label.replace( /^[^:]+:\s*/, '' );
+		const st = async () => ( await all() ).items.find( ( i ) => i.title === title )?.status;
+		report.before = await st();
+		await box.click();
+		await page.waitForTimeout( 2500 );
+		report.afterClick = await st();
+		await page.screenshot( { path: `${ DIR }/check-2-toggled.png` } );
+		await box.click();
+		await page.waitForTimeout( 2500 );
+		report.afterBack = await st();
+		// Щелчок мимо поля — отмена.
+		const row = page.getByRole( 'row' ).filter( { has: box } );
+		await row.getByRole( 'button', { name: /Изменить: Название|Change: Title/ } ).click();
+		const input = page.locator( '.memorial-plugin-inline__form input' );
+		await input.fill( 'ПРОБА — не сохранять' );
+		report.formButtons = await page.locator( '.memorial-plugin-inline__form button' ).count();
+		await page.screenshot( { path: `${ DIR }/check-3-editing.png` } );
+		await page.locator( '#wpfooter' ).click( { position: { x: 4, y: 4 } } );
+		await page.waitForTimeout( 800 );
+		report.formAfterOutside = await input.count();
+		report.titleKept = ( await st() ) !== undefined;
+		await page.setViewportSize( { width: 390, height: 844 } );
+		await page.waitForTimeout( 800 );
+		await page.screenshot( { path: `${ DIR }/check-4-phone-390.png` } );
+		report.errors = errs;
+		fs.writeFileSync( `${ DIR }/log-check.json`, JSON.stringify( report, null, 1 ) );
+	} );
+
 	test( 'таблица товаров щелчком и «Вопрос–ответ»: поиск по разделу, стрелка, свёрнутые разделы', async ( { page, browser } ) => {
 		test.setTimeout( 900_000 );
 		page.setDefaultTimeout( 20000 );
