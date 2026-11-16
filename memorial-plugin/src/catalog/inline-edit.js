@@ -2,11 +2,18 @@
  * Catalog → Products: a value in the table is edited in place — a click (or Enter on it) turns
  * a text or a number into a field in the cell; a choice (categories, “On the site”, a list
  * specification) opens a small form by the value with the same control as the “Edit” window.
- * Enter or ✓ saves, Esc or × cancels. Saving goes the same way as the “Edit” window.
+ * Enter or ✓ saves; Esc or a click outside the field cancels. A field with `toggle`
+ * (“On the site”) is a checkbox in the table: a click saves at once. Saving goes the same way
+ * as the “Edit” window.
  */
-import { useRef, useState } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { Button, Popover, TextControl } from '@wordpress/components';
+import {
+	Button,
+	CheckboxControl,
+	Popover,
+	TextControl,
+} from '@wordpress/components';
 import { DataForm } from '@wordpress/dataviews/wp';
 
 /**
@@ -21,6 +28,52 @@ const isPlain = ( field ) =>
 // Keeps the click and the keys in the cell: the table does not select the row.
 const keep = ( e ) => e.stopPropagation();
 
+// A checkbox in the table (“On the site”): a click saves at once.
+function Toggle( { item, field, onSave } ) {
+	const { on, off } = field.toggle;
+	const [ checked, setChecked ] = useState( item[ field.id ] === on );
+	const [ busy, setBusy ] = useState( false );
+	const [ error, setError ] = useState( '' );
+	useEffect(
+		() => setChecked( item[ field.id ] === on ),
+		[ item, field, on ]
+	);
+	const change = async ( next ) => {
+		setChecked( next );
+		setError( '' );
+		setBusy( true );
+		try {
+			await onSave( item, { [ field.id ]: next ? on : off } );
+		} catch ( err ) {
+			setChecked( ! next );
+			setError( err.message );
+		} finally {
+			setBusy( false );
+		}
+	};
+	return (
+		// eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- only keeps the click in the cell.
+		<div className="memorial-plugin-inline__toggle" onClick={ keep }>
+			<CheckboxControl
+				__nextHasNoMarginBottom
+				aria-label={ sprintf(
+					/* translators: %s: product title. */
+					__( 'Shown on the site: %s', 'memorial-plugin' ),
+					item.title
+				) }
+				checked={ checked }
+				disabled={ busy }
+				onChange={ change }
+			/>
+			{ error && (
+				<span className="memorial-plugin-inline__error" role="alert">
+					{ error }
+				</span>
+			) }
+		</div>
+	);
+}
+
 // The value of a cell and its editing.
 function Cell( { item, field, shown, onSave } ) {
 	const [ editing, setEditing ] = useState( false );
@@ -28,6 +81,7 @@ function Cell( { item, field, shown, onSave } ) {
 	const [ busy, setBusy ] = useState( false );
 	const [ error, setError ] = useState( '' );
 	const anchor = useRef();
+	const form = useRef();
 	const plain = isPlain( field );
 
 	const start = ( e ) => {
@@ -63,6 +117,25 @@ function Cell( { item, field, shown, onSave } ) {
 			setBusy( false );
 		}
 	};
+	// A click or the focus outside the field cancels the change.
+	useEffect( () => {
+		if ( ! editing || ! plain ) {
+			return;
+		}
+		const outside = ( e ) => {
+			if ( form.current && ! form.current.contains( e.target ) ) {
+				setEditing( false );
+				setError( '' );
+			}
+		};
+		const doc = form.current?.ownerDocument || window.document;
+		doc.addEventListener( 'pointerdown', outside, true );
+		doc.addEventListener( 'focusin', outside, true );
+		return () => {
+			doc.removeEventListener( 'pointerdown', outside, true );
+			doc.removeEventListener( 'focusin', outside, true );
+		};
+	}, [ editing, plain ] );
 	const onKey = ( e ) => {
 		e.stopPropagation();
 		if ( e.key === 'Escape' ) {
@@ -71,29 +144,21 @@ function Cell( { item, field, shown, onSave } ) {
 		}
 	};
 	const buttons = (
-		<>
-			<Button
-				type="submit"
-				icon="yes"
-				size="small"
-				label={ __( 'Save', 'memorial-plugin' ) }
-				isBusy={ busy }
-				disabled={ busy }
-			/>
-			<Button
-				icon="no-alt"
-				size="small"
-				label={ __( 'Cancel', 'memorial-plugin' ) }
-				onClick={ cancel }
-				disabled={ busy }
-			/>
-		</>
+		<Button
+			type="submit"
+			icon="yes"
+			size="small"
+			label={ __( 'Save', 'memorial-plugin' ) }
+			isBusy={ busy }
+			disabled={ busy }
+		/>
 	);
 
 	if ( editing && plain ) {
 		return (
 			// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- the form only keeps the clicks in the cell.
 			<form
+				ref={ form }
 				className="memorial-plugin-inline__form"
 				onSubmit={ save }
 				onClick={ keep }
@@ -215,6 +280,18 @@ export default function inlineFields( fields, editable, onSave ) {
 			return field;
 		}
 		const render = field.render;
+		if ( field.toggle ) {
+			return {
+				...field,
+				render: ( props ) => (
+					<Toggle
+						item={ props.item }
+						field={ field }
+						onSave={ onSave }
+					/>
+				),
+			};
+		}
 		return {
 			...field,
 			render: ( props ) => {

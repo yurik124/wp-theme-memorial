@@ -188,6 +188,8 @@ export function statusField() {
 			{ value: 'draft', label: __( 'Hidden', 'memorial-plugin' ) },
 		],
 		filterBy: { operators: [ 'is' ] },
+		// In the table — a checkbox saved by a click (inline-edit.js).
+		toggle: { on: 'publish', off: 'draft' },
 		// In the form — one checkbox instead of a choice of two words.
 		Edit: ( { data, onChange } ) => (
 			<CheckboxControl

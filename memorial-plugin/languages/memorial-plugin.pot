@@ -574,7 +574,7 @@ msgstr ""
 msgid "Add product"
 msgstr ""
 
-#: src/catalog/fields.js:269 src/editor-meta/index.js:213
+#: src/catalog/fields.js:271 src/editor-meta/index.js:213
 msgid "Add row"
 msgstr ""
 
@@ -626,7 +626,7 @@ msgstr ""
 msgid "After cookie consent (recommended): the counter starts only after the visitor clicks “Accept”"
 msgstr ""
 
-#: places/places.php:343 content/faq.php:450 works/works.php:171
+#: places/places.php:343 content/faq.php:451 works/works.php:171
 msgid "All"
 msgstr ""
 
@@ -710,7 +710,7 @@ msgstr ""
 msgid "An empty cell does not change the field of a product of the site; “-” clears it. Products that are not in the file are not changed."
 msgstr ""
 
-#: src/catalog/fields.js:295
+#: src/catalog/fields.js:297
 msgid "An empty line starts a new paragraph."
 msgstr ""
 
@@ -738,7 +738,7 @@ msgstr ""
 msgid "Analytics"
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:124
+#: src/editor-meta/faq-sections.js:129
 msgid "Anchor"
 msgstr ""
 
@@ -926,7 +926,7 @@ msgstr ""
 msgid "Button that calls the main phone number (Memorial → Contacts)."
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:198
+#: src/editor-meta/faq-sections.js:205
 msgid "Button, heading, anchor, link text and the order of the sections."
 msgstr ""
 
@@ -1012,7 +1012,7 @@ msgstr ""
 msgid "Can be left empty: it is made from the name when you save. By the code the price is put into texts and SEO titles, so do not change it once it is used."
 msgstr ""
 
-#: src/catalog/import.js:609 src/catalog/inline-edit.js:76 src/catalog/inline-edit.js:170 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:326
+#: src/catalog/import.js:609 src/catalog/inline-edit.js:236 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:326
 msgid "Cancel"
 msgstr ""
 
@@ -1181,7 +1181,7 @@ msgid "Change prices…"
 msgstr ""
 
 #. translators: %s: column, e.g. Price.
-#: src/catalog/inline-edit.js:125
+#: src/catalog/inline-edit.js:188
 #, php-format
 msgid "Change: %s"
 msgstr ""
@@ -1194,7 +1194,7 @@ msgstr ""
 msgid "Changed — it goes to the settings when you save the page."
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:221
+#: src/editor-meta/faq-sections.js:228
 msgid "Changes are kept with the page: press “Save” of the page. A section just added to the page appears here after saving. Empty fields — the gray text."
 msgstr ""
 
@@ -1667,7 +1667,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: src/block-controls/index.js:717 src/editor-meta/faq-sections.js:258
+#: src/block-controls/index.js:717 src/editor-meta/faq-sections.js:265
 msgid "Done"
 msgstr ""
 
@@ -2036,7 +2036,7 @@ msgstr ""
 msgid "For example: death certificate"
 msgstr ""
 
-#: content/faq.php:438
+#: content/faq.php:439
 msgid "For example: documents"
 msgstr ""
 
@@ -2206,7 +2206,7 @@ msgstr ""
 msgid "Header: phone and call back"
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:123
+#: src/editor-meta/faq-sections.js:125
 msgid "Heading"
 msgstr ""
 
@@ -2234,7 +2234,7 @@ msgstr ""
 msgid "Height"
 msgstr ""
 
-#: admin/collections.php:141 src/catalog/fields.js:164 src/catalog/fields.js:185 src/collections/index.js:125 src/collections/index.js:135
+#: admin/collections.php:141 src/catalog/fields.js:164 src/catalog/fields.js:187 src/collections/index.js:125 src/collections/index.js:135
 msgid "Hidden"
 msgstr ""
 
@@ -2586,7 +2586,7 @@ msgstr ""
 msgid "Link to a document (privacy policy, consent, cookies)"
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:134
+#: src/editor-meta/faq-sections.js:141
 msgid "Link to the page"
 msgstr ""
 
@@ -2630,7 +2630,7 @@ msgstr ""
 msgid "Loading reviews… usually it takes 10–30 seconds"
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:232
+#: src/editor-meta/faq-sections.js:239
 msgid "Loading…"
 msgstr ""
 
@@ -2822,7 +2822,7 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: content/faq.php:468 prices/prices.php:99 prices/packages.php:81
+#: content/faq.php:469 prices/prices.php:99 prices/packages.php:81
 msgid "More details"
 msgstr ""
 
@@ -2837,7 +2837,7 @@ msgid "More topics: %d"
 msgstr ""
 
 #. translators: %s: page title
-#: content/faq.php:309
+#: content/faq.php:310
 #, php-format
 msgid "More — on the page “%s” →"
 msgstr ""
@@ -3358,7 +3358,7 @@ msgstr ""
 msgid "Or these pages, in this order"
 msgstr ""
 
-#: admin/collections.php:145 src/catalog/fields.js:195 src/catalog/types.js:746 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:85
+#: admin/collections.php:145 src/catalog/fields.js:197 src/catalog/types.js:746 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:85
 msgid "Order"
 msgstr ""
 
@@ -3774,7 +3774,7 @@ msgstr ""
 msgid "Price, specifications, categories and the description are changed right here. Select several products to change prices or categories at once."
 msgstr ""
 
-#: src/catalog/products.js:317 src/catalog/fields.js:240 src/editor-meta/index.js:60 prices/prices.php:81
+#: src/catalog/products.js:317 src/catalog/fields.js:242 src/editor-meta/index.js:60 prices/prices.php:81
 msgid "Price, ₽"
 msgstr ""
 
@@ -3954,7 +3954,7 @@ msgstr ""
 msgid "Query"
 msgstr ""
 
-#: src/editor-meta/index.js:316 src/editor-meta/faq-sections.js:214
+#: src/editor-meta/index.js:316 src/editor-meta/faq-sections.js:221
 msgid "Question sections"
 msgstr ""
 
@@ -3962,7 +3962,7 @@ msgstr ""
 msgid "Question the page answers"
 msgstr ""
 
-#: content/faq.php:450
+#: content/faq.php:451
 msgid "Question topics"
 msgstr ""
 
@@ -3974,7 +3974,7 @@ msgstr ""
 msgid "Questions and answers"
 msgstr ""
 
-#: content/faq.php:427
+#: content/faq.php:428
 msgid "Questions and answers: there are no questions on the pages yet (“Details” blocks)."
 msgstr ""
 
@@ -4054,7 +4054,7 @@ msgstr ""
 msgid "Remove photo %d"
 msgstr ""
 
-#: src/catalog/fields.js:256 src/editor-meta/index.js:200
+#: src/catalog/fields.js:258 src/editor-meta/index.js:200
 msgid "Remove row"
 msgstr ""
 
@@ -4324,7 +4324,7 @@ msgstr ""
 msgid "SKU"
 msgstr ""
 
-#: src/catalog/inline-edit.js:69 src/catalog/inline-edit.js:178 src/catalog/product-pages.js:152 src/catalog/types.js:347 src/catalog/types.js:683 src/catalog/list-screen.js:125
+#: src/catalog/inline-edit.js:136 src/catalog/inline-edit.js:244 src/catalog/product-pages.js:152 src/catalog/types.js:347 src/catalog/types.js:683 src/catalog/list-screen.js:125
 msgid "Save"
 msgstr ""
 
@@ -4380,7 +4380,7 @@ msgstr ""
 msgid "Search the articles"
 msgstr ""
 
-#: content/faq.php:437
+#: content/faq.php:438
 msgid "Search the questions"
 msgstr ""
 
@@ -4498,7 +4498,7 @@ msgstr ""
 msgid "Set up the block: texts and what it shows"
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:210
+#: src/editor-meta/faq-sections.js:217
 msgid "Set up the sections"
 msgstr ""
 
@@ -4626,7 +4626,7 @@ msgstr ""
 msgid "Show “from”"
 msgstr ""
 
-#: admin/collections.php:140 src/catalog/fields.js:163 src/catalog/fields.js:181 src/collections/index.js:124 src/collections/index.js:131
+#: admin/collections.php:140 src/catalog/fields.js:163 src/catalog/fields.js:183 src/collections/index.js:124 src/collections/index.js:131
 msgid "Shown"
 msgstr ""
 
@@ -4648,6 +4648,12 @@ msgstr ""
 
 #: src/editor-meta/index.js:381
 msgid "Shown on the page card in “Good to know” and in search. Empty — the page title and first paragraph."
+msgstr ""
+
+#. translators: %s: product title.
+#: src/catalog/inline-edit.js:46
+#, php-format
+msgid "Shown on the site: %s"
 msgstr ""
 
 #: core/settings.php:141
@@ -4699,7 +4705,7 @@ msgstr ""
 msgid "Skip questions of these pages"
 msgstr ""
 
-#: src/catalog/fields.js:197
+#: src/catalog/fields.js:199
 msgid "Smaller first. The arrows in the row menu move the item one place."
 msgstr ""
 
@@ -4934,7 +4940,7 @@ msgstr ""
 msgid "The archive is too large (more than 4 GB). Split the photos into several archives."
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:136
+#: src/editor-meta/faq-sections.js:143
 msgid "The arrow → is added by the site."
 msgstr ""
 
@@ -5210,7 +5216,7 @@ msgstr ""
 msgid "There is no product type “%s”. Add it in “Catalog → Types and categories” or correct the name."
 msgstr ""
 
-#: content/faq.php:441
+#: content/faq.php:442
 msgid "There is no such question on the site yet. Call or leave your number — we will answer."
 msgstr ""
 
@@ -5232,7 +5238,7 @@ msgstr ""
 msgid "Third step"
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:126
+#: src/editor-meta/faq-sections.js:132
 msgid "This anchor is already used — the site will add a number."
 msgstr ""
 
@@ -5240,7 +5246,7 @@ msgstr ""
 msgid "This block shows a part of the product that is open — it works in the product template (Appearance → Editor → Templates)."
 msgstr ""
 
-#: src/catalog/fields.js:291
+#: src/catalog/fields.js:293
 msgid "This description had lists or photos: after a change it is saved as plain text."
 msgstr ""
 
@@ -5349,7 +5355,7 @@ msgid "Total"
 msgstr ""
 
 #. translators: %s: total price.
-#: src/catalog/fields.js:274
+#: src/catalog/fields.js:276
 #, php-format
 msgid "Total: %s"
 msgstr ""
@@ -5520,7 +5526,7 @@ msgstr ""
 msgid "View →"
 msgstr ""
 
-#: src/catalog/fields.js:171
+#: src/catalog/fields.js:173
 msgid "Visible on the site"
 msgstr ""
 
@@ -5733,7 +5739,7 @@ msgid "Work"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/catalog/fields.js:221 src/editor-meta/index.js:183
+#: src/catalog/fields.js:223 src/editor-meta/index.js:183
 #, php-format
 msgid "Work %d"
 msgstr ""
@@ -5820,7 +5826,7 @@ msgstr ""
 msgid "You can send a photo, the text for a wreath ribbon or questions about documents — we will answer during working hours."
 msgstr ""
 
-#: src/editor-meta/faq-sections.js:203
+#: src/editor-meta/faq-sections.js:210
 msgid "Your own section: on this page add a Heading (H2) and right under it “Details” blocks — a question and its answer each. The section is shown among the others, is found by the search and is marked up for search engines (FAQPage). Sections of other pages show the first paragraph of an answer and “Read more”."
 msgstr ""
 
