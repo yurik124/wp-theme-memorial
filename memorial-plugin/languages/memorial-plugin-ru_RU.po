@@ -7819,3 +7819,15 @@ msgstr "Стрелку → сайт добавит сам."
 
 msgid "Shown on the site: %s"
 msgstr "На сайте: %s"
+
+msgid "Copied"
+msgstr "Скопировано"
+
+msgid "Copy %s"
+msgstr "Копировать %s"
+
+msgid "Paste a code like {spec:height} into the product title or description: the site shows the value of this specification of the product, a number with its unit. No value — the code is not shown. Renaming a specification does not change its code."
+msgstr "Вставьте код вида {spec:vysota} в название или описание товара — на сайте вместо него будет значение этой характеристики товара, число — с единицей. Значения нет — код не показывается. При переименовании характеристики код не меняется."
+
+msgid "after saving"
+msgstr "после сохранения"

@@ -306,7 +306,17 @@ export default function Products() {
 				enableGlobalSearch: true,
 				enableHiding: false,
 				filterBy: false, // The title is found by the search field.
-				render: ( { item } ) => item.title,
+				render: ( { item } ) =>
+					item.shown ? (
+						<>
+							{ item.title }
+							<span className="memorial-plugin-catalog__shown">
+								{ item.shown }
+							</span>
+						</>
+					) : (
+						item.title
+					),
 			},
 			{
 				id: 'sku',

@@ -2095,6 +2095,81 @@ test.describe( 'хаб', () => {
 } );
 
 test.describe( 'правка в таблице', () => {
+	test( 'коды характеристик: {spec:…} в названии товара', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		const save = () => fs.writeFileSync( `${ DIR }/log-spec.json`, JSON.stringify( report, null, 1 ) );
+		const errs = errorsOf( page );
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-types' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		const fetchApi = ( o ) => page.evaluate( ( x ) => window.wp.apiFetch( x ), o );
+		const r = await fetchApi( { path: '/memorial-plugin/v1/catalog/types' } );
+		const types = Array.isArray( r ) ? r : r.types || [];
+		report.codes = types.map( ( t ) => [ t.name, ( t.fields || [] ).map( ( f ) => f.label + ' → ' + f.code ) ] );
+		const all = ( await fetchApi( { path: '/memorial-plugin/v1/catalog/products' } ) ).items;
+		// товар на сайте с заполненной характеристикой у типа со страницей
+		let pick = null;
+		for ( const t of types ) {
+			if ( ! t.page || t.page.draft ) {
+				continue;
+			}
+			for ( const f of t.fields || [] ) {
+				const p = all.find( ( i ) => i.type === t.id && i.status === 'publish' && i.specs && String( i.specs[ f.label ] || '' ).trim() );
+				if ( p ) {
+					pick = { t, f, p };
+					break;
+				}
+			}
+			if ( pick ) {
+				break;
+			}
+		}
+		report.pick = pick && { type: pick.t.name, spec: pick.f.label, code: pick.f.code, unit: pick.f.unit, value: pick.p.specs[ pick.f.label ], title: pick.p.title, url: pick.t.page.url };
+		save();
+		// страница типов: коды у характеристик
+		await page.getByRole( 'tab', { name: new RegExp( pick.t.name.replace( /[.*+?^${}()|[\]\\]/g, '\\$&' ) ) } ).click();
+		const card = page.locator( '.memorial-plugin-catalog__spec' ).first();
+		await card.scrollIntoViewIfNeeded();
+		await page.mouse.wheel( 0, -150 );
+		await page.screenshot( { path: `${ DIR }/spec-1-types.png` } );
+		// название с кодом
+		const newTitle = pick.p.title + ' {spec:' + pick.f.code + '}';
+		const res = await fetchApi( { path: '/memorial-plugin/v1/catalog/products/' + pick.p.id, method: 'PUT', data: { values: { title: newTitle } } } );
+		report.saved = { title: res.title, shown: res.shown };
+		save();
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-products&type=' + pick.t.id );
+		await page.waitForTimeout( 4000 );
+		const row = page.getByRole( 'row' ).filter( { hasText: newTitle } ).first();
+		report.tableShown = await row.locator( '.memorial-plugin-catalog__shown' ).innerText().catch( () => null );
+		await row.scrollIntoViewIfNeeded();
+		await page.screenshot( { path: `${ DIR }/spec-2-table.png` } );
+		save();
+		// сайт: карточка в каталоге и крупный просмотр
+		for ( const w of [ 1440, 390, 360 ] ) {
+			await page.setViewportSize( { width: w, height: w > 500 ? 900 : 800 } );
+			await page.goto( pick.t.page.url + ( pick.t.page.url.includes( '?' ) ? '&' : '?' ) + 'nocache=' + Date.now() );
+			const name = page.locator( '.mcard__name', { hasText: res.shown } ).first();
+			report[ 'site' + w ] = {
+				cardFound: await name.count(),
+				codeLeft: await page.locator( 'body' ).evaluate( ( b ) => b.innerHTML.includes( '{spec:' ) ),
+			};
+			if ( await name.count() ) {
+				await name.scrollIntoViewIfNeeded();
+				await page.screenshot( { path: `${ DIR }/spec-3-site-${ w }.png` } );
+			}
+			save();
+		}
+		report.errors = errs;
+		save();
+	} );
+
 	test( 'таблица товаров: галочка «На сайте», отмена щелчком мимо', async ( { page } ) => {
 		test.setTimeout( 600_000 );
 		page.setDefaultTimeout( 20000 );

@@ -157,6 +157,7 @@ $memorial_plugin_modules = array(
 	// каталог: админка.
 	'catalog/catalog-admin.php',
 	'catalog/catalog-types.php',
+	'catalog/catalog-spec-codes.php',
 	'catalog/catalog-manager.php',
 	'catalog/catalog-io.php',
 	'catalog/catalog-import.php',

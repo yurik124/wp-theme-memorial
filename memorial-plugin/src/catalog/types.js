@@ -26,12 +26,57 @@ import {
 	filterSortAndPaginate,
 } from '@wordpress/dataviews/wp';
 import { Page } from '@wordpress/admin-ui';
+import { useCopyToClipboard } from '@wordpress/compose';
 import BooleanEdit from '../shared/boolean-edit';
 import HintedEdit from '../shared/hinted-edit';
+import Hint from '../shared/hint';
 import { ModalButtons, moved } from './list-screen';
 import { termsField } from './fields';
 
 const API = '/memorial-plugin/v1/catalog/';
+
+// Code of a specification for the product title and description: {spec:code} and “Copy”.
+function SpecCode( { value, onChange } ) {
+	const [ copied, setCopied ] = useState( false );
+	const tag = value ? `{spec:${ value }}` : '';
+	const ref = useCopyToClipboard( tag, () => {
+		setCopied( true );
+		window.setTimeout( () => setCopied( false ), 2000 );
+	} );
+	return (
+		<Flex
+			align="flex-end"
+			gap={ 1 }
+			className="memorial-plugin-catalog__code"
+		>
+			<TextControl
+				__next40pxDefaultSize
+				__nextHasNoMarginBottom
+				label={ __( 'Code', 'memorial-plugin' ) }
+				placeholder={ __( 'after saving', 'memorial-plugin' ) }
+				value={ value || '' }
+				onChange={ ( v ) =>
+					onChange( v.toLowerCase().replace( /[^a-z0-9_]+/g, '_' ) )
+				}
+			/>
+			<Button
+				__next40pxDefaultSize
+				variant="secondary"
+				ref={ ref }
+				disabled={ ! tag }
+				aria-label={ sprintf(
+					/* translators: %s: code, e.g. {spec:height}. */
+					__( 'Copy %s', 'memorial-plugin' ),
+					tag
+				) }
+			>
+				{ copied
+					? __( 'Copied', 'memorial-plugin' )
+					: __( 'Copy', 'memorial-plugin' ) }
+			</Button>
+		</Flex>
+	);
+}
 
 function TextareaEdit( { data, field, onChange } ) {
 	return (
@@ -389,7 +434,15 @@ function Specs( { type, save } ) {
 	return (
 		<Card>
 			<CardHeader>
-				<h2>{ __( 'Specifications', 'memorial-plugin' ) }</h2>
+				<h2>
+					{ __( 'Specifications', 'memorial-plugin' ) }{ ' ' }
+					<Hint
+						text={ __(
+							'Paste a code like {spec:height} into the product title or description: the site shows the value of this specification of the product, a number with its unit. No value — the code is not shown. Renaming a specification does not change its code.',
+							'memorial-plugin'
+						) }
+					/>
+				</h2>
 			</CardHeader>
 			<CardBody>
 				<p className="memorial-plugin-catalog__help">
@@ -529,6 +582,14 @@ function Specs( { type, save } ) {
 										}
 									/>
 								) }
+							</FlexItem>
+							<FlexItem>
+								<SpecCode
+									value={ r.code }
+									onChange={ ( v ) =>
+										update( i, { code: v } )
+									}
+								/>
 							</FlexItem>
 							<FlexItem>
 								<Flex gap={ 0 }>

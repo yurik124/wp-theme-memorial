@@ -141,6 +141,12 @@ test( 'типы и категории: новый тип, характерист
 	await expect(
 		page.locator( '.components-notice.is-success' )
 	).toBeVisible();
+	// Код для названия и описания: из названия, с кнопкой «Копировать».
+	const spec = page.locator( '.memorial-plugin-catalog__spec' ).last();
+	await expect( spec.getByLabel( 'Code' ) ).toHaveValue( 'vysota' );
+	await expect(
+		spec.getByRole( 'button', { name: 'Copy {spec:vysota}' } )
+	).toBeEnabled();
 
 	await page.getByRole( 'button', { name: 'Add category' } ).click();
 	modal = page.getByRole( 'dialog' );
@@ -155,6 +161,27 @@ test( 'типы и категории: новый тип, характерист
 	await expect(
 		page.getByRole( 'tab', { name: new RegExp( name ) } )
 	).toHaveAttribute( 'aria-selected', 'true' );
+
+	// Название с кодом: в таблице — как записано, ниже серым — как на сайте.
+	const typeId = Number( new URL( page.url() ).searchParams.get( 'type' ) );
+	await api( page, {
+		path: '/memorial-plugin/v1/catalog/products',
+		method: 'POST',
+		data: {
+			type: typeId,
+			values: {
+				title: 'Венок {spec:vysota}',
+				specs: { Высота: '120' },
+			},
+		},
+	} );
+	await page.reload();
+	const row = page
+		.getByRole( 'row' )
+		.filter( { hasText: 'Венок {spec:vysota}' } );
+	await expect( row.locator( '.memorial-plugin-catalog__shown' ) ).toHaveText(
+		'Венок 120'
+	);
 	expect( errors ).toEqual( [] );
 } );
 
