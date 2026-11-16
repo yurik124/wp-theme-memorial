@@ -401,6 +401,13 @@ body .kontakty__legal p,body .kontakty__badge,body .footer__addr small,body .foo
 .header .nav.wp-block-navigation .wp-block-navigation-item__content{display:block;padding:.6rem .7rem;border-radius:8px;color:var(--ink)}
 .header .nav.wp-block-navigation .has-child .wp-block-navigation__submenu-container{width:auto;height:auto;overflow:visible;flex-direction:column;align-items:stretch;left:0;top:100%;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:.4rem;min-width:240px;z-index:60}
 .header .nav.wp-block-navigation .has-child .wp-block-navigation__submenu-container .wp-block-navigation__submenu-container{left:100%;top:0}
+/* Подменю двух последних пунктов — от правого края пункта, вложенные — влево: иначе скрытое подменю «Полезно знать»
+   у правого края шапки (меню во второй строке) уходит за экран и даёт горизонтальную прокрутку. Правило выше с left:0
+   сильнее прежнего правила для последних пунктов — поэтому здесь та же сила. */
+.header .nav.wp-block-navigation>ul>li.has-child:nth-last-child(-n+2)>.wp-block-navigation__submenu-container{left:auto;right:0}
+.header .nav.wp-block-navigation>ul>li.has-child:nth-last-child(-n+2) .wp-block-navigation__submenu-container .wp-block-navigation__submenu-container{left:auto;right:100%}
+/* Страховка: ничто из шапки не расширяет страницу по горизонтали (clip не создаёт прокрутку, подменю вниз видны) */
+.header{overflow-x:clip}
 .header .nav.wp-block-navigation .has-child:not(:hover):not(:focus-within) > .wp-block-navigation__submenu-container{opacity:0;visibility:hidden}
 .header .nav.wp-block-navigation .has-child:is(:hover,:focus-within) > .wp-block-navigation__submenu-container{opacity:1;visibility:visible}
 .header.is-compact .nav.wp-block-navigation .wp-block-navigation__container{flex-direction:column;align-items:stretch;gap:0;max-width:640px;margin-inline:auto}

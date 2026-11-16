@@ -2095,6 +2095,128 @@ test.describe( 'хаб', () => {
 } );
 
 test.describe( 'ширина', () => {
+	test( 'стили: правка шапки меняет только подменю последних пунктов', async () => {
+		test.setTimeout( 900_000 );
+		const report = {};
+		const browser = await require( '@playwright/test' ).chromium.launch( { ignoreDefaultArgs: [ '--hide-scrollbars' ] } );
+		// старое поведение: подменю от левого края (right:0 оставалось от слабого правила), без страховки
+		const OLD = '.header .nav.wp-block-navigation>ul>li.has-child:nth-last-child(-n+2)>.wp-block-navigation__submenu-container{left:0;right:0}.header .nav.wp-block-navigation>ul>li.has-child:nth-last-child(-n+2) .wp-block-navigation__submenu-container .wp-block-navigation__submenu-container{left:100%;right:auto}.header{overflow-x:visible}';
+		const PROPS = [ 'display', 'position', 'left', 'right', 'top', 'width', 'height', 'margin', 'padding', 'overflow-x', 'overflow-y', 'visibility', 'opacity', 'font-size', 'color', 'background-color', 'flex-wrap', 'order', 'transform' ];
+		const take = ( page ) =>
+			page.evaluate( ( props ) => {
+				const out = {};
+				let i = 0;
+				for ( const el of document.querySelectorAll( 'body *' ) ) {
+					const cs = getComputedStyle( el );
+					const key = i++ + ' ' + el.tagName.toLowerCase() + '.' + String( el.className ).trim().split( /\s+/ ).slice( 0, 3 ).join( '.' );
+					out[ key ] = props.map( ( p ) => p + ':' + cs.getPropertyValue( p ) ).join( ';' );
+				}
+				return out;
+			}, PROPS );
+		const pages = [ '/', '/venki/', '/kontakty/', '/poleznoe/vopros-otvet/', '/ceny/' ];
+		for ( const [ w, h, mob ] of [ [ 1280, 900 ], [ 1440, 900 ], [ 390, 844, true ], [ 360, 640, true ] ] ) {
+			for ( const narrow of mob ? [ false ] : [ false, true ] ) {
+				const ctx = await browser.newContext( { viewport: { width: w, height: h }, isMobile: !! mob, hasTouch: !! mob, baseURL: 'http://localhost:8888' } );
+				const page = await ctx.newPage();
+				page.setDefaultTimeout( 10000 );
+				if ( narrow ) {
+					await page.addInitScript( () => document.addEventListener( 'DOMContentLoaded', () => {
+						const st = document.createElement( 'style' );
+						st.textContent = '.header .nav>ul>li>a{letter-spacing:-.07em}';
+						document.head.append( st );
+					} ) );
+				}
+				for ( const path of pages ) {
+					await page.goto( path, { waitUntil: 'domcontentloaded' } ).catch( () => {} );
+					await page.waitForTimeout( 2000 );
+					const after = await take( page );
+					const swAfter = await page.evaluate( () => document.documentElement.scrollWidth - document.documentElement.clientWidth );
+					await page.addStyleTag( { content: OLD } );
+					await page.waitForTimeout( 200 );
+					const before = await take( page );
+					const swBefore = await page.evaluate( () => document.documentElement.scrollWidth - document.documentElement.clientWidth );
+					const diff = Object.keys( after ).filter( ( k ) => after[ k ] !== before[ k ] ).map( ( k ) => {
+						const a = after[ k ].split( ';' );
+						const b = before[ k ].split( ';' );
+						return k.replace( /^\d+ /, '' ) + ' → ' + a.filter( ( x, j ) => x !== b[ j ] ).join( '; ' );
+					} );
+					report[ `${ w }${ narrow ? ' две строки' : '' } ${ path }` ] = {
+						mode: await page.evaluate( () => document.getElementById( 'header' )?.className ),
+						overflowBefore: swBefore,
+						overflowAfter: swAfter,
+						changed: [ ...new Set( diff ) ].slice( 0, 12 ),
+						changedCount: diff.length,
+					};
+					log( 'styles', report );
+				}
+				await ctx.close();
+			}
+		}
+		await browser.close();
+		log( 'styles', report );
+	} );
+
+	test( 'ширина ПК: шапка в две строки (как со шрифтом Windows)', async () => {
+		test.setTimeout( 900_000 );
+		const report = {};
+		const browser = await require( '@playwright/test' ).chromium.launch( { ignoreDefaultArgs: [ '--hide-scrollbars' ] } );
+		for ( const w of [ 1229, 1280, 1366, 1440, 1536, 1600 ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: 800 }, baseURL: 'http://localhost:8888' } );
+			const page = await ctx.newPage();
+			page.setDefaultTimeout( 10000 );
+			page.setDefaultNavigationTimeout( 45000 );
+			// Segoe UI уже шрифта Linux: сужаем пункты меню, чтобы скрипт шапки выбрал две строки, как у владельца
+			await page.addInitScript( () => {
+				document.addEventListener( 'DOMContentLoaded', () => {
+					const st = document.createElement( 'style' );
+					st.textContent = '.header .nav>ul>li>a{letter-spacing:-.07em}';
+					document.head.append( st );
+				} );
+			} );
+			for ( const path of [ '/venki/', '/', '/kontakty/' ] ) {
+				await page.goto( path, { waitUntil: 'domcontentloaded' } ).catch( () => {} );
+				await page.waitForTimeout( 2000 );
+				const r = await page.evaluate( () => {
+					const de = document.documentElement;
+					const h = document.getElementById( 'header' );
+					const last = document.querySelector( '.header .nav>ul>li.has-child:last-child>.wp-block-navigation__submenu-container' );
+					const lr = last?.getBoundingClientRect();
+					return {
+						mode: h.classList.contains( 'is-compact' ) ? 'compact' : h.classList.contains( 'is-tworow' ) ? 'two rows' : 'one row',
+						sw: de.scrollWidth,
+						cw: de.clientWidth,
+						lastSub: lr ? Math.round( lr.left ) + '…' + Math.round( lr.right ) : '-',
+					};
+				} );
+				report[ w + ' ' + path ] = r;
+				log( 'header2', report );
+				if ( path === '/venki/' ) {
+					await page.locator( '.header .nav>ul>li.has-child' ).last().hover().catch( () => {} );
+					await page.waitForTimeout( 500 );
+					await page.screenshot( { path: `${ DIR }/hdr2-${ w }.png`, clip: { x: 0, y: 0, width: w, height: 520 } } );
+				}
+			}
+			await ctx.close();
+		}
+		// Телефон: меню бургера открывается целиком
+		const ctx = await browser.newContext( { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, baseURL: 'http://localhost:8888' } );
+		const ph = await ctx.newPage();
+		ph.setDefaultTimeout( 10000 );
+		await ph.goto( '/venki/', { waitUntil: 'domcontentloaded' } ).catch( () => {} );
+		await ph.waitForTimeout( 2000 );
+		await ph.locator( '.consent button' ).first().click().catch( () => {} );
+		await ph.locator( '#burger' ).click().catch( ( e ) => ( report.burger = e.message ) );
+		await ph.waitForTimeout( 600 );
+		report.phoneMenu = await ph.evaluate( () => {
+			const n = document.querySelector( '.header .nav' ).getBoundingClientRect();
+			return Math.round( n.left ) + '…' + Math.round( n.right ) + ' h=' + Math.round( n.height ) + ' sw=' + document.documentElement.scrollWidth;
+		} );
+		await ph.screenshot( { path: `${ DIR }/hdr2-phone-menu.png` } );
+		await ctx.close();
+		await browser.close();
+		log( 'header2', report );
+	} );
+
 	test( 'ширина ПК: горизонтальная прокрутка', async () => {
 		test.setTimeout( 900_000 );
 		const report = {};
