@@ -184,21 +184,20 @@ add_shortcode(
 			. '</article>';
 		}
 		// вопросы с остальных страниц сайта — тоже находятся поиском.
-		if ( ! memorial_plugin_sc_no( $a['vse'] ) && function_exists( 'memorial_plugin_faq_all' ) ) {
-			foreach ( memorial_plugin_faq_all() as $g ) {
-				if ( isset( $seen[ $g['id'] ] ) || get_the_ID() === $g['id'] ) {
+		if ( ! memorial_plugin_sc_no( $a['vse'] ) && function_exists( 'memorial_plugin_faq_search_items' ) ) {
+			// Вопросы страниц и свои разделы «Вопрос–ответ» — со ссылкой прямо на вопрос.
+			foreach ( memorial_plugin_faq_search_items() as $it ) {
+				if ( isset( $seen[ $it['page'] ] ) || ( $it['page'] && get_the_ID() === $it['page'] ) ) {
 					continue;
 				}
-				foreach ( $g['qs'] as [$q, $ans] ) {
-					$idx[] = array(
-						'q' => $q,
-						't' => $q . ' ' . mb_substr( trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( memorial_plugin_guide_nosc( $ans ) ) ) ), 0, 300 ),
-						'u' => $g['url'] . '#' . memorial_plugin_q_anchor( $q ),
-						'c' => -1,
-						'g' => $g['title'],
-						'k' => 'q',
-					);
-				}
+				$idx[] = array(
+					'q' => $it['q'],
+					't' => $it['q'] . ' ' . mb_substr( trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( memorial_plugin_guide_nosc( $it['t'] ) ) ) ), 0, 300 ),
+					'u' => $it['u'],
+					'c' => -1,
+					'g' => $it['g'],
+					'k' => 'q',
+				);
 			}
 		}
 		$pop = trim( $a['chasto'] ) !== '' ? explode( ',', $a['chasto'] ) : ( function_exists( 'memorial_plugin_sq_popular' ) ? memorial_plugin_sq_popular( array( 'документы', 'пособие', 'кладбище', 'стоимость', 'морг' ), 5 ) : array( 'документы', 'пособие', 'кладбище', 'стоимость', 'морг' ) );

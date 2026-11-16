@@ -1995,3 +1995,157 @@ test.describe( 'анимация', () => {
 		log( 'import', report );
 	} );
 } );
+
+test.describe( 'хаб', () => {
+	test( 'хаб вопросов: разделы, свой раздел, FAQPage, редактор, llms.txt', async ( { page, browser } ) => {
+		test.setTimeout( 900_000 );
+		page.setDefaultTimeout( 60000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		const hub = PAGES.find( ( x ) => /Вопрос/.test( x.post_title ) && /ответ/.test( x.post_title ) );
+		report.hub = hub && hub.ID + ' ' + hub.post_title;
+		const hubPath = new URL( hub.url ).pathname;
+		// Свой раздел на странице «Вопрос–ответ»: H2 и два вопроса.
+		const det = ( q, a ) => `<!-- wp:details -->\n<details class="wp-block-details"><summary>${ q }</summary><!-- wp:paragraph -->\n<p>${ a }</p>\n<!-- /wp:paragraph --></details>\n<!-- /wp:details -->\n`;
+		report.saved = await page.evaluate( async ( [ id, add ] ) => {
+			const p = await window.wp.apiFetch( { path: '/wp/v2/pages/' + id + '?context=edit' } );
+			const r = await window.wp.apiFetch( { path: '/wp/v2/pages/' + id, method: 'POST', data: { content: p.content.raw + add, meta: { _mem_faq_sections: JSON.stringify( { order: [ 'h:oplata' ], items: {} } ) } } } );
+			return r.meta?._mem_faq_sections;
+		}, [ hub.ID, '\n<!-- wp:heading {"anchor":"oplata"} -->\n<h2 class="wp-block-heading" id="oplata">Оплата</h2>\n<!-- /wp:heading -->\n' + det( 'Можно ли оплатить картой?', 'Да, картой, наличными и переводом.' ) + det( 'Нужна ли предоплата?', 'Предоплата не нужна, оплата после оказания услуг.' ) ] );
+		for ( const [ w, h ] of [ [ 1440, 900 ], [ 390, 844 ], [ 360, 640 ] ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: h }, isMobile: w < 500, hasTouch: w < 500, baseURL: 'http://localhost:8888' } );
+			const ph = await ctx.newPage();
+			const e2 = errorsOf( ph );
+			await ph.goto( hubPath );
+			await ph.waitForTimeout( 2000 );
+			await ph.locator( '.consent button' ).first().click().catch( () => {} );
+			report[ 'hub ' + w ] = await ph.evaluate( () => ( {
+				chips: [ ...document.querySelectorAll( '.mfaq__toc .chip' ) ].map( ( c ) => c.textContent.trim() ),
+				sections: [ ...document.querySelectorAll( '.mfaq__group' ) ].map( ( g ) => g.id + ' | ' + g.querySelector( 'h2' ).textContent ),
+				oldIds: document.querySelectorAll( '[id^="faq-"]' ).length,
+				ownTwice: document.body.innerHTML.split( 'Можно ли оплатить картой?' ).length - 1,
+				readMore: document.querySelectorAll( '.mfaq__qmore a' ).length,
+				ownCount: document.querySelectorAll( '#oplata details' ).length,
+				// ответы длиннее первого абзаца (у них должна быть «Подробнее»)
+				longer: [ ...document.querySelectorAll( '.mfaq details[data-t]' ) ].filter( ( d ) => d.dataset.t.length > [ ...d.children ].filter( ( c ) => c.tagName !== 'SUMMARY' && ! c.classList.contains( 'mfaq__qmore' ) ).map( ( c ) => c.textContent ).join( ' ' ).trim().length + 10 ).length,
+				firstMore: document.querySelector( '.mfaq__qmore a' )?.getAttribute( 'href' ),
+				faqpage: [ ...document.querySelectorAll( 'script[type="application/ld+json"]' ) ].map( ( x ) => x.textContent ).filter( ( t ) => t.includes( 'FAQPage' ) ).map( ( t ) => JSON.parse( t ).mainEntity.map( ( q ) => q.name ) ),
+				sw: document.documentElement.scrollWidth,
+				cw: document.documentElement.clientWidth,
+			} ) );
+			await ph.screenshot( { path: `${ DIR }/hub-${ w }.png` } );
+			if ( w === 1440 ) {
+				// Поиск находит свой вопрос и полный текст ответа раздела страницы.
+				await ph.fill( '#mfaq-q', 'предоплата' );
+				await ph.waitForTimeout( 800 );
+				report.search = await ph.evaluate( () => ( {
+					none: ! document.querySelector( '[data-msearch-none]' )?.hidden,
+					shown: [ ...document.querySelectorAll( '.mfaq details' ) ].filter( ( d ) => d.getClientRects().length ).map( ( d ) => d.querySelector( 'summary' ).textContent ).slice( 0, 5 ),
+				} ) );
+				await ph.screenshot( { path: `${ DIR }/hub-search.png` } );
+				// «Подробнее» ведёт к вопросу на его странице, и он раскрыт.
+				const href = report[ 'hub 1440' ].firstMore;
+				if ( href ) {
+					await ph.goto( href );
+					await ph.waitForTimeout( 1500 );
+					report.readMoreTarget = await ph.evaluate( () => {
+						const el = document.getElementById( decodeURIComponent( location.hash.slice( 1 ) ) );
+						return el ? el.tagName + ' open=' + el.open : 'нет элемента ' + location.hash;
+					} );
+					await ph.screenshot( { path: `${ DIR }/hub-readmore.png` } );
+					report.sourceFaqpage = await ph.evaluate( () => [ ...document.querySelectorAll( 'script[type="application/ld+json"]' ) ].filter( ( x ) => x.textContent.includes( 'FAQPage' ) ).length );
+				}
+			}
+			report[ 'errors ' + w ] = e2;
+			await ctx.close();
+		}
+		// Окно «Разделы вопросов» в редакторе страницы.
+		await page.goto( '/wp-admin/post.php?post=' + hub.ID + '&action=edit' );
+		await page.waitForTimeout( 8000 );
+		report.panels = await page.locator( '.editor-sidebar .components-panel__body-title' ).allInnerTexts().catch( ( e ) => e.message );
+		await page.locator( '.components-modal__header button[aria-label]' ).first().click().catch( () => {} );
+		const panel = page.getByRole( 'button', { name: /Разделы вопросов|Question sections/ } ).first();
+		await panel.click().catch( ( e ) => ( report.panel = e.message ) );
+		await page.waitForTimeout( 500 );
+		await page.getByRole( 'button', { name: /Настроить разделы|Set up the sections/ } ).click().catch( ( e ) => ( report.setup = e.message ) );
+		await page.waitForTimeout( 3000 );
+		report.modal = await page.locator( '.memorial-plugin-faq-sections' ).innerText().catch( ( e ) => e.message );
+		report.modal = String( report.modal ).slice( 0, 1200 );
+		await page.screenshot( { path: `${ DIR }/hub-editor.png` } );
+		// llms.txt: сначала текст из WordPress, после WP-Cron — файл в корне.
+		const llms1 = await page.request.get( '/llms.txt' );
+		report.llms = { status: llms1.status(), type: llms1.headers()[ 'content-type' ], head: ( await llms1.text() ).split( '\n' ).slice( 0, 60 ).join( '\n' ) };
+		await page.request.get( '/wp-cron.php?doing_wp_cron=' + Date.now() ).catch( () => {} );
+		await page.waitForTimeout( 70000 );
+		await page.request.get( '/wp-cron.php?doing_wp_cron=' + Date.now() ).catch( () => {} );
+		await page.waitForTimeout( 5000 );
+		const llms2 = await page.request.get( '/llms.txt' );
+		report.llms2 = { status: llms2.status(), type: llms2.headers()[ 'content-type' ], len: ( await llms2.text() ).length };
+		report.errors = errs;
+		log( 'hub', report );
+	} );
+} );
+
+test.describe( 'ширина', () => {
+	test( 'ширина ПК: горизонтальная прокрутка', async () => {
+		test.setTimeout( 900_000 );
+		const report = {};
+		// Настоящие полосы прокрутки, как в Windows: по умолчанию headless Chromium их прячет, и 100vw не вылезает.
+		const browser = await require( '@playwright/test' ).chromium.launch( { ignoreDefaultArgs: [ '--hide-scrollbars' ] } );
+		const paths = [ '/venki/', '/pamyatniki/', '/', '/poleznoe/vopros-otvet/', '/kontakty/', '/ceny/', '/ritualnye-uslugi/' ];
+		// 1229 и 1536 — ноутбуки Windows с масштабом 125 %
+		for ( const w of [ 1024, 1100, 1229, 1280, 1366, 1440, 1536, 1600, 1920 ] ) {
+			const ctx = await browser.newContext( { viewport: { width: w, height: 900 }, baseURL: 'http://localhost:8888' } );
+			const page = await ctx.newPage();
+			for ( const path of paths ) {
+				await page.goto( path, { waitUntil: 'load' } ).catch( () => {} );
+				await page.waitForTimeout( 400 );
+				const r = await page.evaluate( () => {
+					const de = document.documentElement;
+					const cw = de.clientWidth;
+					// Windows: полоса прокрутки ~17 px съедает ширину, а 100vw её не учитывает
+					const win = cw === window.innerWidth ? cw - 17 : cw;
+					const path = ( el ) => {
+						const out = [];
+						for ( let e = el; e && e !== document.body && out.length < 4; e = e.parentElement ) {
+							out.unshift( e.tagName.toLowerCase() + ( e.id ? '#' + e.id : '' ) + ( e.className && typeof e.className === 'string' ? '.' + e.className.trim().split( /\s+/ ).slice( 0, 2 ).join( '.' ) : '' ) );
+						}
+						return out.join( ' > ' );
+					};
+					const over = [];
+					const overWin = [];
+					for ( const el of document.body.querySelectorAll( '*' ) ) {
+						const cs = getComputedStyle( el );
+						if ( cs.position === 'fixed' || cs.display === 'none' || el.closest( 'dialog:not([open])' ) ) {
+							continue;
+						}
+						const rc = el.getBoundingClientRect();
+						if ( ! rc.width ) {
+							continue;
+						}
+						if ( rc.right > cw + 0.5 ) {
+							over.push( path( el ) + ' right=' + Math.round( rc.right ) + ' w=' + Math.round( rc.width ) );
+						} else if ( rc.right > win + 0.5 ) {
+							overWin.push( path( el ) + ' right=' + Math.round( rc.right ) + ' w=' + Math.round( rc.width ) + ' css-w=' + cs.width );
+						}
+					}
+					return { sw: de.scrollWidth, cw, iw: window.innerWidth, over: over.slice( 0, 6 ), overWin: overWin.slice( 0, 6 ) };
+				} ).catch( ( e ) => ( { error: e.message } ) );
+				if ( r.error || r.sw > r.cw || path === '/venki/' ) {
+					report[ w + ' ' + path ] = r;
+				}
+			}
+			await ctx.close();
+		}
+		await browser.close();
+		log( 'width', report );
+	} );
+} );

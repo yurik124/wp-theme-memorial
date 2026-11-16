@@ -170,6 +170,7 @@ $memorial_plugin_modules = array(
 	'seo/seo.php',
 	'seo/seo-plugins.php',
 	'seo/metrika.php',
+	'seo/llms.php',
 	'legal/legal.php',
 	'leads/callback.php',
 	'leads/lead-mail.php',
@@ -261,7 +262,7 @@ add_action(
 register_deactivation_hook(
 	__FILE__,
 	function () {
-		foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron', 'memorial_plugin_card_sizes' ) as $h ) {
+		foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron', 'memorial_plugin_card_sizes', 'memorial_plugin_llms' ) as $h ) {
 			wp_clear_scheduled_hook( $h );
 		}
 	}
