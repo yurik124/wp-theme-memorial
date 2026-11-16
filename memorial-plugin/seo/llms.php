@@ -58,7 +58,7 @@ function memorial_plugin_llms_build() {
 	$desc = memorial_plugin_llms_text( get_bloginfo( 'description' ) );
 	$c    = function_exists( 'memorial_plugin_contacts' ) ? memorial_plugin_contacts() : array();
 	$out  = array( '# ' . ( '' !== $name ? $name : wp_parse_url( home_url(), PHP_URL_HOST ) ), '' );
-	$out[] = '> ' . ( '' !== $desc ? $desc . '. ' : '' ) . __( 'Funeral services company in Belgorod: arranging funerals and cremation, transportation of the deceased, mourning hall, memorial meals, funeral goods, monuments and grave improvement.', 'memorial-plugin' );
+	$out[] = '> ' . ( '' !== $desc ? rtrim( $desc, '. ' ) : __( 'Funeral services company', 'memorial-plugin' ) ) . '. ' . __( 'Belgorod: arranging funerals and cremation, transportation of the deceased, mourning hall, memorial meals, funeral goods, monuments and grave improvement.', 'memorial-plugin' );
 	$out[] = '';
 
 	// Контакты.

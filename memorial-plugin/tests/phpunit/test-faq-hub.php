@@ -60,7 +60,7 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 			array(
 				'post_type'    => 'page',
 				'post_title'   => 'Вопрос–ответ',
-				'post_content' => "<!-- wp:memorial-plugin/faq /-->\n" . $this->h2( 'Оплата', 'oplata' ) . $this->details( 'Можно ли картой?', array( 'Да, картой и переводом.' ) )
+				'post_content' => "<!-- wp:memorial-plugin/faq /-->\n" . $this->h2( 'Оплата', 'oplata' ) . $this->details( 'Можно ли картой?', array( 'Да, картой и переводом.' ) ) . "\n" . $this->details( 'Нужна ли предоплата?', array( 'Нет.' ) )
 					. "<!-- wp:paragraph -->\n<p>Просто текст.</p>\n<!-- /wp:paragraph -->\n",
 			)
 		);
@@ -76,6 +76,8 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		$this->assertSame( 'Кремация в Белгороде', str_replace( "\u{00A0}", ' ', $s[0]['label'] ) );
 		$this->assertSame( 'oplata', $s[1]['anchor'] );
 		$this->assertSame( 'cena-kremacii', $s[0]['qs'][0][2] );
+		// Both questions under the heading are in the own section (the first section has the number 0).
+		$this->assertCount( 2, $s[1]['qs'] );
 
 		update_post_meta(
 			$hub,
@@ -119,6 +121,7 @@ class Test_Memorial_Plugin_Faq_Hub extends WP_UnitTestCase {
 		$this->assertStringContainsString( get_permalink( $svc ) . '#cena-kremacii', $html );
 		// The own section is in the block, not twice; other text of the page stays.
 		$this->assertSame( 1, substr_count( $html, 'Можно ли картой?' ) );
+		$this->assertSame( 1, substr_count( $html, 'Нужна ли предоплата?' ) );
 		$this->assertStringContainsString( 'id="oplata"', $html );
 		$this->assertStringContainsString( 'Просто текст.', $html );
 		$this->assertStringNotContainsString( 'faq-' . $svc, $html );

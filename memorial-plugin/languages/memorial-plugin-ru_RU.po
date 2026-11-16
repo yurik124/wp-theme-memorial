@@ -7804,3 +7804,9 @@ msgstr "свой раздел этой страницы, вопросов: %d"
 
 msgid "page “%1$s”, questions: %2$d"
 msgstr "страница «%1$s», вопросов: %2$d"
+
+msgid "Belgorod: arranging funerals and cremation, transportation of the deceased, mourning hall, memorial meals, funeral goods, monuments and grave improvement."
+msgstr "Белгород: организация похорон и кремации, перевозка умерших, траурный зал, поминальные обеды, ритуальные товары, памятники и благоустройство захоронений."
+
+msgid "Funeral services company"
+msgstr "Ритуальная компания"

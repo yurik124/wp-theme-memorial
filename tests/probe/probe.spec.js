@@ -2033,6 +2033,9 @@ test.describe( 'хаб', () => {
 				oldIds: document.querySelectorAll( '[id^="faq-"]' ).length,
 				ownTwice: document.body.innerHTML.split( 'Можно ли оплатить картой?' ).length - 1,
 				readMore: document.querySelectorAll( '.mfaq__qmore a' ).length,
+				ownCount: document.querySelectorAll( '#oplata details' ).length,
+				// ответы длиннее первого абзаца (у них должна быть «Подробнее»)
+				longer: [ ...document.querySelectorAll( '.mfaq details[data-t]' ) ].filter( ( d ) => d.dataset.t.length > [ ...d.children ].filter( ( c ) => c.tagName !== 'SUMMARY' && ! c.classList.contains( 'mfaq__qmore' ) ).map( ( c ) => c.textContent ).join( ' ' ).trim().length + 10 ).length,
 				firstMore: document.querySelector( '.mfaq__qmore a' )?.getAttribute( 'href' ),
 				faqpage: [ ...document.querySelectorAll( 'script[type="application/ld+json"]' ) ].map( ( x ) => x.textContent ).filter( ( t ) => t.includes( 'FAQPage' ) ).map( ( t ) => JSON.parse( t ).mainEntity.map( ( q ) => q.name ) ),
 				sw: document.documentElement.scrollWidth,
@@ -2043,7 +2046,10 @@ test.describe( 'хаб', () => {
 				// Поиск находит свой вопрос и полный текст ответа раздела страницы.
 				await ph.fill( '#mfaq-q', 'предоплата' );
 				await ph.waitForTimeout( 800 );
-				report.search = await ph.evaluate( () => [ ...document.querySelectorAll( '.mfaq details' ) ].filter( ( d ) => ! d.hidden ).map( ( d ) => d.querySelector( 'summary' ).textContent ) );
+				report.search = await ph.evaluate( () => ( {
+					none: ! document.querySelector( '[data-msearch-none]' )?.hidden,
+					shown: [ ...document.querySelectorAll( '.mfaq details' ) ].filter( ( d ) => d.getClientRects().length ).map( ( d ) => d.querySelector( 'summary' ).textContent ).slice( 0, 5 ),
+				} ) );
 				await ph.screenshot( { path: `${ DIR }/hub-search.png` } );
 				// «Подробнее» ведёт к вопросу на его странице, и он раскрыт.
 				const href = report[ 'hub 1440' ].firstMore;
@@ -2063,7 +2069,8 @@ test.describe( 'хаб', () => {
 		}
 		// Окно «Разделы вопросов» в редакторе страницы.
 		await page.goto( '/wp-admin/post.php?post=' + hub.ID + '&action=edit' );
-		await page.waitForTimeout( 6000 );
+		await page.waitForTimeout( 8000 );
+		report.panels = await page.locator( '.editor-sidebar .components-panel__body-title' ).allInnerTexts().catch( ( e ) => e.message );
 		await page.locator( '.components-modal__header button[aria-label]' ).first().click().catch( () => {} );
 		const panel = page.getByRole( 'button', { name: /Разделы вопросов|Question sections/ } ).first();
 		await panel.click().catch( ( e ) => ( report.panel = e.message ) );
@@ -2093,8 +2100,9 @@ test.describe( 'ширина', () => {
 		const report = {};
 		// Настоящие полосы прокрутки, как в Windows: по умолчанию headless Chromium их прячет, и 100vw не вылезает.
 		const browser = await require( '@playwright/test' ).chromium.launch( { ignoreDefaultArgs: [ '--hide-scrollbars' ] } );
-		const paths = [ ...new Set( PAGES.map( ( p ) => new URL( p.url ).pathname ) ) ].slice( 0, 60 );
-		for ( const w of [ 1280, 1366, 1440, 1920 ] ) {
+		const paths = [ '/venki/', '/pamyatniki/', '/', '/poleznoe/vopros-otvet/', '/kontakty/', '/ceny/', '/ritualnye-uslugi/' ];
+		// 1229 и 1536 — ноутбуки Windows с масштабом 125 %
+		for ( const w of [ 1024, 1100, 1229, 1280, 1366, 1440, 1536, 1600, 1920 ] ) {
 			const ctx = await browser.newContext( { viewport: { width: w, height: 900 }, baseURL: 'http://localhost:8888' } );
 			const page = await ctx.newPage();
 			for ( const path of paths ) {
@@ -2131,7 +2139,7 @@ test.describe( 'ширина', () => {
 					}
 					return { sw: de.scrollWidth, cw, iw: window.innerWidth, over: over.slice( 0, 6 ), overWin: overWin.slice( 0, 6 ) };
 				} ).catch( ( e ) => ( { error: e.message } ) );
-				if ( r.error || r.sw > r.cw ) {
+				if ( r.error || r.sw > r.cw || path === '/venki/' ) {
 					report[ w + ' ' + path ] = r;
 				}
 			}

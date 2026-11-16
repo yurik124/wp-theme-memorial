@@ -188,7 +188,7 @@ function memorial_plugin_faq_own( $content ) {
 				$head = $b;
 				continue;
 			}
-			if ( 'core/details' === $name && ( $head || $cur ) ) {
+			if ( 'core/details' === $name && ( $head || null !== $cur ) ) {
 				$qa = memorial_plugin_faq_details( $b );
 				if ( ! $qa ) {
 					continue;
