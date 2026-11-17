@@ -40,9 +40,10 @@ class Test_Memorial_Plugin_Seo_Addresses extends WP_UnitTestCase {
 
 	public function test_links_are_replaced_only_on_this_site() {
 		$map  = array( '/ogradki-2/' => '/ogradki/' );
-		$text = '<a href="/ogradki-2/">a</a> <a href="http://example.org/ogradki-2/">b</a> <a href="https://other.ru/ogradki-2/">c</a> "url":"https://memorialbel.ru/ogradki-2/"';
+		$site = untrailingslashit( home_url() );
+		$text = '<a href="/ogradki-2/">a</a> <a href="' . $site . '/ogradki-2/">b</a> <a href="https://other.ru/ogradki-2/">c</a> "url":"https://memorialbel.ru/ogradki-2/"';
 		$this->assertSame(
-			'<a href="/ogradki/">a</a> <a href="http://example.org/ogradki/">b</a> <a href="https://other.ru/ogradki-2/">c</a> "url":"https://memorialbel.ru/ogradki/"',
+			'<a href="/ogradki/">a</a> <a href="' . $site . '/ogradki/">b</a> <a href="https://other.ru/ogradki-2/">c</a> "url":"https://memorialbel.ru/ogradki/"',
 			memorial_plugin_seo_1_links( $text, $map )
 		);
 		// A nested address is not touched: only /posobie-na-pogrebenie/ at the top level is broken.

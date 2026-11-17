@@ -116,7 +116,7 @@ function memorial_plugin_seo_1_hosts() {
  */
 function memorial_plugin_seo_1_links( $text, array $map ) {
 	foreach ( $map as $old => $new ) {
-		$text = (string) preg_replace( '~((?:https?:)?//(?:' . memorial_plugin_seo_1_hosts() . ')|["\'(])' . preg_quote( $old, '~' ) . '~u', '$1' . $new, $text );
+		$text = (string) preg_replace( '~((?:https?:)?//(?:' . memorial_plugin_seo_1_hosts() . ')(?::\d+)?|["\'(])' . preg_quote( $old, '~' ) . '~u', '$1' . $new, $text );
 	}
 	return $text;
 }
