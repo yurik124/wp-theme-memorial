@@ -2652,3 +2652,107 @@ test.describe( 'адреса и SEO', () => {
 		save();
 	} );
 } );
+
+test.describe( 'условия и отзывы', () => {
+	test( 'условия и отзывы: оплата, доставка, гарантии, отзывы страниц, шапка у окна товара', async ( { page, browser } ) => {
+		test.setTimeout( 900_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = { pages: {}, header: {}, errs: [] };
+		const save = () => fs.writeFileSync( `${ DIR }/log-terms.json`, JSON.stringify( report, null, 1 ) );
+		const errs = errorsOf( page );
+		const paths = [ '/venki/', '/groby/', '/pamyatniki/', '/ogradki/', '/ceny/', '/kontakty/', '/ritualnye-uslugi/', '/ritualnye-uslugi/kremacziya/', '/ritualnye-uslugi/traurnyj-zal/', '/ritualnye-uslugi/gruz-200/', '/', '/poleznoe/vopros-otvet/' ];
+		for ( const [ w, h, name ] of [ [ 1440, 900, 'pc' ], [ 390, 844, 'phone' ], [ 360, 780, 'phone360' ] ] ) {
+			await page.setViewportSize( { width: w, height: h } );
+			for ( const p of paths ) {
+				await page.goto( p, { waitUntil: 'networkidle' } );
+				await page.addStyleTag( { content: NO_FLOAT } );
+				const info = await page.evaluate( () => ( {
+					title: document.title,
+					cards: [ ...document.querySelectorAll( '.mterms' ) ].map( ( c ) => [ c.className, c.querySelector( '.mterms__title' )?.textContent.trim(), c.querySelectorAll( 'li' ).length, Math.round( c.getBoundingClientRect().width ) ] ),
+					reviews: document.querySelectorAll( '.rwo' ).length,
+					reviewCards: document.querySelectorAll( '.rwo__card' ).length,
+					reviewTexts: [ ...document.querySelectorAll( '.rwo__card .rwo__text' ) ].slice( 0, 3 ).map( ( t ) => t.textContent.trim().slice( 0, 80 ) ),
+					minFont: Math.min( ...[ ...document.querySelectorAll( '.mterms li, .mterms p' ) ].map( ( e ) => parseFloat( getComputedStyle( e ).fontSize ) ), 99 ),
+					faq: [ ...document.querySelectorAll( 'summary' ) ].map( ( s ) => s.textContent.trim() ).filter( ( t ) => /оплат|доставк|гаранти/i.test( t ) ),
+					overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+				} ) );
+				report.pages[ name + ' ' + p ] = info;
+				const first = page.locator( '.mterms' ).first();
+				if ( await first.count() ) {
+					await first.scrollIntoViewIfNeeded();
+					await page.waitForTimeout( 300 );
+					const box = page.locator( '.mterms' );
+					const n = await box.count();
+					for ( let i = 0; i < n; i++ ) {
+						await box.nth( i ).screenshot( { path: `${ DIR }/terms-${ name }-${ p.replace( /\W+/g, '_' ) }-${ i }.png` } ).catch( () => {} );
+					}
+				}
+				if ( [ '/venki/', '/pamyatniki/' ].includes( p ) && name !== 'phone360' ) {
+					const rwo = page.locator( '.rwo' ).first();
+					if ( await rwo.count() ) {
+						await rwo.scrollIntoViewIfNeeded();
+						await page.waitForTimeout( 300 );
+						await shot( page, `terms-reviews-${ name }-${ p.replace( /\W+/g, '_' ) }` );
+					}
+				}
+				save();
+			}
+			// Шапка при открытом окне товара: страница прокручена вниз, открыто окно.
+			await page.goto( '/venki/', { waitUntil: 'networkidle' } );
+			await page.addStyleTag( { content: NO_FLOAT } );
+			const link = page.locator( 'a[data-pv]' ).nth( 3 );
+			if ( await link.count() ) {
+				await link.scrollIntoViewIfNeeded();
+				await page.mouse.wheel( 0, 400 );
+				await page.waitForTimeout( 500 );
+				const before = await page.evaluate( () => ( { y: window.scrollY, header: document.querySelector( '#header' )?.getBoundingClientRect().toJSON(), cw: document.documentElement.clientWidth } ) );
+				await link.click();
+				await page.waitForTimeout( 900 );
+				const open = await page.evaluate( () => ( { y: window.scrollY, header: document.querySelector( '#header' )?.getBoundingClientRect().toJSON(), cw: document.documentElement.clientWidth, dialog: !! document.querySelector( 'dialog.pv[open]' ) } ) );
+				await shot( page, `terms-pv-open-${ name }` );
+				await page.keyboard.press( 'Escape' );
+				await page.waitForTimeout( 600 );
+				const after = await page.evaluate( () => ( { y: window.scrollY, header: document.querySelector( '#header' )?.getBoundingClientRect().toJSON(), cw: document.documentElement.clientWidth } ) );
+				report.header[ name ] = { before, open, after };
+				save();
+			}
+		}
+		// robots.txt и список отзывов для выбора в редакторе.
+		report.robots = await ( await page.request.get( '/robots.txt' ) ).text();
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		const venki = PAGES.find( ( x ) => x.post_name === 'venki' );
+		await page.goto( '/wp-admin/post.php?action=edit&post=' + venki.ID );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch && window.wp.blocks, null, { timeout: 90000 } );
+		await page.waitForTimeout( 4000 );
+		report.editor = await page.evaluate( async () => {
+			const pick = await window.wp.apiFetch( { path: '/memorial-plugin/v1/reviews/pick' } ).catch( ( e ) => ( { error: e.message } ) );
+			const vars = ( window.wp.blocks.getBlockVariations( 'core/group' ) || [] ).filter( ( v ) => /^memorial-/.test( v.name ) ).map( ( v ) => [ v.name, v.title, ( v.innerBlocks || [] ).length ] );
+			const blocks = window.wp.data.select( 'core/block-editor' ).getBlocks().map( ( b ) => b.name + ( b.attributes.className ? '.' + b.attributes.className : '' ) );
+			return { pickCount: Array.isArray( pick ) ? pick.length : pick, pickFirst: Array.isArray( pick ) ? pick.slice( 0, 2 ) : null, vars, blocks, payment: !! window.wp.blocks.getBlockType( 'memorial-plugin/payment' ) };
+		} );
+		await shot( page, 'terms-editor' );
+		// Блок отзывов выбран — настройки справа (слова, «Выбрать отзывы», книга отзывов).
+		await page.evaluate( () => {
+			const b = window.wp.data.select( 'core/block-editor' ).getBlocks().find( ( x ) => x.name === 'memorial-plugin/rewio-reviews' );
+			if ( b ) {
+				window.wp.data.dispatch( 'core/block-editor' ).selectBlock( b.clientId );
+			}
+		} );
+		await page.waitForTimeout( 1500 );
+		await shot( page, 'terms-editor-reviews' );
+		const choose = page.getByRole( 'button', { name: /Выбрать отзывы|Choose reviews/ } );
+		if ( await choose.count() ) {
+			await choose.first().click();
+			await page.waitForTimeout( 2500 );
+			await shot( page, 'terms-editor-reviews-modal' );
+			report.modal = await page.evaluate( () => document.querySelectorAll( '.memorial-plugin-reviews-picker__list input[type=checkbox]' ).length );
+		}
+		report.errs = errs;
+		save();
+	} );
+} );

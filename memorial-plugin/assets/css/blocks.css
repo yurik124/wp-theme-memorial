@@ -1092,3 +1092,15 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv.is-closing,.lb.is-closing,.pv.is-closing::backdrop,.lb.is-closing::backdrop{opacity:0;transition:opacity .18s ease-in}
 .pv.is-closing .pv__box,.lb.is-closing figure{transform:translateY(10px) scale(.97);transition:transform .18s ease-in}
 @media (prefers-reduced-motion:reduce){.pv[open],.lb[open],.pv[open]::backdrop,.lb[open]::backdrop,.pv[open] .pv__box,.lb[open] figure{animation:none}.pv.is-closing,.lb.is-closing,.pv.is-closing::backdrop,.lb.is-closing::backdrop,.pv.is-closing .pv__box,.lb.is-closing figure{transition:none}}
+
+/* ---------- Оплата, доставка и выезд, гарантии (prices/terms.php): белая карточка, иконка в круге, заголовок, список ---------- */
+.mterms{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.4rem 1.15rem;align-items:start;background:#fff;color:var(--memorial-plugin-ink);border:1px solid var(--memorial-plugin-line);border-radius:var(--memorial-plugin-r);box-shadow:var(--memorial-plugin-sh);padding:1.35rem 1.5rem;margin:1.75rem 0}
+.mterms>.mterms__ico{margin:0}
+.mterms__body{min-width:0}
+.mterms .mterms__title{margin:.7rem 0 .55rem;font-family:var(--memorial-plugin-lora);font-size:1.3rem;line-height:1.3}
+.mterms .mterms__list{list-style:none;margin:0;padding:0}
+.mterms .mterms__list>li{position:relative;padding-left:1.7rem;margin:0 0 .45em;line-height:1.5}
+.mterms .mterms__list>li:last-child{margin-bottom:0}
+.mterms .mterms__list>li::before{content:"";position:absolute;left:.1rem;top:.5em;width:.8rem;height:.42rem;border:solid var(--memorial-plugin-gold);border-width:0 0 2px 2px;transform:rotate(-45deg)}
+.mterms__note{margin:.75rem 0 0;color:var(--memorial-plugin-mute)}
+@media (max-width:600px){.mterms{gap:.2rem .9rem;padding:1.1rem 1.1rem}.mterms>.mterms__ico{width:44px;height:44px}.mterms .mterms__title{margin-top:.45rem;font-size:1.2rem}}

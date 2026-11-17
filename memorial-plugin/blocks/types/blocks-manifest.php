@@ -1830,6 +1830,60 @@ return array (
       'viewportWidth' => 1000,
     ),
   ),
+  'payment' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/payment',
+    'title' => 'Payment',
+    'category' => 'memorial-catalog',
+    'icon' => 'money-alt',
+    'description' => 'Ways of payment and the instalment plan from Memorial → Prices → Payment — the same on every page.',
+    'keywords' => 
+    array (
+      0 => 'payment',
+      1 => 'instalments',
+      2 => 'card',
+      3 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'color' => 
+      array (
+        'text' => true,
+        'background' => true,
+        'link' => true,
+      ),
+      'typography' => 
+      array (
+        'fontSize' => true,
+        'lineHeight' => true,
+      ),
+      'spacing' => 
+      array (
+        'margin' => true,
+        'padding' => true,
+      ),
+      '__experimentalBorder' => 
+      array (
+        'color' => true,
+        'radius' => true,
+        'style' => true,
+        'width' => true,
+      ),
+      'inserter' => true,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+      ),
+      'viewportWidth' => 1000,
+    ),
+  ),
   'phone-button' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -2348,6 +2402,21 @@ return array (
         'type' => 'integer',
         'default' => 0,
       ),
+      'words' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+      'pick' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+      'book' => 
+      array (
+        'type' => 'boolean',
+        'default' => false,
+      ),
     ),
     'supports' => 
     array (
@@ -2385,6 +2454,9 @@ return array (
         'count' => 0,
         'title' => '',
         'cols' => 0,
+        'words' => '',
+        'pick' => '',
+        'book' => false,
       ),
       'viewportWidth' => 1000,
     ),

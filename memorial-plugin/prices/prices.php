@@ -107,6 +107,47 @@ function memorial_plugin_prices_schema() {
 				),
 			),
 		),
+		'pay'      => array(
+			'type'   => 'group',
+			'label'  => __( 'Payment', 'memorial-plugin' ),
+			'help'   => __( 'The “Payment” block on the pages and the payment methods in the data for search engines. The same everywhere.', 'memorial-plugin' ),
+			'fields' => array(
+				'title' => array(
+					'type'        => 'text',
+					'label'       => __( 'Block title', 'memorial-plugin' ),
+					'placeholder' => __( 'Payment', 'memorial-plugin' ),
+				),
+				'items' => array(
+					'type'     => 'repeater',
+					'label'    => __( 'Ways of payment', 'memorial-plugin' ),
+					'add'      => __( 'Add a way of payment', 'memorial-plugin' ),
+					'collapse' => 'name',
+					'summary'  => array( 'show' ),
+					'fields'   => array(
+						'name' => array(
+							'type'  => 'text',
+							'label' => __( 'Way of payment', 'memorial-plugin' ),
+						),
+						'note' => array(
+							'type'  => 'text',
+							'label' => __( 'Explanation', 'memorial-plugin' ),
+							'help'  => __( 'One short line after the name, for example “our own, without a bank — for monuments and tiling”. Can stay empty.', 'memorial-plugin' ),
+						),
+						'show' => array(
+							'type'    => 'checkbox',
+							'label'   => __( 'Show on the site', 'memorial-plugin' ),
+							'short'   => __( 'on the site', 'memorial-plugin' ),
+							'default' => 1,
+						),
+					),
+				),
+				'note'  => array(
+					'type'  => 'textarea',
+					'label' => __( 'Text under the list', 'memorial-plugin' ),
+					'help'  => __( 'Can stay empty. {price:code} puts in a price.', 'memorial-plugin' ),
+				),
+			),
+		),
 		'other'    => array(
 			'type'   => 'group',
 			'label'  => __( 'Separate prices', 'memorial-plugin' ),
@@ -218,6 +259,34 @@ function memorial_plugin_prices_defaults() {
 			'total'      => 'Итого с доставкой до крематория',
 			'card'       => 1,
 			'card_title' => '',
+		),
+		// Ways of payment (owner, 17.11.2026); the instalment plan is the company’s own.
+		'pay'       => array(
+			'title' => '',
+			'items' => array(
+				array(
+					'name' => 'Наличными',
+					'show' => 1,
+				),
+				array(
+					'name' => 'Банковской картой',
+					'show' => 1,
+				),
+				array(
+					'name' => 'По СБП',
+					'show' => 1,
+				),
+				array(
+					'name' => 'На расчётный счёт',
+					'show' => 1,
+				),
+				array(
+					'name' => 'Рассрочка',
+					'note' => 'своя, без банка — на памятники и благоустройство плиткой',
+					'show' => 1,
+				),
+			),
+			'note'  => '',
 		),
 		'other'     => array(
 			'items' => array(

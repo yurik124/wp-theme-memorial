@@ -25,6 +25,18 @@
         "cols": {
             "type": "integer",
             "default": 0
+        },
+        "words": {
+            "type": "string",
+            "default": ""
+        },
+        "pick": {
+            "type": "string",
+            "default": ""
+        },
+        "book": {
+            "type": "boolean",
+            "default": false
         }
     },
     "supports": {
@@ -55,7 +67,10 @@
         "attributes": {
             "count": 0,
             "title": "",
-            "cols": 0
+            "cols": 0,
+            "words": "",
+            "pick": "",
+            "book": false
         },
         "viewportWidth": 1000
     }

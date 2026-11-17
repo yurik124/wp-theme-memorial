@@ -58,7 +58,10 @@
 @media (max-width:600px){.wp-block-table.is-style-price thead th{letter-spacing:.05em;font-size:1rem;overflow-wrap:normal;word-break:keep-all;hyphens:none}}
 
 /* ---------- Крупное фото ---------- *//* Фото — в своей области, подпись и счётчик — под ним; стрелки не наезжают на текст:
-   на ПК — по бокам экрана, на телефоне — внизу, под подписью. Страница под фото не прокручивается. */html.lb-open,html.lb-open body{overflow:hidden}
+   на ПК — по бокам экрана, на телефоне — внизу, под подписью. Страница под фото не прокручивается. */
+/* Прокрутка запрещается только у html: overflow у body делал его своей областью прокрутки, и «липкая»
+   шапка уезжала на своё место в начале страницы — пропадала, пока открыто окно. Место полосы прокрутки
+   остаётся (scrollbar-gutter), страница на ПК не сдвигается вбок. */html.lb-open{overflow:hidden;scrollbar-gutter:stable}
 /* Галереи и ряды фото: одинаковые пропорции у всех снимков */
 
 /* Встроенная панорама / карта, загрузка по кнопке */.mem-embed{position:relative;aspect-ratio:16/9;margin:1.5rem 0;border-radius:14px;overflow:hidden;background:var(--sage,#e6ebdf);color:var(--ink,#2a2c28);display:grid;place-items:center;text-align:center}

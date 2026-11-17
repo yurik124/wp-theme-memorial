@@ -119,3 +119,17 @@
 .memorial-plugin-pages-picker li .components-button.is-link {
 	margin-left: 8px;
 }
+
+// Reviews of a page chosen by hand: the list in the window, one review under another.
+.memorial-plugin-reviews-picker__list {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	margin: 16px 0;
+	max-height: 60vh;
+	overflow-y: auto;
+}
+
+.memorial-plugin-reviews-picker .components-button.is-secondary {
+	margin-top: 4px;
+}

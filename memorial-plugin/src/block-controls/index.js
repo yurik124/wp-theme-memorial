@@ -21,10 +21,13 @@ import {
 } from '@wordpress/block-editor';
 import {
 	Button,
+	CheckboxControl,
 	ComboboxControl,
 	FormTokenField,
+	Modal,
 	PanelBody,
 	Placeholder,
+	SearchControl,
 	SelectControl,
 	Spinner,
 	TextControl,
@@ -380,6 +383,159 @@ function SectionsPicker( { label, value, onChange } ) {
 	);
 }
 
+// Reviews of a page chosen by hand (block “Rewio reviews”): ids separated by commas, in the order shown.
+// The window lists every review the site shows — of the review sites and of the guest book.
+function ReviewsPicker( { label, value, onChange } ) {
+	const [ open, setOpen ] = useState( false );
+	const [ items, setItems ] = useState( null );
+	const [ query, setQuery ] = useState( '' );
+	const list = String( value || '' )
+		.split( ',' )
+		.map( ( x ) => x.trim() )
+		.filter( Boolean );
+	const need = open || list.length > 0;
+	useEffect( () => {
+		if ( need && items === null ) {
+			apiFetch( { path: '/memorial-plugin/v1/reviews/pick' } )
+				.then( ( r ) => setItems( Array.isArray( r ) ? r : [] ) )
+				.catch( () => setItems( [] ) );
+		}
+	}, [ need, items ] );
+	const byId = useMemo(
+		() => Object.fromEntries( ( items || [] ).map( ( r ) => [ r.id, r ] ) ),
+		[ items ]
+	);
+	const set = ( next ) => onChange( next.join( ',' ) );
+	const move = ( i, d ) => {
+		const next = [ ...list ];
+		[ next[ i ], next[ i + d ] ] = [ next[ i + d ], next[ i ] ];
+		set( next );
+	};
+	const short = ( t ) =>
+		String( t || '' ).length > 90
+			? String( t ).slice( 0, 90 ) + '…'
+			: String( t || '' );
+	const norm = ( t ) => String( t || '' ).toLowerCase().replace( /ё/g, 'е' );
+	const shown = ( items || [] ).filter(
+		( r ) => ! query || norm( r.author + ' ' + r.text ).includes( norm( query ) )
+	);
+	return (
+		<div className="memorial-plugin-pages-picker memorial-plugin-reviews-picker">
+			<p className="memorial-plugin-pages-picker__label">{ label }</p>
+			{ list.length > 0 && (
+				<ol>
+					{ list.map( ( id, i ) => (
+						<li key={ id }>
+							<span>
+								{ byId[ id ]
+									? byId[ id ].author +
+									  ' — ' +
+									  short( byId[ id ].text )
+									: id }
+							</span>
+							<Button
+								size="small"
+								icon="arrow-up-alt2"
+								label={ __( 'Move up', 'memorial-plugin' ) }
+								disabled={ i === 0 }
+								onClick={ () => move( i, -1 ) }
+							/>
+							<Button
+								size="small"
+								icon="arrow-down-alt2"
+								label={ __( 'Move down', 'memorial-plugin' ) }
+								disabled={ i === list.length - 1 }
+								onClick={ () => move( i, 1 ) }
+							/>
+							<Button
+								size="small"
+								variant="link"
+								isDestructive
+								onClick={ () =>
+									set( list.filter( ( x ) => x !== id ) )
+								}
+							>
+								{ __( 'Remove', 'memorial-plugin' ) }
+							</Button>
+						</li>
+					) ) }
+				</ol>
+			) }
+			<Button
+				variant="secondary"
+				__next40pxDefaultSize
+				onClick={ () => setOpen( true ) }
+			>
+				{ list.length
+					? __( 'Change the choice', 'memorial-plugin' )
+					: __( 'Choose reviews', 'memorial-plugin' ) }
+			</Button>
+			{ list.length > 0 && (
+				<p className="components-base-control__help">
+					{ __(
+						'The chosen reviews are shown in this order; the words are not used then.',
+						'memorial-plugin'
+					) }
+				</p>
+			) }
+			{ open && (
+				<Modal
+					title={ __( 'Reviews of this page', 'memorial-plugin' ) }
+					onRequestClose={ () => setOpen( false ) }
+					size="medium"
+				>
+					<SearchControl
+						__nextHasNoMarginBottom
+						label={ __( 'Search in the reviews', 'memorial-plugin' ) }
+						value={ query }
+						onChange={ setQuery }
+					/>
+					{ items === null && <Spinner /> }
+					{ items !== null && shown.length === 0 && (
+						<p>{ __( 'No reviews found.', 'memorial-plugin' ) }</p>
+					) }
+					<div className="memorial-plugin-reviews-picker__list">
+						{ shown.map( ( r ) => (
+							<CheckboxControl
+								key={ r.id }
+								__nextHasNoMarginBottom
+								label={ [
+									r.author,
+									r.rating ? '★ ' + r.rating : '',
+									r.date,
+									r.source,
+								]
+									.filter( Boolean )
+									.join( ' · ' ) }
+								help={
+									r.text.length > 300
+										? r.text.slice( 0, 300 ) + '…'
+										: r.text
+								}
+								checked={ list.includes( r.id ) }
+								onChange={ ( on ) =>
+									set(
+										on
+											? [ ...list, r.id ]
+											: list.filter( ( x ) => x !== r.id )
+									)
+								}
+							/>
+						) ) }
+					</div>
+					<Button
+						variant="primary"
+						__next40pxDefaultSize
+						onClick={ () => setOpen( false ) }
+					>
+						{ __( 'Done', 'memorial-plugin' ) }
+					</Button>
+				</Modal>
+			) }
+		</div>
+	);
+}
+
 // The chooser of one attribute.
 function Picker( { picker, value, onChange } ) {
 	switch ( picker.kind ) {
@@ -466,6 +622,14 @@ function Picker( { picker, value, onChange } ) {
 					{ ...picker }
 					postType="page"
 					value={ value || '' }
+					onChange={ onChange }
+				/>
+			);
+		case 'reviews':
+			return (
+				<ReviewsPicker
+					{ ...picker }
+					value={ value }
 					onChange={ onChange }
 				/>
 			);

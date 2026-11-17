@@ -234,7 +234,8 @@ add_action(
 			return;
 		}
 		$p = get_queried_object();
-		if ( ! $p || ! has_shortcode( (string) $p->post_content, 'mem_guide' ) ) {
+		// The block “Useful to know” as well as the old shortcode.
+		if ( ! $p || ! memorial_plugin_has_content_block( (string) $p->post_content, 'mem_guide' ) ) {
 			return;
 		}
 		$kids = get_posts(

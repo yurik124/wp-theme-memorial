@@ -67,6 +67,36 @@ function memorial_plugin_bookrev_month( $id ) {
 	return wp_date( __( 'F Y', 'memorial-plugin' ), $ts, new DateTimeZone( 'UTC' ) );
 }
 
+/**
+ * Reviews of the guest book in the format of the review sites (the “Rewio reviews” block mixes them in).
+ * Id — “b” and the post ID, so they never meet the ids of Rewio.
+ *
+ * @return array<int,array>
+ */
+function memorial_plugin_bookrev_items() {
+	$out = array();
+	foreach ( memorial_plugin_bookrevs() as $r ) {
+		$text = trim( wp_strip_all_tags( (string) $r->post_content ) );
+		if ( '' === $text ) {
+			continue;
+		}
+		$out[] = array(
+			'id'      => 'b' . $r->ID,
+			'author'  => get_the_title( $r ),
+			'rating'  => 0,
+			'date'    => (string) get_post_meta( $r->ID, '_mem_bdate', true ),
+			'text'    => $text,
+			'reply'   => '',
+			'imgs'    => array(),
+			'src'     => 0,
+			'slug'    => '',
+			'url'     => '',
+			'srcname' => __( 'Guest book', 'memorial-plugin' ),
+		);
+	}
+	return $out;
+}
+
 /** Отзывы из книги: сначала по порядку из админки, затем новые сверху
  *
  * @param int $limit Limit.

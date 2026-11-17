@@ -23,7 +23,8 @@ defined( 'ABSPATH' ) || exit;
 /**
  * SEO titles: page path => title. {price:section-slug} — the “from” price of that catalog section when it has one
  * (“ — %%mem_<code>%%”, a variable of SEOPress), {value:code} — the same for a separate price;
- * the part in [ ] is used instead when there is no price.
+ * the part in [ ] is used instead when there is no price. {always:section-slug} — the variable even without a price
+ * today: it stays empty on the site until the products get prices (owner, 17.11.2026: “Coffins”).
  *
  * @return array<string,string>
  */
@@ -41,7 +42,7 @@ function memorial_plugin_seo_titles_1() {
 		'pomoshh-v-organizaczii-pohoron'         => 'Организация похорон в Белгороде под ключ' . $t,
 		'ritualnye-tovary'                       => 'Ритуальные товары в Белгороде: венки, гробы, кресты' . $t,
 		'venki'                                  => 'Ритуальные венки и корзины в Белгороде{price:venki}[: цены]' . $t,
-		'groby'                                  => 'Гробы в Белгороде{price:groby}[: цены]' . $t,
+		'groby'                                  => 'Гробы в Белгороде{always:groby}' . $t,
 		'pamyatniki'                             => 'Памятники на могилу в Белгороде: изготовление{price:pamyatniki}[ и цены]' . $t,
 		'ogradki'                                => 'Оградки на кладбище в Белгороде{price:ogradki-2}[: цены]' . $t,
 		'metallicheskie-kresty'                  => 'Металлические кресты на могилу в Белгороде{price:metallicheskie-kresty}[: цены]' . $t,
@@ -216,6 +217,11 @@ function memorial_plugin_seo_upgrade_1( $dry = false ) {
 		if ( ! $id ) {
 			continue;
 		}
+		$title = (string) preg_replace_callback(
+			'~\{always:([a-z0-9_-]+)\}~u',
+			static fn( $m ) => '' !== ( $price[ $m[1] ] ?? '' ) ? ' — ' . memorial_plugin_seo_var( $price[ $m[1] ] ) : '',
+			$title
+		);
 		$title = (string) preg_replace_callback(
 			'~\{(price|value):([a-z0-9_-]+)\}\[([^\]]*)\]~u',
 			static function ( $m ) use ( $price, $value, $items ) {

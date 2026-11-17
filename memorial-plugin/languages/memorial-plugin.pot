@@ -46,7 +46,7 @@ msgid " — but showing is off (the tick in “1. Connection”)"
 msgstr ""
 
 #. translators: %d: post ID.
-#: src/block-controls/index.js:62
+#: src/block-controls/index.js:65
 #, php-format
 msgid "#%d (no title)"
 msgstr ""
@@ -189,7 +189,7 @@ msgid "%s (copy)"
 msgstr ""
 
 #. translators: %s: site name.
-#: blocks/home/home.php:424
+#: blocks/home/home.php:431
 #, php-format
 msgid "%s on the map — Yandex Maps"
 msgstr ""
@@ -201,7 +201,7 @@ msgid "%s — highest price"
 msgstr ""
 
 #. translators: %s: catalog section.
-#: seo/seo-upgrade.php:89 core/upgrade.php:183
+#: seo/seo-upgrade.php:90 core/upgrade.php:183
 #, php-format
 msgid "%s — lowest price"
 msgstr ""
@@ -224,11 +224,11 @@ msgstr ""
 msgid "%s: the page has no catalog section — choose the section in the block settings."
 msgstr ""
 
-#: prices/prices.php:806
+#: prices/prices.php:875
 msgid "(check whether they are up to date; replace them with a site value if you like):"
 msgstr ""
 
-#: prices/prices.php:273
+#: prices/prices.php:342
 msgid "(headings, captions, button texts) write {price:code} — the price is put in and changes together with this screen."
 msgstr ""
 
@@ -264,7 +264,7 @@ msgstr ""
 msgid ". Optionally more goals:"
 msgstr ""
 
-#: prices/prices.php:794
+#: prices/prices.php:863
 msgid ". The previous text is kept in the page’s “Revisions”."
 msgstr ""
 
@@ -332,6 +332,14 @@ msgstr ""
 msgid "A button in the site style (green, light or outlined) that leads to a page of the site or to any address. The text and the page are set in the block settings on the right."
 msgstr ""
 
+#: prices/terms.php:125
+msgid "A card with the delivery and the visits of the agent. The text is edited right on the page."
+msgstr ""
+
+#: prices/terms.php:126
+msgid "A card with the guarantees. The text is edited right on the page."
+msgstr ""
+
 #: src/catalog/types.js:270 src/catalog/types.js:723
 msgid "A click on the photo opens"
 msgstr ""
@@ -370,7 +378,7 @@ msgstr ""
 msgid "A new product needs a type."
 msgstr ""
 
-#: prices/prices.php:136
+#: prices/prices.php:177
 msgid "A number (500), a range (200–300) or words (free); ₽ is added to numbers by itself."
 msgstr ""
 
@@ -398,7 +406,7 @@ msgstr ""
 msgid "A product without a description opens as a large photo in the catalog, and its old address leads to the catalog section. These addresses are not in the sitemap."
 msgstr ""
 
-#: content/guide.php:327
+#: content/guide.php:328
 msgid "A question and a short answer on the card — the “Good to know” field under the text of the article."
 msgstr ""
 
@@ -502,7 +510,7 @@ msgstr ""
 msgid "Add a package"
 msgstr ""
 
-#: src/block-controls/index.js:266
+#: src/block-controls/index.js:269
 msgid "Add a page"
 msgstr ""
 
@@ -510,7 +518,7 @@ msgstr ""
 msgid "Add a phone"
 msgstr ""
 
-#: prices/prices.php:118
+#: prices/prices.php:159
 msgid "Add a price"
 msgstr ""
 
@@ -532,6 +540,10 @@ msgstr ""
 
 #: catalog/catalog.php:82
 msgid "Add a value"
+msgstr ""
+
+#: prices/prices.php:123
+msgid "Add a way of payment"
 msgstr ""
 
 #: works/works.php:41
@@ -572,6 +584,10 @@ msgstr ""
 
 #: src/catalog/products.js:823
 msgid "Add product"
+msgstr ""
+
+#: blocks/content/content-blocks.php:241
+msgid "Add reviews of the guest book"
 msgstr ""
 
 #: src/catalog/fields.js:271 src/editor-meta/index.js:212
@@ -640,7 +656,7 @@ msgstr ""
 msgid "All from the folder “%s”"
 msgstr ""
 
-#: blocks/home/home.php:153
+#: blocks/home/home.php:160
 msgid "All phones, emails, messengers and addresses with hours (Memorial → Contacts)."
 msgstr ""
 
@@ -656,7 +672,7 @@ msgstr ""
 msgid "All products of the catalog."
 msgstr ""
 
-#: blocks/content/content-blocks.php:243
+#: blocks/content/content-blocks.php:264
 msgid "All questions and answers"
 msgstr ""
 
@@ -754,7 +770,7 @@ msgstr ""
 msgid "Archive with photos (ZIP)"
 msgstr ""
 
-#: blocks/content/content-blocks.php:448 blocks/home/home.php:107
+#: blocks/content/content-blocks.php:469 blocks/home/home.php:107
 msgid "Arrow “→”"
 msgstr ""
 
@@ -766,11 +782,11 @@ msgstr ""
 msgid "Article cards with a search, the “Good to know” field of pages."
 msgstr ""
 
-#: blocks/content/content-blocks.php:267
+#: blocks/content/content-blocks.php:288
 msgid "Article cards with search: child pages of this or another page, or chosen pages."
 msgstr ""
 
-#: blocks/content/content-blocks.php:273
+#: blocks/content/content-blocks.php:294
 msgid "Articles of the page"
 msgstr ""
 
@@ -790,7 +806,7 @@ msgstr ""
 msgid "As on the review site now"
 msgstr ""
 
-#: prices/prices.php:126
+#: prices/prices.php:167
 msgid "As the price is called in the lists, for example “Wreath delivery in Belgorod”."
 msgstr ""
 
@@ -858,7 +874,7 @@ msgstr ""
 msgid "Block on the page"
 msgstr ""
 
-#: reviews/rewio.php:110
+#: reviews/rewio.php:110 prices/prices.php:117
 msgid "Block title"
 msgstr ""
 
@@ -878,7 +894,7 @@ msgstr ""
 msgid "Branch"
 msgstr ""
 
-#: reviews/rewio.php:1358
+#: reviews/rewio.php:1428
 msgid "Branch "
 msgstr ""
 
@@ -968,7 +984,7 @@ msgstr ""
 msgid "Call requests"
 msgstr ""
 
-#: content/patterns.php:54 blocks/content/content-blocks.php:297
+#: content/patterns.php:54 blocks/content/content-blocks.php:318
 msgid "Call to action"
 msgstr ""
 
@@ -1000,8 +1016,12 @@ msgstr ""
 msgid "Calls outside working hours"
 msgstr ""
 
-#: prices/prices.php:166
+#: prices/prices.php:207
 msgid "Can be left empty: it is made from the name when you save. By the code the price is put into texts and SEO titles, so do not change it once it is used."
+msgstr ""
+
+#: prices/prices.php:147
+msgid "Can stay empty. {price:code} puts in a price."
 msgstr ""
 
 #: src/catalog/import.js:609 src/catalog/inline-edit.js:239 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:326
@@ -1020,7 +1040,7 @@ msgstr ""
 msgid "Cannot merge: the values differ."
 msgstr ""
 
-#: blocks/content/content-blocks.php:441 blocks/home/home.php:132 core/settings.php:387
+#: blocks/content/content-blocks.php:462 blocks/home/home.php:139 core/settings.php:387
 msgid "Caption"
 msgstr ""
 
@@ -1040,7 +1060,7 @@ msgstr ""
 msgid "Card"
 msgstr ""
 
-#: blocks/content/content-blocks.php:405
+#: blocks/content/content-blocks.php:426
 msgid "Cards of the sections of this page (its sub-items in the menu or child pages), of another page or of chosen pages — with photo, product count and starting price."
 msgstr ""
 
@@ -1056,7 +1076,7 @@ msgstr ""
 msgid "Cards “photo, title, size and price” from “Our works” — 6 random ones, different every time. A click leads to the work."
 msgstr ""
 
-#: blocks/content/content-blocks.php:367
+#: blocks/content/content-blocks.php:388
 msgid "Cards: these works by title, comma separated"
 msgstr ""
 
@@ -1082,7 +1102,7 @@ msgstr ""
 msgid "Catalog price"
 msgstr ""
 
-#: prices/prices.php:141 blocks/content/content-blocks.php:36 blocks/content/inline-values.php:30 blocks/content/inline-values.php:37 blocks/content/inline-values.php:43 blocks/legacy/legacy.php:77
+#: prices/prices.php:182 blocks/content/content-blocks.php:36 blocks/content/inline-values.php:30 blocks/content/inline-values.php:37 blocks/content/inline-values.php:43 blocks/legacy/legacy.php:77
 msgid "Catalog section"
 msgstr ""
 
@@ -1091,7 +1111,7 @@ msgid "Catalog section with sorting"
 msgstr ""
 
 #. translators: %s: catalog section
-#: prices/prices.php:809
+#: prices/prices.php:878
 #, php-format
 msgid "Catalog section “%s”"
 msgstr ""
@@ -1164,6 +1184,10 @@ msgstr ""
 msgid "Change prices…"
 msgstr ""
 
+#: src/block-controls/index.js:451
+msgid "Change the choice"
+msgstr ""
+
 #. translators: %s: column, e.g. Price.
 #: src/catalog/inline-edit.js:191
 #, php-format
@@ -1230,6 +1254,10 @@ msgstr ""
 msgid "Choose photos"
 msgstr ""
 
+#: src/block-controls/index.js:452
+msgid "Choose reviews"
+msgstr ""
+
 #: reviews/bookreviews.php:27
 msgid "Choose the page photo"
 msgstr ""
@@ -1278,7 +1306,7 @@ msgstr ""
 msgid "Closed for burials"
 msgstr ""
 
-#: src/catalog/types.js:52 prices/prices.php:165
+#: src/catalog/types.js:52 prices/prices.php:206
 msgid "Code"
 msgstr ""
 
@@ -1326,7 +1354,7 @@ msgstr ""
 msgid "Compact"
 msgstr ""
 
-#: blocks/home/home.php:194 blocks/legacy/render/parts/company-details.php:13 core/settings.php:140
+#: blocks/home/home.php:201 blocks/legacy/render/parts/company-details.php:13 core/settings.php:140
 msgid "Company details"
 msgstr ""
 
@@ -1334,7 +1362,7 @@ msgstr ""
 msgid "Company details (personal data operator)"
 msgstr ""
 
-#: reviews/rewio.php:153 reviews/rewio.php:1425 reviews/rewio-archive.php:540
+#: reviews/rewio.php:153 reviews/rewio.php:1495 reviews/rewio-archive.php:540
 msgid "Company’s reply"
 msgstr ""
 
@@ -1342,7 +1370,7 @@ msgstr ""
 msgid "Compatibility with SEO plugins"
 msgstr ""
 
-#: blocks/content/content-blocks.php:343
+#: blocks/content/content-blocks.php:364
 msgid "Completed works with photos, plot sizes and prices: gallery, cards or photos only."
 msgstr ""
 
@@ -1362,7 +1390,7 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
-#: blocks/home/home.php:187
+#: blocks/home/home.php:194
 msgid "Contact cards"
 msgstr ""
 
@@ -1370,7 +1398,7 @@ msgstr ""
 msgid "Contacts"
 msgstr ""
 
-#: blocks/home/home.php:152
+#: blocks/home/home.php:159
 msgid "Contacts list"
 msgstr ""
 
@@ -1432,7 +1460,7 @@ msgstr ""
 msgid "Copyright years, company details, privacy and cookie policy links."
 msgstr ""
 
-#: prices/prices.php:195 prices/prices.php:411 works/works.php:253
+#: prices/prices.php:236 prices/prices.php:480 works/works.php:253
 msgid "Cost"
 msgstr ""
 
@@ -1504,7 +1532,7 @@ msgstr ""
 msgid "Creates products of a type: one product per photo (or one empty product), at the end of the type, with the type’s default price and specifications."
 msgstr ""
 
-#: prices/prices.php:256 blocks/content/content-blocks.php:317
+#: prices/prices.php:325 blocks/content/content-blocks.php:338
 msgid "Cremation"
 msgstr ""
 
@@ -1512,7 +1540,7 @@ msgstr ""
 msgid "Cremation (total)"
 msgstr ""
 
-#: blocks/content/content-blocks.php:307
+#: blocks/content/content-blocks.php:328
 msgid "Cremation prices"
 msgstr ""
 
@@ -1524,7 +1552,7 @@ msgstr ""
 msgid "Customer reviews"
 msgstr ""
 
-#: blocks/home/home.php:421 blocks/legacy/render/parts/reviews.php:42
+#: blocks/home/home.php:428 blocks/legacy/render/parts/reviews.php:42
 msgid "Customer reviews on Yandex Maps"
 msgstr ""
 
@@ -1609,6 +1637,10 @@ msgstr ""
 msgid "Deletes the given queries from the search statistics, or all statistics when no queries are given."
 msgstr ""
 
+#: prices/terms.php:125
+msgid "Delivery and visits"
+msgstr ""
+
 #: catalog/catalog-io.php:148 src/catalog/works.js:173 src/catalog/products.js:402 src/catalog/types.js:162 src/catalog/types.js:707 src/catalog/types.js:796
 msgid "Description"
 msgstr ""
@@ -1661,7 +1693,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: src/block-controls/index.js:717 src/editor-meta/faq-sections.js:265
+#: src/block-controls/index.js:512 src/block-controls/index.js:881 src/editor-meta/faq-sections.js:265
 msgid "Done"
 msgstr ""
 
@@ -1845,7 +1877,7 @@ msgstr ""
 msgid "Examples of works as cards (random)"
 msgstr ""
 
-#: src/shared/hint.js:24
+#: src/shared/hint.js:24 prices/prices.php:133
 msgid "Explanation"
 msgstr ""
 
@@ -1873,7 +1905,7 @@ msgstr ""
 msgid "Export to Excel"
 msgstr ""
 
-#: blocks/content/content-blocks.php:235
+#: blocks/content/content-blocks.php:256
 msgid "Extra service pages"
 msgstr ""
 
@@ -1890,11 +1922,11 @@ msgstr ""
 msgid "FAQ"
 msgstr ""
 
-#: seo/seo-registry.php:194
+#: seo/seo-registry.php:199
 msgid "Facebook description (SEOPress)"
 msgstr ""
 
-#: seo/seo-registry.php:193
+#: seo/seo-registry.php:198
 msgid "Facebook title (SEOPress)"
 msgstr ""
 
@@ -1910,7 +1942,7 @@ msgstr ""
 msgid "Features — comma-separated"
 msgstr ""
 
-#: blocks/home/home.php:120
+#: blocks/home/home.php:127
 msgid "Figure in a laurel wreath"
 msgstr ""
 
@@ -1970,7 +2002,7 @@ msgstr ""
 msgid "Fold all"
 msgstr ""
 
-#: src/block-controls/index.js:656
+#: src/block-controls/index.js:820
 msgid "Fold the block (only in the editor)"
 msgstr ""
 
@@ -2063,7 +2095,7 @@ msgid "Found"
 msgstr ""
 
 #. translators: %s: list of sections or a product.
-#: src/block-controls/index.js:591
+#: src/block-controls/index.js:755
 #, php-format
 msgid "Found on this page: %s."
 msgstr ""
@@ -2092,7 +2124,7 @@ msgstr ""
 msgid "From page"
 msgstr ""
 
-#: reviews/reviews.php:277 reviews/bookreviews.php:102 reviews/bookreviews.php:154
+#: reviews/reviews.php:277 reviews/bookreviews.php:132 reviews/bookreviews.php:184
 msgid "From the guest book"
 msgstr ""
 
@@ -2104,15 +2136,15 @@ msgstr ""
 msgid "Funeral company"
 msgstr ""
 
-#: blocks/home/home.php:146
+#: blocks/home/home.php:153
 msgid "Funeral package cards as on the home page (Memorial → Prices)."
 msgstr ""
 
-#: prices/prices.php:23 blocks/content/content-blocks.php:335
+#: prices/prices.php:23 blocks/content/content-blocks.php:356
 msgid "Funeral packages"
 msgstr ""
 
-#: blocks/home/home.php:145
+#: blocks/home/home.php:152
 msgid "Funeral packages grid"
 msgstr ""
 
@@ -2120,15 +2152,15 @@ msgstr ""
 msgid "Funeral services company"
 msgstr ""
 
-#: blocks/content/content-blocks.php:374
+#: blocks/content/content-blocks.php:395
 msgid "Gallery: how many (-1 — all)"
 msgstr ""
 
-#: blocks/content/content-blocks.php:396
+#: blocks/content/content-blocks.php:417
 msgid "Gallery: sorting"
 msgstr ""
 
-#: blocks/content/content-blocks.php:389
+#: blocks/content/content-blocks.php:410
 msgid "Gallery: type filter"
 msgstr ""
 
@@ -2160,11 +2192,15 @@ msgstr ""
 msgid "Gradient: lighter at the top, darker at the bottom"
 msgstr ""
 
+#: prices/terms.php:126
+msgid "Guarantees"
+msgstr ""
+
 #: reviews/rewio.php:799
 msgid "Guest"
 msgstr ""
 
-#: reviews/bookreviews.php:118 memorial-plugin.php:106
+#: reviews/bookreviews.php:94 reviews/bookreviews.php:148 memorial-plugin.php:106
 msgid "Guest book"
 msgstr ""
 
@@ -2208,11 +2244,11 @@ msgstr ""
 msgid "Heading (empty — from settings)"
 msgstr ""
 
-#: blocks/content/content-blocks.php:301
+#: blocks/content/content-blocks.php:322
 msgid "Heading (empty — “Call us — we will tell you where to start”)"
 msgstr ""
 
-#: blocks/content/content-blocks.php:298
+#: blocks/content/content-blocks.php:319
 msgid "Heading, text and call / message buttons with the site phone."
 msgstr ""
 
@@ -2344,7 +2380,7 @@ msgstr ""
 msgid "How to crop the photos in the cards. “Whole” — the photo is not cropped, with white margins at the edges."
 msgstr ""
 
-#: prices/prices.php:272
+#: prices/prices.php:341
 msgid "How to put a price into the text of a page:"
 msgstr ""
 
@@ -2418,7 +2454,7 @@ msgstr ""
 msgid "In a day or two look at:"
 msgstr ""
 
-#: prices/prices.php:273
+#: prices/prices.php:342
 msgid "In a text field of “Memorial → …”"
 msgstr ""
 
@@ -2434,7 +2470,7 @@ msgstr ""
 msgid "In the MAX app: Profile → Share profile → Copy link."
 msgstr ""
 
-#: prices/prices.php:160
+#: prices/prices.php:201
 msgid "In the SEO plugin — the price can be put into SEO titles and descriptions as the variable %%mem_<code>%%"
 msgstr ""
 
@@ -2466,7 +2502,7 @@ msgstr ""
 msgid "Items"
 msgstr ""
 
-#: prices/prices.php:149
+#: prices/prices.php:190
 msgid "Its price from Memorial → Services."
 msgstr ""
 
@@ -2512,7 +2548,7 @@ msgstr ""
 msgid "Lead text"
 msgstr ""
 
-#: blocks/home/home.php:404 blocks/legacy/render/parts/reviews.php:35
+#: blocks/home/home.php:411 blocks/legacy/render/parts/reviews.php:35
 msgid "Leave a review"
 msgstr ""
 
@@ -2524,11 +2560,11 @@ msgstr ""
 msgid "Leave empty — the map finds the address itself. To set an exact marker, paste a link from Yandex Maps or the code from the “Map Constructor”."
 msgstr ""
 
-#: blocks/content/content-blocks.php:322
+#: blocks/content/content-blocks.php:343
 msgid "Left column title (empty — “What is included”)"
 msgstr ""
 
-#: blocks/home/home.php:195
+#: blocks/home/home.php:202
 msgid "Legal name, taxpayer and registration numbers (Memorial → Contacts)."
 msgstr ""
 
@@ -2552,7 +2588,7 @@ msgstr ""
 msgid "Line under title"
 msgstr ""
 
-#: blocks/home/home.php:113
+#: blocks/home/home.php:120
 msgid "Line “Calls at night”"
 msgstr ""
 
@@ -2560,7 +2596,7 @@ msgstr ""
 msgid "Link button"
 msgstr ""
 
-#: blocks/home/home.php:294
+#: blocks/home/home.php:301
 msgid "Link button: write the text of the button and choose the page (or type an address) in the block settings on the right."
 msgstr ""
 
@@ -2692,7 +2728,7 @@ msgstr ""
 msgid "Map (optional)"
 msgstr ""
 
-#: blocks/home/home.php:160
+#: blocks/home/home.php:167
 msgid "Map for each address; loads on a click so the page stays fast."
 msgstr ""
 
@@ -2708,7 +2744,7 @@ msgstr ""
 msgid "Map: "
 msgstr ""
 
-#: blocks/home/home.php:159
+#: blocks/home/home.php:166
 msgid "Maps"
 msgstr ""
 
@@ -2808,7 +2844,7 @@ msgstr ""
 msgid "Messengers"
 msgstr ""
 
-#: seo/seo-registry.php:192
+#: seo/seo-registry.php:197
 msgid "Meta description (SEOPress)"
 msgstr ""
 
@@ -2848,7 +2884,7 @@ msgstr ""
 msgid "Most expensive first"
 msgstr ""
 
-#: src/catalog/works.js:323 src/catalog/types.js:599 src/catalog/types.js:867 src/catalog/work-types.js:145 src/block-controls/index.js:246 src/editor-meta/faq-sections.js:97
+#: src/catalog/works.js:323 src/catalog/types.js:599 src/catalog/types.js:867 src/catalog/work-types.js:145 src/block-controls/index.js:249 src/block-controls/index.js:427
 msgid "Move down"
 msgstr ""
 
@@ -2887,7 +2923,7 @@ msgstr ""
 msgid "Move type later"
 msgstr ""
 
-#: src/catalog/works.js:318 src/catalog/types.js:590 src/catalog/types.js:862 src/catalog/work-types.js:140 src/block-controls/index.js:239 src/editor-meta/faq-sections.js:90
+#: src/catalog/works.js:318 src/catalog/types.js:590 src/catalog/types.js:862 src/catalog/work-types.js:140 src/block-controls/index.js:242 src/block-controls/index.js:420
 msgid "Move up"
 msgstr ""
 
@@ -2999,7 +3035,7 @@ msgstr ""
 msgid "No access"
 msgstr ""
 
-#: src/block-controls/index.js:383
+#: src/block-controls/index.js:539
 msgid "No addresses in Memorial → Contacts"
 msgstr ""
 
@@ -3031,6 +3067,10 @@ msgstr ""
 msgid "No requests yet"
 msgstr ""
 
+#: src/block-controls/index.js:476
+msgid "No reviews found."
+msgstr ""
+
 #: works/works-manager.php:231
 msgid "No works selected."
 msgstr ""
@@ -3050,7 +3090,7 @@ msgid "Not called back yet: %d. Opening the list…"
 msgstr ""
 
 #. translators: %s: what an empty choice means.
-#: src/block-controls/index.js:186
+#: src/block-controls/index.js:189
 #, php-format
 msgid "Not chosen — %s."
 msgstr ""
@@ -3087,7 +3127,7 @@ msgstr ""
 msgid "Note (optional)"
 msgstr ""
 
-#: blocks/home/home.php:114
+#: blocks/home/home.php:121
 msgid "Note about calls at night (Memorial → Contacts)."
 msgstr ""
 
@@ -3116,7 +3156,7 @@ msgstr ""
 msgid "Now"
 msgstr ""
 
-#: src/catalog/types.js:402 blocks/home/home.php:127 core/settings.php:383
+#: src/catalog/types.js:402 blocks/home/home.php:134 core/settings.php:383
 msgid "Number"
 msgstr ""
 
@@ -3124,7 +3164,7 @@ msgstr ""
 msgid "Number (01, 02…)"
 msgstr ""
 
-#: catalog/catalog-summary.php:169 blocks/content/content-blocks.php:433
+#: catalog/catalog-summary.php:169 blocks/content/content-blocks.php:454
 msgid "Number of models"
 msgstr ""
 
@@ -3136,11 +3176,11 @@ msgstr ""
 msgid "Number of reviews (optional)"
 msgstr ""
 
-#: prices/prices.php:155
+#: prices/prices.php:196
 msgid "Number only — without “from”, “up to”, “models” and ₽"
 msgstr ""
 
-#: blocks/home/home.php:121
+#: blocks/home/home.php:128
 msgid "Number with a caption in a laurel wreath; the number counts up when it scrolls into view."
 msgstr ""
 
@@ -3168,7 +3208,7 @@ msgstr ""
 msgid "Off: no Metrica code on the site — connect it through a tag manager if needed"
 msgstr ""
 
-#: blocks/home/home.php:174
+#: blocks/home/home.php:181
 msgid "Official Yandex Maps reviews widget; loads after cookie consent or on a click."
 msgstr ""
 
@@ -3240,6 +3280,10 @@ msgstr ""
 msgid "One per line, “Name: value”."
 msgstr ""
 
+#: prices/prices.php:134
+msgid "One short line after the name, for example “our own, without a bank — for monuments and tiling”. Can stay empty."
+msgstr ""
+
 #: reviews/rewio.php:72
 msgid "Only 5★"
 msgstr ""
@@ -3268,11 +3312,15 @@ msgstr ""
 msgid "Only photos can be uploaded (JPEG, PNG, WebP, GIF)."
 msgstr ""
 
+#: blocks/content/content-blocks.php:228
+msgid "Only reviews with these words, comma separated (part of a word is enough)"
+msgstr ""
+
 #: src/catalog/types.js:114
 msgid "Only the photo"
 msgstr ""
 
-#: blocks/content/content-blocks.php:361
+#: blocks/content/content-blocks.php:382
 msgid "Only these types (slugs or names, comma separated)"
 msgstr ""
 
@@ -3320,7 +3368,7 @@ msgstr ""
 msgid "Opening hours (shared text)"
 msgstr ""
 
-#: blocks/home/home.php:180
+#: blocks/home/home.php:187
 msgid "Opening hours badge"
 msgstr ""
 
@@ -3328,7 +3376,7 @@ msgstr ""
 msgid "Opening hours of the address"
 msgstr ""
 
-#: blocks/home/home.php:181
+#: blocks/home/home.php:188
 msgid "Opening hours of the first address, or the night line when it is set (Memorial → Contacts)."
 msgstr ""
 
@@ -3348,7 +3396,11 @@ msgstr ""
 msgid "Or call:"
 msgstr ""
 
-#: blocks/content/content-blocks.php:281 blocks/content/content-blocks.php:419
+#: blocks/content/content-blocks.php:234
+msgid "Or reviews chosen by hand"
+msgstr ""
+
+#: blocks/content/content-blocks.php:302 blocks/content/content-blocks.php:440
 msgid "Or these pages, in this order"
 msgstr ""
 
@@ -3394,11 +3446,11 @@ msgstr ""
 msgid "Other counters — start only after consent"
 msgstr ""
 
-#: blocks/content/content-blocks.php:228 core/settings.php:520 core/settings.php:590
+#: blocks/content/content-blocks.php:249 core/settings.php:520 core/settings.php:590
 msgid "Our services"
 msgstr ""
 
-#: admin/commands.php:21 src/catalog/works.js:417 works/works.php:37 works/works.php:39 blocks/content/content-blocks.php:342
+#: admin/commands.php:21 src/catalog/works.js:417 works/works.php:37 works/works.php:39 blocks/content/content-blocks.php:363
 msgid "Our works"
 msgstr ""
 
@@ -3438,11 +3490,11 @@ msgstr ""
 msgid "Own price — typed below"
 msgstr ""
 
-#: blocks/content/content-blocks.php:314
+#: blocks/content/content-blocks.php:335
 msgid "Package"
 msgstr ""
 
-#: blocks/content/content-blocks.php:336
+#: blocks/content/content-blocks.php:357
 msgid "Package cards with prices (Memorial → Prices) — the same on every page."
 msgstr ""
 
@@ -3476,7 +3528,7 @@ msgstr ""
 msgid "Page on the site"
 msgstr ""
 
-#: reviews/bookreviews.php:141
+#: reviews/bookreviews.php:171
 msgid "Page photo"
 msgstr ""
 
@@ -3498,6 +3550,10 @@ msgstr ""
 
 #: blocks/legacy/legacy.php:26
 msgid "Path to the current page; also adds BreadcrumbList structured data."
+msgstr ""
+
+#: prices/prices.php:112 prices/prices.php:118 prices/terms.php:47 blocks/home/home.php:113
+msgid "Payment"
 msgstr ""
 
 #: src/catalog/products.js:83
@@ -3548,7 +3604,7 @@ msgstr ""
 msgid "Phones, messengers, addresses with routes, maps and company details."
 msgstr ""
 
-#: catalog/catalog-front.php:432 src/catalog/fields.js:68 works/works.php:223 blocks/content/content-blocks.php:426
+#: catalog/catalog-front.php:432 src/catalog/fields.js:68 works/works.php:223 blocks/content/content-blocks.php:447
 msgid "Photo"
 msgstr ""
 
@@ -3586,7 +3642,7 @@ msgstr ""
 msgid "Photo blocks of products and works — the photos are picked up automatically."
 msgstr ""
 
-#: reviews/rewio.php:1420
+#: reviews/rewio.php:1490
 msgid "Photo for the review"
 msgstr ""
 
@@ -3602,7 +3658,7 @@ msgstr ""
 msgid "Photo instead of the icon (optional)"
 msgstr ""
 
-#: reviews/bookreviews.php:138
+#: reviews/bookreviews.php:168
 msgid "Photo of a guest book page: "
 msgstr ""
 
@@ -3712,7 +3768,7 @@ msgstr ""
 msgid "Previous product"
 msgstr ""
 
-#: catalog/catalog-io.php:141 catalog/catalog-manager.php:423 places/places.php:75 src/editor-meta/index.js:55 prices/prices.php:135 blocks/content/inline-values.php:49
+#: catalog/catalog-io.php:141 catalog/catalog-manager.php:423 places/places.php:75 src/editor-meta/index.js:55 prices/prices.php:176 blocks/content/inline-values.php:49
 msgid "Price"
 msgstr ""
 
@@ -3748,7 +3804,7 @@ msgstr ""
 msgid "Price table"
 msgstr ""
 
-#: blocks/content/content-blocks.php:308
+#: blocks/content/content-blocks.php:329
 msgid "Price table of a package with the total (Memorial → Prices → Funeral packages); by default — the cremation package."
 msgstr ""
 
@@ -3764,7 +3820,7 @@ msgstr ""
 msgid "Price, ₽"
 msgstr ""
 
-#: prices/prices.php:117 prices/prices.php:269
+#: prices/prices.php:158 prices/prices.php:338
 msgid "Prices"
 msgstr ""
 
@@ -3772,11 +3828,11 @@ msgstr ""
 msgid "Prices are given in roubles and may change; the exact cost is confirmed by phone."
 msgstr ""
 
-#: prices/prices.php:271
+#: prices/prices.php:340
 msgid "Prices from here are put into the pages automatically — change them only here; catalog prices and the number of models are counted from the products."
 msgstr ""
 
-#: prices/prices.php:274
+#: prices/prices.php:343
 msgid "Prices now:"
 msgstr ""
 
@@ -3786,11 +3842,11 @@ msgstr ""
 msgid "Prices of %d."
 msgstr ""
 
-#: prices/prices.php:113
+#: prices/prices.php:154
 msgid "Prices that are mentioned in the texts of pages and in SEO titles: your own price or one counted by the site (from / up to of a catalog section, number of models, price of a service). How to put one into a text: in a paragraph, open the arrow ∨ (“More”) on the block toolbar → “Site value” → “Price from Memorial → Prices” → choose the price. The page always shows the current value."
 msgstr ""
 
-#: prices/prices.php:806
+#: prices/prices.php:875
 msgid "Prices written into the text by hand — they do not change by themselves"
 msgstr ""
 
@@ -3952,7 +4008,7 @@ msgstr ""
 msgid "Questions and answers: there are no questions on the pages yet (“Details” blocks)."
 msgstr ""
 
-#: blocks/content/content-blocks.php:244
+#: blocks/content/content-blocks.php:265
 msgid "Questions from all pages (Details blocks) on one page, with search."
 msgstr ""
 
@@ -3978,7 +4034,7 @@ msgstr ""
 msgid "Rating (optional)"
 msgstr ""
 
-#: reviews/rewio.php:1415 reviews/bookreviews.php:124 core/assets.php:99
+#: reviews/rewio.php:1485 reviews/bookreviews.php:154 core/assets.php:99
 msgid "Read more"
 msgstr ""
 
@@ -4002,7 +4058,7 @@ msgstr ""
 msgid "Ready-made blocks in the editor"
 msgstr ""
 
-#: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:141 src/block-controls/index.js:205 src/block-controls/index.js:258 src/collections/index.js:65
+#: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:141 src/block-controls/index.js:208 src/block-controls/index.js:261 src/block-controls/index.js:439
 msgid "Remove"
 msgstr ""
 
@@ -4126,7 +4182,7 @@ msgstr ""
 msgid "Reviews block: add the review services in “Memorial → Reviews”."
 msgstr ""
 
-#: reviews/rewio.php:1355 reviews/reviews.php:234
+#: reviews/rewio.php:1425 reviews/reviews.php:234
 msgid "Reviews by branch"
 msgstr ""
 
@@ -4170,6 +4226,10 @@ msgstr ""
 msgid "Reviews of our customers"
 msgstr ""
 
+#: src/block-controls/index.js:464
+msgid "Reviews of this page"
+msgstr ""
+
 #: reviews/rewio-mail.php:60
 msgid "Reviews of {site}: new — {new}, deleted — {gone}"
 msgstr ""
@@ -4182,7 +4242,7 @@ msgstr ""
 msgid "Reviews retyped from the paper guest book, with a photo of the page. Before uploading a photo, cover the surname, phone and signature of the author unless they agreed to publication."
 msgstr ""
 
-#: reviews/bookreviews.php:110
+#: reviews/bookreviews.php:140
 msgid "Reviews that customers left in the paper guest book in our office. Reprinted without changes, with the photo of the page next to them."
 msgstr ""
 
@@ -4220,11 +4280,11 @@ msgstr ""
 msgid "Rewio reviews were loaded on the site {site} ({time})."
 msgstr ""
 
-#: reviews/rewio.php:1296
+#: reviews/rewio.php:1337
 msgid "Rewio reviews: showing the reviews is off — the tick in “Memorial → Reviews → Rewio reviews → 1. Connection”. Only you see this message."
 msgstr ""
 
-#: reviews/rewio.php:1308
+#: reviews/rewio.php:1349
 msgid "Rewio reviews: the reviews are not loaded yet — “Memorial → Reviews → Rewio reviews” → “Load reviews now”. Only you see this message."
 msgstr ""
 
@@ -4232,7 +4292,7 @@ msgstr ""
 msgid "Rewio: every "
 msgstr ""
 
-#: blocks/content/content-blocks.php:328
+#: blocks/content/content-blocks.php:349
 msgid "Right column title (empty — “Cost”)"
 msgstr ""
 
@@ -4290,7 +4350,7 @@ msgstr ""
 msgid "Ruble — prices"
 msgstr ""
 
-#: seo/seo-registry.php:191
+#: seo/seo-registry.php:196
 msgid "SEO title (SEOPress)"
 msgstr ""
 
@@ -4342,8 +4402,12 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: blocks/content/content-blocks.php:257
+#: blocks/content/content-blocks.php:278
 msgid "Search field"
+msgstr ""
+
+#: src/block-controls/index.js:470
+msgid "Search in the reviews"
 msgstr ""
 
 #: memorial-plugin.php:111
@@ -4372,7 +4436,7 @@ msgstr ""
 msgid "Section anchor"
 msgstr ""
 
-#: blocks/content/content-blocks.php:404
+#: blocks/content/content-blocks.php:425
 msgid "Section cards"
 msgstr ""
 
@@ -4388,7 +4452,7 @@ msgstr ""
 msgid "Sections inside the type — on the site these are the buttons above the catalog."
 msgstr ""
 
-#: blocks/content/content-blocks.php:411
+#: blocks/content/content-blocks.php:432
 msgid "Sections of the page"
 msgstr ""
 
@@ -4424,15 +4488,15 @@ msgstr ""
 msgid "Sent"
 msgstr ""
 
-#: prices/prices.php:112
+#: prices/prices.php:153
 msgid "Separate prices"
 msgstr ""
 
-#: reviews/reviews.php:40 prices/prices.php:148 blocks/content/inline-values.php:55
+#: reviews/reviews.php:40 prices/prices.php:189 blocks/content/inline-values.php:55
 msgid "Service"
 msgstr ""
 
-#: blocks/home/home.php:139
+#: blocks/home/home.php:146
 msgid "Service cards of the home page (Memorial → Services), full width."
 msgstr ""
 
@@ -4440,7 +4504,7 @@ msgstr ""
 msgid "Service cards with photos and prices — on the home page and in the “Our services” block on other pages. The texts of the home page are edited like any page: “Pages → Home”."
 msgstr ""
 
-#: blocks/content/content-blocks.php:229
+#: blocks/content/content-blocks.php:250
 msgid "Service cards with photos and starting prices (Memorial → Services)."
 msgstr ""
 
@@ -4460,7 +4524,7 @@ msgstr ""
 msgid "Services and widgets"
 msgstr ""
 
-#: blocks/home/home.php:138
+#: blocks/home/home.php:145
 msgid "Services grid"
 msgstr ""
 
@@ -4468,7 +4532,7 @@ msgstr ""
 msgid "Set the same price"
 msgstr ""
 
-#: src/block-controls/index.js:668
+#: src/block-controls/index.js:832
 msgid "Set up the block: texts and what it shows"
 msgstr ""
 
@@ -4540,15 +4604,15 @@ msgstr ""
 msgid "Show in examples"
 msgstr ""
 
-#: reviews/rewio.php:1438
+#: reviews/rewio.php:1508
 msgid "Show more reviews"
 msgstr ""
 
-#: src/catalog/works.js:354 src/catalog/products.js:661 src/collections/index.js:486 reviews/rewio-archive.php:483 prices/prices.php:60
+#: src/catalog/works.js:354 src/catalog/products.js:661 src/collections/index.js:486 reviews/rewio-archive.php:483 prices/prices.php:60 prices/prices.php:138
 msgid "Show on the site"
 msgstr ""
 
-#: reviews/rewio.php:1384
+#: reviews/rewio.php:1454
 msgid "Show only the reviews of: "
 msgstr ""
 
@@ -4560,7 +4624,7 @@ msgstr ""
 msgid "Show or hide on the site"
 msgstr ""
 
-#: blocks/content/content-blocks.php:381
+#: blocks/content/content-blocks.php:402
 msgid "Show plot size"
 msgstr ""
 
@@ -4568,7 +4632,7 @@ msgstr ""
 msgid "Show prices"
 msgstr ""
 
-#: reviews/reviews.php:246 reviews/reviews.php:253 blocks/home/home.php:422 blocks/legacy/render/parts/reviews.php:43
+#: reviews/reviews.php:246 reviews/reviews.php:253 blocks/home/home.php:429 blocks/legacy/render/parts/reviews.php:43
 msgid "Show reviews"
 msgstr ""
 
@@ -4584,7 +4648,7 @@ msgstr ""
 msgid "Show the map"
 msgstr ""
 
-#: reviews/rewio.php:1379
+#: reviews/rewio.php:1449
 msgid "Show the reviews of a site"
 msgstr ""
 
@@ -4675,7 +4739,7 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: blocks/content/content-blocks.php:250
+#: blocks/content/content-blocks.php:271
 msgid "Skip questions of these pages"
 msgstr ""
 
@@ -4691,11 +4755,11 @@ msgstr ""
 msgid "Soft card"
 msgstr ""
 
-#: reviews/rewio.php:1396 core/assets.php:101
+#: reviews/rewio.php:1466 core/assets.php:101
 msgid "Sort by date"
 msgstr ""
 
-#: reviews/rewio.php:1397 core/assets.php:103
+#: reviews/rewio.php:1467 core/assets.php:103
 msgid "Sort by rating"
 msgstr ""
 
@@ -4703,7 +4767,7 @@ msgstr ""
 msgid "Sort order"
 msgstr ""
 
-#: reviews/rewio.php:1395 blocks/content/content-blocks.php:98 blocks/legacy/render/catalog-archive.php:54
+#: reviews/rewio.php:1465 blocks/content/content-blocks.php:98 blocks/legacy/render/catalog-archive.php:54
 msgid "Sorting"
 msgstr ""
 
@@ -4711,7 +4775,7 @@ msgstr ""
 msgid "Sorting for visitors: by date and by rating (on the right above the reviews)"
 msgstr ""
 
-#: catalog/catalog-front.php:369 reviews/rewio.php:1395 works/works.php:179
+#: catalog/catalog-front.php:369 reviews/rewio.php:1465 works/works.php:179
 msgid "Sorting:"
 msgstr ""
 
@@ -4784,11 +4848,11 @@ msgstr ""
 msgid "Suggestions"
 msgstr ""
 
-#: prices/prices.php:796
+#: prices/prices.php:865
 msgid "Switch the prices in the texts to automatic ones"
 msgstr ""
 
-#: prices/prices.php:793
+#: prices/prices.php:862
 msgid "Switched to automatic prices:"
 msgstr ""
 
@@ -4836,7 +4900,7 @@ msgstr ""
 msgid "Text (empty — from settings)"
 msgstr ""
 
-#: blocks/content/content-blocks.php:302
+#: blocks/content/content-blocks.php:323
 msgid "Text (empty — standard text)"
 msgstr ""
 
@@ -4862,6 +4926,10 @@ msgstr ""
 
 #: core/settings.php:221
 msgid "Text of the “what to do” link"
+msgstr ""
+
+#: prices/prices.php:146
+msgid "Text under the list"
 msgstr ""
 
 #: places/places.php:38 core/settings.php:128 core/settings.php:200
@@ -4918,7 +4986,7 @@ msgstr ""
 msgid "The arrow → is added by the site."
 msgstr ""
 
-#: src/block-controls/index.js:733
+#: src/block-controls/index.js:897
 msgid "The block found nothing to show on this page by itself. Choose what it should show — later the choice is changed with the ⚙ button on the block toolbar or in the block settings on the right (“What to show”)."
 msgstr ""
 
@@ -4932,6 +5000,10 @@ msgstr ""
 
 #: catalog/catalog-import.php:936
 msgid "The check of the file is out of date. Check the file again."
+msgstr ""
+
+#: src/block-controls/index.js:456
+msgid "The chosen reviews are shown in this order; the words are not used then."
 msgstr ""
 
 #: legal/legal.php:172
@@ -5034,7 +5106,7 @@ msgstr ""
 msgid "The photo was not received."
 msgstr ""
 
-#: prices/prices.php:142
+#: prices/prices.php:183
 msgid "The price or the number of models is counted from its products."
 msgstr ""
 
@@ -5134,6 +5206,10 @@ msgstr ""
 msgid "The “Call” goal is sent when the number is tapped on a mobile phone; on a computer MAX or the request window opens instead of a call, they are counted by the goals"
 msgstr ""
 
+#: prices/prices.php:113
+msgid "The “Payment” block on the pages and the payment methods in the data for search engines. The same everywhere."
+msgstr ""
+
 #: core/settings.php:161
 msgid "The “more than N years” on the site is counted from it."
 msgstr ""
@@ -5228,7 +5304,7 @@ msgstr ""
 msgid "This is not an email address."
 msgstr ""
 
-#: blocks/content/content-blocks.php:276 blocks/content/content-blocks.php:414
+#: blocks/content/content-blocks.php:297 blocks/content/content-blocks.php:435
 msgid "This page"
 msgstr ""
 
@@ -5320,7 +5396,7 @@ msgstr ""
 msgid "Too many requests. Please call us."
 msgstr ""
 
-#: src/catalog/works.js:143 src/settings/index.js:228 src/settings/index.js:603 prices/prices.php:93 prices/prices.php:417 works/works.php:259
+#: src/catalog/works.js:143 src/settings/index.js:228 src/settings/index.js:603 prices/prices.php:93 prices/prices.php:486 works/works.php:259
 msgid "Total"
 msgstr ""
 
@@ -5380,7 +5456,7 @@ msgstr ""
 msgid "Under the title of the catalog on the site (optional)."
 msgstr ""
 
-#: src/settings/index.js:518 src/block-controls/index.js:700
+#: src/settings/index.js:518 src/block-controls/index.js:864
 msgid "Unfold"
 msgstr ""
 
@@ -5388,7 +5464,7 @@ msgstr ""
 msgid "Unfold all"
 msgstr ""
 
-#: src/block-controls/index.js:655
+#: src/block-controls/index.js:819
 msgid "Unfold the block"
 msgstr ""
 
@@ -5464,7 +5540,7 @@ msgstr ""
 msgid "Use of the content"
 msgstr ""
 
-#: blocks/content/content-blocks.php:266
+#: blocks/content/content-blocks.php:287
 msgid "Useful to know"
 msgstr ""
 
@@ -5480,7 +5556,7 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: blocks/content/content-blocks.php:350
+#: blocks/content/content-blocks.php:371
 msgid "View"
 msgstr ""
 
@@ -5500,7 +5576,19 @@ msgstr ""
 msgid "Waiting for the call"
 msgstr ""
 
-#: blocks/home/home.php:405 blocks/legacy/render/parts/reviews.php:36
+#: prices/prices.php:129
+msgid "Way of payment"
+msgstr ""
+
+#: prices/prices.php:122
+msgid "Ways of payment"
+msgstr ""
+
+#: blocks/home/home.php:114
+msgid "Ways of payment and the instalment plan from Memorial → Prices → Payment — the same on every page."
+msgstr ""
+
+#: blocks/home/home.php:412 blocks/legacy/render/parts/reviews.php:36
 msgid "We are on Yandex Maps"
 msgstr ""
 
@@ -5548,7 +5636,7 @@ msgstr ""
 msgid "What happens"
 msgstr ""
 
-#: prices/prices.php:194 prices/prices.php:410
+#: prices/prices.php:235 prices/prices.php:479
 msgid "What is included"
 msgstr ""
 
@@ -5572,7 +5660,7 @@ msgstr ""
 msgid "What to do."
 msgstr ""
 
-#: src/block-controls/index.js:682
+#: src/block-controls/index.js:846
 msgid "What to show"
 msgstr ""
 
@@ -5624,7 +5712,7 @@ msgstr ""
 msgid "Where the link leads"
 msgstr ""
 
-#: prices/prices.php:130
+#: prices/prices.php:171
 msgid "Where the price comes from"
 msgstr ""
 
@@ -5760,11 +5848,11 @@ msgstr ""
 msgid "Yandex Metrica counter number"
 msgstr ""
 
-#: blocks/home/home.php:166
+#: blocks/home/home.php:173
 msgid "Yandex review buttons"
 msgstr ""
 
-#: blocks/home/home.php:173
+#: blocks/home/home.php:180
 msgid "Yandex reviews widget"
 msgstr ""
 
@@ -5808,7 +5896,7 @@ msgstr ""
 msgid "a draft; add the cemeteries in “Memorial → Cemeteries” and publish it"
 msgstr ""
 
-#: blocks/block-meta.php:138 blocks/block-meta.php:139 blocks/block-meta.php:142 blocks/block-meta.php:166
+#: blocks/block-meta.php:138 blocks/block-meta.php:139 blocks/block-meta.php:142 blocks/block-meta.php:167
 msgid "address"
 msgstr ""
 
@@ -6070,6 +6158,11 @@ msgctxt "block description"
 msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
 msgstr ""
 
+#: blocks/types/payment/block.json
+msgctxt "block description"
+msgid "Ways of payment and the instalment plan from Memorial → Prices → Payment — the same on every page."
+msgstr ""
+
 #: blocks/types/product-buy/block.json
 msgctxt "block description"
 msgid "“Call” and “Call me back” buttons with a hint, under the product. For the product template."
@@ -6143,6 +6236,11 @@ msgstr ""
 #: blocks/types/cta/block.json
 msgctxt "block keyword"
 msgid "call to action"
+msgstr ""
+
+#: blocks/types/payment/block.json
+msgctxt "block keyword"
+msgid "card"
 msgstr ""
 
 #: blocks/types/cards/block.json
@@ -6253,6 +6351,11 @@ msgstr ""
 #: blocks/types/icon/block.json
 msgctxt "block keyword"
 msgid "icon"
+msgstr ""
+
+#: blocks/types/payment/block.json
+msgctxt "block keyword"
+msgid "instalments"
 msgstr ""
 
 #: blocks/types/laurel/block.json
@@ -6398,6 +6501,11 @@ msgstr ""
 #: blocks/types/cards/block.json
 msgctxt "block keyword"
 msgid "pages"
+msgstr ""
+
+#: blocks/types/payment/block.json
+msgctxt "block keyword"
+msgid "payment"
 msgstr ""
 
 #: blocks/types/mobile-bar/block.json blocks/types/contacts-list/block.json blocks/types/cta/block.json blocks/types/phone-button/block.json blocks/types/night-line/block.json blocks/types/header-contacts/block.json
@@ -6660,6 +6768,11 @@ msgctxt "block title"
 msgid "Our works"
 msgstr ""
 
+#: blocks/types/payment/block.json
+msgctxt "block title"
+msgid "Payment"
+msgstr ""
+
 #: blocks/types/phone-button/block.json
 msgctxt "block title"
 msgid "Phone button"
@@ -6744,7 +6857,7 @@ msgstr ""
 msgid "book"
 msgstr ""
 
-#: blocks/block-meta.php:173
+#: blocks/block-meta.php:174
 msgid "breadcrumbs"
 msgstr ""
 
@@ -6757,11 +6870,11 @@ msgctxt "button: order a product"
 msgid "Order"
 msgstr ""
 
-#: reviews/rewio.php:1396
+#: reviews/rewio.php:1466
 msgid "by date"
 msgstr ""
 
-#: reviews/rewio.php:1397
+#: reviews/rewio.php:1467
 msgid "by rating"
 msgstr ""
 
@@ -6769,7 +6882,7 @@ msgstr ""
 msgid "call"
 msgstr ""
 
-#: blocks/block-meta.php:163
+#: blocks/block-meta.php:164
 msgid "call back"
 msgstr ""
 
@@ -6777,11 +6890,15 @@ msgstr ""
 msgid "call to action"
 msgstr ""
 
-#: blocks/block-meta.php:161
+#: blocks/block-meta.php:160
+msgid "card"
+msgstr ""
+
+#: blocks/block-meta.php:162
 msgid "cards"
 msgstr ""
 
-#: blocks/block-meta.php:146 blocks/block-meta.php:147 blocks/block-meta.php:148 blocks/block-meta.php:175 blocks/block-meta.php:176
+#: blocks/block-meta.php:146 blocks/block-meta.php:147 blocks/block-meta.php:148 blocks/block-meta.php:176 blocks/block-meta.php:177
 msgid "catalog"
 msgstr ""
 
@@ -6797,7 +6914,7 @@ msgstr ""
 msgid "categories"
 msgstr ""
 
-#: blocks/block-meta.php:176
+#: blocks/block-meta.php:177
 msgid "category"
 msgstr ""
 
@@ -6805,7 +6922,7 @@ msgstr ""
 msgid "cemeteries"
 msgstr ""
 
-#: prices/prices.php:272
+#: prices/prices.php:341
 msgid "click in the paragraph where the price should be → on the block toolbar open the arrow ∨ (“More”) → “Site value” → “Price from Memorial → Prices” → choose the price → “Insert”. The page always shows the current price. Prices marked “In the SEO plugin” are put into SEO titles as %%mem_code%% (shown in brackets below)."
 msgstr ""
 
@@ -6825,7 +6942,7 @@ msgstr ""
 msgid "company details"
 msgstr ""
 
-#: blocks/block-meta.php:164
+#: blocks/block-meta.php:165
 msgid "consent"
 msgstr ""
 
@@ -6833,7 +6950,7 @@ msgstr ""
 msgid "consent to personal data processing"
 msgstr ""
 
-#: src/bindings/index.js:365 blocks/block-meta.php:138 blocks/block-meta.php:141 blocks/block-meta.php:142 blocks/block-meta.php:143 blocks/block-meta.php:169
+#: src/bindings/index.js:365 blocks/block-meta.php:138 blocks/block-meta.php:141 blocks/block-meta.php:142 blocks/block-meta.php:143 blocks/block-meta.php:170
 msgid "contacts"
 msgstr ""
 
@@ -6841,11 +6958,11 @@ msgstr ""
 msgid "converted, unchanged, no-revision, not-found or an error message."
 msgstr ""
 
-#: blocks/block-meta.php:164
+#: blocks/block-meta.php:165
 msgid "cookie"
 msgstr ""
 
-#: blocks/block-meta.php:171
+#: blocks/block-meta.php:172
 msgid "copyright"
 msgstr ""
 
@@ -6867,6 +6984,10 @@ msgstr ""
 
 #: blocks/block-meta.php:130
 msgid "decoration"
+msgstr ""
+
+#: prices/terms.php:139
+msgid "delivery"
 msgstr ""
 
 #: blocks/block-meta.php:130
@@ -6901,7 +7022,7 @@ msgstr ""
 msgid "figure"
 msgstr ""
 
-#: blocks/block-meta.php:168 blocks/block-meta.php:169 blocks/block-meta.php:170 blocks/block-meta.php:171
+#: blocks/block-meta.php:169 blocks/block-meta.php:170 blocks/block-meta.php:171 blocks/block-meta.php:172
 msgid "footer"
 msgstr ""
 
@@ -6937,7 +7058,7 @@ msgstr ""
 msgid "for example: per metre"
 msgstr ""
 
-#: blocks/block-meta.php:163
+#: blocks/block-meta.php:164
 msgid "form"
 msgstr ""
 
@@ -6963,6 +7084,10 @@ msgstr ""
 msgid "grid"
 msgstr ""
 
+#: prices/terms.php:139
+msgid "guarantee"
+msgstr ""
+
 #: blocks/block-meta.php:156
 msgid "guide"
 msgstr ""
@@ -6971,11 +7096,11 @@ msgstr ""
 msgid "halls"
 msgstr ""
 
-#: blocks/block-meta.php:166 blocks/block-meta.php:167
+#: blocks/block-meta.php:167 blocks/block-meta.php:168
 msgid "header"
 msgstr ""
 
-#: blocks/block-meta.php:336
+#: blocks/block-meta.php:337
 msgid "hidden on the site"
 msgstr ""
 
@@ -6983,7 +7108,7 @@ msgstr ""
 msgid "hide"
 msgstr ""
 
-#: blocks/block-meta.php:134 blocks/block-meta.php:141 blocks/block-meta.php:166
+#: blocks/block-meta.php:134 blocks/block-meta.php:141 blocks/block-meta.php:167
 msgid "hours"
 msgstr ""
 
@@ -6999,7 +7124,7 @@ msgstr ""
 msgid "icon"
 msgstr ""
 
-#: prices/prices.php:161
+#: prices/prices.php:202
 msgid "in SEO"
 msgstr ""
 
@@ -7007,6 +7132,10 @@ msgstr ""
 #: src/catalog/import.js:135
 #, php-format
 msgid "in the library: %d"
+msgstr ""
+
+#: blocks/block-meta.php:160
+msgid "instalments"
 msgstr ""
 
 #: blocks/block-meta.php:130
@@ -7035,7 +7164,7 @@ msgstr ""
 msgid "list from Rewio: %s"
 msgstr ""
 
-#: blocks/block-meta.php:139 blocks/block-meta.php:174
+#: blocks/block-meta.php:139 blocks/block-meta.php:175
 msgid "map"
 msgstr ""
 
@@ -7047,11 +7176,11 @@ msgstr ""
 msgid "memorialbel or https://t.me/…"
 msgstr ""
 
-#: blocks/block-meta.php:170
+#: blocks/block-meta.php:171
 msgid "menu"
 msgstr ""
 
-#: blocks/block-meta.php:172
+#: blocks/block-meta.php:173
 msgid "mobile"
 msgstr ""
 
@@ -7069,7 +7198,7 @@ msgstr ""
 msgid "name (“—” if not given)"
 msgstr ""
 
-#: blocks/block-meta.php:173
+#: blocks/block-meta.php:174
 msgid "navigation"
 msgstr ""
 
@@ -7089,7 +7218,7 @@ msgstr ""
 msgid "not chosen"
 msgstr ""
 
-#: reviews/rewio.php:400 blocks/block-meta.php:177
+#: reviews/rewio.php:400 blocks/block-meta.php:178
 msgid "not found"
 msgstr ""
 
@@ -7119,7 +7248,7 @@ msgstr ""
 msgid "on request"
 msgstr ""
 
-#: prices/prices.php:61
+#: prices/prices.php:61 prices/prices.php:139
 msgid "on the site"
 msgstr ""
 
@@ -7137,7 +7266,7 @@ msgstr ""
 msgid "packages"
 msgstr ""
 
-#: prices/prices.php:810
+#: prices/prices.php:879
 msgid "page"
 msgstr ""
 
@@ -7147,12 +7276,16 @@ msgstr ""
 msgid "page “%1$s”, questions: %2$d"
 msgstr ""
 
-#: blocks/block-meta.php:161
+#: blocks/block-meta.php:162
 msgid "pages"
 msgstr ""
 
 #: places/places.php:81
 msgid "parking, a separate hall, a lenten menu"
+msgstr ""
+
+#: blocks/block-meta.php:160
+msgid "payment"
 msgstr ""
 
 #: catalog/catalog-import.php:1305 catalog/catalog-import.php:1384
@@ -7168,7 +7301,7 @@ msgctxt "person"
 msgid "Name"
 msgstr ""
 
-#: blocks/block-meta.php:132 blocks/block-meta.php:134 blocks/block-meta.php:138 blocks/block-meta.php:142 blocks/block-meta.php:157 blocks/block-meta.php:167
+#: blocks/block-meta.php:132 blocks/block-meta.php:134 blocks/block-meta.php:138 blocks/block-meta.php:142 blocks/block-meta.php:157 blocks/block-meta.php:168
 msgid "phone"
 msgstr ""
 
@@ -7176,7 +7309,7 @@ msgstr ""
 msgid "phone of the visitor"
 msgstr ""
 
-#: blocks/block-meta.php:148 blocks/block-meta.php:160
+#: blocks/block-meta.php:148 blocks/block-meta.php:161
 msgid "photos"
 msgstr ""
 
@@ -7192,7 +7325,7 @@ msgstr ""
 msgid "plot"
 msgstr ""
 
-#: blocks/block-meta.php:160
+#: blocks/block-meta.php:161
 msgid "portfolio"
 msgstr ""
 
@@ -7204,11 +7337,11 @@ msgstr ""
 msgid "prices"
 msgstr ""
 
-#: blocks/block-meta.php:171
+#: blocks/block-meta.php:172
 msgid "privacy"
 msgstr ""
 
-#: blocks/block-meta.php:175
+#: blocks/block-meta.php:176
 msgid "product"
 msgstr ""
 
@@ -7235,7 +7368,7 @@ msgctxt "request column"
 msgid "Email"
 msgstr ""
 
-#: reviews/rewio.php:968 reviews/rewio.php:1122 reviews/rewio.php:1227 reviews/rewio.php:1368 reviews/reviews.php:177
+#: reviews/rewio.php:968 reviews/rewio.php:1122 reviews/rewio.php:1227 reviews/rewio.php:1438 reviews/reviews.php:177
 msgid "review"
 msgid_plural "reviews"
 msgstr[0] ""
@@ -7265,7 +7398,7 @@ msgstr ""
 msgid "search statistics queries"
 msgstr ""
 
-#: prices/prices.php:810
+#: prices/prices.php:879
 msgid "section description"
 msgstr ""
 
@@ -7378,7 +7511,7 @@ msgstr ""
 msgid "with answers"
 msgstr ""
 
-#: blocks/block-meta.php:160
+#: blocks/block-meta.php:161
 msgid "works"
 msgstr ""
 
@@ -7386,7 +7519,7 @@ msgstr ""
 msgid "wreath"
 msgstr ""
 
-#: blocks/block-meta.php:168
+#: blocks/block-meta.php:169
 msgid "years"
 msgstr ""
 
@@ -7407,12 +7540,12 @@ msgid "»</a> — the halls block was added (the halls themselves — “Memoria
 msgstr ""
 
 #. translators: %s: what an empty choice means.
-#: src/block-controls/index.js:312
+#: src/block-controls/index.js:315
 #, php-format
 msgid "— %s —"
 msgstr ""
 
-#: content/guide.php:326
+#: content/guide.php:327
 msgid "— a draft with the search. For an article to appear on it: open the article → “Page Attributes” → “Parent” → “Good to know”."
 msgstr ""
 
@@ -7428,7 +7561,7 @@ msgstr ""
 msgid "— none —"
 msgstr ""
 
-#: src/block-controls/index.js:315 legal/legal.php:32 prices/values.php:40 prices/values.php:72
+#: src/block-controls/index.js:318 legal/legal.php:32 prices/values.php:40 prices/values.php:72
 msgid "— not chosen —"
 msgstr ""
 
@@ -7440,7 +7573,7 @@ msgstr ""
 msgid "— not specified —"
 msgstr ""
 
-#: prices/prices.php:797
+#: prices/prices.php:866
 msgid "— the cremation total, the ribbon, the delivery and the catalog prices that match the current ones in the texts of pages become site values that change by themselves."
 msgstr ""
 
@@ -7452,7 +7585,7 @@ msgstr ""
 msgid "“After cookie consent” and “Always” also set how the cookie bar works. With “Off” the bar follows the setting below."
 msgstr ""
 
-#: blocks/content/content-blocks.php:288
+#: blocks/content/content-blocks.php:309
 msgid "“All articles” link"
 msgstr ""
 
@@ -7472,7 +7605,7 @@ msgstr ""
 msgid "“Call” button on a computer"
 msgstr ""
 
-#: blocks/home/home.php:188
+#: blocks/home/home.php:195
 msgid "“Call”, “Write” and the addresses with directions (Memorial → Contacts)."
 msgstr ""
 
@@ -7500,7 +7633,7 @@ msgstr ""
 msgid "“Going to MAX”,"
 msgstr ""
 
-#: content/guide.php:326
+#: content/guide.php:327
 msgid "“Good to know”"
 msgstr ""
 
@@ -7508,7 +7641,7 @@ msgstr ""
 msgid "“JavaScript event”"
 msgstr ""
 
-#: blocks/home/home.php:167
+#: blocks/home/home.php:174
 msgid "“Leave a review” and “We are on Yandex Maps” buttons."
 msgstr ""
 
@@ -7580,11 +7713,11 @@ msgstr ""
 msgid "✎ Texts and contacts"
 msgstr ""
 
-#: prices/prices.php:799
+#: prices/prices.php:868
 msgid "✔ Done."
 msgstr ""
 
-#: prices/prices.php:803
+#: prices/prices.php:872
 msgid "✔ No prices written into the texts by hand were found."
 msgstr ""
 

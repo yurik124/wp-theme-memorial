@@ -7831,3 +7831,104 @@ msgstr "Вставьте код вида {spec:vysota} в название ил�
 
 msgid "after saving"
 msgstr "после сохранения"
+
+msgid "A card with the delivery and the visits of the agent. The text is edited right on the page."
+msgstr "Карточка о доставке и выезде агента. Текст правится прямо на странице."
+
+msgid "A card with the guarantees. The text is edited right on the page."
+msgstr "Карточка с гарантиями. Текст правится прямо на странице."
+
+msgid "Add a way of payment"
+msgstr "Добавить способ оплаты"
+
+msgid "Add reviews of the guest book"
+msgstr "Добавить отзывы из книги отзывов"
+
+msgid "Can stay empty. {price:code} puts in a price."
+msgstr "Можно оставить пустым. {price:код} подставит цену."
+
+msgid "Change the choice"
+msgstr "Изменить выбор"
+
+msgid "Choose reviews"
+msgstr "Выбрать отзывы"
+
+msgid "Delivery and visits"
+msgstr "Доставка и выезд"
+
+msgid "Guarantees"
+msgstr "Гарантии"
+
+msgid "No reviews found."
+msgstr "Отзывы не найдены."
+
+msgid "One short line after the name, for example “our own, without a bank — for monuments and tiling”. Can stay empty."
+msgstr "Одна короткая строка после названия, например «своя, без банка — на памятники и укладку плитки». Можно оставить пустой."
+
+msgid "Only reviews with these words, comma separated (part of a word is enough)"
+msgstr "Только отзывы с этими словами, через запятую (достаточно части слова)"
+
+msgid "Or reviews chosen by hand"
+msgstr "Или отзывы, выбранные вручную"
+
+msgid "Payment"
+msgstr "Оплата"
+
+msgid "Reviews of this page"
+msgstr "Отзывы для этой страницы"
+
+msgid "Search in the reviews"
+msgstr "Поиск по отзывам"
+
+msgid "Text under the list"
+msgstr "Текст под списком"
+
+msgid "The chosen reviews are shown in this order; the words are not used then."
+msgstr "Выбранные отзывы показываются в этом порядке; слова тогда не учитываются."
+
+msgid "The “Payment” block on the pages and the payment methods in the data for search engines. The same everywhere."
+msgstr "Блок «Оплата» на страницах и способы оплаты в данных для поисковиков. Везде одинаково."
+
+msgid "Way of payment"
+msgstr "Способ оплаты"
+
+msgid "Ways of payment"
+msgstr "Способы оплаты"
+
+msgid "Ways of payment and the instalment plan from Memorial → Prices → Payment — the same on every page."
+msgstr "Способы оплаты и рассрочка из «Мемориал → Цены → Оплата» — одинаково на всех страницах."
+
+msgid "card"
+msgstr "карта"
+
+msgid "delivery"
+msgstr "доставка"
+
+msgid "guarantee"
+msgstr "гарантия"
+
+msgid "instalments"
+msgstr "рассрочка"
+
+msgid "payment"
+msgstr "оплата"
+
+msgctxt "block keyword"
+msgid "payment"
+msgstr "оплата"
+
+msgctxt "block keyword"
+msgid "card"
+msgstr "карта"
+
+msgctxt "block keyword"
+msgid "instalments"
+msgstr "рассрочка"
+
+msgctxt "block description"
+msgid "Ways of payment and the instalment plan from Memorial → Prices → Payment — the same on every page."
+msgstr "Способы оплаты и рассрочка из «Мемориал → Цены → Оплата» — одинаково на всех страницах."
+
+msgctxt "block title"
+msgid "Payment"
+msgstr "Оплата"
