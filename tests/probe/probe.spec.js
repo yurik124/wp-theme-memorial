@@ -2732,15 +2732,17 @@ test.describe( 'условия и отзывы', () => {
 		report.editor = await page.evaluate( async () => {
 			const pick = await window.wp.apiFetch( { path: '/memorial-plugin/v1/reviews/pick' } ).catch( ( e ) => ( { error: e.message } ) );
 			const vars = ( window.wp.blocks.getBlockVariations( 'core/group' ) || [] ).filter( ( v ) => /^memorial-/.test( v.name ) ).map( ( v ) => [ v.name, v.title, ( v.innerBlocks || [] ).length ] );
-			const blocks = window.wp.data.select( 'core/block-editor' ).getBlocks().map( ( b ) => b.name + ( b.attributes.className ? '.' + b.attributes.className : '' ) );
+			const ed = window.wp.data.select( 'core/block-editor' );
+			const blocks = ed.getClientIdsWithDescendants().map( ( id ) => ed.getBlock( id ) ).filter( ( b ) => b && ( /^memorial-plugin\//.test( b.name ) || /mterms/.test( b.attributes.className || '' ) ) ).map( ( b ) => b.name + ( b.attributes.className ? '.' + b.attributes.className : '' ) );
 			return { pickCount: Array.isArray( pick ) ? pick.length : pick, pickFirst: Array.isArray( pick ) ? pick.slice( 0, 2 ) : null, vars, blocks, payment: !! window.wp.blocks.getBlockType( 'memorial-plugin/payment' ) };
 		} );
 		await shot( page, 'terms-editor' );
 		// Блок отзывов выбран — настройки справа (слова, «Выбрать отзывы», книга отзывов).
 		await page.evaluate( () => {
-			const b = window.wp.data.select( 'core/block-editor' ).getBlocks().find( ( x ) => x.name === 'memorial-plugin/rewio-reviews' );
-			if ( b ) {
-				window.wp.data.dispatch( 'core/block-editor' ).selectBlock( b.clientId );
+			const ids = window.wp.data.select( 'core/block-editor' ).getBlocksByName( 'memorial-plugin/rewio-reviews' );
+			if ( ids.length ) {
+				window.wp.data.dispatch( 'core/block-editor' ).selectBlock( ids[ 0 ] );
+				window.wp.data.dispatch( 'core/edit-post' )?.openGeneralSidebar?.( 'edit-post/block' );
 			}
 		} );
 		await page.waitForTimeout( 1500 );
