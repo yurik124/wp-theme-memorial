@@ -2095,6 +2095,103 @@ test.describe( 'хаб', () => {
 } );
 
 test.describe( 'правка в таблице', () => {
+	test( 'описание товара в HTML: окно товара, поисковики и диктор', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 20000 );
+		const report = {};
+		const save = () => fs.writeFileSync( `${ DIR }/log-desc.json`, JSON.stringify( report, null, 1 ) );
+		const errs = errorsOf( page );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/edit.php?post_type=mem_product&page=mem-types' );
+		await page.waitForFunction( () => window.wp && window.wp.apiFetch, null, { timeout: 60000 } );
+		const r = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/types' } ) );
+		const types = Array.isArray( r ) ? r : r.types || [];
+		report.mode = await page.evaluate( () => window.wp.apiFetch( { path: '/wp/v2/settings' } ).then( ( x ) => x.mem_product_pages ).catch( () => null ) );
+		report.types = types.map( ( t ) => [ t.name, t.view, t.page && t.page.url ] );
+		const t = types.find( ( x ) => x.view === 'card' && x.page && ! x.page.draft ) || types.find( ( x ) => x.page && ! x.page.draft );
+		report.type = t && [ t.name, t.view, t.page.url ];
+		const items = ( await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/products' } ) ) ).items;
+		report.withDesc = items.filter( ( i ) => i.type === t.id && String( i.desc || '' ).trim() ).map( ( i ) => ( { id: i.id, title: i.title, desc: String( i.desc ).slice( 0, 60 ), descLen: String( i.desc ).length } ) );
+		save();
+		await page.context().clearCookies();
+		const url = t.page.url + ( t.page.url.includes( '?' ) ? '&' : '?' ) + 'nocache=' + Date.now();
+		// Исходный HTML — как его получает поисковый робот, без JavaScript.
+		const html = await ( await page.request.get( url ) ).text();
+		const descs = [ ...html.matchAll( /<div class="pv__desc">([\s\S]*?)<\/div>/g ) ].map( ( m ) => m[ 1 ].replace( /<[^>]+>/g, ' ' ).replace( /\s+/g, ' ' ).trim() );
+		report.raw = {
+			template: ( html.match( /<template class="mcard__info"/g ) || [] ).length,
+			infoHidden: ( html.match( /<div class="mcard__info" hidden/g ) || [] ).length,
+			descs: descs.length,
+			firstDesc: descs[ 0 ] ? descs[ 0 ].slice( 0, 80 ) : null,
+			pvTitle: ( html.match( /pv__title/g ) || [] ).length,
+		};
+		const sentence = descs[ 0 ] ? descs[ 0 ].split( '.' )[ 0 ] : '';
+		report.raw.sentenceInHtml = sentence ? html.split( sentence ).length - 1 : null;
+		report.raw.sentenceInSaved = sentence ? report.withDesc.length && items.filter( ( i ) => String( i.desc || '' ).includes( sentence ) ).map( ( i ) => String( i.desc ).split( sentence ).length - 1 ) : null;
+		save();
+		const snippet = descs[ 0 ] ? descs[ 0 ].slice( 0, 30 ) : null;
+		for ( const w of [ 1440, 390, 360 ] ) {
+			const o = {};
+			await page.setViewportSize( { width: w, height: w > 500 ? 900 : 800 } );
+			await page.goto( url );
+			const cookie = page.getByRole( 'button', { name: /Принять/ } );
+			if ( await cookie.count() ) {
+				await cookie.first().click().catch( () => {} );
+			}
+			// товар с описанием (или первый в окне)
+			const found = snippet
+				? page.locator( '.mcard', { has: page.locator( '.mcard__info .pv__desc', { hasText: snippet } ) } ).first()
+				: page.locator( '.mcard', { has: page.locator( 'a[data-pv]' ) } ).first();
+			// карточка — по id: пока описание в окне, «карточка с описанием» не находится
+			const li = page.locator( '#' + ( await found.getAttribute( 'id' ) ) );
+			o.infoVisibleBefore = await li.locator( '.mcard__info' ).isVisible();
+			o.descVisibleBefore = snippet ? await page.getByText( snippet ).first().isVisible() : null;
+			// дерево доступности: скрытое описание диктор не видит
+			o.cardTreeBefore = await li.ariaSnapshot();
+			o.a11yCardBefore = o.cardTreeBefore.includes( 'голубых хризантем' );
+			o.visibleWithText = snippet ? await page.getByText( snippet ).evaluateAll( ( els ) => els.filter( ( e ) => e.getClientRects().length ).map( ( e ) => e.className || e.tagName ) ) : null;
+			await li.locator( 'a[data-pv]' ).first().scrollIntoViewIfNeeded();
+			await li.locator( 'a[data-pv]' ).first().click();
+			const pv = page.locator( 'dialog.pv[open]' );
+			await pv.waitFor();
+			await page.waitForTimeout( 700 );
+			o.title = await pv.locator( '.pv__title' ).innerText().catch( () => null );
+			o.price = await pv.locator( '.pv__price' ).innerText().catch( () => null );
+			o.order = await pv.locator( '.pv__order' ).count();
+			o.descInModal = await pv.locator( '.pv__desc' ).isVisible().catch( () => false );
+			o.specsInModal = await pv.locator( '.pv__specs' ).count();
+			o.infoLeftInCard = await li.locator( '.mcard__info > *' ).count();
+			o.descCopiesOpen = snippet ? await page.getByText( snippet ).count() : null;
+			o.a11yOpen = ( await pv.ariaSnapshot() ).includes( 'голубых хризантем' );
+			o.a11yCardOpen = ( await li.ariaSnapshot() ).includes( 'голубых хризантем' );
+			o.focusInDialog = await page.evaluate( () => !! document.activeElement?.closest( 'dialog.pv' ) );
+			await page.screenshot( { path: `${ DIR }/desc-${ w }-open.png` } );
+			if ( await pv.locator( '.pv__next' ).isVisible() ) {
+				await pv.locator( '.pv__next' ).click();
+				await page.waitForTimeout( 500 );
+				o.afterNextBackInCard = await li.locator( '.mcard__info > *' ).count();
+				await pv.locator( '.pv__prev' ).click();
+				await page.waitForTimeout( 500 );
+				o.afterPrevInModal = await pv.locator( '.pv__desc' ).count();
+			}
+			await page.keyboard.press( 'Escape' );
+			await page.waitForTimeout( 600 );
+			o.closed = ! ( await pv.count() );
+			o.infoBackInCard = await li.locator( '.mcard__info > *' ).count();
+			o.descVisibleAfter = snippet ? await page.getByText( snippet ).first().isVisible() : null;
+			o.descCopiesAfter = snippet ? await page.getByText( snippet ).count() : null;
+			o.a11yCardAfter = ( await li.ariaSnapshot() ).includes( 'голубых хризантем' );
+			report[ 'w' + w ] = o;
+			save();
+		}
+		report.errors = errs;
+		save();
+	} );
+
 	test( 'коды характеристик: {spec:…} в названии товара', async ( { page } ) => {
 		test.setTimeout( 600_000 );
 		page.setDefaultTimeout( 20000 );

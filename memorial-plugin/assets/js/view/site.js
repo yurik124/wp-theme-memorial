@@ -738,7 +738,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		let prods = [],
 			pi = 0,
 			ph = 0;
-		// товар из карточки: фото (крупные адреса — data-big), что показать рядом (template)
+		// товар из карточки: фото (крупные адреса — data-big); описание и характеристики — скрытый блок карточки
 		const prodOf = ( a ) => {
 			const li = a.closest( '.mcard' );
 			const imgs = [ ...li.querySelectorAll( '.mcard__ph' ) ];
@@ -757,8 +757,54 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				li,
 				mode: a.dataset.pv === 'card' ? 'card' : 'photo',
 				photos,
-				tpl: li.querySelector( 'template.mcard__info' ),
+				info: li.querySelector( '.mcard__info' ),
 			};
+		};
+		// Описание и характеристики окно берёт у карточки на время показа и возвращает: в HTML
+		// страницы они всегда в одном месте (для поисковиков), скрытые (hidden) — экранный диктор
+		// читает их только в открытом окне.
+		let lent = null;
+		const giveBack = () => {
+			if ( lent ) {
+				lent.info.append( ...lent.nodes );
+				lent = null;
+			}
+		};
+		// название, подпись, цена и «Заказать» — из видимой карточки
+		const fromCard = ( p ) => {
+			const el = ( tag, cls, text ) => {
+				const x = d.createElement( tag );
+				x.className = cls;
+				x.textContent = text;
+				return x;
+			};
+			const name = p.li.querySelector( '.mcard__name' );
+			const sub = p.li.querySelector( '.mcard__sub' );
+			const price = p.li.querySelector( '.mcard__price' );
+			const order = p.li.querySelector( '.mcard__order' );
+			const out = {
+				title: el( 'h2', 'pv__title', name?.textContent || '' ),
+				sub:
+					sub && p.info && ! p.info.hasAttribute( 'data-nosub' )
+						? el( 'p', 'pv__sub', sub.textContent )
+						: null,
+				price: null,
+				order: null,
+			};
+			if ( price ) {
+				out.price = el( 'p', 'pv__price', '' );
+				out.price.append(
+					...[ ...price.childNodes ].map( ( x ) =>
+						x.cloneNode( true )
+					)
+				);
+			}
+			if ( order ) {
+				out.order = order.cloneNode( true );
+				out.order.classList.replace( 'btn--line', 'btn--gold' );
+				out.order.classList.replace( 'mcard__order', 'pv__order' );
+			}
+			return out;
 		};
 		const showPhoto = ( k ) => {
 			const p = prods[ pi ];
@@ -819,18 +865,22 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				'aria-label',
 				p.li.querySelector( '.mcard__name' )?.textContent || ''
 			);
-			const parts = p.tpl
-				? [ ...p.tpl.content.cloneNode( true ).children ]
-				: [];
-			const pick = ( q ) => parts.filter( ( x ) => x.matches( q ) );
+			giveBack();
+			const nodes = p.info ? [ ...p.info.children ] : [];
+			lent = p.info ? { info: p.info, nodes } : null;
+			const one = ( q ) => nodes.find( ( x ) => x.matches( q ) );
+			const c = fromCard( p );
+			const desc = one( '.pv__desc' ),
+				specs = one( '.pv__specs' );
+			const keep = ( list ) => list.filter( Boolean );
 			if ( p.mode === 'card' ) {
 				main.replaceChildren(
-					...pick( '.pv__title, .pv__sub, .pv__desc, .pv__specs' )
+					...keep( [ c.title, c.sub, desc, specs ] )
 				);
-				buy.replaceChildren( ...pick( '.pv__price, .pv__order' ) );
+				buy.replaceChildren( ...keep( [ c.price, c.order ] ) );
 			} else {
 				main.replaceChildren(
-					...pick( '.pv__title, .pv__sub, .pv__price, .pv__specs' )
+					...keep( [ c.title, c.sub, c.price, specs ] )
 				);
 				buy.replaceChildren();
 			}
@@ -858,6 +908,12 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			);
 		};
 		pimg.addEventListener( 'load', placeNav );
+		// окно закрыто (крестик, Esc, фон) — описание и характеристики возвращаются в карточку
+		pv.addEventListener( 'close', () => {
+			giveBack();
+			main.replaceChildren();
+			buy.replaceChildren();
+		} );
 		let pvW = window.innerWidth;
 		window.addEventListener( 'resize', () => {
 			// прокрутка на телефоне меняет только высоту (адресная строка) — размер фото не трогаем

@@ -261,8 +261,11 @@ function memorial_plugin_catalog_card( $p, $i, $opts = array() ) {
 	echo ( $page || $big ) ? '</a>' : '</div>';
 	$button = ! empty( $order['on'] ) ? memorial_plugin_order_button( $title, (string) $order['text'], 'btn--line mcard__order' ) : '';
 	echo $button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_attr()/esc_html().
-	// что крупный просмотр показывает рядом с фото: «Только фото» — название, цена, характеристики;
+	// Что крупный просмотр показывает рядом с фото: «Только фото» — название, цена, характеристики;
 	// «Окно товара» — ещё описание (характеристики под ним) и «Заказать» под ценой.
+	// Название, подпись, цену и кнопку окно берёт из карточки. Описание и характеристики лежат в
+	// карточке скрытым блоком (hidden): они в HTML страницы для поисковиков, экранный диктор их не
+	// читает, а окно переносит этот же блок к себе и возвращает при закрытии (assets/js/view/site.js).
 	if ( ! $page && $big ) {
 		$specs = memorial_plugin_product_specs_shown( $id );
 		// подпись повторяет характеристику («700 × 2050» и «Ширина × высота: 700 × 2050 мм») — не дублируем.
@@ -275,11 +278,7 @@ function memorial_plugin_catalog_card( $p, $i, $opts = array() ) {
 				$psub = '';
 			}
 		}
-		echo '<template class="mcard__info"><h2 class="pv__title">' . esc_html( $title ) . '</h2>';
-		if ( $psub ) {
-			echo '<p class="pv__sub">' . esc_html( $psub ) . '</p>';
-		}
-		echo '<p class="pv__price">' . wp_kses_post( memorial_plugin_price_html( $id ) ) . '</p>';
+		echo '<div class="mcard__info" hidden' . ( $psub ? '' : ' data-nosub' ) . '>';
 		$desc = 'card' === $view ? trim( memorial_plugin_spec_fill( (string) get_post_field( 'post_content', $id ), $id ) ) : '';
 		if ( '' !== wp_strip_all_tags( $desc ) ) {
 			echo '<div class="pv__desc">' . wp_kses_post( wpautop( strip_shortcodes( excerpt_remove_blocks( $desc ) ) ) ) . '</div>';
@@ -291,10 +290,7 @@ function memorial_plugin_catalog_card( $p, $i, $opts = array() ) {
 			}
 			echo '</dl>';
 		}
-		if ( 'card' === $view && $button ) {
-			echo str_replace( 'btn--line mcard__order', 'btn--gold pv__order', $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the same escaped button.
-		}
-		echo '</template>';
+		echo '</div>';
 	}
 	echo '</li>';
 }
