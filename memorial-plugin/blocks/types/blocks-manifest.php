@@ -1830,36 +1830,6 @@ return array (
       'viewportWidth' => 1000,
     ),
   ),
-  'page-products' => 
-  array (
-    '$schema' => 'https://schemas.wp.org/trunk/block.json',
-    'apiVersion' => 3,
-    'name' => 'memorial-plugin/page-products',
-    'title' => 'Products of the page (for the template)',
-    'category' => 'memorial-pages',
-    'icon' => 'grid-view',
-    'description' => 'Catalog tiles or product grid for pages set to show products, with the page text above and below.',
-    'keywords' => 
-    array (
-      0 => 'products',
-      1 => 'catalog',
-      2 => 'memorial',
-    ),
-    'textdomain' => 'memorial-plugin',
-    'supports' => 
-    array (
-      'autoRegister' => true,
-      'html' => false,
-      'reusable' => false,
-    ),
-    'example' => 
-    array (
-      'attributes' => 
-      array (
-      ),
-      'viewportWidth' => 1200,
-    ),
-  ),
   'phone-button' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',

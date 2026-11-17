@@ -60,6 +60,24 @@ foreach ( array(
 ) as $memorial_plugin_hook ) {
 	add_filter( $memorial_plugin_hook, 'memorial_plugin_seo_sc', 99 );
 }
+/**
+ * A variable %%mem_…%% the SEO plugin did not replace (no such price, or it is not marked “In the SEO plugin”)
+ * is not shown to people and search engines: it is removed together with the dash or colon before it.
+ *
+ * @param mixed $s Title or description.
+ * @return mixed
+ */
+function memorial_plugin_seo_unknown_vars( $s ) {
+	if ( ! is_string( $s ) || false === strpos( $s, '%%mem_' ) ) {
+		return $s;
+	}
+	$s = (string) preg_replace( '~\s*(?:[—–-]|:)?\s*%%mem_[a-z0-9_]+%%~u', '', $s );
+	return trim( (string) preg_replace( '~\s{2,}~u', ' ', $s ) );
+}
+foreach ( array( 'seopress_titles_title', 'seopress_titles_desc', 'seopress_social_og_title', 'seopress_social_og_desc', 'wpseo_title', 'wpseo_metadesc', 'rank_math/frontend/title', 'rank_math/frontend/description', 'document_title' ) as $memorial_plugin_hook ) {
+	add_filter( $memorial_plugin_hook, 'memorial_plugin_seo_unknown_vars', 100 );
+}
+
 /* AIOSEO: теги соцсетей приходят массивом */
 foreach ( array( 'aioseo_facebook_tags', 'aioseo_twitter_tags' ) as $memorial_plugin_hook ) {
 	add_filter(

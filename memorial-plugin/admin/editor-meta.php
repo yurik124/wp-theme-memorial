@@ -56,7 +56,6 @@ function memorial_plugin_editor_meta() {
 			),
 		),
 		'page'        => array(
-			'_mem_products'     => array( 'string', 'memorial_plugin_page_products_value' ),
 			'_mem_q'            => array( 'string', $text ),
 			'_mem_qa'           => array( 'string', static fn( $v ) => trim( sanitize_textarea_field( (string) $v ) ) ),
 			// Разделы страницы «Вопрос–ответ»: порядок, кнопка, заголовок, якорь, текст ссылки (content/faq.php).
@@ -93,21 +92,6 @@ function memorial_plugin_work_rows( $v ) {
 		}
 	}
 	return $rows;
-}
-
-/**
- * “Products on the page”: '' (none), 'all' (catalog home with category tiles) or a category ID.
- *
- * @param mixed $v Value.
- * @return string
- */
-function memorial_plugin_page_products_value( $v ) {
-	$v = sanitize_key( (string) $v );
-	if ( 'all' === $v ) {
-		return 'all';
-	}
-	$id = absint( $v );
-	return $id && term_exists( $id, 'mem_cat' ) ? (string) $id : '';
 }
 
 /**
@@ -210,22 +194,10 @@ function memorial_plugin_editor_meta_assets() {
 	if ( is_readable( MEMORIAL_PLUGIN_DIR . '/build/editor-meta/style-index.css' ) ) {
 		wp_enqueue_style( 'memorial-plugin-editor-meta', MEMORIAL_PLUGIN_URL . '/build/editor-meta/style-index.css', array(), $asset['version'] );
 	}
-	$cats = array();
-	if ( 'page' === $screen->post_type ) {
-		$terms = get_terms(
-			array(
-				'taxonomy'   => 'mem_cat',
-				'hide_empty' => false,
-				'orderby'    => 'name',
-			)
-		);
-		$cats  = memorial_plugin_editor_cat_options( is_wp_error( $terms ) ? array() : $terms, 0, 0 );
-	}
 	wp_add_inline_script(
 		'memorial-plugin-editor-meta',
 		'window.memorialPluginEditorMeta = ' . wp_json_encode(
 			array(
-				'cats'     => $cats,
 				'maxYear'  => (int) gmdate( 'Y' ) + 1,
 				'guide'    => function_exists( 'memorial_plugin_guide_lead' ), // “Good to know” is switched on in Memorial → Features.
 				'listsUrl' => array(
@@ -238,26 +210,3 @@ function memorial_plugin_editor_meta_assets() {
 	);
 }
 add_action( 'enqueue_block_editor_assets', 'memorial_plugin_editor_meta_assets' );
-
-/**
- * Category tree as options with “— ” indents.
- *
- * @param WP_Term[] $terms  Terms.
- * @param int       $parent Parent ID.
- * @param int       $depth  Depth.
- * @return array<int,array{value:string,label:string}>
- */
-function memorial_plugin_editor_cat_options( $terms, $parent, $depth ) {
-	$out = array();
-	foreach ( $terms as $t ) {
-		if ( (int) $t->parent !== $parent ) {
-			continue;
-		}
-		$out[] = array(
-			'value' => (string) $t->term_id,
-			'label' => str_repeat( '— ', $depth ) . $t->name,
-		);
-		$out   = array_merge( $out, memorial_plugin_editor_cat_options( $terms, (int) $t->term_id, $depth + 1 ) );
-	}
-	return $out;
-}

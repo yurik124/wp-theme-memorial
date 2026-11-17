@@ -112,21 +112,6 @@ function memorial_plugin_crumbs() {
 	} elseif ( is_page() ) {
 		$id  = get_queried_object_id();
 		$anc = get_post_ancestors( $id );
-		// страница с товарами показывается «внутри» каталога, даже если в WordPress она не дочерняя.
-		$mode = get_post_meta( $id, '_mem_products', true );
-		if ( $mode && 'all' !== $mode && $root && $root !== $id && ! in_array( $root, $anc, true ) ) {
-			$c[] = $catalog;
-			// родительские категории — тоже страницами.
-			$t = get_term( (int) $mode, 'mem_cat' );
-			if ( $t && ! is_wp_error( $t ) ) {
-				foreach ( array_reverse( get_ancestors( $t->term_id, 'mem_cat' ) ) as $a ) {
-					$at = get_term( $a, 'mem_cat' );
-					if ( $at && ! is_wp_error( $at ) ) {
-						$c[] = array( memorial_plugin_term_name( $at ), get_term_link( $at ) );
-					}
-				}
-			}
-		}
 		foreach ( array_reverse( $anc ) as $a ) {
 			$c[] = array( get_the_title( $a ), get_permalink( $a ) );
 		}

@@ -2580,3 +2580,75 @@ test.describe( 'ширина', () => {
 		log( 'width', report );
 	} );
 } );
+
+test.describe( 'адреса и SEO', () => {
+	test( 'адреса и SEO: старые адреса, title, RSS, листание', async ( { page, browser } ) => {
+		test.setTimeout( 600_000 );
+		const report = { codes: {}, titles: {}, errs: [] };
+		const save = () => fs.writeFileSync( `${ DIR }/log-seo.json`, JSON.stringify( report, null, 1 ) );
+		// Ответ без перехода по редиректу — как его видит поисковый робот.
+		const head = async ( p ) => {
+			const r = await page.request.get( p, { maxRedirects: 0 } ).catch( ( e ) => ( { error: e.message } ) );
+			if ( r.error ) {
+				return { error: r.error };
+			}
+			const html = r.status() === 200 && /html/.test( r.headers()[ 'content-type' ] || '' ) ? await r.text() : '';
+			return {
+				code: r.status(),
+				to: ( r.headers().location || '' ).replace( /^https?:\/\/[^/]+/, '' ),
+				title: ( html.match( /<title>([^<]*)<\/title>/ ) || [] )[ 1 ] || '',
+				robots: ( html.match( /<meta[^>]+name=['"]robots['"][^>]+content=['"]([^'"]+)/ ) || [] )[ 1 ] || '',
+				feedLinks: ( html.match( /application\/rss\+xml/g ) || [] ).length,
+				ogradki2: ( html.match( /\/ogradki-2\//g ) || [] ).length,
+				posobieTop: ( html.match( /["'(]\/posobie-na-pogrebenie\//g ) || [] ).length + ( html.match( /localhost:8888\/posobie-na-pogrebenie\//g ) || [] ).length,
+				crumbs: ( html.match( /<nav class="crumbs"[\s\S]*?<\/nav>/ ) || [] )[ 0 ]?.replace( /<[^>]+>/g, '' ).replace( /\s+/g, ' ' ).trim() || '',
+			};
+		};
+		const paths = [
+			'/', '/index.html', '/indexdata/index.swf', '/politika-ispolzovaniya-cookie/', '/politika-cookie/', '/kresty/',
+			'/ogradki/', '/ogradki-2/', '/posobie-na-pogrebenie/', '/venki/page/2/', '/pamyatniki/page/3/?sort=new',
+			'/feed/', '/comments/feed/', '/kontakty/feed/', '/catalog/', '/?author=1',
+			'/ritualnye-uslugi/', '/ritualnye-uslugi/kremacziya/', '/ritualnye-uslugi/gruz-200/', '/ritualnye-uslugi/traurnyj-zal/',
+			'/venki/', '/groby/', '/pamyatniki/', '/metallicheskie-kresty/', '/blagoustrojstvo-zahoroneniya/',
+			'/blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode/', '/fotogalereia/', '/kontakty/', '/ceny/', '/otzyvy/',
+			'/ritualnye-tovary/', '/pomoshh-v-organizaczii-pohoron/', '/chto-delat-esli-umer-chelovek/', '/poleznoe/', '/poleznoe/vopros-otvet/',
+			'/poleznoe/posobie-na-pogrebenie/', '/poleznoe/kladbishha/', '/ritualnye-uslugi/pominalnyj-obed/',
+			'/ritualnye-uslugi/pohorony-uchastnikov-svo/', '/ritualnye-uslugi/prizhiznennyj-dogovor/', '/soglasie-na-obrabotku-personalnyh-dannyh/',
+		];
+		for ( const p of paths ) {
+			report.codes[ p ] = await head( p );
+			save();
+		}
+		// Ссылки, оставшиеся на старые адреса, по всем страницам.
+		report.leftovers = Object.entries( report.codes ).filter( ( [ , v ] ) => v.ogradki2 || v.posobieTop ).map( ( [ k, v ] ) => [ k, v.ogradki2, v.posobieTop ] );
+		save();
+		// Снимки «Оградок» по новому адресу: ПК и телефон.
+		const errs = errorsOf( page );
+		for ( const [ w, h, name ] of [ [ 1440, 900, 'pc' ], [ 390, 844, 'phone' ], [ 360, 780, 'phone360' ] ] ) {
+			await page.setViewportSize( { width: w, height: h } );
+			await page.goto( '/ogradki/', { waitUntil: 'networkidle' } );
+			await page.addStyleTag( { content: NO_FLOAT } );
+			await shot( page, `seo-ogradki-${ name }` );
+		}
+		// Редактор страницы: панели «Товары на странице» больше нет, ошибок нет.
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		const fences = PAGES.find( ( x ) => /^ogradki/.test( x.post_name ) );
+		if ( fences ) {
+			await page.goto( '/wp-admin/post.php?action=edit&post=' + fences.ID );
+			await page.waitForSelector( '.editor-sidebar, .interface-complementary-area', { timeout: 60000 } ).catch( () => {} );
+			await page.waitForTimeout( 3000 );
+			report.editor = await page.evaluate( () => ( {
+				panels: [ ...document.querySelectorAll( '.components-panel__body-title' ) ].map( ( b ) => b.textContent.trim() ),
+				oldPanel: /Товары на странице|Products on the page/.test( document.body.innerText ),
+			} ) );
+			await shot( page, 'seo-ogradki-editor' );
+		}
+		report.errs = errs;
+		save();
+	} );
+} );

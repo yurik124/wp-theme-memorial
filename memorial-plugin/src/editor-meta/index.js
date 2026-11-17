@@ -15,7 +15,6 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
-	SelectControl,
 	TextControl,
 	TextareaControl,
 	ToggleControl,
@@ -335,36 +334,6 @@ function PagePanel() {
 					/>
 				</PluginDocumentSettingPanel>
 			) }
-			<PluginDocumentSettingPanel
-				name="memorial-plugin-page-products"
-				title={ __( 'Products on the page', 'memorial-plugin' ) }
-			>
-				<SelectControl
-					__next40pxDefaultSize
-					__nextHasNoMarginBottom
-					label={ __( 'Catalog category', 'memorial-plugin' ) }
-					value={ meta._mem_products || '' }
-					options={ [
-						{
-							value: '',
-							label: __( '— do not show —', 'memorial-plugin' ),
-						},
-						{
-							value: 'all',
-							label: __(
-								'All categories (tiles)',
-								'memorial-plugin'
-							),
-						},
-						...( settings.cats || [] ),
-					] }
-					onChange={ ( v ) => set( '_mem_products', v ) }
-					help={ __(
-						'The products appear below the page text. To keep part of the text above them, put a “More” block in the text.',
-						'memorial-plugin'
-					) }
-				/>
-			</PluginDocumentSettingPanel>
 			{ settings.guide && (
 				<PluginDocumentSettingPanel
 					name="memorial-plugin-page-guide"

@@ -24,7 +24,6 @@ function memorial_plugin_legacy_blocks() {
 		'footer-legal'    => array( __( 'Footer: copyright and documents', 'memorial-plugin' ), __( 'Copyright years, company details, privacy and cookie policy links.', 'memorial-plugin' ), 'media-document' ),
 		'mobile-bar'      => array( __( 'Bottom phone bar on mobiles', 'memorial-plugin' ), __( 'Bottom bar on phones: Call and Message (MAX) or Call me back.', 'memorial-plugin' ), 'smartphone' ),
 		'breadcrumbs'     => array( __( 'Breadcrumbs', 'memorial-plugin' ), __( 'Path to the current page; also adds BreadcrumbList structured data.', 'memorial-plugin' ), 'arrow-right-alt2' ),
-		'page-products'   => array( __( 'Products of the page (for the template)', 'memorial-plugin' ), __( 'Catalog tiles or product grid for pages set to show products, with the page text above and below.', 'memorial-plugin' ), 'grid-view' ),
 		'contacts-page'   => array( __( 'Contacts: the whole page', 'memorial-plugin' ), __( 'Phones, messengers, addresses with routes, maps and company details.', 'memorial-plugin' ), 'id' ),
 		'product'         => array( __( 'Product card', 'memorial-plugin' ), __( 'Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings.', 'memorial-plugin' ), 'products' ),
 		// The product template is built from core blocks (title, text) and these parts; they follow the product that is open.
@@ -193,7 +192,6 @@ add_action(
 			'single-mem_product'  => array( __( 'Product', 'memorial-plugin' ), __( 'A single product from the catalog.', 'memorial-plugin' ) ),
 			'archive-mem_product' => array( __( 'Catalog', 'memorial-plugin' ), __( 'All products of the catalog.', 'memorial-plugin' ) ),
 			'taxonomy-mem_cat'    => array( __( 'Catalog section', 'memorial-plugin' ), __( 'Products of one catalog section.', 'memorial-plugin' ) ),
-			'page-products'       => array( __( 'Page with products', 'memorial-plugin' ), __( 'Pages set to show catalog tiles or products.', 'memorial-plugin' ) ),
 		);
 		foreach ( $templates as $slug => [$title, $desc] ) {
 			register_block_template(
@@ -205,18 +203,6 @@ add_action(
 				)
 			);
 		}
-	}
-);
-
-/* Страница с товарами (поле «Товары на странице») — свой шаблон page-products */
-add_filter(
-	'page_template_hierarchy',
-	function ( $templates ) {
-		$id = (int) get_queried_object_id();
-		if ( $id && get_post_meta( $id, '_mem_products', true ) ) {
-			array_unshift( $templates, 'page-products' );
-		}
-		return $templates;
 	}
 );
 
