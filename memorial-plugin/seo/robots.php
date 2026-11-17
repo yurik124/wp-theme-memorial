@@ -1,6 +1,6 @@
 <?php
 /**
- * robots.txt of WordPress (it is virtual: no file in the root of the site) gets two lines:
+ * The robots.txt of WordPress (it is virtual: no file in the root of the site) gets two lines:
  *  - Clean-param (Yandex): addresses with ad tags (utm_…, yclid, gclid…) and the catalog sorting ?sort=
  *    are the same page — Yandex does not index them as duplicates. The directive is cross-section in Yandex
  *    (it may stand anywhere), so no group “User-agent: Yandex” is needed — such a group would make Yandex

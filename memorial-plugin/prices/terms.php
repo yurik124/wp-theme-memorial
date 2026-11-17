@@ -291,8 +291,9 @@ function memorial_plugin_terms_position( array $blocks ) {
 		}
 	}
 	// The last block with content (an empty paragraph at the end does not count).
-	$last = count( $blocks ) - 1;
-	while ( $last >= 0 && ( null === $blocks[ $last ]['blockName'] && '' === trim( (string) $blocks[ $last ]['innerHTML'] ) || ( 'core/paragraph' === $blocks[ $last ]['blockName'] && '' === trim( wp_strip_all_tags( (string) $blocks[ $last ]['innerHTML'] ) ) ) ) ) {
+	$empty = static fn( $b ) => in_array( $b['blockName'], array( null, 'core/paragraph' ), true ) && '' === trim( wp_strip_all_tags( (string) $b['innerHTML'] ) );
+	$last  = count( $blocks ) - 1;
+	while ( $last >= 0 && $empty( $blocks[ $last ] ) ) {
 		--$last;
 	}
 	if ( $last >= 0 && 'memorial-plugin/cta' === $blocks[ $last ]['blockName'] ) {
@@ -414,7 +415,7 @@ function memorial_plugin_terms_upgrade_1( $dry = false ) {
 	// 3. “Coffins”: the price code in the SEO title even without prices (the first move put the plain title).
 	$coffins = get_page_by_path( 'groby' );
 	$plain   = 'Гробы в Белгороде: цены %%sep%% %%sitetitle%%';
-	if ( $coffins && $plain === get_post_meta( $coffins->ID, '_seopress_titles_title', true ) && function_exists( 'memorial_plugin_seo_registry' ) && isset( memorial_plugin_seo_registry()['groby_ot'] ) ) {
+	if ( $coffins && get_post_meta( $coffins->ID, '_seopress_titles_title', true ) === $plain && function_exists( 'memorial_plugin_seo_registry' ) && isset( memorial_plugin_seo_registry()['groby_ot'] ) ) {
 		$log['titles'][ $coffins->ID ] = $plain;
 		if ( ! $dry ) {
 			update_post_meta( $coffins->ID, '_seopress_titles_title', 'Гробы в Белгороде — %%mem_groby_ot%% %%sep%% %%sitetitle%%' );
