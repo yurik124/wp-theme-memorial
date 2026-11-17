@@ -2114,6 +2114,8 @@ test.describe( 'правка в таблице', () => {
 		report.types = types.map( ( t ) => [ t.name, t.view, t.page && t.page.url ] );
 		const t = types.find( ( x ) => x.view === 'card' && x.page && ! x.page.draft ) || types.find( ( x ) => x.page && ! x.page.draft );
 		report.type = t && [ t.name, t.view, t.page.url ];
+		const items = ( await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/catalog/products' } ) ) ).items;
+		report.withDesc = items.filter( ( i ) => i.type === t.id && String( i.desc || '' ).trim() ).map( ( i ) => ( { id: i.id, title: i.title, desc: String( i.desc ).slice( 0, 60 ), descLen: String( i.desc ).length } ) );
 		save();
 		await page.context().clearCookies();
 		const url = t.page.url + ( t.page.url.includes( '?' ) ? '&' : '?' ) + 'nocache=' + Date.now();
@@ -2127,6 +2129,9 @@ test.describe( 'правка в таблице', () => {
 			firstDesc: descs[ 0 ] ? descs[ 0 ].slice( 0, 80 ) : null,
 			pvTitle: ( html.match( /pv__title/g ) || [] ).length,
 		};
+		const sentence = descs[ 0 ] ? descs[ 0 ].split( '.' )[ 0 ] : '';
+		report.raw.sentenceInHtml = sentence ? html.split( sentence ).length - 1 : null;
+		report.raw.sentenceInSaved = sentence ? report.withDesc.length && items.filter( ( i ) => String( i.desc || '' ).includes( sentence ) ).map( ( i ) => String( i.desc ).split( sentence ).length - 1 ) : null;
 		save();
 		const snippet = descs[ 0 ] ? descs[ 0 ].slice( 0, 30 ) : null;
 		for ( const w of [ 1440, 390, 360 ] ) {
@@ -2144,7 +2149,8 @@ test.describe( 'правка в таблице', () => {
 			o.infoVisibleBefore = await li.locator( '.mcard__info' ).isVisible();
 			o.descVisibleBefore = snippet ? await page.getByText( snippet ).first().isVisible() : null;
 			// дерево доступности: скрытое описание диктор не видит
-			o.a11yBefore = snippet ? JSON.stringify( await page.locator( 'main, body' ).first().ariaSnapshot() ).includes( snippet ) : null;
+			o.a11yCardBefore = snippet ? ( await li.ariaSnapshot() ).includes( snippet.slice( 0, 15 ) ) : null;
+			o.visibleWithText = snippet ? await page.getByText( snippet ).evaluateAll( ( els ) => els.filter( ( e ) => e.getClientRects().length ).map( ( e ) => e.className || e.tagName ) ) : null;
 			await li.locator( 'a[data-pv]' ).first().scrollIntoViewIfNeeded();
 			await li.locator( 'a[data-pv]' ).first().click();
 			const pv = page.locator( 'dialog.pv[open]' );
@@ -2157,7 +2163,8 @@ test.describe( 'правка в таблице', () => {
 			o.specsInModal = await pv.locator( '.pv__specs' ).count();
 			o.infoLeftInCard = await li.locator( '.mcard__info > *' ).count();
 			o.descCopiesOpen = snippet ? await page.getByText( snippet ).count() : null;
-			o.a11yOpen = snippet ? JSON.stringify( await pv.ariaSnapshot() ).includes( snippet ) : null;
+			o.a11yOpen = snippet ? ( await pv.ariaSnapshot() ).includes( snippet.slice( 0, 15 ) ) : null;
+			o.a11yCardOpen = snippet ? ( await li.ariaSnapshot() ).includes( snippet.slice( 0, 15 ) ) : null;
 			o.focusInDialog = await page.evaluate( () => !! document.activeElement?.closest( 'dialog.pv' ) );
 			await page.screenshot( { path: `${ DIR }/desc-${ w }-open.png` } );
 			if ( await pv.locator( '.pv__next' ).isVisible() ) {
@@ -2174,6 +2181,7 @@ test.describe( 'правка в таблице', () => {
 			o.infoBackInCard = await li.locator( '.mcard__info > *' ).count();
 			o.descVisibleAfter = snippet ? await page.getByText( snippet ).first().isVisible() : null;
 			o.descCopiesAfter = snippet ? await page.getByText( snippet ).count() : null;
+			o.a11yCardAfter = snippet ? ( await li.ariaSnapshot() ).includes( snippet.slice( 0, 15 ) ) : null;
 			report[ 'w' + w ] = o;
 			save();
 		}
