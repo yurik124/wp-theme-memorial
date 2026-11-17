@@ -45,6 +45,8 @@ jobs:
                       url = m.group(1).decode().rstrip('/')
                       break
           print('сайт:', url)
+          os.makedirs('out', exist_ok=True)
+          open('out/site.txt', 'w').write(url)
           name = 'mem-diag-' + secrets.token_hex(8) + '.php'
           key = secrets.token_hex(16)
           body = open('tests/diag/report.php', encoding='utf-8').read().replace('__KEY__', key)
@@ -65,10 +67,15 @@ jobs:
               print(text[:20000])
           PY
 
+      - name: Ответы сайта и карты сайта
+        if: always()
+        run: |
+          [ -f out/site.txt ] && python3 tests/diag/http.py out/site.txt tests/diag || true
+
       - name: В ветку ci-probe
         if: always()
         run: |
-          mkdir -p probe/diag && cp out/report.json probe/diag/ 2>/dev/null || true
+          mkdir -p probe/diag && cp out/report.json out/http.json probe/diag/ 2>/dev/null || true
           cd probe
           git init -q -b ci-probe
           git config user.name "github-actions[bot]"
