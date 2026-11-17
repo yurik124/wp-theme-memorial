@@ -77,7 +77,7 @@ msgid "%1$s “%2$s” is not a number."
 msgstr ""
 
 #. translators: 1: text of the button (“Order”), 2: product name.
-#: catalog/catalog-front.php:312
+#: catalog/catalog-front.php:308
 #, php-format
 msgid "%1$s: %2$s"
 msgstr ""
@@ -201,7 +201,7 @@ msgid "%s — highest price"
 msgstr ""
 
 #. translators: %s: catalog section.
-#: core/upgrade.php:183
+#: seo/seo-upgrade.php:89 core/upgrade.php:183
 #, php-format
 msgid "%s — lowest price"
 msgstr ""
@@ -224,7 +224,7 @@ msgstr ""
 msgid "%s: the page has no catalog section — choose the section in the block settings."
 msgstr ""
 
-#: prices/prices.php:810
+#: prices/prices.php:806
 msgid "(check whether they are up to date; replace them with a site value if you like):"
 msgstr ""
 
@@ -248,7 +248,7 @@ msgstr ""
 msgid ", choose the “Call” goal at the top — you will see where the callers came from (Yandex, Google, maps, ads)."
 msgstr ""
 
-#: catalog/catalog-front.php:388 catalog/catalog-summary.php:153
+#: catalog/catalog-front.php:384 catalog/catalog-summary.php:153
 msgid ", from "
 msgstr ""
 
@@ -264,11 +264,11 @@ msgstr ""
 msgid ". Optionally more goals:"
 msgstr ""
 
-#: prices/prices.php:798
+#: prices/prices.php:794
 msgid ". The previous text is kept in the page’s “Revisions”."
 msgstr ""
 
-#: src/catalog/products.js:329 src/editor-meta/index.js:61
+#: src/catalog/products.js:329 src/editor-meta/index.js:60
 msgid "0 — “price on request”."
 msgstr ""
 
@@ -308,7 +308,7 @@ msgstr ""
 msgid "4. How it looks on the site"
 msgstr ""
 
-#: blocks/legacy/legacy.php:37
+#: blocks/legacy/legacy.php:36
 msgid "404 message with a call button and catalog sections."
 msgstr ""
 
@@ -332,11 +332,11 @@ msgstr ""
 msgid "A button in the site style (green, light or outlined) that leads to a page of the site or to any address. The text and the page are set in the block settings on the right."
 msgstr ""
 
-#: src/catalog/types.js:266 src/catalog/types.js:719
+#: src/catalog/types.js:270 src/catalog/types.js:723
 msgid "A click on the photo opens"
 msgstr ""
 
-#: src/catalog/types.js:971
+#: src/catalog/types.js:975
 msgid "A draft page for the new catalog section is created too."
 msgstr ""
 
@@ -410,11 +410,11 @@ msgstr ""
 msgid "A row for every service and branch. The order is changed with the ↑ ↓ arrows to the right of a row. Write the rating and the number of reviews as in the service itself — visitors see them."
 msgstr ""
 
-#: src/editor-meta/index.js:114
+#: src/editor-meta/index.js:113
 msgid "A short line in the card: size, material, colour."
 msgstr ""
 
-#: blocks/legacy/legacy.php:193
+#: blocks/legacy/legacy.php:192
 msgid "A single product from the catalog."
 msgstr ""
 
@@ -430,7 +430,7 @@ msgstr ""
 msgid "A title, the automatic summary “96 models, from 35,000 ₽” and the catalog."
 msgstr ""
 
-#: src/catalog/types.js:1052
+#: src/catalog/types.js:1056
 msgid "A type is a top section of the catalog (Coffins, Wreaths…) with its own specifications and categories."
 msgstr ""
 
@@ -462,7 +462,7 @@ msgstr ""
 msgid "Active — new burials"
 msgstr ""
 
-#: src/catalog/works.js:49 src/catalog/products.js:157 src/catalog/types.js:741 src/catalog/types.js:979 src/catalog/work-types.js:227 src/settings/index.js:596
+#: src/catalog/works.js:49 src/catalog/products.js:157 src/catalog/types.js:745 src/catalog/types.js:983 src/catalog/work-types.js:227 src/settings/index.js:596
 msgid "Add"
 msgstr ""
 
@@ -550,7 +550,7 @@ msgstr ""
 msgid "Add an item"
 msgstr ""
 
-#: src/catalog/types.js:915
+#: src/catalog/types.js:919
 msgid "Add category"
 msgstr ""
 
@@ -574,11 +574,11 @@ msgstr ""
 msgid "Add product"
 msgstr ""
 
-#: src/catalog/fields.js:271 src/editor-meta/index.js:213
+#: src/catalog/fields.js:271 src/editor-meta/index.js:212
 msgid "Add row"
 msgstr ""
 
-#: src/catalog/types.js:641
+#: src/catalog/types.js:645
 msgid "Add specification"
 msgstr ""
 
@@ -590,7 +590,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: places/places.php:137 src/settings/index.js:325 seo/llms.php:73 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:52 core/settings.php:68
+#: places/places.php:137 src/settings/index.js:325 seo/llms.php:73 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:51 core/settings.php:68
 msgid "Address"
 msgstr ""
 
@@ -630,14 +630,6 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: pages/pages.php:35
-msgid "All categories"
-msgstr ""
-
-#: src/editor-meta/index.js:341
-msgid "All categories (tiles)"
-msgstr ""
-
 #: src/settings/index.js:1153
 msgid "All changes are saved"
 msgstr ""
@@ -660,7 +652,7 @@ msgstr ""
 msgid "All products (or of one type, or the given ones) as an Excel or CSV file in the format of the import: SKU, type, categories, title, prices, description, photos with alt texts, specifications, visibility."
 msgstr ""
 
-#: blocks/legacy/legacy.php:194
+#: blocks/legacy/legacy.php:193
 msgid "All products of the catalog."
 msgstr ""
 
@@ -786,7 +778,7 @@ msgstr ""
 msgid "As in the parent category"
 msgstr ""
 
-#: src/catalog/types.js:108 src/catalog/types.js:125
+#: src/catalog/types.js:112 src/catalog/types.js:129
 msgid "As in the type"
 msgstr ""
 
@@ -898,7 +890,7 @@ msgstr ""
 msgid "Branches and their sites"
 msgstr ""
 
-#: seo/seo.php:152 blocks/legacy/legacy.php:26
+#: seo/seo.php:137 blocks/legacy/legacy.php:26
 msgid "Breadcrumbs"
 msgstr ""
 
@@ -1044,7 +1036,7 @@ msgstr ""
 msgid "Car — transport"
 msgstr ""
 
-#: src/editor-meta/index.js:104 content/content.php:22
+#: src/editor-meta/index.js:103 content/content.php:22
 msgid "Card"
 msgstr ""
 
@@ -1068,16 +1060,12 @@ msgstr ""
 msgid "Cards: these works by title, comma separated"
 msgstr ""
 
-#: catalog/catalog.php:33 catalog/catalog.php:35 catalog/catalog-summary.php:174 content/patterns.php:46 seo/seo.php:89 blocks/legacy/legacy.php:194
+#: catalog/catalog.php:33 catalog/catalog.php:35 catalog/catalog-summary.php:174 content/patterns.php:46 seo/seo.php:89 blocks/legacy/legacy.php:193
 msgid "Catalog"
 msgstr ""
 
-#: catalog/catalog-front.php:333
+#: catalog/catalog-front.php:329
 msgid "Catalog block: the category was not found. Choose it in the block settings."
-msgstr ""
-
-#: src/editor-meta/index.js:332
-msgid "Catalog category"
 msgstr ""
 
 #. translators: %d: number of products.
@@ -1094,16 +1082,16 @@ msgstr ""
 msgid "Catalog price"
 msgstr ""
 
-#: prices/prices.php:141 blocks/content/content-blocks.php:36 blocks/content/inline-values.php:30 blocks/content/inline-values.php:37 blocks/content/inline-values.php:43 blocks/legacy/legacy.php:78
+#: prices/prices.php:141 blocks/content/content-blocks.php:36 blocks/content/inline-values.php:30 blocks/content/inline-values.php:37 blocks/content/inline-values.php:43 blocks/legacy/legacy.php:77
 msgid "Catalog section"
 msgstr ""
 
-#: blocks/legacy/legacy.php:36
+#: blocks/legacy/legacy.php:35
 msgid "Catalog section with sorting"
 msgstr ""
 
 #. translators: %s: catalog section
-#: prices/prices.php:813
+#: prices/prices.php:809
 #, php-format
 msgid "Catalog section “%s”"
 msgstr ""
@@ -1112,7 +1100,7 @@ msgstr ""
 msgid "Catalog section: choose the section in the block settings (“What to show”). In the catalog templates the block shows the section that is open."
 msgstr ""
 
-#: catalog/catalog-front.php:366 blocks/content/content-blocks.php:143 blocks/legacy/render/not-found.php:29
+#: catalog/catalog-front.php:362 blocks/content/content-blocks.php:143 blocks/legacy/render/not-found.php:29
 msgid "Catalog sections"
 msgstr ""
 
@@ -1128,19 +1116,15 @@ msgstr ""
 msgid "Catalog summary by section"
 msgstr ""
 
-#: blocks/legacy/legacy.php:27
-msgid "Catalog tiles or product grid for pages set to show products, with the page text above and below."
-msgstr ""
-
 #: blocks/content/content-blocks.php:83
 msgid "Catalog: products of a section"
 msgstr ""
 
-#: catalog/catalog-import.php:1418 catalog/catalog.php:59 catalog/catalog-io.php:139 src/catalog/products.js:144 src/catalog/products.js:395 src/catalog/types.js:913
+#: catalog/catalog-import.php:1418 catalog/catalog.php:59 catalog/catalog-io.php:139 src/catalog/products.js:144 src/catalog/products.js:395 src/catalog/types.js:917
 msgid "Categories"
 msgstr ""
 
-#: src/catalog/types.js:206
+#: src/catalog/types.js:210
 msgid "Categories of a new product"
 msgstr ""
 
@@ -1148,7 +1132,7 @@ msgstr ""
 msgid "Categories of the type, one per line (Alt+Enter) or separated by “;”. A nested one — with its parent: Live / Roses."
 msgstr ""
 
-#: catalog/catalog.php:60 src/catalog/types.js:775
+#: catalog/catalog.php:60 src/catalog/types.js:779
 msgid "Category"
 msgstr ""
 
@@ -1206,7 +1190,7 @@ msgstr ""
 msgid "Changes the title, price, “from”, unit, line under the title or visibility of one product."
 msgstr ""
 
-#: catalog/catalog-types.php:182 catalog/catalog.php:209 catalog/catalog-front.php:374 works/works.php:182
+#: catalog/catalog-types.php:182 catalog/catalog.php:209 catalog/catalog-front.php:370 works/works.php:182
 msgid "Cheapest first"
 msgstr ""
 
@@ -1226,11 +1210,11 @@ msgstr ""
 msgid "Check the phone number."
 msgstr ""
 
-#: src/catalog/types.js:399
+#: src/catalog/types.js:403
 msgid "Choice from a list"
 msgstr ""
 
-#: src/catalog/types.js:508
+#: src/catalog/types.js:512
 msgid "Choices, separated by commas"
 msgstr ""
 
@@ -1282,7 +1266,7 @@ msgstr ""
 msgid "Clock — round the clock"
 msgstr ""
 
-#: catalog/catalog-front.php:436 catalog/catalog-front.php:442 src/catalog/import.js:765 leads/callback.php:163
+#: catalog/catalog-front.php:432 catalog/catalog-front.php:438 src/catalog/import.js:765 leads/callback.php:163
 msgid "Close"
 msgstr ""
 
@@ -1294,7 +1278,7 @@ msgstr ""
 msgid "Closed for burials"
 msgstr ""
 
-#: src/catalog/types.js:48 prices/prices.php:165
+#: src/catalog/types.js:52 prices/prices.php:165
 msgid "Code"
 msgstr ""
 
@@ -1322,11 +1306,11 @@ msgstr ""
 msgid "Columns (0 — from settings)"
 msgstr ""
 
-#: catalog/catalog-admin.php:29 src/catalog/types.js:242 reviews/rewio.php:128 prices/prices.php:36
+#: catalog/catalog-admin.php:29 src/catalog/types.js:246 reviews/rewio.php:128 prices/prices.php:36
 msgid "Columns on a computer"
 msgstr ""
 
-#: src/catalog/types.js:251
+#: src/catalog/types.js:255
 msgid "Columns on a phone"
 msgstr ""
 
@@ -1394,7 +1378,7 @@ msgstr ""
 msgid "Contacts: phone, address and hours (shared texts)"
 msgstr ""
 
-#: blocks/legacy/legacy.php:28
+#: blocks/legacy/legacy.php:27
 msgid "Contacts: the whole page"
 msgstr ""
 
@@ -1430,16 +1414,16 @@ msgstr ""
 msgid "Cookie settings"
 msgstr ""
 
-#: src/catalog/types.js:67
+#: src/catalog/types.js:71
 msgid "Copied"
 msgstr ""
 
-#: src/catalog/works.js:392 src/catalog/products.js:695 src/catalog/types.js:68
+#: src/catalog/works.js:392 src/catalog/products.js:695 src/catalog/types.js:72
 msgid "Copy"
 msgstr ""
 
 #. translators: %s: code, e.g. {spec:height}.
-#: src/catalog/types.js:62
+#: src/catalog/types.js:66
 #, php-format
 msgid "Copy %s"
 msgstr ""
@@ -1504,7 +1488,7 @@ msgstr ""
 msgid "Create a new draft page from the template and choose it instead of the current one? The current page stays, you can delete it by hand."
 msgstr ""
 
-#: src/catalog/types.js:1143
+#: src/catalog/types.js:1147
 msgid "Create a page for this type"
 msgstr ""
 
@@ -1564,11 +1548,11 @@ msgstr ""
 msgid "Decline"
 msgstr ""
 
-#: catalog/catalog.php:208 catalog/catalog-front.php:374 src/catalog/types.js:530 src/catalog/types.js:563 works/works.php:180
+#: catalog/catalog.php:208 catalog/catalog-front.php:370 src/catalog/types.js:534 src/catalog/types.js:567 works/works.php:180
 msgid "Default"
 msgstr ""
 
-#: src/catalog/types.js:868 src/catalog/types.js:893 src/catalog/types.js:1222 src/catalog/work-types.js:150 src/catalog/work-types.js:174
+#: src/catalog/types.js:872 src/catalog/types.js:897 src/catalog/types.js:1226 src/catalog/work-types.js:150 src/catalog/work-types.js:174
 msgid "Delete"
 msgstr ""
 
@@ -1576,7 +1560,7 @@ msgstr ""
 msgid "Delete all search statistics? “Frequent searches” under the search field will show the default words until new statistics come in."
 msgstr ""
 
-#: src/catalog/types.js:1169 src/catalog/types.js:1208
+#: src/catalog/types.js:1173 src/catalog/types.js:1212
 msgid "Delete type"
 msgstr ""
 
@@ -1589,7 +1573,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1: category, 2: number of products, 3: type.
-#: src/catalog/types.js:876
+#: src/catalog/types.js:880
 #, php-format
 msgid "Delete “%1$s”? Its %2$d product stays in “%3$s”."
 msgid_plural "Delete “%1$s”? Its %2$d products stay in “%3$s”."
@@ -1597,14 +1581,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: type.
-#: src/catalog/types.js:1214
+#: src/catalog/types.js:1218
 #, php-format
 msgid "Delete “%s” with its categories?"
 msgstr ""
 
 #. translators: %s: category.
 #. translators: %s: kind name.
-#: src/catalog/types.js:888 src/catalog/work-types.js:169
+#: src/catalog/types.js:892 src/catalog/work-types.js:169
 #, php-format
 msgid "Delete “%s”?"
 msgstr ""
@@ -1625,7 +1609,7 @@ msgstr ""
 msgid "Deletes the given queries from the search statistics, or all statistics when no queries are given."
 msgstr ""
 
-#: catalog/catalog-io.php:148 src/catalog/works.js:173 src/catalog/products.js:402 src/catalog/types.js:158 src/catalog/types.js:703 src/catalog/types.js:792
+#: catalog/catalog-io.php:148 src/catalog/works.js:173 src/catalog/products.js:402 src/catalog/types.js:162 src/catalog/types.js:707 src/catalog/types.js:796
 msgid "Description"
 msgstr ""
 
@@ -1633,7 +1617,7 @@ msgstr ""
 msgid "Description of each photo for the blind and search engines, one per line in the order of the photos. Empty — the title of the product."
 msgstr ""
 
-#: admin/editor-meta.php:179
+#: admin/editor-meta.php:163
 msgid "Description of the product (optional: with text the product gets its own page)…"
 msgstr ""
 
@@ -1723,7 +1707,7 @@ msgstr ""
 msgid "Each branch on its own tab"
 msgstr ""
 
-#: src/catalog/works.js:311 src/catalog/products.js:631 src/catalog/types.js:835 src/collections/index.js:288 src/collections/index.js:459
+#: src/catalog/works.js:311 src/catalog/products.js:631 src/catalog/types.js:839 src/collections/index.js:288 src/collections/index.js:459
 msgid "Edit"
 msgstr ""
 
@@ -1767,7 +1751,7 @@ msgstr ""
 msgid "Empty — to the first email of “Contacts”"
 msgstr ""
 
-#: src/catalog/types.js:169
+#: src/catalog/types.js:173
 msgid "Empty — “price on request”."
 msgstr ""
 
@@ -1825,7 +1809,7 @@ msgstr ""
 msgid "Every request from the “Call me back” window comes by email and stays in “Memorial → Call-back requests”. The codes for the subject and the text are in “Codes for the emails” above."
 msgstr ""
 
-#: src/catalog/types.js:437
+#: src/catalog/types.js:441
 msgid "Every specification is a column in “Products” and a line in the product card on the site. The default value goes into new products of the type. Renaming a specification renames it in all products."
 msgstr ""
 
@@ -1946,7 +1930,7 @@ msgstr ""
 msgid "Filter by site: clicking a site in the rating summary shows only its reviews"
 msgstr ""
 
-#: src/catalog/types.js:1124
+#: src/catalog/types.js:1128
 msgid "Finish the page (draft)"
 msgstr ""
 
@@ -2022,7 +2006,7 @@ msgstr ""
 msgid "For example 75717068753 or a link like https://yandex.ru/maps/org/…/75717068753/"
 msgstr ""
 
-#: src/catalog/types.js:195
+#: src/catalog/types.js:199
 msgid "For example “height 90 cm”: a field in the products table and in the product window, a line under the name on the site. When it is off, the lines already typed are kept, only not shown."
 msgstr ""
 
@@ -2030,11 +2014,11 @@ msgstr ""
 msgid "For example: Elena V."
 msgstr ""
 
-#: src/catalog/types.js:461
+#: src/catalog/types.js:465
 msgid "For example: Height"
 msgstr ""
 
-#: src/editor-meta/index.js:368
+#: src/editor-meta/index.js:337
 msgid "For example: How to get the funeral allowance?"
 msgstr ""
 
@@ -2070,7 +2054,7 @@ msgstr ""
 msgid "For “%1$s”: %2$s. Click a suggestion to open the right place."
 msgstr ""
 
-#: src/catalog/types.js:131
+#: src/catalog/types.js:135
 msgid "Former order (as arranged by hand)"
 msgstr ""
 
@@ -2088,7 +2072,7 @@ msgstr ""
 msgid "Founding year"
 msgstr ""
 
-#: blocks/legacy/legacy.php:35
+#: blocks/legacy/legacy.php:34
 msgid "Four more products of the same catalog section. For the product template."
 msgstr ""
 
@@ -2100,7 +2084,7 @@ msgstr ""
 msgid "Frequently asked questions"
 msgstr ""
 
-#: src/catalog/types.js:243
+#: src/catalog/types.js:247
 msgid "From 2 to 6; empty — 4."
 msgstr ""
 
@@ -2156,7 +2140,7 @@ msgstr ""
 msgid "Goals"
 msgstr ""
 
-#: src/catalog/search-stats.js:11 src/editor-meta/index.js:358 memorial-plugin.php:110
+#: src/catalog/search-stats.js:11 src/editor-meta/index.js:327 memorial-plugin.php:110
 msgid "Good to know"
 msgstr ""
 
@@ -2288,7 +2272,7 @@ msgstr ""
 msgid "Highlight (accent frame and the label)"
 msgstr ""
 
-#: seo/seo.php:74 seo/seo.php:87 blocks/home/pages-to-content.php:202 pages/pages.php:601
+#: seo/seo.php:74 seo/seo.php:87 blocks/home/pages-to-content.php:202 pages/pages.php:376
 msgid "Home"
 msgstr ""
 
@@ -2344,7 +2328,7 @@ msgstr ""
 msgid "How should we address you"
 msgstr ""
 
-#: src/catalog/types.js:220
+#: src/catalog/types.js:224
 msgid "How the products of this type go when a visitor opens the section. A category can have its own order."
 msgstr ""
 
@@ -2458,7 +2442,7 @@ msgstr ""
 msgid "In the article:"
 msgstr ""
 
-#: src/editor-meta/index.js:277
+#: src/editor-meta/index.js:276
 msgid "In the “Examples of our works” cards on other pages."
 msgstr ""
 
@@ -2474,7 +2458,7 @@ msgstr ""
 msgid "Insert a site value"
 msgstr ""
 
-#: src/catalog/types.js:696
+#: src/catalog/types.js:700
 msgid "Inside"
 msgstr ""
 
@@ -2486,7 +2470,7 @@ msgstr ""
 msgid "Its price from Memorial → Services."
 msgstr ""
 
-#: src/catalog/types.js:475
+#: src/catalog/types.js:479
 msgid "Kind"
 msgstr ""
 
@@ -2560,7 +2544,7 @@ msgstr ""
 msgid "Line item"
 msgstr ""
 
-#: catalog/catalog-io.php:145 src/catalog/products.js:364 src/editor-meta/index.js:110
+#: catalog/catalog-io.php:145 src/catalog/products.js:364 src/editor-meta/index.js:109
 msgid "Line under the title"
 msgstr ""
 
@@ -2656,7 +2640,7 @@ msgstr ""
 msgid "MAX — profile link"
 msgstr ""
 
-#: catalog/catalog-io.php:146 catalog/catalog-front.php:238 src/editor-meta/index.js:94 templates/product-card.php:45 blocks/legacy/render/product-specs.php:26
+#: catalog/catalog-io.php:146 catalog/catalog-front.php:238 src/editor-meta/index.js:93 templates/product-card.php:45 blocks/legacy/render/product-specs.php:26
 msgid "Made to order"
 msgstr ""
 
@@ -2816,7 +2800,7 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: blocks/legacy/legacy.php:37
+#: blocks/legacy/legacy.php:36
 msgid "Message “Page not found”"
 msgstr ""
 
@@ -2836,7 +2820,7 @@ msgstr ""
 msgid "More details"
 msgstr ""
 
-#: src/editor-meta/index.js:140
+#: src/editor-meta/index.js:139
 msgid "More photos (after the featured image)"
 msgstr ""
 
@@ -2860,11 +2844,11 @@ msgstr ""
 msgid "More: how to arrange a burial, what to keep in mind"
 msgstr ""
 
-#: catalog/catalog-types.php:183 catalog/catalog.php:210 catalog/catalog-front.php:374 works/works.php:182
+#: catalog/catalog-types.php:183 catalog/catalog.php:210 catalog/catalog-front.php:370 works/works.php:182
 msgid "Most expensive first"
 msgstr ""
 
-#: src/catalog/works.js:323 src/catalog/types.js:595 src/catalog/types.js:863 src/catalog/work-types.js:145 src/block-controls/index.js:246 src/editor-meta/faq-sections.js:97
+#: src/catalog/works.js:323 src/catalog/types.js:599 src/catalog/types.js:867 src/catalog/work-types.js:145 src/block-controls/index.js:246 src/editor-meta/faq-sections.js:97
 msgid "Move down"
 msgstr ""
 
@@ -2895,19 +2879,19 @@ msgstr ""
 msgid "Move to trash"
 msgstr ""
 
-#: src/catalog/types.js:1154
+#: src/catalog/types.js:1158
 msgid "Move type earlier"
 msgstr ""
 
-#: src/catalog/types.js:1161
+#: src/catalog/types.js:1165
 msgid "Move type later"
 msgstr ""
 
-#: src/catalog/works.js:318 src/catalog/types.js:586 src/catalog/types.js:858 src/catalog/work-types.js:140 src/block-controls/index.js:239 src/editor-meta/faq-sections.js:90
+#: src/catalog/works.js:318 src/catalog/types.js:590 src/catalog/types.js:862 src/catalog/work-types.js:140 src/block-controls/index.js:239 src/editor-meta/faq-sections.js:90
 msgid "Move up"
 msgstr ""
 
-#: places/places.php:56 places/places.php:119 src/catalog/types.js:153 src/catalog/types.js:460 src/catalog/types.js:690 src/catalog/types.js:970
+#: places/places.php:56 places/places.php:119 src/catalog/types.js:157 src/catalog/types.js:464 src/catalog/types.js:694 src/catalog/types.js:974
 msgid "Name"
 msgstr ""
 
@@ -2935,7 +2919,7 @@ msgstr ""
 msgid "New arrivals"
 msgstr ""
 
-#: src/catalog/types.js:937
+#: src/catalog/types.js:941
 msgid "New category"
 msgstr ""
 
@@ -2955,7 +2939,7 @@ msgstr ""
 msgid "New products are shown on the site at once. Otherwise they are hidden until you check them."
 msgstr ""
 
-#: src/catalog/types.js:178
+#: src/catalog/types.js:182
 msgid "New products show “from”"
 msgstr ""
 
@@ -2963,11 +2947,11 @@ msgstr ""
 msgid "New reviews:"
 msgstr ""
 
-#: src/catalog/types.js:1062
+#: src/catalog/types.js:1066
 msgid "New type"
 msgstr ""
 
-#: src/catalog/types.js:1191
+#: src/catalog/types.js:1195
 msgid "New type of product"
 msgstr ""
 
@@ -2991,19 +2975,19 @@ msgstr ""
 msgid "Newest first — click for the oldest first"
 msgstr ""
 
-#: catalog/catalog-front.php:439
+#: catalog/catalog-front.php:435
 msgid "Next"
 msgstr ""
 
-#: catalog/catalog-front.php:244 catalog/catalog-front.php:445 src/shared/photos.js:46 works/works.php:217
+#: catalog/catalog-front.php:244 catalog/catalog-front.php:441 src/shared/photos.js:46 works/works.php:217
 msgid "Next photo"
 msgstr ""
 
-#: catalog/catalog-front.php:448
+#: catalog/catalog-front.php:444
 msgid "Next product"
 msgstr ""
 
-#: blocks/legacy/legacy.php:63
+#: blocks/legacy/legacy.php:62
 msgid "Night phone line"
 msgstr ""
 
@@ -3132,7 +3116,7 @@ msgstr ""
 msgid "Now"
 msgstr ""
 
-#: src/catalog/types.js:398 blocks/home/home.php:127 core/settings.php:383
+#: src/catalog/types.js:402 blocks/home/home.php:127 core/settings.php:383
 msgid "Number"
 msgstr ""
 
@@ -3196,7 +3180,7 @@ msgstr ""
 msgid "Old price"
 msgstr ""
 
-#: src/editor-meta/index.js:69
+#: src/editor-meta/index.js:68
 msgid "Old price, ₽"
 msgstr ""
 
@@ -3244,7 +3228,7 @@ msgstr ""
 msgid "One column per specification, the name after the colon as in the type."
 msgstr ""
 
-#: src/catalog/types.js:252
+#: src/catalog/types.js:256
 msgid "One column — large photos, one product under another; two — more products on the screen."
 msgstr ""
 
@@ -3252,7 +3236,7 @@ msgstr ""
 msgid "One of the addresses with its opening hours and the night phone line, above the header. The address is chosen in the block settings."
 msgstr ""
 
-#: src/editor-meta/index.js:128
+#: src/editor-meta/index.js:127
 msgid "One per line, “Name: value”."
 msgstr ""
 
@@ -3284,7 +3268,7 @@ msgstr ""
 msgid "Only photos can be uploaded (JPEG, PNG, WebP, GIF)."
 msgstr ""
 
-#: src/catalog/types.js:110
+#: src/catalog/types.js:114
 msgid "Only the photo"
 msgstr ""
 
@@ -3340,7 +3324,7 @@ msgstr ""
 msgid "Opening hours badge"
 msgstr ""
 
-#: blocks/legacy/legacy.php:58
+#: blocks/legacy/legacy.php:57
 msgid "Opening hours of the address"
 msgstr ""
 
@@ -3352,7 +3336,7 @@ msgstr ""
 msgid "Opening hours of the main address"
 msgstr ""
 
-#: src/catalog/types.js:279
+#: src/catalog/types.js:283
 msgid "Opens the “Call me back” window; the request shows which product was ordered."
 msgstr ""
 
@@ -3368,7 +3352,7 @@ msgstr ""
 msgid "Or these pages, in this order"
 msgstr ""
 
-#: admin/collections.php:145 src/catalog/fields.js:197 src/catalog/types.js:803 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:85
+#: admin/collections.php:145 src/catalog/fields.js:197 src/catalog/types.js:807 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:85
 msgid "Order"
 msgstr ""
 
@@ -3376,7 +3360,7 @@ msgstr ""
 msgid "Order a meal here"
 msgstr ""
 
-#: src/catalog/types.js:219 src/catalog/types.js:713
+#: src/catalog/types.js:223 src/catalog/types.js:717
 msgid "Order of products on the site"
 msgstr ""
 
@@ -3484,11 +3468,11 @@ msgstr ""
 msgid "Page (the link follows the page if it moves)"
 msgstr ""
 
-#: seo/seo.php:135 blocks/legacy/render/not-found.php:18
+#: seo/seo.php:120 blocks/legacy/render/not-found.php:18
 msgid "Page not found"
 msgstr ""
 
-#: src/catalog/types.js:1128
+#: src/catalog/types.js:1132
 msgid "Page on the site"
 msgstr ""
 
@@ -3496,23 +3480,11 @@ msgstr ""
 msgid "Page photo"
 msgstr ""
 
-#: blocks/legacy/legacy.php:196
-msgid "Page with products"
-msgstr ""
-
 #: leads/lead-mail.php:74
 msgid "Page:"
 msgstr ""
 
-#: pages/pages.php:438
-msgid "Pages"
-msgstr ""
-
-#: blocks/legacy/legacy.php:196
-msgid "Pages set to show catalog tiles or products."
-msgstr ""
-
-#: src/catalog/types.js:428
+#: src/catalog/types.js:432
 msgid "Paste a code like {spec:height} into the product title or description: the site shows the value of this specification of the product, a number with its unit. No value — the code is not shown. Renaming a specification does not change its code."
 msgstr ""
 
@@ -3572,11 +3544,11 @@ msgstr ""
 msgid "Phones, email, addresses and opening hours. Changes appear at once in the header, the footer, on the home page and in the product cards."
 msgstr ""
 
-#: blocks/legacy/legacy.php:28
+#: blocks/legacy/legacy.php:27
 msgid "Phones, messengers, addresses with routes, maps and company details."
 msgstr ""
 
-#: catalog/catalog-front.php:436 src/catalog/fields.js:68 works/works.php:223 blocks/content/content-blocks.php:426
+#: catalog/catalog-front.php:432 src/catalog/fields.js:68 works/works.php:223 blocks/content/content-blocks.php:426
 msgid "Photo"
 msgstr ""
 
@@ -3606,7 +3578,7 @@ msgstr ""
 msgid "Photo 4:3 (coffins, examples of works)"
 msgstr ""
 
-#: src/catalog/types.js:342
+#: src/catalog/types.js:346
 msgid "Photo and order"
 msgstr ""
 
@@ -3646,7 +3618,7 @@ msgstr ""
 msgid "Photo of the page"
 msgstr ""
 
-#: blocks/legacy/legacy.php:31
+#: blocks/legacy/legacy.php:30
 msgid "Photo of the product that is open (a laurel wreath when there is no photo). For the product template."
 msgstr ""
 
@@ -3662,7 +3634,7 @@ msgstr ""
 msgid "Photo tint (not used in the light theme 4.0)"
 msgstr ""
 
-#: blocks/legacy/legacy.php:29
+#: blocks/legacy/legacy.php:28
 msgid "Photo, price, specifications, call buttons and related products of a product: the one that is open (template) or the one chosen in the block settings."
 msgstr ""
 
@@ -3674,7 +3646,7 @@ msgstr ""
 msgid "Photos from the reviews"
 msgstr ""
 
-#: src/catalog/types.js:231
+#: src/catalog/types.js:235
 msgid "Photos in the cards"
 msgstr ""
 
@@ -3684,11 +3656,11 @@ msgstr ""
 msgid "Photos to upload: %d."
 msgstr ""
 
-#: src/catalog/works.js:94 src/editor-meta/index.js:236
+#: src/catalog/works.js:94 src/editor-meta/index.js:235
 msgid "Photos — the first one is the main one"
 msgstr ""
 
-#: src/editor-meta/index.js:232
+#: src/editor-meta/index.js:231
 msgid "Photos, size and prices"
 msgstr ""
 
@@ -3708,7 +3680,7 @@ msgstr ""
 msgid "Please try again."
 msgstr ""
 
-#: src/catalog/works.js:124 src/editor-meta/index.js:246
+#: src/catalog/works.js:124 src/editor-meta/index.js:245
 msgid "Plot size"
 msgstr ""
 
@@ -3728,19 +3700,19 @@ msgstr ""
 msgid "Post IDs (at most 10 per call)."
 msgstr ""
 
-#: catalog/catalog-front.php:437
+#: catalog/catalog-front.php:433
 msgid "Previous"
 msgstr ""
 
-#: catalog/catalog-front.php:243 catalog/catalog-front.php:444 src/shared/photos.js:37 works/works.php:216
+#: catalog/catalog-front.php:243 catalog/catalog-front.php:440 src/shared/photos.js:37 works/works.php:216
 msgid "Previous photo"
 msgstr ""
 
-#: catalog/catalog-front.php:447
+#: catalog/catalog-front.php:443
 msgid "Previous product"
 msgstr ""
 
-#: catalog/catalog-io.php:141 catalog/catalog-manager.php:423 places/places.php:75 src/editor-meta/index.js:56 prices/prices.php:135 blocks/content/inline-values.php:49
+#: catalog/catalog-io.php:141 catalog/catalog-manager.php:423 places/places.php:75 src/editor-meta/index.js:55 prices/prices.php:135 blocks/content/inline-values.php:49
 msgid "Price"
 msgstr ""
 
@@ -3756,7 +3728,7 @@ msgstr ""
 msgid "Price list"
 msgstr ""
 
-#: src/catalog/types.js:168
+#: src/catalog/types.js:172
 msgid "Price of a new product, ₽"
 msgstr ""
 
@@ -3764,7 +3736,7 @@ msgstr ""
 msgid "Price of a service (Memorial → Services)"
 msgstr ""
 
-#: blocks/legacy/legacy.php:32
+#: blocks/legacy/legacy.php:31
 msgid "Price of the product that is open. For the product template."
 msgstr ""
 
@@ -3788,7 +3760,7 @@ msgstr ""
 msgid "Price, specifications, categories and the description are changed right here. Select several products to change prices or categories at once."
 msgstr ""
 
-#: src/catalog/products.js:327 src/catalog/fields.js:242 src/editor-meta/index.js:60 prices/prices.php:81
+#: src/catalog/products.js:327 src/catalog/fields.js:242 src/editor-meta/index.js:59 prices/prices.php:81
 msgid "Price, ₽"
 msgstr ""
 
@@ -3818,7 +3790,7 @@ msgstr ""
 msgid "Prices that are mentioned in the texts of pages and in SEO titles: your own price or one counted by the site (from / up to of a catalog section, number of models, price of a service). How to put one into a text: in a paragraph, open the arrow ∨ (“More”) on the block toolbar → “Site value” → “Price from Memorial → Prices” → choose the price. The page always shows the current value."
 msgstr ""
 
-#: prices/prices.php:810
+#: prices/prices.php:806
 msgid "Prices written into the text by hand — they do not change by themselves"
 msgstr ""
 
@@ -3826,7 +3798,7 @@ msgstr ""
 msgid "Privacy policy"
 msgstr ""
 
-#: catalog/catalog.php:34 catalog/catalog-front.php:442 admin/collections.php:52 blocks/legacy/legacy.php:70 blocks/legacy/legacy.php:193
+#: catalog/catalog.php:34 catalog/catalog-front.php:438 admin/collections.php:52 blocks/legacy/legacy.php:69 blocks/legacy/legacy.php:192
 msgid "Product"
 msgstr ""
 
@@ -3834,7 +3806,7 @@ msgstr ""
 msgid "Product IDs."
 msgstr ""
 
-#: blocks/legacy/legacy.php:29
+#: blocks/legacy/legacy.php:28
 msgid "Product card"
 msgstr ""
 
@@ -3870,31 +3842,31 @@ msgstr ""
 msgid "Product type exactly as in “Catalog → Types and categories” (the sheet “Types and categories”). Needed for a new product."
 msgstr ""
 
-#: src/catalog/types.js:113
+#: src/catalog/types.js:117
 msgid "Product window"
 msgstr ""
 
-#: blocks/legacy/legacy.php:34
+#: blocks/legacy/legacy.php:33
 msgid "Product: call buttons"
 msgstr ""
 
-#: blocks/legacy/legacy.php:31
+#: blocks/legacy/legacy.php:30
 msgid "Product: photo"
 msgstr ""
 
-#: blocks/legacy/legacy.php:32
+#: blocks/legacy/legacy.php:31
 msgid "Product: price"
 msgstr ""
 
-#: blocks/legacy/legacy.php:35
+#: blocks/legacy/legacy.php:34
 msgid "Product: similar products"
 msgstr ""
 
-#: blocks/legacy/legacy.php:33
+#: blocks/legacy/legacy.php:32
 msgid "Product: specifications"
 msgstr ""
 
-#: catalog/catalog-import.php:1457 catalog/catalog-io.php:480 catalog/catalog-manager.php:23 admin/commands.php:19 src/catalog/products.js:784 src/catalog/types.js:783
+#: catalog/catalog-import.php:1457 catalog/catalog-io.php:480 catalog/catalog-manager.php:23 admin/commands.php:19 src/catalog/products.js:784 src/catalog/types.js:787
 msgid "Products"
 msgstr ""
 
@@ -3902,7 +3874,7 @@ msgstr ""
 msgid "Products before “Show more” (number or “all”; empty — automatic)"
 msgstr ""
 
-#: src/catalog/types.js:191
+#: src/catalog/types.js:195
 msgid "Products have a line under the name"
 msgstr ""
 
@@ -3916,7 +3888,7 @@ msgstr ""
 msgid "Products of a catalog section with section links and sorting. The section is chosen in the block settings; by default — the section of this page."
 msgstr ""
 
-#: blocks/legacy/legacy.php:195
+#: blocks/legacy/legacy.php:194
 msgid "Products of one catalog section."
 msgstr ""
 
@@ -3924,20 +3896,8 @@ msgstr ""
 msgid "Products of the catalog with price and visibility, optionally of one product type."
 msgstr ""
 
-#: blocks/legacy/legacy.php:27
-msgid "Products of the page (for the template)"
-msgstr ""
-
-#: src/editor-meta/index.js:327
-msgid "Products on the page"
-msgstr ""
-
-#: src/catalog/types.js:326
+#: src/catalog/types.js:330
 msgid "Products on the site"
-msgstr ""
-
-#: pages/pages.php:403
-msgid "Products will appear soon. Call — we will find what you need and tell you about the prices."
 msgstr ""
 
 #: src/catalog/products.js:91
@@ -3945,13 +3905,13 @@ msgid "Products with the price “on request” stay as they are."
 msgstr ""
 
 #. translators: 1: type, 2: number of products.
-#: src/catalog/types.js:1106
+#: src/catalog/types.js:1110
 #, php-format
 msgid "Products “%1$s” (%2$d)"
 msgstr ""
 
 #. translators: %d: number of products
-#: blocks/legacy/render/catalog-archive.php:51 pages/pages.php:412
+#: blocks/legacy/render/catalog-archive.php:51
 #, php-format
 msgid "Products: %d"
 msgstr ""
@@ -3968,11 +3928,11 @@ msgstr ""
 msgid "Query"
 msgstr ""
 
-#: src/editor-meta/index.js:316 src/editor-meta/faq-sections.js:221
+#: src/editor-meta/index.js:315 src/editor-meta/faq-sections.js:221
 msgid "Question sections"
 msgstr ""
 
-#: src/editor-meta/index.js:364
+#: src/editor-meta/index.js:333
 msgid "Question the page answers"
 msgstr ""
 
@@ -4068,7 +4028,7 @@ msgstr ""
 msgid "Remove photo %d"
 msgstr ""
 
-#: src/catalog/fields.js:258 src/editor-meta/index.js:200
+#: src/catalog/fields.js:258 src/editor-meta/index.js:199
 msgid "Remove row"
 msgstr ""
 
@@ -4078,7 +4038,7 @@ msgstr ""
 msgid "Remove row %d"
 msgstr ""
 
-#: src/catalog/types.js:605
+#: src/catalog/types.js:609
 msgid "Remove specification"
 msgstr ""
 
@@ -4338,11 +4298,11 @@ msgstr ""
 msgid "SKU"
 msgstr ""
 
-#: src/catalog/inline-edit.js:139 src/catalog/inline-edit.js:247 src/catalog/product-pages.js:152 src/catalog/types.js:388 src/catalog/types.js:740 src/catalog/list-screen.js:125
+#: src/catalog/inline-edit.js:139 src/catalog/inline-edit.js:247 src/catalog/product-pages.js:152 src/catalog/types.js:392 src/catalog/types.js:744 src/catalog/list-screen.js:125
 msgid "Save"
 msgstr ""
 
-#: src/catalog/types.js:671
+#: src/catalog/types.js:675
 msgid "Save specifications"
 msgstr ""
 
@@ -4354,7 +4314,7 @@ msgstr ""
 msgid "Saved ✓ The reviews will update within a minute"
 msgstr ""
 
-#: src/catalog/works.js:254 src/catalog/works.js:289 src/catalog/product-pages.js:138 src/catalog/products.js:616 src/catalog/types.js:1015 src/catalog/work-types.js:71
+#: src/catalog/works.js:254 src/catalog/works.js:289 src/catalog/product-pages.js:138 src/catalog/products.js:616 src/catalog/types.js:1019 src/catalog/work-types.js:71
 msgid "Saved."
 msgstr ""
 
@@ -4424,7 +4384,7 @@ msgstr ""
 msgid "Section order"
 msgstr ""
 
-#: src/catalog/types.js:920
+#: src/catalog/types.js:924
 msgid "Sections inside the type — on the site these are the buttons above the catalog."
 msgstr ""
 
@@ -4548,7 +4508,7 @@ msgstr ""
 msgid "Shield with a tick — reliability"
 msgstr ""
 
-#: src/editor-meta/index.js:377
+#: src/editor-meta/index.js:346
 msgid "Short answer — 1–2 sentences"
 msgstr ""
 
@@ -4576,7 +4536,7 @@ msgstr ""
 msgid "Show all"
 msgstr ""
 
-#: src/editor-meta/index.js:276
+#: src/editor-meta/index.js:275
 msgid "Show in examples"
 msgstr ""
 
@@ -4636,7 +4596,7 @@ msgstr ""
 msgid "Show this block"
 msgstr ""
 
-#: src/catalog/products.js:342 src/editor-meta/index.js:86
+#: src/catalog/products.js:342 src/editor-meta/index.js:85
 msgid "Show “from”"
 msgstr ""
 
@@ -4660,7 +4620,7 @@ msgstr ""
 msgid "Shown in the “Examples of our works” cards on other pages."
 msgstr ""
 
-#: src/editor-meta/index.js:381
+#: src/editor-meta/index.js:350
 msgid "Shown on the page card in “Good to know” and in search. Empty — the page title and first paragraph."
 msgstr ""
 
@@ -4711,7 +4671,7 @@ msgstr ""
 msgid "Site value"
 msgstr ""
 
-#: catalog/catalog.php:19 catalog/catalog-front.php:290 seo/seo.php:210
+#: catalog/catalog.php:19 catalog/catalog-front.php:289 seo/seo.php:195
 msgid "Size"
 msgstr ""
 
@@ -4743,7 +4703,7 @@ msgstr ""
 msgid "Sort order"
 msgstr ""
 
-#: reviews/rewio.php:1395 blocks/content/content-blocks.php:98 blocks/legacy/render/catalog-archive.php:54 pages/pages.php:416
+#: reviews/rewio.php:1395 blocks/content/content-blocks.php:98 blocks/legacy/render/catalog-archive.php:54
 msgid "Sorting"
 msgstr ""
 
@@ -4751,7 +4711,7 @@ msgstr ""
 msgid "Sorting for visitors: by date and by rating (on the right above the reviews)"
 msgstr ""
 
-#: catalog/catalog-front.php:373 reviews/rewio.php:1395 works/works.php:179
+#: catalog/catalog-front.php:369 reviews/rewio.php:1395 works/works.php:179
 msgid "Sorting:"
 msgstr ""
 
@@ -4763,16 +4723,16 @@ msgid "Spec: %s"
 msgstr ""
 
 #. translators: %d: number.
-#: src/catalog/types.js:451
+#: src/catalog/types.js:455
 #, php-format
 msgid "Specification %d"
 msgstr ""
 
-#: catalog/catalog-import.php:1418 src/catalog/types.js:426 src/editor-meta/index.js:127
+#: catalog/catalog-import.php:1418 src/catalog/types.js:430 src/editor-meta/index.js:126
 msgid "Specifications"
 msgstr ""
 
-#: blocks/legacy/legacy.php:33
+#: blocks/legacy/legacy.php:32
 msgid "Specifications and the short description of the product that is open. For the product template."
 msgstr ""
 
@@ -4812,7 +4772,7 @@ msgstr ""
 msgid "Sub-section heading level"
 msgstr ""
 
-#: blocks/legacy/legacy.php:36
+#: blocks/legacy/legacy.php:35
 msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
 msgstr ""
 
@@ -4824,11 +4784,11 @@ msgstr ""
 msgid "Suggestions"
 msgstr ""
 
-#: prices/prices.php:800
+#: prices/prices.php:796
 msgid "Switch the prices in the texts to automatic ones"
 msgstr ""
 
-#: prices/prices.php:797
+#: prices/prices.php:793
 msgid "Switched to automatic prices:"
 msgstr ""
 
@@ -4856,7 +4816,7 @@ msgstr ""
 msgid "Tell in 2–3 sentences how and who does it, how long it takes. Choose a photo of the craftsman at work on the left."
 msgstr ""
 
-#: src/catalog/works.js:110 src/editor-meta/index.js:259
+#: src/catalog/works.js:110 src/editor-meta/index.js:258
 msgid "Tells the visitor that the prices are as of that year. Empty — the year is not shown."
 msgstr ""
 
@@ -4868,7 +4828,7 @@ msgstr ""
 msgid "Test"
 msgstr ""
 
-#: src/catalog/types.js:397 blocks/home/home.php:80 core/settings.php:210 core/settings.php:328 core/settings.php:405
+#: src/catalog/types.js:401 blocks/home/home.php:80 core/settings.php:210 core/settings.php:328 core/settings.php:405
 msgid "Text"
 msgstr ""
 
@@ -4892,7 +4852,7 @@ msgstr ""
 msgid "Text next to the reviews"
 msgstr ""
 
-#: src/catalog/types.js:289
+#: src/catalog/types.js:293
 msgid "Text of the button"
 msgstr ""
 
@@ -4966,7 +4926,7 @@ msgstr ""
 msgid "The buttons above the list of works on the site go in this order."
 msgstr ""
 
-#: catalog/catalog-front.php:354
+#: catalog/catalog-front.php:350
 msgid "The catalog will appear soon. Call — we will tell you about the models and prices."
 msgstr ""
 
@@ -5082,10 +5042,6 @@ msgstr ""
 msgid "The product could not be created."
 msgstr ""
 
-#: src/editor-meta/index.js:349
-msgid "The products appear below the page text. To keep part of the text above them, put a “More” block in the text."
-msgstr ""
-
 #. translators: %s: product title.
 #: src/catalog/products.js:182
 #, php-format
@@ -5186,7 +5142,7 @@ msgstr ""
 msgid "There are no product types yet. Add one in “Types and categories”, for example “Wreaths”."
 msgstr ""
 
-#: src/catalog/types.js:1082
+#: src/catalog/types.js:1086
 msgid "There are no product types yet. Add one, for example “Wreaths”."
 msgstr ""
 
@@ -5256,7 +5212,7 @@ msgstr ""
 msgid "This anchor is already used — the site will add a number."
 msgstr ""
 
-#: blocks/legacy/legacy.php:165
+#: blocks/legacy/legacy.php:164
 msgid "This block shows a part of the product that is open — it works in the product template (Appearance → Editor → Templates)."
 msgstr ""
 
@@ -5375,7 +5331,7 @@ msgid "Total: %s"
 msgstr ""
 
 #. translators: %s: total price.
-#: src/editor-meta/index.js:218
+#: src/editor-meta/index.js:217
 #, php-format
 msgid "Total: %s ₽"
 msgstr ""
@@ -5404,7 +5360,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: src/catalog/types.js:310
+#: src/catalog/types.js:314
 msgid "Type of product"
 msgstr ""
 
@@ -5416,11 +5372,11 @@ msgstr ""
 msgid "Under the list on the card and in the total row of the price table, for example “Total with delivery to the crematorium”."
 msgstr ""
 
-#: src/catalog/types.js:704
+#: src/catalog/types.js:708
 msgid "Under the section title on the site; the catalog itself adds “47 models, from 800 ₽”. A price in the text — {price:code} (the codes are in Memorial → Prices → Separate prices)."
 msgstr ""
 
-#: src/catalog/types.js:159
+#: src/catalog/types.js:163
 msgid "Under the title of the catalog on the site (optional)."
 msgstr ""
 
@@ -5436,15 +5392,15 @@ msgstr ""
 msgid "Unfold the block"
 msgstr ""
 
-#: catalog/catalog-io.php:144 catalog/catalog-manager.php:424 src/catalog/products.js:353 src/catalog/types.js:488
+#: catalog/catalog-io.php:144 catalog/catalog-manager.php:424 src/catalog/products.js:353 src/catalog/types.js:492
 msgid "Unit"
 msgstr ""
 
-#: src/editor-meta/index.js:76
+#: src/editor-meta/index.js:75
 msgid "Unit (optional)"
 msgstr ""
 
-#: src/catalog/types.js:184
+#: src/catalog/types.js:188
 msgid "Unit of a new product"
 msgstr ""
 
@@ -5512,7 +5468,7 @@ msgstr ""
 msgid "Useful to know"
 msgstr ""
 
-#: src/catalog/types.js:234
+#: src/catalog/types.js:238
 msgid "Usual 4:3"
 msgstr ""
 
@@ -5534,10 +5490,6 @@ msgstr ""
 
 #: reviews/rewio.php:1151
 msgid "View the loaded reviews and hide unneeded ones"
-msgstr ""
-
-#: pages/pages.php:320
-msgid "View →"
 msgstr ""
 
 #: src/catalog/fields.js:173
@@ -5608,7 +5560,7 @@ msgstr ""
 msgid "What people search for on the site"
 msgstr ""
 
-#: admin/editor-meta.php:180
+#: admin/editor-meta.php:164
 msgid "What the customers wanted and what was done…"
 msgstr ""
 
@@ -5636,7 +5588,7 @@ msgstr ""
 msgid "What was done"
 msgstr ""
 
-#: src/catalog/works.js:131 src/editor-meta/index.js:173
+#: src/catalog/works.js:131 src/editor-meta/index.js:172
 msgid "What was done and the price"
 msgstr ""
 
@@ -5753,7 +5705,7 @@ msgid "Work"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/catalog/fields.js:223 src/editor-meta/index.js:183
+#: src/catalog/fields.js:223 src/editor-meta/index.js:182
 #, php-format
 msgid "Work %d"
 msgstr ""
@@ -5816,7 +5768,7 @@ msgstr ""
 msgid "Yandex reviews widget"
 msgstr ""
 
-#: src/catalog/works.js:108 src/editor-meta/index.js:258
+#: src/catalog/works.js:108 src/editor-meta/index.js:257
 msgid "Year"
 msgstr ""
 
@@ -5868,7 +5820,7 @@ msgstr ""
 msgid "address of the site"
 msgstr ""
 
-#: src/catalog/types.js:49
+#: src/catalog/types.js:53
 msgid "after saving"
 msgstr ""
 
@@ -5931,11 +5883,6 @@ msgstr ""
 #: blocks/types/cards/block.json
 msgctxt "block description"
 msgid "Cards of the sections of this page (its sub-items in the menu or child pages), of another page or of chosen pages — with photo, product count and starting price."
-msgstr ""
-
-#: blocks/types/page-products/block.json
-msgctxt "block description"
-msgid "Catalog tiles or product grid for pages set to show products, with the page text above and below."
 msgstr ""
 
 #: blocks/types/cemeteries/block.json
@@ -6203,7 +6150,7 @@ msgctxt "block keyword"
 msgid "cards"
 msgstr ""
 
-#: blocks/types/catalog/block.json blocks/types/category-list/block.json blocks/types/category-photos/block.json blocks/types/product/block.json blocks/types/page-products/block.json blocks/types/catalog-archive/block.json
+#: blocks/types/catalog/block.json blocks/types/category-list/block.json blocks/types/category-photos/block.json blocks/types/product/block.json blocks/types/catalog-archive/block.json
 msgctxt "block keyword"
 msgid "catalog"
 msgstr ""
@@ -6488,7 +6435,7 @@ msgctxt "block keyword"
 msgid "product"
 msgstr ""
 
-#: blocks/types/catalog/block.json blocks/types/page-products/block.json
+#: blocks/types/catalog/block.json
 msgctxt "block keyword"
 msgid "products"
 msgstr ""
@@ -6753,11 +6700,6 @@ msgctxt "block title"
 msgid "Product: specifications"
 msgstr ""
 
-#: blocks/types/page-products/block.json
-msgctxt "block title"
-msgid "Products of the page (for the template)"
-msgstr ""
-
 #: blocks/types/reviews/block.json
 msgctxt "block title"
 msgid "Reviews from review sites"
@@ -6810,7 +6752,7 @@ msgstr ""
 msgid "button"
 msgstr ""
 
-#: catalog/catalog-types.php:255 src/catalog/types.js:290
+#: catalog/catalog-types.php:255 src/catalog/types.js:294
 msgctxt "button: order a product"
 msgid "Order"
 msgstr ""
@@ -6839,7 +6781,7 @@ msgstr ""
 msgid "cards"
 msgstr ""
 
-#: blocks/block-meta.php:146 blocks/block-meta.php:147 blocks/block-meta.php:148 blocks/block-meta.php:174 blocks/block-meta.php:176 blocks/block-meta.php:177
+#: blocks/block-meta.php:146 blocks/block-meta.php:147 blocks/block-meta.php:148 blocks/block-meta.php:175 blocks/block-meta.php:176
 msgid "catalog"
 msgstr ""
 
@@ -6855,7 +6797,7 @@ msgstr ""
 msgid "categories"
 msgstr ""
 
-#: blocks/block-meta.php:177
+#: blocks/block-meta.php:176
 msgid "category"
 msgstr ""
 
@@ -6867,7 +6809,7 @@ msgstr ""
 msgid "click in the paragraph where the price should be → on the block toolbar open the arrow ∨ (“More”) → “Site value” → “Price from Memorial → Prices” → choose the price → “Insert”. The page always shows the current price. Prices marked “In the SEO plugin” are put into SEO titles as %%mem_code%% (shown in brackets below)."
 msgstr ""
 
-#: src/catalog/types.js:492
+#: src/catalog/types.js:496
 msgid "cm, mm, kg"
 msgstr ""
 
@@ -6967,7 +6909,7 @@ msgstr ""
 msgid "for example max://…"
 msgstr ""
 
-#: src/catalog/works.js:126 src/editor-meta/index.js:247
+#: src/catalog/works.js:126 src/editor-meta/index.js:246
 msgid "for example: 2.5 × 2 m"
 msgstr ""
 
@@ -6983,7 +6925,7 @@ msgstr ""
 msgid "for example: from 58,000 ₽"
 msgstr ""
 
-#: src/editor-meta/index.js:118
+#: src/editor-meta/index.js:117
 msgid "for example: height 90 cm · 700 × 2050 mm"
 msgstr ""
 
@@ -6991,7 +6933,7 @@ msgstr ""
 msgid "for example: korziny"
 msgstr ""
 
-#: src/catalog/products.js:355 src/editor-meta/index.js:77
+#: src/catalog/products.js:355 src/editor-meta/index.js:76
 msgid "for example: per metre"
 msgstr ""
 
@@ -7033,7 +6975,7 @@ msgstr ""
 msgid "header"
 msgstr ""
 
-#: blocks/block-meta.php:337
+#: blocks/block-meta.php:336
 msgid "hidden on the site"
 msgstr ""
 
@@ -7093,7 +7035,7 @@ msgstr ""
 msgid "list from Rewio: %s"
 msgstr ""
 
-#: blocks/block-meta.php:139 blocks/block-meta.php:175
+#: blocks/block-meta.php:139 blocks/block-meta.php:174
 msgid "map"
 msgstr ""
 
@@ -7113,7 +7055,7 @@ msgstr ""
 msgid "mobile"
 msgstr ""
 
-#: catalog/catalog-front.php:387 catalog/catalog-summary.php:93 prices/values.php:230 pages/cards.php:142
+#: catalog/catalog-front.php:383 catalog/catalog-summary.php:93 prices/values.php:230 pages/cards.php:142
 msgid "model"
 msgid_plural "models"
 msgstr[0] ""
@@ -7147,7 +7089,7 @@ msgstr ""
 msgid "not chosen"
 msgstr ""
 
-#: reviews/rewio.php:400 blocks/block-meta.php:178
+#: reviews/rewio.php:400 blocks/block-meta.php:177
 msgid "not found"
 msgstr ""
 
@@ -7195,7 +7137,7 @@ msgstr ""
 msgid "packages"
 msgstr ""
 
-#: prices/prices.php:814
+#: prices/prices.php:810
 msgid "page"
 msgstr ""
 
@@ -7217,7 +7159,7 @@ msgstr ""
 msgid "pcs"
 msgstr ""
 
-#: src/catalog/types.js:185
+#: src/catalog/types.js:189
 msgid "per piece"
 msgstr ""
 
@@ -7266,11 +7208,11 @@ msgstr ""
 msgid "privacy"
 msgstr ""
 
-#: blocks/block-meta.php:176
+#: blocks/block-meta.php:175
 msgid "product"
 msgstr ""
 
-#: blocks/block-meta.php:146 blocks/block-meta.php:174
+#: blocks/block-meta.php:146
 msgid "products"
 msgstr ""
 
@@ -7323,7 +7265,7 @@ msgstr ""
 msgid "search statistics queries"
 msgstr ""
 
-#: prices/prices.php:814
+#: prices/prices.php:810
 msgid "section description"
 msgstr ""
 
@@ -7474,10 +7416,6 @@ msgstr ""
 msgid "— a draft with the search. For an article to appear on it: open the article → “Page Attributes” → “Parent” → “Good to know”."
 msgstr ""
 
-#: src/editor-meta/index.js:337
-msgid "— do not show —"
-msgstr ""
-
 #: legal/legal.php:165
 msgid "— drafts with text templates will appear; the company details (sole proprietor, TIN, OGRNIP, address, email) are filled in from “Contacts” automatically."
 msgstr ""
@@ -7486,7 +7424,7 @@ msgstr ""
 msgid "— no link —"
 msgstr ""
 
-#: src/catalog/types.js:538
+#: src/catalog/types.js:542
 msgid "— none —"
 msgstr ""
 
@@ -7502,7 +7440,7 @@ msgstr ""
 msgid "— not specified —"
 msgstr ""
 
-#: prices/prices.php:801
+#: prices/prices.php:797
 msgid "— the cremation total, the ribbon, the delivery and the catalog prices that match the current ones in the texts of pages become site values that change by themselves."
 msgstr ""
 
@@ -7526,7 +7464,7 @@ msgstr ""
 msgid "“Call request”,"
 msgstr ""
 
-#: blocks/legacy/legacy.php:34
+#: blocks/legacy/legacy.php:33
 msgid "“Call” and “Call me back” buttons with a hint, under the product. For the product template."
 msgstr ""
 
@@ -7582,11 +7520,11 @@ msgstr ""
 msgid "“Often searched” words, comma separated (empty — from search statistics)"
 msgstr ""
 
-#: src/catalog/types.js:117
+#: src/catalog/types.js:121
 msgid "“Only the photo” — a large photo with arrows. “Product window” — photos, name, specifications, price, description and the “Order” button, if it is on."
 msgstr ""
 
-#: src/catalog/types.js:275
+#: src/catalog/types.js:279
 msgid "“Order” button under the product cards"
 msgstr ""
 
@@ -7630,7 +7568,7 @@ msgstr ""
 msgid "… St., near the … cemetery"
 msgstr ""
 
-#: src/editor-meta/index.js:192
+#: src/editor-meta/index.js:191
 msgid "₽"
 msgstr ""
 
@@ -7642,11 +7580,11 @@ msgstr ""
 msgid "✎ Texts and contacts"
 msgstr ""
 
-#: prices/prices.php:803
+#: prices/prices.php:799
 msgid "✔ Done."
 msgstr ""
 
-#: prices/prices.php:807
+#: prices/prices.php:803
 msgid "✔ No prices written into the texts by hand were found."
 msgstr ""
 

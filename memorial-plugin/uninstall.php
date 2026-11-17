@@ -41,7 +41,7 @@ function memorial_plugin_uninstall_site( $everything ) {
 	if ( get_option( 'memorial_plugin_llms_file' ) && file_exists( ABSPATH . 'llms.txt' ) ) {
 		wp_delete_file( ABSPATH . 'llms.txt' );
 	}
-	foreach ( array( 'mem_rewio_cache', 'mem_rewio_catalog', 'mem_rewio_status', 'mem_logos_queue', 'mem_core_flush', 'memorial_plugin_pages_to_content', 'memorial_plugin_upgrade_210', 'memorial_plugin_reviews_mail_last', 'memorial_plugin_card_sizes_done', 'memorial_plugin_fix_uploads_2', 'memorial_plugin_fix_uploads_log', 'memorial_plugin_sku_1', 'memorial_plugin_sku_log', 'memorial_plugin_import_log', 'memorial_plugin_llms_file' ) as $option ) {
+	foreach ( array( 'mem_rewio_cache', 'mem_rewio_catalog', 'mem_rewio_status', 'mem_logos_queue', 'mem_core_flush', 'memorial_plugin_pages_to_content', 'memorial_plugin_upgrade_210', 'memorial_plugin_reviews_mail_last', 'memorial_plugin_card_sizes_done', 'memorial_plugin_fix_uploads_2', 'memorial_plugin_fix_uploads_log', 'memorial_plugin_sku_1', 'memorial_plugin_sku_log', 'memorial_plugin_import_log', 'memorial_plugin_llms_file', 'memorial_plugin_seo_1', 'memorial_plugin_seo_1_log' ) as $option ) {
 		delete_option( $option );
 	}
 

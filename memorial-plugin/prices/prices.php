@@ -527,15 +527,11 @@ function memorial_plugin_prices_migrate() {
 	return $done;
 }
 
-/** Раздел каталога страницы: «Товары на странице» или блок [mem_catalog] в тексте
+/** Раздел каталога страницы: блок «Каталог» в тексте (поле _mem_cat)
  *
  * @param mixed $pid Pid.
  */
 function memorial_plugin_page_term( $pid ) {
-	$v = get_post_meta( $pid, '_mem_products', true );
-	if ( is_numeric( $v ) && (int) $v > 0 ) {
-		return (int) $v;
-	}
 	return (int) get_post_meta( $pid, '_mem_cat', true );
 }
 

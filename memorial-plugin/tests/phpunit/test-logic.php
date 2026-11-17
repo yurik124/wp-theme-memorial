@@ -54,13 +54,6 @@ class Test_Memorial_Plugin_Logic extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_page_products_value_accepts_only_known_categories() {
-		$this->assertSame( 'all', memorial_plugin_page_products_value( 'all' ) );
-		$this->assertSame( '', memorial_plugin_page_products_value( '999999' ) );
-		$cat = self::factory()->term->create( array( 'taxonomy' => 'mem_cat' ) );
-		$this->assertSame( (string) $cat, memorial_plugin_page_products_value( (string) $cat ) );
-	}
-
 	public function test_theme_bridge_maps_missing_presets() {
 		add_filter(
 			'wp_theme_json_data_theme',

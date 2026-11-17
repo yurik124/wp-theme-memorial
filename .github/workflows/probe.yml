@@ -121,7 +121,7 @@ jobs:
             "testsEnvironment": false,
             "core": "https://wordpress.org/wordpress-7.1.4.zip",
             "phpVersion": "8.4",
-            "plugins": [],
+            "plugins": ["https://downloads.wordpress.org/plugin/wp-seopress.zip"],
             "themes": [],
             "mappings": {
               "wp-content/plugins/memorial-core": "../classic/memorial-core",
@@ -158,6 +158,7 @@ jobs:
           if [ -f after/tests/probe/run.env ]; then . after/tests/probe/run.env; fi
           echo "PROBE_GREP=${PROBE_GREP:-бургер-ветка|подменю ПК}" >> "$GITHUB_ENV"
           echo "PROBE_PHASES=${PROBE_PHASES:-}" >> "$GITHUB_ENV"
+          echo "PROBE_CLI=${PROBE_CLI:-}" >> "$GITHUB_ENV"
 
       - name: Снимки — старое
         if: ${{ !env.PROBE_PHASES || contains(env.PROBE_PHASES, 'classic') }}
@@ -180,6 +181,12 @@ jobs:
           # Admin in the site's language: core translations (wp-env start --update resets them) and the probe user's locale.
           ../after/node_modules/.bin/wp-env run cli sh -c 'l=$(wp option get WPLANG 2>/dev/null); l=${l:-ru_RU}; wp language core install "$l" --quiet; wp user update probe --locale="$l" --quiet' || true
           ../after/node_modules/.bin/wp-env run cli sh -c 'rm -rf wp-content/cache/memorial; wp eval "wp_set_current_user( (int) ( get_users( array( \"role\" => \"administrator\", \"number\" => 1, \"fields\" => \"ID\" ) )[0] ?? 1 ) ); do_action(\"admin_init\");" || true'
+
+      - name: Команды WP-CLI сценария (PROBE_CLI из run.env) — вывод в probe/cli.txt
+        if: ${{ env.PROBE_CLI != '' }}
+        run: |
+          mkdir -p probe
+          cd env && ../after/node_modules/.bin/wp-env run cli sh -c "$PROBE_CLI" > ../probe/cli.txt 2>&1 || true
 
       - name: Снимки — исправленное
         run: cd after && PHASE=block PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "$PROBE_GREP" || true

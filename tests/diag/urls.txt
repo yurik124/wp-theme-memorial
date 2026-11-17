@@ -1,0 +1,35 @@
+# Адреса для проверки ответа сайта (diag.yml → site_check.py): код ответа и куда ведёт редирект.
+# Старые адреса memorialbel.ru (sitemap старого сайта и индекс Яндекса и Google, 17.11.2026).
+/
+/index.html
+/indexdata/index.swf
+/ritualnye-uslugi/
+/ritualnye-uslugi/kremacziya/
+/ritualnye-uslugi/gruz-200/
+/ritualnye-uslugi/traurnyj-zal/
+/groby/
+/venki/
+/pamyatniki/
+/ogradki/
+/ogradki-2/
+/kresty/
+/metallicheskie-kresty/
+/blagoustrojstvo-zahoroneniya/
+/blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode/
+/fotogalereia/
+/kontakty/
+/politika-ispolzovaniya-cookie/
+# Служебные адреса.
+/?author=1
+/author/admin/
+/catalog/
+/feed/
+/comments/feed/
+/kontakty/feed/
+/venki/page/2/
+/?s=венок
+/robots.txt
+/llms.txt
+/sitemaps.xml
+/sitemap.xml
+/wp-sitemap.xml

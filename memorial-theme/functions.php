@@ -200,9 +200,26 @@ add_action(
 		remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 		remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 		remove_action( 'wp_head', 'rest_output_link_wp_head' );
+		// RSS: the site has no blog, the feeds only repeat the pages.
+		remove_action( 'wp_head', 'feed_links', 2 );
+		remove_action( 'wp_head', 'feed_links_extra', 3 );
 		add_filter( 'emoji_svg_url', '__return_false' );
 		remove_action( 'wp_body_open', 'wp_global_styles_render_svg_filters' );
 	}
+);
+
+/* RSS-ленты (/feed/, /comments/feed/, /<страница>/feed/) — 301 на саму страницу или на главную */
+add_action(
+	'template_redirect',
+	static function () {
+		if ( ! is_feed() ) {
+			return;
+		}
+		$id = is_singular() ? (int) get_queried_object_id() : 0;
+		wp_safe_redirect( $id ? (string) get_permalink( $id ) : home_url( '/' ), 301, 'Memorial' );
+		exit;
+	},
+	1
 );
 
 /* «Логотип сайта» без своего логотипа: значок сайта, иначе лавровый знак с буквой (как в теме 4) */
