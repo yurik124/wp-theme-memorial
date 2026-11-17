@@ -227,4 +227,29 @@ foreach ( $wpdb->get_results( "SELECT post_id, meta_key, meta_value FROM {$wpdb-
 ksort( $links );
 $out['links'] = $links;
 
+// SEOPress fields of the pages (title, description, noindex).
+foreach ( get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'posts_per_page' => -1 ) ) as $p ) {
+	$out['seo_meta'][ $p->ID . ' ' . urldecode( get_page_uri( $p ) ) ] = array(
+		'title'   => get_post_meta( $p->ID, '_seopress_titles_title', true ),
+		'desc'    => get_post_meta( $p->ID, '_seopress_titles_desc', true ),
+		'noindex' => get_post_meta( $p->ID, '_seopress_robots_index', true ),
+		'h1'      => $p->post_title,
+	);
+}
+// Separate prices: code, kind, section, “In the SEO plugin”, what the site prints.
+foreach ( function_exists( 'memorial_plugin_values' ) ? memorial_plugin_values() : array() as $k => $row ) {
+	$out['values'][ $k ] = array(
+		'name'    => $row['name'] ?? '',
+		'what'    => $row['what'] ?? '',
+		'section' => $row['section'] ?? '',
+		'seo'     => $row['seo'] ?? '',
+		'bare'    => $row['bare'] ?? '',
+		'text'    => function_exists( 'memorial_plugin_value_text' ) ? memorial_plugin_value_text( $row ) : '',
+	);
+}
+$out['seo_registry'] = function_exists( 'memorial_plugin_seo_registry' ) ? array_keys( memorial_plugin_seo_registry() ) : null;
+// Who holds the name “ogradki” (any type and status, also attachments and trash).
+$out['ogradki_taken'] = $wpdb->get_results( "SELECT ID, post_type, post_status, post_parent, post_name FROM {$wpdb->posts} WHERE post_name IN ('ogradki','ogradki__trashed','politika-ispolzovaniya-cookie') OR post_name LIKE 'ogradki-%'" );
+$out['legal_pages']   = array( get_option( 'mem_legal' ), (int) get_option( 'wp_page_for_privacy_policy' ) );
+
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE );

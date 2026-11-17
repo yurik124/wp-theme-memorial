@@ -23,6 +23,7 @@ def get(url):
         m = re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\']([^"\']+)', r.text[:30000], re.I)
         c = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)', r.text[:30000], re.I)
         t = re.search(r'<title>([^<]*)</title>', r.text[:30000], re.I)
+        dsc = re.search(r'<meta[^>]+name=["\']description["\'][^>]+content=["\']([^"\']*)', r.text[:30000], re.I)
         return {
             'code': r.status_code,
             'to': r.headers.get('Location', ''),
@@ -30,6 +31,8 @@ def get(url):
             'meta_robots': m.group(1) if m else '',
             'canonical': c.group(1) if c else '',
             'title': t.group(1).strip() if t else '',
+            'desc': dsc.group(1) if dsc else '',
+            'ctype': r.headers.get('Content-Type', ''),
             'body': r.text if url.endswith(('robots.txt', 'llms.txt')) else head,
         }
     except Exception as e:  # noqa: BLE001
@@ -56,11 +59,13 @@ for ch in children:
     urls += locs
 urls = list(dict.fromkeys(urls))[:400]
 bad = []
+pages = {}
 with ThreadPoolExecutor(6) as ex:
     for u, res in zip(urls, ex.map(get, urls)):
+        pages[u] = {'title': res.get('title'), 'desc': res.get('desc')}
         if res.get('code') != 200 or 'noindex' in (res.get('meta_robots', '') + res.get('x_robots', '')):
             bad.append({'url': u, **{k: res.get(k) for k in ('code', 'to', 'meta_robots', 'x_robots', 'error')}})
-out['sitemaps'] = {'index_code': idx.status_code, 'maps': maps, 'urls': len(urls), 'bad': bad}
+out['sitemaps'] = {'index_code': idx.status_code, 'maps': maps, 'urls': len(urls), 'bad': bad, 'pages': pages}
 
 open('out/http.json', 'w', encoding='utf-8').write(json.dumps(out, ensure_ascii=False, indent=1))
 print(json.dumps(out, ensure_ascii=False, indent=1)[:40000])
