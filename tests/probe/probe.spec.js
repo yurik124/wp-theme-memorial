@@ -2151,7 +2151,8 @@ test.describe( 'правка в таблице', () => {
 			o.infoVisibleBefore = await li.locator( '.mcard__info' ).isVisible();
 			o.descVisibleBefore = snippet ? await page.getByText( snippet ).first().isVisible() : null;
 			// дерево доступности: скрытое описание диктор не видит
-			o.a11yCardBefore = snippet ? ( await li.ariaSnapshot() ).includes( snippet.slice( 0, 15 ) ) : null;
+			o.cardTreeBefore = await li.ariaSnapshot();
+			o.a11yCardBefore = o.cardTreeBefore.includes( 'голубых хризантем' );
 			o.visibleWithText = snippet ? await page.getByText( snippet ).evaluateAll( ( els ) => els.filter( ( e ) => e.getClientRects().length ).map( ( e ) => e.className || e.tagName ) ) : null;
 			await li.locator( 'a[data-pv]' ).first().scrollIntoViewIfNeeded();
 			await li.locator( 'a[data-pv]' ).first().click();
@@ -2165,8 +2166,8 @@ test.describe( 'правка в таблице', () => {
 			o.specsInModal = await pv.locator( '.pv__specs' ).count();
 			o.infoLeftInCard = await li.locator( '.mcard__info > *' ).count();
 			o.descCopiesOpen = snippet ? await page.getByText( snippet ).count() : null;
-			o.a11yOpen = snippet ? ( await pv.ariaSnapshot() ).includes( snippet.slice( 0, 15 ) ) : null;
-			o.a11yCardOpen = snippet ? ( await li.ariaSnapshot() ).includes( snippet.slice( 0, 15 ) ) : null;
+			o.a11yOpen = ( await pv.ariaSnapshot() ).includes( 'голубых хризантем' );
+			o.a11yCardOpen = ( await li.ariaSnapshot() ).includes( 'голубых хризантем' );
 			o.focusInDialog = await page.evaluate( () => !! document.activeElement?.closest( 'dialog.pv' ) );
 			await page.screenshot( { path: `${ DIR }/desc-${ w }-open.png` } );
 			if ( await pv.locator( '.pv__next' ).isVisible() ) {
@@ -2183,7 +2184,7 @@ test.describe( 'правка в таблице', () => {
 			o.infoBackInCard = await li.locator( '.mcard__info > *' ).count();
 			o.descVisibleAfter = snippet ? await page.getByText( snippet ).first().isVisible() : null;
 			o.descCopiesAfter = snippet ? await page.getByText( snippet ).count() : null;
-			o.a11yCardAfter = snippet ? ( await li.ariaSnapshot() ).includes( snippet.slice( 0, 15 ) ) : null;
+			o.a11yCardAfter = ( await li.ariaSnapshot() ).includes( 'голубых хризантем' );
 			report[ 'w' + w ] = o;
 			save();
 		}
