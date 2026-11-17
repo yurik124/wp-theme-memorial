@@ -2758,3 +2758,50 @@ test.describe( 'условия и отзывы', () => {
 		save();
 	} );
 } );
+
+test.describe( 'выбор отзывов', () => {
+	test( 'выбор отзывов: окно с галочками в редакторе', async ( { page } ) => {
+		test.setTimeout( 300_000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		const venki = PAGES.find( ( x ) => x.post_name === 'venki' );
+		await page.goto( '/wp-admin/post.php?action=edit&post=' + venki.ID );
+		await page.waitForFunction( () => window.wp && window.wp.data && window.wp.blocks, null, { timeout: 90000 } );
+		// Без приветственного окна редактора.
+		await page.evaluate( () => window.wp.data.dispatch( 'core/preferences' ).set( 'core/edit-post', 'welcomeGuide', false ) );
+		await page.keyboard.press( 'Escape' );
+		await page.waitForTimeout( 3000 );
+		await page.evaluate( () => {
+			const ids = window.wp.data.select( 'core/block-editor' ).getBlocksByName( 'memorial-plugin/rewio-reviews' );
+			if ( ids.length ) {
+				window.wp.data.dispatch( 'core/block-editor' ).selectBlock( ids[ 0 ] );
+			}
+		} );
+		await page.waitForTimeout( 1500 );
+		const choose = page.getByRole( 'button', { name: /Выбрать отзывы|Choose reviews/ } ).first();
+		await choose.click();
+		await page.waitForSelector( '.memorial-plugin-reviews-picker__list input[type=checkbox]', { timeout: 30000 } ).catch( () => {} );
+		report.boxes = await page.locator( '.memorial-plugin-reviews-picker__list input[type=checkbox]' ).count();
+		await page.locator( '.memorial-plugin-reviews-picker__list input[type=checkbox]' ).nth( 1 ).check().catch( ( e ) => ( report.err1 = e.message ) );
+		await page.locator( '.memorial-plugin-reviews-picker__list input[type=checkbox]' ).nth( 0 ).check().catch( ( e ) => ( report.err2 = e.message ) );
+		await page.getByRole( 'searchbox' ).first().fill( 'оградк' ).catch( () => {} );
+		await page.waitForTimeout( 500 );
+		report.found = await page.locator( '.memorial-plugin-reviews-picker__list input[type=checkbox]' ).count();
+		await shot( page, 'pick-modal' );
+		await page.getByRole( 'button', { name: /Готово|Done/ } ).click();
+		await page.waitForTimeout( 2500 );
+		report.pick = await page.evaluate( () => {
+			const ids = window.wp.data.select( 'core/block-editor' ).getBlocksByName( 'memorial-plugin/rewio-reviews' );
+			return ids.length ? window.wp.data.select( 'core/block-editor' ).getBlockAttributes( ids[ 0 ] ).pick : null;
+		} );
+		await shot( page, 'pick-sidebar' );
+		report.errs = errs;
+		fs.writeFileSync( `${ DIR }/log-pick.json`, JSON.stringify( report, null, 1 ) );
+	} );
+} );
