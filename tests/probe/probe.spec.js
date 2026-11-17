@@ -2143,9 +2143,11 @@ test.describe( 'правка в таблице', () => {
 				await cookie.first().click().catch( () => {} );
 			}
 			// товар с описанием (или первый в окне)
-			const li = snippet
+			const found = snippet
 				? page.locator( '.mcard', { has: page.locator( '.mcard__info .pv__desc', { hasText: snippet } ) } ).first()
 				: page.locator( '.mcard', { has: page.locator( 'a[data-pv]' ) } ).first();
+			// карточка — по id: пока описание в окне, «карточка с описанием» не находится
+			const li = page.locator( '#' + ( await found.getAttribute( 'id' ) ) );
 			o.infoVisibleBefore = await li.locator( '.mcard__info' ).isVisible();
 			o.descVisibleBefore = snippet ? await page.getByText( snippet ).first().isVisible() : null;
 			// дерево доступности: скрытое описание диктор не видит
