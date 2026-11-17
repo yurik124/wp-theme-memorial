@@ -794,7 +794,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 			if ( price ) {
 				out.price = el( 'p', 'pv__price', '' );
 				out.price.append(
-					...[ ...price.childNodes ].map( ( x ) => x.cloneNode( true ) )
+					...[ ...price.childNodes ].map( ( x ) =>
+						x.cloneNode( true )
+					)
 				);
 			}
 			if ( order ) {
@@ -872,7 +874,9 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 				specs = one( '.pv__specs' );
 			const keep = ( list ) => list.filter( Boolean );
 			if ( p.mode === 'card' ) {
-				main.replaceChildren( ...keep( [ c.title, c.sub, desc, specs ] ) );
+				main.replaceChildren(
+					...keep( [ c.title, c.sub, desc, specs ] )
+				);
 				buy.replaceChildren( ...keep( [ c.price, c.order ] ) );
 			} else {
 				main.replaceChildren(
