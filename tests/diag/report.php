@@ -255,4 +255,101 @@ $out['legal_pages']   = array( get_option( 'mem_legal' ), (int) get_option( 'wp_
 // Products with a price below 100 ₽ (a placeholder price spoils “from …” in titles).
 $out['cheap'] = $wpdb->get_results( "SELECT p.ID, p.post_title, p.post_status, m.meta_value price, (SELECT GROUP_CONCAT(t.slug) FROM {$wpdb->term_relationships} r JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id=r.term_taxonomy_id JOIN {$wpdb->terms} t ON t.term_id=tt.term_id WHERE r.object_id=p.ID AND tt.taxonomy='mem_cat') cats FROM {$wpdb->posts} p JOIN {$wpdb->postmeta} m ON m.post_id=p.ID AND m.meta_key='_mem_price' WHERE p.post_type='mem_product' AND p.post_status='publish' AND CAST(m.meta_value AS SIGNED) BETWEEN 1 AND 99" );
 
+
+// ---------- 18.11.2026: обработка фото, антиспам, «Наши услуги» ----------
+$out['img_env'] = array(
+	'imagick'         => extension_loaded( 'imagick' ) ? ( class_exists( 'Imagick' ) ? Imagick::getVersion()['versionString'] : 'loaded' ) : false,
+	'imagick_formats' => class_exists( 'Imagick' ) ? array_values( array_intersect( array( 'JPEG', 'PNG', 'WEBP', 'AVIF' ), Imagick::queryFormats() ) ) : null,
+	'gd'              => function_exists( 'gd_info' ) ? gd_info() : false,
+	'editor'          => _wp_image_editor_choose( array( 'mime_type' => 'image/jpeg' ) ),
+	'exif'            => function_exists( 'exif_read_data' ),
+	'memory'          => ini_get( 'memory_limit' ),
+	'max_exec'        => ini_get( 'max_execution_time' ),
+	'big_threshold'   => apply_filters( 'big_image_size_threshold', 2560, array( 0, 0 ), '', 0 ),
+	'webp'            => get_option( 'memorial_plugin_webp' ),
+);
+// Фото по видам: товары (главное фото и галерея), работы, изображения записи страниц.
+$ids = array( 'product' => array(), 'work' => array(), 'page' => array() );
+foreach ( $wpdb->get_results( "SELECT p.post_type, m.meta_key, m.meta_value FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id WHERE p.post_status IN ('publish','draft','private') AND p.post_type IN ('mem_product','mem_work','page') AND m.meta_key IN ('_thumbnail_id','_mem_gallery','_mem_photos') AND m.meta_value <> ''" ) as $r ) {
+	$k = 'mem_product' === $r->post_type ? 'product' : ( 'mem_work' === $r->post_type ? 'work' : 'page' );
+	foreach ( array_filter( array_map( 'absint', explode( ',', (string) $r->meta_value ) ) ) as $a ) {
+		$ids[ $k ][ $a ] = true;
+	}
+}
+$stats = array();
+foreach ( $ids as $k => $set ) {
+	$list = array_keys( $set );
+	$st   = array( 'count' => count( $list ), 'small' => 0, 'png' => 0, 'webp' => 0, 'bytes' => 0, 'w' => array(), 'exif_gps' => 0, 'exif_any' => 0, 'icc' => array(), 'missing' => 0 );
+	foreach ( $list as $i => $a ) {
+		$f = get_attached_file( $a );
+		if ( ! $f || ! is_file( $f ) ) {
+			++$st['missing'];
+			continue;
+		}
+		$m = wp_get_attachment_metadata( $a );
+		$w = (int) ( $m['width'] ?? 0 );
+		$st['w'][] = $w;
+		if ( $w && $w < 1000 ) {
+			++$st['small'];
+		}
+		$st['bytes'] += filesize( $f );
+		$t = wp_check_filetype( $f )['type'] ?? '';
+		$st['png']  += 'image/png' === $t ? 1 : 0;
+		$st['webp'] += 'image/webp' === $t ? 1 : 0;
+		// исходник (до уменьшения WordPress) — там EXIF и профиль
+		$orig = function_exists( 'wp_get_original_image_path' ) ? wp_get_original_image_path( $a ) : $f;
+		if ( $i < 60 && $orig && is_file( $orig ) && 'image/jpeg' === ( wp_check_filetype( $orig )['type'] ?? '' ) ) {
+			$e = function_exists( 'exif_read_data' ) ? @exif_read_data( $orig ) : false;
+			if ( $e ) {
+				++$st['exif_any'];
+				if ( ! empty( $e['GPSLatitude'] ) ) {
+					++$st['exif_gps'];
+				}
+			}
+			if ( class_exists( 'Imagick' ) ) {
+				try {
+					$im  = new Imagick();
+					$im->pingImage( $orig );
+					$cs  = $im->getImageColorspace();
+					$pro = array_keys( $im->getImageProfiles( 'icc', false ) );
+					$key = $cs . ( $pro ? ' icc' : '' );
+					$st['icc'][ $key ] = ( $st['icc'][ $key ] ?? 0 ) + 1;
+					$im->clear();
+				} catch ( Throwable $ex ) {
+					$st['icc']['err'] = $ex->getMessage();
+				}
+			}
+		}
+	}
+	sort( $st['w'] );
+	$st['w']     = $st['w'] ? array( 'min' => $st['w'][0], 'median' => $st['w'][ intdiv( count( $st['w'] ), 2 ) ], 'max' => end( $st['w'] ) ) : null;
+	$st['mb']    = round( $st['bytes'] / 1048576, 1 );
+	unset( $st['bytes'] );
+	$stats[ $k ] = $st;
+}
+$out['photos'] = $stats;
+// Типы товаров (корневые разделы) и сколько фото у каждого.
+foreach ( get_terms( array( 'taxonomy' => 'mem_cat', 'parent' => 0, 'hide_empty' => false ) ) as $t ) {
+	$out['photo_types'][ $t->slug ] = $t->name;
+}
+// Антиспам: комментарии и пингбэки.
+$out['comments'] = array(
+	'default_status'  => get_option( 'default_comment_status' ),
+	'default_ping'    => get_option( 'default_ping_status' ),
+	'open_posts'      => (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE comment_status='open' AND post_status='publish'" ),
+	'open_pings'      => (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE ping_status='open' AND post_status='publish'" ),
+	'by_status'       => $wpdb->get_results( "SELECT comment_approved, comment_type, COUNT(*) n FROM {$wpdb->comments} GROUP BY comment_approved, comment_type" ),
+	'leads'           => (int) wp_count_posts( 'mem_lead' )->publish,
+	'leads_7d'        => (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type='mem_lead' AND post_date > DATE_SUB(NOW(), INTERVAL 7 DAY)" ),
+	'leads_names'     => $wpdb->get_col( "SELECT m.meta_value FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID=m.post_id WHERE p.post_type='mem_lead' AND m.meta_key='_name' AND m.meta_value REGEXP '[a-zA-Z]{6,}|http|www' LIMIT 20" ),
+	'xmlrpc_filter'   => apply_filters( 'xmlrpc_enabled', true ),
+	'htaccess'        => is_file( ABSPATH . '.htaccess' ) ? substr( (string) file_get_contents( ABSPATH . '.htaccess' ), 0, 3000 ) : null,
+	'server'          => $_SERVER['SERVER_SOFTWARE'] ?? '',
+);
+// «Наши услуги» (Главная → Наши услуги).
+foreach ( (array) ( memorial_plugin_home( 'services' )['items'] ?? array() ) as $it ) {
+	$out['home_services'][] = array( $it['title'] ?? '', (int) ( $it['page'] ?? 0 ), $it['page'] ? urldecode( (string) get_page_uri( (int) $it['page'] ) ) : '', $it['price'] ?? '' );
+}
+$out['home_services_raw_saved'] = is_array( get_option( 'mem_home' ) ) && isset( get_option( 'mem_home' )['services'] );
+
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE );
