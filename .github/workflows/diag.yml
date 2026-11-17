@@ -70,7 +70,7 @@ jobs:
       - name: Ответы сайта и карты сайта
         if: always()
         run: |
-          [ -f out/site.txt ] && python3 tests/diag/http.py out/site.txt tests/diag || true
+          [ -f out/site.txt ] && python3 tests/diag/site_check.py out/site.txt tests/diag || true
 
       - name: В ветку ci-probe
         if: always()
