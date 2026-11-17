@@ -130,6 +130,16 @@
 	overflow-y: auto;
 }
 
-.memorial-plugin-reviews-picker .components-button.is-secondary {
-	margin-top: 4px;
+// The column is as wide as the sidebar: long review texts wrap instead of pushing the button out.
+.memorial-plugin-reviews-picker {
+	grid-template-columns: minmax(0, 1fr);
+
+	.components-button.is-secondary {
+		justify-content: center;
+		margin-top: 4px;
+	}
+
+	.components-base-control__help {
+		margin: 0;
+	}
 }
