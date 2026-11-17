@@ -440,4 +440,3 @@ function memorial_plugin_menu_children( $page_id ) {
 	}
 	return array_values( array_filter( memorial_plugin_menu_items(), fn( $c ) => (int) $c->menu_item_parent === (int) $it->ID && 'post_type' === $c->type ) );
 }
-
