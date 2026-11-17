@@ -252,4 +252,7 @@ $out['seo_registry'] = function_exists( 'memorial_plugin_seo_registry' ) ? array
 $out['ogradki_taken'] = $wpdb->get_results( "SELECT ID, post_type, post_status, post_parent, post_name FROM {$wpdb->posts} WHERE post_name IN ('ogradki','ogradki__trashed','politika-ispolzovaniya-cookie') OR post_name LIKE 'ogradki-%'" );
 $out['legal_pages']   = array( get_option( 'mem_legal' ), (int) get_option( 'wp_page_for_privacy_policy' ) );
 
+// Products with a price below 100 ₽ (a placeholder price spoils “from …” in titles).
+$out['cheap'] = $wpdb->get_results( "SELECT p.ID, p.post_title, p.post_status, m.meta_value price, (SELECT GROUP_CONCAT(t.slug) FROM {$wpdb->term_relationships} r JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id=r.term_taxonomy_id JOIN {$wpdb->terms} t ON t.term_id=tt.term_id WHERE r.object_id=p.ID AND tt.taxonomy='mem_cat') cats FROM {$wpdb->posts} p JOIN {$wpdb->postmeta} m ON m.post_id=p.ID AND m.meta_key='_mem_price' WHERE p.post_type='mem_product' AND p.post_status='publish' AND CAST(m.meta_value AS SIGNED) BETWEEN 1 AND 99" );
+
 echo wp_json_encode( $out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE );
