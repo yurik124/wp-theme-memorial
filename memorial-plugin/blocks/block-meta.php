@@ -82,7 +82,7 @@ function memorial_plugin_block_categories() {
 function memorial_plugin_block_category( $slug ) {
 	$groups = array(
 		'memorial-contacts' => array( 'phone-button', 'night-line', 'contacts-list', 'contacts-cards', 'contacts-badges', 'maps', 'company-details' ),
-		'memorial-catalog'  => array( 'catalog', 'category-list', 'category-photos', 'cards', 'packages', 'packages-grid', 'cremation' ),
+		'memorial-catalog'  => array( 'catalog', 'category-list', 'category-photos', 'cards', 'packages', 'packages-grid', 'cremation', 'payment' ),
 		'memorial-services' => array( 'services', 'services-grid', 'works', 'cemeteries', 'restaurants', 'faq', 'guide', 'cta' ),
 		'memorial-reviews'  => array( 'reviews', 'book-reviews', 'rewio-reviews', 'review-buttons', 'review-widget' ),
 		'memorial-design'   => array( 'laurel', 'icon', 'stat', 'link-button' ),
@@ -157,6 +157,7 @@ function memorial_plugin_block_keywords() {
 		'cta'             => array( __( 'call to action', 'memorial-plugin' ), __( 'phone', 'memorial-plugin' ) ),
 		'cremation'       => array( __( 'cremation', 'memorial-plugin' ), __( 'prices', 'memorial-plugin' ) ),
 		'packages'        => array( __( 'packages', 'memorial-plugin' ), __( 'prices', 'memorial-plugin' ) ),
+		'payment'         => array( __( 'payment', 'memorial-plugin' ), __( 'instalments', 'memorial-plugin' ), __( 'card', 'memorial-plugin' ) ),
 		'works'           => array( __( 'works', 'memorial-plugin' ), __( 'portfolio', 'memorial-plugin' ), __( 'photos', 'memorial-plugin' ) ),
 		'cards'           => array( __( 'cards', 'memorial-plugin' ), __( 'pages', 'memorial-plugin' ) ),
 		// Floating.

@@ -154,6 +154,7 @@ $memorial_plugin_modules = array(
 	// цены.
 	'prices/packages.php',
 	'prices/prices.php',
+	'prices/terms.php',
 	// каталог: админка.
 	'catalog/catalog-admin.php',
 	'catalog/catalog-types.php',
@@ -170,6 +171,7 @@ $memorial_plugin_modules = array(
 	// SEO, аналитика, заявки.
 	'seo/seo.php',
 	'seo/redirects.php',
+	'seo/robots.php',
 	'seo/seo-upgrade.php',
 	'seo/seo-plugins.php',
 	'seo/metrika.php',

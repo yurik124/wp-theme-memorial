@@ -63,16 +63,19 @@ foreach ( array(
 /**
  * A variable %%mem_…%% the SEO plugin did not replace (no such price, or it is not marked “In the SEO plugin”)
  * is not shown to people and search engines: it is removed together with the dash or colon before it.
+ * A variable that is empty today (a catalog price “on request”) leaves no dangling dash either.
  *
  * @param mixed $s Title or description.
  * @return mixed
  */
 function memorial_plugin_seo_unknown_vars( $s ) {
-	if ( ! is_string( $s ) || false === strpos( $s, '%%mem_' ) ) {
+	if ( ! is_string( $s ) ) {
 		return $s;
 	}
 	$s = (string) preg_replace( '~\s*(?:[—–-]|:)?\s*%%mem_[a-z0-9_]+%%~u', '', $s );
-	return trim( (string) preg_replace( '~\s{2,}~u', ' ', $s ) );
+	// An empty value (a price “on request”) leaves a dash before the separator or at the end — removed.
+	$s = (string) preg_replace( array( '~\s+[—–]\s*\|~u', '~\s+[—–]\s*$~u' ), array( ' |', '' ), $s );
+	return trim( (string) preg_replace( '~ {2,}~u', ' ', $s ) );
 }
 foreach ( array( 'seopress_titles_title', 'seopress_titles_desc', 'seopress_social_og_title', 'seopress_social_og_desc', 'wpseo_title', 'wpseo_metadesc', 'rank_math/frontend/title', 'rank_math/frontend/description', 'document_title' ) as $memorial_plugin_hook ) {
 	add_filter( $memorial_plugin_hook, 'memorial_plugin_seo_unknown_vars', 100 );

@@ -52,7 +52,12 @@ function memorial_plugin_seo_registry() {
 		}
 		$registry[ $key ] = array(
 			'label' => '' !== trim( (string) ( $row['name'] ?? '' ) ) ? (string) $row['name'] : $key,
-			'get'   => static fn() => memorial_plugin_value_text( $row ),
+			// A catalog price without a number (“on request”) is empty in titles: the dash before it goes too
+			// (seo/seo-plugins.php), and the price appears by itself when the products get prices.
+			'get'   => static function () use ( $row ) {
+				$text = (string) memorial_plugin_value_text( $row );
+				return in_array( $row['what'] ?? '', array( 'cat-min', 'cat-max' ), true ) && ! preg_match( '/\d/u', $text ) ? '' : $text;
+			},
 		);
 		if ( 'cat-min' === ( $row['what'] ?? '' ) && empty( $row['bare'] ) ) {
 			$term = get_term_by( 'slug', (string) ( $row['section'] ?? '' ), 'mem_cat' );

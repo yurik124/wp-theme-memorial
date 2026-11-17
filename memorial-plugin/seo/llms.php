@@ -157,8 +157,29 @@ function memorial_plugin_llms_write() {
 	$ok = $wp_filesystem->put_contents( $file, memorial_plugin_llms_build(), FS_CHMOD_FILE );
 	if ( $ok ) {
 		update_option( 'memorial_plugin_llms_file', time(), false );
+		memorial_plugin_llms_charset();
 	}
 	return (bool) $ok;
+}
+
+/**
+ * Кодировка llms.txt: веб-сервер отдаёт файл как text/plain без charset, и программы читают кириллицу
+ * как Latin-1 (кракозябры). Правило в .htaccess корня сайта (Apache) между своими метками — как WordPress
+ * пишет свои правила; без .htaccess (nginx) ничего не делается. Убирается при удалении плагина.
+ *
+ * @param bool $on Добавить (true) или убрать правило.
+ * @return bool Записано ли.
+ */
+function memorial_plugin_llms_charset( $on = true ) {
+	$htaccess = ABSPATH . '.htaccess';
+	if ( ! file_exists( $htaccess ) || ! wp_is_writable( $htaccess ) ) {
+		return false;
+	}
+	if ( ! function_exists( 'insert_with_markers' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/misc.php';
+	}
+	$rules = $on ? array( '<Files "llms.txt">', 'AddDefaultCharset UTF-8', '</Files>' ) : array();
+	return (bool) insert_with_markers( $htaccess, 'Memorial llms.txt', $rules );
 }
 add_action( 'memorial_plugin_llms', 'memorial_plugin_llms_write' );
 
@@ -177,6 +198,17 @@ add_action(
 		if ( in_array( $option, array( 'mem_contacts', 'blogname', 'blogdescription' ), true ) ) {
 			memorial_plugin_llms_soon();
 		}
+	}
+);
+
+/* Правило кодировки для уже записанного файла — один раз после обновления плагина. */
+add_action(
+	'admin_init',
+	static function () {
+		if ( get_option( 'memorial_plugin_llms_charset' ) || ! get_option( 'memorial_plugin_llms_file' ) || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		update_option( 'memorial_plugin_llms_charset', memorial_plugin_llms_charset() ? 1 : -1, false );
 	}
 );
 

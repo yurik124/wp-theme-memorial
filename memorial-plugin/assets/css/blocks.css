@@ -1092,3 +1092,17 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv.is-closing,.lb.is-closing,.pv.is-closing::backdrop,.lb.is-closing::backdrop{opacity:0;transition:opacity .18s ease-in}
 .pv.is-closing .pv__box,.lb.is-closing figure{transform:translateY(10px) scale(.97);transition:transform .18s ease-in}
 @media (prefers-reduced-motion:reduce){.pv[open],.lb[open],.pv[open]::backdrop,.lb[open]::backdrop,.pv[open] .pv__box,.lb[open] figure{animation:none}.pv.is-closing,.lb.is-closing,.pv.is-closing::backdrop,.lb.is-closing::backdrop,.pv.is-closing .pv__box,.lb.is-closing figure{transition:none}}
+
+/* ---------- Оплата, доставка и выезд, гарантии (prices/terms.php): белая карточка, иконка в круге, заголовок, список ---------- */
+.mterms{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.4rem 1.15rem;align-items:start;background:#fff;color:var(--memorial-plugin-ink);border:1px solid var(--memorial-plugin-line);border-radius:var(--memorial-plugin-r);box-shadow:var(--memorial-plugin-sh);padding:1.35rem 1.5rem;margin:1.75rem 0}
+.mterms>.mterms__ico{margin:0}
+.mterms__body{min-width:0}
+.mterms .mterms__title{margin:.7rem 0 .55rem;font-family:var(--memorial-plugin-lora);font-size:1.3rem;line-height:1.3}
+.mterms .mterms__list{list-style:none;margin:0;padding:0}
+.mterms .mterms__list>li{position:relative;padding-left:1.7rem;margin:0 0 .45em;line-height:1.5}
+.mterms .mterms__list>li:last-child{margin-bottom:0}
+/* маркер — лавровый лист, как в списках сайта (тема: content.css); задан здесь, чтобы карточка выглядела одинаково на любой странице */
+.mterms .mterms__list>li::before{content:"";position:absolute;left:.1rem;top:.42em;width:14px;height:14px;border:0;transform:none;background:var(--memorial-plugin-gold);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath transform='translate(2 14) rotate(-48)' d='M0 0C5.1 -5 12.24 -4.25 17 0C12.24 4.25 5.1 5 0 0Z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath transform='translate(2 14) rotate(-48)' d='M0 0C5.1 -5 12.24 -4.25 17 0C12.24 4.25 5.1 5 0 0Z'/%3E%3C/svg%3E") center/contain no-repeat}
+.mterms__note{margin:.75rem 0 0;color:var(--memorial-plugin-mute)}
+/* телефон: иконка и заголовок в одну строку, список — на всю ширину карточки */
+@media (max-width:600px){.mterms{gap:.75rem .85rem;padding:1.1rem 1.1rem;align-items:center}.mterms>.mterms__ico{width:44px;height:44px}.mterms>.mterms__body{display:contents}.mterms .mterms__title{margin:0;font-size:1.2rem}.mterms .mterms__list,.mterms__note{grid-column:1/-1}.mterms__note{margin-top:0}}

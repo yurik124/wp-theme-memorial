@@ -99,6 +99,10 @@ add_action(
 		if ( $same ) {
 			$data['sameAs'] = $same;
 		}
+		// способы оплаты («Мемориал → Цены → Оплата»).
+		if ( function_exists( 'memorial_plugin_payment_items' ) && memorial_plugin_payment_items() ) {
+			$data['paymentAccepted'] = implode( ', ', array_column( memorial_plugin_payment_items(), 0 ) );
+		}
 		// одно значение — без массива.
 		if ( empty( $data['taxID'] ) ) {
 			unset( $data['taxID'] );

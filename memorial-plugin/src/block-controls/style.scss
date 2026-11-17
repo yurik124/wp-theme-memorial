@@ -119,3 +119,27 @@
 .memorial-plugin-pages-picker li .components-button.is-link {
 	margin-left: 8px;
 }
+
+// Reviews of a page chosen by hand: the list in the window, one review under another.
+.memorial-plugin-reviews-picker__list {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	margin: 16px 0;
+	max-height: 60vh;
+	overflow-y: auto;
+}
+
+// The column is as wide as the sidebar: long review texts wrap instead of pushing the button out.
+.memorial-plugin-reviews-picker {
+	grid-template-columns: minmax(0, 1fr);
+
+	.components-button.is-secondary {
+		justify-content: center;
+		margin-top: 4px;
+	}
+
+	.components-base-control__help {
+		margin: 0;
+	}
+}

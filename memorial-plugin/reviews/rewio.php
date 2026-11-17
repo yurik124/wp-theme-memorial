@@ -1276,6 +1276,40 @@ function memorial_plugin_rewio_stars( $r, $cls = 'rwo__stars' ) {
 }
 
 /**
+ * Words of the “Only reviews with these words” setting: lower case, ё → е, without empty ones.
+ *
+ * @param string $text Words separated by commas.
+ * @return string[]
+ */
+function memorial_plugin_rewio_words( $text ) {
+	$out = array();
+	foreach ( explode( ',', str_replace( array( ';', "\n" ), ',', $text ) ) as $w ) {
+		$w = str_replace( 'ё', 'е', mb_strtolower( trim( $w ) ) );
+		if ( '' !== $w ) {
+			$out[] = $w;
+		}
+	}
+	return array_values( array_unique( $out ) );
+}
+
+/**
+ * Whether a review text has any of the words (a part of a word is enough: «памятн» finds «памятником»).
+ *
+ * @param string   $text  Review text.
+ * @param string[] $words Words (memorial_plugin_rewio_words()).
+ * @return bool
+ */
+function memorial_plugin_rewio_has_words( $text, array $words ) {
+	$text = str_replace( 'ё', 'е', mb_strtolower( $text ) );
+	foreach ( $words as $w ) {
+		if ( false !== mb_strpos( $text, $w ) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
  * Rewio html.
  *
  * @param array $atts Shortcode attributes.
@@ -1288,10 +1322,17 @@ function memorial_plugin_rewio_html( $atts = array() ) {
 			'count' => $v['count'],
 			'title' => $v['title'],
 			'cols'  => $v['cols'],
+			'slova' => '',
+			'vybor' => '',
+			'kniga' => '',
 		),
 		$atts,
 		'mem_rewio'
 	);
+	$words  = memorial_plugin_rewio_words( (string) $a['slova'] );
+	$chosen = array_values( array_filter( array_map( 'trim', explode( ',', (string) $a['vybor'] ) ), 'strlen' ) );
+	$book   = function_exists( 'memorial_plugin_sc_no' ) ? ! memorial_plugin_sc_no( (string) $a['kniga'] ) && '' !== trim( (string) $a['kniga'] ) : in_array( (string) $a['kniga'], array( '1', 'да', 'yes', 'true' ), true );
+	$picked = $words || $chosen;
 	if ( empty( $o['api']['on'] ) ) {
 		return current_user_can( 'manage_options' ) ? ( '<p class="is-style-note">' . esc_html__( 'Rewio reviews: showing the reviews is off — the tick in “Memorial → Reviews → Rewio reviews → 1. Connection”. Only you see this message.', 'memorial-plugin' ) . '</p>' ) : '';
 	}
@@ -1341,6 +1382,35 @@ function memorial_plugin_rewio_html( $atts = array() ) {
 		if ( $list ) {
 			$groups[] = $g + array( 'list' => $list );
 		}
+	}
+	// Reviews of the guest book on this site — added to the first branch, newest first.
+	if ( $book && function_exists( 'memorial_plugin_bookrev_items' ) ) {
+		$own = memorial_plugin_bookrev_items();
+		if ( $own ) {
+			if ( ! $groups ) {
+				$groups[] = array(
+					'name'    => '',
+					'summary' => null,
+					'list'    => array(),
+				);
+			}
+			$groups[0]['list'] = array_merge( $groups[0]['list'], $own );
+			if ( 'best' !== $v['sort'] && 'photos' !== $v['sort'] ) {
+				usort( $groups[0]['list'], static fn( $x, $y ) => strcmp( (string) $y['date'], (string) $x['date'] ) );
+			}
+		}
+	}
+	// This page’s reviews: chosen by hand (in that order) or with one of the words.
+	if ( $picked ) {
+		$order = array_flip( $chosen );
+		foreach ( $groups as $n => $g ) {
+			$list = array_values( array_filter( $g['list'], static fn( $r ) => $chosen ? isset( $order[ (string) $r['id'] ] ) : memorial_plugin_rewio_has_words( (string) $r['text'], $words ) ) );
+			if ( $chosen ) {
+				usort( $list, static fn( $x, $y ) => $order[ (string) $x['id'] ] <=> $order[ (string) $y['id'] ] );
+			}
+			$groups[ $n ]['list'] = $list;
+		}
+		$groups = array_values( array_filter( $groups, static fn( $g ) => (bool) $g['list'] ) );
 	}
 	if ( ! $groups ) {
 		return '';
@@ -1400,7 +1470,7 @@ function memorial_plugin_rewio_html( $atts = array() ) {
 		}
 		$h .= '<div class="rwo__list">';
 		foreach ( $g['list'] as $i => $r ) {
-			$name = $src[ $r['src'] ]['name'] ?? '';
+			$name = $r['srcname'] ?? ( $src[ $r['src'] ]['name'] ?? '' );
 			$ini  = (string) preg_replace( '/[^\p{L}]/u', '', $r['author'] );
 			$ini  = mb_strtoupper( mb_substr( '' !== $ini ? $ini : '?', 0, 1 ) );
 			$hue  = crc32( $r['author'] ) % 360;
@@ -1442,3 +1512,58 @@ function memorial_plugin_rewio_html( $atts = array() ) {
 	return $h . '</section>';
 }
 add_shortcode( 'mem_rewio', 'memorial_plugin_rewio_html' );
+
+/**
+ * Reviews for the chooser of the “Rewio reviews” block (“Or reviews chosen by hand”): every review the site
+ * shows — of the review sites (hidden ones are left out) and of the guest book, newest first.
+ *
+ * @return array<int,array{id:string,author:string,rating:float,date:string,text:string,source:string}>
+ */
+function memorial_plugin_rewio_pick_items() {
+	$c      = memorial_plugin_rewio_cache_get();
+	$hidden = array_map( 'intval', (array) get_option( 'mem_rewio_hidden', array() ) );
+	$src    = $c['sources'] ?? array();
+	$out    = array();
+	foreach ( (array) ( $c['groups'] ?? array() ) as $g ) {
+		foreach ( (array) ( $g['reviews'] ?? array() ) as $r ) {
+			if ( in_array( (int) $r['id'], $hidden, true ) ) {
+				continue;
+			}
+			$out[] = array(
+				'id'     => (string) $r['id'],
+				'author' => (string) $r['author'],
+				'rating' => (float) $r['rating'],
+				'date'   => substr( (string) $r['date'], 0, 10 ),
+				'text'   => (string) $r['text'],
+				'source' => trim( (string) ( $src[ $r['src'] ]['name'] ?? '' ) . ( ! empty( $g['name'] ) ? ' · ' . $g['name'] : '' ), ' ·' ),
+			);
+		}
+	}
+	foreach ( function_exists( 'memorial_plugin_bookrev_items' ) ? memorial_plugin_bookrev_items() : array() as $r ) {
+		$out[] = array(
+			'id'     => $r['id'],
+			'author' => $r['author'],
+			'rating' => 0,
+			'date'   => substr( $r['date'], 0, 10 ),
+			'text'   => $r['text'],
+			'source' => $r['srcname'],
+		);
+	}
+	usort( $out, static fn( $x, $y ) => strcmp( $y['date'], $x['date'] ) );
+	return $out;
+}
+
+add_action(
+	'rest_api_init',
+	static function () {
+		register_rest_route(
+			'memorial-plugin/v1',
+			'/reviews/pick',
+			array(
+				'methods'             => 'GET',
+				'callback'            => static fn() => rest_ensure_response( memorial_plugin_rewio_pick_items() ),
+				'permission_callback' => static fn() => current_user_can( 'edit_posts' ),
+			)
+		);
+	}
+);

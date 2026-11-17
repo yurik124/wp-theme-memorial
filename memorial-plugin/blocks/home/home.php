@@ -109,6 +109,13 @@ function memorial_plugin_home_blocks_list() {
 			),
 			'render' => 'memorial_plugin_home_render_link_button',
 		),
+		'payment'         => array(
+			'title'  => __( 'Payment', 'memorial-plugin' ),
+			'desc'   => __( 'Ways of payment and the instalment plan from Memorial → Prices → Payment — the same on every page.', 'memorial-plugin' ),
+			'icon'   => 'money-alt',
+			'attrs'  => array(),
+			'render' => 'memorial_plugin_payment_render',
+		),
 		'night-line'      => array(
 			'title'  => __( 'Line “Calls at night”', 'memorial-plugin' ),
 			'desc'   => __( 'Note about calls at night (Memorial → Contacts).', 'memorial-plugin' ),

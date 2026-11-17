@@ -221,6 +221,27 @@ function memorial_plugin_content_blocks() {
 					'label'   => __( 'Columns (0 — from settings)', 'memorial-plugin' ),
 					'sc'      => 'cols',
 				),
+				// Reviews of this page (owner, 17.11.2026): by words or chosen by hand; none fits — no block.
+				'words' => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Only reviews with these words, comma separated (part of a word is enough)', 'memorial-plugin' ),
+					'sc'      => 'slova',
+				),
+				'pick'  => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Or reviews chosen by hand', 'memorial-plugin' ),
+					'sc'      => 'vybor',
+					'picker'  => 'reviews',
+				),
+				'book'  => array(
+					'type'    => 'boolean',
+					'default' => false,
+					'label'   => __( 'Add reviews of the guest book', 'memorial-plugin' ),
+					'sc'      => 'kniga',
+					'fmt'     => 'yesno',
+				),
 			),
 		),
 		'services'        => array(
