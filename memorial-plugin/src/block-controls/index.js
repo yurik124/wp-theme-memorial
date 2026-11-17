@@ -415,9 +415,13 @@ function ReviewsPicker( { label, value, onChange } ) {
 		String( t || '' ).length > 90
 			? String( t ).slice( 0, 90 ) + '…'
 			: String( t || '' );
-	const norm = ( t ) => String( t || '' ).toLowerCase().replace( /ё/g, 'е' );
+	const norm = ( t ) =>
+		String( t || '' )
+			.toLowerCase()
+			.replace( /ё/g, 'е' );
 	const shown = ( items || [] ).filter(
-		( r ) => ! query || norm( r.author + ' ' + r.text ).includes( norm( query ) )
+		( r ) =>
+			! query || norm( r.author + ' ' + r.text ).includes( norm( query ) )
 	);
 	return (
 		<div className="memorial-plugin-pages-picker memorial-plugin-reviews-picker">
@@ -429,8 +433,8 @@ function ReviewsPicker( { label, value, onChange } ) {
 							<span>
 								{ byId[ id ]
 									? byId[ id ].author +
-									  ' — ' +
-									  short( byId[ id ].text )
+										' — ' +
+										short( byId[ id ].text )
 									: id }
 							</span>
 							<Button
@@ -486,7 +490,10 @@ function ReviewsPicker( { label, value, onChange } ) {
 				>
 					<SearchControl
 						__nextHasNoMarginBottom
-						label={ __( 'Search in the reviews', 'memorial-plugin' ) }
+						label={ __(
+							'Search in the reviews',
+							'memorial-plugin'
+						) }
 						value={ query }
 						onChange={ setQuery }
 					/>
