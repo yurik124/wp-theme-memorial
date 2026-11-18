@@ -75,6 +75,23 @@ function memorial_plugin_collections() {
 						''       => __( 'not sent (an older request)', 'memorial-plugin' ),
 						'sent'   => __( 'Sent', 'memorial-plugin' ),
 						'failed' => __( 'Not sent', 'memorial-plugin' ),
+						'held'   => __( 'Held: many requests in an hour', 'memorial-plugin' ),
+					),
+				),
+				'check' => array(
+					'label'    => __( 'Check', 'memorial-plugin' ),
+					'type'     => 'select',
+					'source'   => 'meta:_mem_check',
+					'readonly' => true,
+					'options'  => array(
+						''            => '—',
+						'token'       => __( 'Sent not from the window of the site', 'memorial-plugin' ),
+						'text'        => __( 'A link or code in the name', 'memorial-plugin' ),
+						'flood'       => __( 'Many requests in an hour', 'memorial-plugin' ),
+						'token,text'  => __( 'Not from the window; a link in the name', 'memorial-plugin' ),
+						'token,flood' => __( 'Not from the window; many requests', 'memorial-plugin' ),
+						'text,flood'  => __( 'A link in the name; many requests', 'memorial-plugin' ),
+						'token,text,flood' => __( 'Not from the window; a link; many requests', 'memorial-plugin' ),
 					),
 				),
 				'mailerr' => array(

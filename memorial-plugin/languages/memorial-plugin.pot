@@ -232,7 +232,7 @@ msgstr ""
 msgid "(headings, captions, button texts) write {price:code} — the price is put in and changes together with this screen."
 msgstr ""
 
-#: leads/callback.php:171
+#: leads/callback.php:259
 msgid "(optional)"
 msgstr ""
 
@@ -360,6 +360,14 @@ msgstr ""
 
 #: places/places.php:159
 msgid "A link from Yandex Maps. Empty — a map by the address."
+msgstr ""
+
+#: admin/collections.php:93
+msgid "A link in the name; many requests"
+msgstr ""
+
+#: admin/collections.php:89
+msgid "A link or code in the name"
 msgstr ""
 
 #: core/settings.php:217
@@ -810,7 +818,7 @@ msgstr ""
 msgid "As the price is called in the lists, for example “Wreath delivery in Belgorod”."
 msgstr ""
 
-#: admin/collections.php:116
+#: admin/collections.php:133
 msgid "As written in the book."
 msgstr ""
 
@@ -822,7 +830,7 @@ msgstr ""
 msgid "At least one site must stay — otherwise untick the branch itself"
 msgstr ""
 
-#: admin/collections.php:107 reviews/rewio-archive.php:441
+#: admin/collections.php:124 reviews/rewio-archive.php:441
 msgid "Author"
 msgstr ""
 
@@ -1004,7 +1012,7 @@ msgstr ""
 msgid "Call-back requests"
 msgstr ""
 
-#: admin/collections.php:88
+#: admin/collections.php:105
 msgid "Called back"
 msgstr ""
 
@@ -1184,7 +1192,7 @@ msgstr ""
 msgid "Change prices…"
 msgstr ""
 
-#: src/block-controls/index.js:451
+#: src/block-controls/index.js:455
 msgid "Change the choice"
 msgstr ""
 
@@ -1218,6 +1226,10 @@ msgstr ""
 msgid "Cheapest first"
 msgstr ""
 
+#: admin/collections.php:82 leads/lead-mail.php:135 leads/lead-mail.php:172
+msgid "Check"
+msgstr ""
+
 #: catalog/catalog-import.php:1616
 msgid "Check an import file"
 msgstr ""
@@ -1230,7 +1242,7 @@ msgstr ""
 msgid "Check the file"
 msgstr ""
 
-#: leads/callback.php:73
+#: leads/callback.php:143
 msgid "Check the phone number."
 msgstr ""
 
@@ -1254,7 +1266,7 @@ msgstr ""
 msgid "Choose photos"
 msgstr ""
 
-#: src/block-controls/index.js:452
+#: src/block-controls/index.js:456
 msgid "Choose reviews"
 msgstr ""
 
@@ -1294,7 +1306,7 @@ msgstr ""
 msgid "Clock — round the clock"
 msgstr ""
 
-#: catalog/catalog-front.php:432 catalog/catalog-front.php:438 src/catalog/import.js:765 leads/callback.php:163
+#: catalog/catalog-front.php:432 catalog/catalog-front.php:438 src/catalog/import.js:765 leads/callback.php:251
 msgid "Close"
 msgstr ""
 
@@ -1350,6 +1362,10 @@ msgstr ""
 msgid "Comfortable"
 msgstr ""
 
+#: core/no-comments.php:35 core/no-comments.php:42
+msgid "Comments are closed."
+msgstr ""
+
 #: core/assets.php:333
 msgid "Compact"
 msgstr ""
@@ -1378,7 +1394,7 @@ msgstr ""
 msgid "Consent to personal data processing"
 msgstr ""
 
-#: leads/callback.php:76
+#: leads/callback.php:146
 msgid "Consent to the data processing is needed."
 msgstr ""
 
@@ -1568,7 +1584,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: admin/collections.php:119
+#: admin/collections.php:136
 msgid "Date in the book"
 msgstr ""
 
@@ -1665,7 +1681,7 @@ msgstr ""
 msgid "Do not count visits of those logged into the admin (your own visits will not spoil the statistics)"
 msgstr ""
 
-#: leads/callback.php:173
+#: leads/callback.php:261
 msgid "Do not fill in"
 msgstr ""
 
@@ -1693,7 +1709,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: src/block-controls/index.js:512 src/block-controls/index.js:881 src/editor-meta/faq-sections.js:265
+#: src/block-controls/index.js:519 src/block-controls/index.js:888 src/editor-meta/faq-sections.js:265
 msgid "Done"
 msgstr ""
 
@@ -2002,7 +2018,7 @@ msgstr ""
 msgid "Fold all"
 msgstr ""
 
-#: src/block-controls/index.js:820
+#: src/block-controls/index.js:827
 msgid "Fold the block (only in the editor)"
 msgstr ""
 
@@ -2042,7 +2058,7 @@ msgstr ""
 msgid "For example “height 90 cm”: a field in the products table and in the product window, a line under the name on the site. When it is off, the lines already typed are kept, only not shown."
 msgstr ""
 
-#: admin/collections.php:110
+#: admin/collections.php:127
 msgid "For example: Elena V."
 msgstr ""
 
@@ -2095,7 +2111,7 @@ msgid "Found"
 msgstr ""
 
 #. translators: %s: list of sections or a product.
-#: src/block-controls/index.js:755
+#: src/block-controls/index.js:762
 #, php-format
 msgid "Found on this page: %s."
 msgstr ""
@@ -2264,7 +2280,11 @@ msgstr ""
 msgid "Height"
 msgstr ""
 
-#: admin/collections.php:141 src/catalog/fields.js:164 src/catalog/fields.js:187 src/collections/index.js:125 src/collections/index.js:135
+#: admin/collections.php:78
+msgid "Held: many requests in an hour"
+msgstr ""
+
+#: admin/collections.php:158 src/catalog/fields.js:164 src/catalog/fields.js:187 src/collections/index.js:125 src/collections/index.js:135
 msgid "Hidden"
 msgstr ""
 
@@ -2312,7 +2332,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: admin/collections.php:212
+#: admin/collections.php:229
 msgid "Home page"
 msgstr ""
 
@@ -2360,7 +2380,7 @@ msgstr ""
 msgid "How often to check for new reviews"
 msgstr ""
 
-#: leads/callback.php:171
+#: leads/callback.php:259
 msgid "How should we address you"
 msgstr ""
 
@@ -2393,7 +2413,7 @@ msgid "How to set up call tracking:"
 msgstr ""
 
 #. translators: 1: link “consent to personal data processing”, 2: link “the personal data processing policy”
-#: leads/callback.php:179
+#: leads/callback.php:267
 #, php-format
 msgid "I give my %1$s in accordance with %2$s"
 msgstr ""
@@ -2410,7 +2430,7 @@ msgstr ""
 msgid "Icon in a circle"
 msgstr ""
 
-#: admin/collections.php:122
+#: admin/collections.php:139
 msgid "If the day cannot be read, use the 1st: the site shows only month and year."
 msgstr ""
 
@@ -2720,6 +2740,14 @@ msgstr ""
 msgid "Main phone number, “Call me back” button and the call icon for phones."
 msgstr ""
 
+#: leads/lead-mail.php:172
+msgid "Many call-back requests in an hour"
+msgstr ""
+
+#: admin/collections.php:90
+msgid "Many requests in an hour"
+msgstr ""
+
 #: blocks/legacy/render/contacts-page.php:23
 msgid "Map"
 msgstr ""
@@ -2860,6 +2888,12 @@ msgstr ""
 msgid "More photos (after the featured image)"
 msgstr ""
 
+#. translators: 1: number of requests, 2: link to the list.
+#: leads/lead-mail.php:175
+#, php-format
+msgid "More than %1$d requests came from the site in the last hour — maybe spam. The emails of the next requests wait for an hour; the requests themselves are kept with the mark “Check”: %2$s"
+msgstr ""
+
 #. translators: %d: number of hidden topics
 #: core/assets.php:82
 #, php-format
@@ -2884,7 +2918,7 @@ msgstr ""
 msgid "Most expensive first"
 msgstr ""
 
-#: src/catalog/works.js:323 src/catalog/types.js:599 src/catalog/types.js:867 src/catalog/work-types.js:145 src/block-controls/index.js:249 src/block-controls/index.js:427
+#: src/catalog/works.js:323 src/catalog/types.js:599 src/catalog/types.js:867 src/catalog/work-types.js:145 src/block-controls/index.js:249 src/block-controls/index.js:431
 msgid "Move down"
 msgstr ""
 
@@ -2923,7 +2957,7 @@ msgstr ""
 msgid "Move type later"
 msgstr ""
 
-#: src/catalog/works.js:318 src/catalog/types.js:590 src/catalog/types.js:862 src/catalog/work-types.js:140 src/block-controls/index.js:242 src/block-controls/index.js:420
+#: src/catalog/works.js:318 src/catalog/types.js:590 src/catalog/types.js:862 src/catalog/work-types.js:140 src/block-controls/index.js:242 src/block-controls/index.js:424
 msgid "Move up"
 msgstr ""
 
@@ -3035,7 +3069,7 @@ msgstr ""
 msgid "No access"
 msgstr ""
 
-#: src/block-controls/index.js:539
+#: src/block-controls/index.js:546
 msgid "No addresses in Memorial → Contacts"
 msgstr ""
 
@@ -3067,7 +3101,7 @@ msgstr ""
 msgid "No requests yet"
 msgstr ""
 
-#: src/block-controls/index.js:476
+#: src/block-controls/index.js:483
 msgid "No reviews found."
 msgstr ""
 
@@ -3103,6 +3137,18 @@ msgstr ""
 msgid "Not connected — paste the API key below and save."
 msgstr ""
 
+#: admin/collections.php:91
+msgid "Not from the window; a link in the name"
+msgstr ""
+
+#: admin/collections.php:94
+msgid "Not from the window; a link; many requests"
+msgstr ""
+
+#: admin/collections.php:92
+msgid "Not from the window; many requests"
+msgstr ""
+
 #: reviews/rewio.php:85
 msgid "Not older than, months (0 — all time)"
 msgstr ""
@@ -3119,7 +3165,7 @@ msgstr ""
 msgid "Not sent"
 msgstr ""
 
-#: admin/collections.php:93 content/content.php:21
+#: admin/collections.php:110 content/content.php:21
 msgid "Note"
 msgstr ""
 
@@ -3248,7 +3294,7 @@ msgstr ""
 msgid "On the review site"
 msgstr ""
 
-#: catalog/catalog-io.php:147 admin/collections.php:136 src/catalog/fields.js:160
+#: catalog/catalog-io.php:147 admin/collections.php:153 src/catalog/fields.js:160
 msgid "On the site"
 msgstr ""
 
@@ -3392,7 +3438,7 @@ msgstr ""
 msgid "Or address"
 msgstr ""
 
-#: leads/callback.php:195
+#: leads/callback.php:283
 msgid "Or call:"
 msgstr ""
 
@@ -3404,7 +3450,7 @@ msgstr ""
 msgid "Or these pages, in this order"
 msgstr ""
 
-#: admin/collections.php:145 src/catalog/fields.js:197 src/catalog/types.js:807 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:85
+#: admin/collections.php:162 src/catalog/fields.js:197 src/catalog/types.js:807 src/catalog/work-types.js:103 templates/product-card.php:65 prices/packages.php:85
 msgid "Order"
 msgstr ""
 
@@ -3424,7 +3470,7 @@ msgstr ""
 msgid "Order — with the ↑ ↓ arrows to the right of a cemetery."
 msgstr ""
 
-#: leads/lead-mail.php:136
+#: leads/lead-mail.php:140
 msgid "Order:"
 msgstr ""
 
@@ -3568,7 +3614,7 @@ msgstr ""
 msgid "Personal data processing policy"
 msgstr ""
 
-#: admin/collections.php:40 leads/callback.php:169 seo/llms.php:68 blocks/content/inline-values.php:326 core/icons-api.php:23 core/icons-fallback.php:23
+#: admin/collections.php:40 leads/callback.php:257 seo/llms.php:68 blocks/content/inline-values.php:326 core/icons-api.php:23 core/icons-fallback.php:23
 msgid "Phone"
 msgstr ""
 
@@ -3670,7 +3716,7 @@ msgstr ""
 msgid "Photo of the hall"
 msgstr ""
 
-#: admin/collections.php:131
+#: admin/collections.php:148
 msgid "Photo of the page"
 msgstr ""
 
@@ -3732,7 +3778,7 @@ msgstr ""
 msgid "Please call us."
 msgstr ""
 
-#: leads/callback.php:67
+#: leads/callback.php:137
 msgid "Please try again."
 msgstr ""
 
@@ -4058,7 +4104,7 @@ msgstr ""
 msgid "Ready-made blocks in the editor"
 msgstr ""
 
-#: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:141 src/block-controls/index.js:208 src/block-controls/index.js:261 src/block-controls/index.js:439
+#: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:141 src/block-controls/index.js:208 src/block-controls/index.js:261 src/block-controls/index.js:443
 msgid "Remove"
 msgstr ""
 
@@ -4146,7 +4192,7 @@ msgstr ""
 msgid "Restores the text and SEO fields of a post from before its conversion to blocks."
 msgstr ""
 
-#: admin/collections.php:113 reviews/rewio-archive.php:447
+#: admin/collections.php:130 reviews/rewio-archive.php:447
 msgid "Review"
 msgstr ""
 
@@ -4198,7 +4244,7 @@ msgstr ""
 msgid "Reviews from review sites"
 msgstr ""
 
-#: admin/collections.php:101 core/permissions.php:34
+#: admin/collections.php:118 core/permissions.php:34
 msgid "Reviews from the guest book"
 msgstr ""
 
@@ -4226,7 +4272,7 @@ msgstr ""
 msgid "Reviews of our customers"
 msgstr ""
 
-#: src/block-controls/index.js:464
+#: src/block-controls/index.js:468
 msgid "Reviews of this page"
 msgstr ""
 
@@ -4238,7 +4284,7 @@ msgstr ""
 msgid "Reviews on Yandex Maps"
 msgstr ""
 
-#: admin/collections.php:102
+#: admin/collections.php:119
 msgid "Reviews retyped from the paper guest book, with a photo of the page. Before uploading a photo, cover the surname, phone and signature of the author unless they agreed to publication."
 msgstr ""
 
@@ -4406,7 +4452,7 @@ msgstr ""
 msgid "Search field"
 msgstr ""
 
-#: src/block-controls/index.js:470
+#: src/block-controls/index.js:474
 msgid "Search in the reviews"
 msgstr ""
 
@@ -4488,6 +4534,10 @@ msgstr ""
 msgid "Sent"
 msgstr ""
 
+#: admin/collections.php:88
+msgid "Sent not from the window of the site"
+msgstr ""
+
 #: prices/prices.php:153
 msgid "Separate prices"
 msgstr ""
@@ -4532,7 +4582,7 @@ msgstr ""
 msgid "Set the same price"
 msgstr ""
 
-#: src/block-controls/index.js:832
+#: src/block-controls/index.js:839
 msgid "Set up the block: texts and what it shows"
 msgstr ""
 
@@ -4664,7 +4714,7 @@ msgstr ""
 msgid "Show “from”"
 msgstr ""
 
-#: admin/collections.php:140 src/catalog/fields.js:163 src/catalog/fields.js:183 src/collections/index.js:124 src/collections/index.js:131
+#: admin/collections.php:157 src/catalog/fields.js:163 src/catalog/fields.js:183 src/collections/index.js:124 src/collections/index.js:131
 msgid "Shown"
 msgstr ""
 
@@ -4747,7 +4797,7 @@ msgstr ""
 msgid "Smaller first. The arrows in the row menu move the item one place."
 msgstr ""
 
-#: admin/collections.php:148
+#: admin/collections.php:165
 msgid "Smaller first; equal — newer first."
 msgstr ""
 
@@ -4888,7 +4938,7 @@ msgstr ""
 msgid "Templates are a sample under 152-FZ; check them for your business before publishing (better with a lawyer)."
 msgstr ""
 
-#: reviews/rewio-mail.php:205 reviews/rewio-mail.php:206 leads/lead-mail.php:183
+#: reviews/rewio-mail.php:205 reviews/rewio-mail.php:206 leads/lead-mail.php:209
 msgid "Test"
 msgstr ""
 
@@ -4940,7 +4990,7 @@ msgstr ""
 msgid "Texts on the page"
 msgstr ""
 
-#: leads/callback.php:189
+#: leads/callback.php:277
 msgid "Thank you! The request is accepted — we will call you back soon."
 msgstr ""
 
@@ -4986,7 +5036,7 @@ msgstr ""
 msgid "The arrow → is added by the site."
 msgstr ""
 
-#: src/block-controls/index.js:897
+#: src/block-controls/index.js:904
 msgid "The block found nothing to show on this page by itself. Choose what it should show — later the choice is changed with the ⚙ button on the block toolbar or in the block settings on the right (“What to show”)."
 msgstr ""
 
@@ -5002,7 +5052,7 @@ msgstr ""
 msgid "The check of the file is out of date. Check the file again."
 msgstr ""
 
-#: src/block-controls/index.js:456
+#: src/block-controls/index.js:460
 msgid "The chosen reviews are shown in this order; the words are not used then."
 msgstr ""
 
@@ -5392,7 +5442,7 @@ msgstr ""
 msgid "Today the cost may differ — we will calculate it by phone for free."
 msgstr ""
 
-#: leads/callback.php:83
+#: leads/callback.php:153
 msgid "Too many requests. Please call us."
 msgstr ""
 
@@ -5456,7 +5506,7 @@ msgstr ""
 msgid "Under the title of the catalog on the site (optional)."
 msgstr ""
 
-#: src/settings/index.js:518 src/block-controls/index.js:864
+#: src/settings/index.js:518 src/block-controls/index.js:871
 msgid "Unfold"
 msgstr ""
 
@@ -5464,7 +5514,7 @@ msgstr ""
 msgid "Unfold all"
 msgstr ""
 
-#: src/block-controls/index.js:819
+#: src/block-controls/index.js:826
 msgid "Unfold the block"
 msgstr ""
 
@@ -5484,7 +5534,7 @@ msgstr ""
 msgid "Unknown action."
 msgstr ""
 
-#: admin/collections.php:336
+#: admin/collections.php:353
 msgid "Unknown list."
 msgstr ""
 
@@ -5572,7 +5622,7 @@ msgstr ""
 msgid "Visible on the site"
 msgstr ""
 
-#: leads/callback.php:186
+#: leads/callback.php:274
 msgid "Waiting for the call"
 msgstr ""
 
@@ -5608,7 +5658,7 @@ msgstr ""
 msgid "We will answer your questions and help with the documents and the cost."
 msgstr ""
 
-#: leads/callback.php:166
+#: leads/callback.php:254
 msgid "We will call you back"
 msgstr ""
 
@@ -5660,7 +5710,7 @@ msgstr ""
 msgid "What to do."
 msgstr ""
 
-#: src/block-controls/index.js:846
+#: src/block-controls/index.js:853
 msgid "What to show"
 msgstr ""
 
@@ -5704,7 +5754,7 @@ msgstr ""
 msgid "Where people write reviews about us"
 msgstr ""
 
-#: admin/collections.php:125
+#: admin/collections.php:142
 msgid "Where the book is kept"
 msgstr ""
 
@@ -5764,7 +5814,7 @@ msgstr ""
 msgid "Why people trust us"
 msgstr ""
 
-#: admin/collections.php:81
+#: admin/collections.php:98
 msgid "Why the email was not sent"
 msgstr ""
 
@@ -5819,7 +5869,7 @@ msgid "Write"
 msgstr ""
 
 #. translators: %s: messenger
-#: leads/callback.php:199
+#: leads/callback.php:287
 #, php-format
 msgid "Write in %s"
 msgstr ""
@@ -6946,7 +6996,7 @@ msgstr ""
 msgid "consent"
 msgstr ""
 
-#: leads/callback.php:180
+#: leads/callback.php:268
 msgid "consent to personal data processing"
 msgstr ""
 
@@ -7451,7 +7501,7 @@ msgstr ""
 msgid "the link in the footer and in the “Call me back” window; it is also the WordPress privacy policy page"
 msgstr ""
 
-#: leads/callback.php:181
+#: leads/callback.php:269
 msgid "the personal data processing policy"
 msgstr ""
 
@@ -7569,7 +7619,7 @@ msgstr ""
 msgid "— not selected —"
 msgstr ""
 
-#: admin/collections.php:128
+#: admin/collections.php:145
 msgid "— not specified —"
 msgstr ""
 

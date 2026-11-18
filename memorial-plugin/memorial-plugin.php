@@ -145,6 +145,7 @@ $memorial_plugin_modules = array(
 	'core/permissions.php',
 	'core/data.php',
 	'core/mail.php',
+	'core/no-comments.php',
 	// каталог и страницы.
 	'catalog/catalog.php',
 	'pages/pages.php',

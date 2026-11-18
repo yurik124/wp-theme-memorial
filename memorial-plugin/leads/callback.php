@@ -50,8 +50,73 @@ add_action(
 				'callback'            => 'memorial_plugin_callback_receive',
 			)
 		);
+		// The mark of the time when the window was opened (the form asks for it when it opens).
+		register_rest_route(
+			'mem/v1',
+			'/callback/token',
+			array(
+				'methods'             => 'GET',
+				'permission_callback' => '__return_true',
+				'callback'            => static function () {
+					nocache_headers();
+					return array( 't' => memorial_plugin_callback_token() );
+				},
+			)
+		);
 	}
 );
+
+/**
+ * A mark of the time signed by the site: “time.signature”. The form gets it when the window opens and sends it back;
+ * the time is the server’s, so a bot cannot say “I spent a minute on the form”.
+ *
+ * @param int|null $time Time (now by default).
+ * @return string
+ */
+function memorial_plugin_callback_token( $time = null ) {
+	$time = null === $time ? time() : (int) $time;
+	return $time . '.' . substr( hash_hmac( 'sha256', 'mem-callback|' . $time, wp_salt( 'nonce' ) ), 0, 24 );
+}
+
+/**
+ * Seconds since the window was opened by the mark, or null when there is no valid mark.
+ *
+ * @param string $token Mark.
+ * @return int|null
+ */
+function memorial_plugin_callback_token_age( $token ) {
+	if ( ! preg_match( '/^(\d{9,11})\.[a-f0-9]{24}$/', (string) $token, $m ) || ! hash_equals( memorial_plugin_callback_token( (int) $m[1] ), (string) $token ) ) {
+		return null;
+	}
+	return time() - (int) $m[1];
+}
+
+/** Minimum time to fill in the form, seconds (owner, 18.11.2026: 3 s, no upper limit). */
+const MEMORIAL_PLUGIN_CALLBACK_MIN_SECONDS = 3;
+
+/** More requests than this in an hour from all addresses — the next ones are to be checked, their emails wait. */
+const MEMORIAL_PLUGIN_CALLBACK_HOUR_LIMIT = 20;
+
+/**
+ * Signs of spam in the name: a link, HTML, BB code, a long Latin word.
+ *
+ * @param string $name Name.
+ * @return bool
+ */
+function memorial_plugin_callback_text_suspicious( $name ) {
+	return (bool) preg_match( '~https?:|www\.|<\s*/?\s*[a-z]|\[/?(url|link)|[a-z0-9.-]+\.(ru|com|net|org|xyz|top|info|online|site)\b|[a-z]{12,}~i', (string) $name );
+}
+
+/**
+ * Requests of the last hour from all addresses.
+ *
+ * @return int
+ */
+function memorial_plugin_callback_last_hour() {
+	global $wpdb;
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- a cheap count, no cache needed.
+	return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'mem_lead' AND post_date_gmt > %s", gmdate( 'Y-m-d H:i:s', time() - HOUR_IN_SECONDS ) ) );
+}
 
 /**
  * Callback receive.
@@ -59,11 +124,16 @@ add_action(
  * @param WP_REST_Request $r R.
  */
 function memorial_plugin_callback_receive( WP_REST_Request $r ) {
-	// защита от ботов: скрытое поле и слишком быстрая отправка.
+	// Защита от ботов. Явный бот (заполнено скрытое поле) — «спасибо» без заявки. Всё сомнительное сохраняется
+	// с пометкой «Проверить» и приходит письмом с [Проверить] в теме: настоящую заявку терять нельзя.
 	if ( $r->get_param( 'website' ) !== '' && $r->get_param( 'website' ) !== null ) {
 		return array( 'ok' => true );
 	}
-	if ( (int) $r->get_param( 'elapsed' ) < 2 ) {
+	$check = array();
+	$age   = memorial_plugin_callback_token_age( (string) $r->get_param( 'token' ) );
+	if ( null === $age ) {
+		$check[] = 'token';
+	} elseif ( $age < MEMORIAL_PLUGIN_CALLBACK_MIN_SECONDS ) {
 		return new WP_Error( 'fast', __( 'Please try again.', 'memorial-plugin' ), array( 'status' => 400 ) );
 	}
 
@@ -85,6 +155,13 @@ function memorial_plugin_callback_receive( WP_REST_Request $r ) {
 	set_transient( $key, $n + 1, 15 * MINUTE_IN_SECONDS );
 
 	$name = mb_substr( sanitize_text_field( (string) $r->get_param( 'name' ) ), 0, 80 );
+	if ( memorial_plugin_callback_text_suspicious( (string) $r->get_param( 'name' ) ) ) {
+		$check[] = 'text';
+	}
+	$flood = memorial_plugin_callback_last_hour() >= MEMORIAL_PLUGIN_CALLBACK_HOUR_LIMIT;
+	if ( $flood ) {
+		$check[] = 'flood';
+	}
 	// The “Order” button of a product card: the name of the product.
 	$product = mb_substr( sanitize_text_field( (string) $r->get_param( 'product' ) ), 0, 150 );
 	$page = esc_url_raw( (string) $r->get_param( 'page' ) );
@@ -105,11 +182,20 @@ function memorial_plugin_callback_receive( WP_REST_Request $r ) {
 		if ( '' !== $product ) {
 			update_post_meta( $id, '_product', $product );
 		}
+		if ( $check ) {
+			update_post_meta( $id, '_mem_check', implode( ',', $check ) );
+		}
 		// IP-адрес не сохраняется (минимум персональных данных): он нужен только для ограничения частоты выше.
 	}
 
 	// Email (template and addresses — «Мемориал → Настройки → Почта», leads/lead-mail.php).
-	if ( function_exists( 'memorial_plugin_lead_mail' ) ) {
+	// Too many requests in an hour: no email for each of them — one email an hour “check the requests”.
+	if ( $flood && function_exists( 'memorial_plugin_lead_mail_flood' ) ) {
+		if ( $id && ! is_wp_error( $id ) ) {
+			update_post_meta( $id, '_mem_mail', 'held' );
+		}
+		memorial_plugin_lead_mail_flood();
+	} elseif ( function_exists( 'memorial_plugin_lead_mail' ) ) {
 		memorial_plugin_lead_mail(
 			$id && ! is_wp_error( $id ) ? (int) $id : 0,
 			array(
@@ -117,6 +203,7 @@ function memorial_plugin_callback_receive( WP_REST_Request $r ) {
 				'name'    => $name,
 				'page'    => $page,
 				'product' => $product,
+				'check'   => $check,
 			)
 		);
 	}
@@ -152,6 +239,7 @@ function memorial_plugin_callback_html() {
 		'max'    => $msg['max'] ?? '',
 		'maxApp' => trim( $c['max_app'] ?? '' ),
 		'api'    => esc_url_raw( rest_url( 'mem/v1/callback' ) ),
+		'token'  => esc_url_raw( rest_url( 'mem/v1/callback/token' ) ),
 	);
 	$names = array(
 		'max'      => 'MAX',

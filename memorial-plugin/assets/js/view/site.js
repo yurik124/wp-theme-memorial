@@ -72,7 +72,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 	/* ---------- Окно «Перезвоните мне» ---------- */
 	const cfg = window.memCall || {};
 	const dlg = d.getElementById( 'callback' );
-	let openedAt = 0,
+	let token = '',
 		from = '',
 		product = '';
 	const openCallback = ( status, src, what ) => {
@@ -91,7 +91,17 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 		dlg.querySelector( '.cb__form' ).hidden = false;
 		dlg.querySelector( '.cb__done' ).hidden = true;
 		dlg.querySelector( '.cb__err' ).hidden = true;
-		openedAt = Date.now();
+		// Метка времени от сайта: без неё заявка придёт с пометкой «Проверить».
+		token = '';
+		if ( cfg.token ) {
+			window
+				.fetch( cfg.token, { credentials: 'same-origin' } )
+				.then( ( r ) => r.json() )
+				.then( ( j ) => {
+					token = ( j && j.t ) || '';
+				} )
+				.catch( () => {} );
+		}
 		if ( ! dlg.open ) {
 			dlg.showModal();
 		}
@@ -166,7 +176,7 @@ const SITE_TEXTS = ( getConfig( 'memorial-plugin' ) || {} ).site || {};
 						consent: 1,
 						page: window.location.href,
 						product,
-						elapsed: Math.round( ( Date.now() - openedAt ) / 1000 ),
+						token,
 					} ),
 				} );
 				const j = await r.json().catch( () => ( {} ) );
