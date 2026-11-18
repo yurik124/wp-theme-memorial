@@ -2873,6 +2873,27 @@ test.describe( 'обработка фото', () => {
 		await page.waitForTimeout( 2500 );
 		await shot( page, 'photos-screen', { fullPage: true } );
 		report.samples = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/photos/samples' } ).then( ( d ) => ( { items: d.items.length, all: d.all.length, logo: d.logo, kinds: d.items.map( ( i ) => i.kind + ':' + i.type + ( i.bg ? ' bg' : '' ) ) } ) ).catch( ( e ) => e.message ) );
+		// Главный переключатель: выключить — все поля ниже неактивны; снимок; включить обратно.
+		const master = page.locator( '.memorial-plugin-settings__master input[type=checkbox]' );
+		report.master = { exists: await master.count(), on: await master.isChecked().catch( () => null ) };
+		await master.click().catch( ( e ) => ( report.masterErr = e.message ) );
+		await page.waitForTimeout( 800 );
+		report.master.offDisabled = await page.evaluate( () => document.querySelector( '.memorial-plugin-settings__cards' )?.disabled );
+		report.master.offFieldDisabled = await page.getByLabel( 'Цветокоррекция', { exact: true } ).isDisabled().catch( ( e ) => e.message );
+		await shot( page, 'photos-screen-off', { fullPage: true } );
+		await master.click().catch( () => {} );
+		await page.waitForTimeout( 800 );
+		report.master.onEnabled = ! ( await page.evaluate( () => document.querySelector( '.memorial-plugin-settings__cards' )?.disabled ) );
+		// Тёмная подложка логотипа: включить — картинка логотипа делается заново (вариант «-p»).
+		await page.getByLabel( 'Тёмная подложка под логотипом', { exact: true } ).check().catch( ( e ) => ( report.plateErr = e.message ) );
+		await page.waitForTimeout( 3000 );
+		const pbox = await page.locator( '.memorial-plugin-photo-preview' ).boundingBox();
+		if ( pbox ) {
+			await page.screenshot( { path: `${ DIR }/photos-plate.png`, clip: { x: pbox.x, y: pbox.y, width: pbox.width, height: Math.min( pbox.height, 1000 ) } } );
+		}
+		report.plateKeys = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/photos/samples' } ).then( ( d ) => d.make?.keys ).catch( ( e ) => e.message ) );
+		await page.getByLabel( 'Тёмная подложка под логотипом', { exact: true } ).uncheck().catch( () => {} );
+		await page.waitForTimeout( 1500 );
 		// Настройки уже включены (PROBE_CLI): выключить «Цветокоррекция» — предпросмотр меняется до сохранения, потом вернуть.
 		const canvasLen = () => page.evaluate( () => document.querySelector( '.memorial-plugin-photo-preview canvas' )?.toDataURL().length || 0 );
 		const before = await canvasLen();
@@ -2923,5 +2944,41 @@ test.describe( 'обработка фото', () => {
 		}
 		report.errs = errs;
 		fs.writeFileSync( `${ DIR }/log-photos.json`, JSON.stringify( report, null, 1 ) );
+	} );
+
+	test( 'обработка фото: окно товара на телефоне — стрелки и «Закрыть»', async ( { browser } ) => {
+		test.setTimeout( 300_000 );
+		const ctx = await browser.newContext( { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2, baseURL: process.env.WP_BASE_URL || 'http://localhost:8888' } );
+		const ph = await ctx.newPage();
+		ph.setDefaultTimeout( 60000 );
+		const report = {};
+		await ph.goto( '/venki/', { waitUntil: 'domcontentloaded' } );
+		await ph.waitForTimeout( 2500 );
+		await ph.addStyleTag( { content: NO_FLOAT } );
+		report.hoverNone = await ph.evaluate( () => window.matchMedia( '(hover: none)' ).matches );
+		await ph.locator( '.mcard a[data-pv]' ).first().tap();
+		await ph.waitForTimeout( 1500 );
+		const t1 = await ph.locator( '#pv .pv__title' ).innerText().catch( () => '' );
+		await ph.locator( '#pv .pv__next' ).tap();
+		await ph.waitForTimeout( 1200 );
+		report.changed = ( await ph.locator( '#pv .pv__title' ).innerText().catch( () => '' ) ) !== t1;
+		// После нажатия стрелка белая, не «наведённая» зелёная.
+		report.nextBg = await ph.locator( '#pv .pv__next' ).evaluate( ( e ) => getComputedStyle( e ).backgroundColor );
+		await shot( ph, 'pv-phone-after-next' );
+		// Прокрутить окно так, чтобы стрелка оказалась на высоте крестика: сверху должен быть крестик.
+		report.overlap = await ph.evaluate( async () => {
+			const pv = document.getElementById( 'pv' );
+			const x = pv.querySelector( '.pv__x' ).getBoundingClientRect();
+			const n = pv.querySelector( '.pv__next' ).getBoundingClientRect();
+			pv.scrollTop += n.top - x.top;
+			await new Promise( ( r ) => setTimeout( r, 400 ) );
+			const x2 = pv.querySelector( '.pv__x' ).getBoundingClientRect();
+			const n2 = pv.querySelector( '.pv__next' ).getBoundingClientRect();
+			const top = document.elementFromPoint( x2.left + x2.width / 2, x2.top + x2.height / 2 );
+			return { x: [ x2.top, x2.left ], next: [ n2.top, n2.left ], topIsClose: !! top?.closest( '.pv__x' ) };
+		} );
+		await shot( ph, 'pv-phone-overlap' );
+		fs.writeFileSync( `${ DIR }/log-pv-phone.json`, JSON.stringify( report, null, 1 ) );
+		await ctx.close();
 	} );
 } );

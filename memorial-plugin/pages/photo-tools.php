@@ -1,8 +1,7 @@
 <?php
 /**
  * «Мемориал → Обработка фото» (owner, 18.11.2026): one style for the photos of the catalog, of “Our works” and of the
- * pages — colour, the logo in a corner, a single light background for the products, the same proportions, no EXIF,
- * sRGB, and a report of bad photos. Every function is switched on and off by itself, all of them by one switch;
+ * pages — colour, the logo in a corner, the same proportions, no EXIF, and a report of bad photos. Every function is switched on and off by itself, all of them by one switch;
  * the screen shows how a photo looks with the settings before they are saved (src/settings/photo-preview.js — the
  * same formulas as here).
  *
@@ -10,9 +9,8 @@
  * them (name-m<hash>.<ext>), and the attachment points to it. “Return the original” points the attachment back
  * and removes the processed files. When the settings change, the photos are processed again, a few a minute (WP-Cron).
  *
- * The hosting has no Imagick, only GD: colour, crop, logo and the removal of EXIF are done here; the background
- * and the conversion of colour profiles (P3, Adobe RGB → sRGB) are done in GitHub Actions (.github/workflows/photos.yml):
- * it puts a prepared copy into uploads/memorial-photos/stage/, and the processing here starts from it.
+ * Everything is done here with GD (the hosting has no Imagick). The background replacement and sRGB were removed
+ * (owner, 18.11.2026): photos with a new background are made on a computer — tools/photos-pc.
  *
  * Never processed: reviews, the guest book, documents, the logo and the icon of the site, a photo marked
  * “Do not process” (_mem_photo_skip).
@@ -22,11 +20,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/** Product types (root catalog sections) whose background is replaced by default (owner, 18.11.2026). */
-const MEMORIAL_PLUGIN_PHOTO_BG_TYPES = array( 'venki', 'groby', 'metallicheskie-kresty', 'ogradki-2' );
-
-/** The warm light background of the site. */
-const MEMORIAL_PLUGIN_PHOTO_BG = '#fbfaf6';
 
 /**
  * Steps from −N to +N for a select (the number field of the screens takes no minus).
@@ -65,19 +58,6 @@ function memorial_plugin_photo_percents( $max, $step, $from = 0 ) {
  * @return array
  */
 function memorial_plugin_photos_schema() {
-	$types = array();
-	foreach ( get_terms(
-		array(
-			'taxonomy'   => 'mem_cat',
-			'parent'     => 0,
-			'hide_empty' => false,
-		)
-	) as $t ) {
-		$types[ 'type_' . $t->slug ] = array(
-			'type'  => 'checkbox',
-			'label' => $t->name,
-		);
-	}
 	$ratios = array(
 		''    => __( 'As it is', 'memorial-plugin' ),
 		'1:1' => '1 : 1',
@@ -88,8 +68,8 @@ function memorial_plugin_photos_schema() {
 	return array(
 		'main'   => array(
 			'type'   => 'group',
-			'label'  => __( 'Processing', 'memorial-plugin' ),
-			'help'   => __( 'Switched off — the site shows the photos as they were uploaded (the originals are kept). Which photos are processed: reviews, documents, the logo and a photo marked “Do not process” in the media library never are.', 'memorial-plugin' ),
+			'label'  => __( 'Which photos', 'memorial-plugin' ),
+			'help'   => __( 'Reviews, documents, the logo and a photo marked “Do not process” in the media library are never processed.', 'memorial-plugin' ),
 			'fields' => array(
 				'on'      => array(
 					'type'  => 'checkbox',
@@ -189,6 +169,12 @@ function memorial_plugin_photos_schema() {
 					'label'   => __( 'With the name of the site', 'memorial-plugin' ),
 					'show_if' => array( 'on', array( 1, '1', true ) ),
 				),
+				'plate'   => array(
+					'type'    => 'checkbox',
+					'label'   => __( 'Dark background under the logo', 'memorial-plugin' ),
+					'help'    => __( 'A dark circle under the mark alone, a dark rectangle under the mark with the name — the logo is seen on any photo.', 'memorial-plugin' ),
+					'show_if' => array( 'on', array( 1, '1', true ) ),
+				),
 				'size'    => array(
 					'type'    => 'select',
 					'label'   => __( 'Width of the logo', 'memorial-plugin' ),
@@ -214,29 +200,10 @@ function memorial_plugin_photos_schema() {
 				),
 			),
 		),
-		'bg'     => array(
-			'type'   => 'group',
-			'label'  => __( 'Single background of the products', 'memorial-plugin' ),
-			'help'   => __( 'The background around a product is replaced with one light colour. It is done by a free open model in GitHub Actions (the hosting cannot), so a new photo gets its background within an hour; the preview shows the samples of the last run of “Photos — background” in Actions.', 'memorial-plugin' ),
-			'fields' => array_merge(
-				array(
-					'on'    => array(
-						'type'  => 'checkbox',
-						'label' => __( 'Replace the background', 'memorial-plugin' ),
-					),
-					'color' => array(
-						'type'    => 'text',
-						'label'   => __( 'Background colour', 'memorial-plugin' ),
-						'show_if' => array( 'on', array( 1, '1', true ) ),
-					),
-				),
-				array_map( static fn( $f ) => $f + array( 'show_if' => array( 'on', array( 1, '1', true ) ) ), $types )
-			),
-		),
 		'crop'   => array(
 			'type'   => 'group',
 			'label'  => __( 'Proportions and cropping', 'memorial-plugin' ),
-			'help'   => __( 'Products: the object is found on its background and put in the middle with even margins, the photo gets the chosen proportions (the missing part is filled with the background, nothing is cut off the product). Works: cut to the proportions around the middle.', 'memorial-plugin' ),
+			'help'   => __( 'Products: the object is found on its background and put in the middle with even margins, the photo is cut to the chosen proportions inside itself. Works: cut to the proportions around the middle.', 'memorial-plugin' ),
 			'fields' => array(
 				'on'      => array(
 					'type'  => 'checkbox',
@@ -275,10 +242,6 @@ function memorial_plugin_photos_schema() {
 					'type'  => 'checkbox',
 					'label' => __( 'Remove EXIF (camera, time, place of the shot)', 'memorial-plugin' ),
 				),
-				'srgb' => array(
-					'type'  => 'checkbox',
-					'label' => __( 'Convert to sRGB (colours the same in every browser; done in GitHub Actions)', 'memorial-plugin' ),
-				),
 			),
 		),
 		'report' => array(
@@ -296,18 +259,11 @@ function memorial_plugin_photos_schema() {
 }
 
 /**
- * Defaults: everything off (the owner looks at the preview first); the background types as the owner chose.
+ * Defaults: everything off (the owner looks at the preview first).
  *
  * @return array
  */
 function memorial_plugin_photos_defaults() {
-	$bg = array(
-		'on'    => 0,
-		'color' => MEMORIAL_PLUGIN_PHOTO_BG,
-	);
-	foreach ( MEMORIAL_PLUGIN_PHOTO_BG_TYPES as $slug ) {
-		$bg[ 'type_' . $slug ] = 1;
-	}
 	return array(
 		'main'   => array(
 			'on'      => 0,
@@ -330,12 +286,12 @@ function memorial_plugin_photos_defaults() {
 			'file'    => '',
 			'tint'    => 'white',
 			'text'    => 1,
+			'plate'   => 0,
 			'size'    => '22',
 			'opacity' => '70',
 			'margin'  => '3',
 			'min'     => 600,
 		),
-		'bg'     => $bg,
 		'crop'   => array(
 			'on'      => 0,
 			'trim'    => 1,
@@ -343,10 +299,7 @@ function memorial_plugin_photos_defaults() {
 			'work'    => '',
 			'pad'     => '6',
 		),
-		'clean'  => array(
-			'exif' => 1,
-			'srgb' => 1,
-		),
+		'clean'  => array( 'exif' => 1 ),
 		'report' => array( 'on' => 1 ),
 	);
 }
@@ -368,6 +321,13 @@ add_filter(
 			'title'   => __( 'Photo processing', 'memorial-plugin' ),
 			'schema'  => 'memorial_plugin_photos_schema',
 			'preview' => 'photos',
+			'master'  => array(
+				'group' => 'main',
+				'field' => 'on',
+				'label' => __( 'Process the photos — all the functions below', 'memorial-plugin' ),
+				'on'    => __( 'On: the settings below are applied to the photos of the site.', 'memorial-plugin' ),
+				'off'   => __( 'Off: all the functions below are switched off, the site shows the photos as they were uploaded. Turn it on to set them.', 'memorial-plugin' ),
+			),
 			'intro'   => '<p>' . esc_html__( 'One style for the photos of the site. Every change is seen at once in the preview on the right — before saving. After saving the photos are processed in the background, a few a minute; the originals are kept, and everything can be returned.', 'memorial-plugin' ) . '</p>',
 		);
 		return $pages;
@@ -439,10 +399,6 @@ function memorial_plugin_photo_recipe( $kind, $type ) {
 	if ( ! empty( $s['color']['on'] ) ) {
 		$r['color'] = array_intersect_key( $s['color'], array_flip( array( 'levels', 'wb', 'bright', 'contrast', 'warmth', 'sat', 'sharp' ) ) );
 	}
-	$bg = 'product' === $kind && ! empty( $s['bg']['on'] ) && ! empty( $s['bg'][ 'type_' . $type ] );
-	if ( $bg ) {
-		$r['bg'] = memorial_plugin_photo_hex( (string) ( $s['bg']['color'] ?? '' ) );
-	}
 	if ( ! empty( $s['crop']['on'] ) ) {
 		$ratio = (string) ( 'product' === $kind ? $s['crop']['product'] : $s['crop']['work'] );
 		$trim  = 'product' === $kind && ! empty( $s['crop']['trim'] );
@@ -463,24 +419,10 @@ function memorial_plugin_photo_recipe( $kind, $type ) {
 			'file'    => md5( memorial_plugin_photo_logo_file() . filemtime( memorial_plugin_photo_logo_file() ) ),
 		);
 	}
-	if ( ! empty( $s['clean']['srgb'] ) ) {
-		$r['srgb'] = 1;
-	}
 	if ( ! empty( $s['clean']['exif'] ) ) {
 		$r['exif'] = 1;
 	}
 	return $r;
-}
-
-/**
- * A colour #rrggbb (the background of the site when the value is not a colour).
- *
- * @param string $hex Colour.
- * @return string
- */
-function memorial_plugin_photo_hex( $hex ) {
-	$hex = strtolower( trim( $hex ) );
-	return preg_match( '/^#[0-9a-f]{6}$/', $hex ) ? $hex : MEMORIAL_PLUGIN_PHOTO_BG;
 }
 
 /**
@@ -514,14 +456,14 @@ function memorial_plugin_photo_logo_file() {
 }
 
 /**
- * The variant of the picture of the logo: colour and the name of the site (“white-1”).
+ * The variant of the picture of the logo: colour, the name of the site, the dark background (“white-1”, “site-0-p”).
  *
  * @param array|null $logo The “Logo” settings; null — the saved ones.
  * @return string
  */
 function memorial_plugin_photo_logo_variant( $logo = null ) {
 	$logo = $logo ?? (array) ( memorial_plugin_photos()['logo'] ?? array() );
-	return ( 'site' === ( $logo['tint'] ?? '' ) ? 'site' : 'white' ) . '-' . ( empty( $logo['text'] ) ? '0' : '1' );
+	return ( 'site' === ( $logo['tint'] ?? '' ) ? 'site' : 'white' ) . '-' . ( empty( $logo['text'] ) ? '0' : '1' ) . ( empty( $logo['plate'] ) ? '' : '-p' );
 }
 
 /**
@@ -531,7 +473,7 @@ function memorial_plugin_photo_logo_variant( $logo = null ) {
  * @return string Path (the file may be absent).
  */
 function memorial_plugin_photo_logo_made( $variant = '' ) {
-	$variant = preg_match( '/^(white|site)-[01]$/', $variant ) ? $variant : memorial_plugin_photo_logo_variant();
+	$variant = preg_match( '/^(white|site)-[01](-p)?$/', $variant ) ? $variant : memorial_plugin_photo_logo_variant();
 	return wp_get_upload_dir()['basedir'] . '/memorial-photos/logo-' . $variant . '.png';
 }
 
@@ -552,6 +494,8 @@ function memorial_plugin_photo_logo_source() {
 	$colors = array(
 		'primary'  => '#5e7052',
 		'contrast' => '#2a2c28',
+		'tertiary' => '#a9b796',
+		'base'     => '#fbfaf6',
 	);
 	foreach ( (array) ( wp_get_global_settings( array( 'color', 'palette', 'theme' ) ) ?? array() ) as $c ) {
 		$slug = (string) ( $c['slug'] ?? '' );
@@ -561,12 +505,15 @@ function memorial_plugin_photo_logo_source() {
 	}
 	$font = get_theme_file_path( 'assets/fonts/cormorant-garamond-500.woff2' );
 	return array(
-		'svg'  => $svg,
-		'name' => wp_strip_all_tags( get_bloginfo( 'name' ) ),
-		'font' => is_file( $font ) ? get_theme_file_uri( 'assets/fonts/cormorant-garamond-500.woff2' ) : '',
-		'ink'  => $colors['contrast'],
+		'svg'   => $svg,
+		'name'  => wp_strip_all_tags( get_bloginfo( 'name' ) ),
+		'font'  => is_file( $font ) ? get_theme_file_uri( 'assets/fonts/cormorant-garamond-500.woff2' ) : '',
+		'ink'   => $colors['contrast'],
+		// On the dark background: the light colours of the site.
+		'light' => $colors['tertiary'],
+		'paper' => $colors['base'],
 		// What every variant was made from: the screen makes it again when the logo or the name changes.
-		'keys' => (object) array_filter( (array) get_option( 'memorial_plugin_photos_logo_key', array() ), 'is_string' ),
+		'keys'  => (object) array_filter( (array) get_option( 'memorial_plugin_photos_logo_key', array() ), 'is_string' ),
 	);
 }
 
@@ -579,7 +526,7 @@ function memorial_plugin_photo_logo_source() {
  * @return true|WP_Error
  */
 function memorial_plugin_photo_logo_save( $data, $key, $variant ) {
-	if ( ! preg_match( '/^(white|site)-[01]$/', $variant ) ) {
+	if ( ! preg_match( '/^(white|site)-[01](-p)?$/', $variant ) ) {
 		return new WP_Error( 'memorial_plugin_photo_logo', 'bad variant', array( 'status' => 400 ) );
 	}
 	if ( ! preg_match( '~^data:image/png;base64,([a-z0-9+/=]+)$~i', $data, $m ) ) {
@@ -972,7 +919,7 @@ function memorial_plugin_photo_save( $im, $file ) {
  * @param int    $id   Attachment ID.
  * @param string $kind product|work|page.
  * @param string $type Product type slug.
- * @return string|WP_Error 'done', 'wait' (the background is not ready yet), 'same'.
+ * @return string|WP_Error 'done' or 'same'.
  */
 function memorial_plugin_photo_process( $id, $kind, $type ) {
 	$recipe = memorial_plugin_photo_recipe( $kind, $type );
@@ -984,48 +931,26 @@ function memorial_plugin_photo_process( $id, $kind, $type ) {
 	if ( ! $orig ) {
 		return new WP_Error( 'memorial_plugin_photo_file', 'no file' );
 	}
-	// The prepared copy of GitHub Actions (background, sRGB) — when it is needed and ready.
-	$base  = $orig['file'];
-	$stage = memorial_plugin_photo_stage_file( $id, $recipe );
-	if ( ( isset( $recipe['bg'] ) || isset( $recipe['srgb'] ) ) && $stage ) {
-		$base = $stage;
-	} elseif ( isset( $recipe['bg'] ) && ! $stage ) {
-		return 'wait';
-	}
-	$im = memorial_plugin_photo_load( $base );
+	$im = memorial_plugin_photo_load( $orig['file'] );
 	if ( ! $im ) {
 		return new WP_Error( 'memorial_plugin_photo_load', 'cannot read' );
 	}
-	$bg = isset( $recipe['bg'] ) ? sscanf( $recipe['bg'], '#%02x%02x%02x' ) : memorial_plugin_photo_border( memorial_plugin_photo_sample( $im ) );
-	// With a new background the colour of the object is corrected first, then it is put on the background colour.
-	if ( isset( $recipe['bg'], $recipe['color'] ) ) {
-		memorial_plugin_photo_color( $im, $recipe['color'] );
-	}
-	$f = null;
+	// The photo keeps its own background: the frame is cut inside it, nothing is added.
 	if ( isset( $recipe['crop'] ) ) {
-		$f = memorial_plugin_photo_frame( $im, $recipe['crop'], $bg, ! isset( $recipe['bg'] ) );
+		$f = memorial_plugin_photo_frame( $im, $recipe['crop'], memorial_plugin_photo_border( memorial_plugin_photo_sample( $im ) ), true );
 		if ( $f ) {
 			$c = imagecreatetruecolor( $f[0], $f[1] );
-			imagefill( $c, 0, 0, imagecolorallocate( $c, $bg[0], $bg[1], $bg[2] ) );
 			imagecopy( $c, $im, $f[6], $f[7], $f[2], $f[3], $f[4], $f[5] );
 			$im = $c;
 		}
 	}
-	if ( isset( $recipe['bg'] ) && ! $f ) {
-		// The copy of Actions is transparent around the object: on the background colour.
-		$c = imagecreatetruecolor( imagesx( $im ), imagesy( $im ) );
-		imagefill( $c, 0, 0, imagecolorallocate( $c, $bg[0], $bg[1], $bg[2] ) );
-		imagealphablending( $c, true );
-		imagecopy( $c, $im, 0, 0, 0, 0, imagesx( $im ), imagesy( $im ) );
-		$im = $c;
-	}
-	if ( isset( $recipe['color'] ) && ! isset( $recipe['bg'] ) ) {
+	if ( isset( $recipe['color'] ) ) {
 		memorial_plugin_photo_color( $im, $recipe['color'] );
 	}
 	$dir  = dirname( $orig['file'] );
 	$name = pathinfo( $orig['file'], PATHINFO_FILENAME );
 	$ext  = strtolower( pathinfo( $orig['file'], PATHINFO_EXTENSION ) );
-	$new  = $dir . '/' . preg_replace( '/-m[0-9a-f]{8}$/', '', $name ) . '-m' . $ver . '.' . ( 'png' === $ext && ! isset( $recipe['bg'] ) ? 'png' : ( 'png' === $ext ? 'webp' : $ext ) );
+	$new  = $dir . '/' . preg_replace( '/-m[0-9a-f]{8}$/', '', $name ) . '-m' . $ver . '.' . $ext;
 	if ( ! memorial_plugin_photo_save( $im, $new ) ) {
 		return new WP_Error( 'memorial_plugin_photo_save', 'cannot write' );
 	}
@@ -1140,29 +1065,6 @@ function memorial_plugin_photo_restore( $id ) {
 	return true;
 }
 
-/**
- * The prepared copy of GitHub Actions for this recipe (background colour, sRGB), if it is there.
- *
- * @param int   $id     Attachment ID.
- * @param array $recipe Recipe.
- * @return string Path or ''.
- */
-function memorial_plugin_photo_stage_file( $id, array $recipe ) {
-	$key  = memorial_plugin_photo_stage_key( $recipe );
-	$file = wp_get_upload_dir()['basedir'] . '/memorial-photos/stage/' . (int) $id . '-' . $key . '.png';
-	return is_file( $file ) ? $file : '';
-}
-
-/**
- * Key of the prepared copy: what GitHub Actions does to it.
- *
- * @param array $recipe Recipe.
- * @return string
- */
-function memorial_plugin_photo_stage_key( array $recipe ) {
-	return substr( md5( ( $recipe['bg'] ?? '' ) . '|' . ( isset( $recipe['srgb'] ) ? 's' : '' ) ), 0, 8 );
-}
-
 /* ---------- The queue (WP-Cron, a few photos a minute) ---------- */
 
 add_filter(
@@ -1179,13 +1081,12 @@ add_filter(
 /**
  * One portion: up to 20 seconds of work. Switched off — the processed photos get their originals back.
  *
- * @return array{done:int,wait:int,left:int}
+ * @return array{done:int,left:int}
  */
 function memorial_plugin_photo_batch() {
 	if ( get_transient( 'memorial_plugin_photo_lock' ) ) {
 		return array(
 			'done' => 0,
-			'wait' => 0,
 			'left' => -1,
 		);
 	}
@@ -1194,7 +1095,6 @@ function memorial_plugin_photo_batch() {
 	$s     = memorial_plugin_photos();
 	$scope = ! empty( $s['main']['on'] ) ? memorial_plugin_photo_scope() : array();
 	$done  = 0;
-	$wait  = 0;
 	$left  = 0;
 	// Processed photos that are out of the scope now (switched off, kind not chosen, marked “Do not process”).
 	global $wpdb;
@@ -1218,10 +1118,7 @@ function memorial_plugin_photo_batch() {
 			++$left;
 			continue;
 		}
-		$r = memorial_plugin_photo_process( $id, $kind, $type );
-		if ( 'wait' === $r ) {
-			++$wait;
-		} elseif ( 'done' === $r ) {
+		if ( 'done' === memorial_plugin_photo_process( $id, $kind, $type ) ) {
 			++$done;
 		}
 	}
@@ -1233,12 +1130,11 @@ function memorial_plugin_photo_batch() {
 		array(
 			'time' => time(),
 			'done' => $done,
-			'wait' => $wait,
 			'left' => $left,
 		),
 		false
 	);
-	if ( ! $left && ! $wait ) {
+	if ( ! $left ) {
 		wp_clear_scheduled_hook( 'memorial_plugin_photos' );
 	}
 	delete_transient( 'memorial_plugin_photo_lock' );
@@ -1247,7 +1143,6 @@ function memorial_plugin_photo_batch() {
 	}
 	return array(
 		'done' => $done,
-		'wait' => $wait,
 		'left' => $left,
 	);
 }
@@ -1489,8 +1384,8 @@ function memorial_plugin_photo_processed_ids() {
 }
 
 /**
- * Photos for the preview: the chosen one and a few of every kind — the original, the kind, the product type and the
- * background sample of GitHub Actions; plus the logo.
+ * Photos for the preview: the chosen one and a few of every kind — the original, the kind, the product type; plus
+ * the logo.
  *
  * @param int $chosen A photo chosen on the screen.
  * @return array
@@ -1528,14 +1423,12 @@ function memorial_plugin_photo_samples( $chosen = 0 ) {
 				$bw   = (int) $s['width'];
 			}
 		}
-		$preview = $up['basedir'] . '/memorial-photos/preview/' . $id . '.png';
 		$items[] = array(
 			'id'    => $id,
 			'title' => get_the_title( $id ),
 			'kind'  => $kind,
 			'type'  => $type,
 			'url'   => $best ? $best : $url,
-			'bg'    => is_file( $preview ) ? $up['baseurl'] . '/memorial-photos/preview/' . $id . '.png?v=' . filemtime( $preview ) : '',
 		);
 	}
 	$logo = memorial_plugin_photo_logo_file();

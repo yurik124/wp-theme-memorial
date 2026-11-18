@@ -8191,3 +8191,27 @@ msgstr "Белый с мягкой тенью — виден на любом ф�
 
 msgid "With the name of the site"
 msgstr "С названием сайта"
+
+msgid "A dark circle under the mark alone, a dark rectangle under the mark with the name — the logo is seen on any photo."
+msgstr "Под одним знаком — тёмный круг, под знаком с названием — тёмный прямоугольник: логотип виден на любом фото."
+
+msgid "Dark background under the logo"
+msgstr "Тёмная подложка под логотипом"
+
+msgid "Off: all the functions below are switched off, the site shows the photos as they were uploaded. Turn it on to set them."
+msgstr "Выключено: все функции ниже не работают, сайт показывает фото такими, какими их загрузили. Включите, чтобы настроить."
+
+msgid "On: the settings below are applied to the photos of the site."
+msgstr "Включено: настройки ниже применяются к фото сайта."
+
+msgid "Products: the object is found on its background and put in the middle with even margins, the photo is cut to the chosen proportions inside itself. Works: cut to the proportions around the middle."
+msgstr "Товары: предмет находится на фоне и ставится по центру с ровными полями, фото обрезается до выбранных пропорций внутри самого снимка. Работы: обрезаются до пропорций по центру."
+
+msgid "Reviews, documents, the logo and a photo marked “Do not process” in the media library are never processed."
+msgstr "Отзывы, документы, логотип и фото с отметкой «Не обрабатывать» в медиатеке не обрабатываются никогда."
+
+msgid "Which photos"
+msgstr "Какие фото"
+
+msgid "Process the photos — all the functions below"
+msgstr "Обрабатывать фото — все функции ниже"

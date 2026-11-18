@@ -890,7 +890,7 @@ a.svc__item:hover h3,.cat:hover h3{color:var(--memorial-plugin-gold3)}
 .lb__nav[hidden]{display:none}
 .lb__prev{left:20px}
 .lb__next{right:20px}
-.lb__x:hover,.lb__nav:hover{background:rgba(255,255,255,.24)}
+@media (hover:hover){.lb__x:hover,.lb__nav:hover{background:rgba(255,255,255,.24)}}
 @media (max-width:700px){.lb figure{width:calc(100vw - 24px);padding:60px 0 84px}.lb img{max-height:calc(100svh - 250px)}.lb__nav{top:auto;bottom:16px;margin-top:0}.lb__prev{left:calc(50% - 64px)}.lb__next{right:calc(50% - 64px)}}
 .wp-block-gallery.mem-eq.has-nested-images figure.wp-block-image:not(#individual-image){align-self:flex-start}
 .wp-block-gallery.mem-eq.has-nested-images figure.wp-block-image:not(#individual-image) img{aspect-ratio:var(--mem-ar,4/3);width:100%;height:auto!important;object-fit:cover;flex:none}
@@ -994,7 +994,7 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv__img:not([src]){min-height:40svh;min-width:40%}
 .pv__arr{position:absolute;top:50%;margin-top:-20px;width:40px;height:40px;padding:0;border:0;border-radius:50%;display:none;place-items:center;background:rgba(255,255,255,.92);color:var(--wp--preset--color--secondary,#3f4d36);box-shadow:0 1px 6px rgba(0,0,0,.22);cursor:pointer}
 .pv__arr svg{width:18px;height:18px;display:block}
-.pv__arr:hover{background:#fff}
+@media (hover:hover){.pv__arr:hover{background:#fff}}
 .pv__arr--l{left:8px}
 .pv__arr--r{right:8px}
 .pv__media.is-many .pv__arr{display:grid}
@@ -1020,8 +1020,10 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv__order{width:100%;min-height:48px}
 .pv__x,.pv__nav{position:fixed;z-index:3;border:0;padding:0;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;border-radius:50%;width:48px;height:48px;display:grid;place-items:center}
 .pv__x svg,.pv__nav svg{display:block;width:24px;height:24px}
-.pv__x:hover,.pv__nav:hover{background:rgba(255,255,255,.24)}
-.pv__x{top:12px;right:12px}
+/* наведение — только там, где есть мышь: на телефоне после нажатия стрелка не остаётся «наведённой» (зелёной) */
+@media (hover:hover){.pv__x:hover,.pv__nav:hover{background:rgba(255,255,255,.24)}}
+/* «Закрыть» всегда над стрелками товаров: при прокрутке окна на телефоне стрелка проходит под крестиком */
+.pv__x{top:12px;right:12px;z-index:4}
 .pv__nav{top:50%;margin-top:-24px}
 .pv__nav[hidden]{display:none}
 .pv__prev{left:20px}
@@ -1070,6 +1072,8 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .pv--card .pv__main{max-height:none;overflow:visible;padding-right:0}
 /* «Окно товара»: закрыть и листать — белый круг с тенью, как кнопка «Наверх»; непрозрачный, чтобы не терялся над текстом */
 .pv--card .pv__x,.pv--card .pv__nav{background:#fff;border:1px solid var(--memorial-plugin-line,#e2ded2);box-shadow:0 1px 3px rgba(42,44,40,.14),0 4px 14px rgba(42,44,40,.18);color:var(--memorial-plugin-ink,#2a2c28)}
+}
+@media (max-width:700px) and (hover:hover){
 .pv--card .pv__x:hover,.pv--card .pv__nav:hover{background:var(--memorial-plugin-sage,#e6ebdf);border-color:var(--memorial-plugin-gold,#5e7052)}
 }
 /* Одна колонка на телефоне: фото карточки по высоте экрана так, чтобы под ним были видны название, цена и «Заказать» (--mcard-ph считает site.js).

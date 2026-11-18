@@ -292,11 +292,11 @@ msgstr ""
 msgid "2GIS"
 msgstr ""
 
-#: pages/photo-tools.php:86
+#: pages/photo-tools.php:66
 msgid "3 : 2 (landscape)"
 msgstr ""
 
-#: pages/photo-tools.php:84
+#: pages/photo-tools.php:64
 msgid "3 : 4 (upright)"
 msgstr ""
 
@@ -312,7 +312,7 @@ msgstr ""
 msgid "3★ and higher"
 msgstr ""
 
-#: pages/photo-tools.php:85
+#: pages/photo-tools.php:65
 msgid "4 : 3 (landscape)"
 msgstr ""
 
@@ -354,6 +354,10 @@ msgstr ""
 
 #: src/catalog/types.js:270 src/catalog/types.js:723
 msgid "A click on the photo opens"
+msgstr ""
+
+#: pages/photo-tools.php:175
+msgid "A dark circle under the mark alone, a dark rectangle under the mark with the name — the logo is seen on any photo."
 msgstr ""
 
 #: src/catalog/types.js:975
@@ -490,7 +494,7 @@ msgstr ""
 msgid "Active — new burials"
 msgstr ""
 
-#: src/catalog/works.js:49 src/catalog/products.js:157 src/catalog/types.js:745 src/catalog/types.js:983 src/catalog/work-types.js:227 src/settings/index.js:597
+#: src/catalog/works.js:49 src/catalog/products.js:157 src/catalog/types.js:745 src/catalog/types.js:983 src/catalog/work-types.js:227 src/settings/index.js:598
 msgid "Add"
 msgstr ""
 
@@ -626,7 +630,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: places/places.php:137 src/settings/index.js:326 seo/llms.php:73 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:51 core/settings.php:68
+#: places/places.php:137 src/settings/index.js:327 seo/llms.php:73 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:51 core/settings.php:68
 msgid "Address"
 msgstr ""
 
@@ -650,7 +654,7 @@ msgstr ""
 msgid "Advantages (with laurel leaves)"
 msgstr ""
 
-#: src/settings/photo-preview.js:720
+#: src/settings/photo-preview.js:722
 msgid "After"
 msgstr ""
 
@@ -670,7 +674,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: src/settings/index.js:1161
+#: src/settings/index.js:1204
 msgid "All changes are saved"
 msgstr ""
 
@@ -774,7 +778,7 @@ msgstr ""
 msgid "Anchor"
 msgstr ""
 
-#: src/settings/index.js:314
+#: src/settings/index.js:315
 msgid "Another address…"
 msgstr ""
 
@@ -822,7 +826,7 @@ msgstr ""
 msgid "As in the type"
 msgstr ""
 
-#: pages/photo-tools.php:82
+#: pages/photo-tools.php:62
 msgid "As it is"
 msgstr ""
 
@@ -834,7 +838,7 @@ msgstr ""
 msgid "As on the review site now"
 msgstr ""
 
-#: pages/photo-tools.php:183
+#: pages/photo-tools.php:163
 msgid "As on the site"
 msgstr ""
 
@@ -858,11 +862,11 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: pages/photo-tools.php:123
+#: pages/photo-tools.php:103
 msgid "Auto levels"
 msgstr ""
 
-#: pages/photo-tools.php:115
+#: pages/photo-tools.php:95
 msgid "Auto levels stretch the darkest and the lightest tones; white balance removes a yellow or blue cast of the light. The rest is the same for every photo."
 msgstr ""
 
@@ -882,10 +886,6 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: pages/photo-tools.php:229
-msgid "Background colour"
-msgstr ""
-
 #: core/assets.php:332
 msgid "Balanced"
 msgstr ""
@@ -898,7 +898,7 @@ msgstr ""
 msgid "Banner text — “Only notify”"
 msgstr ""
 
-#: src/settings/photo-preview.js:716 src/settings/photo-preview.js:738
+#: src/settings/photo-preview.js:718 src/settings/photo-preview.js:740
 msgid "Before"
 msgstr ""
 
@@ -930,7 +930,7 @@ msgstr ""
 msgid "Block with numbers"
 msgstr ""
 
-#: src/settings/photo-preview.js:750
+#: src/settings/photo-preview.js:752
 msgid "Border"
 msgstr ""
 
@@ -962,7 +962,7 @@ msgstr ""
 msgid "Breadcrumbs"
 msgstr ""
 
-#: pages/photo-tools.php:134
+#: pages/photo-tools.php:114
 msgid "Brightness"
 msgstr ""
 
@@ -1080,7 +1080,7 @@ msgstr ""
 msgid "Can stay empty. {price:code} puts in a price."
 msgstr ""
 
-#: src/catalog/import.js:609 src/catalog/inline-edit.js:239 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/settings/photo-preview.js:516 src/collections/index.js:326
+#: src/catalog/import.js:609 src/catalog/inline-edit.js:239 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/settings/photo-preview.js:509 src/collections/index.js:326
 msgid "Cancel"
 msgstr ""
 
@@ -1158,7 +1158,7 @@ msgstr ""
 msgid "Catalog price"
 msgstr ""
 
-#: pages/photo-tools.php:100
+#: pages/photo-tools.php:80
 msgid "Catalog products"
 msgstr ""
 
@@ -1310,7 +1310,7 @@ msgstr ""
 msgid "Choose by the title"
 msgstr ""
 
-#: src/settings/index.js:132 src/collections/index.js:55
+#: src/settings/index.js:133 src/collections/index.js:55
 msgid "Choose photo"
 msgstr ""
 
@@ -1334,7 +1334,7 @@ msgstr ""
 msgid "Choose the table or an archive"
 msgstr ""
 
-#: pages/photo-tools.php:272
+#: pages/photo-tools.php:239
 msgid "Clean-up"
 msgstr ""
 
@@ -1390,15 +1390,15 @@ msgstr ""
 msgid "Collapse long text after, characters"
 msgstr ""
 
-#: catalog/catalog.php:18 pages/photo-tools.php:114
+#: catalog/catalog.php:18 pages/photo-tools.php:94
 msgid "Colour"
 msgstr ""
 
-#: pages/photo-tools.php:119
+#: pages/photo-tools.php:99
 msgid "Colour correction"
 msgstr ""
 
-#: pages/photo-tools.php:180
+#: pages/photo-tools.php:160
 msgid "Colour of the logo"
 msgstr ""
 
@@ -1446,7 +1446,7 @@ msgstr ""
 msgid "Company’s reply"
 msgstr ""
 
-#: src/settings/photo-preview.js:724
+#: src/settings/photo-preview.js:726
 msgid "Compare"
 msgstr ""
 
@@ -1498,7 +1498,7 @@ msgstr ""
 msgid "Contents of the package — the total is counted automatically. “On the card” — 3–5 main items, visible without opening the list"
 msgstr ""
 
-#: pages/photo-tools.php:140
+#: pages/photo-tools.php:120
 msgid "Contrast"
 msgstr ""
 
@@ -1508,10 +1508,6 @@ msgstr ""
 
 #: src/commands/index.js:174
 msgid "Convert the old codes of this page to blocks"
-msgstr ""
-
-#: pages/photo-tools.php:280
-msgid "Convert to sRGB (colours the same in every browser; done in GitHub Actions)"
 msgstr ""
 
 #: src/commands/index.js:203
@@ -1656,6 +1652,10 @@ msgstr ""
 msgid "Daily from 9:00 to 18:00"
 msgstr ""
 
+#: pages/photo-tools.php:174
+msgid "Dark background under the logo"
+msgstr ""
+
 #: reviews/rewio-archive.php:466
 msgid "Date"
 msgstr ""
@@ -1761,7 +1761,7 @@ msgstr ""
 msgid "Do not fill in"
 msgstr ""
 
-#: pages/photo-tools.php:1571
+#: pages/photo-tools.php:1464
 msgid "Do not process"
 msgstr ""
 
@@ -1811,7 +1811,7 @@ msgstr ""
 msgid "Done: loaded "
 msgstr ""
 
-#: src/settings/index.js:190
+#: src/settings/index.js:191
 msgid "Down"
 msgstr ""
 
@@ -2090,11 +2090,11 @@ msgstr ""
 msgid "Flower — wreaths"
 msgstr ""
 
-#: src/settings/index.js:518
+#: src/settings/index.js:519
 msgid "Fold"
 msgstr ""
 
-#: src/settings/index.js:452
+#: src/settings/index.js:453
 msgid "Fold all"
 msgstr ""
 
@@ -2388,7 +2388,7 @@ msgstr ""
 msgid "Hide reviews with the words (comma-separated)"
 msgstr ""
 
-#: src/settings/index.js:630
+#: src/settings/index.js:631
 msgid "Hide the key"
 msgstr ""
 
@@ -2424,7 +2424,7 @@ msgstr ""
 msgid "How far (optional)"
 msgstr ""
 
-#: src/settings/index.js:53 seo/metrika.php:57
+#: src/settings/index.js:54 seo/metrika.php:57
 msgid "How it works"
 msgstr ""
 
@@ -2468,7 +2468,7 @@ msgstr ""
 msgid "How the products of this type go when a visitor opens the section. A category can have its own order."
 msgstr ""
 
-#: src/settings/index.js:912
+#: src/settings/index.js:913
 msgid "How this screen works"
 msgstr ""
 
@@ -2558,7 +2558,7 @@ msgstr ""
 msgid "In a text field of “Memorial → …”"
 msgstr ""
 
-#: src/settings/index.js:528
+#: src/settings/index.js:529
 msgid "In a text field or a block write:"
 msgstr ""
 
@@ -2578,7 +2578,7 @@ msgstr ""
 msgid "In the article:"
 msgstr ""
 
-#: pages/photo-tools.php:167
+#: pages/photo-tools.php:147
 msgid "In the lower right corner. Without an own file — the current logo of the site with its name, the picture is made on this screen. On small copies (catalog cards) it is not put: it would be unreadable."
 msgstr ""
 
@@ -2768,11 +2768,11 @@ msgstr ""
 msgid "Loading…"
 msgstr ""
 
-#: pages/photo-tools.php:166
+#: pages/photo-tools.php:146
 msgid "Logo"
 msgstr ""
 
-#: pages/photo-tools.php:171
+#: pages/photo-tools.php:151
 msgid "Logo on the photos"
 msgstr ""
 
@@ -2832,7 +2832,7 @@ msgstr ""
 msgid "Main phone number, “Call me back” button and the call icon for phones."
 msgstr ""
 
-#: pages/photo-tools.php:291
+#: pages/photo-tools.php:254
 msgid "Make the report"
 msgstr ""
 
@@ -2872,11 +2872,11 @@ msgstr ""
 msgid "Maps"
 msgstr ""
 
-#: pages/photo-tools.php:264
+#: pages/photo-tools.php:231
 msgid "Margin around the product"
 msgstr ""
 
-#: pages/photo-tools.php:206
+#: pages/photo-tools.php:192
 msgid "Margin from the edge"
 msgstr ""
 
@@ -3038,13 +3038,13 @@ msgid "Move photo %d later"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:564
+#: src/settings/index.js:565
 #, php-format
 msgid "Move row %d down"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:553
+#: src/settings/index.js:554
 #, php-format
 msgid "Move row %d up"
 msgstr ""
@@ -3193,7 +3193,7 @@ msgstr ""
 msgid "No photo"
 msgstr ""
 
-#: src/settings/photo-preview.js:776
+#: src/settings/photo-preview.js:772
 msgid "No photos to show yet."
 msgstr ""
 
@@ -3261,7 +3261,7 @@ msgstr ""
 msgid "Not older than, months (0 — all time)"
 msgstr ""
 
-#: pages/photo-tools.php:212
+#: pages/photo-tools.php:198
 msgid "Not on copies narrower than, px"
 msgstr ""
 
@@ -3362,6 +3362,10 @@ msgstr ""
 msgid "Off — the photo without a tint"
 msgstr ""
 
+#: pages/photo-tools.php:329
+msgid "Off: all the functions below are switched off, the site shows the photos as they were uploaded. Turn it on to set them."
+msgstr ""
+
 #: seo/metrika.php:27
 msgid "Off: no Metrica code on the site — connect it through a tag manager if needed"
 msgstr ""
@@ -3414,6 +3418,10 @@ msgstr ""
 msgid "On the site "
 msgstr ""
 
+#: pages/photo-tools.php:328
+msgid "On: the settings below are applied to the photos of the site."
+msgstr ""
+
 #: reviews/rewio.php:182
 msgid "Once a day"
 msgstr ""
@@ -3442,7 +3450,7 @@ msgstr ""
 msgid "One short line after the name, for example “our own, without a bank — for monuments and tiling”. Can stay empty."
 msgstr ""
 
-#: pages/photo-tools.php:371
+#: pages/photo-tools.php:331
 msgid "One style for the photos of the site. Every change is seen at once in the preview on the right — before saving. After saving the photos are processed in the background, a few a minute; the originals are kept, and everything can be returned."
 msgstr ""
 
@@ -3508,7 +3516,7 @@ msgstr ""
 msgid "Only “%s” — Excel"
 msgstr ""
 
-#: pages/photo-tools.php:200
+#: pages/photo-tools.php:186
 msgid "Opacity"
 msgstr ""
 
@@ -3518,7 +3526,7 @@ msgstr ""
 msgid "Open photo %d large"
 msgstr ""
 
-#: src/settings/index.js:1037
+#: src/settings/index.js:1038
 msgid "Open site"
 msgstr ""
 
@@ -3648,7 +3656,7 @@ msgstr ""
 msgid "Own link to the source"
 msgstr ""
 
-#: pages/photo-tools.php:175
+#: pages/photo-tools.php:155
 msgid "Own logo file (PNG with a transparent background)"
 msgstr ""
 
@@ -3774,7 +3782,7 @@ msgstr ""
 msgid "Phones, messengers, addresses with routes, maps and company details."
 msgstr ""
 
-#: catalog/catalog-front.php:432 src/catalog/fields.js:68 src/settings/photo-preview.js:693 works/works.php:223 blocks/content/content-blocks.php:447
+#: catalog/catalog-front.php:432 src/catalog/fields.js:68 src/settings/photo-preview.js:695 works/works.php:223 blocks/content/content-blocks.php:447
 msgid "Photo"
 msgstr ""
 
@@ -3852,7 +3860,7 @@ msgstr ""
 msgid "Photo on the right (mourning hall — light, daylight)"
 msgstr ""
 
-#: pages/photo-tools.php:368 pages/photo-tools.php:1569
+#: pages/photo-tools.php:321 pages/photo-tools.php:1462
 msgid "Photo processing"
 msgstr ""
 
@@ -3880,12 +3888,12 @@ msgstr ""
 msgid "Photos in the cards"
 msgstr ""
 
-#: pages/photo-tools.php:108
+#: pages/photo-tools.php:88
 msgid "Photos of the pages"
 msgstr ""
 
 #. translators: %d: number of photos.
-#: src/settings/photo-preview.js:526
+#: src/settings/photo-preview.js:519
 #, php-format
 msgid "Photos to look at: %d"
 msgstr ""
@@ -3940,7 +3948,7 @@ msgstr ""
 msgid "Post IDs (at most 10 per call)."
 msgstr ""
 
-#: src/settings/photo-preview.js:678
+#: src/settings/photo-preview.js:680
 msgid "Preview"
 msgstr ""
 
@@ -4042,20 +4050,20 @@ msgstr ""
 msgid "Privacy policy"
 msgstr ""
 
-#: pages/photo-tools.php:96
+#: pages/photo-tools.php:76
 msgid "Process the photos"
 msgstr ""
 
-#: src/settings/photo-preview.js:471
+#: pages/photo-tools.php:327
+msgid "Process the photos — all the functions below"
+msgstr ""
+
+#: src/settings/photo-preview.js:474
 #, php-format
 msgid "Processed: %1$d of %2$d."
 msgstr ""
 
-#: pages/photo-tools.php:91
-msgid "Processing"
-msgstr ""
-
-#: src/settings/photo-preview.js:767
+#: src/settings/photo-preview.js:763
 msgid "Processing is switched off: the site shows the originals. The preview shows what the photos will look like when it is on."
 msgstr ""
 
@@ -4177,15 +4185,15 @@ msgstr ""
 msgid "Products: %d"
 msgstr ""
 
-#: pages/photo-tools.php:247
+#: pages/photo-tools.php:214
 msgid "Products: crop to the object"
 msgstr ""
 
-#: pages/photo-tools.php:239
-msgid "Products: the object is found on its background and put in the middle with even margins, the photo gets the chosen proportions (the missing part is filled with the background, nothing is cut off the product). Works: cut to the proportions around the middle."
+#: pages/photo-tools.php:206
+msgid "Products: the object is found on its background and put in the middle with even margins, the photo is cut to the chosen proportions inside itself. Works: cut to the proportions around the middle."
 msgstr ""
 
-#: pages/photo-tools.php:238
+#: pages/photo-tools.php:205
 msgid "Proportions and cropping"
 msgstr ""
 
@@ -4275,11 +4283,11 @@ msgstr ""
 msgid "Ready-made blocks in the editor"
 msgstr ""
 
-#: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:142 src/block-controls/index.js:208 src/block-controls/index.js:261 src/block-controls/index.js:443
+#: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:143 src/block-controls/index.js:208 src/block-controls/index.js:261 src/block-controls/index.js:443
 msgid "Remove"
 msgstr ""
 
-#: pages/photo-tools.php:276
+#: pages/photo-tools.php:243
 msgid "Remove EXIF (camera, time, place of the shot)"
 msgstr ""
 
@@ -4310,7 +4318,7 @@ msgid "Remove row"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:576
+#: src/settings/index.js:577
 #, php-format
 msgid "Remove row %d"
 msgstr ""
@@ -4327,19 +4335,15 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: src/settings/index.js:131 src/collections/index.js:54
+#: src/settings/index.js:132 src/collections/index.js:54
 msgid "Replace photo"
-msgstr ""
-
-#: pages/photo-tools.php:225
-msgid "Replace the background"
 msgstr ""
 
 #: admin/abilities.php:556
 msgid "Replaces the old codes in square brackets in a post with blocks and site values, and in SEOPress fields with variables. The text before the conversion is saved as a revision."
 msgstr ""
 
-#: pages/photo-tools.php:286
+#: pages/photo-tools.php:249
 msgid "Report of bad photos"
 msgstr ""
 
@@ -4375,15 +4379,15 @@ msgstr ""
 msgid "Restores the text and SEO fields of a post from before its conversion to blocks."
 msgstr ""
 
-#: src/settings/photo-preview.js:510
+#: src/settings/photo-preview.js:503
 msgid "Return"
 msgstr ""
 
-#: src/settings/photo-preview.js:493
+#: src/settings/photo-preview.js:486
 msgid "Return all originals"
 msgstr ""
 
-#: src/settings/photo-preview.js:499
+#: src/settings/photo-preview.js:492
 msgid "Return the originals of all photos and switch the processing off?"
 msgstr ""
 
@@ -4491,6 +4495,10 @@ msgstr ""
 msgid "Reviews were received ("
 msgstr ""
 
+#: pages/photo-tools.php:72
+msgid "Reviews, documents, the logo and a photo marked “Do not process” in the media library are never processed."
+msgstr ""
+
 #. translators: %s: review site
 #: core/assets.php:105
 #, php-format
@@ -4572,7 +4580,7 @@ msgid "Row"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:504
+#: src/settings/index.js:505
 #, php-format
 msgid "Row %d"
 msgstr ""
@@ -4599,11 +4607,11 @@ msgstr ""
 msgid "SKU"
 msgstr ""
 
-#: pages/photo-tools.php:243
+#: pages/photo-tools.php:210
 msgid "Same proportions"
 msgstr ""
 
-#: pages/photo-tools.php:152
+#: pages/photo-tools.php:132
 msgid "Saturation"
 msgstr ""
 
@@ -4627,7 +4635,7 @@ msgstr ""
 msgid "Saved."
 msgstr ""
 
-#: src/settings/index.js:1013
+#: src/settings/index.js:1014
 msgid "Saved. The changes are already on the site."
 msgstr ""
 
@@ -4817,7 +4825,7 @@ msgstr ""
 msgid "Shared texts right on a page"
 msgstr ""
 
-#: pages/photo-tools.php:158
+#: pages/photo-tools.php:138
 msgid "Sharpness"
 msgstr ""
 
@@ -4841,7 +4849,7 @@ msgstr ""
 msgid "Short text."
 msgstr ""
 
-#: src/settings/photo-preview.js:710
+#: src/settings/photo-preview.js:712
 msgid "Show"
 msgstr ""
 
@@ -4901,7 +4909,7 @@ msgstr ""
 msgid "Show reviews deleted on the review site"
 msgstr ""
 
-#: src/settings/index.js:631
+#: src/settings/index.js:632
 msgid "Show the key"
 msgstr ""
 
@@ -4967,10 +4975,6 @@ msgstr ""
 msgid "Similar products"
 msgstr ""
 
-#: pages/photo-tools.php:219
-msgid "Single background of the products"
-msgstr ""
-
 #: reviews/rewio.php:931 reviews/rewio-archive.php:459 blocks/content/inline-values.php:327
 msgid "Site"
 msgstr ""
@@ -5008,7 +5012,7 @@ msgstr ""
 msgid "Skip questions of these pages"
 msgstr ""
 
-#: pages/photo-tools.php:287
+#: pages/photo-tools.php:250
 msgid "Small, blurred, too dark or too light photos, repeats and photos without a description — a list below the settings, to take or choose better ones."
 msgstr ""
 
@@ -5121,10 +5125,6 @@ msgstr ""
 msgid "Switch the prices in the texts to automatic ones"
 msgstr ""
 
-#: pages/photo-tools.php:92
-msgid "Switched off — the site shows the photos as they were uploaded (the originals are kept). Which photos are processed: reviews, documents, the logo and a photo marked “Do not process” in the media library never are."
-msgstr ""
-
 #: prices/prices.php:862
 msgid "Switched to automatic prices:"
 msgstr ""
@@ -5225,7 +5225,7 @@ msgstr ""
 msgid "The Excel file could not be read. Save it again in Excel as “Excel Workbook (.xlsx)” or as CSV."
 msgstr ""
 
-#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:775 admin/settings-form.php:251
+#: catalog/catalog-types-admin.php:33 catalog/catalog-manager.php:775 admin/settings-form.php:253
 msgid "The JavaScript build is missing. Run npm run build."
 msgstr ""
 
@@ -5257,14 +5257,6 @@ msgstr ""
 
 #: src/editor-meta/faq-sections.js:143
 msgid "The arrow → is added by the site."
-msgstr ""
-
-#: pages/photo-tools.php:220
-msgid "The background around a product is replaced with one light colour. It is done by a free open model in GitHub Actions (the hosting cannot), so a new photo gets its background within an hour; the preview shows the samples of the last run of “Photos — background” in Actions."
-msgstr ""
-
-#: src/settings/photo-preview.js:759
-msgid "The background of this photo is not ready yet: run “Photos — background” in GitHub Actions (Actions → Photos — background → Run workflow); in 3–5 minutes the sample appears here. Until then the preview shows the rest without the new background."
 msgstr ""
 
 #: src/block-controls/index.js:904
@@ -5383,7 +5375,7 @@ msgstr ""
 msgid "The packages themselves, their contents and prices — in “Memorial → Prices”."
 msgstr ""
 
-#: src/settings/photo-preview.js:653
+#: src/settings/photo-preview.js:655
 msgid "The photo could not be loaded."
 msgstr ""
 
@@ -5523,7 +5515,7 @@ msgstr ""
 msgid "There are several files named %s — write the folder too, e.g. foto/M-1/1.jpg."
 msgstr ""
 
-#: src/settings/index.js:1157
+#: src/settings/index.js:1200
 msgid "There are unsaved changes"
 msgstr ""
 
@@ -5561,7 +5553,7 @@ msgstr ""
 msgid "These settings were changed elsewhere while the page was open (in another tab or by another person). Reload the page to see the current texts, then make the change again."
 msgstr ""
 
-#: admin/settings-form.php:228
+#: admin/settings-form.php:230
 msgid "These settings were changed elsewhere while this screen was open (on a page of the site, in another tab or by another person). Reload the screen — your changes here are not saved."
 msgstr ""
 
@@ -5681,7 +5673,7 @@ msgstr ""
 msgid "Too many requests. Please call us."
 msgstr ""
 
-#: src/catalog/works.js:143 src/settings/index.js:229 src/settings/index.js:604 prices/prices.php:93 prices/prices.php:486 works/works.php:259
+#: src/catalog/works.js:143 src/settings/index.js:230 src/settings/index.js:605 prices/prices.php:93 prices/prices.php:486 works/works.php:259
 msgid "Total"
 msgstr ""
 
@@ -5741,11 +5733,11 @@ msgstr ""
 msgid "Under the title of the catalog on the site (optional)."
 msgstr ""
 
-#: src/settings/index.js:519 src/block-controls/index.js:871
+#: src/settings/index.js:520 src/block-controls/index.js:871
 msgid "Unfold"
 msgstr ""
 
-#: src/settings/index.js:461
+#: src/settings/index.js:462
 msgid "Unfold all"
 msgstr ""
 
@@ -5777,7 +5769,7 @@ msgstr ""
 msgid "Unknown product type."
 msgstr ""
 
-#: admin/settings-form.php:169 admin/settings-form.php:223
+#: admin/settings-form.php:169 admin/settings-form.php:225
 msgid "Unknown settings page."
 msgstr ""
 
@@ -5793,7 +5785,7 @@ msgstr ""
 msgid "Untitled work"
 msgstr ""
 
-#: src/settings/index.js:183
+#: src/settings/index.js:184
 msgid "Up"
 msgstr ""
 
@@ -5857,17 +5849,11 @@ msgstr ""
 msgid "Visible on the site"
 msgstr ""
 
-#. translators: %d: number of photos.
-#: src/settings/photo-preview.js:478
-#, php-format
-msgid "Waiting for the background from GitHub Actions: %d."
-msgstr ""
-
 #: leads/callback.php:274
 msgid "Waiting for the call"
 msgstr ""
 
-#: pages/photo-tools.php:146
+#: pages/photo-tools.php:126
 msgid "Warmth"
 msgstr ""
 
@@ -5911,7 +5897,7 @@ msgstr ""
 msgid "Webvisor — recording how visitors view the site"
 msgstr ""
 
-#: src/settings/index.js:351
+#: src/settings/index.js:352
 msgid "What"
 msgstr ""
 
@@ -6031,15 +6017,19 @@ msgstr ""
 msgid "Which one"
 msgstr ""
 
+#: pages/photo-tools.php:71
+msgid "Which photos"
+msgstr ""
+
 #: reviews/rewio-archive.php:495
 msgid "Which version to show"
 msgstr ""
 
-#: pages/photo-tools.php:128
+#: pages/photo-tools.php:108
 msgid "White balance"
 msgstr ""
 
-#: pages/photo-tools.php:182
+#: pages/photo-tools.php:162
 msgid "White with a soft shadow — seen on any photo"
 msgstr ""
 
@@ -6079,7 +6069,7 @@ msgstr ""
 msgid "Widget code (optional)"
 msgstr ""
 
-#: pages/photo-tools.php:194
+#: pages/photo-tools.php:180
 msgid "Width of the logo"
 msgstr ""
 
@@ -6091,7 +6081,7 @@ msgstr ""
 msgid "With photos first, then newest"
 msgstr ""
 
-#: pages/photo-tools.php:189
+#: pages/photo-tools.php:169
 msgid "With the name of the site"
 msgstr ""
 
@@ -6113,7 +6103,7 @@ msgstr ""
 msgid "Works"
 msgstr ""
 
-#: pages/photo-tools.php:258
+#: pages/photo-tools.php:225
 msgid "Works and pages"
 msgstr ""
 
@@ -7892,7 +7882,7 @@ msgstr ""
 msgid "— drafts with text templates will appear; the company details (sole proprietor, TIN, OGRNIP, address, email) are filled in from “Contacts” automatically."
 msgstr ""
 
-#: src/settings/index.js:309
+#: src/settings/index.js:310
 msgid "— no link —"
 msgstr ""
 
@@ -7904,7 +7894,7 @@ msgstr ""
 msgid "— not chosen —"
 msgstr ""
 
-#: src/settings/index.js:782
+#: src/settings/index.js:783
 msgid "— not selected —"
 msgstr ""
 
@@ -8004,7 +7994,7 @@ msgstr ""
 msgid "“Our services” block"
 msgstr ""
 
-#: memorial-plugin.php:107 pages/photo-tools.php:104
+#: memorial-plugin.php:107 pages/photo-tools.php:84
 msgid "“Our works”"
 msgstr ""
 

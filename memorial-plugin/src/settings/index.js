@@ -29,6 +29,7 @@ import {
 	TabPanel,
 	TextareaControl,
 	TextControl,
+	ToggleControl,
 	Flex,
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
@@ -1127,6 +1128,10 @@ function App( { option } ) {
 		</Flex>
 	);
 
+	const master = page.master;
+	const masterOn =
+		! master || !! Number( value[ master.group ]?.[ master.field ] );
+
 	return (
 		<Page title={ page.title } actions={ actions }>
 			<div
@@ -1155,6 +1160,38 @@ function App( { option } ) {
 						</Notice>
 					) }
 					<div ref={ extraRef } />
+					{ master && (
+						<Card
+							className={
+								'memorial-plugin-settings__master' +
+								( masterOn ? ' is-on' : '' )
+							}
+						>
+							<CardBody>
+								<ToggleControl
+									__nextHasNoMarginBottom
+									label={ master.label }
+									help={ masterOn ? master.on : master.off }
+									checked={ masterOn }
+									onChange={ ( on ) => {
+										setValue( ( v ) => ( {
+											...v,
+											[ master.group ]: {
+												...( v[ master.group ] || {} ),
+												[ master.field ]: on ? 1 : 0,
+											},
+										} ) );
+										setDirty( true );
+									} }
+								/>
+							</CardBody>
+						</Card>
+					) }
+					{ /* Off — every field below is inactive (a disabled fieldset disables all its controls). */ }
+					<fieldset
+						className="memorial-plugin-settings__cards"
+						disabled={ ! masterOn }
+					>
 					{ withTabs( page.fields, ( def ) =>
 						def.type === 'note' ? (
 							<Note key={ def.id } def={ def } />
@@ -1180,7 +1217,12 @@ function App( { option } ) {
 												<Help text={ def.help } />
 											) }
 											<FieldsForm
-												defs={ def.fields || [] }
+												defs={ ( def.fields || [] ).filter(
+													( f ) =>
+														! master ||
+														def.id !== master.group ||
+														f.id !== master.field
+												) }
 												data={ value[ def.id ] || {} }
 												onChange={ ( edits ) => {
 													setValue( ( v ) => ( {
@@ -1223,6 +1265,7 @@ function App( { option } ) {
 							</Card>
 						)
 					) }
+					</fieldset>
 					<div
 						className={
 							'memorial-plugin-settings__bar' +

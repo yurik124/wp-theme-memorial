@@ -85,6 +85,7 @@ def read_settings(root):
             'on': on('Логотип', 'включено', '1'),
             'tint': 'site' if 'сайт' in tint else 'white',
             'text': on('Логотип', 'название', '1'),
+            'plate': on('Логотип', 'подложка', '0'),
             'file': cfg.get('Логотип', 'свой_файл', fallback='').strip().strip('"'),
             'size': num('Логотип', 'ширина', 22),
             'opacity': num('Логотип', 'непрозрачность', 70),
@@ -269,7 +270,7 @@ _logo_cache = {}
 
 def logo_image(lg, root):
     own = lg['file']
-    path = own if own and os.path.isabs(own) else os.path.join(root, own) if own else os.path.join(HERE, f"logo-{lg['tint']}-{1 if lg['text'] else 0}.png")
+    path = own if own and os.path.isabs(own) else os.path.join(root, own) if own else os.path.join(HERE, f"logo-{lg['tint']}-{1 if lg['text'] else 0}{'-p' if lg['plate'] else ''}.png")
     if path not in _logo_cache:
         _logo_cache[path] = Image.open(path).convert('RGBA')
     return _logo_cache[path]

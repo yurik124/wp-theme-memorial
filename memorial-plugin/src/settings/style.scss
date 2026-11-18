@@ -667,3 +667,41 @@
 		border-radius: 4px;
 	}
 }
+
+/* One switch for the whole screen (Photo processing): above the groups, larger, with a coloured edge when on. */
+.memorial-plugin-settings__master {
+	border-inline-start: 4px solid #949494;
+
+	&.is-on {
+		border-inline-start-color: var(--wp-admin-theme-color, #3858e9);
+	}
+
+	.components-toggle-control .components-toggle-control__label,
+	.components-toggle-control label {
+		font-size: 18px;
+		font-weight: 600;
+	}
+
+	.components-base-control__help {
+		font-size: 16px;
+		margin-top: 8px;
+	}
+}
+
+/* The groups under the switch: a fieldset without its frame; disabled — dimmed and inert. */
+.memorial-plugin-settings__cards {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+
+	&:disabled {
+		opacity: 0.5;
+		filter: grayscale(1);
+		pointer-events: none;
+		user-select: none;
+	}
+}
