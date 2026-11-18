@@ -11,7 +11,9 @@ test( 'заявки: новая заявка видна в списке и от�
 	const errors = collectJsErrors( page );
 	const phone = '+7 900 555-' + String( Date.now() ).slice( -2 ) + '-11';
 	// Метка времени от сайта, как при открытии окна; отправка не раньше чем через 3 секунды.
-	const token = ( await ( await request.get( '/wp-json/mem/v1/callback/token' ) ).json() ).t;
+	const token = (
+		await ( await request.get( '/wp-json/mem/v1/callback/token' ) ).json()
+	).t;
 	expect( token ).toMatch( /^\d+\.[a-f0-9]{24}$/ );
 	const fast = await request.post( '/wp-json/mem/v1/callback', {
 		data: { phone, consent: 1, token, page: '/' },
