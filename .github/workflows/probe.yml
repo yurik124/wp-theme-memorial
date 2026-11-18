@@ -77,14 +77,17 @@ jobs:
           # paramiko из PyPI, а не lftp из apt: зеркала apt на раннерах бывают недоступны
           pip install -q paramiko
           mkdir -p data uploads
-          python3 - <<'PY'
+          python3 -u - <<'PY'
           import os, re, stat, gzip, shutil, paramiko
+          print('подключение к хостингу…')
           t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
           t.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
           sf = paramiko.SFTPClient.from_transport(t)
           site = os.environ['SITE_DIR'].rstrip('/')
           dbs = sorted(f for f in sf.listdir(site + '/updraft') if f.endswith('-db.gz'))
+          print('база:', dbs[-1])
           sf.get(site + '/updraft/' + dbs[-1], 'data/db.sql.gz')
+          print('база скачана')
           with gzip.open('data/db.sql.gz', 'rb') as a, open('data/db.sql', 'wb') as b:
               shutil.copyfileobj(a, b)
           # список файлов — одним соединением, скачивание — в 4 потока (по своему соединению на поток)
