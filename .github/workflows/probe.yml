@@ -61,6 +61,7 @@ jobs:
           done
 
       - name: Скачать базу и uploads (только чтение)
+        timeout-minutes: 25
         env:
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
@@ -98,14 +99,26 @@ jobs:
           q = queue.Queue()
           for f in files: q.put(f)
           def worker():
-              tt = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
-              tt.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
-              c = paramiko.SFTPClient.from_transport(tt)
+              # зависший файл не должен вешать прогон: таймаут на канал, при обрыве — новое соединение
+              def connect():
+                  tt = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+                  tt.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
+                  c = paramiko.SFTPClient.from_transport(tt)
+                  c.get_channel().settimeout(60)
+                  return tt, c
+              tt, c = connect()
               while True:
                   try: r, l = q.get_nowait()
                   except queue.Empty: break
-                  try: c.get(r, l)
-                  except Exception as ex: print('пропуск', r, ex)
+                  for attempt in (1, 2):
+                      try:
+                          c.get(r, l)
+                          break
+                      except Exception as ex:
+                          print('пропуск' if attempt == 2 else 'повтор', r, ex)
+                          try: tt.close()
+                          except Exception: pass
+                          tt, c = connect()
               tt.close()
           ts = [threading.Thread(target=worker) for _ in range(12)]
           for t_ in ts: t_.start()
