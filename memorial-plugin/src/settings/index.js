@@ -1192,79 +1192,87 @@ function App( { option } ) {
 						className="memorial-plugin-settings__cards"
 						disabled={ ! masterOn }
 					>
-					{ withTabs( page.fields, ( def ) =>
-						def.type === 'note' ? (
-							<Note key={ def.id } def={ def } />
-						) : (
-							<Card
-								key={ def.id }
-								className="memorial-plugin-settings__card"
-							>
-								<CardHeader>
-									<h2 className="memorial-plugin-settings__card-title">
-										{ def.label || def.id }
-										{ String( def.help ?? '' ).length >
-											HINT_FROM && (
-											<Hint text={ def.help } />
-										) }
-									</h2>
-								</CardHeader>
-								<CardBody>
-									{ def.type === 'group' ? (
-										<>
-											{ String( def.help ?? '' ).length <=
+						{ withTabs( page.fields, ( def ) =>
+							def.type === 'note' ? (
+								<Note key={ def.id } def={ def } />
+							) : (
+								<Card
+									key={ def.id }
+									className="memorial-plugin-settings__card"
+								>
+									<CardHeader>
+										<h2 className="memorial-plugin-settings__card-title">
+											{ def.label || def.id }
+											{ String( def.help ?? '' ).length >
 												HINT_FROM && (
-												<Help text={ def.help } />
+												<Hint text={ def.help } />
 											) }
-											<FieldsForm
-												defs={ ( def.fields || [] ).filter(
-													( f ) =>
-														! master ||
-														def.id !== master.group ||
-														f.id !== master.field
+										</h2>
+									</CardHeader>
+									<CardBody>
+										{ def.type === 'group' ? (
+											<>
+												{ String( def.help ?? '' )
+													.length <= HINT_FROM && (
+													<Help text={ def.help } />
 												) }
-												data={ value[ def.id ] || {} }
+												<FieldsForm
+													defs={ (
+														def.fields || []
+													).filter(
+														( f ) =>
+															! master ||
+															def.id !==
+																master.group ||
+															f.id !==
+																master.field
+													) }
+													data={
+														value[ def.id ] || {}
+													}
+													onChange={ ( edits ) => {
+														setValue( ( v ) => ( {
+															...v,
+															[ def.id ]: {
+																...( v[
+																	def.id
+																] || {} ),
+																...edits,
+															},
+														} ) );
+														setDirty( true );
+													} }
+												/>
+											</>
+										) : (
+											<FieldsForm
+												defs={ [
+													{
+														...def,
+														hideLabel: true,
+														// A long explanation is behind “?” next to the card title.
+														help:
+															String(
+																def.help ?? ''
+															).length > HINT_FROM
+																? ''
+																: def.help,
+													},
+												] }
+												data={ value }
 												onChange={ ( edits ) => {
 													setValue( ( v ) => ( {
 														...v,
-														[ def.id ]: {
-															...( v[ def.id ] ||
-																{} ),
-															...edits,
-														},
+														...edits,
 													} ) );
 													setDirty( true );
 												} }
 											/>
-										</>
-									) : (
-										<FieldsForm
-											defs={ [
-												{
-													...def,
-													hideLabel: true,
-													// A long explanation is behind “?” next to the card title.
-													help:
-														String( def.help ?? '' )
-															.length > HINT_FROM
-															? ''
-															: def.help,
-												},
-											] }
-											data={ value }
-											onChange={ ( edits ) => {
-												setValue( ( v ) => ( {
-													...v,
-													...edits,
-												} ) );
-												setDirty( true );
-											} }
-										/>
-									) }
-								</CardBody>
-							</Card>
-						)
-					) }
+										) }
+									</CardBody>
+								</Card>
+							)
+						) }
 					</fieldset>
 					<div
 						className={
