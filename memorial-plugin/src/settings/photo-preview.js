@@ -269,10 +269,7 @@ function frameOf( src, crop, bg ) {
 				}
 			}
 		}
-		if (
-			x1 >= 0 &&
-			( x1 - x0 + 1 ) * ( y1 - y0 + 1 ) >= 0.05 * sw * sh
-		) {
+		if ( x1 >= 0 && ( x1 - x0 + 1 ) * ( y1 - y0 + 1 ) >= 0.05 * sw * sh ) {
 			const k = w / sw;
 			bx = Math.floor( x0 * k );
 			by = Math.floor( y0 * k );
@@ -348,10 +345,20 @@ async function processOf( base, recipe, logo ) {
 			1,
 			Math.round( ( out.width * Number( recipe.logo.size ) ) / 100 )
 		);
-		const lh = Math.round( ( logo.naturalHeight * lw ) / logo.naturalWidth );
-		const mg = Math.round( ( out.width * Number( recipe.logo.margin ) ) / 100 );
+		const lh = Math.round(
+			( logo.naturalHeight * lw ) / logo.naturalWidth
+		);
+		const mg = Math.round(
+			( out.width * Number( recipe.logo.margin ) ) / 100
+		);
 		ctx.globalAlpha = Number( recipe.logo.opacity ) / 100;
-		ctx.drawImage( logo, out.width - lw - mg, out.height - lh - mg, lw, lh );
+		ctx.drawImage(
+			logo,
+			out.width - lw - mg,
+			out.height - lh - mg,
+			lw,
+			lh
+		);
 		ctx.globalAlpha = 1;
 	}
 	return out;
@@ -372,8 +379,14 @@ function Report() {
 		return <Spinner />;
 	}
 	const restore = async () => {
-		// eslint-disable-next-line no-alert
-		if ( ! window.confirm( __( 'Return the originals of all photos and switch the processing off?', 'memorial-plugin' ) ) ) {
+		if (
+			! window.confirm(
+				__(
+					'Return the originals of all photos and switch the processing off?',
+					'memorial-plugin'
+				)
+			)
+		) {
 			return;
 		}
 		setBusy( true );
@@ -396,9 +409,12 @@ function Report() {
 				{ data.state?.wait
 					? sprintf(
 							/* translators: %d: number of photos. */
-							__( 'Waiting for the background from GitHub Actions: %d.', 'memorial-plugin' ),
+							__(
+								'Waiting for the background from GitHub Actions: %d.',
+								'memorial-plugin'
+							),
 							data.state.wait
-					  )
+						)
 					: '' }
 			</p>
 			{ data.processed > 0 && (
@@ -431,7 +447,9 @@ function Report() {
 									{ r.problems
 										.map(
 											( p ) =>
-												PROBLEMS[ p.split( ':' )[ 0 ] ] || p
+												PROBLEMS[
+													p.split( ':' )[ 0 ]
+												] || p
 										)
 										.join( ', ' ) }
 								</span>
@@ -455,7 +473,9 @@ export default function PhotoPreview( { value } ) {
 
 	useEffect( () => {
 		apiFetch( {
-			path: '/memorial-plugin/v1/photos/samples' + ( chosen ? '?id=' + chosen : '' ),
+			path:
+				'/memorial-plugin/v1/photos/samples' +
+				( chosen ? '?id=' + chosen : '' ),
 		} )
 			.then( setData )
 			.catch( ( e ) => setError( e.message ) );
@@ -490,7 +510,7 @@ export default function PhotoPreview( { value } ) {
 					recipe.logo && data.logo
 						? await loadImage(
 								value.logo?.file || data.logo
-						  ).catch( () => null )
+							).catch( () => null )
 						: null;
 				const out = await processOf( base, recipe, logo );
 				if ( ! stop && holder.current ) {
@@ -542,13 +562,15 @@ export default function PhotoPreview( { value } ) {
 							__nextHasNoMarginBottom
 							label={ __( 'Photo', 'memorial-plugin' ) }
 							value={ String( photo?.id || '' ) }
-							options={ ( data.all || data.items ).map( ( p ) => ( {
-								value: String( p.id ),
-								label:
-									( KINDS[ p.kind ] || '' ) +
-									': ' +
-									( p.title || p.id ),
-							} ) ) }
+							options={ ( data.all || data.items ).map(
+								( p ) => ( {
+									value: String( p.id ),
+									label:
+										( KINDS[ p.kind ] || '' ) +
+										': ' +
+										( p.title || p.id ),
+								} )
+							) }
 							onChange={ ( v ) => setChosen( Number( v ) ) }
 						/>
 						<ToggleGroupControl
