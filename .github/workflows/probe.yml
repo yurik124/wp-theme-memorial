@@ -77,18 +77,19 @@ jobs:
 
       # uploads между прогонами — из кэша Actions: хостинг не любит много SSH-соединений подряд
       - name: Кэш uploads
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: uploads
           key: probe-uploads-${{ github.run_id }}
           restore-keys: probe-uploads-
 
       - name: Скачать базу и uploads (только чтение)
-        timeout-minutes: 25
+        timeout-minutes: 45
         env:
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
           if [ -f after/tests/probe/run.env ]; then set -a; . after/tests/probe/run.env; set +a; fi
+          echo "PROBE_UPLOADS=${PROBE_UPLOADS:-0}" >> "$GITHUB_ENV"
           # paramiko из PyPI, а не lftp из apt: зеркала apt на раннерах бывают недоступны
           pip install -q paramiko
           mkdir -p data uploads
@@ -106,7 +107,7 @@ jobs:
           print('база скачана')
           with gzip.open('data/db.sql.gz', 'rb') as a, open('data/db.sql', 'wb') as b:
               shutil.copyfileobj(a, b)
-          # список файлов — одним соединением, скачивание — в 4 потока (по своему соединению на поток)
+          # список файлов — одним соединением, скачивание — в 8 потоков (по своему соединению на поток)
           files = []
           def walk(remote, local):
               os.makedirs(local, exist_ok=True)
@@ -124,6 +125,7 @@ jobs:
           print(len(files), 'файлов')
           import threading, queue
           q = queue.Queue()
+          done = []
           for f in files: q.put(f)
           def worker():
               # зависший файл не должен вешать прогон: таймаут на канал, при обрыве — пауза и новое соединение
@@ -147,6 +149,8 @@ jobs:
                   for attempt in (1, 2):
                       try:
                           c.get(r, l)
+                          done.append(1)
+                          if len(done) % 500 == 0: print('скачано', len(done), 'из', len(files))
                           break
                       except Exception as ex:
                           print('пропуск' if attempt == 2 else 'повтор', r, ex)
@@ -155,11 +159,19 @@ jobs:
                           tt, c = connect()
                           if not c: break
               if tt: tt.close()
-          ts = [threading.Thread(target=worker) for _ in range(4)]
+          ts = [threading.Thread(target=worker) for _ in range(8)]
           for t_ in ts: t_.start()
           for t_ in ts: t_.join()
           PY
           du -sh data uploads
+
+      # скачанное сохраняется даже при обрыве — следующий прогон докачает только недостающее
+      - name: Сохранить uploads в кэш
+        if: always() && env.PROBE_UPLOADS == '1'
+        uses: actions/cache/save@v4
+        with:
+          path: uploads
+          key: probe-uploads-${{ github.run_id }}
 
       - name: WordPress со старыми темой и плагином
         run: |
