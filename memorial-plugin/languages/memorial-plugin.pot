@@ -654,7 +654,7 @@ msgstr ""
 msgid "Advantages (with laurel leaves)"
 msgstr ""
 
-#: src/settings/photo-preview.js:722
+#: src/settings/photo-preview.js:789
 msgid "After"
 msgstr ""
 
@@ -674,7 +674,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: src/settings/index.js:1204
+#: src/settings/index.js:1212
 msgid "All changes are saved"
 msgstr ""
 
@@ -898,7 +898,7 @@ msgstr ""
 msgid "Banner text — “Only notify”"
 msgstr ""
 
-#: src/settings/photo-preview.js:718 src/settings/photo-preview.js:740
+#: src/settings/photo-preview.js:785 src/settings/photo-preview.js:807
 msgid "Before"
 msgstr ""
 
@@ -930,7 +930,7 @@ msgstr ""
 msgid "Block with numbers"
 msgstr ""
 
-#: src/settings/photo-preview.js:752
+#: src/settings/photo-preview.js:819
 msgid "Border"
 msgstr ""
 
@@ -1080,7 +1080,7 @@ msgstr ""
 msgid "Can stay empty. {price:code} puts in a price."
 msgstr ""
 
-#: src/catalog/import.js:609 src/catalog/inline-edit.js:239 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/settings/photo-preview.js:509 src/collections/index.js:326
+#: src/catalog/import.js:609 src/catalog/inline-edit.js:239 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/settings/photo-preview.js:569 src/collections/index.js:326
 msgid "Cancel"
 msgstr ""
 
@@ -1446,7 +1446,7 @@ msgstr ""
 msgid "Company’s reply"
 msgstr ""
 
-#: src/settings/photo-preview.js:726
+#: src/settings/photo-preview.js:793
 msgid "Compare"
 msgstr ""
 
@@ -1761,7 +1761,7 @@ msgstr ""
 msgid "Do not fill in"
 msgstr ""
 
-#: pages/photo-tools.php:1464
+#: pages/photo-tools.php:1535
 msgid "Do not process"
 msgstr ""
 
@@ -2024,6 +2024,12 @@ msgstr ""
 
 #: seo/seo-registry.php:198
 msgid "Facebook title (SEOPress)"
+msgstr ""
+
+#. translators: %d: number of photos.
+#: src/settings/photo-preview.js:530
+#, php-format
+msgid "Failed: %d — tried again after the settings change."
 msgstr ""
 
 #: places/places.php:296
@@ -2580,6 +2586,12 @@ msgstr ""
 
 #: pages/photo-tools.php:147
 msgid "In the lower right corner. Without an own file — the current logo of the site with its name, the picture is made on this screen. On small copies (catalog cards) it is not put: it would be unreadable."
+msgstr ""
+
+#. translators: %d: number of photos.
+#: src/settings/photo-preview.js:504
+#, php-format
+msgid "In the queue: %d — a few a minute, the counter updates itself."
 msgstr ""
 
 #: src/editor-meta/index.js:276
@@ -3193,7 +3205,7 @@ msgstr ""
 msgid "No photo"
 msgstr ""
 
-#: src/settings/photo-preview.js:772
+#: src/settings/photo-preview.js:837
 msgid "No photos to show yet."
 msgstr ""
 
@@ -3612,6 +3624,12 @@ msgstr ""
 msgid "Organisation on Yandex Maps — number or link"
 msgstr ""
 
+#. translators: %d: number of photos.
+#: src/settings/photo-preview.js:517
+#, php-format
+msgid "Originals being returned: %d."
+msgstr ""
+
 #: core/icons-api.php:37
 msgid "Orthodox cross"
 msgstr ""
@@ -3782,7 +3800,7 @@ msgstr ""
 msgid "Phones, messengers, addresses with routes, maps and company details."
 msgstr ""
 
-#: catalog/catalog-front.php:432 src/catalog/fields.js:68 src/settings/photo-preview.js:695 works/works.php:223 blocks/content/content-blocks.php:447
+#: catalog/catalog-front.php:432 src/catalog/fields.js:68 src/settings/photo-preview.js:762 works/works.php:223 blocks/content/content-blocks.php:447
 msgid "Photo"
 msgstr ""
 
@@ -3860,7 +3878,7 @@ msgstr ""
 msgid "Photo on the right (mourning hall — light, daylight)"
 msgstr ""
 
-#: pages/photo-tools.php:321 pages/photo-tools.php:1462
+#: pages/photo-tools.php:321 pages/photo-tools.php:1533
 msgid "Photo processing"
 msgstr ""
 
@@ -3893,7 +3911,7 @@ msgid "Photos of the pages"
 msgstr ""
 
 #. translators: %d: number of photos.
-#: src/settings/photo-preview.js:519
+#: src/settings/photo-preview.js:579
 #, php-format
 msgid "Photos to look at: %d"
 msgstr ""
@@ -3948,7 +3966,7 @@ msgstr ""
 msgid "Post IDs (at most 10 per call)."
 msgstr ""
 
-#: src/settings/photo-preview.js:680
+#: src/settings/photo-preview.js:747
 msgid "Preview"
 msgstr ""
 
@@ -4058,12 +4076,13 @@ msgstr ""
 msgid "Process the photos — all the functions below"
 msgstr ""
 
-#: src/settings/photo-preview.js:474
+#. translators: 1: processed photos, 2: photos to process.
+#: src/settings/photo-preview.js:492
 #, php-format
-msgid "Processed: %1$d of %2$d."
+msgid "Processed with the current settings: %1$d of %2$d."
 msgstr ""
 
-#: src/settings/photo-preview.js:763
+#: src/settings/photo-preview.js:828
 msgid "Processing is switched off: the site shows the originals. The preview shows what the photos will look like when it is on."
 msgstr ""
 
@@ -4379,15 +4398,15 @@ msgstr ""
 msgid "Restores the text and SEO fields of a post from before its conversion to blocks."
 msgstr ""
 
-#: src/settings/photo-preview.js:503
+#: src/settings/photo-preview.js:563
 msgid "Return"
 msgstr ""
 
-#: src/settings/photo-preview.js:486
+#: src/settings/photo-preview.js:546
 msgid "Return all originals"
 msgstr ""
 
-#: src/settings/photo-preview.js:492
+#: src/settings/photo-preview.js:552
 msgid "Return the originals of all photos and switch the processing off?"
 msgstr ""
 
@@ -4849,7 +4868,7 @@ msgstr ""
 msgid "Short text."
 msgstr ""
 
-#: src/settings/photo-preview.js:712
+#: src/settings/photo-preview.js:779
 msgid "Show"
 msgstr ""
 
@@ -5375,7 +5394,7 @@ msgstr ""
 msgid "The packages themselves, their contents and prices — in “Memorial → Prices”."
 msgstr ""
 
-#: src/settings/photo-preview.js:655
+#: src/settings/photo-preview.js:722
 msgid "The photo could not be loaded."
 msgstr ""
 
@@ -5515,7 +5534,7 @@ msgstr ""
 msgid "There are several files named %s — write the folder too, e.g. foto/M-1/1.jpg."
 msgstr ""
 
-#: src/settings/index.js:1200
+#: src/settings/index.js:1208
 msgid "There are unsaved changes"
 msgstr ""
 

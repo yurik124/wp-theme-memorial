@@ -469,9 +469,16 @@ function Report() {
 	useEffect( () => {
 		load();
 	}, [] );
+	// While the photos are being processed or returned — the counter is refreshed every 10 seconds
+	// (also after “Save”: the server sees the new settings, the counter goes down and up again).
+	useEffect( () => {
+		const timer = window.setInterval( load, 10000 );
+		return () => window.clearInterval( timer );
+	}, [] );
 	if ( ! data ) {
 		return <Spinner />;
 	}
+	const prog = data.progress || {};
 	const restore = async () => {
 		setAsk( false );
 		setBusy( true );
@@ -487,12 +494,54 @@ function Report() {
 			<p>
 				{ sprintf(
 					/* translators: 1: processed photos, 2: photos to process. */
-					__( 'Processed: %1$d of %2$d.', 'memorial-plugin' ),
-					data.processed || 0,
-					data.scope || 0
+					__(
+						'Processed with the current settings: %1$d of %2$d.',
+						'memorial-plugin'
+					),
+					prog.current || 0,
+					prog.scope || 0
+				) }
+				{ prog.queued > 0 && (
+					<>
+						<br />
+						{ sprintf(
+							/* translators: %d: number of photos. */
+							__(
+								'In the queue: %d — a few a minute, the counter updates itself.',
+								'memorial-plugin'
+							),
+							prog.queued
+						) }
+					</>
+				) }
+				{ prog.returning > 0 && (
+					<>
+						<br />
+						{ sprintf(
+							/* translators: %d: number of photos. */
+							__(
+								'Originals being returned: %d.',
+								'memorial-plugin'
+							),
+							prog.returning
+						) }
+					</>
+				) }
+				{ prog.errors > 0 && (
+					<>
+						<br />
+						{ sprintf(
+							/* translators: %d: number of photos. */
+							__(
+								'Failed: %d — tried again after the settings change.',
+								'memorial-plugin'
+							),
+							prog.errors
+						) }
+					</>
 				) }
 			</p>
-			{ data.processed > 0 && ! ask && (
+			{ data.kept > 0 && ! ask && (
 				<Button
 					variant="secondary"
 					isDestructive

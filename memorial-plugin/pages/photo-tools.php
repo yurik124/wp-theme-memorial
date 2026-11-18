@@ -923,7 +923,7 @@ function memorial_plugin_photo_save( $im, $file ) {
  */
 function memorial_plugin_photo_process( $id, $kind, $type ) {
 	$recipe = memorial_plugin_photo_recipe( $kind, $type );
-	$ver    = substr( md5( wp_json_encode( $recipe ) ), 0, 8 );
+	$ver    = memorial_plugin_photo_ver( $kind, $type );
 	if ( get_post_meta( $id, '_mem_photo_ver', true ) === $ver ) {
 		return 'same';
 	}
@@ -1109,19 +1109,34 @@ function memorial_plugin_photo_batch() {
 			++$done;
 		}
 	}
+	$errors = (array) get_option( 'memorial_plugin_photos_errors', array() );
 	foreach ( $scope as $id => [ $kind, $type ] ) {
-		$ver = substr( md5( wp_json_encode( memorial_plugin_photo_recipe( $kind, $type ) ) ), 0, 8 );
+		$ver = memorial_plugin_photo_ver( $kind, $type );
 		if ( get_post_meta( $id, '_mem_photo_ver', true ) === $ver ) {
+			continue;
+		}
+		// Failed with these settings already: not again every minute — again when the settings change.
+		if ( ( $errors[ $id ]['ver'] ?? '' ) === $ver ) {
 			continue;
 		}
 		if ( microtime( true ) - $start > 20 ) {
 			++$left;
 			continue;
 		}
-		if ( 'done' === memorial_plugin_photo_process( $id, $kind, $type ) ) {
-			++$done;
+		$res = memorial_plugin_photo_process( $id, $kind, $type );
+		if ( is_wp_error( $res ) ) {
+			$errors[ $id ] = array(
+				'ver'  => $ver,
+				'code' => $res->get_error_code(),
+			);
+		} else {
+			unset( $errors[ $id ] );
+			if ( 'done' === $res ) {
+				++$done;
+			}
 		}
 	}
+	update_option( 'memorial_plugin_photos_errors', array_intersect_key( $errors, $scope ), false );
 	if ( ! empty( $s['report']['on'] ) && ( $done || ! get_option( 'memorial_plugin_photos_report' ) ) && microtime( true ) - $start < 40 ) {
 		update_option( 'memorial_plugin_photos_report', memorial_plugin_photo_report(), false );
 	}
@@ -1321,7 +1336,15 @@ add_action(
 				'methods'             => 'GET',
 				'permission_callback' => $can,
 				'callback'            => static function () {
-					$state = get_option( 'memorial_plugin_photos_state', array() );
+					$state    = get_option( 'memorial_plugin_photos_state', array() );
+					$progress = memorial_plugin_photo_progress();
+					// The screen is open and there is work: WP-Cron is started now, not on the next visit to the site.
+					if ( $progress['queued'] || $progress['returning'] ) {
+						memorial_plugin_photo_queue();
+						if ( function_exists( 'spawn_cron' ) ) {
+							spawn_cron();
+						}
+					}
 					return rest_ensure_response(
 						array(
 							'items'     => array_map(
@@ -1334,8 +1357,8 @@ add_action(
 								(array) get_option( 'memorial_plugin_photos_report', array() )
 							),
 							'state'     => $state,
-							'processed' => count( memorial_plugin_photo_processed_ids() ),
-							'scope'     => count( memorial_plugin_photo_scope() ),
+							'progress'  => $progress,
+							'kept'      => count( memorial_plugin_photo_processed_ids() ),
 						)
 					);
 				},
@@ -1373,7 +1396,55 @@ add_action(
 );
 
 /**
- * IDs of the processed photos.
+ * The version of the saved settings for a photo of this kind and type: the processed photo keeps it in _mem_photo_ver.
+ *
+ * @param string $kind product, work or page.
+ * @param string $type Product type (slug of the root section).
+ * @return string 8 characters.
+ */
+function memorial_plugin_photo_ver( $kind, $type ) {
+	return substr( md5( wp_json_encode( memorial_plugin_photo_recipe( $kind, $type ) ) ), 0, 8 );
+}
+
+/**
+ * How far the processing is with the saved settings — for the counter of the screen.
+ *
+ * @return array{scope:int,current:int,queued:int,errors:int,returning:int}
+ */
+function memorial_plugin_photo_progress() {
+	$s      = memorial_plugin_photos();
+	$scope  = ! empty( $s['main']['on'] ) ? memorial_plugin_photo_scope() : array();
+	$errors = (array) get_option( 'memorial_plugin_photos_errors', array() );
+	$vers   = array();
+	$out    = array(
+		'scope'     => count( $scope ),
+		'current'   => 0,
+		'queued'    => 0,
+		'errors'    => 0,
+		'returning' => 0,
+	);
+	update_meta_cache( 'post', array_keys( $scope ) );
+	foreach ( $scope as $id => [ $kind, $type ] ) {
+		$vers[ $kind . '|' . $type ] ??= memorial_plugin_photo_ver( $kind, $type );
+		$ver = $vers[ $kind . '|' . $type ];
+		if ( get_post_meta( $id, '_mem_photo_ver', true ) === $ver ) {
+			++$out['current'];
+		} elseif ( ( $errors[ $id ]['ver'] ?? '' ) === $ver ) {
+			++$out['errors'];
+		} else {
+			++$out['queued'];
+		}
+	}
+	foreach ( memorial_plugin_photo_processed_ids() as $id ) {
+		if ( ! isset( $scope[ $id ] ) ) {
+			++$out['returning'];
+		}
+	}
+	return $out;
+}
+
+/**
+ * The photos with an original kept (processed at least once, with any settings).
  *
  * @return int[]
  */

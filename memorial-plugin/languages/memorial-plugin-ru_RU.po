@@ -8215,3 +8215,19 @@ msgstr "Какие фото"
 
 msgid "Process the photos — all the functions below"
 msgstr "Обрабатывать фото — все функции ниже"
+
+#. translators: %d: number of photos.
+msgid "Failed: %d — tried again after the settings change."
+msgstr "Не удалось: %d — повтор после смены настроек."
+
+#. translators: %d: number of photos.
+msgid "In the queue: %d — a few a minute, the counter updates itself."
+msgstr "В очереди: %d — по несколько в минуту, счётчик обновляется сам."
+
+#. translators: %d: number of photos.
+msgid "Originals being returned: %d."
+msgstr "Возвращаются оригиналы: %d."
+
+#. translators: 1: processed photos, 2: photos to process.
+msgid "Processed with the current settings: %1$d of %2$d."
+msgstr "Обработано по текущим настройкам: %1$d из %2$d."
