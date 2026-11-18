@@ -478,7 +478,7 @@ function Report() {
 	if ( ! data ) {
 		return <Spinner />;
 	}
-	const p = data.progress || {};
+	const prog = data.progress || {};
 	const restore = async () => {
 		setAsk( false );
 		setBusy( true );
@@ -498,10 +498,10 @@ function Report() {
 						'Processed with the current settings: %1$d of %2$d.',
 						'memorial-plugin'
 					),
-					p.current || 0,
-					p.scope || 0
+					prog.current || 0,
+					prog.scope || 0
 				) }
-				{ p.queued > 0 && (
+				{ prog.queued > 0 && (
 					<>
 						<br />
 						{ sprintf(
@@ -510,11 +510,11 @@ function Report() {
 								'In the queue: %d — a few a minute, the counter updates itself.',
 								'memorial-plugin'
 							),
-							p.queued
+							prog.queued
 						) }
 					</>
 				) }
-				{ p.returning > 0 && (
+				{ prog.returning > 0 && (
 					<>
 						<br />
 						{ sprintf(
@@ -523,11 +523,11 @@ function Report() {
 								'Originals being returned: %d.',
 								'memorial-plugin'
 							),
-							p.returning
+							prog.returning
 						) }
 					</>
 				) }
-				{ p.errors > 0 && (
+				{ prog.errors > 0 && (
 					<>
 						<br />
 						{ sprintf(
@@ -536,7 +536,7 @@ function Report() {
 								'Failed: %d — tried again after the settings change.',
 								'memorial-plugin'
 							),
-							p.errors
+							prog.errors
 						) }
 					</>
 				) }
