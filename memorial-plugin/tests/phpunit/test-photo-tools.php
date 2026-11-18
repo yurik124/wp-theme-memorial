@@ -48,6 +48,56 @@ class Test_Memorial_Plugin_Photo_Tools extends WP_UnitTestCase {
 		return $att;
 	}
 
+	/**
+	 * The counter: by the version of the saved settings — after a change it goes down to 0 and up again.
+	 * A broken photo is not tried every minute: again only after the settings change.
+	 */
+	public function test_progress_follows_the_settings() {
+		$a   = $this->product_photo( 'groby' );
+		$b   = $this->product_photo( 'groby' );
+		$set = array(
+			'main'  => array(
+				'on'      => 1,
+				'product' => 1,
+			),
+			'color' => array(
+				'on'       => 1,
+				'contrast' => '5',
+			),
+		);
+		update_option( 'mem_photos', $set );
+		delete_transient( 'memorial_plugin_photo_lock' );
+		memorial_plugin_photo_batch();
+		$p = memorial_plugin_photo_progress();
+		$this->assertSame( 2, $p['scope'] );
+		$this->assertSame( 2, $p['current'] );
+		$this->assertSame( 0, $p['queued'] );
+
+		$set['color']['contrast'] = '10';
+		update_option( 'mem_photos', $set );
+		$p = memorial_plugin_photo_progress();
+		$this->assertSame( 0, $p['current'], 'New settings: nothing is processed with them yet.' );
+		$this->assertSame( 2, $p['queued'] );
+
+		// The file of one photo is gone: it fails once and waits for the next change of the settings.
+		wp_delete_file( get_attached_file( $b ) );
+		$saved = get_post_meta( $b, '_mem_photo_orig', true );
+		wp_delete_file( path_join( wp_get_upload_dir()['basedir'], $saved['file'] ) );
+		delete_transient( 'memorial_plugin_photo_lock' );
+		memorial_plugin_photo_batch();
+		$p = memorial_plugin_photo_progress();
+		$this->assertSame( 1, $p['current'] );
+		$this->assertSame( 1, $p['errors'] );
+		$this->assertSame( 0, $p['queued'] );
+		$this->assertSame( 0, memorial_plugin_photo_batch()['left'], 'The broken photo is not in the queue again.' );
+
+		update_option( 'mem_photos', array( 'main' => array( 'on' => 0 ) ) );
+		$p = memorial_plugin_photo_progress();
+		$this->assertSame( 0, $p['scope'] );
+		$this->assertGreaterThan( 0, $p['returning'], 'Switched off: the processed photos get their originals back.' );
+		$this->assertNotEmpty( $a );
+	}
+
 	public function test_steps_and_defaults() {
 		$this->assertSame( '−10', memorial_plugin_photo_steps( 10, 5 )['-10'] );
 		$this->assertSame( '+5', memorial_plugin_photo_steps( 10, 5 )['5'] );
