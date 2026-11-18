@@ -53,10 +53,8 @@ class Test_Memorial_Plugin_Photo_Tools extends WP_UnitTestCase {
 		$this->assertSame( '+5', memorial_plugin_photo_steps( 10, 5 )['5'] );
 		$s = memorial_plugin_photos();
 		$this->assertSame( 0, (int) $s['main']['on'], 'Off until the owner switches it on.' );
-		foreach ( MEMORIAL_PLUGIN_PHOTO_BG_TYPES as $slug ) {
-			$this->assertSame( 1, (int) $s['bg'][ 'type_' . $slug ] );
-		}
-		$this->assertSame( '#fbfaf6', memorial_plugin_photo_hex( 'nonsense' ) );
+		$this->assertArrayNotHasKey( 'bg', $s, 'No background replacement on the site (owner, 18.11.2026).' );
+		$this->assertArrayNotHasKey( 'srgb', $s['clean'] );
 	}
 
 	public function test_luts_stretch_and_keep_order() {
@@ -147,6 +145,18 @@ class Test_Memorial_Plugin_Photo_Tools extends WP_UnitTestCase {
 		$this->assertSame( 'white-1', memorial_plugin_photo_logo_variant(), 'Defaults: white, with the name.' );
 		$this->assertSame( 'k1', memorial_plugin_photo_logo_source()['keys']->{'white-1'} );
 		$this->assertSame( 'site-0', memorial_plugin_photo_logo_variant( array( 'tint' => 'site' ) ) );
+		$this->assertSame(
+			'white-0-p',
+			memorial_plugin_photo_logo_variant(
+				array(
+					'text'  => 0,
+					'plate' => 1,
+				)
+			),
+			'Dark background: “-p”.'
+		);
+		$this->assertTrue( memorial_plugin_photo_logo_save( $png, 'k3', 'site-1-p' ) );
+		wp_delete_file( memorial_plugin_photo_logo_made( 'site-1-p' ) );
 		wp_delete_file( memorial_plugin_photo_logo_made( 'white-1' ) );
 		wp_delete_file( memorial_plugin_photo_logo_made( 'site-0' ) );
 	}
@@ -192,41 +202,30 @@ class Test_Memorial_Plugin_Photo_Tools extends WP_UnitTestCase {
 		$this->assertFileDoesNotExist( $new, 'The processed file is removed.' );
 	}
 
-	public function test_background_waits_for_actions() {
+	/**
+	 * Settings saved before 18.11.2026 with a background and sRGB: nothing waits, the photo is processed here.
+	 */
+	public function test_old_background_settings_are_ignored() {
 		$att = $this->product_photo( 'venki' );
 		update_option(
 			'mem_photos',
 			array(
-				'main' => array(
+				'main'  => array(
 					'on'      => 1,
 					'product' => 1,
 				),
-				'bg'   => array(
+				'color' => array( 'on' => 1 ),
+				'bg'    => array(
 					'on'         => 1,
 					'type_venki' => 1,
 				),
+				'clean' => array( 'srgb' => 1 ),
 			)
 		);
-		$this->assertSame( 'wait', memorial_plugin_photo_process( $att, 'product', 'venki' ) );
-
-		// The prepared copy of Actions: the object on a transparent background.
 		$recipe = memorial_plugin_photo_recipe( 'product', 'venki' );
-		$dir    = wp_get_upload_dir()['basedir'] . '/memorial-photos/stage';
-		wp_mkdir_p( $dir );
-		$png = imagecreatetruecolor( 400, 600 );
-		imagesavealpha( $png, true );
-		imagealphablending( $png, false );
-		imagefill( $png, 0, 0, imagecolorallocatealpha( $png, 0, 0, 0, 127 ) );
-		imagefilledellipse( $png, 200, 300, 200, 400, imagecolorallocate( $png, 40, 120, 60 ) );
-		imagepng( $png, $dir . '/' . $att . '-' . memorial_plugin_photo_stage_key( $recipe ) . '.png' );
-
+		$this->assertArrayNotHasKey( 'bg', $recipe );
+		$this->assertArrayNotHasKey( 'srgb', $recipe );
 		$this->assertSame( 'done', memorial_plugin_photo_process( $att, 'product', 'venki' ) );
-		$im = memorial_plugin_photo_load( get_attached_file( $att ) );
-		$c  = imagecolorat( $im, 2, 2 );
-		// The corner is the background colour of the site (JPEG may move a tone by one or two).
-		$this->assertEqualsWithDelta( 0xfb, ( $c >> 16 ) & 255, 3 );
-		$this->assertEqualsWithDelta( 0xfa, ( $c >> 8 ) & 255, 3 );
-		$this->assertEqualsWithDelta( 0xf6, $c & 255, 3 );
 	}
 
 	public function test_report_finds_small_and_no_description() {

@@ -175,6 +175,8 @@ function memorial_plugin_settings_page_data( $opt ) {
 		'intro'   => wp_kses_post( (string) ( $p['intro'] ?? '' ) ),
 		// A panel next to the settings that shows their effect before saving (photos: pages/photo-tools.php).
 		'preview' => (string) ( $p['preview'] ?? '' ),
+		// One switch for the whole screen (photos: “Process the photos”): shown above the groups; off — they are inactive.
+		'master'  => isset( $p['master'] ) ? array_map( 'strval', (array) $p['master'] ) : null,
 		// The extra panels (tabs, Rewio status) are printed by PHP next to the app (with their own scripts) — see the container.
 		'extra'   => has_action( 'memorial_plugin_admin_tabs' ) || has_action( 'memorial_plugin_admin_after_intro' ),
 		'fields'  => memorial_plugin_settings_describe( call_user_func( $p['schema'] ) ),

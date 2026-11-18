@@ -2,7 +2,6 @@
  * Preview of «Memorial → Photo processing»: a photo of the site with the settings of the screen as they are now —
  * before saving. The formulas are the ones of pages/photo-tools.php (colour tables from a 200 px copy, saturation,
  * sharpness 3×3, frame of the object, logo), so the photo on the site looks the same.
- * The background is replaced in GitHub Actions: its samples come from the last run of “Photos — background”.
  * Under the photo: the state of the processing and the report of bad photos.
  */
 import {
@@ -66,15 +65,18 @@ const keyOf = ( text ) => {
 const variantOf = ( logo ) =>
 	( logo?.tint === 'site' ? 'site' : 'white' ) +
 	'-' +
-	( logo?.text && logo.text !== '0' ? '1' : '0' );
+	( logo?.text && logo.text !== '0' ? '1' : '0' ) +
+	( logo?.plate && logo.plate !== '0' ? '-p' : '' );
 
 // The current logo of the site as a picture: its mark (SVG) and the name in the font of the site.
-// White — with a soft shadow, so it is seen on a light and on a dark photo.
+// White — with a soft shadow, so it is seen on a light and on a dark photo. With a dark background (“-p”):
+// a circle under the mark alone, a rectangle under the mark with the name; the logo is light on it.
 async function makeLogo( src, variant ) {
-	const [ tint, text ] = variant.split( '-' );
+	const [ tint, text, plate ] = variant.split( '-' );
+	const dark = plate === 'p';
 	const mark = await loadImage( src.svg );
 	const size = 240;
-	const pad = 28;
+	const pad = dark ? 44 : 28;
 	let family = 'Georgia, serif';
 	const name = text === '1' ? src.name : '';
 	if ( name && src.font ) {
@@ -98,13 +100,41 @@ async function makeLogo( src, variant ) {
 	const gap = tw ? Math.round( size * 0.2 ) : 0;
 	const out = canvasOf( pad * 2 + size + gap + tw, pad * 2 + size );
 	const ctx = out.getContext( '2d' );
+	// Colours: white; as on the site; on the dark background — light ones of the site.
+	let markColor = '';
+	let textColor = src.ink;
+	if ( tint === 'white' ) {
+		markColor = '#fff';
+		textColor = '#fff';
+	} else if ( dark ) {
+		markColor = src.light || '#a9b796';
+		textColor = src.paper || '#fbfaf6';
+	}
+	if ( dark ) {
+		ctx.fillStyle = 'rgba(31,33,30,0.72)';
+		ctx.beginPath();
+		if ( tw ) {
+			ctx.roundRect( 0, 0, out.width, out.height, 18 );
+		} else {
+			ctx.arc(
+				out.width / 2,
+				out.height / 2,
+				out.width / 2,
+				0,
+				Math.PI * 2
+			);
+		}
+		ctx.fill();
+	}
 	const m = canvasOf( size, size );
 	const mc = m.getContext( '2d' );
 	mc.drawImage( mark, 0, 0, size, size );
-	if ( tint === 'white' ) {
+	if ( markColor ) {
 		mc.globalCompositeOperation = 'source-in';
-		mc.fillStyle = '#fff';
+		mc.fillStyle = markColor;
 		mc.fillRect( 0, 0, size, size );
+	}
+	if ( tint === 'white' && ! dark ) {
 		ctx.shadowColor = 'rgba(0,0,0,0.45)';
 		ctx.shadowBlur = 16;
 	}
@@ -112,22 +142,17 @@ async function makeLogo( src, variant ) {
 	if ( tw ) {
 		ctx.font = font;
 		ctx.textBaseline = 'middle';
-		ctx.fillStyle = tint === 'white' ? '#fff' : src.ink;
+		ctx.fillStyle = textColor;
 		ctx.fillText( name, pad + size + gap, pad + size / 2 );
 	}
 	return out;
 }
 
 // What is done to a photo — memorial_plugin_photo_recipe().
-function recipeOf( s, kind, type ) {
+function recipeOf( s, kind ) {
 	const r = {};
 	if ( s.color?.on ) {
 		r.color = s.color;
-	}
-	if ( kind === 'product' && s.bg?.on && s.bg[ 'type_' + type ] ) {
-		r.bg = /^#[0-9a-f]{6}$/i.test( s.bg.color || '' )
-			? s.bg.color
-			: '#fbfaf6';
 	}
 	if ( s.crop?.on ) {
 		const ratio = kind === 'product' ? s.crop.product : s.crop.work;
@@ -387,35 +412,23 @@ function frameOf( src, crop, bg, fit ) {
 	return { bx, by, bw, bh };
 }
 
-const hexOf = ( hex ) =>
-	[ 1, 3, 5 ].map( ( i ) => parseInt( hex.slice( i, i + 2 ), 16 ) );
-
-// The whole processing of one photo in the browser.
+// The whole processing of one photo in the browser — memorial_plugin_photo_process().
 async function processOf( base, recipe, logo ) {
 	const src = canvasOf( base.naturalWidth, base.naturalHeight );
 	src.getContext( '2d' ).drawImage( base, 0, 0 );
-	const bg = recipe.bg ? hexOf( recipe.bg ) : borderOf( sampleOf( src ) );
-	// С новым фоном сначала цвет самого предмета, потом он ложится на цвет фона.
-	if ( recipe.bg && recipe.color ) {
-		colorOf( src, recipe.color );
-	}
 	let out = src;
 	if ( recipe.crop ) {
-		const f = frameOf( src, recipe.crop, bg, ! recipe.bg );
+		// The photo keeps its own background: the frame is cut inside it.
+		const f = frameOf(
+			src,
+			recipe.crop,
+			borderOf( sampleOf( src ) ),
+			true
+		);
 		out = canvasOf( f.bw, f.bh );
-		const ctx = out.getContext( '2d' );
-		ctx.fillStyle = `rgb(${ bg[ 0 ] },${ bg[ 1 ] },${ bg[ 2 ] })`;
-		ctx.fillRect( 0, 0, f.bw, f.bh );
-		ctx.drawImage( src, -f.bx, -f.by );
-	} else if ( recipe.bg ) {
-		// The sample of Actions is transparent around the object: on the background colour.
-		out = canvasOf( src.width, src.height );
-		const ctx = out.getContext( '2d' );
-		ctx.fillStyle = recipe.bg;
-		ctx.fillRect( 0, 0, src.width, src.height );
-		ctx.drawImage( src, 0, 0 );
+		out.getContext( '2d' ).drawImage( src, -f.bx, -f.by );
 	}
-	if ( recipe.color && ! recipe.bg ) {
+	if ( recipe.color ) {
 		colorOf( out, recipe.color );
 	}
 	if ( recipe.logo && logo ) {
@@ -477,17 +490,7 @@ function Report() {
 					__( 'Processed: %1$d of %2$d.', 'memorial-plugin' ),
 					data.processed || 0,
 					data.scope || 0
-				) }{ ' ' }
-				{ data.state?.wait
-					? sprintf(
-							/* translators: %d: number of photos. */
-							__(
-								'Waiting for the background from GitHub Actions: %d.',
-								'memorial-plugin'
-							),
-							data.state.wait
-						)
-					: '' }
+				) }
 			</p>
 			{ data.processed > 0 && ! ask && (
 				<Button
@@ -586,10 +589,9 @@ export default function PhotoPreview( { value } ) {
 	}, [ data, chosen ] );
 
 	const recipe = useMemo(
-		() => ( photo ? recipeOf( value, photo.kind, photo.type ) : {} ),
+		() => ( photo ? recipeOf( value, photo.kind ) : {} ),
 		[ value, photo ]
 	);
-	const bgMissing = !! ( recipe.bg && photo && ! photo.bg );
 
 	// The logo of the site is SVG, the server cannot draw it: the picture is made here and kept on the site
 	// (every variant once; again when the logo or the name of the site changes).
@@ -609,7 +611,14 @@ export default function PhotoPreview( { value } ) {
 				}
 				setMade( canvas );
 				const key = keyOf(
-					[ src.svg, src.name, src.font, src.ink ].join( '|' )
+					[
+						src.svg,
+						src.name,
+						src.font,
+						src.ink,
+						src.light,
+						src.paper,
+					].join( '|' )
 				);
 				if ( src.keys?.[ variant ] !== key ) {
 					src.keys = { ...src.keys, [ variant ]: key };
@@ -643,9 +652,7 @@ export default function PhotoPreview( { value } ) {
 		const timer = setTimeout( async () => {
 			setBusy( true );
 			try {
-				const base = await loadImage(
-					recipe.bg && photo.bg ? photo.bg : photo.url
-				);
+				const base = await loadImage( photo.url );
 				let logo = null;
 				if ( recipe.logo && value.logo?.file ) {
 					logo = await loadImage( value.logo.file ).catch(
@@ -771,14 +778,6 @@ export default function PhotoPreview( { value } ) {
 								max={ 100 }
 								onChange={ ( v ) => setSplit( v ?? 50 ) }
 							/>
-						) }
-						{ bgMissing && (
-							<Notice status="info" isDismissible={ false }>
-								{ __(
-									'The background of this photo is not ready yet: run “Photos — background” in GitHub Actions (Actions → Photos — background → Run workflow); in 3–5 minutes the sample appears here. Until then the preview shows the rest without the new background.',
-									'memorial-plugin'
-								) }
-							</Notice>
 						) }
 						{ value.main && ! value.main.on && (
 							<Notice status="warning" isDismissible={ false }>

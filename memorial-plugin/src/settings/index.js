@@ -29,6 +29,7 @@ import {
 	TabPanel,
 	TextareaControl,
 	TextControl,
+	ToggleControl,
 	Flex,
 } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/media-utils';
@@ -1127,6 +1128,10 @@ function App( { option } ) {
 		</Flex>
 	);
 
+	const master = page.master;
+	const masterOn =
+		! master || !! Number( value[ master.group ]?.[ master.field ] );
+
 	return (
 		<Page title={ page.title } actions={ actions }>
 			<div
@@ -1155,74 +1160,120 @@ function App( { option } ) {
 						</Notice>
 					) }
 					<div ref={ extraRef } />
-					{ withTabs( page.fields, ( def ) =>
-						def.type === 'note' ? (
-							<Note key={ def.id } def={ def } />
-						) : (
-							<Card
-								key={ def.id }
-								className="memorial-plugin-settings__card"
-							>
-								<CardHeader>
-									<h2 className="memorial-plugin-settings__card-title">
-										{ def.label || def.id }
-										{ String( def.help ?? '' ).length >
-											HINT_FROM && (
-											<Hint text={ def.help } />
-										) }
-									</h2>
-								</CardHeader>
-								<CardBody>
-									{ def.type === 'group' ? (
-										<>
-											{ String( def.help ?? '' ).length <=
+					{ master && (
+						<Card
+							className={
+								'memorial-plugin-settings__master' +
+								( masterOn ? ' is-on' : '' )
+							}
+						>
+							<CardBody>
+								<ToggleControl
+									__nextHasNoMarginBottom
+									label={ master.label }
+									help={ masterOn ? master.on : master.off }
+									checked={ masterOn }
+									onChange={ ( on ) => {
+										setValue( ( v ) => ( {
+											...v,
+											[ master.group ]: {
+												...( v[ master.group ] || {} ),
+												[ master.field ]: on ? 1 : 0,
+											},
+										} ) );
+										setDirty( true );
+									} }
+								/>
+							</CardBody>
+						</Card>
+					) }
+					{ /* Off — every field below is inactive (a disabled fieldset disables all its controls). */ }
+					<fieldset
+						className="memorial-plugin-settings__cards"
+						disabled={ ! masterOn }
+					>
+						{ withTabs( page.fields, ( def ) =>
+							def.type === 'note' ? (
+								<Note key={ def.id } def={ def } />
+							) : (
+								<Card
+									key={ def.id }
+									className="memorial-plugin-settings__card"
+								>
+									<CardHeader>
+										<h2 className="memorial-plugin-settings__card-title">
+											{ def.label || def.id }
+											{ String( def.help ?? '' ).length >
 												HINT_FROM && (
-												<Help text={ def.help } />
+												<Hint text={ def.help } />
 											) }
+										</h2>
+									</CardHeader>
+									<CardBody>
+										{ def.type === 'group' ? (
+											<>
+												{ String( def.help ?? '' )
+													.length <= HINT_FROM && (
+													<Help text={ def.help } />
+												) }
+												<FieldsForm
+													defs={ (
+														def.fields || []
+													).filter(
+														( f ) =>
+															! master ||
+															def.id !==
+																master.group ||
+															f.id !==
+																master.field
+													) }
+													data={
+														value[ def.id ] || {}
+													}
+													onChange={ ( edits ) => {
+														setValue( ( v ) => ( {
+															...v,
+															[ def.id ]: {
+																...( v[
+																	def.id
+																] || {} ),
+																...edits,
+															},
+														} ) );
+														setDirty( true );
+													} }
+												/>
+											</>
+										) : (
 											<FieldsForm
-												defs={ def.fields || [] }
-												data={ value[ def.id ] || {} }
+												defs={ [
+													{
+														...def,
+														hideLabel: true,
+														// A long explanation is behind “?” next to the card title.
+														help:
+															String(
+																def.help ?? ''
+															).length > HINT_FROM
+																? ''
+																: def.help,
+													},
+												] }
+												data={ value }
 												onChange={ ( edits ) => {
 													setValue( ( v ) => ( {
 														...v,
-														[ def.id ]: {
-															...( v[ def.id ] ||
-																{} ),
-															...edits,
-														},
+														...edits,
 													} ) );
 													setDirty( true );
 												} }
 											/>
-										</>
-									) : (
-										<FieldsForm
-											defs={ [
-												{
-													...def,
-													hideLabel: true,
-													// A long explanation is behind “?” next to the card title.
-													help:
-														String( def.help ?? '' )
-															.length > HINT_FROM
-															? ''
-															: def.help,
-												},
-											] }
-											data={ value }
-											onChange={ ( edits ) => {
-												setValue( ( v ) => ( {
-													...v,
-													...edits,
-												} ) );
-												setDirty( true );
-											} }
-										/>
-									) }
-								</CardBody>
-							</Card>
-						)
-					) }
+										) }
+									</CardBody>
+								</Card>
+							)
+						) }
+					</fieldset>
 					<div
 						className={
 							'memorial-plugin-settings__bar' +
