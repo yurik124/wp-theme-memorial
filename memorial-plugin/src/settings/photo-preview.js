@@ -53,6 +53,71 @@ const canvasOf = ( w, h ) => {
 	return c;
 };
 
+// A short key of a text (what a picture of the logo was made from).
+const keyOf = ( text ) => {
+	let h = 5381;
+	for ( let i = 0; i < text.length; i++ ) {
+		h = ( ( h * 33 ) ^ text.charCodeAt( i ) ) >>> 0;
+	}
+	return h.toString( 36 );
+};
+
+// Variant of the picture of the logo — memorial_plugin_photo_logo_variant().
+const variantOf = ( logo ) =>
+	( logo?.tint === 'site' ? 'site' : 'white' ) +
+	'-' +
+	( logo?.text && logo.text !== '0' ? '1' : '0' );
+
+// The current logo of the site as a picture: its mark (SVG) and the name in the font of the site.
+// White — with a soft shadow, so it is seen on a light and on a dark photo.
+async function makeLogo( src, variant ) {
+	const [ tint, text ] = variant.split( '-' );
+	const mark = await loadImage( src.svg );
+	const size = 240;
+	const pad = 28;
+	let family = 'Georgia, serif';
+	const name = text === '1' ? src.name : '';
+	if ( name && src.font ) {
+		try {
+			const face = new window.FontFace(
+				'MemorialLogo',
+				`url(${ src.font })`,
+				{ weight: '500' }
+			);
+			await face.load();
+			document.fonts.add( face );
+			family = 'MemorialLogo, Georgia, serif';
+		} catch {
+			// Without the font of the site — Georgia.
+		}
+	}
+	const font = `500 ${ Math.round( size * 0.6 ) }px ${ family }`;
+	const probe = canvasOf( 1, 1 ).getContext( '2d' );
+	probe.font = font;
+	const tw = name ? Math.ceil( probe.measureText( name ).width ) : 0;
+	const gap = tw ? Math.round( size * 0.2 ) : 0;
+	const out = canvasOf( pad * 2 + size + gap + tw, pad * 2 + size );
+	const ctx = out.getContext( '2d' );
+	const m = canvasOf( size, size );
+	const mc = m.getContext( '2d' );
+	mc.drawImage( mark, 0, 0, size, size );
+	if ( tint === 'white' ) {
+		mc.globalCompositeOperation = 'source-in';
+		mc.fillStyle = '#fff';
+		mc.fillRect( 0, 0, size, size );
+		ctx.shadowColor = 'rgba(0,0,0,0.45)';
+		ctx.shadowBlur = 16;
+	}
+	ctx.drawImage( m, pad, pad );
+	if ( tw ) {
+		ctx.font = font;
+		ctx.textBaseline = 'middle';
+		ctx.fillStyle = tint === 'white' ? '#fff' : src.ink;
+		ctx.fillText( name, pad + size + gap, pad + size / 2 );
+	}
+	return out;
+}
+
 // What is done to a photo — memorial_plugin_photo_recipe().
 function recipeOf( s, kind, type ) {
 	const r = {};
@@ -237,7 +302,7 @@ function borderOf( sample ) {
 }
 
 // The frame of the photo on its new canvas — memorial_plugin_photo_frame().
-function frameOf( src, crop, bg ) {
+function frameOf( src, crop, bg, fit ) {
 	const w = src.width;
 	const h = src.height;
 	let bx = 0;
@@ -305,6 +370,20 @@ function frameOf( src, crop, bg ) {
 			bw = nw;
 		}
 	}
+	// Own background: the frame stays inside the photo, nothing is added.
+	if ( fit && ( bx < 0 || by < 0 || bx + bw > w || by + bh > h ) ) {
+		if ( bw > w || bh > h ) {
+			const k = Math.min( w / bw, h / bh );
+			const nw = Math.min( w, Math.floor( bw * k ) );
+			const nh = Math.min( h, Math.floor( bh * k ) );
+			bx = Math.floor( bx + ( bw - nw ) / 2 );
+			by = Math.floor( by + ( bh - nh ) / 2 );
+			bw = nw;
+			bh = nh;
+		}
+		bx = Math.max( 0, Math.min( bx, w - bw ) );
+		by = Math.max( 0, Math.min( by, h - bh ) );
+	}
 	return { bx, by, bw, bh };
 }
 
@@ -322,7 +401,7 @@ async function processOf( base, recipe, logo ) {
 	}
 	let out = src;
 	if ( recipe.crop ) {
-		const f = frameOf( src, recipe.crop, bg );
+		const f = frameOf( src, recipe.crop, bg, ! recipe.bg );
 		out = canvasOf( f.bw, f.bh );
 		const ctx = out.getContext( '2d' );
 		ctx.fillStyle = `rgb(${ bg[ 0 ] },${ bg[ 1 ] },${ bg[ 2 ] })`;
@@ -346,7 +425,8 @@ async function processOf( base, recipe, logo ) {
 			Math.round( ( out.width * Number( recipe.logo.size ) ) / 100 )
 		);
 		const lh = Math.round(
-			( logo.naturalHeight * lw ) / logo.naturalWidth
+			( ( logo.naturalHeight || logo.height ) * lw ) /
+				( logo.naturalWidth || logo.width )
 		);
 		const mg = Math.round(
 			( out.width * Number( recipe.logo.margin ) ) / 100
@@ -511,6 +591,43 @@ export default function PhotoPreview( { value } ) {
 	);
 	const bgMissing = !! ( recipe.bg && photo && ! photo.bg );
 
+	// The logo of the site is SVG, the server cannot draw it: the picture is made here and kept on the site
+	// (every variant once; again when the logo or the name of the site changes).
+	const variant = variantOf( value.logo );
+	const [ made, setMade ] = useState( null );
+	useEffect( () => {
+		const src = data?.make;
+		if ( ! value.logo?.on || data?.own || ! src?.svg ) {
+			setMade( null );
+			return;
+		}
+		let stop = false;
+		makeLogo( src, variant )
+			.then( ( canvas ) => {
+				if ( stop ) {
+					return;
+				}
+				setMade( canvas );
+				const key = keyOf( [ src.svg, src.name, src.font, src.ink ].join( '|' ) );
+				if ( src.keys?.[ variant ] !== key ) {
+					src.keys = { ...src.keys, [ variant ]: key };
+					apiFetch( {
+						path: '/memorial-plugin/v1/photos/logo',
+						method: 'POST',
+						data: { png: canvas.toDataURL( 'image/png' ), key, variant },
+					} ).catch( () => {} );
+				}
+			} )
+			.catch( () => {
+				if ( ! stop ) {
+					setMade( null );
+				}
+			} );
+		return () => {
+			stop = true;
+		};
+	}, [ data, variant, value.logo?.on ] );
+
 	// Recount after every change of the settings (a short pause — the sliders do not freeze the screen).
 	useEffect( () => {
 		if ( ! photo ) {
@@ -523,12 +640,14 @@ export default function PhotoPreview( { value } ) {
 				const base = await loadImage(
 					recipe.bg && photo.bg ? photo.bg : photo.url
 				);
-				const logo =
-					recipe.logo && data.logo
-						? await loadImage(
-								value.logo?.file || data.logo
-							).catch( () => null )
-						: null;
+				let logo = null;
+				if ( recipe.logo && value.logo?.file ) {
+					logo = await loadImage( value.logo.file ).catch( () => null );
+				} else if ( recipe.logo && ( data.own || ! made ) && data.logo ) {
+					logo = await loadImage( data.logo ).catch( () => null );
+				} else if ( recipe.logo ) {
+					logo = made;
+				}
 				const out = await processOf( base, recipe, logo );
 				if ( ! stop && holder.current ) {
 					out.className = 'memorial-plugin-photo-preview__after';
@@ -546,7 +665,7 @@ export default function PhotoPreview( { value } ) {
 			stop = true;
 			clearTimeout( timer );
 		};
-	}, [ photo, recipe, data, value.logo?.file ] );
+	}, [ photo, recipe, data, made, value.logo?.file ] );
 
 	if ( ! data && ! error ) {
 		return (

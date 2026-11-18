@@ -105,6 +105,52 @@ class Test_Memorial_Plugin_Photo_Tools extends WP_UnitTestCase {
 		$this->assertSame( array( 800, 800 ), array( $w[0], $w[1] ), 'Work: cut to the middle.' );
 	}
 
+	/**
+	 * Own background: the frame of a product stays inside the photo — nothing is added around it.
+	 */
+	public function test_frame_with_own_background_stays_inside() {
+		// A tall object: 3:4 with margins would be taller than the photo.
+		$im = imagecreatetruecolor( 900, 1000 );
+		imagefill( $im, 0, 0, imagecolorallocate( $im, 225, 228, 240 ) );
+		imagefilledrectangle( $im, 300, 20, 600, 980, imagecolorallocate( $im, 60, 62, 80 ) );
+		$bg   = memorial_plugin_photo_border( memorial_plugin_photo_sample( $im ) );
+		$crop = array(
+			'ratio' => '3:4',
+			'trim'  => true,
+			'pad'   => 6,
+		);
+		$add  = memorial_plugin_photo_frame( $im, $crop, $bg );
+		$this->assertGreaterThan( 1000, $add[1], 'A single background: the canvas grows, the colour fills the rest.' );
+		$fit = memorial_plugin_photo_frame( $im, $crop, $bg, true );
+		$this->assertLessThanOrEqual( 900, $fit[0] );
+		$this->assertLessThanOrEqual( 1000, $fit[1] );
+		$this->assertEqualsWithDelta( 3 / 4, $fit[0] / $fit[1], 0.01 );
+		$this->assertSame( array( 0, 0 ), array( $fit[6], $fit[7] ), 'Placed at the corner: no margins of colour.' );
+		$this->assertSame( array( $fit[0], $fit[1] ), array( $fit[4], $fit[5] ), 'The whole canvas is the photo.' );
+	}
+
+	/**
+	 * The picture of the logo made on the screen: saved by variant, used when the logo of the site is SVG.
+	 */
+	public function test_logo_made_on_the_screen() {
+		$im = imagecreatetruecolor( 300, 100 );
+		imagesavealpha( $im, true );
+		imagefill( $im, 0, 0, imagecolorallocatealpha( $im, 0, 0, 0, 127 ) );
+		ob_start();
+		imagepng( $im );
+		$png = 'data:image/png;base64,' . base64_encode( (string) ob_get_clean() ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- a test image.
+		$this->assertWPError( memorial_plugin_photo_logo_save( 'data:text/plain;base64,AAAA', 'k', 'white-1' ) );
+		$this->assertWPError( memorial_plugin_photo_logo_save( $png, 'k', '../x' ) );
+		$this->assertTrue( memorial_plugin_photo_logo_save( $png, 'k1', 'white-1' ) );
+		$this->assertTrue( memorial_plugin_photo_logo_save( $png, 'k2', 'site-0' ) );
+		$this->assertFileExists( memorial_plugin_photo_logo_made( 'white-1' ) );
+		$this->assertSame( 'white-1', memorial_plugin_photo_logo_variant(), 'Defaults: white, with the name.' );
+		$this->assertSame( 'k1', memorial_plugin_photo_logo_source()['keys']->{'white-1'} );
+		$this->assertSame( 'site-0', memorial_plugin_photo_logo_variant( array( 'tint' => 'site' ) ) );
+		wp_delete_file( memorial_plugin_photo_logo_made( 'white-1' ) );
+		wp_delete_file( memorial_plugin_photo_logo_made( 'site-0' ) );
+	}
+
 	public function test_process_and_return_the_original() {
 		$att  = $this->product_photo( 'pamyatniki' );
 		$orig = get_attached_file( $att );

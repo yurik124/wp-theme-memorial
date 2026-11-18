@@ -8173,3 +8173,21 @@ msgstr "слишком светлое"
 
 msgid "Return"
 msgstr "Вернуть"
+
+msgid "As on the site"
+msgstr "Как на сайте"
+
+msgid "Colour of the logo"
+msgstr "Цвет логотипа"
+
+msgid "In the lower right corner. Without an own file — the current logo of the site with its name, the picture is made on this screen. On small copies (catalog cards) it is not put: it would be unreadable."
+msgstr "В правом нижнем углу. Без своего файла — текущий логотип сайта с названием, картинка делается на этом экране. На маленькие копии (карточки каталога) не ставится — его не разглядеть."
+
+msgid "Own logo file (PNG with a transparent background)"
+msgstr "Свой файл логотипа (PNG с прозрачным фоном)"
+
+msgid "White with a soft shadow — seen on any photo"
+msgstr "Белый с мягкой тенью — виден на любом фото"
+
+msgid "With the name of the site"
+msgstr "С названием сайта"

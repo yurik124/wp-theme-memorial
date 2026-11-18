@@ -164,7 +164,7 @@ function memorial_plugin_photos_schema() {
 		'logo'   => array(
 			'type'   => 'group',
 			'label'  => __( 'Logo', 'memorial-plugin' ),
-			'help'   => __( 'In the lower right corner. Empty file — the logo of the site. On small copies (catalog cards) it is not put: it would be unreadable.', 'memorial-plugin' ),
+			'help'   => __( 'In the lower right corner. Without an own file — the current logo of the site with its name, the picture is made on this screen. On small copies (catalog cards) it is not put: it would be unreadable.', 'memorial-plugin' ),
 			'fields' => array(
 				'on'      => array(
 					'type'  => 'checkbox',
@@ -172,7 +172,21 @@ function memorial_plugin_photos_schema() {
 				),
 				'file'    => array(
 					'type'    => 'image',
-					'label'   => __( 'Logo file (PNG with a transparent background)', 'memorial-plugin' ),
+					'label'   => __( 'Own logo file (PNG with a transparent background)', 'memorial-plugin' ),
+					'show_if' => array( 'on', array( 1, '1', true ) ),
+				),
+				'tint'    => array(
+					'type'    => 'select',
+					'label'   => __( 'Colour of the logo', 'memorial-plugin' ),
+					'options' => array(
+						'white' => __( 'White with a soft shadow — seen on any photo', 'memorial-plugin' ),
+						'site'  => __( 'As on the site', 'memorial-plugin' ),
+					),
+					'show_if' => array( 'on', array( 1, '1', true ) ),
+				),
+				'text'    => array(
+					'type'    => 'checkbox',
+					'label'   => __( 'With the name of the site', 'memorial-plugin' ),
 					'show_if' => array( 'on', array( 1, '1', true ) ),
 				),
 				'size'    => array(
@@ -314,7 +328,9 @@ function memorial_plugin_photos_defaults() {
 		'logo'   => array(
 			'on'      => 0,
 			'file'    => '',
-			'size'    => '14',
+			'tint'    => 'white',
+			'text'    => 1,
+			'size'    => '22',
 			'opacity' => '70',
 			'margin'  => '3',
 			'min'     => 600,
@@ -479,15 +495,116 @@ function memorial_plugin_photo_logo_file() {
 	}
 	$file = '';
 	$url  = (string) ( memorial_plugin_photos()['logo']['file'] ?? '' );
-	$ids  = array_filter( array( $url ? attachment_url_to_postid( $url ) : 0, (int) get_option( 'site_logo' ), (int) get_option( 'site_icon' ) ) );
-	foreach ( $ids as $id ) {
-		$f = (string) get_attached_file( $id );
+	// Own file → a raster logo of the site → the picture of the current logo made on the screen → the site icon.
+	$made = memorial_plugin_photo_logo_made();
+	$list = array(
+		$url ? attachment_url_to_postid( $url ) : 0,
+		(int) get_option( 'site_logo' ),
+		$made && is_file( $made ) ? $made : 0,
+		(int) get_option( 'site_icon' ),
+	);
+	foreach ( array_filter( $list ) as $one ) {
+		$f = is_string( $one ) ? $one : (string) get_attached_file( $one );
 		if ( $f && is_file( $f ) && preg_match( '/\.(png|webp|jpe?g)$/i', $f ) ) {
 			$file = $f;
 			break;
 		}
 	}
 	return $file;
+}
+
+/**
+ * The variant of the picture of the logo: colour and the name of the site (“white-1”).
+ *
+ * @param array|null $logo The “Logo” settings; null — the saved ones.
+ * @return string
+ */
+function memorial_plugin_photo_logo_variant( $logo = null ) {
+	$logo = $logo ?? (array) ( memorial_plugin_photos()['logo'] ?? array() );
+	return ( 'site' === ( $logo['tint'] ?? '' ) ? 'site' : 'white' ) . '-' . ( empty( $logo['text'] ) ? '0' : '1' );
+}
+
+/**
+ * The picture of the current logo made on the settings screen (the logo of the site is SVG, GD cannot draw it).
+ *
+ * @param string $variant Variant; empty — of the saved settings.
+ * @return string Path (the file may be absent).
+ */
+function memorial_plugin_photo_logo_made( $variant = '' ) {
+	$variant = preg_match( '/^(white|site)-[01]$/', $variant ) ? $variant : memorial_plugin_photo_logo_variant();
+	return wp_get_upload_dir()['basedir'] . '/memorial-photos/logo-' . $variant . '.png';
+}
+
+/**
+ * What the screen needs to draw the current logo: its SVG, the name of the site, the font and the colours.
+ *
+ * @return array
+ */
+function memorial_plugin_photo_logo_source() {
+	$svg  = '';
+	$logo = (int) get_option( 'site_logo' );
+	$file = $logo ? (string) get_attached_file( $logo ) : '';
+	if ( $file && is_file( $file ) && preg_match( '/\.svg$/i', $file ) ) {
+		$svg = (string) wp_get_attachment_url( $logo );
+	} elseif ( ! $logo && function_exists( 'memorial_theme_logo_svg' ) ) {
+		$svg = 'data:image/svg+xml;base64,' . base64_encode( memorial_theme_logo_svg() ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- an image in a data URL.
+	}
+	$colors = array(
+		'primary'  => '#5e7052',
+		'contrast' => '#2a2c28',
+	);
+	foreach ( (array) ( wp_get_global_settings( array( 'color', 'palette', 'theme' ) ) ?? array() ) as $c ) {
+		$slug = (string) ( $c['slug'] ?? '' );
+		if ( isset( $colors[ $slug ] ) && preg_match( '~^#[0-9a-f]{6}$~i', (string) ( $c['color'] ?? '' ) ) ) {
+			$colors[ $slug ] = $c['color'];
+		}
+	}
+	$font = get_theme_file_path( 'assets/fonts/cormorant-garamond-500.woff2' );
+	return array(
+		'svg'  => $svg,
+		'name' => wp_strip_all_tags( get_bloginfo( 'name' ) ),
+		'font' => is_file( $font ) ? get_theme_file_uri( 'assets/fonts/cormorant-garamond-500.woff2' ) : '',
+		'ink'  => $colors['contrast'],
+		// What every variant was made from: the screen makes it again when the logo or the name changes.
+		'keys' => (object) array_filter( (array) get_option( 'memorial_plugin_photos_logo_key', array() ), 'is_string' ),
+	);
+}
+
+/**
+ * Save the picture of the current logo made on the screen.
+ *
+ * @param string $data    PNG as a data URL.
+ * @param string $key     What it was made from (the screen compares it next time).
+ * @param string $variant Variant “white-1”.
+ * @return true|WP_Error
+ */
+function memorial_plugin_photo_logo_save( $data, $key, $variant ) {
+	if ( ! preg_match( '/^(white|site)-[01]$/', $variant ) ) {
+		return new WP_Error( 'memorial_plugin_photo_logo', 'bad variant', array( 'status' => 400 ) );
+	}
+	if ( ! preg_match( '~^data:image/png;base64,([a-z0-9+/=]+)$~i', $data, $m ) ) {
+		return new WP_Error( 'memorial_plugin_photo_logo', 'not png', array( 'status' => 400 ) );
+	}
+	$png = base64_decode( $m[1], true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- an image from a data URL.
+	$im  = $png && strlen( $png ) < 2 * MB_IN_BYTES ? @imagecreatefromstring( $png ) : false; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- a broken file gives false.
+	if ( ! $im || imagesx( $im ) > 4000 || imagesy( $im ) > 2000 ) {
+		return new WP_Error( 'memorial_plugin_photo_logo', 'bad image', array( 'status' => 400 ) );
+	}
+	imagealphablending( $im, false );
+	imagesavealpha( $im, true );
+	$file = memorial_plugin_photo_logo_made( $variant );
+	wp_mkdir_p( dirname( $file ) );
+	if ( ! imagepng( $im, $file, 7 ) ) {
+		return new WP_Error( 'memorial_plugin_photo_logo', 'cannot save', array( 'status' => 500 ) );
+	}
+	$keys             = (array) get_option( 'memorial_plugin_photos_logo_key', array() );
+	$keys[ $variant ] = sanitize_key( $key );
+	update_option( 'memorial_plugin_photos_logo_key', $keys, false );
+	// The photos are processed again only when this is the variant of the saved settings.
+	if ( memorial_plugin_photo_logo_variant() === $variant ) {
+		memorial_plugin_photo_queue();
+	}
+	return true;
 }
 
 /* ---------- The processing (GD) ---------- */
@@ -699,9 +816,10 @@ function memorial_plugin_photo_border( $sample ) {
  * @param GdImage $im   Image.
  * @param array   $crop ratio ('3:4'…), trim, pad (%).
  * @param int[]   $bg   Background colour of the photo.
+ * @param bool    $fit  The photo keeps its own background: the frame stays inside the photo (cut, nothing is added).
  * @return int[]|null Null — nothing to change.
  */
-function memorial_plugin_photo_frame( $im, array $crop, array $bg ) {
+function memorial_plugin_photo_frame( $im, array $crop, array $bg, $fit = false ) {
 	$w  = imagesx( $im );
 	$h  = imagesy( $im );
 	$bx = 0;
@@ -766,6 +884,21 @@ function memorial_plugin_photo_frame( $im, array $crop, array $bg ) {
 			$bx -= intdiv( $nw - $bw, 2 );
 			$bw  = $nw;
 		}
+	}
+	// Own background (wall, floor): a plain colour around the photo looks like a frame — instead the frame is made
+	// smaller to fit the photo and moved inside it, around the middle of the object.
+	if ( $fit && ( $bx < 0 || $by < 0 || $bx + $bw > $w || $by + $bh > $h ) ) {
+		if ( $bw > $w || $bh > $h ) {
+			$k  = min( $w / $bw, $h / $bh );
+			$nw = (int) min( $w, floor( $bw * $k ) );
+			$nh = (int) min( $h, floor( $bh * $k ) );
+			$bx = (int) floor( $bx + ( $bw - $nw ) / 2 );
+			$by = (int) floor( $by + ( $bh - $nh ) / 2 );
+			$bw = $nw;
+			$bh = $nh;
+		}
+		$bx = max( 0, min( $bx, $w - $bw ) );
+		$by = max( 0, min( $by, $h - $bh ) );
 	}
 	if ( 0 === $bx && 0 === $by && $bw === $w && $bh === $h ) {
 		return null;
@@ -870,7 +1003,7 @@ function memorial_plugin_photo_process( $id, $kind, $type ) {
 	}
 	$f = null;
 	if ( isset( $recipe['crop'] ) ) {
-		$f = memorial_plugin_photo_frame( $im, $recipe['crop'], $bg );
+		$f = memorial_plugin_photo_frame( $im, $recipe['crop'], $bg, ! isset( $recipe['bg'] ) );
 		if ( $f ) {
 			$c = imagecreatetruecolor( $f[0], $f[1] );
 			imagefill( $c, 0, 0, imagecolorallocate( $c, $bg[0], $bg[1], $bg[2] ) );
@@ -1315,6 +1448,18 @@ add_action(
 		);
 		register_rest_route(
 			'memorial-plugin/v1',
+			'/photos/logo',
+			array(
+				'methods'             => 'POST',
+				'permission_callback' => $can,
+				'callback'            => static function ( WP_REST_Request $r ) {
+					$res = memorial_plugin_photo_logo_save( (string) $r['png'], (string) $r['key'], (string) $r['variant'] );
+					return is_wp_error( $res ) ? $res : rest_ensure_response( array( 'ok' => true ) );
+				},
+			)
+		);
+		register_rest_route(
+			'memorial-plugin/v1',
 			'/photos/restore-all',
 			array(
 				'methods'             => 'POST',
@@ -1394,9 +1539,14 @@ function memorial_plugin_photo_samples( $chosen = 0 ) {
 		);
 	}
 	$logo = memorial_plugin_photo_logo_file();
+	$icon = (int) get_option( 'site_icon' );
+	// An own file or a raster logo of the site: the screen does not make a picture of the logo.
+	$own = $logo && ! str_contains( $logo, '/memorial-photos/logo-' ) && ! ( $icon && get_attached_file( $icon ) === $logo );
 	return array(
 		'items' => $items,
 		'logo'  => $logo ? str_replace( $up['basedir'], $up['baseurl'], $logo ) : '',
+		'own'   => $own,
+		'make'  => memorial_plugin_photo_logo_source(),
 		'all'   => array_map(
 			static fn( $id ) => array(
 				'id'    => $id,
