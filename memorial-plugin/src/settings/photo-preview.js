@@ -608,13 +608,19 @@ export default function PhotoPreview( { value } ) {
 					return;
 				}
 				setMade( canvas );
-				const key = keyOf( [ src.svg, src.name, src.font, src.ink ].join( '|' ) );
+				const key = keyOf(
+					[ src.svg, src.name, src.font, src.ink ].join( '|' )
+				);
 				if ( src.keys?.[ variant ] !== key ) {
 					src.keys = { ...src.keys, [ variant ]: key };
 					apiFetch( {
 						path: '/memorial-plugin/v1/photos/logo',
 						method: 'POST',
-						data: { png: canvas.toDataURL( 'image/png' ), key, variant },
+						data: {
+							png: canvas.toDataURL( 'image/png' ),
+							key,
+							variant,
+						},
 					} ).catch( () => {} );
 				}
 			} )
@@ -642,8 +648,14 @@ export default function PhotoPreview( { value } ) {
 				);
 				let logo = null;
 				if ( recipe.logo && value.logo?.file ) {
-					logo = await loadImage( value.logo.file ).catch( () => null );
-				} else if ( recipe.logo && ( data.own || ! made ) && data.logo ) {
+					logo = await loadImage( value.logo.file ).catch(
+						() => null
+					);
+				} else if (
+					recipe.logo &&
+					( data.own || ! made ) &&
+					data.logo
+				) {
 					logo = await loadImage( data.logo ).catch( () => null );
 				} else if ( recipe.logo ) {
 					logo = made;
