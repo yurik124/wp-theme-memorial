@@ -51,6 +51,21 @@ jobs:
           path: ~/.u2net
           key: rembg-isnet-general-use-1
 
+      # вход на хостинг по ключу SSH (секрет SSH_PRIVATE_KEY); без ключа — по паролю, как раньше
+      - name: Ключ SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          if [ -n "$SSH_PRIVATE_KEY" ]; then
+            mkdir -p ~/.ssh && printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/memorial_key && chmod 600 ~/.ssh/memorial_key
+            echo "SSH_KEY_FILE=$HOME/.ssh/memorial_key" >> "$GITHUB_ENV"
+            echo "LFTP_OPEN=set sftp:connect-program \"ssh -a -x -i $HOME/.ssh/memorial_key -o StrictHostKeyChecking=accept-new -o BatchMode=yes\"; open -u $SFTP_USER," >> "$GITHUB_ENV"
+            echo "Вход по ключу"
+          else
+            echo "LFTP_OPEN=open -u $SFTP_USER --env-password" >> "$GITHUB_ENV"
+            echo "::warning::Секрета SSH_PRIVATE_KEY нет — вход по паролю"
+          fi
+
       - name: Список фото с сайта
         env:
           SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
@@ -59,8 +74,9 @@ jobs:
           mkdir -p out
           python3 - <<'PY'
           import os, re, gzip, secrets, paramiko, requests, json
+          AUTH = {'pkey': paramiko.PKey.from_path(os.environ['SSH_KEY_FILE'])} if os.environ.get('SSH_KEY_FILE') else {'password': os.environ['SFTP_PASSWORD']}
           t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
-          t.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
+          t.connect(username=os.environ['SFTP_USER'], **AUTH)
           sf = paramiko.SFTPClient.from_transport(t)
           site = os.environ['SITE_DIR'].rstrip('/')
           dbs = sorted(f for f in sf.listdir(site + '/updraft') if f.endswith('-db.gz'))
@@ -105,9 +121,10 @@ jobs:
         run: |
           python3 - <<'PY'
           import os, json, paramiko, requests
+          AUTH = {'pkey': paramiko.PKey.from_path(os.environ['SSH_KEY_FILE'])} if os.environ.get('SSH_KEY_FILE') else {'password': os.environ['SFTP_PASSWORD']}
           a = json.load(open('out/agent.json'))
           t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
-          t.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
+          t.connect(username=os.environ['SFTP_USER'], **AUTH)
           sf = paramiko.SFTPClient.from_transport(t)
           site = os.environ['SITE_DIR'].rstrip('/')
           try:
