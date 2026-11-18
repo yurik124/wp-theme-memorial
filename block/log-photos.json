@@ -1,0 +1,103 @@
+{
+ "samples": {
+  "items": 14,
+  "all": 261,
+  "logo": "http://localhost:8888/wp-content/uploads/memorial-photos/logo-white-1.png",
+  "kinds": [
+   "product:venki",
+   "product:venki",
+   "product:groby",
+   "product:groby",
+   "product:metallicheskie-kresty",
+   "product:metallicheskie-kresty",
+   "product:ogradki-2",
+   "product:ogradki-2",
+   "product:pamyatniki",
+   "product:pamyatniki",
+   "work:",
+   "work:",
+   "page:",
+   "page:"
+  ]
+ },
+ "master": {
+  "exists": 1,
+  "on": true,
+  "offDisabled": true,
+  "offFieldDisabled": true,
+  "onEnabled": true
+ },
+ "plateKeys": {
+  "white-1": "8c6int",
+  "white-1-p": "8c6int"
+ },
+ "previewChanged": true,
+ "previewBack": true,
+ "logoMade": {
+  "logo": "http://localhost:8888/wp-content/uploads/memorial-photos/logo-white-1.png",
+  "own": false,
+  "keys": {
+   "white-1": "8c6int",
+   "white-1-p": "8c6int"
+  },
+  "svg": true
+ },
+ "cronState": {
+  "time": 1795029515,
+  "done": 19,
+  "left": 81
+ },
+ "report": {
+  "state": {
+   "time": 1795029515,
+   "done": 19,
+   "left": 81
+  },
+  "items": 258,
+  "first": [
+   [
+    "изображение_viber_2022-01-05_12-33-40-280",
+    1200,
+    [
+     "alt"
+    ]
+   ],
+   [
+    "IMG_20261113_134722",
+    1440,
+    [
+     "alt"
+    ]
+   ],
+   [
+    "DSC01509",
+    1024,
+    [
+     "alt"
+    ]
+   ],
+   [
+    "DSC01510",
+    1024,
+    [
+     "alt"
+    ]
+   ],
+   [
+    "DSC01519",
+    1024,
+    [
+     "alt"
+    ]
+   ]
+  ]
+ },
+ "cards": [
+  "http://localhost:8888/wp-content/uploads/2019/11/3-2-mf90da664-360x480.webp",
+  "http://localhost:8888/wp-content/uploads/2019/11/1-2-mf90da664-360x480.webp",
+  "http://localhost:8888/wp-content/uploads/2019/11/2-2-mf90da664-360x480.webp",
+  "http://localhost:8888/wp-content/uploads/2019/11/6-2-mf90da664-360x480.webp"
+ ],
+ "big": "http://localhost:8888/wp-content/uploads/2019/11/3-2-mf90da664.webp",
+ "errs": []
+}

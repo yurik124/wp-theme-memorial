@@ -1,0 +1,16 @@
+{
+ "hoverNone": true,
+ "changed": false,
+ "nextBg": "rgb(255, 255, 255)",
+ "overlap": {
+  "x": [
+   12,
+   330
+  ],
+  "next": [
+   582,
+   340
+  ],
+  "topIsClose": true
+ }
+}
