@@ -761,8 +761,6 @@ export default function PhotoPreview( { value } ) {
 								onChange={ ( v ) => setSplit( v ?? 50 ) }
 							/>
 						) }
-							</Notice>
-						) }
 						{ value.main && ! value.main.on && (
 							<Notice status="warning" isDismissible={ false }>
 								{ __(
