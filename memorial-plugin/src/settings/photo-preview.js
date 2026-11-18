@@ -116,7 +116,13 @@ async function makeLogo( src, variant ) {
 		if ( tw ) {
 			ctx.roundRect( 0, 0, out.width, out.height, 18 );
 		} else {
-			ctx.arc( out.width / 2, out.height / 2, out.width / 2, 0, Math.PI * 2 );
+			ctx.arc(
+				out.width / 2,
+				out.height / 2,
+				out.width / 2,
+				0,
+				Math.PI * 2
+			);
 		}
 		ctx.fill();
 	}
@@ -413,7 +419,12 @@ async function processOf( base, recipe, logo ) {
 	let out = src;
 	if ( recipe.crop ) {
 		// The photo keeps its own background: the frame is cut inside it.
-		const f = frameOf( src, recipe.crop, borderOf( sampleOf( src ) ), true );
+		const f = frameOf(
+			src,
+			recipe.crop,
+			borderOf( sampleOf( src ) ),
+			true
+		);
 		out = canvasOf( f.bw, f.bh );
 		out.getContext( '2d' ).drawImage( src, -f.bx, -f.by );
 	}
@@ -600,7 +611,14 @@ export default function PhotoPreview( { value } ) {
 				}
 				setMade( canvas );
 				const key = keyOf(
-					[ src.svg, src.name, src.font, src.ink, src.light, src.paper ].join( '|' )
+					[
+						src.svg,
+						src.name,
+						src.font,
+						src.ink,
+						src.light,
+						src.paper,
+					].join( '|' )
 				);
 				if ( src.keys?.[ variant ] !== key ) {
 					src.keys = { ...src.keys, [ variant ]: key };
