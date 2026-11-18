@@ -2824,7 +2824,7 @@ test.describe( 'антиспам и услуги', () => {
 			report.titles[ p ] = [ ( html.match( /<title>([^<]*)<\/title>/ ) || [] )[ 1 ], ( html.match( /<meta name="description" content="([^"]*)"/ ) || [] )[ 1 ] ];
 		}
 		// Заявка из окна, как посетитель: открыть, подождать, заполнить, отправить.
-		await page.locator( '[data-callback]' ).first().click();
+		await page.locator( '[data-callback]:visible' ).first().click();
 		await page.waitForTimeout( 3500 );
 		await page.fill( '#callback input[name=phone]', '9001234567' );
 		await page.fill( '#callback input[name=name]', 'Проверка probe' );
