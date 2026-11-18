@@ -2855,3 +2855,48 @@ test.describe( 'антиспам и услуги', () => {
 		fs.writeFileSync( `${ DIR }/log-spam.json`, JSON.stringify( report, null, 1 ) );
 	} );
 } );
+
+test.describe( 'обработка фото', () => {
+	test( 'обработка фото: экран с предпросмотром, фото каталога после обработки', async ( { page } ) => {
+		test.setTimeout( 900_000 );
+		page.setDefaultTimeout( 60000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.setViewportSize( { width: 1440, height: 1000 } );
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/admin.php?page=mem-photos' );
+		await page.waitForSelector( '.memorial-plugin-photo-preview canvas, .memorial-plugin-photo-preview .components-notice', { timeout: 90000 } ).catch( () => {} );
+		await page.waitForTimeout( 2500 );
+		await shot( page, 'photos-screen', { fullPage: true } );
+		report.samples = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/photos/samples' } ).then( ( d ) => ( { items: d.items.length, all: d.all.length, logo: d.logo, kinds: d.items.map( ( i ) => i.kind + ':' + i.type + ( i.bg ? ' bg' : '' ) ) } ) ).catch( ( e ) => e.message ) );
+		// Переключить «Цветокоррекция» и «Одинаковые пропорции» — предпросмотр меняется до сохранения.
+		const before = await page.evaluate( () => document.querySelector( '.memorial-plugin-photo-preview canvas' )?.toDataURL().length || 0 );
+		for ( const label of [ 'Цветокоррекция', 'Одинаковые пропорции', 'Логотип на фото' ] ) {
+			await page.getByLabel( label, { exact: true } ).check().catch( ( e ) => ( report[ 'err ' + label ] = e.message ) );
+		}
+		await page.waitForTimeout( 2500 );
+		report.previewChanged = before !== ( await page.evaluate( () => document.querySelector( '.memorial-plugin-photo-preview canvas' )?.toDataURL().length || 0 ) );
+		await shot( page, 'photos-screen-on', { fullPage: true } );
+		await page.getByRole( 'button', { name: 'Сравнить' } ).click().catch( () => {} );
+		await page.waitForTimeout( 800 );
+		await page.locator( '.memorial-plugin-photo-preview' ).screenshot( { path: `${ DIR }/photos-compare.png` } ).catch( () => {} );
+		report.report = await page.evaluate( () => window.wp.apiFetch( { path: '/memorial-plugin/v1/photos/report' } ).then( ( d ) => ( { processed: d.processed, scope: d.scope, state: d.state, items: d.items.length, first: d.items.slice( 0, 5 ).map( ( r ) => [ r.title, r.width, r.problems ] ) } ) ).catch( ( e ) => e.message ) );
+		// Каталог после пакетной обработки (PROBE_CLI): памятники — без замены фона, сразу обработаны.
+		for ( const [ w, h, name ] of [ [ 1440, 900, 'pc' ], [ 390, 844, 'phone' ] ] ) {
+			await page.setViewportSize( { width: w, height: h } );
+			await page.goto( '/pamyatniki/', { waitUntil: 'domcontentloaded' } );
+			await page.waitForTimeout( 2500 );
+			await page.addStyleTag( { content: NO_FLOAT } );
+			await page.locator( '.mcat__grid, .mcard' ).first().scrollIntoViewIfNeeded().catch( () => {} );
+			await page.waitForTimeout( 1500 );
+			await shot( page, `photos-pamyatniki-${ name }` );
+		}
+		report.cards = await page.evaluate( () => [ ...document.querySelectorAll( '.mcard img' ) ].slice( 0, 4 ).map( ( i ) => i.currentSrc ) );
+		report.errs = errs;
+		fs.writeFileSync( `${ DIR }/log-photos.json`, JSON.stringify( report, null, 1 ) );
+	} );
+} );

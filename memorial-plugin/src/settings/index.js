@@ -37,6 +37,7 @@ import { Page } from '@wordpress/admin-ui';
 
 import Hint from '../shared/hint';
 import RewioScope from './rewio-scope';
+import PhotoPreview from './photo-preview';
 import './style.scss';
 
 const SITE = window.memorialPluginSettings?.siteUrl || '/';
@@ -1128,6 +1129,13 @@ function App( { option } ) {
 
 	return (
 		<Page title={ page.title } actions={ actions }>
+			<div
+				className={
+					page.preview
+						? 'memorial-plugin-settings__split'
+						: 'memorial-plugin-settings__single'
+				}
+			>
 			<Flex
 				direction="column"
 				align="stretch"
@@ -1242,6 +1250,12 @@ function App( { option } ) {
 					</Button>
 				</div>
 			</Flex>
+			{ page.preview === 'photos' && (
+				<aside className="memorial-plugin-settings__preview">
+					<PhotoPreview value={ value } />
+				</aside>
+			) }
+			</div>
 		</Page>
 	);
 }
