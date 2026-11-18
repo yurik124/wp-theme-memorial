@@ -8170,3 +8170,6 @@ msgstr "слишком тёмное"
 
 msgid "too light"
 msgstr "слишком светлое"
+
+msgid "Return"
+msgstr "Вернуть"

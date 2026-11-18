@@ -368,6 +368,7 @@ async function processOf( base, recipe, logo ) {
 function Report() {
 	const [ data, setData ] = useState( null );
 	const [ busy, setBusy ] = useState( false );
+	const [ ask, setAsk ] = useState( false );
 	const load = () =>
 		apiFetch( { path: '/memorial-plugin/v1/photos/report' } )
 			.then( setData )
@@ -379,16 +380,7 @@ function Report() {
 		return <Spinner />;
 	}
 	const restore = async () => {
-		if (
-			! window.confirm(
-				__(
-					'Return the originals of all photos and switch the processing off?',
-					'memorial-plugin'
-				)
-			)
-		) {
-			return;
-		}
+		setAsk( false );
 		setBusy( true );
 		await apiFetch( {
 			path: '/memorial-plugin/v1/photos/restore-all',
@@ -417,15 +409,40 @@ function Report() {
 						)
 					: '' }
 			</p>
-			{ data.processed > 0 && (
+			{ data.processed > 0 && ! ask && (
 				<Button
 					variant="secondary"
 					isDestructive
 					isBusy={ busy }
-					onClick={ restore }
+					onClick={ () => setAsk( true ) }
 				>
 					{ __( 'Return all originals', 'memorial-plugin' ) }
 				</Button>
+			) }
+			{ ask && (
+				<Notice status="warning" isDismissible={ false }>
+					<p>
+						{ __(
+							'Return the originals of all photos and switch the processing off?',
+							'memorial-plugin'
+						) }
+					</p>
+					<Flex justify="flex-start">
+						<Button
+							variant="primary"
+							isDestructive
+							onClick={ restore }
+						>
+							{ __( 'Return', 'memorial-plugin' ) }
+						</Button>
+						<Button
+							variant="tertiary"
+							onClick={ () => setAsk( false ) }
+						>
+							{ __( 'Cancel', 'memorial-plugin' ) }
+						</Button>
+					</Flex>
+				</Notice>
 			) }
 			{ data.items.length > 0 && (
 				<>
@@ -518,7 +535,7 @@ export default function PhotoPreview( { value } ) {
 					holder.current.replaceChildren( out );
 				}
 				setError( '' );
-			} catch ( e ) {
+			} catch {
 				setError(
 					__( 'The photo could not be loaded.', 'memorial-plugin' )
 				);

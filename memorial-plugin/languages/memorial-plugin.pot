@@ -650,7 +650,7 @@ msgstr ""
 msgid "Advantages (with laurel leaves)"
 msgstr ""
 
-#: src/settings/photo-preview.js:562
+#: src/settings/photo-preview.js:601
 msgid "After"
 msgstr ""
 
@@ -894,7 +894,7 @@ msgstr ""
 msgid "Banner text — “Only notify”"
 msgstr ""
 
-#: src/settings/photo-preview.js:558 src/settings/photo-preview.js:580
+#: src/settings/photo-preview.js:597 src/settings/photo-preview.js:619
 msgid "Before"
 msgstr ""
 
@@ -926,7 +926,7 @@ msgstr ""
 msgid "Block with numbers"
 msgstr ""
 
-#: src/settings/photo-preview.js:592
+#: src/settings/photo-preview.js:631
 msgid "Border"
 msgstr ""
 
@@ -1076,7 +1076,7 @@ msgstr ""
 msgid "Can stay empty. {price:code} puts in a price."
 msgstr ""
 
-#: src/catalog/import.js:609 src/catalog/inline-edit.js:239 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/collections/index.js:326
+#: src/catalog/import.js:609 src/catalog/inline-edit.js:239 src/catalog/list-screen.js:115 src/catalog/list-screen.js:144 src/settings/photo-preview.js:436 src/collections/index.js:326
 msgid "Cancel"
 msgstr ""
 
@@ -1438,7 +1438,7 @@ msgstr ""
 msgid "Company’s reply"
 msgstr ""
 
-#: src/settings/photo-preview.js:566
+#: src/settings/photo-preview.js:605
 msgid "Compare"
 msgstr ""
 
@@ -3189,7 +3189,7 @@ msgstr ""
 msgid "No photo"
 msgstr ""
 
-#: src/settings/photo-preview.js:618
+#: src/settings/photo-preview.js:657
 msgid "No photos to show yet."
 msgstr ""
 
@@ -3766,7 +3766,7 @@ msgstr ""
 msgid "Phones, messengers, addresses with routes, maps and company details."
 msgstr ""
 
-#: catalog/catalog-front.php:432 src/catalog/fields.js:68 src/settings/photo-preview.js:537 works/works.php:223 blocks/content/content-blocks.php:447
+#: catalog/catalog-front.php:432 src/catalog/fields.js:68 src/settings/photo-preview.js:574 works/works.php:223 blocks/content/content-blocks.php:447
 msgid "Photo"
 msgstr ""
 
@@ -3877,7 +3877,7 @@ msgid "Photos of the pages"
 msgstr ""
 
 #. translators: %d: number of photos.
-#: src/settings/photo-preview.js:413
+#: src/settings/photo-preview.js:446
 #, php-format
 msgid "Photos to look at: %d"
 msgstr ""
@@ -3932,7 +3932,7 @@ msgstr ""
 msgid "Post IDs (at most 10 per call)."
 msgstr ""
 
-#: src/settings/photo-preview.js:522
+#: src/settings/photo-preview.js:559
 msgid "Preview"
 msgstr ""
 
@@ -4038,8 +4038,7 @@ msgstr ""
 msgid "Process the photos"
 msgstr ""
 
-#. translators: 1: processed photos, 2: photos to process.
-#: src/settings/photo-preview.js:386
+#: src/settings/photo-preview.js:391
 #, php-format
 msgid "Processed: %1$d of %2$d."
 msgstr ""
@@ -4048,7 +4047,7 @@ msgstr ""
 msgid "Processing"
 msgstr ""
 
-#: src/settings/photo-preview.js:609
+#: src/settings/photo-preview.js:648
 msgid "Processing is switched off: the site shows the originals. The preview shows what the photos will look like when it is on."
 msgstr ""
 
@@ -4368,11 +4367,15 @@ msgstr ""
 msgid "Restores the text and SEO fields of a post from before its conversion to blocks."
 msgstr ""
 
-#: src/settings/photo-preview.js:405
+#: src/settings/photo-preview.js:430
+msgid "Return"
+msgstr ""
+
+#: src/settings/photo-preview.js:413
 msgid "Return all originals"
 msgstr ""
 
-#: src/settings/photo-preview.js:370
+#: src/settings/photo-preview.js:419
 msgid "Return the originals of all photos and switch the processing off?"
 msgstr ""
 
@@ -4830,7 +4833,7 @@ msgstr ""
 msgid "Short text."
 msgstr ""
 
-#: src/settings/photo-preview.js:552
+#: src/settings/photo-preview.js:591
 msgid "Show"
 msgstr ""
 
@@ -5252,7 +5255,7 @@ msgstr ""
 msgid "The background around a product is replaced with one light colour. It is done by a free open model in GitHub Actions (the hosting cannot), so a new photo gets its background within an hour; the preview shows the samples of the last run of “Photos — background” in Actions."
 msgstr ""
 
-#: src/settings/photo-preview.js:601
+#: src/settings/photo-preview.js:640
 msgid "The background of this photo is not ready yet: run “Photos — background” in GitHub Actions (Actions → Photos — background → Run workflow); in 3–5 minutes the sample appears here. Until then the preview shows the rest without the new background."
 msgstr ""
 
@@ -5372,7 +5375,7 @@ msgstr ""
 msgid "The packages themselves, their contents and prices — in “Memorial → Prices”."
 msgstr ""
 
-#: src/settings/photo-preview.js:497
+#: src/settings/photo-preview.js:534
 msgid "The photo could not be loaded."
 msgstr ""
 
@@ -5847,7 +5850,7 @@ msgid "Visible on the site"
 msgstr ""
 
 #. translators: %d: number of photos.
-#: src/settings/photo-preview.js:393
+#: src/settings/photo-preview.js:398
 #, php-format
 msgid "Waiting for the background from GitHub Actions: %d."
 msgstr ""
