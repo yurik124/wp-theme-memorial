@@ -2817,6 +2817,11 @@ test.describe( 'антиспам и услуги', () => {
 		report.homeCards = await page.evaluate( () => [ ...document.querySelectorAll( '.svc__item h3' ) ].map( ( h ) => h.textContent.trim() ) );
 		await page.goto( '/ritualnye-uslugi/', { waitUntil: 'networkidle' } );
 		report.uslugiCards = await page.evaluate( () => [ ...document.querySelectorAll( '.svc__item h3' ) ].map( ( h ) => h.textContent.trim() ) );
+		report.titles = {};
+		for ( const p of [ '/', '/ritualnye-uslugi/', '/pomoshh-v-organizaczii-pohoron/', '/ceny/', '/groby/' ] ) {
+			const html = await ( await page.request.get( p ) ).text();
+			report.titles[ p ] = [ ( html.match( /<title>([^<]*)<\/title>/ ) || [] )[ 1 ], ( html.match( /<meta name="description" content="([^"]*)"/ ) || [] )[ 1 ] ];
+		}
 		// Заявка из окна, как посетитель: открыть, подождать, заполнить, отправить.
 		await page.locator( '[data-callback]' ).first().click();
 		await page.waitForTimeout( 3500 );
