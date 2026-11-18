@@ -60,6 +60,14 @@ jobs:
             (cd $d && npm ci --no-audit --no-fund && npm run build && composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative)
           done
 
+      # uploads между прогонами — из кэша Actions: хостинг не любит много SSH-соединений подряд
+      - name: Кэш uploads
+        uses: actions/cache@v4
+        with:
+          path: uploads
+          key: probe-uploads-${{ github.run_id }}
+          restore-keys: probe-uploads-
+
       - name: Скачать базу и uploads (только чтение)
         timeout-minutes: 25
         env:
@@ -79,7 +87,7 @@ jobs:
           sf.get(site + '/updraft/' + dbs[-1], 'data/db.sql.gz')
           with gzip.open('data/db.sql.gz', 'rb') as a, open('data/db.sql', 'wb') as b:
               shutil.copyfileobj(a, b)
-          # список файлов — одним соединением, скачивание — в 12 потоков (по своему соединению на поток)
+          # список файлов — одним соединением, скачивание — в 4 потока (по своему соединению на поток)
           files = []
           def walk(remote, local):
               os.makedirs(local, exist_ok=True)
@@ -89,7 +97,7 @@ jobs:
                   r, l = remote + '/' + e.filename, os.path.join(local, e.filename)
                   if stat.S_ISDIR(e.st_mode):
                       walk(r, l)
-                  else:
+                  elif not (os.path.exists(l) and os.path.getsize(l) == e.st_size):
                       files.append((r, l))
           # картинки для разбора меню, редактора и админки не нужны — берём только файлы до 2 уровня (логотипы, иконки)
           if os.environ.get('PROBE_UPLOADS') == '1':
@@ -99,15 +107,22 @@ jobs:
           q = queue.Queue()
           for f in files: q.put(f)
           def worker():
-              # зависший файл не должен вешать прогон: таймаут на канал, при обрыве — новое соединение
+              # зависший файл не должен вешать прогон: таймаут на канал, при обрыве — пауза и новое соединение
+              import time
               def connect():
-                  tt = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
-                  tt.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
-                  c = paramiko.SFTPClient.from_transport(tt)
-                  c.get_channel().settimeout(60)
-                  return tt, c
+                  for wait in (0, 10, 30, 60):
+                      time.sleep(wait)
+                      try:
+                          tt = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+                          tt.connect(username=os.environ['SFTP_USER'], password=os.environ['SFTP_PASSWORD'])
+                          c = paramiko.SFTPClient.from_transport(tt)
+                          c.get_channel().settimeout(60)
+                          return tt, c
+                      except Exception as ex:
+                          print('нет соединения', ex)
+                  return None, None
               tt, c = connect()
-              while True:
+              while c:
                   try: r, l = q.get_nowait()
                   except queue.Empty: break
                   for attempt in (1, 2):
@@ -119,8 +134,9 @@ jobs:
                           try: tt.close()
                           except Exception: pass
                           tt, c = connect()
-              tt.close()
-          ts = [threading.Thread(target=worker) for _ in range(12)]
+                          if not c: break
+              if tt: tt.close()
+          ts = [threading.Thread(target=worker) for _ in range(4)]
           for t_ in ts: t_.start()
           for t_ in ts: t_.join()
           PY
