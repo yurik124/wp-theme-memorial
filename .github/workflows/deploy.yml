@@ -73,6 +73,21 @@ jobs:
           test -f dist/memorial-theme/style.css
           du -sh dist/*
 
+      # вход на хостинг по ключу SSH (секрет SSH_PRIVATE_KEY); без ключа — по паролю, как раньше
+      - name: Ключ SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          if [ -n "$SSH_PRIVATE_KEY" ]; then
+            mkdir -p ~/.ssh && printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/memorial_key && chmod 600 ~/.ssh/memorial_key
+            echo "SSH_KEY_FILE=$HOME/.ssh/memorial_key" >> "$GITHUB_ENV"
+            echo "LFTP_OPEN=set sftp:connect-program \"ssh -a -x -i $HOME/.ssh/memorial_key -o StrictHostKeyChecking=accept-new -o BatchMode=yes\"; open -u $SFTP_USER," >> "$GITHUB_ENV"
+            echo "Вход по ключу"
+          else
+            echo "LFTP_OPEN=open -u $SFTP_USER --env-password" >> "$GITHUB_ENV"
+            echo "::warning::Секрета SSH_PRIVATE_KEY нет — вход по паролю"
+          fi
+
       - name: Установить lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
@@ -82,7 +97,7 @@ jobs:
         run: |
           lftp -c "
             set sftp:auto-confirm yes; set net:max-retries 3; set net:timeout 30; set cmd:fail-exit yes;
-            open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
+            $LFTP_OPEN sftp://$SFTP_HOST:$SFTP_PORT;
             mirror --reverse --delete --parallel=4 --verbose ./dist/memorial-theme/ $SITE_DIR/themes/.memorial-theme-new/;
             mirror --reverse --delete --parallel=4 --verbose ./dist/memorial-plugin/ $SITE_DIR/plugins/.memorial-plugin-new/;
           "
@@ -96,20 +111,20 @@ jobs:
             # прошлая резервная копия и текущая папка могут отсутствовать (первая выгрузка) — это не ошибка
             lftp -c "
               set sftp:auto-confirm yes; set cmd:fail-exit no;
-              open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
+              $LFTP_OPEN sftp://$SFTP_HOST:$SFTP_PORT;
               rm -r -f $SITE_DIR/$dir/.$name-old;
               mv $SITE_DIR/$dir/$name $SITE_DIR/$dir/.$name-old;
             " || true
             # а вот переименование новой версии обязано пройти
             lftp -c "
               set sftp:auto-confirm yes; set cmd:fail-exit yes;
-              open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
+              $LFTP_OPEN sftp://$SFTP_HOST:$SFTP_PORT;
               mv $SITE_DIR/$dir/.$name-new $SITE_DIR/$dir/$name;
             "
             # прежняя версия больше не нужна
             lftp -c "
               set sftp:auto-confirm yes; set cmd:fail-exit no;
-              open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT;
+              $LFTP_OPEN sftp://$SFTP_HOST:$SFTP_PORT;
               rm -r -f $SITE_DIR/$dir/.$name-old;
             " || true
           done
