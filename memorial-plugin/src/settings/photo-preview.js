@@ -57,7 +57,7 @@ const canvasOf = ( w, h ) => {
 const keyOf = ( text ) => {
 	let h = 5381;
 	for ( let i = 0; i < text.length; i++ ) {
-		h = ( ( h * 33 ) ^ text.charCodeAt( i ) ) >>> 0;
+		h = ( h * 33 + text.charCodeAt( i ) ) % 2147483647;
 	}
 	return h.toString( 36 );
 };
