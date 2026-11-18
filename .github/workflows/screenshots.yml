@@ -71,6 +71,21 @@ jobs:
             (cd $d && npm ci --no-audit --no-fund && npm run build && composer dump-autoload --working-dir=memorial-plugin --no-dev --classmap-authoritative)
           done
 
+      # вход на хостинг по ключу SSH (секрет SSH_PRIVATE_KEY); без ключа — по паролю, как раньше
+      - name: Ключ SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          if [ -n "$SSH_PRIVATE_KEY" ]; then
+            mkdir -p ~/.ssh && printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/memorial_key && chmod 600 ~/.ssh/memorial_key
+            echo "SSH_KEY_FILE=$HOME/.ssh/memorial_key" >> "$GITHUB_ENV"
+            echo "LFTP_OPEN=set sftp:connect-program \"ssh -a -x -i $HOME/.ssh/memorial_key -o StrictHostKeyChecking=accept-new -o BatchMode=yes\"; open -u $SFTP_USER," >> "$GITHUB_ENV"
+            echo "Вход по ключу"
+          else
+            echo "LFTP_OPEN=open -u $SFTP_USER --env-password" >> "$GITHUB_ENV"
+            echo "::warning::Секрета SSH_PRIVATE_KEY нет — вход по паролю"
+          fi
+
       - name: Установить lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
@@ -79,7 +94,7 @@ jobs:
           LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
         run: |
           mkdir -p data uploads
-          open="set sftp:auto-confirm yes; set net:max-retries 3; set net:timeout 30; open -u $SFTP_USER --env-password sftp://$SFTP_HOST:$SFTP_PORT"
+          open="set sftp:auto-confirm yes; set net:max-retries 3; set net:timeout 30; $LFTP_OPEN sftp://$SFTP_HOST:$SFTP_PORT"
           db=$(lftp -c "$open; cls -1 $SITE_DIR/updraft/" | grep -E -- '-db\.gz$' | sort | tail -n 1)
           if [ -z "$db" ]; then echo "::error::В $SITE_DIR/updraft нет копии базы UpdraftPlus — сделайте резервную копию"; exit 1; fi
           echo "Копия базы: $(basename "$db")"
