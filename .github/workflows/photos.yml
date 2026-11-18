@@ -7,6 +7,7 @@ name: Фото — фон
 #
 # Запуск: Actions → «Фото — фон» → Run workflow (режим preview — только образцы для экрана; process — всё),
 # а также каждый час (только process: новые фото получают фон без участия человека).
+# Файл лежит и в main, и в block-migration (одинаковый): кнопку и расписание GitHub берёт из ветки по умолчанию.
 
 on:
   workflow_dispatch:
@@ -100,6 +101,10 @@ jobs:
           print('HTTP', r.status_code)
           open('out/list.json', 'w', encoding='utf-8').write(r.text)
           d = r.json()
+          if 'error' in d:
+              # на сайте ещё нет обработки фото (не выгружена) — нечего делать, это не ошибка
+              print('::notice::' + d['error'])
+              d = {'items': [], 'preview': []}
           todo = d['preview'] if os.environ['MODE'] == 'preview' else d['items']
           print('к подготовке:', len(todo))
           os.makedirs('in', exist_ok=True)
