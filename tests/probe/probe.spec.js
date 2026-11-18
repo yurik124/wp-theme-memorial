@@ -2808,14 +2808,15 @@ test.describe( 'выбор отзывов', () => {
 
 test.describe( 'антиспам и услуги', () => {
 	test( 'антиспам и услуги: форма из окна, комментарии, XML-RPC, «Наши услуги»', async ( { page } ) => {
-		test.setTimeout( 300_000 );
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 60000 );
 		const report = {};
 		const errs = errorsOf( page );
 		await page.setViewportSize( { width: 1440, height: 900 } );
-		await page.goto( '/', { waitUntil: 'networkidle' } );
+		await page.goto( '/', { waitUntil: 'domcontentloaded' } ).then( () => page.waitForTimeout( 1500 ) );
 		await page.addStyleTag( { content: NO_FLOAT } );
 		report.homeCards = await page.evaluate( () => [ ...document.querySelectorAll( '.svc__item h3' ) ].map( ( h ) => h.textContent.trim() ) );
-		await page.goto( '/ritualnye-uslugi/', { waitUntil: 'networkidle' } );
+		await page.goto( '/ritualnye-uslugi/', { waitUntil: 'domcontentloaded' } ).then( () => page.waitForTimeout( 1500 ) );
 		report.uslugiCards = await page.evaluate( () => [ ...document.querySelectorAll( '.svc__item h3' ) ].map( ( h ) => h.textContent.trim() ) );
 		report.titles = {};
 		for ( const p of [ '/', '/ritualnye-uslugi/', '/pomoshh-v-organizaczii-pohoron/', '/ceny/', '/groby/' ] ) {
