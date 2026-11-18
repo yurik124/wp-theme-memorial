@@ -268,3 +268,85 @@ add_action(
 	},
 	7
 );
+
+/**
+ * Once (18.11.2026): the home page and “Funeral services” do not compete for the same query. By the Yandex results for
+ * Belgorod, “ритуальные услуги / похоронное бюро / ритуальное агентство / организация похорон + Белгород” is one
+ * cluster where the home pages of the companies rank — it is the home page’s; the price queries go to “Prices”;
+ * “Funeral services” is the list of services, “Help with the funeral” — how it goes, step by step.
+ * Only a title or description that is empty or still the one of the first move is changed — never the owner’s own.
+ *
+ * @return array<string,array{0:string,1:string,2:string[]}> path ('' — home) => [title, description, old titles that may be replaced]
+ */
+function memorial_plugin_seo_titles_2() {
+	$t = ' %%sep%% %%sitetitle%%';
+	return array(
+		''                               => array(
+			'Ритуальные услуги и организация похорон в Белгороде — «Мемориал»',
+			'Ритуальное агентство «Мемориал» в Белгороде: организация похорон под ключ, кремация, свой траурный зал, перевозка умерших. Цены на сайте, звонки круглосуточно.',
+			array( 'Ритуальные услуги в Белгороде круглосуточно — «Мемориал»' ),
+		),
+		'ritualnye-uslugi'               => array(
+			'Перечень ритуальных услуг «Мемориала»: похороны, кремация, траурный зал' . $t,
+			'Какие ритуальные услуги оказывает «Мемориал» в Белгороде: организация похорон, кремация, прощание в траурном зале, перевозка умерших, поминальный обед. Состав и цены.',
+			array( 'Ритуальные услуги в Белгороде: цены и состав' . $t, 'Ритуальные услуги | %%sitetitle%%' ),
+		),
+		'pomoshh-v-organizaczii-pohoron' => array(
+			'Как мы организуем похороны: что входит и как всё проходит' . $t,
+			'Что делает «Мемориал», когда вы обращаетесь за помощью: выезд агента, документы, морг, прощание и захоронение — по шагам. Звонки принимаем круглосуточно.',
+			array( 'Организация похорон в Белгороде под ключ' . $t ),
+		),
+		'ceny'                           => array(
+			'Сколько стоят похороны в Белгороде: цены на ритуальные услуги' . $t,
+			'Цены на похороны и ритуальные услуги в Белгороде: готовые пакеты с полным составом, кремация, отдельные услуги и товары. Цены обновляются вместе с каталогом.',
+			array( 'Цены на ритуальные услуги и товары в Белгороде' . $t ),
+		),
+	);
+}
+
+/**
+ * The run of memorial_plugin_seo_titles_2(). $dry = true — only what would change.
+ *
+ * @param bool $dry Dry run.
+ * @return array Log: [post id => [field => old value]].
+ */
+function memorial_plugin_seo_upgrade_2( $dry = false ) {
+	$log = array( 'time' => time() );
+	foreach ( memorial_plugin_seo_titles_2() as $path => [ $title, $desc, $old ] ) {
+		$id = '' === $path ? (int) get_option( 'page_on_front' ) : (int) ( get_page_by_path( $path )->ID ?? 0 );
+		if ( ! $id ) {
+			continue;
+		}
+		$now = (string) get_post_meta( $id, '_seopress_titles_title', true );
+		if ( '' === $now || in_array( $now, $old, true ) ) {
+			$log['posts'][ $id ]['_seopress_titles_title'] = $now;
+			if ( ! $dry ) {
+				update_post_meta( $id, '_seopress_titles_title', $title );
+			}
+		}
+		// The description: empty, or the old short one of the first site (“Контакты - …”-like texts are not touched).
+		$d = (string) get_post_meta( $id, '_seopress_titles_desc', true );
+		if ( '' === $d || ( 'ritualnye-uslugi' === $path && false !== strpos( $d, 'весь комплекс услуг' ) ) ) {
+			$log['posts'][ $id ]['_seopress_titles_desc'] = $d;
+			if ( ! $dry ) {
+				update_post_meta( $id, '_seopress_titles_desc', $desc );
+			}
+		}
+	}
+	return $log;
+}
+
+add_action(
+	'admin_init',
+	static function () {
+		if ( get_option( 'memorial_plugin_seo_2' ) || ! current_user_can( 'manage_options' ) || wp_doing_ajax() || ! get_option( 'memorial_plugin_seo_1' ) ) {
+			return;
+		}
+		update_option( 'memorial_plugin_seo_2', time(), false );
+		update_option( 'memorial_plugin_seo_2_log', memorial_plugin_seo_upgrade_2(), false );
+		if ( function_exists( 'memorial_plugin_page_cache_clear' ) ) {
+			memorial_plugin_page_cache_clear();
+		}
+	},
+	9
+);

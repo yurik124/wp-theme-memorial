@@ -7932,3 +7932,40 @@ msgstr "Способы оплаты и рассрочка из «Мемориа�
 msgctxt "block title"
 msgid "Payment"
 msgstr "Оплата"
+
+msgid "A link in the name; many requests"
+msgstr "Ссылка в имени; много заявок"
+
+msgid "A link or code in the name"
+msgstr "Ссылка или код в имени"
+
+msgid "Check"
+msgstr "Проверить"
+
+msgid "Comments are closed."
+msgstr "Комментарии закрыты."
+
+msgid "Held: many requests in an hour"
+msgstr "Отложено: много заявок за час"
+
+msgid "Many call-back requests in an hour"
+msgstr "Много заявок на звонок за час"
+
+msgid "Many requests in an hour"
+msgstr "Много заявок за час"
+
+#, php-format
+msgid "More than %1$d requests came from the site in the last hour — maybe spam. The emails of the next requests wait for an hour; the requests themselves are kept with the mark “Check”: %2$s"
+msgstr "За последний час с сайта пришло больше %1$d заявок — возможно, это спам. Письма о следующих заявках отложены на час, сами заявки сохранены с пометкой «Проверить»: %2$s"
+
+msgid "Not from the window; a link in the name"
+msgstr "Не из окна сайта; ссылка в имени"
+
+msgid "Not from the window; a link; many requests"
+msgstr "Не из окна сайта; ссылка; много заявок"
+
+msgid "Not from the window; many requests"
+msgstr "Не из окна сайта; много заявок"
+
+msgid "Sent not from the window of the site"
+msgstr "Отправлено не из окна сайта"

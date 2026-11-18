@@ -33,3 +33,5 @@
 /sitemaps.xml
 /sitemap.xml
 /wp-sitemap.xml
+/xmlrpc.php
+/wp-comments-post.php

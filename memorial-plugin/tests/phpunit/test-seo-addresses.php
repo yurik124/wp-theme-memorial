@@ -121,4 +121,28 @@ class Test_Memorial_Plugin_Seo_Addresses extends WP_UnitTestCase {
 		// The old address of the page leads to the new one.
 		$this->assertSame( get_permalink( $fences ), memorial_plugin_redirect_target( '/ogradki-2/' ) );
 	}
+
+	public function test_home_and_services_do_not_compete() {
+		$home = self::factory()->post->create( array( 'post_type' => 'page' ) );
+		update_option( 'page_on_front', $home );
+		update_option( 'show_on_front', 'page' );
+		update_post_meta( $home, '_seopress_titles_title', 'Ритуальные услуги в Белгороде круглосуточно — «Мемориал»' );
+		$list = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+				'post_name' => 'ritualnye-uslugi',
+			)
+		);
+		update_post_meta( $list, '_seopress_titles_title', 'Своё название владельца' );
+		update_post_meta( $list, '_seopress_titles_desc', 'Компания предлагает весь комплекс услуг.' );
+
+		$dry = memorial_plugin_seo_upgrade_2( true );
+		$this->assertArrayHasKey( $home, $dry['posts'] );
+		$this->assertSame( 'Ритуальные услуги в Белгороде круглосуточно — «Мемориал»', get_post_meta( $home, '_seopress_titles_title', true ) );
+
+		memorial_plugin_seo_upgrade_2();
+		$this->assertSame( 'Ритуальные услуги и организация похорон в Белгороде — «Мемориал»', get_post_meta( $home, '_seopress_titles_title', true ) );
+		$this->assertSame( 'Своё название владельца', get_post_meta( $list, '_seopress_titles_title', true ), 'The owner’s own title stays.' );
+		$this->assertStringStartsWith( 'Какие ритуальные услуги', get_post_meta( $list, '_seopress_titles_desc', true ) );
+	}
 }

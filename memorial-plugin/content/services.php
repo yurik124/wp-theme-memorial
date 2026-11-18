@@ -82,3 +82,51 @@ add_shortcode(
 		return $items ? '<div class="mem-svc">' . memorial_plugin_services_grid( $items ) . '</div>' : '';
 	}
 );
+
+/**
+ * Once (owner, 18.11.2026): only services in “Our services” — on the home page and on “Funeral services”. The cards of the
+ * landscaping and of the funeral goods are removed from «Memorial → Home → Our services»; they stay in the log
+ * memorial_plugin_services_1_log (to put them back by hand). The option is written as it is, before the sanitizer of
+ * the screen is registered (admin_init 10).
+ *
+ * @param bool $dry Dry run: only the cards that would go.
+ * @return array Removed cards.
+ */
+function memorial_plugin_services_upgrade_1( $dry = false ) {
+	$opt = get_option( 'mem_home' );
+	if ( ! is_array( $opt ) || empty( $opt['services']['items'] ) || ! is_array( $opt['services']['items'] ) ) {
+		return array();
+	}
+	$not_services = array( 'blagoustrojstvo-zahoroneniya', 'ritualnye-tovary' );
+	$keep         = array();
+	$gone         = array();
+	foreach ( $opt['services']['items'] as $it ) {
+		$pid  = (int) ( $it['page'] ?? 0 );
+		$path = $pid ? urldecode( (string) get_page_uri( $pid ) ) : '';
+		if ( in_array( $path, $not_services, true ) || preg_match( '/благоустр|ритуальн\w* товар/iu', (string) ( $it['title'] ?? '' ) ) ) {
+			$gone[] = $it;
+		} else {
+			$keep[] = $it;
+		}
+	}
+	if ( $gone && ! $dry ) {
+		$opt['services']['items'] = $keep;
+		update_option( 'mem_home', $opt );
+	}
+	return $gone;
+}
+
+add_action(
+	'admin_init',
+	static function () {
+		if ( get_option( 'memorial_plugin_services_1' ) || ! current_user_can( 'manage_options' ) || wp_doing_ajax() ) {
+			return;
+		}
+		update_option( 'memorial_plugin_services_1', time(), false );
+		update_option( 'memorial_plugin_services_1_log', memorial_plugin_services_upgrade_1(), false );
+		if ( function_exists( 'memorial_plugin_page_cache_clear' ) ) {
+			memorial_plugin_page_cache_clear();
+		}
+	},
+	7
+);

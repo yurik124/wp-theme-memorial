@@ -130,6 +130,10 @@ function memorial_plugin_lead_mail_send( $lead, $settings ) {
 		'{link}'  => admin_url( 'admin.php?page=memorial-plugin-leads' ),
 	);
 	$subject = str_replace( ' ()', '', strtr( (string) $settings['subject'], '' !== $name ? $vars : array( '{name}' => '' ) + $vars ) );
+	// A request to check (no mark of the window, a link in the name…): the same email with a mark in the subject.
+	if ( ! empty( $lead['check'] ) ) {
+		$subject = '[' . __( 'Check', 'memorial-plugin' ) . '] ' . $subject;
+	}
 	$body    = strtr( (string) $settings['body'], $vars );
 	// An order from a product card reaches the email even if the text has no {product}.
 	if ( '' !== $vars['{product}'] && false === strpos( (string) $settings['body'], '{product}' ) ) {
@@ -151,6 +155,28 @@ function memorial_plugin_lead_mail( $id, $lead ) {
 		$res['ok'] ? delete_post_meta( $id, '_mem_mail_error' ) : update_post_meta( $id, '_mem_mail_error', $res['error'] );
 	}
 	return $res;
+}
+
+/**
+ * Many requests in an hour (memorial_plugin_callback_receive): instead of an email for each — one email an hour
+ * “many requests, check the list”.
+ *
+ * @return bool Sent now.
+ */
+function memorial_plugin_lead_mail_flood() {
+	if ( get_transient( 'memorial_plugin_lead_flood' ) ) {
+		return false;
+	}
+	set_transient( 'memorial_plugin_lead_flood', 1, HOUR_IN_SECONDS );
+	$settings = memorial_plugin_lead_mail_settings();
+	$subject  = '[' . __( 'Check', 'memorial-plugin' ) . '] ' . __( 'Many call-back requests in an hour', 'memorial-plugin' );
+	$body     = sprintf(
+		/* translators: 1: number of requests, 2: link to the list. */
+		__( 'More than %1$d requests came from the site in the last hour — maybe spam. The emails of the next requests wait for an hour; the requests themselves are kept with the mark “Check”: %2$s', 'memorial-plugin' ),
+		MEMORIAL_PLUGIN_CALLBACK_HOUR_LIMIT,
+		admin_url( 'admin.php?page=memorial-plugin-leads' )
+	);
+	return (bool) memorial_plugin_mail_send( memorial_plugin_mail_to( (string) $settings['to'] ), $subject, $body, (string) $settings['from_email'], (string) $settings['from_name'] )['ok'];
 }
 
 /* Test email: the settings from the screen (also unsaved). */

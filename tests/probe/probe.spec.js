@@ -2805,3 +2805,53 @@ test.describe( 'выбор отзывов', () => {
 		fs.writeFileSync( `${ DIR }/log-pick.json`, JSON.stringify( report, null, 1 ) );
 	} );
 } );
+
+test.describe( 'антиспам и услуги', () => {
+	test( 'антиспам и услуги: форма из окна, комментарии, XML-RPC, «Наши услуги»', async ( { page } ) => {
+		test.setTimeout( 600_000 );
+		page.setDefaultTimeout( 60000 );
+		const report = {};
+		const errs = errorsOf( page );
+		await page.setViewportSize( { width: 1440, height: 900 } );
+		await page.goto( '/', { waitUntil: 'domcontentloaded' } ).then( () => page.waitForTimeout( 1500 ) );
+		await page.addStyleTag( { content: NO_FLOAT } );
+		report.homeCards = await page.evaluate( () => [ ...document.querySelectorAll( '.svc__item h3' ) ].map( ( h ) => h.textContent.trim() ) );
+		await page.goto( '/ritualnye-uslugi/', { waitUntil: 'domcontentloaded' } ).then( () => page.waitForTimeout( 1500 ) );
+		report.uslugiCards = await page.evaluate( () => [ ...document.querySelectorAll( '.svc__item h3' ) ].map( ( h ) => h.textContent.trim() ) );
+		report.titles = {};
+		for ( const p of [ '/', '/ritualnye-uslugi/', '/pomoshh-v-organizaczii-pohoron/', '/ceny/', '/groby/' ] ) {
+			const html = await ( await page.request.get( p ) ).text();
+			report.titles[ p ] = [ ( html.match( /<title>([^<]*)<\/title>/ ) || [] )[ 1 ], ( html.match( /<meta name="description" content="([^"]*)"/ ) || [] )[ 1 ] ];
+		}
+		// Заявка из окна, как посетитель: открыть, подождать, заполнить, отправить.
+		await page.locator( '[data-callback]:visible' ).first().click();
+		await page.waitForTimeout( 3500 );
+		await page.fill( '#callback input[name=phone]', '9001234567' );
+		await page.fill( '#callback input[name=name]', 'Проверка probe' );
+		await page.check( '#callback input[name=consent]' );
+		const resp = page.waitForResponse( ( r ) => r.url().includes( '/mem/v1/callback' ) && r.request().method() === 'POST' );
+		await page.click( '#callback [type=submit]' );
+		const r = await resp;
+		report.formStatus = r.status();
+		report.formDone = await page.locator( '#callback .cb__done' ).isVisible();
+		await shot( page, 'spam-form-done' );
+		// Бот без окна: заявка сохраняется с пометкой.
+		const bot = await page.request.post( '/wp-json/mem/v1/callback', { data: { phone: '+7 900 765-43-21', consent: 1, name: 'buy http://x.example' } } );
+		report.botStatus = bot.status();
+		report.xmlrpc = ( await page.request.post( '/xmlrpc.php', { data: '<?xml version="1.0"?><methodCall><methodName>system.listMethods</methodName></methodCall>', maxRedirects: 0 } ) ).status();
+		report.comment = ( await page.request.post( '/wp-comments-post.php', { form: { comment_post_ID: '1', comment: 'spam', author: 'x', email: 'x@example.org' }, maxRedirects: 0 } ) ).status();
+		report.pingback = ( await page.request.get( '/', { maxRedirects: 0 } ) ).headers()[ 'x-pingback' ] || '';
+		// Список заявок: пометка «Проверить».
+		await page.goto( '/wp-login.php' );
+		await page.fill( '#user_login', 'probe' );
+		await page.fill( '#user_pass', 'probe-pass-123' );
+		await page.click( '#wp-submit' );
+		await page.waitForURL( /wp-admin/ );
+		await page.goto( '/wp-admin/admin.php?page=memorial-plugin-leads' );
+		await page.waitForTimeout( 4000 );
+		await shot( page, 'spam-leads' );
+		report.leadsText = ( await page.locator( 'body' ).innerText() ).match( /Проверка probe|buy http|Отправлено не из окна|Ссылка или код|Не из окна[^\n]*/g );
+		report.errs = errs;
+		fs.writeFileSync( `${ DIR }/log-spam.json`, JSON.stringify( report, null, 1 ) );
+	} );
+} );
