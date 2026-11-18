@@ -7969,3 +7969,225 @@ msgstr "Не из окна сайта; много заявок"
 
 msgid "Sent not from the window of the site"
 msgstr "Отправлено не из окна сайта"
+
+msgid "3 : 2 (landscape)"
+msgstr "3 : 2 (горизонтально)"
+
+msgid "3 : 4 (upright)"
+msgstr "3 : 4 (вертикально)"
+
+msgid "4 : 3 (landscape)"
+msgstr "4 : 3 (горизонтально)"
+
+msgid "After"
+msgstr "После"
+
+msgid "As it is"
+msgstr "Как есть"
+
+msgid "Auto levels"
+msgstr "Автоуровни"
+
+msgid "Auto levels stretch the darkest and the lightest tones; white balance removes a yellow or blue cast of the light. The rest is the same for every photo."
+msgstr "Автоуровни растягивают самые тёмные и самые светлые тона; баланс белого убирает жёлтый или синий оттенок освещения. Остальное — одинаково для всех фото."
+
+msgid "Background colour"
+msgstr "Цвет фона"
+
+msgid "Before"
+msgstr "До"
+
+msgid "Border"
+msgstr "Граница"
+
+msgid "Brightness"
+msgstr "Яркость"
+
+msgid "Catalog products"
+msgstr "Товары каталога"
+
+msgid "Clean-up"
+msgstr "Очистка"
+
+msgid "Colour correction"
+msgstr "Цветокоррекция"
+
+msgid "Compare"
+msgstr "Сравнить"
+
+msgid "Contrast"
+msgstr "Контраст"
+
+msgid "Convert to sRGB (colours the same in every browser; done in GitHub Actions)"
+msgstr "Перевод в sRGB (цвета одинаковы во всех браузерах; делается в GitHub Actions)"
+
+msgid "Do not process"
+msgstr "Не обрабатывать"
+
+msgid "In the lower right corner. Empty file — the logo of the site. On small copies (catalog cards) it is not put: it would be unreadable."
+msgstr "В правом нижнем углу. Файл не выбран — логотип сайта. На маленькие копии (карточки каталога) не ставится: его не прочитать."
+
+msgid "Logo"
+msgstr "Логотип"
+
+msgid "Logo file (PNG with a transparent background)"
+msgstr "Файл логотипа (PNG с прозрачным фоном)"
+
+msgid "Logo on the photos"
+msgstr "Логотип на фото"
+
+msgid "Make the report"
+msgstr "Составлять отчёт"
+
+msgid "Margin around the product"
+msgstr "Поля вокруг товара"
+
+msgid "Margin from the edge"
+msgstr "Отступ от края"
+
+msgid "No photos to show yet."
+msgstr "Пока нет фото для показа."
+
+msgid "Not on copies narrower than, px"
+msgstr "Не ставить на копии уже, px"
+
+msgid "One style for the photos of the site. Every change is seen at once in the preview on the right — before saving. After saving the photos are processed in the background, a few a minute; the originals are kept, and everything can be returned."
+msgstr "Единый стиль фото сайта. Каждое изменение сразу видно в предпросмотре справа — до сохранения. После сохранения фото обрабатываются в фоне, по несколько в минуту; оригиналы сохраняются, всё можно вернуть."
+
+msgid "Opacity"
+msgstr "Непрозрачность"
+
+msgid "Photo processing"
+msgstr "Обработка фото"
+
+msgid "Photos of the pages"
+msgstr "Фото страниц"
+
+#, php-format
+msgid "Photos to look at: %d"
+msgstr "Фото, на которые стоит посмотреть: %d"
+
+msgid "Preview"
+msgstr "Предпросмотр"
+
+msgid "Process the photos"
+msgstr "Обрабатывать фото"
+
+#, php-format
+msgid "Processed: %1$d of %2$d."
+msgstr "Обработано: %1$d из %2$d."
+
+msgid "Processing"
+msgstr "Обработка"
+
+msgid "Processing is switched off: the site shows the originals. The preview shows what the photos will look like when it is on."
+msgstr "Обработка выключена: на сайте оригиналы. Предпросмотр показывает, как фото будут выглядеть, когда её включить."
+
+msgid "Products: crop to the object"
+msgstr "Товары: обрезать по предмету"
+
+msgid "Products: the object is found on its background and put in the middle with even margins, the photo gets the chosen proportions (the missing part is filled with the background, nothing is cut off the product). Works: cut to the proportions around the middle."
+msgstr "Товары: предмет находится на фоне и ставится по центру с ровными полями, фото получает выбранные пропорции (недостающее заполняется фоном, у товара ничего не обрезается). Работы: обрезка до пропорций по центру."
+
+msgid "Proportions and cropping"
+msgstr "Пропорции и обрезка"
+
+msgid "Replace the background"
+msgstr "Заменить фон"
+
+msgid "Report of bad photos"
+msgstr "Отчёт о плохих фото"
+
+msgid "Remove EXIF (camera, time, place of the shot)"
+msgstr "Удалять EXIF (камера, время, место съёмки)"
+
+msgid "Return all originals"
+msgstr "Вернуть все оригиналы"
+
+msgid "Return the originals of all photos and switch the processing off?"
+msgstr "Вернуть оригиналы всех фото и выключить обработку?"
+
+msgid "Same proportions"
+msgstr "Одинаковые пропорции"
+
+msgid "Saturation"
+msgstr "Насыщенность"
+
+msgid "Sharpness"
+msgstr "Резкость"
+
+msgid "Show"
+msgstr "Показать"
+
+msgid "Single background of the products"
+msgstr "Единый фон товаров"
+
+msgid "Small, blurred, too dark or too light photos, repeats and photos without a description — a list below the settings, to take or choose better ones."
+msgstr "Маленькие, размытые, слишком тёмные или светлые фото, повторы и фото без описания — список под настройками, чтобы переснять или выбрать лучшие."
+
+msgid "Switched off — the site shows the photos as they were uploaded (the originals are kept). Which photos are processed: reviews, documents, the logo and a photo marked “Do not process” in the media library never are."
+msgstr "Выключено — на сайте фото такими, какими их загрузили (оригиналы хранятся). Какие фото обрабатывать: отзывы, документы, логотип и фото с отметкой «Не обрабатывать» в медиатеке не обрабатываются никогда."
+
+msgid "The background around a product is replaced with one light colour. It is done by a free open model in GitHub Actions (the hosting cannot), so a new photo gets its background within an hour; the preview shows the samples of the last run of “Photos — background” in Actions."
+msgstr "Фон вокруг товара заменяется одним светлым цветом. Это делает бесплатная открытая модель в GitHub Actions (хостинг не умеет), поэтому новое фото получает фон в течение часа; предпросмотр показывает образцы последнего запуска «Фото — фон» в Actions."
+
+msgid "The background of this photo is not ready yet: run “Photos — background” in GitHub Actions (Actions → Photos — background → Run workflow); in 3–5 minutes the sample appears here. Until then the preview shows the rest without the new background."
+msgstr "Фон этого фото ещё не готов: запустите «Фото — фон» в GitHub Actions (Actions → Фото — фон → Run workflow); через 3–5 минут образец появится здесь. До тех пор предпросмотр показывает остальное без нового фона."
+
+msgid "The photo could not be loaded."
+msgstr "Не удалось загрузить фото."
+
+#, php-format
+msgid "Waiting for the background from GitHub Actions: %d."
+msgstr "Ждут фон из GitHub Actions: %d."
+
+msgid "White balance"
+msgstr "Баланс белого"
+
+msgid "Width of the logo"
+msgstr "Ширина логотипа"
+
+msgid "Works and pages"
+msgstr "Работы и страницы"
+
+msgid "Warmth"
+msgstr "Теплота"
+
+msgid "blurred"
+msgstr "размыто"
+
+msgid "no description"
+msgstr "нет описания"
+
+msgid "repeats another photo"
+msgstr "повторяет другое фото"
+
+msgid "small"
+msgstr "маленькое"
+
+msgid "too dark"
+msgstr "слишком тёмное"
+
+msgid "too light"
+msgstr "слишком светлое"
+
+msgid "Return"
+msgstr "Вернуть"
+
+msgid "As on the site"
+msgstr "Как на сайте"
+
+msgid "Colour of the logo"
+msgstr "Цвет логотипа"
+
+msgid "In the lower right corner. Without an own file — the current logo of the site with its name, the picture is made on this screen. On small copies (catalog cards) it is not put: it would be unreadable."
+msgstr "В правом нижнем углу. Без своего файла — текущий логотип сайта с названием, картинка делается на этом экране. На маленькие копии (карточки каталога) не ставится — его не разглядеть."
+
+msgid "Own logo file (PNG with a transparent background)"
+msgstr "Свой файл логотипа (PNG с прозрачным фоном)"
+
+msgid "White with a soft shadow — seen on any photo"
+msgstr "Белый с мягкой тенью — виден на любом фото"
+
+msgid "With the name of the site"
+msgstr "С названием сайта"

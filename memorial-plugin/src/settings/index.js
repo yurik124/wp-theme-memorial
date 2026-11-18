@@ -37,6 +37,7 @@ import { Page } from '@wordpress/admin-ui';
 
 import Hint from '../shared/hint';
 import RewioScope from './rewio-scope';
+import PhotoPreview from './photo-preview';
 import './style.scss';
 
 const SITE = window.memorialPluginSettings?.siteUrl || '/';
@@ -1128,120 +1129,136 @@ function App( { option } ) {
 
 	return (
 		<Page title={ page.title } actions={ actions }>
-			<Flex
-				direction="column"
-				align="stretch"
-				gap={ 4 }
-				className="memorial-plugin-settings"
+			<div
+				className={
+					page.preview
+						? 'memorial-plugin-settings__split'
+						: 'memorial-plugin-settings__single'
+				}
 			>
-				{ page.intro && (
-					// The intro may hold lists and paragraphs, so it is not the page subtitle (a <p>).
-					<Intro html={ page.intro } />
-				) }
-				{ notice && (
-					<Notice
-						status={ notice.status }
-						onRemove={ () => setNotice( null ) }
-					>
-						{ notice.text }
-					</Notice>
-				) }
-				<div ref={ extraRef } />
-				{ withTabs( page.fields, ( def ) =>
-					def.type === 'note' ? (
-						<Note key={ def.id } def={ def } />
-					) : (
-						<Card
-							key={ def.id }
-							className="memorial-plugin-settings__card"
+				<Flex
+					direction="column"
+					align="stretch"
+					gap={ 4 }
+					className="memorial-plugin-settings"
+				>
+					{ page.intro && (
+						// The intro may hold lists and paragraphs, so it is not the page subtitle (a <p>).
+						<Intro html={ page.intro } />
+					) }
+					{ notice && (
+						<Notice
+							status={ notice.status }
+							onRemove={ () => setNotice( null ) }
 						>
-							<CardHeader>
-								<h2 className="memorial-plugin-settings__card-title">
-									{ def.label || def.id }
-									{ String( def.help ?? '' ).length >
-										HINT_FROM && (
-										<Hint text={ def.help } />
-									) }
-								</h2>
-							</CardHeader>
-							<CardBody>
-								{ def.type === 'group' ? (
-									<>
-										{ String( def.help ?? '' ).length <=
+							{ notice.text }
+						</Notice>
+					) }
+					<div ref={ extraRef } />
+					{ withTabs( page.fields, ( def ) =>
+						def.type === 'note' ? (
+							<Note key={ def.id } def={ def } />
+						) : (
+							<Card
+								key={ def.id }
+								className="memorial-plugin-settings__card"
+							>
+								<CardHeader>
+									<h2 className="memorial-plugin-settings__card-title">
+										{ def.label || def.id }
+										{ String( def.help ?? '' ).length >
 											HINT_FROM && (
-											<Help text={ def.help } />
+											<Hint text={ def.help } />
 										) }
+									</h2>
+								</CardHeader>
+								<CardBody>
+									{ def.type === 'group' ? (
+										<>
+											{ String( def.help ?? '' ).length <=
+												HINT_FROM && (
+												<Help text={ def.help } />
+											) }
+											<FieldsForm
+												defs={ def.fields || [] }
+												data={ value[ def.id ] || {} }
+												onChange={ ( edits ) => {
+													setValue( ( v ) => ( {
+														...v,
+														[ def.id ]: {
+															...( v[ def.id ] ||
+																{} ),
+															...edits,
+														},
+													} ) );
+													setDirty( true );
+												} }
+											/>
+										</>
+									) : (
 										<FieldsForm
-											defs={ def.fields || [] }
-											data={ value[ def.id ] || {} }
+											defs={ [
+												{
+													...def,
+													hideLabel: true,
+													// A long explanation is behind “?” next to the card title.
+													help:
+														String( def.help ?? '' )
+															.length > HINT_FROM
+															? ''
+															: def.help,
+												},
+											] }
+											data={ value }
 											onChange={ ( edits ) => {
 												setValue( ( v ) => ( {
 													...v,
-													[ def.id ]: {
-														...( v[ def.id ] ||
-															{} ),
-														...edits,
-													},
+													...edits,
 												} ) );
 												setDirty( true );
 											} }
 										/>
-									</>
-								) : (
-									<FieldsForm
-										defs={ [
-											{
-												...def,
-												hideLabel: true,
-												// A long explanation is behind “?” next to the card title.
-												help:
-													String( def.help ?? '' )
-														.length > HINT_FROM
-														? ''
-														: def.help,
-											},
-										] }
-										data={ value }
-										onChange={ ( edits ) => {
-											setValue( ( v ) => ( {
-												...v,
-												...edits,
-											} ) );
-											setDirty( true );
-										} }
-									/>
-								) }
-							</CardBody>
-						</Card>
-					)
+									) }
+								</CardBody>
+							</Card>
+						)
+					) }
+					<div
+						className={
+							'memorial-plugin-settings__bar' +
+							( dirty ? ' is-dirty' : '' )
+						}
+					>
+						<span
+							className="memorial-plugin-settings__state"
+							role="status"
+						>
+							{ dirty
+								? __(
+										'There are unsaved changes',
+										'memorial-plugin'
+									)
+								: __(
+										'All changes are saved',
+										'memorial-plugin'
+									) }
+						</span>
+						<Button
+							variant="primary"
+							isBusy={ busy }
+							disabled={ busy || ! dirty }
+							onClick={ save }
+						>
+							{ __( 'Save', 'memorial-plugin' ) }
+						</Button>
+					</div>
+				</Flex>
+				{ page.preview === 'photos' && (
+					<aside className="memorial-plugin-settings__preview">
+						<PhotoPreview value={ value } />
+					</aside>
 				) }
-				<div
-					className={
-						'memorial-plugin-settings__bar' +
-						( dirty ? ' is-dirty' : '' )
-					}
-				>
-					<span
-						className="memorial-plugin-settings__state"
-						role="status"
-					>
-						{ dirty
-							? __(
-									'There are unsaved changes',
-									'memorial-plugin'
-								)
-							: __( 'All changes are saved', 'memorial-plugin' ) }
-					</span>
-					<Button
-						variant="primary"
-						isBusy={ busy }
-						disabled={ busy || ! dirty }
-						onClick={ save }
-					>
-						{ __( 'Save', 'memorial-plugin' ) }
-					</Button>
-				</div>
-			</Flex>
+			</div>
 		</Page>
 	);
 }

@@ -586,3 +586,84 @@
 		margin: 0;
 	}
 }
+
+// A screen with a preview (photo processing): the settings on the left, the preview on the right, it stays in view.
+.memorial-plugin-settings__split {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 24px;
+
+	@media (min-width: 1200px) {
+		grid-template-columns: minmax(0, 1fr) minmax(380px, 520px);
+		align-items: start;
+	}
+}
+
+.memorial-plugin-settings__preview {
+	min-width: 0;
+
+	@media (min-width: 1200px) {
+		position: sticky;
+		top: 48px;
+		max-height: calc(100vh - 64px);
+		overflow-y: auto;
+	}
+}
+
+.memorial-plugin-photo-preview__stage {
+	position: relative;
+	background: #f0f0f0;
+	border-radius: 8px;
+	overflow: hidden;
+	min-height: 120px;
+
+	canvas,
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	&.is-after .memorial-plugin-photo-preview__before,
+	&.is-before .memorial-plugin-photo-preview__holder {
+		display: none;
+	}
+
+	// Compare: the processed photo over the original, cut at the border.
+	&.is-split .memorial-plugin-photo-preview__holder {
+		position: absolute;
+		inset: 0;
+		clip-path: inset(0 0 0 var(--split, 50%));
+
+		canvas {
+			height: 100%;
+			object-fit: contain;
+		}
+	}
+}
+
+.memorial-plugin-photo-preview__h {
+	margin: 20px 0 8px;
+	font-size: 14px;
+}
+
+.memorial-plugin-photo-preview__report {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		padding: 6px 0;
+		border-bottom: 1px solid #eee;
+	}
+
+	img {
+		width: 48px;
+		height: 48px;
+		object-fit: cover;
+		border-radius: 4px;
+	}
+}

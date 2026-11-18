@@ -1,0 +1,149 @@
+name: Фото — фон
+
+# «Мемориал → Обработка фото»: то, чего не умеет хостинг (только GD) — замена фона у товаров и перевод в sRGB.
+# Кладёт на сайт временный agent.php с ключом (как диагностика), берёт список фото, скачивает оригиналы по SFTP,
+# готовит PNG (.github/photos/process.py) и кладёт их в uploads/memorial-photos/stage/ (или preview/ — образцы
+# для предпросмотра на экране), затем запускает очередь сайта. Оригиналы на сайте не меняются.
+#
+# Запуск: Actions → «Фото — фон» → Run workflow (режим preview — только образцы для экрана; process — всё),
+# а также каждый час (только process: новые фото получают фон без участия человека).
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'preview — образцы для предпросмотра; process — подготовить все фото'
+        required: true
+        default: preview
+        type: choice
+        options: [preview, process]
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: photos
+  cancel-in-progress: false
+
+env:
+  SFTP_HOST: ${{ secrets.SFTP_HOST }}
+  SFTP_PORT: ${{ secrets.SFTP_PORT }}
+  SFTP_USER: ${{ secrets.SFTP_USER }}
+  SITE_DIR: ${{ secrets.SITE_DIR }}
+  MODE: ${{ inputs.mode || 'process' }}
+
+jobs:
+  photos:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Модель фона (кэш)
+        uses: actions/cache@v4
+        with:
+          path: ~/.u2net
+          key: rembg-isnet-general-use-1
+
+      # вход на хостинг по ключу SSH (секрет SSH_PRIVATE_KEY); без ключа — по паролю, как раньше
+      - name: Ключ SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          if [ -n "$SSH_PRIVATE_KEY" ]; then
+            mkdir -p ~/.ssh && printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/memorial_key && chmod 600 ~/.ssh/memorial_key
+            echo "SSH_KEY_FILE=$HOME/.ssh/memorial_key" >> "$GITHUB_ENV"
+            echo "LFTP_OPEN=set sftp:connect-program \"ssh -a -x -i $HOME/.ssh/memorial_key -o StrictHostKeyChecking=accept-new -o BatchMode=yes\"; open -u $SFTP_USER," >> "$GITHUB_ENV"
+            echo "Вход по ключу"
+          else
+            echo "LFTP_OPEN=open -u $SFTP_USER --env-password" >> "$GITHUB_ENV"
+            echo "::warning::Секрета SSH_PRIVATE_KEY нет — вход по паролю"
+          fi
+
+      - name: Список фото с сайта
+        env:
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          pip install -q paramiko requests
+          mkdir -p out
+          python3 - <<'PY'
+          import os, re, gzip, secrets, paramiko, requests, json
+          AUTH = {'pkey': paramiko.PKey.from_path(os.environ['SSH_KEY_FILE'])} if os.environ.get('SSH_KEY_FILE') else {'password': os.environ['SFTP_PASSWORD']}
+          t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+          t.connect(username=os.environ['SFTP_USER'], **AUTH)
+          sf = paramiko.SFTPClient.from_transport(t)
+          site = os.environ['SITE_DIR'].rstrip('/')
+          dbs = sorted(f for f in sf.listdir(site + '/updraft') if f.endswith('-db.gz'))
+          url = ''
+          with sf.open(site + '/updraft/' + dbs[-1], 'rb') as raw, gzip.GzipFile(fileobj=raw) as g:
+              for line in g:
+                  m = re.search(rb"'siteurl',\s*'([^']+)'", line)
+                  if m:
+                      url = m.group(1).decode().rstrip('/')
+                      break
+          name = 'mem-photos-' + secrets.token_hex(8) + '.php'
+          key = secrets.token_hex(16)
+          body = open('.github/photos/agent.php', encoding='utf-8').read().replace('__KEY__', key)
+          with sf.open(site + '/' + name, 'w') as f:
+              f.write(body)
+          open('out/agent.json', 'w').write(json.dumps({'url': url + '/wp-content/' + name, 'key': key, 'name': name}))
+          r = requests.get(url + '/wp-content/' + name, params={'k': key, 'do': 'list'}, timeout=120)
+          print('HTTP', r.status_code)
+          open('out/list.json', 'w', encoding='utf-8').write(r.text)
+          d = r.json()
+          todo = d['preview'] if os.environ['MODE'] == 'preview' else d['items']
+          print('к подготовке:', len(todo))
+          os.makedirs('in', exist_ok=True)
+          up = site + '/uploads/'
+          for it in todo:
+              local = os.path.join('in', it['file'])
+              os.makedirs(os.path.dirname(local), exist_ok=True)
+              sf.get(up + it['file'], local)
+          open('out/count.txt', 'w').write(str(len(todo)))
+          PY
+
+      - name: Подготовка (фон, sRGB)
+        run: |
+          if [ "$(cat out/count.txt)" = "0" ]; then echo "Делать нечего"; exit 0; fi
+          pip install -q "rembg[cpu]==2.0.*" pillow
+          python3 .github/photos/process.py out/list.json out/files "$MODE"
+
+      - name: Выложить на сайт и запустить очередь
+        if: always()
+        env:
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import os, json, paramiko, requests
+          AUTH = {'pkey': paramiko.PKey.from_path(os.environ['SSH_KEY_FILE'])} if os.environ.get('SSH_KEY_FILE') else {'password': os.environ['SFTP_PASSWORD']}
+          a = json.load(open('out/agent.json'))
+          t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+          t.connect(username=os.environ['SFTP_USER'], **AUTH)
+          sf = paramiko.SFTPClient.from_transport(t)
+          site = os.environ['SITE_DIR'].rstrip('/')
+          try:
+              if os.path.exists('out/result.json'):
+                  res = json.load(open('out/result.json', encoding='utf-8'))
+                  sub = 'preview' if os.environ['MODE'] == 'preview' else 'stage'
+                  base = site + '/uploads/memorial-photos'
+                  for d in (base, base + '/' + sub):
+                      try:
+                          sf.mkdir(d)
+                      except OSError:
+                          pass
+                  for f in res['files']:
+                      sf.put(os.path.join('out/files', f), base + '/' + sub + '/' + f)
+                  print('выложено:', len(res['files']), 'ошибок:', len(res['errors']))
+                  if os.environ['MODE'] != 'preview':
+                      r = requests.post(a['url'], params={'k': a['key'], 'do': 'mark'}, json={'ok': res['ok']}, timeout=60)
+                      print('очередь сайта:', r.status_code)
+          finally:
+              sf.remove(site + '/' + a['name'])
+              print('временный файл удалён')
+          PY
