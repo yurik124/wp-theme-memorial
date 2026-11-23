@@ -186,6 +186,15 @@ def parse_page(text):
     return out
 
 
+def clean(v):
+    """Разметка без служебных пометок проверки (для отчёта)."""
+    if isinstance(v, dict):
+        return {k: clean(x) for k, x in v.items() if k != '_format'}
+    if isinstance(v, list):
+        return [clean(x) for x in v]
+    return v
+
+
 def nodes_of(data, fmt):
     """Все объекты с @type (вложенные тоже): (узел, родитель, поле родителя)."""
     res = []
@@ -479,7 +488,6 @@ def main():
             'microformats': page['microformats'],
         }
         allnodes = jn + mn
-        clean = lambda v: [{k: clean(x) if isinstance(x, (dict, list)) else x for k, x in i.items() if k != '_format'} if isinstance(i, dict) else i for i in v] if isinstance(v, list) else v
         data[upath] = {'jsonld': clean(page['jsonld']), 'microdata': clean(page['microdata'])}
         check_vocab(rep, url, allnodes, vocab)
         check_google(rep, url, jn)
@@ -626,6 +634,9 @@ def main():
         if len(xs) > 8:
             lines.append(f'- … ещё {len(xs) - 8}')
         lines.append('')
+    lines += ['### Что размечено', '', '| Страница | JSON-LD | Микроданные | OpenGraph |', '|---|---|---|---|']
+    for pth, inv in sorted(inventory.items()):
+        lines.append(f'| {pth} | {", ".join(inv["jsonld"]) or "—"} | {", ".join(inv["microdata"]) or "—"} | {inv["opengraph"] or "—"} |')
     summary = '\n'.join(lines)
     print(summary)
     if os.environ.get('GITHUB_STEP_SUMMARY'):

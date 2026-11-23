@@ -272,6 +272,8 @@ jobs:
         run: |
           python3 after/tests/diag/fetch_pages.py http://localhost:8888 pages-after > /dev/null
           python3 after/tests/diag/schema_check.py pages-after --vocab schemaorg.json --require-vocab --require-og --out probe/schema/after.json
+          # HTML страниц — для проверки в валидаторах Яндекса и Google (режим «код»)
+          mkdir -p probe/schema/html && python3 -c "import json,shutil,re; [shutil.copy('pages-after/'+p['file'], 'probe/schema/html/'+(re.sub(r'[^a-z0-9]+','_',p['url'].split('8888',1)[1]).strip('_') or 'home')+'.html') for p in json.load(open('pages-after/index.json'))['pages'] if p['code']==200]" 
 
       - name: В ветку ci-probe
         if: always()

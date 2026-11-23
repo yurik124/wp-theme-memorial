@@ -150,7 +150,7 @@ function memorial_plugin_service_offer( $src, $url ) {
  * @return string
  */
 function memorial_plugin_service_desc( $id ) {
-	$d = trim( (string) get_post_meta( $id, '_seopress_titles_desc', true ) );
+	$d = trim( html_entity_decode( (string) get_post_meta( $id, '_seopress_titles_desc', true ), ENT_QUOTES, 'UTF-8' ) );
 	if ( '' !== $d && ! str_contains( $d, '%%' ) ) {
 		return $d;
 	}

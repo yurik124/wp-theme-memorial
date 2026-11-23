@@ -137,6 +137,7 @@ class Test_Memorial_Plugin_Schema extends WP_UnitTestCase {
 			array(
 				'post_type'    => 'page',
 				'post_title'   => 'Траурный зал',
+				'post_excerpt' => '',
 				'post_content' => '<!-- wp:paragraph --><p>Собственный зал для прощания.</p><!-- /wp:paragraph -->',
 			)
 		);

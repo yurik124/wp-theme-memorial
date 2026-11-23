@@ -416,7 +416,7 @@ function memorial_plugin_schema_upgrade_1( $dry = false ) {
 		$addr = (string) $a['addr'];
 		if ( preg_match( '/Студенческ/u', $addr ) ) {
 			// «…Студенческая, 40» без корпуса — корпус 10; индекс 308000 (общий по городу) или без индекса — 308023.
-			$addr = (string) preg_replace( '/(Студенческ[^,]*,\s*(?:д\.\s*)?40)(?!\s*(?:к|корп|\/))/u', '$1, корп. 10', $addr );
+			$addr = (string) preg_replace( '/(Студенческ[^,]*,\s*(?:д\.\s*)?40)(?![\d\/])(?!\s*,?\s*(?:к\.?\s*\d|корп|стр))/u', '$1, корп. 10', $addr );
 			if ( preg_match( '/^\s*308000\b/', $addr ) ) {
 				$addr = (string) preg_replace( '/^\s*308000\b/', '308023', $addr );
 			} elseif ( ! preg_match( '/\b\d{6}\b/', $addr ) ) {
