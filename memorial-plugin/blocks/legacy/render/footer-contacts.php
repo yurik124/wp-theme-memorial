@@ -10,14 +10,24 @@ defined( 'ABSPATH' ) || exit;
 <?php if ( memorial_plugin_addrs() ) : ?>
 <div class="footer__col">
 	<p class="fnav__title"><?php esc_html_e( 'Addresses', 'memorial-plugin' ); ?></p>
-	<?php foreach ( memorial_plugin_addrs() as $a ) : ?>
-	<p class="footer__addr"><?php echo esc_html( memorial_plugin_addr( $a['addr'] ) ); ?>
+	<?php
+	// Микроданные организации для Яндекса — если на странице их ещё нет (seo/schema.php).
+	$memorial_plugin_micro = memorial_plugin_org_micro_place( true );
+	foreach ( memorial_plugin_addrs() as $i => $a ) :
+		?>
+	<p class="footer__addr"<?php echo memorial_plugin_org_micro_attrs( $i ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>><?php echo esc_html( memorial_plugin_addr( $a['addr'] ) ); ?>
 		<?php
 		if ( ! empty( $a['hours'] ) ) {
 			echo '<br><small>' . esc_html( $a['hours'] ) . '</small>';}
+		echo memorial_plugin_org_micro_fields( $i ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function.
 		?>
 	</p>
-	<?php endforeach; ?>
+		<?php
+	endforeach;
+	if ( $memorial_plugin_micro ) {
+		memorial_plugin_org_micro_place( false );
+	}
+	?>
 </div>
 <?php endif; ?>
 <?php if ( memorial_plugin_phones() || memorial_plugin_emails() ) : ?>

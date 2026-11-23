@@ -97,10 +97,11 @@ def main():
     ap.add_argument('--ssh', action='store_true')
     ap.add_argument('--paths', default='')
     ap.add_argument('--limit', type=int, default=400)
+    ap.add_argument('--no-sitemap', action='store_true', help='только главная и --paths')
     a = ap.parse_args()
     base = a.base.rstrip('/')
     client = Ssh(urlparse(base).hostname) if a.ssh else Http()
-    urls = [base + '/'] + sitemap_urls(client, base) + [urljoin(base + '/', p.strip().lstrip('/')) for p in a.paths.split(',') if p.strip()]
+    urls = [base + '/'] + ([] if a.no_sitemap else sitemap_urls(client, base)) + [urljoin(base + '/', p.strip().lstrip('/')) for p in a.paths.split(',') if p.strip()]
     # адреса с другим хостом в карте сайта (копия сайта на localhost) — к своему
     host = urlparse(base)
     fixed = []

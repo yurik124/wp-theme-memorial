@@ -53,8 +53,12 @@ $route  = fn( $a ) => 'https://yandex.ru/maps/?rtext=~' . rawurlencode( preg_rep
 		</section>
 		<?php endif; ?>
 
-		<?php foreach ( $addrs as $a ) : ?>
-		<section class="kcard kaddr">
+		<?php
+		// Микроданные организации для Яндекса: адреса на «Контактах» — каждый филиал отдельно (seo/schema.php).
+		$micro = memorial_plugin_org_micro_place( true );
+		foreach ( $addrs as $i => $a ) :
+			?>
+		<section class="kcard kaddr"<?php echo memorial_plugin_org_micro_attrs( $i ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>>
 		<h2 class="kcard__title"><?php echo memorial_plugin_icon( 'pin' ); ?><?php echo esc_html( ! empty( $a['title'] ) ? $a['title'] : memorial_plugin_short_addr( $a['addr'] ) ); ?></h2>
 		<p class="kaddr__full"><?php echo esc_html( $a['addr'] ); ?></p>
 			<?php
@@ -62,7 +66,13 @@ $route  = fn( $a ) => 'https://yandex.ru/maps/?rtext=~' . rawurlencode( preg_rep
 				?>
 				<p class="kaddr__hours"><?php echo memorial_plugin_icon( 'clock' ) . esc_html( $a['hours'] ); ?></p><?php endif; ?>
 		<a class="kaddr__route" href="<?php echo esc_url( $route( $a['addr'] ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Get directions →', 'memorial-plugin' ); ?></a>
+			<?php echo memorial_plugin_org_micro_fields( $i ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>
 		</section>
-		<?php endforeach; ?>
+			<?php
+		endforeach;
+		if ( $micro ) {
+			memorial_plugin_org_micro_place( false );
+		}
+		?>
 	</div>
 

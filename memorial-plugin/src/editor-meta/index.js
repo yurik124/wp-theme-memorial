@@ -15,6 +15,7 @@ import {
 	Flex,
 	FlexBlock,
 	FlexItem,
+	SelectControl,
 	TextControl,
 	TextareaControl,
 	ToggleControl,
@@ -334,6 +335,56 @@ function PagePanel() {
 					/>
 				</PluginDocumentSettingPanel>
 			) }
+			<PluginDocumentSettingPanel
+				name="memorial-plugin-page-service"
+				title={ __( 'Service markup', 'memorial-plugin' ) }
+			>
+				<Flex direction="column" gap={ 4 }>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label={ __( 'This is a page of a service', 'memorial-plugin' ) }
+						help={ __(
+							'Search engines get the service: the title, description and photo of the page, the company as the provider, the price if chosen.',
+							'memorial-plugin'
+						) }
+						checked={ meta._mem_ld_service === '1' }
+						onChange={ ( v ) =>
+							set( '_mem_ld_service', v ? '1' : '' )
+						}
+					/>
+					{ meta._mem_ld_service === '1' && (
+						<>
+							<TextControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __( 'Kind of service', 'memorial-plugin' ) }
+								placeholder={ __(
+									'for example: Cremation',
+									'memorial-plugin'
+								) }
+								value={ meta._mem_ld_service_type || '' }
+								onChange={ ( v ) =>
+									set( '_mem_ld_service_type', v )
+								}
+							/>
+							<SelectControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __( 'Price', 'memorial-plugin' ) }
+								help={ __(
+									'Only a price that is the same for every customer. If the price depends on the case — no price.',
+									'memorial-plugin'
+								) }
+								value={ meta._mem_ld_service_price || '' }
+								options={ settings.prices || [] }
+								onChange={ ( v ) =>
+									set( '_mem_ld_service_price', v )
+								}
+							/>
+						</>
+					) }
+				</Flex>
+			</PluginDocumentSettingPanel>
 			{ settings.guide && (
 				<PluginDocumentSettingPanel
 					name="memorial-plugin-page-guide"

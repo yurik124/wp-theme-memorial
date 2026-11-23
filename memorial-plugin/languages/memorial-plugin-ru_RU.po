@@ -8231,3 +8231,49 @@ msgstr "Возвращаются оригиналы: %d."
 #. translators: 1: processed photos, 2: photos to process.
 msgid "Processed with the current settings: %1$d of %2$d."
 msgstr "Обработано по текущим настройкам: %1$d из %2$d."
+
+msgid "Card on 2GIS (optional)"
+msgstr "Карточка в 2ГИС (необязательно)"
+
+msgid "Card on Yandex Maps (optional)"
+msgstr "Карточка на Яндекс Картах (необязательно)"
+
+msgid "Coordinates (optional)"
+msgstr "Координаты (необязательно)"
+
+msgid "Funeral packages: from the cheapest to the dearest"
+msgstr "Пакеты похорон: от самого недорогого до самого дорогого"
+
+msgid "Kind of service"
+msgstr "Вид услуги"
+
+msgid "Latitude and longitude for search engines. Empty — taken from the map link or the 2GIS link."
+msgstr "Широта и долгота для поисковиков. Пусто — берутся из ссылки карты или ссылки на 2ГИС."
+
+msgid "No price in the markup"
+msgstr "Без цены в разметке"
+
+msgid "Only a price that is the same for every customer. If the price depends on the case — no price."
+msgstr "Только цена, одинаковая для всех клиентов. Если цена зависит от случая — без цены."
+
+msgid "Search engines get the service: the title, description and photo of the page, the company as the provider, the price if chosen."
+msgstr "Поисковики получат услугу: название, описание и фото страницы, компанию как исполнителя и цену, если она выбрана."
+
+#. translators: 1: price name, 2: price now.
+msgid "Separate price: %1$s (%2$s)"
+msgstr "Отдельная цена: %1$s (%2$s)"
+
+msgid "Service markup"
+msgstr "Разметка услуги"
+
+msgid "The link to the company card of this address on 2GIS — any form, the site keeps only the card."
+msgstr "Ссылка на карточку компании по этому адресу в 2ГИС — в любом виде, сайт оставит только карточку."
+
+msgid "The link to the company card of this address. Search engines link the site with the card (structured data for Google and Yandex)."
+msgstr "Ссылка на карточку компании по этому адресу. Поисковики свяжут сайт с карточкой (разметка для Google и Яндекса)."
+
+msgid "This is a page of a service"
+msgstr "Это страница услуги"
+
+msgid "for example: Cremation"
+msgstr "например: Кремация"

@@ -5,7 +5,7 @@
  *
  * Product: price, old price, unit, “from”, made to order, line under the title, specifications, extra photos.
  * Work: photos, plot size, year, what was done with prices, “show in examples”.
- * Page: products on the page (catalog category), the “Good to know” question and short answer.
+ * Page: the “Good to know” question and short answer, the question sections, the Service markup.
  *
  * The stored format is the same as before (strings “1”/“”, “12,34,56”, [[name, price], …]), so the site
  * output and the old data need no changes.
@@ -56,10 +56,14 @@ function memorial_plugin_editor_meta() {
 			),
 		),
 		'page'        => array(
-			'_mem_q'            => array( 'string', $text ),
-			'_mem_qa'           => array( 'string', static fn( $v ) => trim( sanitize_textarea_field( (string) $v ) ) ),
+			'_mem_q'                => array( 'string', $text ),
+			'_mem_qa'               => array( 'string', static fn( $v ) => trim( sanitize_textarea_field( (string) $v ) ) ),
 			// Разделы страницы «Вопрос–ответ»: порядок, кнопка, заголовок, якорь, текст ссылки (content/faq.php).
-			'_mem_faq_sections' => array( 'string', static fn( $v ) => function_exists( 'memorial_plugin_faq_settings_clean' ) ? (string) wp_json_encode( memorial_plugin_faq_settings_clean( $v ), JSON_UNESCAPED_UNICODE ) : (string) $v ),
+			'_mem_faq_sections'     => array( 'string', static fn( $v ) => function_exists( 'memorial_plugin_faq_settings_clean' ) ? (string) wp_json_encode( memorial_plugin_faq_settings_clean( $v ), JSON_UNESCAPED_UNICODE ) : (string) $v ),
+			// Разметка услуги Schema.org Service (seo/schema-service.php): включена, вид услуги, откуда цена.
+			'_mem_ld_service'       => array( 'string', $flag ),
+			'_mem_ld_service_type'  => array( 'string', $text ),
+			'_mem_ld_service_price' => array( 'string', static fn( $v ) => function_exists( 'memorial_plugin_service_price_clean' ) ? memorial_plugin_service_price_clean( $v ) : '' ),
 		),
 	);
 }
@@ -200,6 +204,10 @@ function memorial_plugin_editor_meta_assets() {
 			array(
 				'maxYear'  => (int) gmdate( 'Y' ) + 1,
 				'guide'    => function_exists( 'memorial_plugin_guide_lead' ), // “Good to know” is switched on in Memorial → Features.
+				// Where the price of a service comes from (seo/schema-service.php).
+				'prices'   => 'page' === $screen->post_type && function_exists( 'memorial_plugin_service_price_choices' )
+					? array_map( static fn( $v, $l ) => array( 'value' => (string) $v, 'label' => $l ), array_keys( memorial_plugin_service_price_choices() ), memorial_plugin_service_price_choices() )
+					: array(),
 				'listsUrl' => array(
 					'mem_product' => admin_url( 'edit.php?post_type=mem_product&page=mem-products' ),
 					'mem_work'    => admin_url( 'edit.php?post_type=mem_work&page=mem-works' ),

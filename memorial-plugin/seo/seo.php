@@ -158,7 +158,7 @@ function memorial_plugin_ld( $data ) {
 /**
  * Schema.org Product of a product: name, description, photo, category, brand, specifications and the
  * offer (a product “price on request” has no offer — the price is not made up for search engines).
- * The seller is the company of the site (FuneralHome on the home page, seo/schema.php).
+ * The seller is the company of the site (a reference to the organization of the home page, seo/schema.php).
  *
  * @param int    $id  Product.
  * @param string $url Address of the product: its page or its place in the catalog section.
@@ -206,11 +206,7 @@ function memorial_plugin_product_ld( $id, $url ) {
 			'priceCurrency' => 'RUB',
 			'availability'  => get_post_meta( $id, '_mem_on_order', true ) ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
 			'url'           => $url,
-			'seller'        => array(
-				'@type' => 'FuneralHome', // the same node as the organization on the home page and “Contacts” (seo/schema.php).
-				'@id'   => home_url( '/#organization' ),
-				'name'  => get_bloginfo( 'name' ),
-			),
+			'seller'        => memorial_plugin_schema_org_ref(), // the organization of the home page (seo/schema.php).
 		);
 		$offer[ 'AggregateOffer' === $offer['@type'] ? 'lowPrice' : 'price' ] = $price;
 		$p['offers'] = $offer;
@@ -226,7 +222,11 @@ add_action(
 		}
 
 		// Хлебные крошки.
-		$c = memorial_plugin_crumbs();
+		// Google: у каждого звена, кроме последнего, нужна ссылка — звено без ссылки (раздел меню без
+		// страницы) в разметку не попадает.
+		$c    = memorial_plugin_crumbs();
+		$last = count( $c ) - 1;
+		$c    = array_values( array_filter( $c, static fn( $item, $i ) => $i === $last || ! empty( $item[1] ), ARRAY_FILTER_USE_BOTH ) );
 		if ( count( $c ) >= 2 ) {
 			$list = array();
 			foreach ( $c as $i => $item ) {
@@ -271,26 +271,60 @@ add_filter(
 	}
 );
 
+/**
+ * The page of a product in the markup: its own page, else the page of its catalog section (or of the nearest
+ * upper section that has a page) with the anchor of the product. '' — no such page.
+ *
+ * @param int $id Product.
+ * @return string
+ */
+function memorial_plugin_product_home( $id ) {
+	if ( memorial_plugin_product_has_page( $id ) ) {
+		return (string) get_permalink( $id );
+	}
+	$cat = memorial_plugin_product_cat( $id );
+	if ( ! $cat || ! function_exists( 'memorial_plugin_term_page' ) ) {
+		return '';
+	}
+	foreach ( array_merge( array( $cat->term_id ), get_ancestors( $cat->term_id, 'mem_cat' ) ) as $term_id ) {
+		$pid = memorial_plugin_term_page( (int) $term_id );
+		if ( $pid ) {
+			return get_permalink( $pid ) . '#' . memorial_plugin_product_anchor( $id );
+		}
+	}
+	return '';
+}
+
 /*
  * Schema.org on the pages of catalog sections: the products the page shows, as a list of Product
- * (catalog/catalog-front.php notes them while the cards are drawn).
+ * (catalog/catalog-front.php notes them while the cards are drawn). Every product is marked on one page
+ * only — its own page or the page of its section; a product shown elsewhere (the catalog on the home page,
+ * “Funeral goods”) is not marked there. A product without a price is not marked: Google needs offers,
+ * review or aggregateRating (https://developers.google.com/search/docs/appearance/structured-data/product-snippet).
  */
 add_action(
 	'wp_footer',
 	static function () {
 		$ids = array_keys( (array) ( $GLOBALS['memorial_plugin_ld_products'] ?? array() ) );
-		if ( ! $ids || is_singular( 'mem_product' ) ) {
+		if ( ! $ids || ! is_singular() || is_singular( 'mem_product' ) ) {
 			return;
 		}
 		$page = (string) get_permalink();
 		$list = array();
-		foreach ( array_values( $ids ) as $i => $id ) {
-			$url    = memorial_plugin_product_has_page( $id ) ? (string) get_permalink( $id ) : $page . '#' . memorial_plugin_product_anchor( $id );
+		foreach ( array_values( $ids ) as $id ) {
+			$home = memorial_plugin_product_home( $id );
+			$here = '' === $home ? $page . '#' . memorial_plugin_product_anchor( $id ) : $home;
+			if ( explode( '#', $here )[0] !== $page || memorial_plugin_product_has_page( $id ) || (int) get_post_meta( $id, '_mem_price', true ) <= 0 ) {
+				continue;
+			}
 			$list[] = array(
 				'@type'    => 'ListItem',
-				'position' => $i + 1,
-				'item'     => memorial_plugin_product_ld( $id, $url ),
+				'position' => count( $list ) + 1,
+				'item'     => memorial_plugin_product_ld( $id, $here ),
 			);
+		}
+		if ( ! $list ) {
+			return;
 		}
 		memorial_plugin_ld(
 			array(
