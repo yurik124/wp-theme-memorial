@@ -342,7 +342,10 @@ function PagePanel() {
 				<Flex direction="column" gap={ 4 }>
 					<ToggleControl
 						__nextHasNoMarginBottom
-						label={ __( 'This is a page of a service', 'memorial-plugin' ) }
+						label={ __(
+							'This is a page of a service',
+							'memorial-plugin'
+						) }
 						help={ __(
 							'Search engines get the service: the title, description and photo of the page, the company as the provider, the price if chosen.',
 							'memorial-plugin'
@@ -357,7 +360,10 @@ function PagePanel() {
 							<TextControl
 								__next40pxDefaultSize
 								__nextHasNoMarginBottom
-								label={ __( 'Kind of service', 'memorial-plugin' ) }
+								label={ __(
+									'Kind of service',
+									'memorial-plugin'
+								) }
 								placeholder={ __(
 									'for example: Cremation',
 									'memorial-plugin'
