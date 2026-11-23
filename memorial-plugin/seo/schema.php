@@ -50,7 +50,15 @@ function memorial_plugin_schema_hours( $s ) {
  * @return array
  */
 function memorial_plugin_schema_hours_spec( $iso ) {
-	$days = array( 'Mo' => 'Monday', 'Tu' => 'Tuesday', 'We' => 'Wednesday', 'Th' => 'Thursday', 'Fr' => 'Friday', 'Sa' => 'Saturday', 'Su' => 'Sunday' );
+	$days = array(
+		'Mo' => 'Monday',
+		'Tu' => 'Tuesday',
+		'We' => 'Wednesday',
+		'Th' => 'Thursday',
+		'Fr' => 'Friday',
+		'Sa' => 'Saturday',
+		'Su' => 'Sunday',
+	);
 	if ( ! preg_match( '/^(\w\w)(?:-(\w\w))? (\d\d:\d\d)-(\d\d:\d\d)$/', $iso, $m ) || ! isset( $days[ $m[1] ] ) ) {
 		return array();
 	}
@@ -187,7 +195,10 @@ function memorial_plugin_schema_logo() {
  * @return string[]
  */
 function memorial_plugin_schema_same_as( $branches ) {
-	$own  = array_merge( ...array_map( fn( $b ) => $b['profiles'], $branches ?: array( array( 'profiles' => array() ) ) ) );
+	$own  = array();
+	foreach ( $branches as $b ) {
+		$own = array_merge( $own, $b['profiles'] );
+	}
 	$keys = array_map( fn( $u ) => preg_replace( '~\D+~', '', $u ), $own );
 	$out  = array();
 	$raw  = array_map( fn( $s ) => trim( (string) ( $s['link'] ?? '' ) ), (array) ( get_option( 'mem_reviews' )['sources'] ?? array() ) );
@@ -310,6 +321,7 @@ function memorial_plugin_schema_org() {
 			'@type' => MEMORIAL_PLUGIN_ORG_TYPE,
 			'@id'   => $b['id'],
 			'name'  => $b['name'],
+			'url'   => home_url( '/' ),
 		) + $place( $b );
 		if ( $b['profiles'] ) {
 			$d['sameAs'] = $b['profiles'];
@@ -436,10 +448,13 @@ add_filter(
 	'seopress_social_og_thumb',
 	static function ( $html ) {
 		$img = memorial_plugin_social_image();
-		if ( '' === $img ) {
-			return $html;
-		}
 		$alt = wp_strip_all_tags( get_the_title( get_queried_object_id() ) );
+		if ( '' === $img ) {
+			// Своя картинка страницы — подпись к ней, если SEOPress её не вывел.
+			return is_singular() && str_contains( (string) $html, 'og:image' ) && ! str_contains( (string) $html, 'og:image:alt' )
+				? $html . '<meta property="og:image:alt" content="' . esc_attr( $alt ) . '" />' . "\n"
+				: $html;
+		}
 		$out = '<meta property="og:image" content="' . esc_url( $img ) . '" />' . "\n";
 		if ( str_starts_with( $img, 'https://' ) ) {
 			$out .= '<meta property="og:image:secure_url" content="' . esc_url( $img ) . '" />' . "\n";

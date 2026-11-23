@@ -206,7 +206,14 @@ function memorial_plugin_editor_meta_assets() {
 				'guide'    => function_exists( 'memorial_plugin_guide_lead' ), // “Good to know” is switched on in Memorial → Features.
 				// Where the price of a service comes from (seo/schema-service.php).
 				'prices'   => 'page' === $screen->post_type && function_exists( 'memorial_plugin_service_price_choices' )
-					? array_map( static fn( $v, $l ) => array( 'value' => (string) $v, 'label' => $l ), array_keys( memorial_plugin_service_price_choices() ), memorial_plugin_service_price_choices() )
+					? array_map(
+						static fn( $v, $l ) => array(
+							'value' => (string) $v,
+							'label' => $l,
+						),
+						array_keys( memorial_plugin_service_price_choices() ),
+						memorial_plugin_service_price_choices()
+					)
 					: array(),
 				'listsUrl' => array(
 					'mem_product' => admin_url( 'edit.php?post_type=mem_product&page=mem-products' ),

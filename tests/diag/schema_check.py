@@ -458,7 +458,7 @@ def main():
     rep = Report()
     inventory = {}
     site = defaultdict(lambda: defaultdict(set))  # что → ключ → страницы
-    home_full, micro_all, pages_links = [], [], {}
+    home_full, micro_all, pages_links, data = [], [], {}, {}
 
     for p in idx['pages']:
         if p['code'] != 200:
@@ -479,6 +479,8 @@ def main():
             'microformats': page['microformats'],
         }
         allnodes = jn + mn
+        clean = lambda v: [{k: clean(x) if isinstance(x, (dict, list)) else x for k, x in i.items() if k != '_format'} if isinstance(i, dict) else i for i in v] if isinstance(v, list) else v
+        data[upath] = {'jsonld': clean(page['jsonld']), 'microdata': clean(page['microdata'])}
         check_vocab(rep, url, allnodes, vocab)
         check_google(rep, url, jn)
         check_yandex_micro(rep, url, page['microdata'])
@@ -496,7 +498,7 @@ def main():
         lists = [n for n in top if 'ItemList' in types_of(n) and any(isinstance(li, dict) and isinstance(li.get('item'), dict) and 'Product' in types_of(li['item']) for li in as_list(n.get('itemListElement')))]
         if len(lists) > 1:
             rep.add('p-once-page', url, f'список товаров ×{len(lists)}')
-        full = [n for n, _, _ in jn if is_full_org(n)]
+        full = [n for n, par, _ in jn if par is None and is_full_org(n)]  # филиалы (department) — внутри
         if len(full) > 1:
             rep.add('p-once-page', url, f'полное описание организации в JSON-LD ×{len(full)}')
         if full:
@@ -606,6 +608,7 @@ def main():
         'rules': {k: {'level': v[0], 'title': v[1], 'doc': DOCS[v[2]]} for k, v in RULES.items()},
         'findings': rep.items,
         'inventory': inventory,
+        'data': data,
     }
     if a.out:
         os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
