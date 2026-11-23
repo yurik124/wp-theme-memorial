@@ -219,6 +219,14 @@ jobs:
           echo "PROBE_GREP=${PROBE_GREP:-бургер-ветка|подменю ПК}" >> "$GITHUB_ENV"
           echo "PROBE_PHASES=${PROBE_PHASES:-}" >> "$GITHUB_ENV"
           echo "PROBE_CLI=${PROBE_CLI:-}" >> "$GITHUB_ENV"
+          echo "PROBE_SCHEMA=${PROBE_SCHEMA:-0}" >> "$GITHUB_ENV"
+
+      # Микроразметка (tests/diag/schema_check.py): словарь schema.org закреплённого выпуска
+      - name: Словарь schema.org
+        if: ${{ env.PROBE_SCHEMA == '1' }}
+        run: |
+          pip install -q requests lxml
+          python3 after/tests/diag/schema_vocab.py build "$(cat after/tests/diag/schemaorg-version.txt)" schemaorg.json
 
       - name: Снимки — старое
         if: ${{ !env.PROBE_PHASES || contains(env.PROBE_PHASES, 'classic') }}
@@ -232,6 +240,13 @@ jobs:
       - name: Снимки — как на сайте сейчас
         if: ${{ !env.PROBE_PHASES || contains(env.PROBE_PHASES, 'before') }}
         run: cd after && PHASE=before PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "$PROBE_GREP" || true
+
+      - name: Микроразметка — как на сайте сейчас (probe/schema/before.json)
+        if: ${{ env.PROBE_SCHEMA == '1' && (!env.PROBE_PHASES || contains(env.PROBE_PHASES, 'before')) }}
+        continue-on-error: true
+        run: |
+          python3 after/tests/diag/fetch_pages.py http://localhost:8888 pages-before > /dev/null
+          python3 after/tests/diag/schema_check.py pages-before --vocab schemaorg.json --require-vocab --require-og --out probe/schema/before.json
 
       - name: Переключить на исправленное
         run: |
@@ -250,6 +265,15 @@ jobs:
 
       - name: Снимки — исправленное
         run: cd after && PHASE=block PAGES_FILE=$GITHUB_WORKSPACE/pages.json PROBE_DIR=$GITHUB_WORKSPACE/probe npx playwright test --config tests/probe/probe.config.js --grep "$PROBE_GREP" || true
+
+      - name: Микроразметка — исправленное (probe/schema/after.json)
+        if: ${{ env.PROBE_SCHEMA == '1' }}
+        continue-on-error: true
+        run: |
+          python3 after/tests/diag/fetch_pages.py http://localhost:8888 pages-after > /dev/null
+          python3 after/tests/diag/schema_check.py pages-after --vocab schemaorg.json --require-vocab --require-og --out probe/schema/after.json
+          # HTML страниц — для проверки в валидаторах Яндекса и Google (режим «код»)
+          mkdir -p probe/schema/html && python3 -c "import json,shutil,re; [shutil.copy('pages-after/'+p['file'], 'probe/schema/html/'+(re.sub(r'[^a-z0-9]+','_',p['url'].split('8888',1)[1]).strip('_') or 'home')+'.html') for p in json.load(open('pages-after/index.json'))['pages'] if p['code']==200]" 
 
       - name: В ветку ci-probe
         if: always()

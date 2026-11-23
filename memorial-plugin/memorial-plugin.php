@@ -171,6 +171,7 @@ $memorial_plugin_modules = array(
 	'works/works-manager.php',
 	// SEO, аналитика, заявки.
 	'seo/seo.php',
+	'seo/schema-service.php',
 	'seo/redirects.php',
 	'seo/robots.php',
 	'seo/seo-upgrade.php',

@@ -350,3 +350,152 @@ add_action(
 	},
 	9
 );
+
+/**
+ * Once (23.11.2026, owner): Schema.org markup of the organization and the services.
+ *  — addresses: «ул. Студенческая, 40» → «…, корп. 10», index 308023 (as on Yandex Maps and 2GIS);
+ *  — cards of the branches on Yandex Maps and 2GIS and their coordinates (from the 2GIS cards);
+ *  — the Service markup of the service pages with the price source (seo/schema-service.php);
+ *  — SEOPress: no Knowledge Graph organization (the plugin describes the organization itself).
+ * Only empty fields and the old values are changed — never what the owner has typed.
+ *
+ * @return array path => [kind of service, price source] ('?:слово' — a separate price whose name has the word).
+ */
+function memorial_plugin_schema_services_1() {
+	return array(
+		'pomoshh-v-organizaczii-pohoron'          => array( 'Организация похорон', 'packages' ),
+		'ritualnye-uslugi/kremacziya'             => array( 'Кремация', 'kremaciya' ),
+		'ritualnye-uslugi/traurnyj-zal'           => array( 'Прощание и отпевание в траурном зале', '' ),
+		'ritualnye-uslugi/pominalnyj-obed'        => array( 'Поминальный обед', '' ),
+		'ritualnye-uslugi/gruz-200'               => array( 'Перевозка умерших', '' ),
+		'ritualnye-uslugi/pohorony-uchastnikov-svo' => array( 'Похороны участников СВО', '' ),
+		'ritualnye-uslugi/prizhiznennyj-dogovor'  => array( 'Прижизненный договор на похороны', '' ),
+		'blagoustrojstvo-zahoroneniya'            => array( 'Благоустройство захоронений', '?:благоустр' ),
+		'blagoustrojstvo-zahoroneniya/ukladka-plitki-na-kladbishhe-v-belgorode' => array( 'Укладка плитки и установка памятников', '?:плитк' ),
+	);
+}
+
+/**
+ * Branches as the owner gave them (23.11.2026): street pattern => fields.
+ *
+ * @return array<string,array>
+ */
+function memorial_plugin_schema_branches_1() {
+	return array(
+		'/Студенческ/u' => array(
+			'yandex' => 'https://yandex.ru/maps/org/agentstvo_ritualnykh_uslug_memorial/75717068753/',
+			'twogis' => 'https://2gis.ru/belgorod/firm/70000001006496307',
+			'geo'    => '50.620132, 36.564591',
+		),
+		'/Щорса/u'      => array(
+			'yandex' => 'https://yandex.ru/maps/org/memorial/1023942285/',
+			'twogis' => 'https://2gis.ru/belgorod/firm/6474452745374101',
+			'geo'    => '50.576618, 36.569422',
+		),
+	);
+}
+
+/**
+ * The run. $dry = true — only what would change.
+ *
+ * @param bool $dry Dry run.
+ * @return array Log.
+ */
+function memorial_plugin_schema_upgrade_1( $dry = false ) {
+	$log = array( 'time' => time() );
+
+	// 1. Адреса: корпус и индекс Студенческой, карточки и координаты филиалов.
+	$opt   = get_option( 'mem_contacts' );
+	$opt   = is_array( $opt ) ? $opt : array();
+	$addrs = isset( $opt['addrs'] ) && is_array( $opt['addrs'] ) ? $opt['addrs'] : (array) ( memorial_plugin_contacts()['addrs'] ?? array() );
+	$old   = $addrs;
+	foreach ( $addrs as $i => $a ) {
+		if ( ! is_array( $a ) || '' === trim( (string) ( $a['addr'] ?? '' ) ) ) {
+			continue;
+		}
+		$addr = (string) $a['addr'];
+		if ( preg_match( '/Студенческ/u', $addr ) ) {
+			// «…Студенческая, 40» без корпуса — корпус 10; индекс 308000 (общий по городу) или без индекса — 308023.
+			$addr = (string) preg_replace( '/(Студенческ[^,]*,\s*(?:д\.\s*)?40)(?![\d\/])(?!\s*,?\s*(?:к\.?\s*\d|корп|стр))/u', '$1, корп. 10', $addr );
+			if ( preg_match( '/^\s*308000\b/', $addr ) ) {
+				$addr = (string) preg_replace( '/^\s*308000\b/', '308023', $addr );
+			} elseif ( ! preg_match( '/\b\d{6}\b/', $addr ) ) {
+				$addr = '308023, ' . $addr;
+			}
+			$addrs[ $i ]['addr'] = $addr;
+		}
+		foreach ( memorial_plugin_schema_branches_1() as $re => $fields ) {
+			if ( ! preg_match( $re, $addr ) ) {
+				continue;
+			}
+			foreach ( $fields as $k => $v ) {
+				if ( 'geo' === $k && function_exists( 'memorial_plugin_schema_coords' ) && memorial_plugin_schema_coords( array( 'map' => $a['map'] ?? '' ) ) ) {
+					continue; // точка на карте уже стоит — координаты берутся из неё.
+				}
+				if ( '' === trim( (string) ( $a[ $k ] ?? '' ) ) ) {
+					$addrs[ $i ][ $k ] = $v;
+				}
+			}
+		}
+	}
+	if ( $addrs !== $old ) {
+		$log['addrs'] = $old;
+		if ( ! $dry ) {
+			$opt['addrs'] = $addrs;
+			update_option( 'mem_contacts', $opt );
+		}
+	}
+
+	// 2. Разметка услуг: только у страниц, где её ещё не настраивали.
+	foreach ( memorial_plugin_schema_services_1() as $path => [ $type, $price ] ) {
+		$page = get_page_by_path( $path );
+		if ( ! $page || metadata_exists( 'post', $page->ID, '_mem_ld_service' ) ) {
+			continue;
+		}
+		if ( str_starts_with( $price, '?:' ) ) {
+			$word  = substr( $price, 2 );
+			$price = '';
+			foreach ( memorial_plugin_prices( 'other' )['items'] ?? array() as $it ) {
+				$code = memorial_plugin_value_key( (string) ( $it['code'] ?? '' ) );
+				if ( '' !== $code && preg_match( '/' . preg_quote( $word, '/' ) . '/ui', (string) ( $it['name'] ?? '' ) ) && memorial_plugin_service_price_parse( memorial_plugin_value_by_key( $code ) ) ) {
+					$price = 'value:' . $code;
+					break;
+				}
+			}
+		}
+		$log['services'][ $page->ID ] = array( $path, $type, $price );
+		if ( ! $dry ) {
+			update_post_meta( $page->ID, '_mem_ld_service', '1' );
+			update_post_meta( $page->ID, '_mem_ld_service_type', $type );
+			if ( '' !== $price ) {
+				update_post_meta( $page->ID, '_mem_ld_service_price', $price );
+			}
+		}
+	}
+
+	// 3. SEOPress: организация Knowledge Graph — «нет».
+	$sp = get_option( 'seopress_social_option_name' );
+	if ( is_array( $sp ) && ! empty( $sp['seopress_social_knowledge_type'] ) && 'none' !== $sp['seopress_social_knowledge_type'] ) {
+		$log['seopress_knowledge_type'] = $sp['seopress_social_knowledge_type'];
+		if ( ! $dry ) {
+			$sp['seopress_social_knowledge_type'] = 'none';
+			update_option( 'seopress_social_option_name', $sp );
+		}
+	}
+	return $log;
+}
+
+add_action(
+	'admin_init',
+	static function () {
+		if ( get_option( 'memorial_plugin_schema_1' ) || ! current_user_can( 'manage_options' ) || wp_doing_ajax() || ! function_exists( 'memorial_plugin_service_price_parse' ) ) {
+			return;
+		}
+		update_option( 'memorial_plugin_schema_1', time(), false );
+		update_option( 'memorial_plugin_schema_1_log', memorial_plugin_schema_upgrade_1(), false );
+		if ( function_exists( 'memorial_plugin_page_cache_clear' ) ) {
+			memorial_plugin_page_cache_clear();
+		}
+	},
+	9
+);

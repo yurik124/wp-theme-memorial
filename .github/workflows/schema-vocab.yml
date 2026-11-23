@@ -1,0 +1,50 @@
+name: Словарь schema.org
+
+# Раз в месяц: есть ли новый выпуск schema.org. Если есть — ветка schema-vocab/<выпуск> с новым номером в
+# tests/diag/schemaorg-version.txt и запрос на слияние в block-migration: проверка микроразметки
+# (tests/diag/schema_check.py) пройдёт по новому словарю в «Проверках» этого запроса.
+# Вручную: push ветки schema-vocab-check/<что угодно> — только сообщить номер последнего выпуска.
+
+on:
+  schedule:
+    - cron: '17 4 3 * *'
+  push:
+    branches: ['schema-vocab-check/**']
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  vocab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event_name == 'schedule' && 'block-migration' || github.ref }}
+
+      - name: Последний выпуск schema.org
+        id: v
+        run: |
+          latest=$(python3 tests/diag/schema_vocab.py latest)
+          pinned=$(tr -d ' \n\r' < tests/diag/schemaorg-version.txt)
+          echo "закреплён: $pinned, последний: $latest" | tee -a "$GITHUB_STEP_SUMMARY"
+          python3 tests/diag/schema_vocab.py build "$latest" /tmp/vocab.json
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+          echo "pinned=$pinned" >> "$GITHUB_OUTPUT"
+
+      - name: Запрос на слияние с новым выпуском
+        if: ${{ github.event_name == 'schedule' && steps.v.outputs.latest != steps.v.outputs.pinned }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          b="schema-vocab/${{ steps.v.outputs.latest }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$b"
+          echo "${{ steps.v.outputs.latest }}" > tests/diag/schemaorg-version.txt
+          git commit -am "Словарь schema.org ${{ steps.v.outputs.latest }} для проверки микроразметки"
+          git push -f origin "$b"
+          gh pr create --base block-migration --head "$b" --title "Словарь schema.org ${{ steps.v.outputs.latest }}" \
+            --body "Вышел выпуск schema.org ${{ steps.v.outputs.latest }} (был ${{ steps.v.outputs.pinned }}). Проверка микроразметки пойдёт по новому словарю — запустите «Проверки» с WordPress, если всё зелёное — слить." || true

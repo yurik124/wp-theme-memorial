@@ -8,6 +8,8 @@ name: Деплой на сайт
 #  Откат — из резервной копии сайта (UpdraftPlus), см. MIGRATION.md.
 #
 # Перед выгрузкой — все проверки, включая WordPress 7.1.4 (ci.yml). Не прошли — выгрузки нет.
+# После выгрузки — проверка микроразметки на самом сайте (задача «Микроразметка на сайте»): страницы из карты
+# сайта запрашиваются с хостинга по SSH (адреса GitHub хостинг не пускает), отчёт — в артефакте schema-site.
 # Запуск: push в main или вручную (Actions → «Деплой на сайт» → Run workflow → выбрать ветку).
 
 on:
@@ -128,3 +130,57 @@ jobs:
               rm -r -f $SITE_DIR/$dir/.$name-old;
             " || true
           done
+
+  schema:
+    name: Микроразметка на сайте
+    needs: [deploy]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Ключ SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          if [ -n "$SSH_PRIVATE_KEY" ]; then
+            mkdir -p ~/.ssh && printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/memorial_key && chmod 600 ~/.ssh/memorial_key
+            echo "SSH_KEY_FILE=$HOME/.ssh/memorial_key" >> "$GITHUB_ENV"
+          fi
+
+      - name: Адрес сайта (из последней копии базы UpdraftPlus)
+        env:
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          pip install -q paramiko requests lxml
+          python3 - <<'PY'
+          import gzip, os, re, paramiko
+          auth = {'pkey': paramiko.PKey.from_path(os.environ['SSH_KEY_FILE'])} if os.environ.get('SSH_KEY_FILE') else {'password': os.environ['SFTP_PASSWORD']}
+          t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+          t.connect(username=os.environ['SFTP_USER'], **auth)
+          sf = paramiko.SFTPClient.from_transport(t)
+          site = os.environ['SITE_DIR'].rstrip('/')
+          dbs = sorted(f for f in sf.listdir(site + '/updraft') if f.endswith('-db.gz'))
+          with sf.open(site + '/updraft/' + dbs[-1], 'rb') as raw, gzip.GzipFile(fileobj=raw) as g:
+              for line in g:
+                  m = re.search(rb"'home',\s*'([^']+)'", line) or re.search(rb"'siteurl',\s*'([^']+)'", line)
+                  if m:
+                      open(os.environ['GITHUB_ENV'], 'a').write('SITE_URL=' + m.group(1).decode().rstrip('/') + '\n')
+                      break
+          PY
+
+      - name: Микроразметка на сайте
+        env:
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          echo "сайт: $SITE_URL"
+          python3 tests/diag/schema_vocab.py build "$(cat tests/diag/schemaorg-version.txt)" schemaorg.json
+          python3 tests/diag/fetch_pages.py "$SITE_URL" out/pages --ssh > /dev/null
+          python3 tests/diag/schema_check.py out/pages --vocab schemaorg.json --require-vocab --require-og --out out/schema.json
+
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: schema-site
+          if-no-files-found: ignore
+          path: out/schema.json

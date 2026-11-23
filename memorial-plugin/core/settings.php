@@ -63,25 +63,43 @@ function memorial_plugin_contacts_schema() {
 			'open'     => true,
 			'help'     => __( 'The first address is shown in the top bar of the site. Every address gets a tab with a map on the home page.', 'memorial-plugin' ),
 			'fields'   => array(
-				'addr'  => array(
+				'addr'   => array(
 					'type'        => 'text',
 					'label'       => __( 'Address', 'memorial-plugin' ),
 					'placeholder' => __( '308000, Belgorod, 40 Studencheskaya St.', 'memorial-plugin' ),
 				),
-				'hours' => array(
+				'hours'  => array(
 					'type'        => 'text',
 					'label'       => __( 'Opening hours', 'memorial-plugin' ),
 					'placeholder' => __( 'Daily from 9:00 to 18:00', 'memorial-plugin' ),
 				),
-				'title' => array(
+				'title'  => array(
 					'type'        => 'text',
 					'label'       => __( 'Map tab label (optional)', 'memorial-plugin' ),
 					'placeholder' => __( 'By default — the street and the house', 'memorial-plugin' ),
 				),
-				'map'   => array(
+				'map'    => array(
 					'type'  => 'map',
 					'label' => __( 'Map (optional)', 'memorial-plugin' ),
 					'help'  => __( 'Leave empty — the map finds the address itself. To set an exact marker, paste a link from Yandex Maps or the code from the “Map Constructor”.', 'memorial-plugin' ),
+				),
+				'yandex' => array(
+					'type'        => 'text',
+					'label'       => __( 'Card on Yandex Maps (optional)', 'memorial-plugin' ),
+					'placeholder' => 'https://yandex.ru/maps/org/…',
+					'help'        => __( 'The link to the company card of this address. Search engines link the site with the card (structured data for Google and Yandex).', 'memorial-plugin' ),
+				),
+				'twogis' => array(
+					'type'        => 'text',
+					'label'       => __( 'Card on 2GIS (optional)', 'memorial-plugin' ),
+					'placeholder' => 'https://2gis.ru/belgorod/firm/…',
+					'help'        => __( 'The link to the company card of this address on 2GIS — any form, the site keeps only the card.', 'memorial-plugin' ),
+				),
+				'geo'    => array(
+					'type'        => 'text',
+					'label'       => __( 'Coordinates (optional)', 'memorial-plugin' ),
+					'placeholder' => '50.620132, 36.564591',
+					'help'        => __( 'Latitude and longitude for search engines. Empty — taken from the map link or the 2GIS link.', 'memorial-plugin' ),
 				),
 			),
 		),
@@ -470,10 +488,13 @@ function memorial_plugin_contacts_defaults() {
 		}
 		$map     = $m( 'map' . $n, '' );
 		$addrs[] = array(
-			'addr'  => $a,
-			'hours' => $m( 'hours', __( 'Daily from 9:00 to 18:00', 'memorial-plugin' ) ),
-			'title' => '',
-			'map'   => strpos( $map, 'text=' ) !== false ? '' : $map, // карту по тексту адреса строим сами.
+			'addr'   => $a,
+			'hours'  => $m( 'hours', __( 'Daily from 9:00 to 18:00', 'memorial-plugin' ) ),
+			'title'  => '',
+			'map'    => strpos( $map, 'text=' ) !== false ? '' : $map, // карту по тексту адреса строим сами.
+			'yandex' => '',
+			'twogis' => '',
+			'geo'    => '',
 		);
 	}
 	return array(

@@ -118,6 +118,33 @@ function memorial_plugin_collect_faq( $blocks, &$out ) {
 	}
 }
 
+/**
+ * Questions that are marked on this page: a question that is on several pages is marked on one of them only
+ * (Google: the same question with its answer is marked up once on the site) — the most specific page
+ * (the deepest one: “Wreaths” rather than “Funeral goods”), between equal ones the older page.
+ *
+ * @param array $faq     Question items of the page (memorial_plugin_collect_faq()).
+ * @param int   $post_id Page.
+ * @return array
+ */
+function memorial_plugin_faq_own_questions( array $faq, $post_id ) {
+	if ( ! function_exists( 'memorial_plugin_faq_all' ) ) {
+		return $faq;
+	}
+	$key   = static fn( $q ) => mb_strtolower( trim( (string) preg_replace( '/\s+/u', ' ', (string) $q ) ) );
+	$owner = array();
+	$rank  = static fn( $id ) => array( -count( get_post_ancestors( $id ) ), $id );
+	foreach ( memorial_plugin_faq_all() as $p ) {
+		foreach ( (array) $p['qs'] as $qa ) {
+			$k = $key( $qa[0] ?? '' );
+			if ( '' !== $k && ( ! isset( $owner[ $k ] ) || $rank( (int) $p['id'] ) < $rank( $owner[ $k ] ) ) ) {
+				$owner[ $k ] = (int) $p['id'];
+			}
+		}
+	}
+	return array_values( array_filter( $faq, static fn( $q ) => ( $owner[ $key( $q['name'] ) ] ?? $post_id ) === $post_id ) );
+}
+
 add_action(
 	'wp_head',
 	function () {
@@ -134,6 +161,7 @@ add_action(
 		}
 		$faq = array();
 		memorial_plugin_collect_faq( parse_blocks( $post->post_content ), $faq );
+		$faq = memorial_plugin_faq_own_questions( $faq, (int) $post->ID );
 		if ( count( $faq ) >= 2 ) {
 			memorial_plugin_ld(
 				array(

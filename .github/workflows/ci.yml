@@ -228,6 +228,18 @@ jobs:
       - name: Проверки в браузере, часть ${{ matrix.shard }}/2
         run: npm run test:e2e -- --shard=${{ matrix.shard }}/2
 
+      # Микроразметка для Google и Яндекса (tests/diag/schema_check.py) на сайте с двумя филиалами, услугами,
+      # вопросами и товарами (tools/create-schema-check-site.php). Ошибки — проверка красная; отчёт — в артефакте.
+      - name: Микроразметка
+        if: ${{ !cancelled() && matrix.shard == 2 }}
+        run: |
+          npx wp-env run cli wp eval-file wp-content/plugins/memorial-plugin/tools/create-schema-check-site.php
+          pip install -q requests lxml
+          python3 tests/diag/schema_vocab.py build "$(cat tests/diag/schemaorg-version.txt)" schemaorg.json
+          python3 tests/diag/fetch_pages.py http://localhost:8888 artifacts/schema-pages --no-sitemap \
+            --paths /kontakty/,/ritualnye-uslugi/,/ritualnye-uslugi/traurnyj-zal/,/ritualnye-uslugi/kremacziya/,/venki-test/
+          python3 tests/diag/schema_check.py artifacts/schema-pages --vocab schemaorg.json --require-vocab --out artifacts/schema.json
+
       - name: Ошибки PHP в debug.log
         if: always()
         run: |
