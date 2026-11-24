@@ -20,6 +20,7 @@ function memorial_plugin_prices_schema() {
 	return array(
 		'packages' => array(
 			'type'   => 'group',
+			'tab'    => __( 'Packages', 'memorial-plugin' ),
 			'label'  => __( 'Funeral packages', 'memorial-plugin' ),
 			'help'   => __( 'Funeral and cremation packages: on the home page and by the “Funeral packages” block on any page — the same everywhere. The cremation table on the cremation page is the “Cremation prices” block.', 'memorial-plugin' ),
 			'fields' => array(
@@ -109,6 +110,7 @@ function memorial_plugin_prices_schema() {
 		),
 		'pay'      => array(
 			'type'   => 'group',
+			'tab'    => __( 'Payment', 'memorial-plugin' ),
 			'label'  => __( 'Payment', 'memorial-plugin' ),
 			'help'   => __( 'The “Payment” block on the pages and the payment methods in the data for search engines. The same everywhere.', 'memorial-plugin' ),
 			'fields' => array(
@@ -133,6 +135,12 @@ function memorial_plugin_prices_schema() {
 							'label' => __( 'Explanation', 'memorial-plugin' ),
 							'help'  => __( 'One short line after the name, for example “our own, without a bank — for monuments and tiling”. Can stay empty.', 'memorial-plugin' ),
 						),
+						'for'  => array(
+							'type'    => 'select',
+							'label'   => __( 'For what', 'memorial-plugin' ),
+							'help'    => __( 'The “Payment” block of a page shows the ways for its kind of work: on the funeral pages — “for everything” and “funeral”, on the monument and landscaping pages — “for everything” and “monuments and landscaping”.', 'memorial-plugin' ),
+							'options' => memorial_plugin_payment_for_options(),
+						),
 						'show' => array(
 							'type'    => 'checkbox',
 							'label'   => __( 'Show on the site', 'memorial-plugin' ),
@@ -141,15 +149,26 @@ function memorial_plugin_prices_schema() {
 						),
 					),
 				),
-				'note'  => array(
+				'note'           => array(
 					'type'  => 'textarea',
 					'label' => __( 'Text under the list', 'memorial-plugin' ),
 					'help'  => __( 'Can stay empty. {price:code} puts in a price.', 'memorial-plugin' ),
+				),
+				'note_funeral'   => array(
+					'type'  => 'textarea',
+					'label' => __( 'Text under the list — funeral', 'memorial-plugin' ),
+					'help'  => __( 'On the funeral pages instead of the text above, for example the terms: half before the work, the rest on the day of the funeral. Empty — the text above.', 'memorial-plugin' ),
+				),
+				'note_monuments' => array(
+					'type'  => 'textarea',
+					'label' => __( 'Text under the list — monuments and landscaping', 'memorial-plugin' ),
+					'help'  => __( 'On the monument and landscaping pages instead of the text above, for example the instalment terms by kind of work. Empty — the text above.', 'memorial-plugin' ),
 				),
 			),
 		),
 		'other'    => array(
 			'type'   => 'group',
+			'tab'    => __( 'Separate prices', 'memorial-plugin' ),
 			'label'  => __( 'Separate prices', 'memorial-plugin' ),
 			'help'   => __( 'Prices that are mentioned in the texts of pages and in SEO titles: your own price or one counted by the site (from / up to of a catalog section, number of models, price of a service). How to put one into a text: in a paragraph, open the arrow ∨ (“More”) on the block toolbar → “Site value” → “Price from Memorial → Prices” → choose the price. The page always shows the current value.', 'memorial-plugin' ),
 			'fields' => array(
@@ -158,7 +177,7 @@ function memorial_plugin_prices_schema() {
 					'label'    => __( 'Prices', 'memorial-plugin' ),
 					'add'      => __( 'Add a price', 'memorial-plugin' ),
 					'collapse' => 'name',
-					'summary'  => array( 'what', 'price', 'section', 'service', 'seo' ),
+					'summary'  => array( 'what', 'price', 'updated', 'section', 'service', 'seo' ),
 					'token'    => array( 'code', '{price:%s}' ),
 					'fields'   => array(
 						'name'    => array(
@@ -176,6 +195,13 @@ function memorial_plugin_prices_schema() {
 							'label'   => __( 'Price', 'memorial-plugin' ),
 							'help'    => __( 'A number (500), a range (200–300) or words (free); ₽ is added to numbers by itself.', 'memorial-plugin' ),
 							'show_if' => array( 'what', array( '', 'custom' ) ),
+						),
+						'updated' => array(
+							'type'        => 'text',
+							'label'       => __( 'Updated', 'memorial-plugin' ),
+							'help'        => __( 'The date the price was checked or changed, for example 01.02.2026. It is put by itself when the price changes and is saved; it can be changed by hand.', 'memorial-plugin' ),
+							'placeholder' => __( 'dd.mm.yyyy', 'memorial-plugin' ),
+							'show_if'     => array( 'what', array( '', 'custom' ) ),
 						),
 						'section' => array(
 							'type'    => 'select',
@@ -210,7 +236,76 @@ function memorial_plugin_prices_schema() {
 				),
 			),
 		),
+		'guarantees' => array(
+			'type'   => 'group',
+			'tab'    => __( 'Guarantees', 'memorial-plugin' ),
+			'label'  => __( 'Our guarantees', 'memorial-plugin' ),
+			'help'   => __( 'The “Our guarantees” block on the pages — the same text everywhere. A point “for funeral” is shown on the funeral pages, “for monuments and landscaping” — on theirs, “for everything” — everywhere. The instalment plan is never shown for the funeral.', 'memorial-plugin' ),
+			'fields' => array(
+				'title' => array(
+					'type'        => 'text',
+					'label'       => __( 'Section title', 'memorial-plugin' ),
+					'placeholder' => __( 'Our guarantees', 'memorial-plugin' ),
+				),
+				'items' => array(
+					'type'     => 'repeater',
+					'label'    => __( 'Points (up to 8)', 'memorial-plugin' ),
+					'add'      => __( 'Add a point', 'memorial-plugin' ),
+					'collapse' => 'title',
+					'summary'  => array( 'for', 'show' ),
+					'fields'   => array(
+						'icon'  => array(
+							'type'    => 'select',
+							'label'   => __( 'Icon', 'memorial-plugin' ),
+							'options' => memorial_plugin_guarantee_icons(),
+						),
+						'title' => array(
+							'type'  => 'text',
+							'label' => __( 'Heading (up to 40 characters)', 'memorial-plugin' ),
+						),
+						'text'  => array(
+							'type'  => 'textarea',
+							'label' => __( 'Text (up to 160 characters)', 'memorial-plugin' ),
+							'rows'  => 2,
+						),
+						'for'   => array(
+							'type'    => 'select',
+							'label'   => __( 'For what', 'memorial-plugin' ),
+							'options' => memorial_plugin_payment_for_options(),
+						),
+						'show'  => array(
+							'type'    => 'checkbox',
+							'label'   => __( 'Show on the site', 'memorial-plugin' ),
+							'short'   => __( 'on the site', 'memorial-plugin' ),
+							'default' => 1,
+						),
+					),
+				),
+			),
+		),
 	);
+}
+
+/**
+ * “For what” of a way of payment or a guarantee: everything, funeral, monuments and landscaping.
+ *
+ * @return array<string,string>
+ */
+function memorial_plugin_payment_for_options() {
+	return array(
+		''          => __( 'For everything', 'memorial-plugin' ),
+		'funeral'   => __( 'Funeral', 'memorial-plugin' ),
+		'monuments' => __( 'Monuments and landscaping', 'memorial-plugin' ),
+	);
+}
+
+/**
+ * Icons a guarantee can have: the icons of the site set.
+ *
+ * @return array<string,string>
+ */
+function memorial_plugin_guarantee_icons() {
+	return function_exists( 'memorial_plugin_icon_labels' ) ? memorial_plugin_icon_labels() : array( 'shield' => 'shield' );
 }
 
 /**
@@ -286,7 +381,14 @@ function memorial_plugin_prices_defaults() {
 					'show' => 1,
 				),
 			),
-			'note'  => '',
+			'note'           => '',
+			'note_funeral'   => '50% стоимости — до начала работ, остаток — в день похорон. Рассрочки на похороны нет.',
+			'note_monuments' => '',
+		),
+		// «Наши гарантии» (ТЗ «Блоки и доработки», 24.11.2026; тексты — из карточки компании).
+		'guarantees' => array(
+			'title' => '',
+			'items' => memorial_plugin_guarantees_defaults(),
 		),
 		'other'     => array(
 			'items' => array(

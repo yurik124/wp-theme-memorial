@@ -2999,6 +2999,7 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 			await page.goto( '/wp-admin/admin.php?page=mem-prices' );
 			await page.waitForSelector( '.memorial-plugin-settings__card' );
 			const out = { width };
+			await page.getByRole( 'tab', { name: 'Отдельные цены' } ).click().catch( () => {} );
 			const card = page.locator( '.memorial-plugin-settings__card' ).filter( { hasText: 'Отдельные цены' } );
 			// Свёрнутые строки: сводка не должна заходить под «Развернуть», стрелки и корзину.
 			await card.locator( '.memorial-plugin-settings__row' ).first().scrollIntoViewIfNeeded();

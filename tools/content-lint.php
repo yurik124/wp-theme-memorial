@@ -193,6 +193,16 @@ foreach ( $files as $f ) {
 				}
 			}
 		}
+		if ( 'memorial-plugin/price-list' === $name ) {
+			foreach ( (array) ( $b['attrs']['rows'] ?? array() ) as $row ) {
+				if ( isset( $row['page'] ) && is_string( $row['page'] ) && '' !== $row['page'] ) {
+					$links[] = $row['page'];
+				}
+				if ( isset( $row['code'] ) && $codes && ! in_array( mb_strtolower( (string) $row['code'] ), $codes, true ) ) {
+					$warn( $rel, "«Цены по отдельности»: кода «{$row['code']}» нет в «Мемориал → Цены» на сайте — строка не выведется, пока код не появится." );
+				}
+			}
+		}
 		if ( 'memorial-plugin/link-button' === $name ) {
 			foreach ( array( 'page', 'url' ) as $a ) {
 				if ( isset( $b['attrs'][ $a ] ) && is_string( $b['attrs'][ $a ] ) && '' !== $b['attrs'][ $a ] ) {

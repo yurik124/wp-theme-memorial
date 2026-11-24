@@ -1,0 +1,72 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/benefits",
+    "title": "Benefit and payments",
+    "category": "memorial-catalog",
+    "icon": "id-alt",
+    "description": "The burial benefit and the payment for participants of the special military operation — the sums from Memorial → Prices → Separate prices (codes posobie and vyplata_svo).",
+    "keywords": [
+        "benefit",
+        "payment",
+        "special military operation",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "show": {
+            "type": "string",
+            "default": "both",
+            "enum": [
+                "both",
+                "posobie",
+                "svo"
+            ]
+        },
+        "heading": {
+            "type": "boolean",
+            "default": true
+        },
+        "title": {
+            "type": "string",
+            "default": ""
+        },
+        "link": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": true
+    },
+    "example": {
+        "attributes": {
+            "show": "both",
+            "heading": true,
+            "title": "",
+            "link": true
+        },
+        "viewportWidth": 1000
+    }
+}

@@ -13,6 +13,17 @@
         "memorial"
     ],
     "textdomain": "memorial-plugin",
+    "attributes": {
+        "context": {
+            "type": "string",
+            "default": "",
+            "enum": [
+                "",
+                "funeral",
+                "monuments"
+            ]
+        }
+    },
     "supports": {
         "autoRegister": true,
         "html": false,
@@ -38,7 +49,9 @@
         "inserter": true
     },
     "example": {
-        "attributes": {},
+        "attributes": {
+            "context": ""
+        },
         "viewportWidth": 1000
     }
 }

@@ -8451,3 +8451,262 @@ msgid_plural "Pages from the repository: %d pages wait for your decision."
 msgstr[0] "Страницы из репозитория: %d страница ждёт вашего решения."
 msgstr[1] "Страницы из репозитория: %d страницы ждут вашего решения."
 msgstr[2] "Страницы из репозитория: %d страниц ждут вашего решения."
+
+msgid "A table “service — price from — more” from the codes of Memorial → Prices → Separate prices. A row whose code has no price is not shown."
+msgstr "Таблица «услуга — цена от — подробнее» из кодов «Мемориал → Цены → Отдельные цены». Строка, у кода которой нет цены, не выводится."
+
+msgid "Add a point"
+msgstr "Добавить пункт"
+
+msgid "Add a row"
+msgstr "Добавить строку"
+
+msgid "All points"
+msgstr "Все пункты"
+
+msgid "All ways of payment"
+msgstr "Все способы оплаты"
+
+msgid "Benefit and payments"
+msgstr "Пособие и выплаты"
+
+msgid "Benefit and payments for a burial"
+msgstr "Пособие и выплаты на погребение"
+
+msgid "Benefits and payments: fill in the prices with the codes posobie and vyplata_svo in Memorial → Prices → Separate prices."
+msgstr "Пособие и выплаты: заполните цены с кодами posobie и vyplata_svo в «Мемориал → Цены → Отдельные цены»."
+
+msgid "Empty — the name of the price."
+msgstr "Пусто — название цены."
+
+msgid "Fill: %s"
+msgstr "Заполнить: %s"
+
+msgid "For everything"
+msgstr "Для всего"
+
+msgid "For what"
+msgstr "Для чего"
+
+msgid "Funeral"
+msgstr "Похороны"
+
+msgid "Funeral (without the instalment plan)"
+msgstr "Похороны (без рассрочки)"
+
+msgid "Funeral and goods"
+msgstr "Похороны и товары"
+
+msgid "Guarantees from Memorial → Prices → Guarantees: cards with an icon, a heading and a text — the same on every page."
+msgstr "Гарантии из «Мемориал → Цены → Гарантии»: карточки с иконкой, заголовком и текстом — одинаково на всех страницах."
+
+msgid "Heading (empty — from the settings, “Our guarantees”)"
+msgstr "Заголовок (пусто — из настроек, «Наши гарантии»)"
+
+msgid "Heading (empty — none)"
+msgstr "Заголовок (пусто — без заголовка)"
+
+msgid "Heading (empty — “Benefit and payments for a burial”)"
+msgstr "Заголовок (пусто — «Пособие и выплаты на погребение»)"
+
+msgid "Heading (up to 40 characters)"
+msgstr "Заголовок (до 40 знаков)"
+
+msgid "Heading of the section"
+msgstr "Заголовок раздела"
+
+msgid "How many (0 — all)"
+msgstr "Сколько (0 — все)"
+
+msgid "Line under the table"
+msgstr "Строка под таблицей"
+
+msgid "Link “More about the benefit”"
+msgstr "Ссылка «Подробно о пособии»"
+
+msgid "Monuments and landscaping"
+msgstr "Памятники и благоустройство"
+
+msgid "More about the benefit"
+msgstr "Подробно о пособии"
+
+msgid "Name in the table"
+msgstr "Название в таблице"
+
+msgid "None"
+msgstr "Нет"
+
+msgid "On the funeral pages instead of the text above, for example the terms: half before the work, the rest on the day of the funeral. Empty — the text above."
+msgstr "На страницах похорон вместо текста выше, например условия: половина до начала работ, остаток в день похорон. Пусто — текст выше."
+
+msgid "On the monument and landscaping pages instead of the text above, for example the instalment terms by kind of work. Empty — the text above."
+msgstr "На страницах памятников и благоустройства вместо текста выше, например условия рассрочки по видам работ. Пусто — текст выше."
+
+msgid "Only the payment for participants of the special military operation"
+msgstr "Только выплата участникам СВО"
+
+msgid "Only the social benefit"
+msgstr "Только социальное пособие"
+
+msgid "Our guarantees"
+msgstr "Наши гарантии"
+
+msgid "Page “more”"
+msgstr "Страница «подробнее»"
+
+msgid "Payment for the burial of a participant of the special military operation"
+msgstr "Выплата на погребение участника СВО"
+
+msgid "Points (up to 8)"
+msgstr "Пункты (до 8)"
+
+msgid "Prices one by one"
+msgstr "Цены по отдельности"
+
+msgid "Prices one by one: no row has a price yet. Fill in the prices of the codes in Memorial → Prices → Separate prices."
+msgstr "Цены по отдельности: ни у одной строки пока нет цены. Впишите цены кодов в «Мемориал → Цены → Отдельные цены»."
+
+msgid "Ready set when there are no rows of its own"
+msgstr "Готовый набор, если своих строк нет"
+
+msgid "Rows"
+msgstr "Строки"
+
+msgid "Section title"
+msgstr "Заголовок раздела"
+
+msgid "Social benefit for a burial"
+msgstr "Социальное пособие на погребение"
+
+msgid "Text (up to 160 characters)"
+msgstr "Текст (до 160 знаков)"
+
+msgid "Text under the list — funeral"
+msgstr "Текст под списком — похороны"
+
+msgid "Text under the list — monuments and landscaping"
+msgstr "Текст под списком — памятники и благоустройство"
+
+msgid "The benefit and the payment"
+msgstr "Пособие и выплата"
+
+msgid "The burial benefit and the payment for participants of the special military operation — the sums from Memorial → Prices → Separate prices (codes posobie and vyplata_svo)."
+msgstr "Пособие на погребение и выплата участникам СВО — суммы из «Мемориал → Цены → Отдельные цены» (коды posobie и vyplata_svo)."
+
+msgid "The date the price was checked or changed, for example 01.02.2026. It is put by itself when the price changes and is saved; it can be changed by hand."
+msgstr "Дата, когда цену проверили или изменили, например 01.02.2026. Ставится сама, когда цена меняется и сохраняется; можно поправить вручную."
+
+msgid "The “Our guarantees” block on the pages — the same text everywhere. A point “for funeral” is shown on the funeral pages, “for monuments and landscaping” — on theirs, “for everything” — everywhere. The instalment plan is never shown for the funeral."
+msgstr "Блок «Наши гарантии» на страницах — один текст везде. Пункт «Похороны» виден на страницах похорон, «Памятники и благоустройство» — на их страницах, «Для всего» — везде. Рассрочка для похорон не показывается никогда."
+
+msgid "The “Payment” block of a page shows the ways for its kind of work: on the funeral pages — “for everything” and “funeral”, on the monument and landscaping pages — “for everything” and “monuments and landscaping”."
+msgstr "Блок «Оплата» показывает способы для своего вида работ: на страницах похорон — «Для всего» и «Похороны», на страницах памятников и благоустройства — «Для всего» и «Памятники и благоустройство»."
+
+msgid "We give the full set of documents for claiming the payments. The payment is claimed by a relative."
+msgstr "Мы даём полный комплект документов для получения выплат. Оформляет выплату родственник."
+
+msgid "Which points"
+msgstr "Какие пункты"
+
+msgid "benefit"
+msgstr "пособие"
+
+msgid "contract"
+msgstr "договор"
+
+msgid "dd.mm.yyyy"
+msgstr "дд.мм.гггг"
+
+msgid "in the Belgorod region, through the military enlistment office"
+msgstr "по Белгородской области, через военкомат"
+
+msgid "more"
+msgstr "подробнее"
+
+msgid "no price yet"
+msgstr "цены пока нет"
+
+msgid "no unit"
+msgstr "без единицы"
+
+msgid "per km"
+msgstr "за км"
+
+msgid "per m²"
+msgstr "за м²"
+
+msgid "per running metre"
+msgstr "за пог. м"
+
+msgid "per trip"
+msgstr "за рейс"
+
+msgid "price list"
+msgstr "прайс"
+
+msgid "special military operation"
+msgstr "СВО"
+
+msgid "table"
+msgstr "таблица"
+
+msgid "through the Social Fund of Russia"
+msgstr "через Социальный фонд"
+
+msgid "trust"
+msgstr "доверие"
+
+msgid "— choose a price —"
+msgstr "— выберите цену —"
+
+msgctxt "block description"
+msgid "A table “service — price from — more” from the codes of Memorial → Prices → Separate prices. A row whose code has no price is not shown."
+msgstr "Таблица «услуга — цена от — подробнее» из кодов «Мемориал → Цены → Отдельные цены». Строка, у кода которой нет цены, не выводится."
+
+msgctxt "block description"
+msgid "Guarantees from Memorial → Prices → Guarantees: cards with an icon, a heading and a text — the same on every page."
+msgstr "Гарантии из «Мемориал → Цены → Гарантии»: карточки с иконкой, заголовком и текстом — одинаково на всех страницах."
+
+msgctxt "block description"
+msgid "The burial benefit and the payment for participants of the special military operation — the sums from Memorial → Prices → Separate prices (codes posobie and vyplata_svo)."
+msgstr "Пособие на погребение и выплата участникам СВО — суммы из «Мемориал → Цены → Отдельные цены» (коды posobie и vyplata_svo)."
+
+msgctxt "block keyword"
+msgid "benefit"
+msgstr "пособие"
+
+msgctxt "block keyword"
+msgid "contract"
+msgstr "договор"
+
+msgctxt "block keyword"
+msgid "guarantee"
+msgstr "гарантия"
+
+msgctxt "block keyword"
+msgid "price list"
+msgstr "прайс"
+
+msgctxt "block keyword"
+msgid "special military operation"
+msgstr "СВО"
+
+msgctxt "block keyword"
+msgid "table"
+msgstr "таблица"
+
+msgctxt "block keyword"
+msgid "trust"
+msgstr "доверие"
+
+msgctxt "block title"
+msgid "Benefit and payments"
+msgstr "Пособие и выплаты"
+
+msgctxt "block title"
+msgid "Our guarantees"
+msgstr "Наши гарантии"
+
+msgctxt "block title"
+msgid "Prices one by one"
+msgstr "Цены по отдельности"

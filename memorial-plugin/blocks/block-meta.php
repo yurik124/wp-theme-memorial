@@ -82,7 +82,7 @@ function memorial_plugin_block_categories() {
 function memorial_plugin_block_category( $slug ) {
 	$groups = array(
 		'memorial-contacts' => array( 'phone-button', 'night-line', 'contacts-list', 'contacts-cards', 'contacts-badges', 'maps', 'company-details' ),
-		'memorial-catalog'  => array( 'catalog', 'category-list', 'category-photos', 'cards', 'packages', 'packages-grid', 'cremation', 'payment' ),
+		'memorial-catalog'  => array( 'catalog', 'category-list', 'category-photos', 'cards', 'packages', 'packages-grid', 'cremation', 'payment', 'price-list', 'benefits', 'guarantees' ),
 		'memorial-services' => array( 'services', 'services-grid', 'works', 'cemeteries', 'restaurants', 'faq', 'guide', 'cta' ),
 		'memorial-reviews'  => array( 'reviews', 'book-reviews', 'rewio-reviews', 'review-buttons', 'review-widget' ),
 		'memorial-design'   => array( 'laurel', 'icon', 'stat', 'link-button' ),
@@ -160,6 +160,9 @@ function memorial_plugin_block_keywords() {
 		'payment'         => array( __( 'payment', 'memorial-plugin' ), __( 'instalments', 'memorial-plugin' ), __( 'card', 'memorial-plugin' ) ),
 		'works'           => array( __( 'works', 'memorial-plugin' ), __( 'portfolio', 'memorial-plugin' ), __( 'photos', 'memorial-plugin' ) ),
 		'cards'           => array( __( 'cards', 'memorial-plugin' ), __( 'pages', 'memorial-plugin' ) ),
+		'guarantees'      => array( __( 'guarantee', 'memorial-plugin' ), __( 'contract', 'memorial-plugin' ), __( 'trust', 'memorial-plugin' ) ),
+		'benefits'        => array( __( 'benefit', 'memorial-plugin' ), __( 'payment', 'memorial-plugin' ), __( 'special military operation', 'memorial-plugin' ) ),
+		'price-list'      => array( __( 'prices', 'memorial-plugin' ), __( 'price list', 'memorial-plugin' ), __( 'table', 'memorial-plugin' ) ),
 		// Floating.
 		'callback-dialog' => array( __( 'call back', 'memorial-plugin' ), __( 'form', 'memorial-plugin' ) ),
 		'cookie-banner'   => array( __( 'cookie', 'memorial-plugin' ), __( 'consent', 'memorial-plugin' ) ),
@@ -225,16 +228,26 @@ function memorial_plugin_block_example( $attributes = array(), $width = 800 ) {
 function memorial_plugin_block_attributes( $name, $defs ) {
 	$out = array();
 	foreach ( $defs as $attr => $def ) {
+		// One of several values with readable names: a list in the block settings instead of the bare values.
+		if ( empty( $def['picker'] ) && ! empty( $def['options'] ) ) {
+			$def['picker'] = 'choice';
+		}
 		if ( ! empty( $def['picker'] ) ) {
-			memorial_plugin_block_pickers(
-				$name,
-				$attr,
-				array(
-					'kind'  => (string) $def['picker'],
-					'label' => (string) ( $def['label'] ?? '' ),
-					'empty' => (string) ( $def['empty'] ?? '' ),
-				)
+			$picker = array(
+				'kind'  => (string) $def['picker'],
+				'label' => (string) ( $def['label'] ?? '' ),
+				'empty' => (string) ( $def['empty'] ?? '' ),
 			);
+			if ( ! empty( $def['options'] ) ) {
+				$picker['options'] = array();
+				foreach ( (array) $def['options'] as $value => $label ) {
+					$picker['options'][] = array(
+						'value' => (string) $value,
+						'label' => (string) $label,
+					);
+				}
+			}
+			memorial_plugin_block_pickers( $name, $attr, $picker );
 		}
 		$out[ $attr ] = array_intersect_key( $def, array_flip( array( 'type', 'default', 'enum', 'label' ) ) );
 	}
@@ -330,6 +343,9 @@ function memorial_plugin_block_controls_assets() {
 				'pickers'   => memorial_plugin_block_pickers(),
 				'texts'     => memorial_plugin_block_texts(),
 				'addresses' => $addresses,
+				'prices'    => memorial_plugin_block_price_codes(),
+				'units'     => function_exists( 'memorial_plugin_price_list_units' ) ? memorial_plugin_price_list_units() : array(),
+				'presets'   => function_exists( 'memorial_plugin_price_list_presets' ) ? memorial_plugin_price_list_presets() : array(),
 				'packages'  => array_values(
 					array_map(
 						static fn( $p ) => array(
@@ -345,6 +361,31 @@ function memorial_plugin_block_controls_assets() {
 	);
 }
 add_action( 'enqueue_block_editor_assets', 'memorial_plugin_block_controls_assets' );
+
+/**
+ * Price codes for the “Prices one by one” rows: code => «name — price now» (no price yet — said so).
+ *
+ * @return array<int,array{value:string,label:string}>
+ */
+function memorial_plugin_block_price_codes() {
+	if ( ! function_exists( 'memorial_plugin_values' ) ) {
+		return array();
+	}
+	$out = array(
+		array(
+			'value' => 'kremaciya',
+			'label' => __( 'Cremation (total)', 'memorial-plugin' ) . ' — ' . memorial_plugin_price_value( 'kremaciya' ),
+		),
+	);
+	foreach ( memorial_plugin_values() as $code => $row ) {
+		$now   = function_exists( 'memorial_plugin_price_list_value' ) ? memorial_plugin_price_list_value( (string) $code ) : '';
+		$out[] = array(
+			'value' => (string) $code,
+			'label' => ( '' !== trim( (string) ( $row['name'] ?? '' ) ) ? $row['name'] : $code ) . ' — ' . ( '' !== $now ? $now : __( 'no price yet', 'memorial-plugin' ) ),
+		);
+	}
+	return $out;
+}
 
 /**
  * Settings of the plugin blocks that are plain values (a text, a number, a switch, one of several):

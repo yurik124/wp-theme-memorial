@@ -113,8 +113,133 @@ function memorial_plugin_home_blocks_list() {
 			'title'  => __( 'Payment', 'memorial-plugin' ),
 			'desc'   => __( 'Ways of payment and the instalment plan from Memorial → Prices → Payment — the same on every page.', 'memorial-plugin' ),
 			'icon'   => 'money-alt',
-			'attrs'  => array(),
+			'attrs'  => array(
+				'context' => array(
+					'type'    => 'string',
+					'default' => '',
+					'enum'    => array( '', 'funeral', 'monuments' ),
+					'options' => array(
+						''          => __( 'All ways of payment', 'memorial-plugin' ),
+						'funeral'   => __( 'Funeral (without the instalment plan)', 'memorial-plugin' ),
+						'monuments' => __( 'Monuments and landscaping', 'memorial-plugin' ),
+					),
+					'label'   => __( 'For what', 'memorial-plugin' ),
+				),
+			),
 			'render' => 'memorial_plugin_payment_render',
+		),
+		'guarantees'      => array(
+			'title'  => __( 'Our guarantees', 'memorial-plugin' ),
+			'desc'   => __( 'Guarantees from Memorial → Prices → Guarantees: cards with an icon, a heading and a text — the same on every page.', 'memorial-plugin' ),
+			'icon'   => 'shield',
+			'attrs'  => array(
+				'set'     => array(
+					'type'    => 'string',
+					'default' => 'all',
+					'enum'    => array( 'all', 'funeral', 'monuments' ),
+					'options' => array(
+						'all'       => __( 'All points', 'memorial-plugin' ),
+						'funeral'   => __( 'Funeral (without the instalment plan)', 'memorial-plugin' ),
+						'monuments' => __( 'Monuments and landscaping', 'memorial-plugin' ),
+					),
+					'label'   => __( 'Which points', 'memorial-plugin' ),
+				),
+				'count'   => array(
+					'type'    => 'integer',
+					'default' => 0,
+					'label'   => __( 'How many (0 — all)', 'memorial-plugin' ),
+				),
+				'heading' => array(
+					'type'    => 'boolean',
+					'default' => true,
+					'label'   => __( 'Heading of the section', 'memorial-plugin' ),
+				),
+				'title'   => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Heading (empty — from the settings, “Our guarantees”)', 'memorial-plugin' ),
+				),
+				'cols'    => array(
+					'type'    => 'integer',
+					'default' => 3,
+					'enum'    => array( 2, 3 ),
+					'options' => array(
+						2 => '2',
+						3 => '3',
+					),
+					'label'   => __( 'Columns on a computer', 'memorial-plugin' ),
+				),
+			),
+			'render' => 'memorial_plugin_guarantees_render',
+		),
+		'benefits'        => array(
+			'title'  => __( 'Benefit and payments', 'memorial-plugin' ),
+			'desc'   => __( 'The burial benefit and the payment for participants of the special military operation — the sums from Memorial → Prices → Separate prices (codes posobie and vyplata_svo).', 'memorial-plugin' ),
+			'icon'   => 'id-alt',
+			'attrs'  => array(
+				'show'    => array(
+					'type'    => 'string',
+					'default' => 'both',
+					'enum'    => array( 'both', 'posobie', 'svo' ),
+					'options' => array(
+						'both'    => __( 'The benefit and the payment', 'memorial-plugin' ),
+						'posobie' => __( 'Only the social benefit', 'memorial-plugin' ),
+						'svo'     => __( 'Only the payment for participants of the special military operation', 'memorial-plugin' ),
+					),
+					'label'   => __( 'What to show', 'memorial-plugin' ),
+				),
+				'heading' => array(
+					'type'    => 'boolean',
+					'default' => true,
+					'label'   => __( 'Heading of the section', 'memorial-plugin' ),
+				),
+				'title'   => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Heading (empty — “Benefit and payments for a burial”)', 'memorial-plugin' ),
+				),
+				'link'    => array(
+					'type'    => 'boolean',
+					'default' => true,
+					'label'   => __( 'Link “More about the benefit”', 'memorial-plugin' ),
+				),
+			),
+			'render' => 'memorial_plugin_benefits_render',
+		),
+		'price-list'      => array(
+			'title'  => __( 'Prices one by one', 'memorial-plugin' ),
+			'desc'   => __( 'A table “service — price from — more” from the codes of Memorial → Prices → Separate prices. A row whose code has no price is not shown.', 'memorial-plugin' ),
+			'icon'   => 'list-view',
+			'attrs'  => array(
+				'rows'   => array(
+					'type'    => 'array',
+					'default' => array(),
+					'label'   => __( 'Rows', 'memorial-plugin' ),
+					'picker'  => 'price-rows',
+				),
+				'preset' => array(
+					'type'    => 'string',
+					'default' => '',
+					'enum'    => array( '', 'funeral', 'monuments' ),
+					'options' => array(
+						''          => __( 'None', 'memorial-plugin' ),
+						'funeral'   => __( 'Funeral and goods', 'memorial-plugin' ),
+						'monuments' => __( 'Monuments and landscaping', 'memorial-plugin' ),
+					),
+					'label'   => __( 'Ready set when there are no rows of its own', 'memorial-plugin' ),
+				),
+				'title'  => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Heading (empty — none)', 'memorial-plugin' ),
+				),
+				'note'   => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Line under the table', 'memorial-plugin' ),
+				),
+			),
+			'render' => 'memorial_plugin_price_list_render',
 		),
 		'night-line'      => array(
 			'title'  => __( 'Line “Calls at night”', 'memorial-plugin' ),

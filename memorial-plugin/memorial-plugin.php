@@ -156,6 +156,7 @@ $memorial_plugin_modules = array(
 	'prices/packages.php',
 	'prices/prices.php',
 	'prices/terms.php',
+	'prices/price-blocks.php',
 	// каталог: админка.
 	'catalog/catalog-admin.php',
 	'catalog/catalog-types.php',

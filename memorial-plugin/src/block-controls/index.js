@@ -50,6 +50,9 @@ const PICKERS = DATA.pickers || {};
 const TEXTS = DATA.texts || {};
 const ADDRESSES = DATA.addresses || [];
 const PACKAGES = DATA.packages || [];
+const PRICES = DATA.prices || [];
+const UNITS = DATA.units || {};
+const PRESETS = DATA.presets || {};
 // A block that shows nothing until this setting is filled in: its fields open in place of the block.
 const REQUIRED = { 'memorial-plugin/stat': 'number' };
 const PREFIX = 'memorial-plugin/';
@@ -543,9 +546,164 @@ function ReviewsPicker( { label, value, onChange } ) {
 	);
 }
 
+// Rows of “Prices one by one”: a price code, the name, the page, the unit; a ready set fills them at once.
+function PriceRowsPicker( { label, value, onChange } ) {
+	const rows = Array.isArray( value ) ? value : [];
+	const set = ( next ) => onChange( next );
+	const change = ( i, edits ) =>
+		set( rows.map( ( r, j ) => ( j === i ? { ...r, ...edits } : r ) ) );
+	const move = ( i, d ) => {
+		const next = [ ...rows ];
+		[ next[ i ], next[ i + d ] ] = [ next[ i + d ], next[ i ] ];
+		set( next );
+	};
+	const codes = ( code ) => [
+		{ value: '', label: __( '— choose a price —', 'memorial-plugin' ) },
+		...( code && ! PRICES.some( ( p ) => p.value === code )
+			? [ { value: code, label: code } ]
+			: [] ),
+		...PRICES,
+	];
+	const units = Object.entries( UNITS ).map( ( [ v, l ] ) => ( {
+		value: v,
+		label: l,
+	} ) );
+	return (
+		<div className="memorial-plugin-price-rows">
+			<p className="memorial-plugin-pages-picker__label">{ label }</p>
+			{ rows.map( ( row, i ) => (
+				<fieldset
+					className="memorial-plugin-price-rows__row"
+					key={ i }
+				>
+					<legend>
+						{ sprintf(
+							/* translators: %d: row number. */
+							__( 'Row %d', 'memorial-plugin' ),
+							i + 1
+						) }
+					</legend>
+					<SelectControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Price', 'memorial-plugin' ) }
+						value={ row.code || '' }
+						options={ codes( row.code ) }
+						onChange={ ( v ) => change( i, { code: v } ) }
+					/>
+					<TextControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Name in the table', 'memorial-plugin' ) }
+						help={ __(
+							'Empty — the name of the price.',
+							'memorial-plugin'
+						) }
+						value={ row.label || '' }
+						onChange={ ( v ) => change( i, { label: v } ) }
+					/>
+					<PostPicker
+						postType="page"
+						label={ __( 'Page “more”', 'memorial-plugin' ) }
+						value={ row.page || '' }
+						onChange={ ( v ) =>
+							change( i, {
+								page: /^\d+$/.test( String( v ) )
+									? Number( v )
+									: v,
+							} )
+						}
+					/>
+					<SelectControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Unit', 'memorial-plugin' ) }
+						value={ row.unit || '' }
+						options={ units }
+						onChange={ ( v ) => change( i, { unit: v } ) }
+					/>
+					<div className="memorial-plugin-price-rows__actions">
+						<Button
+							size="small"
+							icon="arrow-up-alt2"
+							label={ __( 'Move up', 'memorial-plugin' ) }
+							disabled={ i === 0 }
+							onClick={ () => move( i, -1 ) }
+						/>
+						<Button
+							size="small"
+							icon="arrow-down-alt2"
+							label={ __( 'Move down', 'memorial-plugin' ) }
+							disabled={ i === rows.length - 1 }
+							onClick={ () => move( i, 1 ) }
+						/>
+						<Button
+							size="small"
+							variant="link"
+							isDestructive
+							onClick={ () =>
+								set( rows.filter( ( r, j ) => j !== i ) )
+							}
+						>
+							{ __( 'Remove', 'memorial-plugin' ) }
+						</Button>
+					</div>
+				</fieldset>
+			) ) }
+			<div className="memorial-plugin-price-rows__add">
+				<Button
+					variant="secondary"
+					onClick={ () =>
+						set( [
+							...rows,
+							{ code: '', label: '', page: '', unit: '' },
+						] )
+					}
+				>
+					{ __( 'Add a row', 'memorial-plugin' ) }
+				</Button>
+				{ Object.entries( PRESETS ).map( ( [ key, preset ] ) => (
+					<Button
+						key={ key }
+						variant="tertiary"
+						onClick={ () =>
+							set( preset.rows.map( ( r ) => ( { ...r } ) ) )
+						}
+					>
+						{ sprintf(
+							/* translators: %s: name of a ready set of rows. */
+							__( 'Fill: %s', 'memorial-plugin' ),
+							preset.label
+						) }
+					</Button>
+				) ) }
+			</div>
+		</div>
+	);
+}
+
 // The chooser of one attribute.
 function Picker( { picker, value, onChange } ) {
 	switch ( picker.kind ) {
+		case 'choice':
+			return (
+				<SelectControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					label={ picker.label }
+					value={ String( value ?? '' ) }
+					options={ picker.options || [] }
+					onChange={ onChange }
+				/>
+			);
+		case 'price-rows':
+			return (
+				<PriceRowsPicker
+					{ ...picker }
+					value={ value }
+					onChange={ onChange }
+				/>
+			);
 		case 'address':
 			return (
 				<SelectControl

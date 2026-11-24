@@ -58,6 +58,7 @@ test( 'Отдельные цены: новая строка — ввод по б
 	const errors = collectJsErrors( page );
 	await login( page );
 	await page.goto( '/wp-admin/admin.php?page=mem-prices' );
+	await page.getByRole( 'tab', { name: 'Separate prices' } ).click();
 	const card = page
 		.locator( '.memorial-plugin-settings__card' )
 		.filter( { hasText: 'Separate prices' } );

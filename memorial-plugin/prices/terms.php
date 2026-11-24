@@ -17,14 +17,33 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * What a way of payment is for: '' (everything), funeral, monuments. A way saved before the field appeared
+ * and named an instalment plan is for monuments: there is no instalment plan for a funeral.
+ *
+ * @param array $row Way of payment.
+ * @return string
+ */
+function memorial_plugin_payment_for( $row ) {
+	if ( array_key_exists( 'for', $row ) && in_array( $row['for'], array( '', 'funeral', 'monuments' ), true ) ) {
+		return (string) $row['for'];
+	}
+	return preg_match( '/рассрочк/iu', ( $row['name'] ?? '' ) . ' ' . ( $row['note'] ?? '' ) ) ? 'monuments' : '';
+}
+
+/**
  * Ways of payment shown on the site: [[name, note], …].
  *
+ * @param string $context '' — all; funeral | monuments — the ways for everything and for this kind of work.
  * @return array<int,array{0:string,1:string}>
  */
-function memorial_plugin_payment_items() {
+function memorial_plugin_payment_items( $context = '' ) {
 	$out = array();
 	foreach ( (array) ( memorial_plugin_prices( 'pay' )['items'] ?? array() ) as $row ) {
 		if ( ! is_array( $row ) || empty( $row['show'] ) || '' === trim( (string) ( $row['name'] ?? '' ) ) ) {
+			continue;
+		}
+		$for = memorial_plugin_payment_for( $row );
+		if ( '' !== $context && '' !== $for && $for !== $context ) {
 			continue;
 		}
 		$out[] = array( trim( (string) $row['name'] ), trim( (string) ( $row['note'] ?? '' ) ) );
@@ -35,10 +54,12 @@ function memorial_plugin_payment_items() {
 /**
  * The “Payment” block.
  *
+ * @param array $a Attributes: context ('' | funeral | monuments).
  * @return string
  */
-function memorial_plugin_payment_render() {
-	$items = memorial_plugin_payment_items();
+function memorial_plugin_payment_render( $a = array() ) {
+	$context = in_array( $a['context'] ?? '', array( 'funeral', 'monuments' ), true ) ? $a['context'] : '';
+	$items   = memorial_plugin_payment_items( $context );
 	if ( ! $items ) {
 		return '';
 	}
@@ -50,6 +71,9 @@ function memorial_plugin_payment_render() {
 		$list .= '<li><b>' . esc_html( memorial_plugin_t( $name ) ) . '</b>' . ( '' !== $note ? ' — ' . esc_html( memorial_plugin_t( $note ) ) : '' ) . '</li>';
 	}
 	$note = trim( (string) ( $pay['note'] ?? '' ) );
+	if ( '' !== $context && '' !== trim( (string) ( $pay[ 'note_' . $context ] ?? '' ) ) ) {
+		$note = trim( (string) $pay[ 'note_' . $context ] );
+	}
 	return '<section class="mterms mterms--pay">'
 		. '<span class="feat__ico mterms__ico">' . memorial_plugin_icon( 'ruble' ) . '</span>'
 		. '<div class="mterms__body"><h3 class="mterms__title">' . esc_html( $title ) . '</h3>'
