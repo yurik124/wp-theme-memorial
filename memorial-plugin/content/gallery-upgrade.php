@@ -53,6 +53,22 @@ function memorial_plugin_gallery_caption_html( $html, $caption, $url ) {
 }
 
 /**
+ * Address of a published page or post by its path; '' if there is none.
+ *
+ * @param string $path Path without slashes at the ends.
+ * @return string
+ */
+function memorial_plugin_gallery_target_url( $path ) {
+	$target = get_page_by_path( $path );
+	if ( ! $target ) {
+		// A page of another post type (as «Катафалк» may be) — find it by the address.
+		$id     = url_to_postid( home_url( '/' . $path . '/' ) );
+		$target = $id ? get_post( $id ) : null;
+	}
+	return $target && 'publish' === $target->post_status ? (string) get_permalink( $target ) : '';
+}
+
+/**
  * The run. $dry = true — only what would change, nothing is written.
  *
  * @param bool $dry Dry run.
@@ -73,8 +89,7 @@ function memorial_plugin_gallery_upgrade_1( $dry = false ) {
 			$id = (int) ( $b['attrs']['id'] ?? 0 );
 			if ( 'core/image' === ( $b['blockName'] ?? '' ) && isset( $map[ $id ] ) ) {
 				list( $caption, $path ) = $map[ $id ];
-				$target                 = get_page_by_path( $path );
-				$url                    = $target && 'publish' === $target->post_status ? (string) get_permalink( $target ) : '';
+				$url                    = memorial_plugin_gallery_target_url( $path );
 				$new                    = memorial_plugin_gallery_caption_html( (string) $b['innerHTML'], $caption, $url );
 				if ( $new !== $b['innerHTML'] ) {
 					$b['innerHTML']    = $new;
