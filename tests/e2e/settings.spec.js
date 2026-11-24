@@ -49,3 +49,45 @@ test( 'Контакты: изменение сохраняется', async ( { p
 		page.getByLabel( 'Calls outside working hours' )
 	).toHaveValue( 'Звоните круглосуточно — проверка e2e' );
 } );
+
+// Ввод по буквам: раньше после первой буквы форма собиралась заново — курсор уходил из поля,
+// страница прыгала (fill() этого не ловит, он вставляет текст сразу).
+test( 'Отдельные цены: новая строка — ввод по буквам без потери фокуса и прыжка', async ( {
+	page,
+} ) => {
+	const errors = collectJsErrors( page );
+	await login( page );
+	await page.goto( '/wp-admin/admin.php?page=mem-prices' );
+	const card = page
+		.locator( '.memorial-plugin-settings__card' )
+		.filter( { hasText: 'Separate prices' } );
+	await card.getByRole( 'button', { name: '+ Add a price' } ).click();
+	const row = card.locator( '.memorial-plugin-settings__row' ).last();
+	const name = row.getByRole( 'textbox', { name: /^Name/ } );
+	await name.scrollIntoViewIfNeeded();
+	await name.click();
+	const before = await page.evaluate( () => window.scrollY );
+	await name.pressSequentially( 'Доставка венков', { delay: 30 } );
+	await expect( name ).toBeFocused();
+	await expect( name ).toHaveValue( 'Доставка венков' );
+	const price = row.getByRole( 'textbox', { name: /^Price/ } );
+	await price.click();
+	await price.pressSequentially( '500', { delay: 30 } );
+	await expect( price ).toBeFocused();
+	await expect( price ).toHaveValue( '500' );
+	const after = await page.evaluate( () => window.scrollY );
+	expect( Math.abs( after - before ) ).toBeLessThan( 5 );
+	expect( errors ).toEqual( [] );
+} );
+
+test( 'Контакты: ввод по буквам в поле группы — фокус остаётся', async ( {
+	page,
+} ) => {
+	await login( page );
+	await page.goto( '/wp-admin/admin.php?page=mem-contacts' );
+	const field = page.getByLabel( 'Calls outside working hours' );
+	await field.fill( '' );
+	await field.pressSequentially( 'Круглосуточно', { delay: 30 } );
+	await expect( field ).toBeFocused();
+	await expect( field ).toHaveValue( 'Круглосуточно' );
+} );

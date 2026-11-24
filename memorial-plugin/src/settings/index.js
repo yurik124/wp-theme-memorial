@@ -929,31 +929,41 @@ function ControlFor( { def, value, onChange, row } ) {
 function FieldsForm( { defs: all, data, onChange } ) {
 	const visible = all.filter( ( def ) => isShown( def, data ) );
 	const ids = visible.map( ( def ) => def.id ).join( ',' );
-	// eslint-disable-next-line react-hooks/exhaustive-deps -- the visible fields change only with their ids.
-	const defs = useMemo( () => visible, [ all, ids ] );
+	// The callers build the list of fields anew on every render (a filtered copy). If the controls were
+	// made from it, every key press would give DataForm new components: it would mount the whole form
+	// again, the cursor would leave the field and the page would jump. So the controls are made once per
+	// set of fields and take the current description of their field from here.
+	const current = useRef( {} );
+	current.current = Object.fromEntries(
+		visible.map( ( def ) => [ def.id, def ] )
+	);
 	const fields = useMemo(
 		() =>
-			defs.map( ( def ) => ( {
-				id: def.id,
-				label: def.label,
-				type: 'text',
-				Edit: ( { data: item, onChange: change } ) => (
-					<ControlFor
-						def={ def }
-						row={ item }
-						value={ item[ def.id ] }
-						onChange={ ( v ) => change( { [ def.id ]: v } ) }
-					/>
-				),
-			} ) ),
-		[ defs ]
+			ids
+				.split( ',' )
+				.filter( Boolean )
+				.map( ( id ) => ( {
+					id,
+					label: current.current[ id ]?.label,
+					type: 'text',
+					Edit: ( { data: item, onChange: change } ) =>
+						current.current[ id ] ? (
+							<ControlFor
+								def={ current.current[ id ] }
+								row={ item }
+								value={ item[ id ] }
+								onChange={ ( v ) => change( { [ id ]: v } ) }
+							/>
+						) : null,
+				} ) ),
+		[ ids ]
 	);
 	const form = useMemo(
 		() => ( {
 			layout: { type: 'regular', labelPosition: 'none' },
-			fields: defs.map( ( def ) => def.id ),
+			fields: ids.split( ',' ).filter( Boolean ),
 		} ),
-		[ defs ]
+		[ ids ]
 	);
 	return (
 		<DataForm
