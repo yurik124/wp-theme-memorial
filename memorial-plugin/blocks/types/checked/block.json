@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/checked",
+    "title": "Source and date of the check",
+    "category": "memorial-services",
+    "icon": "yes-alt",
+    "description": "Small text at the end of an article: “Checked on … against official sources” with the links. A date older than 12 months is marked in the list of pages.",
+    "keywords": [
+        "source",
+        "checked",
+        "law",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "date": {
+            "type": "string",
+            "default": ""
+        },
+        "sources": {
+            "type": "array",
+            "default": []
+        },
+        "text": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": true
+    },
+    "example": {
+        "attributes": {
+            "date": "",
+            "sources": [],
+            "text": ""
+        },
+        "viewportWidth": 1000
+    }
+}

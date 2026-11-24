@@ -95,11 +95,67 @@ function memorial_plugin_contacts_schema() {
 					'placeholder' => 'https://2gis.ru/belgorod/firm/…',
 					'help'        => __( 'The link to the company card of this address on 2GIS — any form, the site keeps only the card.', 'memorial-plugin' ),
 				),
-				'geo'    => array(
+				'geo'       => array(
 					'type'        => 'text',
 					'label'       => __( 'Coordinates (optional)', 'memorial-plugin' ),
 					'placeholder' => '50.620132, 36.564591',
 					'help'        => __( 'Latitude and longitude for search engines. Empty — taken from the map link or the 2GIS link.', 'memorial-plugin' ),
+				),
+				'shop'      => array(
+					'type'  => 'checkbox',
+					'label' => __( 'Here is a shop (wreaths, goods)', 'memorial-plugin' ),
+					'short' => __( 'shop', 'memorial-plugin' ),
+				),
+				'hall'      => array(
+					'type'  => 'checkbox',
+					'label' => __( 'Here is the funeral hall', 'memorial-plugin' ),
+					'short' => __( 'funeral hall', 'memorial-plugin' ),
+				),
+				'district'  => array(
+					'type'        => 'text',
+					'label'       => __( 'District', 'memorial-plugin' ),
+					'placeholder' => __( 'For example: Eastern district', 'memorial-plugin' ),
+				),
+				'stop'      => array(
+					'type'        => 'text',
+					'label'       => __( 'Bus stop', 'memorial-plugin' ),
+					'placeholder' => __( 'For example: UTEP', 'memorial-plugin' ),
+				),
+				'landmarks' => array(
+					'type'        => 'text',
+					'label'       => __( 'Landmarks', 'memorial-plugin' ),
+					'placeholder' => __( 'For example: near BelSU, Kharkovskaya Gora', 'memorial-plugin' ),
+					'help'        => __( 'How people name the place: near what, which part of the city. Comma separated. Shown under the address in grey and given to search engines.', 'memorial-plugin' ),
+				),
+				'parking'   => array(
+					'type'  => 'checkbox',
+					'label' => __( 'There is parking', 'memorial-plugin' ),
+					'short' => __( 'parking', 'memorial-plugin' ),
+				),
+			),
+		),
+		'area'       => array(
+			'type'   => 'group',
+			'label'  => __( 'Where we work', 'memorial-plugin' ),
+			'help'   => __( 'The “Where we work” block and the area of the company for search engines.', 'memorial-plugin' ),
+			'fields' => array(
+				'line'        => array(
+					'type'  => 'text',
+					'label' => __( 'Main line', 'memorial-plugin' ),
+				),
+				'places'      => array(
+					'type'  => 'textarea',
+					'label' => __( 'Suburbs and villages', 'memorial-plugin' ),
+					'help'  => __( 'Comma separated.', 'memorial-plugin' ),
+					'rows'  => 2,
+				),
+				'funeral'     => array(
+					'type'  => 'text',
+					'label' => __( 'Terms — funeral', 'memorial-plugin' ),
+				),
+				'landscaping' => array(
+					'type'  => 'text',
+					'label' => __( 'Terms — landscaping', 'memorial-plugin' ),
 				),
 			),
 		),
@@ -486,10 +542,6 @@ function memorial_plugin_contacts_defaults() {
 				'num'  => '+7 (4722) 37-16-58',
 				'note' => '',
 			),
-			array(
-				'num'  => '+7 (910) 737-16-58',
-				'note' => '',
-			),
 		),
 		'legal'      => array(
 			'name' => '',
@@ -511,6 +563,13 @@ function memorial_plugin_contacts_defaults() {
 			'max_app' => '',
 		),
 		'founded'    => (int) $m( 'founded', 2003 ),
+		// Где работаем (ТЗ «Блоки и доработки», 24.11.2026; карточка компании).
+		'area'       => array(
+			'line'        => 'Работаем по Белгороду и Белгородской области',
+			'places'      => 'Дубовое, Стрелецкое, Репное, Игуменка, Таврово, Красненское',
+			'funeral'     => 'Выезд агента по Белгороду бесплатно, за город — по расстоянию',
+			'landscaping' => 'Благоустройство — по всей области, выезд за город оплачивается отдельно',
+		),
 	);
 }
 

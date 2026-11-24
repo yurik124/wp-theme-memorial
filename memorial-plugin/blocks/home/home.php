@@ -319,8 +319,96 @@ function memorial_plugin_home_blocks_list() {
 			'title'  => __( 'Contact cards', 'memorial-plugin' ),
 			'desc'   => __( '“Call”, “Write” and the addresses with directions (Memorial → Contacts).', 'memorial-plugin' ),
 			'icon'   => 'id-alt',
-			'attrs'  => array(),
-			'render' => static fn() => memorial_plugin_home_part( 'contacts-cards' ),
+			'attrs'  => array(
+				'only'      => array(
+					'type'    => 'string',
+					'default' => 'all',
+					'enum'    => array( 'all', 'shop', 'hall' ),
+					'options' => array(
+						'all'  => __( 'All addresses', 'memorial-plugin' ),
+						'shop' => __( 'Only where there is a shop', 'memorial-plugin' ),
+						'hall' => __( 'Only where there is the funeral hall', 'memorial-plugin' ),
+					),
+					'label'   => __( 'Which addresses', 'memorial-plugin' ),
+				),
+				'landmarks' => array(
+					'type'    => 'boolean',
+					'default' => true,
+					'label'   => __( 'District, bus stop and landmarks under the address', 'memorial-plugin' ),
+				),
+				'route'     => array(
+					'type'    => 'boolean',
+					'default' => true,
+					'label'   => __( '“Get directions” link (Yandex Maps)', 'memorial-plugin' ),
+				),
+			),
+			'render' => 'memorial_plugin_contacts_cards_render',
+		),
+		'vehicle'         => array(
+			'title'  => __( 'Funeral transport', 'memorial-plugin' ),
+			'desc'   => __( 'The hearse from Memorial → Transport: photos outside and inside, seats, features, the price of a trip and the call button; a line about the bus. Not for the page of the transportation of the deceased.', 'memorial-plugin' ),
+			'icon'   => 'car',
+			'attrs'  => array(
+				'vehicle' => array(
+					'type'    => 'integer',
+					'default' => 0,
+					'label'   => __( 'Which car (0 — all, 1 — the first in the list…)', 'memorial-plugin' ),
+				),
+				'price'   => array(
+					'type'    => 'boolean',
+					'default' => true,
+					'label'   => __( 'Price of a trip', 'memorial-plugin' ),
+				),
+				'bus'     => array(
+					'type'    => 'boolean',
+					'default' => true,
+					'label'   => __( 'Line about the bus', 'memorial-plugin' ),
+				),
+			),
+			'render' => 'memorial_plugin_vehicle_render',
+		),
+		'checked'         => array(
+			'title'  => __( 'Source and date of the check', 'memorial-plugin' ),
+			'desc'   => __( 'Small text at the end of an article: “Checked on … against official sources” with the links. A date older than 12 months is marked in the list of pages.', 'memorial-plugin' ),
+			'icon'   => 'yes-alt',
+			'attrs'  => array(
+				'date'    => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Date of the check', 'memorial-plugin' ),
+					'picker'  => 'date',
+				),
+				'sources' => array(
+					'type'    => 'array',
+					'default' => array(),
+					'label'   => __( 'Sources', 'memorial-plugin' ),
+					'picker'  => 'sources',
+				),
+				'text'    => array(
+					'type'    => 'string',
+					'default' => '',
+					'label'   => __( 'Text (empty — “Checked on {date} against official sources”)', 'memorial-plugin' ),
+				),
+			),
+			'render' => 'memorial_plugin_checked_render',
+		),
+		'service-area'    => array(
+			'title'  => __( 'Where we work', 'memorial-plugin' ),
+			'desc'   => __( 'The city, the region and the suburbs with the terms of the visit (Memorial → Contacts → Where we work), one or two lines.', 'memorial-plugin' ),
+			'icon'   => 'location-alt',
+			'attrs'  => array(
+				'context' => array(
+					'type'    => 'string',
+					'default' => 'funeral',
+					'enum'    => array( 'funeral', 'landscaping' ),
+					'options' => array(
+						'funeral'     => __( 'Funeral: the visit of the agent', 'memorial-plugin' ),
+						'landscaping' => __( 'Landscaping: work in the region', 'memorial-plugin' ),
+					),
+					'label'   => __( 'Which terms', 'memorial-plugin' ),
+				),
+			),
+			'render' => 'memorial_plugin_service_area_render',
 		),
 		'company-details' => array(
 			'title'  => __( 'Company details', 'memorial-plugin' ),

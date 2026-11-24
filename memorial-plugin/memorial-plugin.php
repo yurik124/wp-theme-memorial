@@ -144,6 +144,7 @@ $memorial_plugin_modules = array(
 	'core/settings.php',
 	'core/permissions.php',
 	'core/data.php',
+	'core/contacts-more.php',
 	'core/mail.php',
 	'core/no-comments.php',
 	// каталог и страницы.
@@ -196,6 +197,7 @@ $memorial_plugin_modules = array(
 	// ещё блоки и фото.
 	'content/faq.php',
 	'content/guide.php',
+	'content/checked.php',
 	'content/services.php',
 	'pages/media.php',
 	'content/patterns.php',
@@ -204,6 +206,7 @@ $memorial_plugin_modules = array(
 	'pages/photo-tools.php',
 	'pages/repo-pages.php',
 	'places/places.php',
+	'places/transport.php',
 	// стили и скрипты блоков на сайте.
 	'core/assets.php',
 );

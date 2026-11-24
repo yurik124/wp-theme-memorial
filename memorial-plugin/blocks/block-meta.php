@@ -81,9 +81,9 @@ function memorial_plugin_block_categories() {
  */
 function memorial_plugin_block_category( $slug ) {
 	$groups = array(
-		'memorial-contacts' => array( 'phone-button', 'night-line', 'contacts-list', 'contacts-cards', 'contacts-badges', 'maps', 'company-details' ),
+		'memorial-contacts' => array( 'phone-button', 'night-line', 'contacts-list', 'contacts-cards', 'contacts-badges', 'maps', 'company-details', 'service-area' ),
 		'memorial-catalog'  => array( 'catalog', 'category-list', 'category-photos', 'cards', 'packages', 'packages-grid', 'cremation', 'payment', 'price-list', 'benefits', 'guarantees' ),
-		'memorial-services' => array( 'services', 'services-grid', 'works', 'cemeteries', 'restaurants', 'faq', 'guide', 'cta' ),
+		'memorial-services' => array( 'services', 'services-grid', 'works', 'cemeteries', 'restaurants', 'faq', 'guide', 'cta', 'vehicle', 'checked' ),
 		'memorial-reviews'  => array( 'reviews', 'book-reviews', 'rewio-reviews', 'review-buttons', 'review-widget' ),
 		'memorial-design'   => array( 'laurel', 'icon', 'stat', 'link-button' ),
 		'memorial-layout'   => array( 'topbar', 'header-contacts', 'tagline', 'footer-contacts', 'menu-columns', 'footer-legal', 'mobile-bar', 'breadcrumbs', 'callback-dialog', 'cookie-banner' ),
@@ -162,6 +162,9 @@ function memorial_plugin_block_keywords() {
 		'cards'           => array( __( 'cards', 'memorial-plugin' ), __( 'pages', 'memorial-plugin' ) ),
 		'guarantees'      => array( __( 'guarantee', 'memorial-plugin' ), __( 'contract', 'memorial-plugin' ), __( 'trust', 'memorial-plugin' ) ),
 		'benefits'        => array( __( 'benefit', 'memorial-plugin' ), __( 'payment', 'memorial-plugin' ), __( 'special military operation', 'memorial-plugin' ) ),
+		'service-area'    => array( __( 'area', 'memorial-plugin' ), __( 'suburbs', 'memorial-plugin' ), __( 'visit', 'memorial-plugin' ) ),
+		'vehicle'         => array( __( 'hearse', 'memorial-plugin' ), __( 'transport', 'memorial-plugin' ), __( 'bus', 'memorial-plugin' ) ),
+		'checked'         => array( __( 'source', 'memorial-plugin' ), __( 'checked', 'memorial-plugin' ), __( 'law', 'memorial-plugin' ) ),
 		'price-list'      => array( __( 'prices', 'memorial-plugin' ), __( 'price list', 'memorial-plugin' ), __( 'table', 'memorial-plugin' ) ),
 		// Floating.
 		'callback-dialog' => array( __( 'call back', 'memorial-plugin' ), __( 'form', 'memorial-plugin' ) ),

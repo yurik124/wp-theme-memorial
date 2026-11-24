@@ -1137,3 +1137,32 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .mprice-list__unit{color:var(--memorial-plugin-mute);font-size:1rem}
 .mprice-list__more{text-align:right;white-space:nowrap}
 .mprice-list__note{margin:.5rem 0 0;color:var(--memorial-plugin-mute)}
+/* «Карточки контактов»: что здесь и ориентиры серой строкой под адресом */
+.kaddr__kind{margin:0 0 .25rem;font-weight:600;color:var(--memorial-plugin-ink)}
+.kaddr__notes{margin:.35rem 0 0;font-size:1rem;color:var(--memorial-plugin-mute)}
+/* «География работы»: одна-две строки с меткой */
+.marea{display:flex;gap:.75rem;align-items:flex-start;margin:1.5rem 0}
+.marea__ico{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid var(--memorial-plugin-line);color:var(--memorial-plugin-gold)}
+.marea__text p{margin:0;line-height:1.5}
+.marea__line{font-weight:600}
+.marea__terms{color:var(--memorial-plugin-mute)}
+/* «Ритуальный транспорт»: фото слева, описание справа; телефон — друг под другом */
+.mvehicle{margin:2rem 0}
+.mvehicle__car{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:1.5rem 2rem;align-items:start;background:#fff;color:var(--memorial-plugin-ink);border:1px solid var(--memorial-plugin-line);border-radius:var(--memorial-plugin-r);box-shadow:var(--memorial-plugin-sh);padding:1.25rem}
+.mvehicle__car.is-text{grid-template-columns:minmax(0,1fr)}
+.mvehicle__car+.mvehicle__car{margin-top:1rem}
+.mvehicle__gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem}
+.mvehicle__photo{display:block;border-radius:var(--memorial-plugin-rb);overflow:hidden;background:var(--memorial-plugin-bg2)}
+.mvehicle__photo.is-main{grid-column:1/-1}
+.mvehicle__photo img{display:block;width:100%;height:100%;aspect-ratio:4/3;object-fit:cover}
+.mvehicle .mvehicle__model{margin:0 0 .35rem;font-family:var(--memorial-plugin-lora);font-size:1.35rem;line-height:1.3}
+.mvehicle__seats{margin:0 0 .75rem;font-weight:600;color:var(--memorial-plugin-gold3)}
+.mvehicle__price{margin:.75rem 0 1rem}
+.mvehicle__bus{display:flex;gap:.5rem;align-items:center;margin:1rem 0 0;color:var(--memorial-plugin-mute)}
+@media (max-width:782px){.mvehicle__car{grid-template-columns:minmax(0,1fr)}}
+/* «Источник и дата проверки»: мелкий текст на светлой подложке, как примечание */
+.mchecked{margin:2rem 0 1rem;padding:.85rem 1.1rem;border-left:3px solid var(--memorial-plugin-gold);border-radius:var(--memorial-plugin-rb);background:var(--memorial-plugin-bg2);color:var(--memorial-plugin-ink);font-size:1rem;line-height:1.5}
+.mchecked p{margin:0}
+.mchecked__text{display:flex;gap:.5rem;align-items:flex-start}
+.mchecked__text svg{flex:none;width:20px;height:20px;margin-top:.15rem;color:var(--memorial-plugin-gold)}
+.mchecked__links{margin-top:.35rem;padding-left:1.75rem}

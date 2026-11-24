@@ -89,6 +89,38 @@ add_action(
 				$h( __( 'Examples of our works', 'memorial-plugin' ) ) . $sc( '[mem_works vid="карточки" chislo="6" poryadok="случайно"]' ),
 			),
 		);
+		// ТЗ «Блоки и доработки» 24.11.2026, разделы 10–11 (тексты — из карточки компании).
+		$step  = static fn( $ico, $title, $text, $extra = '' ) => '<!-- wp:group {"className":"mem-step ' . $ico . '","layout":{"type":"default"}} --><div class="wp-block-group mem-step ' . $ico . '"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">' . $title . '</h3><!-- /wp:heading -->' . $p( $text ) . $extra . '</div><!-- /wp:group -->';
+		$card  = static fn( $title, $text ) => '<!-- wp:column --><div class="wp-block-column"><!-- wp:group {"className":"is-style-card","layout":{"type":"default"}} --><div class="wp-block-group is-style-card"><!-- wp:heading {"level":3} --><h3 class="wp-block-heading">' . $title . '</h3><!-- /wp:heading -->' . $p( $text ) . '</div><!-- /wp:group --></div><!-- /wp:column -->';
+		$pats['what-to-do'] = array(
+			__( 'What to do when a person has died', 'memorial-plugin' ),
+			__( 'Four steps with icons: the call, the protocol and the morgue, the documents for the cemetery, the death certificate; the button “Step by step” and the phone button. The phone is the shared text of Memorial → Contacts.', 'memorial-plugin' ),
+			$h( 'Что делать, если умер человек' )
+				. '<!-- wp:group {"className":"mem-steps","layout":{"type":"default"}} --><div class="wp-block-group mem-steps">'
+				. $step( 'ico-phone', 'Позвоните нам', 'Звонки принимаем круглосуточно — подскажем, что делать прямо сейчас.', $bound( 'mem_contacts:phones.@first.num' ) )
+				. $step( 'ico-car', 'Протокол и морг', 'Нужен протокол скорой помощи или участкового. Мы доставим тело в морг областной больницы. Если причина смерти неясна, тело в Бюро СМЭ направляет Следственный комитет.' )
+				. $step( 'ico-doc', 'Документы для кладбища', 'Документы для кладбища оформим сами — от вас паспорт и медицинское свидетельство о смерти.' )
+				. $step( 'ico-candle', 'Свидетельство о смерти', 'Гербовое свидетельство о смерти вы получаете в ЗАГСе или через МФЦ.' )
+				. '</div><!-- /wp:group -->'
+				. '<!-- wp:group {"layout":{"type":"flex","flexWrap":"wrap"}} --><div class="wp-block-group"><!-- wp:memorial-plugin/link-button {"text":"Подробно по шагам","url":"/chto-delat-esli-umer-chelovek/","variant":"light"} /--><!-- wp:memorial-plugin/phone-button /--></div><!-- /wp:group -->',
+		);
+		$pats['crematorium'] = array(
+			__( 'Is there a crematorium in Belgorod', 'memorial-plugin' ),
+			__( 'A heading and a note: there is no crematorium in Belgorod and the region; cremation in Voronezh or Tula, we take the body ourselves.', 'memorial-plugin' ),
+			$h( 'Есть ли в Белгороде крематорий' )
+				. $p( 'В Белгороде и области крематория нет. Кремация — в Воронеже, реже в Туле; везём сами, сопровождать могут до двух родственников; урна возвращается в тот же день.', 'is-style-note' ),
+		);
+		$pats['urn'] = array(
+			__( 'The urn with the ashes: the options', 'memorial-plugin' ),
+			__( 'Three cards: burial in a family grave, keeping with us (paid), handing over; and a note about the columbarium.', 'memorial-plugin' ),
+			$h( 'Урна с прахом: что можно сделать' )
+				. '<!-- wp:columns --><div class="wp-block-columns">'
+				. $card( 'Захоронение в родственную могилу', 'Подзахороним урну в могилу родственников на кладбище.' )
+				. $card( 'Хранение у нас', 'Урна может храниться у нас, пока вы решаете, где её похоронить. Хранение платное.' )
+				. $card( 'Выдача на руки', 'Отдадим урну родственникам на руки.' )
+				. '</div><!-- /wp:columns -->'
+				. $p( 'Колумбарий на кладбище по ул. Попова есть, но свободных мест в нём нет.', 'is-style-note' ),
+		);
 		foreach ( $pats as $slug => [$title, $desc, $content] ) {
 			register_block_pattern(
 				'memorial/' . $slug,
