@@ -51,7 +51,7 @@ export default function RepoPages() {
 	const [ view, setView ] = useState( {
 		type: 'table',
 		titleField: 'title',
-		fields: [ 'path', 'status', 'version', 'menu', 'message' ],
+		fields: [ 'status', 'version', 'menu', 'message' ],
 		sort: { field: 'path', direction: 'asc' },
 		perPage: 50,
 		page: 1,
@@ -128,14 +128,22 @@ export default function RepoPages() {
 				type: 'text',
 				enableGlobalSearch: true,
 				enableHiding: false,
-				render: ( { item } ) =>
-					item.view ? (
-						<a href={ item.view } target="_blank" rel="noreferrer">
-							{ item.title || item.path }
-						</a>
-					) : (
-						item.title || item.path
-					),
+				render: ( { item } ) => (
+					<span className="memorial-plugin-repo__page">
+						{ item.view ? (
+							<a
+								href={ item.view }
+								target="_blank"
+								rel="noreferrer"
+							>
+								{ item.title || item.path }
+							</a>
+						) : (
+							item.title || item.path
+						) }
+						<small>{ item.path }</small>
+					</span>
+				),
 			},
 			{
 				id: 'path',
