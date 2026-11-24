@@ -2982,3 +2982,52 @@ test.describe( 'обработка фото', () => {
 		await ctx.close();
 	} );
 } );
+
+// Ввод по буквам в новой строке «Отдельных цен» (жалоба 24.11: после первой буквы страница прыгает).
+// Фазы before (код живого сайта) и block (ветка): фокус, прокрутка, снимки ПК и телефонов.
+for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] ) {
+	test.describe( 'ввод в ценах ' + width, () => {
+		test.use( { viewport: { width, height } } );
+		test( 'ввод в ценах ' + width, async ( { page } ) => {
+			test.setTimeout( 180_000 );
+			const errs = errorsOf( page );
+			await page.goto( '/wp-login.php' );
+			await page.fill( '#user_login', 'probe' );
+			await page.fill( '#user_pass', 'probe-pass-123' );
+			await page.click( '#wp-submit' );
+			await page.waitForURL( /wp-admin/ );
+			await page.goto( '/wp-admin/admin.php?page=mem-prices' );
+			await page.waitForSelector( '.memorial-plugin-settings__card' );
+			const out = { width };
+			const card = page.locator( '.memorial-plugin-settings__card' ).filter( { hasText: 'Отдельные цены' } );
+			await card.getByRole( 'button', { name: /Добавить цену/ } ).click();
+			const row = card.locator( '.memorial-plugin-settings__row' ).last();
+			const name = row.getByRole( 'textbox', { name: /^Название/ } );
+			await name.scrollIntoViewIfNeeded();
+			await name.click();
+			out.scrollBefore = await page.evaluate( () => window.scrollY );
+			const steps = [];
+			for ( const ch of 'Доставка' ) {
+				await page.keyboard.type( ch );
+				await page.waitForTimeout( 120 );
+				steps.push( {
+					ch,
+					focused: await name.evaluate( ( el ) => el === document.activeElement ).catch( () => false ),
+					scrollY: await page.evaluate( () => window.scrollY ),
+				} );
+			}
+			out.steps = steps;
+			out.nameValue = await name.inputValue().catch( () => null );
+			await shot( page, 'prices-typing-' + width );
+			const price = row.getByRole( 'textbox', { name: /^Цена/ } );
+			await price.click();
+			await page.keyboard.type( '500', { delay: 120 } );
+			out.priceFocused = await price.evaluate( ( el ) => el === document.activeElement ).catch( () => false );
+			out.priceValue = await price.inputValue().catch( () => null );
+			out.scrollAfter = await page.evaluate( () => window.scrollY );
+			await shot( page, 'prices-typed-' + width );
+			out.errors = errs;
+			log( 'prices-typing-' + width, out );
+		} );
+	} );
+}
