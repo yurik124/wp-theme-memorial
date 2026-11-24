@@ -8277,3 +8277,177 @@ msgstr "Это страница услуги"
 
 msgid "for example: Cremation"
 msgstr "например: Кремация"
+
+msgid "A link leads to %s — there is no such page yet."
+msgstr "Ссылка ведёт на %s — такой страницы пока нет."
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Apply (%d)"
+msgstr "Применить (%d)"
+
+msgid "Blocks that cannot be imported: %s."
+msgstr "Блоки, которые нельзя импортировать: %s."
+
+msgid "Check (dry run)"
+msgstr "Проверить (вхолостую)"
+
+msgid "Conflict: edited on the site"
+msgstr "Конфликт: правили на сайте"
+
+msgid "Created"
+msgstr "Создана"
+
+msgid "Details"
+msgstr "Подробности"
+
+msgid "Difference: %s"
+msgstr "Разница: %s"
+
+msgid "Done, with errors: %d. See the journal."
+msgstr "Готово, ошибок: %d. Подробности — в журнале."
+
+msgid "Done. What was changed is in the journal."
+msgstr "Готово. Что изменено — в журнале."
+
+msgid "Files"
+msgstr "Файлы"
+
+msgid "How"
+msgstr "Как"
+
+msgid "In the file"
+msgstr "В файле"
+
+msgid "Journal"
+msgstr "Журнал"
+
+msgid "Keep as on the site"
+msgstr "Оставить как на сайте"
+
+msgid "Menu"
+msgstr "Меню"
+
+msgid "Menu item “%1$s” added under %2$s."
+msgstr "Пункт меню «%1$s» добавлен в %2$s."
+
+msgid "No memorial-page header in the first line."
+msgstr "В первой строке нет заголовка memorial-page."
+
+msgid "Old page: choose"
+msgstr "Старая страница: выберите"
+
+msgid "On the site now"
+msgstr "Сейчас на сайте"
+
+msgid "Open"
+msgstr "Открыть"
+
+msgid "Pages from the repository"
+msgstr "Страницы из репозитория"
+
+msgid "Pages written as files in %s come to the site with the update. New and untouched pages are written by themselves when an administrator opens the admin area after the update; pages edited on the site and pages made before the import wait for your decision here. Menu items are only added."
+msgstr "Страницы, записанные файлами в %s, приходят на сайт с обновлением. Новые и нетронутые страницы записываются сами, когда администратор заходит в админку после обновления; страницы, которые правили на сайте, и страницы, созданные до импорта, ждут вашего решения здесь. Пункты меню только добавляются."
+
+msgid "Show the difference"
+msgstr "Показать разницу"
+
+msgid "Site text kept"
+msgstr "Оставлен текст сайта"
+
+msgid "Take from the repository"
+msgstr "Взять из репозитория"
+
+msgid "The header has no “%s” field."
+msgstr "В заголовке нет поля «%s»."
+
+msgid "The memorial-page header is not JSON."
+msgstr "Заголовок memorial-page — не JSON."
+
+msgid "The page was made before the import. Look at the difference and choose."
+msgstr "Страница создана до импорта. Посмотрите разницу и выберите."
+
+msgid "The page will be created."
+msgstr "Страница будет создана."
+
+msgid "The page will be updated (a revision is kept)."
+msgstr "Страница будет обновлена (прежний текст сохранится в ревизии)."
+
+msgid "The text of the site is kept."
+msgstr "Текст сайта оставлен."
+
+msgid "The text was edited on the site after the import. Look at the difference and choose."
+msgstr "Текст правили на сайте после импорта. Посмотрите разницу и выберите."
+
+msgid "The texts are the same."
+msgstr "Тексты одинаковые."
+
+msgid "There is no parent page /%s/."
+msgstr "Нет родительской страницы /%s/."
+
+msgid "Up to date"
+msgstr "Актуальна"
+
+msgid "Up to date."
+msgstr "Актуальна."
+
+msgid "Up to date; the text was edited on the site after the import."
+msgstr "Актуальна; текст правили на сайте после импорта."
+
+msgid "Updated"
+msgstr "Обновлена"
+
+msgid "Updated to version %1$d; the previous text is revision %2$d."
+msgstr "Обновлена до версии %1$d; прежний текст — ревизия %2$d."
+
+msgid "Version: file / site"
+msgstr "Версия: файл / сайт"
+
+msgid "Warning"
+msgstr "Предупреждение"
+
+msgid "What the import does"
+msgstr "Что сделает импорт"
+
+msgid "Will be created"
+msgstr "Будет создана"
+
+msgid "Will be updated"
+msgstr "Будет обновлена"
+
+msgid "Written, version %d."
+msgstr "Записана, версия %d."
+
+msgid "You chose to keep the text of the site for this version of the file."
+msgstr "Вы решили оставить текст сайта для этой версии файла."
+
+msgid "by itself after the update"
+msgstr "сам после обновления"
+
+msgid "in the menu"
+msgstr "в меню"
+
+msgid "no main menu"
+msgstr "нет главного меню"
+
+msgid "no menu item %s"
+msgstr "нет пункта меню %s"
+
+msgid "on this screen"
+msgstr "на этом экране"
+
+msgid "text outside blocks"
+msgstr "текст вне блоков"
+
+msgid "the top level"
+msgstr "верхний уровень"
+
+msgid "will be added"
+msgstr "будет добавлен"
+
+msgid "Pages from the repository: %d page waits for your decision."
+msgid_plural "Pages from the repository: %d pages wait for your decision."
+msgstr[0] "Страницы из репозитория: %d страница ждёт вашего решения."
+msgstr[1] "Страницы из репозитория: %d страницы ждут вашего решения."
+msgstr[2] "Страницы из репозитория: %d страниц ждут вашего решения."

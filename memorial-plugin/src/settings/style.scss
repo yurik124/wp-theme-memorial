@@ -705,3 +705,43 @@
 		user-select: none;
 	}
 }
+
+// Phones: a folded row of a list takes two lines — the title with “Unfold” above, the summary under it
+// across the whole row; the arrows and “Remove” go under the row. Long codes ({price:…}) break instead of
+// running under the buttons.
+@media (max-width: 600px) {
+
+	.memorial-plugin-settings__repeater:not(.is-inline) > .memorial-plugin-settings__row {
+		flex-wrap: wrap;
+		gap: 8px 10px;
+	}
+
+	.memorial-plugin-settings__repeater:not(.is-inline) > .memorial-plugin-settings__row > .memorial-plugin-settings__row-main {
+		flex: 1 1 0;
+	}
+
+	.memorial-plugin-settings__row-head {
+		flex-wrap: wrap;
+	}
+
+	.memorial-plugin-settings__row-head .memorial-plugin-settings__row-title {
+		flex: 1 1 0;
+		min-width: 0;
+		overflow-wrap: anywhere;
+	}
+
+	.memorial-plugin-settings__row-sum {
+		flex: 1 0 100%;
+		order: 3;
+		overflow-wrap: anywhere;
+	}
+
+	.memorial-plugin-settings__repeater:not(.is-inline) > .memorial-plugin-settings__row > .memorial-plugin-settings__row-actions {
+		flex: 1 0 100%;
+		justify-content: flex-end;
+		margin-top: 0;
+		padding: 6px 0 0;
+		border-top: 1px solid #e6e2d8;
+		border-left: 0;
+	}
+}

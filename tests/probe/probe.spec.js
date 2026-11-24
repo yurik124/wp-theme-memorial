@@ -3000,6 +3000,25 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 			await page.waitForSelector( '.memorial-plugin-settings__card' );
 			const out = { width };
 			const card = page.locator( '.memorial-plugin-settings__card' ).filter( { hasText: 'Отдельные цены' } );
+			// Свёрнутые строки: сводка не должна заходить под «Развернуть», стрелки и корзину.
+			await card.locator( '.memorial-plugin-settings__row' ).first().scrollIntoViewIfNeeded();
+			out.overlaps = await page.evaluate( () => {
+				const hit = ( a, b ) => a && b && a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1;
+				const box = ( el ) => el && el.getBoundingClientRect();
+				const bad = [];
+				document.querySelectorAll( '.memorial-plugin-settings__row.is-folded' ).forEach( ( row, i ) => {
+					const sum = box( row.querySelector( '.memorial-plugin-settings__row-sum' ) );
+					const title = box( row.querySelector( '.memorial-plugin-settings__row-title' ) );
+					const toggle = box( row.querySelector( '.memorial-plugin-settings__row-toggle' ) );
+					const acts = box( row.querySelector( '.memorial-plugin-settings__row-actions' ) );
+					const rowBox = box( row );
+					if ( hit( sum, toggle ) || hit( sum, acts ) || hit( title, toggle ) || hit( title, acts ) || ( sum && sum.right > rowBox.right + 1 ) ) {
+						bad.push( i + 1 );
+					}
+				} );
+				return bad;
+			} );
+			await shot( page, 'prices-folded-' + width );
 			await card.getByRole( 'button', { name: /Добавить цену/ } ).click();
 			const row = card.locator( '.memorial-plugin-settings__row' ).last();
 			const name = row.getByRole( 'textbox', { name: /^Название/ } );
@@ -3031,3 +3050,76 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 		} );
 	} );
 }
+
+// Страницы из репозитория на копии сайта (только фаза block): новая страница с пунктом меню создаётся при
+// заходе в админку, старая страница сайта (груз 200) ждёт решения; разница и «Оставить как на сайте».
+test.describe( 'страницы из репозитория', () => {
+	test.use( { viewport: { width: 1440, height: 1000 } } );
+	test( 'страницы из репозитория', async ( { page } ) => {
+		test.skip( PHASE !== 'block', 'модуль есть только в исправленном коде' );
+		test.setTimeout( 240_000 );
+		const path = require( 'path' );
+		const dir = path.resolve( __dirname, '../../memorial-plugin/content/pages/ritualnye-uslugi' );
+		fs.mkdirSync( dir, { recursive: true } );
+		const file = ( slug, head, body ) =>
+			fs.writeFileSync(
+				`${ dir }/${ slug }.html`,
+				'<!-- memorial-page ' + JSON.stringify( { slug, parent: 'ritualnye-uslugi', seo_title: head.title, seo_description: head.title, status: 'publish', version: 1, ...head } ) + ' -->\n<!-- wp:paragraph -->\n<p>' + body + '</p>\n<!-- /wp:paragraph -->\n'
+			);
+		file( 'eksgumaciya', { title: 'Эксгумация (проверка)', menu: { parent: '/ritualnye-uslugi/', label: 'Эксгумация', after: '/ritualnye-uslugi/gruz-200/' } }, 'Текст страницы из репозитория. <a href="/ritualnye-uslugi/traurnyj-zal/">Траурный зал</a>.' );
+		file( 'gruz-200', { title: 'Перевозка умерших (груз 200)', menu: null }, 'Новый текст груза 200 из репозитория.' );
+		const errs = errorsOf( page );
+		const out = {};
+		const T = { timeout: 15_000 };
+		try {
+			let t = Date.now();
+			await page.goto( '/wp-login.php' );
+			await page.fill( '#user_login', 'probe' );
+			await page.fill( '#user_pass', 'probe-pass-123' );
+			await page.click( '#wp-submit' );
+			await page.waitForURL( /wp-admin/ );
+			out.loginMs = Date.now() - t;
+			// Вход в админку уже запустил импорт: остался вопрос по старой странице — напоминание наверху.
+			out.notice = ( await page.locator( '.notice-warning' ).filter( { hasText: /репозитори/i } ).count() ) ? await page.locator( '.notice-warning' ).filter( { hasText: /репозитори/i } ).innerText( T ) : '';
+			t = Date.now();
+			await page.goto( '/wp-admin/admin.php?page=mem-repo-pages' );
+			await page.locator( '.dataviews-view-table' ).waitFor( T ).catch( ( e ) => ( out.tableError = e.message ) );
+			await page.waitForTimeout( 1000 );
+			out.screenMs = Date.now() - t;
+			out.rows = await page.getByRole( 'row' ).allInnerTexts();
+			await shot( page, 'repo-1440', { fullPage: true } );
+			for ( const [ w, h ] of [ [ 390, 844 ], [ 360, 780 ] ] ) {
+				await page.setViewportSize( { width: w, height: h } );
+				await page.waitForTimeout( 500 );
+				await shot( page, 'repo-' + w, { fullPage: true } );
+			}
+			await page.setViewportSize( { width: 1440, height: 1000 } );
+			log( 'repo-pages', out );
+			const row = page.getByRole( 'row' ).filter( { hasText: '/ritualnye-uslugi/gruz-200/' } );
+			await row.getByRole( 'button', { name: /Показать разницу/ } ).click( T ).catch( ( e ) => ( out.diffError = e.message ) );
+			await page.locator( '.memorial-plugin-repo__diff' ).waitFor( T ).catch( () => {} );
+			out.diff = ( await page.locator( '.memorial-plugin-repo__diff' ).count() ) ? ( await page.locator( '.memorial-plugin-repo__diff' ).innerText( T ) ).slice( 0, 1500 ) : '';
+			await shot( page, 'repo-diff-1440' );
+			await page.getByRole( 'dialog' ).getByRole( 'button', { name: 'Оставить как на сайте' } ).click( T ).catch( ( e ) => ( out.keepError = e.message ) );
+			await page.waitForTimeout( 2500 );
+			out.after = await page.getByRole( 'row' ).allInnerTexts();
+			await page.getByRole( 'tab', { name: 'Журнал' } ).click( T ).catch( ( e ) => ( out.tabError = e.message ) );
+			await page.waitForTimeout( 800 );
+			out.log = await page.getByRole( 'row' ).allInnerTexts();
+			await shot( page, 'repo-log-1440', { fullPage: true } );
+			log( 'repo-pages', out );
+			const res = await page.goto( '/ritualnye-uslugi/eksgumaciya/' );
+			out.newPage = res ? res.status() : 0;
+			const html = await page.content();
+			out.menuHasNew = /href="[^"]*\/ritualnye-uslugi\/eksgumaciya\/"/.test( html );
+			out.hallLink = html.includes( '/ritualnye-uslugi/traurnyj-zal/' );
+			await shot( page, 'repo-new-page-1440' );
+			const gruz = await page.goto( '/ritualnye-uslugi/gruz-200/' );
+			out.gruzUntouched = ! ( await gruz.text() ).includes( 'Новый текст груза 200 из репозитория.' );
+		} finally {
+			fs.rmSync( dir, { recursive: true, force: true } );
+		}
+		out.errors = errs;
+		log( 'repo-pages', out );
+	} );
+} );

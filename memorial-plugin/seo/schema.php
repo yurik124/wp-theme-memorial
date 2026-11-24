@@ -22,25 +22,91 @@ const MEMORIAL_PLUGIN_ORG_TYPE = 'LocalBusiness';
 
 /**
  * Часы работы из текста настроек в формате ISO 8601 («Mo-Sa 09:00-17:00»), иначе ''.
+ * Несколько интервалов — через запятую или точку с запятой: «пн–пт 9:00–18:00, сб–вс 9:00–17:00» →
+ * «Mo-Fr 09:00-18:00, Sa-Su 09:00-17:00». Части без времени («воскресенье — выходной») пропускаются;
+ * дни без времени («пн–сб, 9:00–17:00») переходят к следующей части.
  *
- * @param string $s Text: «Пн–Сб с 9:00 до 17:00», «Ежедневно 8:30–17:00».
+ * @param string $s Text: «Пн–Сб с 9:00 до 17:00», «Ежедневно 8:30–17:00», «пн–пт 9:00–18:00, сб–вс 9:00–17:00».
  * @return string
  */
 function memorial_plugin_schema_hours( $s ) {
-	if ( ! preg_match( '/(\d{1,2})[:.](\d{2})\D+(\d{1,2})[:.](\d{2})/u', (string) $s, $m ) ) {
+	$out  = array();
+	$days = '';
+	foreach ( preg_split( '/[,;]/u', (string) $s ) as $part ) {
+		$d    = memorial_plugin_schema_hours_days( $part );
+		$days = '' !== $d ? $d : $days;
+		if ( ! preg_match( '/(\d{1,2})[:.](\d{2})\D+(\d{1,2})[:.](\d{2})/u', $part, $m ) ) {
+			continue;
+		}
+		if ( '' === $days ) {
+			continue;
+		}
+		$out[] = $days . ' ' . sprintf( '%02d:%s-%02d:%s', $m[1], $m[2], $m[3], $m[4] );
+		$days  = '';
+	}
+	return implode( ', ', array_unique( $out ) );
+}
+
+/**
+ * Days of one part of the hours text in ISO form («Mo-Fr», «Sa», «Mo-Su»), otherwise ''.
+ *
+ * @param string $part «пн–пт 9:00–18:00», «сб-вс», «ежедневно», «по будням».
+ * @return string
+ */
+function memorial_plugin_schema_hours_days( $part ) {
+	$part = mb_strtolower( (string) $part );
+	if ( preg_match( '/ежедневно|без выходных|круглосуточно|каждый день/u', $part ) ) {
+		return 'Mo-Su';
+	}
+	if ( preg_match( '/будн/u', $part ) ) {
+		return 'Mo-Fr';
+	}
+	if ( preg_match( '/выходн(ые|ым)/u', $part ) && ! preg_match( '/\b(пн|вт|ср|чт|пт|сб|вс)|понед|вторн|сред|четв|пятн|субб|воскр/u', $part ) ) {
+		return 'Sa-Su';
+	}
+	$map = array(
+		'пн'  => 'Mo',
+		'пон' => 'Mo',
+		'вт'  => 'Tu',
+		'ср'  => 'We',
+		'чт'  => 'Th',
+		'чет' => 'Th',
+		'пт'  => 'Fr',
+		'пят' => 'Fr',
+		'сб'  => 'Sa',
+		'суб' => 'Sa',
+		'вс'  => 'Su',
+		'вос' => 'Su',
+	);
+	$day = '(пн|пон\S*|вт\S*|ср\S*|чт|чет\S*|пт|пят\S*|сб|суб\S*|вс|вос\S*)';
+	$key = static function ( $w ) use ( $map ) {
+		foreach ( $map as $ru => $en ) {
+			if ( 0 === strpos( $w, $ru ) ) {
+				return $en;
+			}
+		}
 		return '';
+	};
+	if ( preg_match( '/(?<!\pL)' . $day . '\.?\s*[-–—]\s*' . $day . '/u', $part, $m ) ) {
+		$a = $key( $m[1] );
+		$b = $key( $m[2] );
+		return $a && $b ? $a . '-' . $b : '';
 	}
-	$t = sprintf( '%02d:%s-%02d:%s', $m[1], $m[2], $m[3], $m[4] );
-	if ( preg_match( '/ежедневно|без выходных|круглосуточно/iu', $s ) ) {
-		return 'Mo-Su ' . $t;
-	}
-	if ( preg_match( '/пн\S*\s*[-–—]\s*пт|будни/iu', $s ) ) {
-		return 'Mo-Fr ' . $t;
-	}
-	if ( preg_match( '/пн\S*\s*[-–—]\s*сб/iu', $s ) ) {
-		return 'Mo-Sa ' . $t;
+	// One day with a time: «сб 9:00–15:00». A day without a time («воскресенье — выходной») is not a working day.
+	if ( preg_match( '/(?<!\pL)' . $day . '(?!\pL)/u', $part, $m ) && preg_match( '/\d[:.]\d\d/u', $part ) ) {
+		return $key( $m[1] );
 	}
 	return '';
+}
+
+/**
+ * Every interval of the hours as OpeningHoursSpecification (Google).
+ *
+ * @param string $iso «Mo-Fr 09:00-18:00, Sa-Su 09:00-17:00».
+ * @return array<int,array>
+ */
+function memorial_plugin_schema_hours_specs( $iso ) {
+	return array_values( array_filter( array_map( 'memorial_plugin_schema_hours_spec', array_map( 'trim', explode( ',', (string) $iso ) ) ) ) );
 }
 
 /**
@@ -268,7 +334,7 @@ function memorial_plugin_schema_org() {
 			$p['hasMap'] = 'https://yandex.ru/maps/?pt=' . $b['geo'][1] . ',' . $b['geo'][0] . '&z=17';
 		}
 		if ( $b['hours'] ) {
-			$p['openingHoursSpecification'] = array( memorial_plugin_schema_hours_spec( $b['hours'] ) );
+			$p['openingHoursSpecification'] = memorial_plugin_schema_hours_specs( $b['hours'] );
 		}
 		return $p;
 	};
@@ -401,8 +467,9 @@ function memorial_plugin_org_micro_fields( $i ) {
 	foreach ( $b['phones'] as $p ) {
 		$h .= $meta( 'telephone', $p );
 	}
-	if ( $b['hours'] ) {
-		$h .= $meta( 'openingHours', $b['hours'] );
+	// Several intervals (weekdays and weekend) — one openingHours each: «Mo-Fr 09:00-18:00», «Sa-Su 09:00-17:00».
+	foreach ( array_filter( array_map( 'trim', explode( ',', (string) $b['hours'] ) ) ) as $hours ) {
+		$h .= $meta( 'openingHours', $hours );
 	}
 	if ( $b['geo'] ) {
 		$h .= '<span itemprop="geo" itemscope itemtype="https://schema.org/GeoCoordinates">' . $meta( 'latitude', $b['geo'][0] ) . $meta( 'longitude', $b['geo'][1] ) . '</span>';

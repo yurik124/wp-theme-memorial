@@ -414,3 +414,80 @@ body.folded .memorial-plugin-catalog__float {
 		gap: 8px;
 	}
 }
+
+// Memorial → Pages from the repository: what the import does, and the difference of the texts.
+.memorial-plugin-repo__status {
+	font-weight: 600;
+
+	&.is-conflict,
+	&.is-legacy,
+	&.is-error {
+		color: #b32d2e;
+	}
+
+	&.is-create,
+	&.is-update {
+		color: #3f4d36;
+	}
+}
+
+.memorial-plugin-repo__tabs {
+	margin-bottom: 8px;
+}
+
+.memorial-plugin-repo__diff {
+	max-height: 60vh;
+	overflow: auto;
+
+	table.diff {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 13px;
+		table-layout: fixed;
+	}
+
+	td {
+		padding: 4px 8px;
+		vertical-align: top;
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+	}
+
+	.diff-deletedline {
+		background: #fcf0f1;
+	}
+
+	.diff-addedline {
+		background: #edfaef;
+	}
+
+	del {
+		background: #f4c2c4;
+		text-decoration: none;
+	}
+
+	ins {
+		background: #b8e6bf;
+		text-decoration: none;
+	}
+}
+
+// Long explanations wrap instead of being cut at the edge of the cell.
+.memorial-plugin-repo__msg {
+	display: block;
+	min-width: 220px;
+	max-width: 420px;
+	white-space: normal;
+}
+
+// The page and its address under it (the address is not a column of its own by default).
+.memorial-plugin-repo__page {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+
+	small {
+		color: #5f6158;
+		font-size: 12px;
+	}
+}

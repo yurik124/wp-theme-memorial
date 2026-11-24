@@ -75,7 +75,12 @@ jobs:
           php tests/smoke/metrika.php
           php tests/smoke/settings.php
           php tests/smoke/seo.php
+          php tests/smoke/content-lint.php
           php tools/check-templates.php
+
+      - name: Тексты страниц (tools/content-lint.php — ТЗ «Блоки и доработки», раздел 2)
+        if: ${{ !cancelled() }}
+        run: php tools/content-lint.php
 
       - name: Сжатые копии CSS/JS свежие (tools/minify.php)
         if: ${{ !cancelled() }}

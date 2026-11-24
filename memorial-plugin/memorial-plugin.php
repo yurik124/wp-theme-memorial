@@ -201,6 +201,7 @@ $memorial_plugin_modules = array(
 	'pages/cards.php',
 	'pages/photos.php',
 	'pages/photo-tools.php',
+	'pages/repo-pages.php',
 	'places/places.php',
 	// стили и скрипты блоков на сайте.
 	'core/assets.php',
