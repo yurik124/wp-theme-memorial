@@ -8710,3 +8710,6 @@ msgstr "Наши гарантии"
 msgctxt "block title"
 msgid "Prices one by one"
 msgstr "Цены по отдельности"
+
+msgid "Price list item"
+msgstr "Услуга"

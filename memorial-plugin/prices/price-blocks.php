@@ -284,7 +284,7 @@ function memorial_plugin_price_list_render( $a = array() ) {
 	$note  = trim( (string) ( $a['note'] ?? '' ) );
 	return '<section class="mprice-list">'
 		. ( '' !== $title ? '<h2 class="wp-block-heading mprice-list__title">' . esc_html( memorial_plugin_t( $title ) ) . '</h2>' : '' )
-		. '<figure class="wp-block-table is-style-price"><table><thead><tr><th scope="col">' . esc_html__( 'Service', 'memorial-plugin' ) . '</th><th scope="col">' . esc_html__( 'Price', 'memorial-plugin' ) . '</th><th scope="col"><span class="screen-reader-text">' . esc_html__( 'Page', 'memorial-plugin' ) . '</span></th></tr></thead>'
+		. '<figure class="wp-block-table is-style-price"><table><thead><tr><th scope="col">' . esc_html__( 'Price list item', 'memorial-plugin' ) . '</th><th scope="col">' . esc_html__( 'Price', 'memorial-plugin' ) . '</th><th scope="col"><span class="screen-reader-text">' . esc_html__( 'Page', 'memorial-plugin' ) . '</span></th></tr></thead>'
 		. '<tbody>' . $body . '</tbody></table></figure>'
 		. ( '' !== $note ? '<p class="mprice-list__note">' . esc_html( memorial_plugin_t( $note ) ) . '</p>' : '' )
 		. '</section>';
