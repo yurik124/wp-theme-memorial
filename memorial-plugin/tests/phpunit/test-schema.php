@@ -63,6 +63,15 @@ class Test_Memorial_Plugin_Schema extends WP_UnitTestCase {
 		$this->assertSame( 'Mo-Sa 09:00-17:00', memorial_plugin_schema_hours( 'Пн–Сб с 9:00 до 17:00' ) );
 		$this->assertSame( 'Mo-Su 08:30-17:00', memorial_plugin_schema_hours( 'Ежедневно 8:30–17:00' ) );
 		$this->assertSame( '', memorial_plugin_schema_hours( 'по договорённости' ) );
+		// Two intervals (ул. Щорса, 21): the weekend is not lost.
+		$this->assertSame( 'Mo-Fr 09:00-18:00, Sa-Su 09:00-17:00', memorial_plugin_schema_hours( 'пн–пт 9:00–18:00, сб–вс 9:00–17:00' ) );
+		$this->assertSame( 'Mo-Sa 08:30-17:00', memorial_plugin_schema_hours( 'пн–сб 8:30–17:00, воскресенье — выходной' ) );
+		$this->assertSame( 'Mo-Fr 09:00-18:00, Sa 10:00-15:00', memorial_plugin_schema_hours( 'Пн-Пт 9.00-18.00; Сб 10:00-15:00' ) );
+		$this->assertSame( 'Mo-Sa 09:00-17:00', memorial_plugin_schema_hours( 'пн–сб, 9:00–17:00' ) );
+		$specs = memorial_plugin_schema_hours_specs( 'Mo-Fr 09:00-18:00, Sa-Su 09:00-17:00' );
+		$this->assertCount( 2, $specs );
+		$this->assertSame( array( 'Saturday', 'Sunday' ), $specs[1]['dayOfWeek'] );
+		$this->assertSame( '17:00', $specs[1]['closes'] );
 		$spec = memorial_plugin_schema_hours_spec( 'Mo-Sa 09:00-17:00' );
 		$this->assertSame( array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ), $spec['dayOfWeek'] );
 		$this->assertSame( '09:00', $spec['opens'] );
@@ -124,6 +133,23 @@ class Test_Memorial_Plugin_Schema extends WP_UnitTestCase {
 		$this->assertFalse( memorial_plugin_org_micro_place( true ) );
 		$this->assertSame( '', memorial_plugin_org_micro_attrs( 0 ) );
 		$this->assertSame( '', memorial_plugin_org_micro_fields( 0 ) );
+		unset( $GLOBALS['memorial_plugin_org_micro'], $GLOBALS['memorial_plugin_org_micro_open'] );
+	}
+
+	public function test_branch_with_weekday_and_weekend_hours() {
+		$this->contacts();
+		$c                       = get_option( 'mem_contacts' );
+		$c['addrs'][1]['hours'] = 'пн–пт 9:00–18:00, сб–вс 9:00–17:00';
+		update_option( 'mem_contacts', $c );
+		$dep = memorial_plugin_schema_org()['department'][0];
+		$this->assertCount( 2, $dep['openingHoursSpecification'] );
+		$this->assertSame( array( 'Saturday', 'Sunday' ), $dep['openingHoursSpecification'][1]['dayOfWeek'] );
+		unset( $GLOBALS['memorial_plugin_org_micro'], $GLOBALS['memorial_plugin_org_micro_open'] );
+		memorial_plugin_org_micro_place( true );
+		$fields = memorial_plugin_org_micro_fields( 1 );
+		memorial_plugin_org_micro_place( false );
+		$this->assertStringContainsString( 'itemprop="openingHours" content="Mo-Fr 09:00-18:00"', $fields );
+		$this->assertStringContainsString( 'itemprop="openingHours" content="Sa-Su 09:00-17:00"', $fields );
 		unset( $GLOBALS['memorial_plugin_org_micro'], $GLOBALS['memorial_plugin_org_micro_open'] );
 	}
 
