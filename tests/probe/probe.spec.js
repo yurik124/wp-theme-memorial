@@ -3000,6 +3000,25 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 			await page.waitForSelector( '.memorial-plugin-settings__card' );
 			const out = { width };
 			const card = page.locator( '.memorial-plugin-settings__card' ).filter( { hasText: 'Отдельные цены' } );
+			// Свёрнутые строки: сводка не должна заходить под «Развернуть», стрелки и корзину.
+			await card.locator( '.memorial-plugin-settings__row' ).first().scrollIntoViewIfNeeded();
+			out.overlaps = await page.evaluate( () => {
+				const hit = ( a, b ) => a && b && a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1;
+				const box = ( el ) => el && el.getBoundingClientRect();
+				const bad = [];
+				document.querySelectorAll( '.memorial-plugin-settings__row.is-folded' ).forEach( ( row, i ) => {
+					const sum = box( row.querySelector( '.memorial-plugin-settings__row-sum' ) );
+					const title = box( row.querySelector( '.memorial-plugin-settings__row-title' ) );
+					const toggle = box( row.querySelector( '.memorial-plugin-settings__row-toggle' ) );
+					const acts = box( row.querySelector( '.memorial-plugin-settings__row-actions' ) );
+					const rowBox = box( row );
+					if ( hit( sum, toggle ) || hit( sum, acts ) || hit( title, toggle ) || hit( title, acts ) || ( sum && sum.right > rowBox.right + 1 ) ) {
+						bad.push( i + 1 );
+					}
+				} );
+				return bad;
+			} );
+			await shot( page, 'prices-folded-' + width );
 			await card.getByRole( 'button', { name: /Добавить цену/ } ).click();
 			const row = card.locator( '.memorial-plugin-settings__row' ).last();
 			const name = row.getByRole( 'textbox', { name: /^Название/ } );
