@@ -60,7 +60,7 @@ class Test_Memorial_Plugin_Step3 extends WP_UnitTestCase {
 		memorial_plugin_contacts_upgrade_3();
 		$all = memorial_plugin_contacts_cards_render();
 		$this->assertStringContainsString( 'Восточный округ · ост. УТЭП · у УТЭПа · у БелГУ', $all );
-		$this->assertStringContainsString( 'Магазин и траурный зал', $all );
+		$this->assertStringContainsString( 'kaddr__kind', $all );
 		$hall = memorial_plugin_contacts_cards_render( array( 'only' => 'hall' ) );
 		$this->assertStringContainsString( 'Студенческая', $hall );
 		$this->assertStringNotContainsString( 'Щорса', $hall );
