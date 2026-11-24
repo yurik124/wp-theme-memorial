@@ -10,6 +10,14 @@ $phones = memorial_plugin_phones();
 $msg    = memorial_plugin_messengers();
 $emails = memorial_plugin_emails();
 $addrs  = memorial_plugin_addrs();
+// Settings of the “Contact cards” block (core/contacts-more.php): which addresses, landmarks, the route link.
+$atts = (array) ( $GLOBALS['memorial_plugin_cards_atts'] ?? array() );
+$only = (string) ( $atts['only'] ?? 'all' );
+if ( in_array( $only, array( 'shop', 'hall' ), true ) ) {
+	$addrs = array_filter( $addrs, static fn( $a ) => ! empty( $a[ $only ] ) );
+}
+$show_notes = ! isset( $atts['landmarks'] ) || ! empty( $atts['landmarks'] );
+$show_route = ! isset( $atts['route'] ) || ! empty( $atts['route'] );
 $names  = array(
 	'max'      => 'MAX',
 	'telegram' => 'Telegram',
@@ -60,12 +68,24 @@ $route  = fn( $a ) => 'https://yandex.ru/maps/?rtext=~' . rawurlencode( preg_rep
 			?>
 		<section class="kcard kaddr"<?php echo memorial_plugin_org_micro_attrs( $i ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>>
 		<h2 class="kcard__title"><?php echo memorial_plugin_icon( 'pin' ); ?><?php echo esc_html( ! empty( $a['title'] ) ? $a['title'] : memorial_plugin_short_addr( $a['addr'] ) ); ?></h2>
+			<?php
+			$kind = function_exists( 'memorial_plugin_addr_kind' ) ? memorial_plugin_addr_kind( $a ) : '';
+			if ( '' !== $kind ) :
+				?>
+				<p class="kaddr__kind"><?php echo esc_html( $kind ); ?></p><?php endif; ?>
 		<p class="kaddr__full"><?php echo esc_html( $a['addr'] ); ?></p>
+			<?php
+			$notes = $show_notes && function_exists( 'memorial_plugin_addr_notes' ) ? memorial_plugin_addr_notes( $a ) : array();
+			if ( $notes ) :
+				?>
+				<p class="kaddr__notes"><?php echo esc_html( implode( ' · ', $notes ) ); ?></p><?php endif; ?>
 			<?php
 			if ( ! empty( $a['hours'] ) ) :
 				?>
 				<p class="kaddr__hours"><?php echo memorial_plugin_icon( 'clock' ) . esc_html( $a['hours'] ); ?></p><?php endif; ?>
+			<?php if ( $show_route ) : ?>
 		<a class="kaddr__route" href="<?php echo esc_url( $route( $a['addr'] ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Get directions →', 'memorial-plugin' ); ?></a>
+			<?php endif; ?>
 			<?php echo memorial_plugin_org_micro_fields( $i ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function. ?>
 		</section>
 			<?php

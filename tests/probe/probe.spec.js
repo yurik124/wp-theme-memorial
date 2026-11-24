@@ -3162,3 +3162,46 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 		} );
 	} );
 }
+
+// Шаг 3 ТЗ: ориентиры на «Контактах», страница проверки (транспорт, география, паттерны, источник) и экраны
+// «Контакты» и «Транспорт» — ПК и телефоны.
+for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] ) {
+	test.describe( 'шаг 3 ' + width, () => {
+		test.use( { viewport: { width, height } } );
+		test( 'шаг 3 ' + width, async ( { page } ) => {
+			test.setTimeout( 180_000 );
+			const errs = errorsOf( page );
+			const out = { width };
+			await page.goto( '/kontakty/' );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+			out.notes = await page.locator( '.kaddr__notes' ).allInnerTexts();
+			out.kind = await page.locator( '.kaddr__kind' ).allInnerTexts();
+			out.hours = await page.locator( '.kaddr__hours' ).allInnerTexts();
+			out.micro = await page.locator( '[itemprop="openingHours"], [itemprop="description"]' ).evaluateAll( ( els ) => els.map( ( e ) => e.getAttribute( 'itemprop' ) + ': ' + e.getAttribute( 'content' ) ) );
+			await shot( page, 'step3-kontakty-' + width, { fullPage: true } );
+			await page.goto( '/probe-step3/' );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+			out.vehicle = await page.locator( '.mvehicle' ).innerText().catch( () => '' );
+			out.area = await page.locator( '.marea' ).allInnerTexts();
+			out.steps = await page.locator( '.mem-step' ).count();
+			out.checked = await page.locator( '.mchecked' ).innerText().catch( () => '' );
+			out.overflow = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
+			await shot( page, 'step3-page-' + width, { fullPage: true } );
+			if ( width === 1440 ) {
+				await page.goto( '/wp-login.php' );
+				await page.fill( '#user_login', 'probe' );
+				await page.fill( '#user_pass', 'probe-pass-123' );
+				await page.click( '#wp-submit' );
+				await page.waitForURL( /wp-admin/ );
+				for ( const scr of [ 'mem-transport', 'mem-contacts' ] ) {
+					await page.goto( '/wp-admin/admin.php?page=' + scr );
+					await page.locator( '.memorial-plugin-settings__card' ).first().waitFor( { timeout: 15_000 } ).catch( () => {} );
+					await page.waitForTimeout( 800 );
+					await shot( page, 'step3-' + scr, { fullPage: true } );
+				}
+			}
+			out.errors = errs;
+			log( 'step3-' + width, out );
+		} );
+	} );
+}

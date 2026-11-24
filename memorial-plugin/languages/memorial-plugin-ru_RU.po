@@ -8713,3 +8713,321 @@ msgstr "Цены по отдельности"
 
 msgid "Price list item"
 msgstr "Услуга"
+
+msgid "A bus for the mourners can be ordered"
+msgstr "Можно заказать автобус для провожающих"
+
+msgid "A heading and a note: there is no crematorium in Belgorod and the region; cremation in Voronezh or Tula, we take the body ourselves."
+msgstr "Заголовок и примечание: в Белгороде и области крематория нет; кремация в Воронеже или Туле, везём сами."
+
+msgid "Add a car"
+msgstr "Добавить машину"
+
+msgid "Add a photo"
+msgstr "Добавить фото"
+
+msgid "Add a source"
+msgstr "Добавить источник"
+
+msgid "All addresses"
+msgstr "Все адреса"
+
+msgid "Bus stop"
+msgstr "Остановка"
+
+msgid "Cars"
+msgstr "Машины"
+
+msgid "Checked on %s against official sources"
+msgstr "Проверено %s по официальным источникам"
+
+msgid "Comma separated."
+msgstr "Через запятую."
+
+msgid "Date of the check"
+msgstr "Дата проверки"
+
+msgid "District"
+msgstr "Округ"
+
+msgid "District, bus stop and landmarks under the address"
+msgstr "Округ, остановка и ориентиры под адресом"
+
+msgid "Features — one per line"
+msgstr "Особенности — по одной в строке"
+
+msgid "For example: Eastern district"
+msgstr "Например: Восточный округ"
+
+msgid "For example: UTEP"
+msgstr "Например: УТЭП"
+
+msgid "For example: near BelSU, Kharkovskaya Gora"
+msgstr "Например: у БелГУ, Харьковская гора"
+
+msgid "Four steps with icons: the call, the protocol and the morgue, the documents for the cemetery, the death certificate; the button “Step by step” and the phone button. The phone is the shared text of Memorial → Contacts."
+msgstr "Четыре шага с иконками: звонок, протокол и морг, документы для кладбища, свидетельство о смерти; кнопки «Подробно по шагам» и звонка. Телефон — общий текст из «Мемориал → Контакты»."
+
+msgid "Funeral hall"
+msgstr "Траурный зал"
+
+msgid "Funeral transport"
+msgstr "Ритуальный транспорт"
+
+msgid "Funeral transport: add a car in Memorial → Transport."
+msgstr "Ритуальный транспорт: добавьте машину в «Мемориал → Транспорт»."
+
+msgid "Funeral: the visit of the agent"
+msgstr "Похороны: выезд агента"
+
+msgid "Here is a shop (wreaths, goods)"
+msgstr "Здесь магазин (венки, товары)"
+
+msgid "Here is the funeral hall"
+msgstr "Здесь траурный зал"
+
+msgid "How people name the place: near what, which part of the city. Comma separated. Shown under the address in grey and given to search engines."
+msgstr "Как называют место: у чего, какая часть города. Через запятую. Видно под адресом серым и уходит поисковикам."
+
+msgid "Included in the funeral packages; can be ordered separately."
+msgstr "Входит в пакеты похорон; можно заказать отдельно."
+
+msgid "Is there a crematorium in Belgorod"
+msgstr "Есть ли в Белгороде крематорий"
+
+msgid "Landmarks"
+msgstr "Ориентиры"
+
+msgid "Landscaping: work in the region"
+msgstr "Благоустройство: работы по области"
+
+msgid "Line about the bus"
+msgstr "Строка про автобус"
+
+msgid "Main line"
+msgstr "Главная строка"
+
+msgid "Model"
+msgstr "Модель"
+
+msgid "Official sources"
+msgstr "Официальные источники"
+
+msgid "Only where there is a shop"
+msgstr "Только где магазин"
+
+msgid "Only where there is the funeral hall"
+msgstr "Только где траурный зал"
+
+msgid "Open the photo larger: %s"
+msgstr "Открыть фото крупнее: %s"
+
+msgid "Photos: outside and inside (2–6)"
+msgstr "Фото: снаружи и салон (2–6)"
+
+msgid "Price and bus"
+msgstr "Цена и автобус"
+
+msgid "Price of a trip"
+msgstr "Цена рейса"
+
+msgid "Seats for the mourners"
+msgstr "Мест для провожающих"
+
+msgid "Separately — from %s per trip; in the funeral packages it is included."
+msgstr "Отдельно — от %s за рейс; в пакетах похорон — входит."
+
+msgid "Shop"
+msgstr "Магазин"
+
+msgid "Shop and funeral hall"
+msgstr "Магазин и траурный зал"
+
+msgid "Small text at the end of an article: “Checked on … against official sources” with the links. A date older than 12 months is marked in the list of pages."
+msgstr "Мелкий текст в конце статьи: «Проверено … по официальным источникам» со ссылками. Дата старше 12 месяцев отмечается в списке страниц."
+
+msgid "Social Fund of Russia"
+msgstr "Социальный фонд России"
+
+msgid "Source %d"
+msgstr "Источник %d"
+
+msgid "Source and date of the check"
+msgstr "Источник и дата проверки"
+
+msgid "Source and date of the check: set the date of the check and the sources in the block settings."
+msgstr "Источник и дата проверки: укажите дату проверки и источники в настройках блока."
+
+msgid "Sources"
+msgstr "Источники"
+
+msgid "Suburbs and villages"
+msgstr "Пригороды и сёла"
+
+msgid "Suburbs: %s"
+msgstr "Пригороды: %s"
+
+msgid "Terms — funeral"
+msgstr "Условия — похороны"
+
+msgid "Terms — landscaping"
+msgstr "Условия — благоустройство"
+
+msgid "Text (empty — “Checked on {date} against official sources”)"
+msgstr "Текст (пусто — «Проверено {дата} по официальным источникам»)"
+
+msgid "The city, the region and the suburbs with the terms of the visit (Memorial → Contacts → Where we work), one or two lines."
+msgstr "Город, область и пригороды с условиями выезда («Мемориал → Контакты → Где работаем»), одна-две строки."
+
+msgid "The hearse and the bus: shown by the “Funeral transport” block (hearse page, funeral pages). The prices are in Memorial → Prices → Separate prices: codes katafalk and avtobus."
+msgstr "Катафалк и автобус: показывает блок «Ритуальный транспорт» (страница катафалка, страницы похорон). Цены — в «Мемориал → Цены → Отдельные цены»: коды katafalk и avtobus."
+
+msgid "The hearse from Memorial → Transport: photos outside and inside, seats, features, the price of a trip and the call button; a line about the bus. Not for the page of the transportation of the deceased."
+msgstr "Катафалк из «Мемориал → Транспорт»: фото снаружи и салона, места, особенности, цена рейса и кнопка звонка; строка про автобус. Не для страницы перевозки умерших."
+
+msgid "The price of a trip is the price with the code katafalk in Memorial → Prices → Separate prices, the bus — the code avtobus. Empty price — the line is shown without a sum."
+msgstr "Цена рейса — цена с кодом katafalk в «Мемориал → Цены → Отдельные цены», автобуса — код avtobus. Цена пустая — строка выводится без суммы."
+
+msgid "The urn with the ashes: the options"
+msgstr "Урна с прахом: варианты"
+
+msgid "The “Where we work” block and the area of the company for search engines."
+msgstr "Блок «География работы» и территория компании для поисковиков."
+
+msgid "There is parking"
+msgstr "Есть парковка"
+
+msgid "Three cards: burial in a family grave, keeping with us (paid), handing over; and a note about the columbarium."
+msgstr "Три карточки: захоронение в родственную могилу, хранение у нас (платно), выдача на руки; примечание о колумбарии."
+
+msgid "Transport"
+msgstr "Транспорт"
+
+msgid "What is in the photo"
+msgstr "Что на фото"
+
+msgid "What to do when a person has died"
+msgstr "Что делать, если умер человек"
+
+msgid "Where we work"
+msgstr "География работы"
+
+msgid "Which addresses"
+msgstr "Какие адреса"
+
+msgid "Which car (0 — all, 1 — the first in the list…)"
+msgstr "Какая машина (0 — все, 1 — первая в списке…)"
+
+msgid "Which terms"
+msgstr "Какие условия"
+
+msgid "area"
+msgstr "география"
+
+msgid "bus"
+msgstr "автобус"
+
+msgid "check whether it is up to date"
+msgstr "проверить актуальность"
+
+msgid "checked"
+msgstr "проверено"
+
+msgid "from %s per trip"
+msgstr "от %s за рейс"
+
+msgid "funeral hall"
+msgstr "траурный зал"
+
+msgid "hearse"
+msgstr "катафалк"
+
+msgid "law"
+msgstr "закон"
+
+msgid "parking"
+msgstr "парковка"
+
+msgid "shop"
+msgstr "магазин"
+
+msgid "source"
+msgstr "источник"
+
+msgid "suburbs"
+msgstr "пригороды"
+
+msgid "transport"
+msgstr "транспорт"
+
+msgid "visit"
+msgstr "выезд"
+
+msgid "“Get directions” link (Yandex Maps)"
+msgstr "Ссылка «Как добраться» (Яндекс Карты)"
+
+msgctxt "block description"
+msgid "Small text at the end of an article: “Checked on … against official sources” with the links. A date older than 12 months is marked in the list of pages."
+msgstr "Мелкий текст в конце статьи: «Проверено … по официальным источникам» со ссылками. Дата старше 12 месяцев отмечается в списке страниц."
+
+msgctxt "block description"
+msgid "The city, the region and the suburbs with the terms of the visit (Memorial → Contacts → Where we work), one or two lines."
+msgstr "Город, область и пригороды с условиями выезда («Мемориал → Контакты → Где работаем»), одна-две строки."
+
+msgctxt "block description"
+msgid "The hearse from Memorial → Transport: photos outside and inside, seats, features, the price of a trip and the call button; a line about the bus. Not for the page of the transportation of the deceased."
+msgstr "Катафалк из «Мемориал → Транспорт»: фото снаружи и салона, места, особенности, цена рейса и кнопка звонка; строка про автобус. Не для страницы перевозки умерших."
+
+msgctxt "block keyword"
+msgid "area"
+msgstr "география"
+
+msgctxt "block keyword"
+msgid "bus"
+msgstr "автобус"
+
+msgctxt "block keyword"
+msgid "checked"
+msgstr "проверено"
+
+msgctxt "block keyword"
+msgid "hearse"
+msgstr "катафалк"
+
+msgctxt "block keyword"
+msgid "law"
+msgstr "закон"
+
+msgctxt "block keyword"
+msgid "source"
+msgstr "источник"
+
+msgctxt "block keyword"
+msgid "suburbs"
+msgstr "пригороды"
+
+msgctxt "block keyword"
+msgid "transport"
+msgstr "транспорт"
+
+msgctxt "block keyword"
+msgid "visit"
+msgstr "выезд"
+
+msgctxt "block title"
+msgid "Funeral transport"
+msgstr "Ритуальный транспорт"
+
+msgctxt "block title"
+msgid "Source and date of the check"
+msgstr "Источник и дата проверки"
+
+msgctxt "block title"
+msgid "Where we work"
+msgstr "География работы"
+
+msgid "%d seat for the mourners"
+msgid_plural "%d seats for the mourners"
+msgstr[0] "%d место для провожающих"
+msgstr[1] "%d места для провожающих"
+msgstr[2] "%d мест для провожающих"

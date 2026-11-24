@@ -679,9 +679,95 @@ function PriceRowsPicker( { label, value, onChange } ) {
 	);
 }
 
+// Sources of the “Source and date of the check” block: a name and an address each.
+function SourcesPicker( { label, value, onChange } ) {
+	const rows = Array.isArray( value ) ? value : [];
+	const change = ( i, edits ) =>
+		onChange(
+			rows.map( ( r, j ) => ( j === i ? { ...r, ...edits } : r ) )
+		);
+	return (
+		<div className="memorial-plugin-price-rows">
+			<p className="memorial-plugin-pages-picker__label">{ label }</p>
+			{ rows.map( ( row, i ) => (
+				<fieldset className="memorial-plugin-price-rows__row" key={ i }>
+					<legend>
+						{ sprintf(
+							/* translators: %d: source number. */
+							__( 'Source %d', 'memorial-plugin' ),
+							i + 1
+						) }
+					</legend>
+					<TextControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __( 'Name', 'memorial-plugin' ) }
+						placeholder={ __(
+							'Social Fund of Russia',
+							'memorial-plugin'
+						) }
+						value={ row.title || '' }
+						onChange={ ( v ) => change( i, { title: v } ) }
+					/>
+					<TextControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						type="url"
+						label={ __( 'Address', 'memorial-plugin' ) }
+						placeholder="https://"
+						value={ row.url || '' }
+						onChange={ ( v ) => change( i, { url: v } ) }
+					/>
+					<div className="memorial-plugin-price-rows__actions">
+						<Button
+							size="small"
+							variant="link"
+							isDestructive
+							onClick={ () =>
+								onChange( rows.filter( ( r, j ) => j !== i ) )
+							}
+						>
+							{ __( 'Remove', 'memorial-plugin' ) }
+						</Button>
+					</div>
+				</fieldset>
+			) ) }
+			<div className="memorial-plugin-price-rows__add">
+				<Button
+					variant="secondary"
+					onClick={ () =>
+						onChange( [ ...rows, { title: '', url: '' } ] )
+					}
+				>
+					{ __( 'Add a source', 'memorial-plugin' ) }
+				</Button>
+			</div>
+		</div>
+	);
+}
+
 // The chooser of one attribute.
 function Picker( { picker, value, onChange } ) {
 	switch ( picker.kind ) {
+		case 'date':
+			return (
+				<TextControl
+					__next40pxDefaultSize
+					__nextHasNoMarginBottom
+					type="date"
+					label={ picker.label }
+					value={ value || '' }
+					onChange={ onChange }
+				/>
+			);
+		case 'sources':
+			return (
+				<SourcesPicker
+					{ ...picker }
+					value={ value }
+					onChange={ onChange }
+				/>
+			);
 		case 'choice':
 			return (
 				<SelectControl

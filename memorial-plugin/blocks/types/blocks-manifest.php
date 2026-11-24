@@ -690,6 +690,85 @@ return array (
       'viewportWidth' => 1000,
     ),
   ),
+  'checked' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/checked',
+    'title' => 'Source and date of the check',
+    'category' => 'memorial-services',
+    'icon' => 'yes-alt',
+    'description' => 'Small text at the end of an article: “Checked on … against official sources” with the links. A date older than 12 months is marked in the list of pages.',
+    'keywords' => 
+    array (
+      0 => 'source',
+      1 => 'checked',
+      2 => 'law',
+      3 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'date' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+      'sources' => 
+      array (
+        'type' => 'array',
+        'default' => 
+        array (
+        ),
+      ),
+      'text' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+    ),
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'color' => 
+      array (
+        'text' => true,
+        'background' => true,
+        'link' => true,
+      ),
+      'typography' => 
+      array (
+        'fontSize' => true,
+        'lineHeight' => true,
+      ),
+      'spacing' => 
+      array (
+        'margin' => true,
+        'padding' => true,
+      ),
+      '__experimentalBorder' => 
+      array (
+        'color' => true,
+        'radius' => true,
+        'style' => true,
+        'width' => true,
+      ),
+      'inserter' => true,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+        'date' => '',
+        'sources' => 
+        array (
+        ),
+        'text' => '',
+      ),
+      'viewportWidth' => 1000,
+    ),
+  ),
   'company-details' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -814,6 +893,30 @@ return array (
       3 => 'memorial',
     ),
     'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'only' => 
+      array (
+        'type' => 'string',
+        'default' => 'all',
+        'enum' => 
+        array (
+          0 => 'all',
+          1 => 'shop',
+          2 => 'hall',
+        ),
+      ),
+      'landmarks' => 
+      array (
+        'type' => 'boolean',
+        'default' => true,
+      ),
+      'route' => 
+      array (
+        'type' => 'boolean',
+        'default' => true,
+      ),
+    ),
     'supports' => 
     array (
       'autoRegister' => true,
@@ -847,6 +950,9 @@ return array (
     array (
       'attributes' => 
       array (
+        'only' => 'all',
+        'landmarks' => true,
+        'route' => true,
       ),
       'viewportWidth' => 1000,
     ),
@@ -2752,6 +2858,74 @@ return array (
       'viewportWidth' => 1000,
     ),
   ),
+  'service-area' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/service-area',
+    'title' => 'Where we work',
+    'category' => 'memorial-contacts',
+    'icon' => 'location-alt',
+    'description' => 'The city, the region and the suburbs with the terms of the visit (Memorial → Contacts → Where we work), one or two lines.',
+    'keywords' => 
+    array (
+      0 => 'area',
+      1 => 'suburbs',
+      2 => 'visit',
+      3 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'context' => 
+      array (
+        'type' => 'string',
+        'default' => 'funeral',
+        'enum' => 
+        array (
+          0 => 'funeral',
+          1 => 'landscaping',
+        ),
+      ),
+    ),
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'color' => 
+      array (
+        'text' => true,
+        'background' => true,
+        'link' => true,
+      ),
+      'typography' => 
+      array (
+        'fontSize' => true,
+        'lineHeight' => true,
+      ),
+      'spacing' => 
+      array (
+        'margin' => true,
+        'padding' => true,
+      ),
+      '__experimentalBorder' => 
+      array (
+        'color' => true,
+        'radius' => true,
+        'style' => true,
+        'width' => true,
+      ),
+      'inserter' => true,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+        'context' => 'funeral',
+      ),
+      'viewportWidth' => 1000,
+    ),
+  ),
   'services' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -3016,6 +3190,81 @@ return array (
         'night' => true,
       ),
       'viewportWidth' => 1200,
+    ),
+  ),
+  'vehicle' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/vehicle',
+    'title' => 'Funeral transport',
+    'category' => 'memorial-services',
+    'icon' => 'car',
+    'description' => 'The hearse from Memorial → Transport: photos outside and inside, seats, features, the price of a trip and the call button; a line about the bus. Not for the page of the transportation of the deceased.',
+    'keywords' => 
+    array (
+      0 => 'hearse',
+      1 => 'transport',
+      2 => 'bus',
+      3 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'vehicle' => 
+      array (
+        'type' => 'integer',
+        'default' => 0,
+      ),
+      'price' => 
+      array (
+        'type' => 'boolean',
+        'default' => true,
+      ),
+      'bus' => 
+      array (
+        'type' => 'boolean',
+        'default' => true,
+      ),
+    ),
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'color' => 
+      array (
+        'text' => true,
+        'background' => true,
+        'link' => true,
+      ),
+      'typography' => 
+      array (
+        'fontSize' => true,
+        'lineHeight' => true,
+      ),
+      'spacing' => 
+      array (
+        'margin' => true,
+        'padding' => true,
+      ),
+      '__experimentalBorder' => 
+      array (
+        'color' => true,
+        'radius' => true,
+        'style' => true,
+        'width' => true,
+      ),
+      'inserter' => true,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+        'vehicle' => 0,
+        'price' => true,
+        'bus' => true,
+      ),
+      'viewportWidth' => 1000,
     ),
   ),
   'works' => 

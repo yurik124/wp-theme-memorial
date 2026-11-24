@@ -238,6 +238,8 @@ function memorial_plugin_schema_branches() {
 			// Телефоны общие: у главного офиса — все, у филиала — основной.
 			'phones'   => 0 === $i ? $phones : array_slice( $phones, 0, 1 ),
 			'profiles' => array_values( array_filter( array( memorial_plugin_schema_yandex_url( $a['yandex'] ?? '' ), memorial_plugin_schema_2gis_url( $a['twogis'] ?? '' ) ) ) ),
+			// What is here and how people find the place (core/contacts-more.php): «Магазин и траурный зал. Восточный округ · ост. УТЭП · у БелГУ».
+			'desc'     => function_exists( 'memorial_plugin_addr_notes' ) ? trim( implode( '. ', array_filter( array( memorial_plugin_addr_kind( $a ), implode( ' · ', memorial_plugin_addr_notes( $a ) ) ) ) ) ) : '',
 		);
 	}
 	return $out;
@@ -358,7 +360,7 @@ function memorial_plugin_schema_org() {
 	if ( $inn ) {
 		$data['taxID'] = $inn;
 	}
-	$data['areaServed'] = 'Белгород';
+	$data['areaServed'] = function_exists( 'memorial_plugin_schema_area_served' ) ? memorial_plugin_schema_area_served() : 'Белгород';
 	if ( function_exists( 'memorial_plugin_payment_items' ) && memorial_plugin_payment_items() ) {
 		$data['paymentAccepted'] = implode( ', ', array_column( memorial_plugin_payment_items(), 0 ) );
 	}
@@ -473,6 +475,9 @@ function memorial_plugin_org_micro_fields( $i ) {
 	}
 	if ( $b['geo'] ) {
 		$h .= '<span itemprop="geo" itemscope itemtype="https://schema.org/GeoCoordinates">' . $meta( 'latitude', $b['geo'][0] ) . $meta( 'longitude', $b['geo'][1] ) . '</span>';
+	}
+	if ( '' !== ( $b['desc'] ?? '' ) ) {
+		$h .= $meta( 'description', $b['desc'] );
 	}
 	return $h;
 }

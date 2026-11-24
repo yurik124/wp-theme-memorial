@@ -13,6 +13,25 @@
         "memorial"
     ],
     "textdomain": "memorial-plugin",
+    "attributes": {
+        "only": {
+            "type": "string",
+            "default": "all",
+            "enum": [
+                "all",
+                "shop",
+                "hall"
+            ]
+        },
+        "landmarks": {
+            "type": "boolean",
+            "default": true
+        },
+        "route": {
+            "type": "boolean",
+            "default": true
+        }
+    },
     "supports": {
         "autoRegister": true,
         "html": false,
@@ -38,7 +57,11 @@
         "inserter": true
     },
     "example": {
-        "attributes": {},
+        "attributes": {
+            "only": "all",
+            "landmarks": true,
+            "route": true
+        },
         "viewportWidth": 1000
     }
 }

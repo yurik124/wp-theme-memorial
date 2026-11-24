@@ -1,0 +1,56 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/service-area",
+    "title": "Where we work",
+    "category": "memorial-contacts",
+    "icon": "location-alt",
+    "description": "The city, the region and the suburbs with the terms of the visit (Memorial → Contacts → Where we work), one or two lines.",
+    "keywords": [
+        "area",
+        "suburbs",
+        "visit",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "context": {
+            "type": "string",
+            "default": "funeral",
+            "enum": [
+                "funeral",
+                "landscaping"
+            ]
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": true
+    },
+    "example": {
+        "attributes": {
+            "context": "funeral"
+        },
+        "viewportWidth": 1000
+    }
+}
