@@ -91,11 +91,11 @@ export default function RepoPages() {
 									'memorial-plugin'
 								),
 								errors
-						  )
+							)
 						: __(
 								'Done. What was changed is in the journal.',
 								'memorial-plugin'
-						  ),
+							),
 				} );
 			} catch ( e ) {
 				setNotice( { status: 'error', text: e.message } );
@@ -323,7 +323,7 @@ export default function RepoPages() {
 										/* translators: %d: number of pages. */
 										__( 'Apply (%d)', 'memorial-plugin' ),
 										pending
-								  )
+									)
 								: __( 'Apply', 'memorial-plugin' ) }
 						</Button>
 					</Flex>
