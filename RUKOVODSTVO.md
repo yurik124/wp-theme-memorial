@@ -41,7 +41,7 @@
    - `php tools/i18n.php build`;
    - `php tools/i18n.php check` — должно быть 0 непереведённых строк.
 4. Если менялся `assets/css/*.css` или `assets/js/**/*.js`, у которых есть `.min`-копия: `php tools/minify.php <исходник>`.
-5. Если менялись атрибуты блоков: `php tools/block-json.php build`.
+5. Если менялись атрибуты блоков: `php tools/block-json.php build`, затем `php tools/blocks-doc.php build`. Новый блок — новый раздел в `BLOCKS.md` (справочник по блокам; CI проверяет).
 6. Быстро локально:
    - `php -l` для изменённых PHP;
    - `node --check` для JS;
@@ -84,6 +84,7 @@
 - `i18n.php` — pot / build / check;
 - `minify.php` — сжатые копии;
 - `block-json.php` — build / check;
+- `blocks-doc.php` — build / check справочника `BLOCKS.md`;
 - `check-prefixes.php`;
 - `check-templates.php`;
 - `validate-json.mjs`, `check-contrast.mjs`;
@@ -331,7 +332,7 @@
 - [ ] План был, вопросы заданы, решения записаны.
 - [ ] CI с `wordpress=true` зелёный.
 - [ ] Переводы: `i18n.php check` — 0.
-- [ ] `.min` свежие; `block-json.php check` в порядке.
+- [ ] `.min` свежие; `block-json.php check` и `blocks-doc.php check` в порядке.
 - [ ] Probe на копии сайта: снимки ПК и телефона (390, 360) просмотрены глазами; ошибок в консоли и в `debug.log` нет.
 - [ ] Текст не мельче 16 px, контраст AA, клавиатура и фокус работают, `prefers-reduced-motion` учтён.
 - [ ] Блок одинаков на главной и внутренних страницах; ничего не закрыто нижней панелью на телефоне.
@@ -440,5 +441,5 @@
   - PHPUnit и e2e для ключевого;
   - строки на английском + перевод, `.pot` актуален;
   - нет ошибок в консоли и `debug.log` при `WP_DEBUG`.
-- Документация: `README.md`, `MIGRATION.md` (что было → стало, обновление и откат), `STANDARDS_REPORT.md`, `CHANGELOG.md`, `readme.txt` плагина.
+- Документация: `README.md`, `BLOCKS.md` (справочник по блокам), `MIGRATION.md` (что было → стало, обновление и откат), `STANDARDS_REPORT.md`, `CHANGELOG.md`, `readme.txt` плагина.
 - Не трогать ядро. Не грузить шрифты и скрипты с CDN. Не удалять данные пользователя без переноса и резервной копии.
