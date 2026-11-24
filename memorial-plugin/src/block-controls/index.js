@@ -683,7 +683,9 @@ function PriceRowsPicker( { label, value, onChange } ) {
 function SourcesPicker( { label, value, onChange } ) {
 	const rows = Array.isArray( value ) ? value : [];
 	const change = ( i, edits ) =>
-		onChange( rows.map( ( r, j ) => ( j === i ? { ...r, ...edits } : r ) ) );
+		onChange(
+			rows.map( ( r, j ) => ( j === i ? { ...r, ...edits } : r ) )
+		);
 	return (
 		<div className="memorial-plugin-price-rows">
 			<p className="memorial-plugin-pages-picker__label">{ label }</p>
@@ -700,7 +702,10 @@ function SourcesPicker( { label, value, onChange } ) {
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 						label={ __( 'Name', 'memorial-plugin' ) }
-						placeholder={ __( 'Social Fund of Russia', 'memorial-plugin' ) }
+						placeholder={ __(
+							'Social Fund of Russia',
+							'memorial-plugin'
+						) }
 						value={ row.title || '' }
 						onChange={ ( v ) => change( i, { title: v } ) }
 					/>
