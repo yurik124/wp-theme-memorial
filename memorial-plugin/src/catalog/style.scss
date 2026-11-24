@@ -471,3 +471,11 @@ body.folded .memorial-plugin-catalog__float {
 		text-decoration: none;
 	}
 }
+
+// Long explanations wrap instead of being cut at the edge of the cell.
+.memorial-plugin-repo__msg {
+	display: block;
+	min-width: 220px;
+	max-width: 420px;
+	white-space: normal;
+}

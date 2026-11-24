@@ -7,6 +7,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { Button, Flex, Modal, Spinner, TabPanel } from '@wordpress/components';
 import { addQueryArgs } from '@wordpress/url';
+import { seen } from '@wordpress/icons';
 import { useListData, ListPage } from './list-screen';
 
 const API = '/memorial-plugin/v1/repo-pages';
@@ -189,6 +190,11 @@ export default function RepoPages() {
 				type: 'text',
 				filterBy: false,
 				enableSorting: false,
+				render: ( { item } ) => (
+					<span className="memorial-plugin-repo__msg">
+						{ item.message }
+					</span>
+				),
 			},
 		],
 		[]
@@ -228,6 +234,11 @@ export default function RepoPages() {
 				enableGlobalSearch: true,
 				filterBy: false,
 				enableSorting: false,
+				render: ( { item } ) => (
+					<span className="memorial-plugin-repo__msg">
+						{ item.message }
+					</span>
+				),
 			},
 			{
 				id: 'how',
@@ -250,7 +261,7 @@ export default function RepoPages() {
 				id: 'diff',
 				label: __( 'Show the difference', 'memorial-plugin' ),
 				isPrimary: true,
-				icon: 'visibility',
+				icon: seen,
 				isEligible: ( item ) =>
 					item.page > 0 && item.status !== 'error',
 				callback: ( [ item ] ) => openDiff( item ),
