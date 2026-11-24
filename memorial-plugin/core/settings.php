@@ -385,29 +385,8 @@ function memorial_plugin_home_schema() {
 				),
 			),
 		),
-		'stats'    => array(
-			'type'   => 'group',
-			'label'  => __( 'Block with numbers', 'memorial-plugin' ),
-			'fields' => array(
-				'show'  => $show,
-				'items' => array(
-					'type'   => 'repeater',
-					'label'  => __( 'Numbers', 'memorial-plugin' ),
-					'add'    => __( 'Add a number', 'memorial-plugin' ),
-					'inline' => true,
-					'fields' => array(
-						'num'   => array(
-							'type'  => 'number',
-							'label' => __( 'Number', 'memorial-plugin' ),
-						),
-						'label' => array(
-							'type'  => 'text',
-							'label' => __( 'Caption', 'memorial-plugin' ),
-						),
-					),
-				),
-			),
-		),
+		// «Блок с цифрами» убран (ТЗ «Блоки и доработки», 24.11.2026: счётчики в нише не вызывают доверия).
+		// Сохранённые цифры остаются в опции mem_home['stats'] — экран их не показывает и не трогает.
 		'about'    => array(
 			'type'   => 'group',
 			'label'  => __( '“About the company” block', 'memorial-plugin' ),
@@ -542,7 +521,6 @@ function memorial_plugin_home_blocks() {
 		'feats'    => __( 'Why people trust us', 'memorial-plugin' ),
 		'catalog'  => __( 'Catalog', 'memorial-plugin' ),
 		'prices'   => __( 'Service packages', 'memorial-plugin' ),
-		'stats'    => __( 'Block with numbers', 'memorial-plugin' ),
 		'about'    => __( 'About the company', 'memorial-plugin' ),
 		'reviews'  => __( 'Reviews', 'memorial-plugin' ),
 		'contacts' => __( 'Contacts', 'memorial-plugin' ),
@@ -753,7 +731,7 @@ function memorial_plugin_home_defaults() {
 			),
 		),
 		'stats'    => array(
-			'show'  => 1,
+			'show'  => 0,
 			'items' => array(
 				array(
 					'num'   => 5200,

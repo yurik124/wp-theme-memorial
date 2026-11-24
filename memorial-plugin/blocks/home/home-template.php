@@ -276,23 +276,7 @@ function memorial_plugin_home_sections( $o ) {
 	if ( $on( 'prices' ) && memorial_plugin_packages_shown() ) {
 		$s['prices'] = static fn( $alt ) => memorial_plugin_home_section( 'prices', $alt, memorial_plugin_home_head( $o['prices'] ) . memorial_plugin_home_block( 'memorial-plugin/packages-grid' ) );
 	}
-	if ( $on( 'stats' ) && ! empty( $o['stats']['items'] ) ) {
-		$s['stats'] = static function () use ( $o ) {
-			$items = '';
-			foreach ( $o['stats']['items'] as $st ) {
-				$items .= memorial_plugin_home_block(
-					'memorial-plugin/stat',
-					array_filter(
-						array(
-							'number' => (string) ( $st['num'] ?? '' ),
-							'label'  => memorial_plugin_t( (string) ( $st['label'] ?? '' ) ),
-						)
-					)
-				);
-			}
-			return memorial_plugin_home_group( 'stats', memorial_plugin_home_group( 'wrap stats__in stats__in--' . min( 4, count( $o['stats']['items'] ) ), $items ), array( 'tagName' => 'section' ) );
-		};
-	}
+	// «Блок с цифрами» на главной не ставится (ТЗ «Блоки и доработки», 24.11.2026); блок stat остаётся в плагине.
 	if ( $on( 'about' ) ) {
 		$s['about'] = static function ( $alt ) use ( $o ) {
 			$a    = $o['about'];
