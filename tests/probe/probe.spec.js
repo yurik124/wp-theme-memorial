@@ -3205,3 +3205,30 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 		} );
 	} );
 }
+
+// Шаг 4 ТЗ: подписи «Фотогалереи», «Написать в MAX» в призыве, cookie вне сниппета, ориентиры — ПК и телефоны.
+for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] ) {
+	test.describe( 'шаг 4 ' + width, () => {
+		test.use( { viewport: { width, height } } );
+		test( 'шаг 4 ' + width, async ( { page } ) => {
+			test.setTimeout( 180_000 );
+			const errs = errorsOf( page );
+			const out = { width };
+			await page.goto( '/fotogalereia/' );
+			out.captions = await page.locator( 'figcaption' ).allInnerTexts();
+			out.cta = await page.locator( '.mem-cta__btns' ).allInnerTexts();
+			out.consent = await page.evaluate( () => {
+				const el = document.getElementById( 'consent' );
+				return el ? { nosnippet: el.hasAttribute( 'data-nosnippet' ), html: document.documentElement.outerHTML.includes( '<!--noindex--><div class="consent' ) } : null;
+			} );
+			out.desc = await page.locator( 'meta[name="description"]' ).getAttribute( 'content' ).catch( () => '' );
+			out.overflow = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+			await shot( page, 'step4-gallery-' + width, { fullPage: true } );
+			await page.goto( '/kontakty/' );
+			out.notes = await page.locator( '.kaddr__notes' ).allInnerTexts();
+			out.errors = errs;
+			log( 'step4-' + width, out );
+		} );
+	} );
+}

@@ -63,6 +63,44 @@ class Test_Memorial_Plugin_Step4 extends WP_UnitTestCase {
 		$this->assertStringContainsString( '<!--/noindex-->', $html );
 	}
 
+	public function test_gallery_gets_captions_links_and_description() {
+		$parent = self::factory()->post->create(
+			array(
+				'post_type' => 'page',
+				'post_name' => 'ritualnye-uslugi',
+			)
+		);
+		self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_name'   => 'katafalk',
+				'post_parent' => $parent,
+			)
+		);
+		$img     = static fn( $id, $alt, $cap = '' ) => '<!-- wp:image {"id":' . $id . ',"sizeSlug":"large","linkDestination":"media"} --><figure class="wp-block-image size-large"><a href="/p' . $id . '.webp"><img src="/p' . $id . '.webp" alt="' . $alt . '" class="wp-image-' . $id . '"/></a>' . $cap . '</figure><!-- /wp:image -->';
+		$gallery = '<!-- wp:gallery {"columns":3,"linkTo":"media"} --><figure class="wp-block-gallery has-nested-images columns-3">'
+			. $img( 1598, 'катафалк' ) . $img( 717, '' ) . $img( 1594, 'x', '<figcaption class="wp-element-caption">Своя подпись</figcaption>' )
+			. '</figure><!-- /wp:gallery -->';
+		$page    = self::factory()->post->create(
+			array(
+				'post_type'    => 'page',
+				'post_name'    => 'fotogalereia',
+				'post_content' => $gallery,
+			)
+		);
+		$dry = memorial_plugin_gallery_upgrade_1( true );
+		$this->assertSame( 2, $dry['photos'] );
+		$this->assertStringNotContainsString( 'figcaption class="wp-element-caption">Катафалк', get_post_field( 'post_content', $page ) );
+		memorial_plugin_gallery_upgrade_1();
+		$content = get_post_field( 'post_content', $page );
+		$this->assertStringContainsString( 'Катафалк Ford Transit на 8 мест для провожающих. <a href="', $content );
+		$this->assertStringContainsString( 'alt="Салон катафалка: места для провожающих"', $content );
+		$this->assertStringContainsString( 'Своя подпись', $content );
+		$this->assertStringNotContainsString( 'на 3 места', $content, 'a caption of the owner stays' );
+		$this->assertStringContainsString( 'Фото здания', get_post_meta( $page, '_seopress_titles_desc', true ) );
+		$this->assertArrayNotHasKey( 'photos', memorial_plugin_gallery_upgrade_1( true ), 'once more — nothing' );
+	}
+
 	public function test_price_table_pattern_has_no_digits() {
 		$pattern = WP_Block_Patterns_Registry::get_instance()->get_registered( 'memorial/price' );
 		$this->assertStringContainsString( 'data-value="price"', $pattern['content'] );

@@ -198,6 +198,7 @@ $memorial_plugin_modules = array(
 	'content/faq.php',
 	'content/guide.php',
 	'content/checked.php',
+	'content/gallery-upgrade.php',
 	'content/services.php',
 	'pages/media.php',
 	'content/patterns.php',
