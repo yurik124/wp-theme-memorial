@@ -56,7 +56,9 @@ test( 'Страницы из репозитория: файл → страниц
 	write( 2, 'Second text from the repository.' );
 	await page.goto( '/wp-admin/admin.php?page=mem-repo-pages' );
 	// The fingerprint changed: the screen itself already applied it on admin_init — or shows it to apply.
-	const row = page.getByRole( 'row' ).filter( { hasText: '/e2e-repo-test/' } );
+	const row = page
+		.getByRole( 'row' )
+		.filter( { hasText: '/e2e-repo-test/' } );
 	await expect( row ).toBeVisible();
 	const apply = page.getByRole( 'button', { name: /^Apply/ } );
 	if ( await apply.isEnabled() ) {
