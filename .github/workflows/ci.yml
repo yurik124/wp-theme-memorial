@@ -61,6 +61,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: php tools/block-json.php check
 
+      - name: BLOCKS.md — у каждого блока есть раздел, атрибуты свежие (tools/blocks-doc.php check)
+        if: ${{ !cancelled() }}
+        run: php tools/blocks-doc.php check
+
       - name: Переводы (tools/i18n.php check)
         if: ${{ !cancelled() }}
         run: php tools/i18n.php check
