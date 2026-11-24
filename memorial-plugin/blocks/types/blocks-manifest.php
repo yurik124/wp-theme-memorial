@@ -1,6 +1,93 @@
 <?php
 // Made by tools/block-json.php from blocks/types/*/block.json — do not edit by hand.
 return array (
+  'benefits' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/benefits',
+    'title' => 'Benefit and payments',
+    'category' => 'memorial-catalog',
+    'icon' => 'id-alt',
+    'description' => 'The burial benefit and the payment for participants of the special military operation — the sums from Memorial → Prices → Separate prices (codes posobie and vyplata_svo).',
+    'keywords' => 
+    array (
+      0 => 'benefit',
+      1 => 'payment',
+      2 => 'special military operation',
+      3 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'show' => 
+      array (
+        'type' => 'string',
+        'default' => 'both',
+        'enum' => 
+        array (
+          0 => 'both',
+          1 => 'posobie',
+          2 => 'svo',
+        ),
+      ),
+      'heading' => 
+      array (
+        'type' => 'boolean',
+        'default' => true,
+      ),
+      'title' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+      'link' => 
+      array (
+        'type' => 'boolean',
+        'default' => true,
+      ),
+    ),
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'color' => 
+      array (
+        'text' => true,
+        'background' => true,
+        'link' => true,
+      ),
+      'typography' => 
+      array (
+        'fontSize' => true,
+        'lineHeight' => true,
+      ),
+      'spacing' => 
+      array (
+        'margin' => true,
+        'padding' => true,
+      ),
+      '__experimentalBorder' => 
+      array (
+        'color' => true,
+        'radius' => true,
+        'style' => true,
+        'width' => true,
+      ),
+      'inserter' => true,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+        'show' => 'both',
+        'heading' => true,
+        'title' => '',
+        'link' => true,
+      ),
+      'viewportWidth' => 1000,
+    ),
+  ),
   'book-reviews' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -1183,6 +1270,104 @@ return array (
       'viewportWidth' => 1200,
     ),
   ),
+  'guarantees' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/guarantees',
+    'title' => 'Our guarantees',
+    'category' => 'memorial-catalog',
+    'icon' => 'shield',
+    'description' => 'Guarantees from Memorial → Prices → Guarantees: cards with an icon, a heading and a text — the same on every page.',
+    'keywords' => 
+    array (
+      0 => 'guarantee',
+      1 => 'contract',
+      2 => 'trust',
+      3 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'set' => 
+      array (
+        'type' => 'string',
+        'default' => 'all',
+        'enum' => 
+        array (
+          0 => 'all',
+          1 => 'funeral',
+          2 => 'monuments',
+        ),
+      ),
+      'count' => 
+      array (
+        'type' => 'integer',
+        'default' => 0,
+      ),
+      'heading' => 
+      array (
+        'type' => 'boolean',
+        'default' => true,
+      ),
+      'title' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+      'cols' => 
+      array (
+        'type' => 'integer',
+        'default' => 3,
+        'enum' => 
+        array (
+          0 => 2,
+          1 => 3,
+        ),
+      ),
+    ),
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'color' => 
+      array (
+        'text' => true,
+        'background' => true,
+        'link' => true,
+      ),
+      'typography' => 
+      array (
+        'fontSize' => true,
+        'lineHeight' => true,
+      ),
+      'spacing' => 
+      array (
+        'margin' => true,
+        'padding' => true,
+      ),
+      '__experimentalBorder' => 
+      array (
+        'color' => true,
+        'radius' => true,
+        'style' => true,
+        'width' => true,
+      ),
+      'inserter' => true,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+        'set' => 'all',
+        'count' => 0,
+        'heading' => true,
+        'title' => '',
+        'cols' => 3,
+      ),
+      'viewportWidth' => 1000,
+    ),
+  ),
   'guide' => 
   array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',
@@ -1847,6 +2032,20 @@ return array (
       3 => 'memorial',
     ),
     'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'context' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+        'enum' => 
+        array (
+          0 => '',
+          1 => 'funeral',
+          2 => 'monuments',
+        ),
+      ),
+    ),
     'supports' => 
     array (
       'autoRegister' => true,
@@ -1880,6 +2079,7 @@ return array (
     array (
       'attributes' => 
       array (
+        'context' => '',
       ),
       'viewportWidth' => 1000,
     ),
@@ -1957,6 +2157,97 @@ return array (
         'large' => true,
       ),
       'viewportWidth' => 400,
+    ),
+  ),
+  'price-list' => 
+  array (
+    '$schema' => 'https://schemas.wp.org/trunk/block.json',
+    'apiVersion' => 3,
+    'name' => 'memorial-plugin/price-list',
+    'title' => 'Prices one by one',
+    'category' => 'memorial-catalog',
+    'icon' => 'list-view',
+    'description' => 'A table “service — price from — more” from the codes of Memorial → Prices → Separate prices. A row whose code has no price is not shown.',
+    'keywords' => 
+    array (
+      0 => 'prices',
+      1 => 'price list',
+      2 => 'table',
+      3 => 'memorial',
+    ),
+    'textdomain' => 'memorial-plugin',
+    'attributes' => 
+    array (
+      'rows' => 
+      array (
+        'type' => 'array',
+        'default' => 
+        array (
+        ),
+      ),
+      'preset' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+        'enum' => 
+        array (
+          0 => '',
+          1 => 'funeral',
+          2 => 'monuments',
+        ),
+      ),
+      'title' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+      'note' => 
+      array (
+        'type' => 'string',
+        'default' => '',
+      ),
+    ),
+    'supports' => 
+    array (
+      'autoRegister' => true,
+      'html' => false,
+      'color' => 
+      array (
+        'text' => true,
+        'background' => true,
+        'link' => true,
+      ),
+      'typography' => 
+      array (
+        'fontSize' => true,
+        'lineHeight' => true,
+      ),
+      'spacing' => 
+      array (
+        'margin' => true,
+        'padding' => true,
+      ),
+      '__experimentalBorder' => 
+      array (
+        'color' => true,
+        'radius' => true,
+        'style' => true,
+        'width' => true,
+      ),
+      'inserter' => true,
+    ),
+    'example' => 
+    array (
+      'attributes' => 
+      array (
+        'rows' => 
+        array (
+        ),
+        'preset' => '',
+        'title' => '',
+        'note' => '',
+      ),
+      'viewportWidth' => 1000,
     ),
   ),
   'product' => 

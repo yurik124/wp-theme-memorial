@@ -143,3 +143,33 @@
 		margin: 0;
 	}
 }
+
+// Rows of “Prices one by one” in the block settings.
+.memorial-plugin-price-rows {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	&__row {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		margin: 0;
+		padding: 10px 12px;
+		border: 1px solid #e0e0e0;
+		border-radius: 8px;
+
+		legend {
+			padding: 0 4px;
+			font-weight: 600;
+		}
+	}
+
+	&__actions,
+	&__add {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 8px;
+		align-items: center;
+	}
+}

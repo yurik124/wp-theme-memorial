@@ -2999,6 +2999,7 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 			await page.goto( '/wp-admin/admin.php?page=mem-prices' );
 			await page.waitForSelector( '.memorial-plugin-settings__card' );
 			const out = { width };
+			await page.getByRole( 'tab', { name: 'Отдельные цены' } ).click().catch( () => {} );
 			const card = page.locator( '.memorial-plugin-settings__card' ).filter( { hasText: 'Отдельные цены' } );
 			// Свёрнутые строки: сводка не должна заходить под «Развернуть», стрелки и корзину.
 			await card.locator( '.memorial-plugin-settings__row' ).first().scrollIntoViewIfNeeded();
@@ -3123,3 +3124,41 @@ test.describe( 'страницы из репозитория', () => {
 		log( 'repo-pages', out );
 	} );
 } );
+
+// Шаг 2 ТЗ: новые блоки на странице проверки (её создаёт PROBE_CLI) и «Цены» на вкладках — ПК и телефоны.
+for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] ) {
+	test.describe( 'шаг 2 ' + width, () => {
+		test.use( { viewport: { width, height } } );
+		test( 'шаг 2 ' + width, async ( { page } ) => {
+			test.setTimeout( 180_000 );
+			const errs = errorsOf( page );
+			const out = { width };
+			await page.goto( '/probe-step2/' );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+			out.guar = await page.locator( '.mguar' ).count();
+			out.guarItems = await page.locator( '.mguar__item' ).count();
+			out.benefit = await page.locator( '.mbenefit__item' ).allInnerTexts();
+			out.priceRows = await page.locator( '.mprice-list tbody tr' ).count();
+			out.pay = await page.locator( '.mterms--pay' ).allInnerTexts();
+			out.overflow = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
+			await shot( page, 'step2-page-' + width, { fullPage: true } );
+			if ( width === 1440 ) {
+				await page.goto( '/wp-login.php' );
+				await page.fill( '#user_login', 'probe' );
+				await page.fill( '#user_pass', 'probe-pass-123' );
+				await page.click( '#wp-submit' );
+				await page.waitForURL( /wp-admin/ );
+				await page.goto( '/wp-admin/admin.php?page=mem-prices' );
+				await page.locator( '.memorial-plugin-settings__card' ).first().waitFor( { timeout: 15_000 } ).catch( () => {} );
+				out.tabs = await page.getByRole( 'tab' ).allInnerTexts();
+				for ( const tab of [ 'Гарантии', 'Отдельные цены', 'Оплата' ] ) {
+					await page.getByRole( 'tab', { name: tab } ).click( { timeout: 10_000 } ).catch( ( e ) => ( out[ 'tabError ' + tab ] = e.message ) );
+					await page.waitForTimeout( 600 );
+					await shot( page, 'step2-prices-' + tab, { fullPage: true } );
+				}
+			}
+			out.errors = errs;
+			log( 'step2-' + width, out );
+		} );
+	} );
+}

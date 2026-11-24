@@ -1110,3 +1110,30 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .mterms__note{margin:.75rem 0 0;color:var(--memorial-plugin-mute)}
 /* телефон: иконка и заголовок в одну строку, список — на всю ширину карточки */
 @media (max-width:600px){.mterms{gap:.75rem .85rem;padding:1.1rem 1.1rem;align-items:center}.mterms>.mterms__ico{width:44px;height:44px}.mterms>.mterms__body{display:contents}.mterms .mterms__title{margin:0;font-size:1.2rem}.mterms .mterms__list,.mterms__note{grid-column:1/-1}.mterms__note{margin-top:0}}
+/* «Наши гарантии»: карточки с иконкой в круге, заголовком и текстом; телефон — одна колонка */
+.mguar{margin:2rem 0}
+.mguar__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.mguar__grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mguar__item{display:flex;flex-direction:column;gap:.6rem;background:#fff;color:var(--memorial-plugin-ink);border:1px solid var(--memorial-plugin-line);border-radius:var(--memorial-plugin-r);box-shadow:var(--memorial-plugin-sh);padding:1.25rem 1.35rem}
+.mguar__ico{width:48px;height:48px}
+.mguar .mguar__name{margin:0;font-family:var(--memorial-plugin-lora);font-size:1.15rem;line-height:1.3}
+.mguar__text{margin:0;font-size:1rem;line-height:1.5}
+@media (max-width:900px){.mguar__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.mguar__grid,.mguar__grid--2{grid-template-columns:1fr}}
+/* «Пособие и выплаты»: две карточки в ряд, сумма крупно */
+.mbenefit{margin:2rem 0}
+.mbenefit__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.mbenefit__grid--1{grid-template-columns:minmax(0,1fr)}
+.mbenefit__item{display:flex;flex-direction:column;gap:.5rem;background:#fff;color:var(--memorial-plugin-ink);border:1px solid var(--memorial-plugin-line);border-radius:var(--memorial-plugin-r);box-shadow:var(--memorial-plugin-sh);padding:1.25rem 1.35rem}
+.mbenefit__ico{width:48px;height:48px}
+.mbenefit .mbenefit__name{margin:0;font-family:var(--memorial-plugin-lora);font-size:1.15rem;line-height:1.3}
+.mbenefit__sum{margin:0;font-family:var(--memorial-plugin-lora);font-size:1.6rem;line-height:1.2;color:var(--memorial-plugin-gold3)}
+.mbenefit__how{margin:0;color:var(--memorial-plugin-mute)}
+.mbenefit__note{margin:1rem 0 0}
+@media (max-width:600px){.mbenefit__grid{grid-template-columns:1fr}}
+/* «Цены по отдельности»: таблица как стиль «Прайс», цена и ₽ не переносятся */
+.mprice-list{margin:2rem 0}
+.mprice-list .nowrap{white-space:nowrap}
+.mprice-list__unit{color:var(--memorial-plugin-mute);font-size:1rem}
+.mprice-list__more{text-align:right;white-space:nowrap}
+.mprice-list__note{margin:.5rem 0 0;color:var(--memorial-plugin-mute)}

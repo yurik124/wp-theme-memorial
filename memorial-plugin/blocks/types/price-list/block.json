@@ -1,0 +1,72 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "memorial-plugin/price-list",
+    "title": "Prices one by one",
+    "category": "memorial-catalog",
+    "icon": "list-view",
+    "description": "A table “service — price from — more” from the codes of Memorial → Prices → Separate prices. A row whose code has no price is not shown.",
+    "keywords": [
+        "prices",
+        "price list",
+        "table",
+        "memorial"
+    ],
+    "textdomain": "memorial-plugin",
+    "attributes": {
+        "rows": {
+            "type": "array",
+            "default": []
+        },
+        "preset": {
+            "type": "string",
+            "default": "",
+            "enum": [
+                "",
+                "funeral",
+                "monuments"
+            ]
+        },
+        "title": {
+            "type": "string",
+            "default": ""
+        },
+        "note": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "supports": {
+        "autoRegister": true,
+        "html": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "typography": {
+            "fontSize": true,
+            "lineHeight": true
+        },
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "__experimentalBorder": {
+            "color": true,
+            "radius": true,
+            "style": true,
+            "width": true
+        },
+        "inserter": true
+    },
+    "example": {
+        "attributes": {
+            "rows": [],
+            "preset": "",
+            "title": "",
+            "note": ""
+        },
+        "viewportWidth": 1000
+    }
+}
