@@ -3227,6 +3227,11 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 			await shot( page, 'step4-gallery-' + width, { fullPage: true } );
 			const tr = page.locator( 'figure.wp-block-gallery' ).filter( { hasText: 'Ford Transit' } ).first();
 			if ( await tr.count() ) {
+				out.trFig = await tr.evaluate( ( g ) => {
+					const f = g.querySelector( 'figure.wp-block-image' );
+					const r = ( el ) => el && Math.round( el.getBoundingClientRect().height );
+					return { gallery: g.className, html: f.outerHTML.slice( 0, 700 ), fig: r( f ), a: r( f.querySelector( 'a' ) ), img: r( f.querySelector( 'img' ) ), cap: r( f.querySelector( 'figcaption' ) ), capMargin: getComputedStyle( f.querySelector( 'figcaption' ) ).marginTop, figStyle: getComputedStyle( f ).display + ' ' + getComputedStyle( f ).flexDirection };
+				} );
 				await tr.scrollIntoViewIfNeeded();
 				await tr.screenshot( { path: `${ DIR }/step4-transport-${ width }.png` } ).catch( () => {} );
 			}
