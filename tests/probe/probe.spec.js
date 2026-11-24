@@ -3225,6 +3225,11 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 			out.overflow = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
 			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
 			await shot( page, 'step4-gallery-' + width, { fullPage: true } );
+			const tr = page.locator( 'figure.wp-block-gallery' ).filter( { hasText: 'Ford Transit' } ).first();
+			if ( await tr.count() ) {
+				await tr.scrollIntoViewIfNeeded();
+				await tr.screenshot( { path: `${ DIR }/step4-transport-${ width }.png` } ).catch( () => {} );
+			}
 			await page.goto( '/kontakty/' );
 			out.notes = await page.locator( '.kaddr__notes' ).allInnerTexts();
 			out.errors = errs;

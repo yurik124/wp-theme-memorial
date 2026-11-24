@@ -18,6 +18,9 @@ foreach ( memorial_plugin_addrs() as $a ) {
 }
 $kid = url_to_postid( home_url( '/ritualnye-uslugi/katafalk/' ) );
 echo 'katafalk: ' . $kid . ' ' . ( $kid ? get_post_type( $kid ) . ' ' . get_post_status( $kid ) : '' ) . ' page_by_path=' . var_export( (bool) get_page_by_path( 'ritualnye-uslugi/katafalk' ), true ) . "\n";
+foreach ( get_posts( array( 'name' => 'katafalk', 'post_type' => 'any', 'post_status' => 'any', 'numberposts' => -1 ) ) as $k ) {
+	echo 'katafalk post: ' . $k->ID . ' ' . $k->post_type . ' ' . $k->post_status . ' parent=' . $k->post_parent . "\n";
+}
 $page = get_page_by_path( 'fotogalereia' );
 preg_match_all( '~<figcaption[^>]*>(.*?)</figcaption>~s', (string) $page->post_content, $m );
 echo "captions:\n " . implode( "\n ", $m[1] ) . "\n";
