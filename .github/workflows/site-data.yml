@@ -1,0 +1,111 @@
+name: Данные сайта для проверки текстов
+
+# Только чтение с живого сайта: коды цен, адреса страниц и разделов каталога → tools/content-site.json
+# (по ним tools/content-lint.php проверяет {price:…} и внутренние ссылки). Как diag.yml: временный PHP
+# со случайным именем и ключом, сразу удаляется. Запуск: git push origin <ветка>:sitedata/<ветка> —
+# файл обновляется коммитом в <ветка>, ветка sitedata/<ветка> удаляется.
+
+on:
+  push:
+    branches: ['sitedata/**']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hosting-ssh
+  cancel-in-progress: false
+
+env:
+  SFTP_HOST: ${{ secrets.SFTP_HOST }}
+  SFTP_PORT: ${{ secrets.SFTP_PORT }}
+  SFTP_USER: ${{ secrets.SFTP_USER }}
+  SITE_DIR: ${{ secrets.SITE_DIR }}
+
+jobs:
+  data:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Ветка, в которую записать
+        run: echo "TARGET=${GITHUB_REF_NAME#sitedata/}" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TARGET }}
+
+      - name: Ключ SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          if [ -n "$SSH_PRIVATE_KEY" ]; then
+            mkdir -p ~/.ssh && printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/memorial_key && chmod 600 ~/.ssh/memorial_key
+            echo "SSH_KEY_FILE=$HOME/.ssh/memorial_key" >> "$GITHUB_ENV"
+          fi
+
+      - name: Данные с сайта
+        env:
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          pip install -q paramiko requests
+          python3 - <<'PY'
+          import os, re, gzip, secrets, json, time, paramiko, requests
+          AUTH = {'pkey': paramiko.PKey.from_path(os.environ['SSH_KEY_FILE'])} if os.environ.get('SSH_KEY_FILE') else {'password': os.environ['SFTP_PASSWORD']}
+          for attempt in range(3):
+              try:
+                  t = paramiko.Transport((os.environ['SFTP_HOST'], int(os.environ.get('SFTP_PORT') or 22)))
+                  t.connect(username=os.environ['SFTP_USER'], **AUTH)
+                  break
+              except Exception as e:
+                  print('SSH:', e, '— ещё раз через 20 с')
+                  time.sleep(20)
+          else:
+              raise SystemExit('Хостинг не отвечает по SSH')
+          sf = paramiko.SFTPClient.from_transport(t)
+          site = os.environ['SITE_DIR'].rstrip('/')
+          dbs = sorted(f for f in sf.listdir(site + '/updraft') if f.endswith('-db.gz'))
+          url = ''
+          with sf.open(site + '/updraft/' + dbs[-1], 'rb') as raw, gzip.GzipFile(fileobj=raw) as g:
+              for line in g:
+                  m = re.search(rb"'siteurl',\s*'([^']+)'", line)
+                  if m:
+                      url = m.group(1).decode().rstrip('/')
+                      break
+          name = 'mem-data-' + secrets.token_hex(8) + '.php'
+          key = secrets.token_hex(16)
+          body = open('tests/diag/site-data.php', encoding='utf-8').read().replace('__KEY__', key)
+          with sf.open(site + '/' + name, 'w') as f:
+              f.write(body)
+          try:
+              r = requests.get(url + '/wp-content/' + name, params={'k': key}, timeout=60)
+          finally:
+              sf.remove(site + '/' + name)
+              print('временный файл удалён')
+          data = r.json()
+          out = {
+              '_': 'Данные живого сайта для tools/content-lint.php. Не править руками: обновляет GitHub Actions «Данные сайта для проверки текстов» (git push origin <ветка>:sitedata/<ветка>).',
+              'updated': time.strftime('%Y-%m-%d'),
+              **data,
+          }
+          try:
+              old = json.load(open('tools/content-site.json', encoding='utf-8'))
+          except Exception:
+              old = {}
+          same = {k: v for k, v in old.items() if k not in ('_', 'updated')} == data
+          if not same:
+              json.dump(out, open('tools/content-site.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+          print(json.dumps(out, ensure_ascii=False, indent=1)[:4000])
+          PY
+
+      - name: Коммит в ветку и уборка
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- tools/content-site.json; then
+            echo "Данные не изменились"
+          else
+            git add tools/content-site.json
+            git commit -q -m "Данные сайта для проверки текстов (tools/content-site.json)"
+            git push origin "HEAD:${TARGET}"
+          fi
+          git push origin --delete "${GITHUB_REF_NAME}" || true
