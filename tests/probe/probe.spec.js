@@ -3050,3 +3050,68 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 		} );
 	} );
 }
+
+// Страницы из репозитория на копии сайта (только фаза block): новая страница с пунктом меню создаётся при
+// заходе в админку, старая страница (катафалк уже есть на сайте) ждёт решения; разница и «Оставить как на сайте».
+test.describe( 'страницы из репозитория', () => {
+	test.use( { viewport: { width: 1440, height: 1000 } } );
+	test( 'страницы из репозитория', async ( { page } ) => {
+		test.skip( PHASE !== 'block', 'модуль есть только в исправленном коде' );
+		test.setTimeout( 240_000 );
+		const path = require( 'path' );
+		const dir = path.resolve( __dirname, '../../memorial-plugin/content/pages/ritualnye-uslugi' );
+		fs.mkdirSync( dir, { recursive: true } );
+		const file = ( slug, head, body ) =>
+			fs.writeFileSync(
+				`${ dir }/${ slug }.html`,
+				'<!-- memorial-page ' + JSON.stringify( { slug, parent: 'ritualnye-uslugi', seo_title: head.title, seo_description: head.title, status: 'publish', version: 1, ...head } ) + ' -->\n<!-- wp:paragraph -->\n<p>' + body + '</p>\n<!-- /wp:paragraph -->\n'
+			);
+		file( 'eksgumaciya', { title: 'Эксгумация (проверка)', menu: { parent: '/ritualnye-uslugi/', label: 'Эксгумация', after: '/ritualnye-uslugi/gruz-200/' } }, 'Текст страницы из репозитория. <a href="/ritualnye-uslugi/traurnyj-zal/">Траурный зал</a>.' );
+		file( 'katafalk', { title: 'Катафалк на похороны', menu: { parent: '/ritualnye-uslugi/', label: 'Катафалк', after: '/ritualnye-uslugi/traurnyj-zal/' } }, 'Новый текст катафалка из репозитория.' );
+		const errs = errorsOf( page );
+		const out = {};
+		try {
+			await page.goto( '/wp-login.php' );
+			await page.fill( '#user_login', 'probe' );
+			await page.fill( '#user_pass', 'probe-pass-123' );
+			await page.click( '#wp-submit' );
+			await page.waitForURL( /wp-admin/ );
+			await page.goto( '/wp-admin/' );
+			out.notice = await page.locator( '.notice-warning' ).filter( { hasText: /репозитори/i } ).innerText().catch( () => '' );
+			await page.goto( '/wp-admin/admin.php?page=mem-repo-pages' );
+			await page.waitForSelector( '.dataviews-view-table, table' );
+			await page.waitForTimeout( 1500 );
+			out.rows = await page.getByRole( 'row' ).allInnerTexts();
+			await shot( page, 'repo-1440', { fullPage: true } );
+			for ( const [ w, h ] of [ [ 390, 844 ], [ 360, 780 ] ] ) {
+				await page.setViewportSize( { width: w, height: h } );
+				await page.waitForTimeout( 500 );
+				await shot( page, 'repo-' + w, { fullPage: true } );
+			}
+			await page.setViewportSize( { width: 1440, height: 1000 } );
+			const row = page.getByRole( 'row' ).filter( { hasText: '/ritualnye-uslugi/katafalk/' } );
+			await row.getByRole( 'button', { name: /Показать разницу/ } ).click().catch( ( e ) => ( out.diffError = e.message ) );
+			await page.waitForSelector( '.memorial-plugin-repo__diff', { timeout: 15000 } ).catch( () => {} );
+			out.diff = await page.locator( '.memorial-plugin-repo__diff' ).innerText().catch( () => '' );
+			await shot( page, 'repo-diff-1440' );
+			await page.getByRole( 'dialog' ).getByRole( 'button', { name: 'Оставить как на сайте' } ).click().catch( ( e ) => ( out.keepError = e.message ) );
+			await page.waitForTimeout( 2500 );
+			out.after = await page.getByRole( 'row' ).allInnerTexts();
+			await page.getByRole( 'tab', { name: 'Журнал' } ).click().catch( () => {} );
+			await page.waitForTimeout( 800 );
+			out.log = await page.getByRole( 'row' ).allInnerTexts();
+			await shot( page, 'repo-log-1440', { fullPage: true } );
+			const res = await page.goto( '/ritualnye-uslugi/eksgumaciya/' );
+			out.newPage = res ? res.status() : 0;
+			const html = await page.content();
+			out.menuHasNew = /href="[^"]*\/ritualnye-uslugi\/eksgumaciya\/"/.test( html );
+			out.hallLink = html.includes( '/ritualnye-uslugi/traurnyj-zal/' );
+			await shot( page, 'repo-new-page-1440' );
+			out.katafalkUntouched = ! ( await ( await page.goto( '/ritualnye-uslugi/katafalk/' ) ).text() ).includes( 'Новый текст катафалка из репозитория.' );
+		} finally {
+			fs.rmSync( dir, { recursive: true, force: true } );
+		}
+		out.errors = errs;
+		log( 'repo-pages', out );
+	} );
+} );
