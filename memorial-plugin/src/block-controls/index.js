@@ -572,10 +572,7 @@ function PriceRowsPicker( { label, value, onChange } ) {
 		<div className="memorial-plugin-price-rows">
 			<p className="memorial-plugin-pages-picker__label">{ label }</p>
 			{ rows.map( ( row, i ) => (
-				<fieldset
-					className="memorial-plugin-price-rows__row"
-					key={ i }
-				>
+				<fieldset className="memorial-plugin-price-rows__row" key={ i }>
 					<legend>
 						{ sprintf(
 							/* translators: %d: row number. */
