@@ -112,7 +112,7 @@ function memorial_plugin_service_area_render( $a = array() ) {
 }
 
 /**
- * areaServed of the organization: the city, the region and the suburbs.
+ * The area of the organization (areaServed): the city, the region and the suburbs.
  *
  * @return array<int,array>
  */
