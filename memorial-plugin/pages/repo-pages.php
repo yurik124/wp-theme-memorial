@@ -344,7 +344,13 @@ function memorial_plugin_repo_apply( $choices = array(), $how = 'screen' ) {
 	$retry   = array();
 	$changed = false;
 	// Parents first: «ritualnye-uslugi» before «ritualnye-uslugi/katafalk».
-	uksort( $files, static fn( $a, $b ) => substr_count( $a, '/' ) <=> substr_count( $b, '/' ) ?: strcmp( $a, $b ) );
+	uksort(
+		$files,
+		static function ( $a, $b ) {
+			$depth = substr_count( $a, '/' ) <=> substr_count( $b, '/' );
+			return 0 !== $depth ? $depth : strcmp( $a, $b );
+		}
+	);
 	foreach ( $files as $path => $f ) {
 		$key = '' === $path ? '/' : $path;
 		if ( '' !== $f['error'] ) {
@@ -714,10 +720,10 @@ function memorial_plugin_repo_menu_add( $menu, $id, $path ) {
 		'innerHTML'    => '',
 		'innerContent' => array(),
 	);
-	$put    = static function ( $list ) use ( $link, $after ) {
+	$put    = static function ( $items ) use ( $link, $after ) {
 		$out = array();
 		$in  = false;
-		foreach ( $list as $b ) {
+		foreach ( $items as $b ) {
 			$out[] = $b;
 			if ( ! $in && '' !== $after && in_array( $b['blockName'] ?? '', array( 'core/navigation-link', 'core/navigation-submenu' ), true ) && memorial_plugin_repo_item_path( (array) $b['attrs'] ) === $after ) {
 				$out[] = $link;
@@ -734,8 +740,8 @@ function memorial_plugin_repo_menu_add( $menu, $id, $path ) {
 		$blocks = $put( $blocks );
 		$added  = true;
 	} else {
-		$walk   = static function ( $list ) use ( &$walk, $parent, $put, &$added ) {
-			foreach ( $list as &$b ) {
+		$walk   = static function ( $items ) use ( &$walk, $parent, $put, &$added ) {
+			foreach ( $items as &$b ) {
 				if ( $added ) {
 					break;
 				}
@@ -757,7 +763,7 @@ function memorial_plugin_repo_menu_add( $menu, $id, $path ) {
 				}
 			}
 			unset( $b );
-			return $list;
+			return $items;
 		};
 		$blocks = $walk( $blocks );
 	}
@@ -777,7 +783,7 @@ function memorial_plugin_repo_menu_add( $menu, $id, $path ) {
 }
 
 /**
- * innerContent of a block whose inner blocks changed in number: the HTML around stays, one place per block.
+ * The innerContent of a block whose inner blocks changed in number: the HTML around stays, one place per block.
  *
  * @param array $b Block.
  * @return array

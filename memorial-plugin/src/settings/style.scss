@@ -710,6 +710,7 @@
 // across the whole row; the arrows and “Remove” go under the row. Long codes ({price:…}) break instead of
 // running under the buttons.
 @media (max-width: 600px) {
+
 	.memorial-plugin-settings__repeater:not(.is-inline) > .memorial-plugin-settings__row {
 		flex-wrap: wrap;
 		gap: 8px 10px;
