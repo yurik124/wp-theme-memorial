@@ -235,6 +235,14 @@ foreach ( $files as $f ) {
 	} elseif ( preg_match( '/(?<!\pL)руб/iu', $p['text'] ) ) {
 		$err( $rel, '«руб» в тексте: цены — только кодами {price:код}.' );
 	}
+	// Site values inserted in the editor: <span class="memorial-plugin-value" data-value="price" data-atts="{&quot;id&quot;:&quot;код&quot;}">.
+	if ( preg_match_all( '/data-value="price"[^>]*data-atts="[^"]*?(?:&quot;|")id(?:&quot;|"):(?:&quot;|")([^&"]+)/u', $p['html'], $mv ) ) {
+		foreach ( array_unique( $mv[1] ) as $code ) {
+			if ( $codes && ! in_array( mb_strtolower( trim( $code ) ), $codes, true ) ) {
+				$err( $rel, "Неизвестный код цены «{$code}» в «Значении сайта» — его нет в «Мемориал → Цены» на сайте." );
+			}
+		}
+	}
 	if ( preg_match_all( '/\{price:([^}]+)\}/u', $p['html'] . ' ' . wp_json_like( $p['blocks'] ), $m ) ) {
 		foreach ( array_unique( $m[1] ) as $code ) {
 			if ( $codes && ! in_array( mb_strtolower( trim( $code ) ), $codes, true ) ) {

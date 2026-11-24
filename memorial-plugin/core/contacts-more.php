@@ -153,8 +153,7 @@ function memorial_plugin_contacts_card_3() {
 			'shop'      => 1,
 			'hall'      => 1,
 			'district'  => 'Восточный округ',
-			'stop'      => 'УТЭП',
-			'landmarks' => 'у УТЭПа, у БелГУ',
+			'landmarks' => 'рядом с магазином «Гиперстрой», у БелГУ',
 		),
 		'Щорса'        => array(
 			'hours'     => 'Пн–Пт 9:00–18:00, сб–вс 9:00–17:00',
@@ -212,6 +211,60 @@ function memorial_plugin_contacts_upgrade_3( $dry = false ) {
 	}
 	return $log;
 }
+
+/* ---------- Разовый перенос memorial_plugin_contacts_4 ---------- */
+
+/**
+ * Owner, 24.11.2026: not «ост. УТЭП · у УТЭПа» but «рядом с магазином «Гиперстрой»» (BelSU stays). Only the fields
+ * that still hold exactly what the move of step 3 wrote are changed: an edit of the owner stays.
+ *
+ * @param bool $dry Dry run.
+ * @return array Log: changed => [address => [field => [old, new]]], contacts (old option).
+ */
+function memorial_plugin_contacts_upgrade_4( $dry = false ) {
+	$log   = array( 'time' => time() );
+	$saved = get_option( 'mem_contacts' );
+	if ( ! is_array( $saved ) || empty( $saved['addrs'] ) ) {
+		return $log;
+	}
+	$fix = array(
+		'stop'      => array( 'УТЭП', '' ),
+		'landmarks' => array( 'у УТЭПа, у БелГУ', 'рядом с магазином «Гиперстрой», у БелГУ' ),
+	);
+	foreach ( $saved['addrs'] as $i => $a ) {
+		if ( false === mb_strpos( (string) ( $a['addr'] ?? '' ), 'Студенческая' ) ) {
+			continue;
+		}
+		foreach ( $fix as $k => list( $was, $now ) ) {
+			if ( (string) ( $a[ $k ] ?? '' ) === $was ) {
+				$log['changed'][ $a['addr'] ][ $k ] = array( $was, $now );
+				$saved['addrs'][ $i ][ $k ]         = $now;
+			}
+		}
+	}
+	if ( ! empty( $log['changed'] ) ) {
+		$log['contacts'] = get_option( 'mem_contacts' );
+		if ( ! $dry ) {
+			update_option( 'mem_contacts', $saved );
+		}
+	}
+	return $log;
+}
+
+add_action(
+	'admin_init',
+	static function () {
+		if ( get_option( 'memorial_plugin_contacts_4' ) || ! current_user_can( 'manage_options' ) || wp_doing_ajax() ) {
+			return;
+		}
+		update_option( 'memorial_plugin_contacts_4', time(), false );
+		update_option( 'memorial_plugin_contacts_4_log', memorial_plugin_contacts_upgrade_4(), false );
+		if ( function_exists( 'memorial_plugin_page_cache_clear' ) ) {
+			memorial_plugin_page_cache_clear();
+		}
+	},
+	9
+);
 
 add_action(
 	'admin_init',

@@ -3205,3 +3205,40 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 		} );
 	} );
 }
+
+// Шаг 4 ТЗ: подписи «Фотогалереи», «Написать в MAX» в призыве, cookie вне сниппета, ориентиры — ПК и телефоны.
+for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] ) {
+	test.describe( 'шаг 4 ' + width, () => {
+		test.use( { viewport: { width, height } } );
+		test( 'шаг 4 ' + width, async ( { page } ) => {
+			test.setTimeout( 180_000 );
+			const errs = errorsOf( page );
+			const out = { width };
+			await page.goto( '/fotogalereia/' );
+			out.captions = await page.locator( 'figcaption' ).allInnerTexts();
+			out.cta = await page.locator( '.mem-cta__btns' ).allInnerTexts();
+			out.consent = await page.evaluate( () => {
+				const el = document.getElementById( 'consent' );
+				return el ? { nosnippet: el.hasAttribute( 'data-nosnippet' ), html: document.documentElement.outerHTML.includes( '<!--noindex--><div class="consent' ) } : null;
+			} );
+			out.desc = await page.locator( 'meta[name="description"]' ).getAttribute( 'content' ).catch( () => '' );
+			out.overflow = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+			await shot( page, 'step4-gallery-' + width, { fullPage: true } );
+			const tr = page.locator( 'figure.wp-block-gallery' ).filter( { hasText: 'Ford Transit' } ).first();
+			if ( await tr.count() ) {
+				out.trFig = await tr.evaluate( ( g ) => {
+					const f = g.querySelector( 'figure.wp-block-image' );
+					const r = ( el ) => el && Math.round( el.getBoundingClientRect().height );
+					return { gallery: g.className, html: f.outerHTML.slice( 0, 700 ), fig: r( f ), a: r( f.querySelector( 'a' ) ), img: r( f.querySelector( 'img' ) ), cap: r( f.querySelector( 'figcaption' ) ), capMargin: getComputedStyle( f.querySelector( 'figcaption' ) ).marginTop, figStyle: getComputedStyle( f ).display + ' ' + getComputedStyle( f ).flexDirection, aCss: ( ( c ) => [ c.display, c.height, c.aspectRatio, c.paddingTop, c.paddingBottom, c.lineHeight, c.flex ].join( ' | ' ) )( getComputedStyle( f.querySelector( 'a' ) ) ), imgCss: ( ( c ) => [ c.display, c.height, c.aspectRatio, c.marginBottom, c.marginTop, c.verticalAlign, c.flex ].join( ' | ' ) )( getComputedStyle( f.querySelector( 'img' ) ) ), aKids: [ ...f.querySelector( 'a' ).childNodes ].map( ( n ) => n.nodeName + ( n.getBoundingClientRect ? ':' + Math.round( n.getBoundingClientRect().height ) : '' ) ).join( ',' ), aAfter: getComputedStyle( f.querySelector( 'a' ), '::after' ).content + ' ' + getComputedStyle( f.querySelector( 'a' ), '::after' ).height };
+				} );
+				await tr.scrollIntoViewIfNeeded();
+				await tr.screenshot( { path: `${ DIR }/step4-transport-${ width }.png` } ).catch( () => {} );
+			}
+			await page.goto( '/kontakty/' );
+			out.notes = await page.locator( '.kaddr__notes' ).allInnerTexts();
+			out.errors = errs;
+			log( 'step4-' + width, out );
+		} );
+	} );
+}

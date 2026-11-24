@@ -208,6 +208,26 @@ class Test_Memorial_Plugin_Repo_Pages extends WP_UnitTestCase {
 		$this->assertSame( 'error', end( $log )['action'] );
 	}
 
+	public function test_price_codes_become_site_values() {
+		$prices                   = memorial_plugin_prices_defaults();
+		$prices['other']['items'] = array(
+			array(
+				'name'  => 'Надпись на ленту',
+				'what'  => 'custom',
+				'price' => '200–500',
+				'code'  => 'lenta',
+			),
+		);
+		update_option( 'mem_prices', $prices );
+		$this->file( 'ritualnye-uslugi/lenta', array( 'title' => 'Лента' ), "<!-- wp:paragraph -->\n<p>Надпись на ленту — {price:lenta}.</p>\n<!-- /wp:paragraph -->" );
+		memorial_plugin_repo_apply( array(), 'auto' );
+		$id      = memorial_plugin_repo_page_id( 'ritualnye-uslugi/lenta' );
+		$content = get_post_field( 'post_content', $id );
+		$this->assertStringNotContainsString( '{price:', $content );
+		$this->assertStringContainsString( 'data-value="price"', $content );
+		$this->assertStringContainsString( '200–500', do_blocks( $content ) );
+	}
+
 	public function test_screen_needs_the_right_to_manage_options() {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'editor' ) ) );
 		$res = rest_do_request( new WP_REST_Request( 'GET', '/memorial-plugin/v1/repo-pages' ) );

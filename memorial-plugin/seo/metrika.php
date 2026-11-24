@@ -281,7 +281,11 @@ add_action(
 	5 // before the footer scripts (consent.js reads the template and the banner).
 );
 
-/** Плашка о cookie (один раз на странице; пусто, если плашка не нужна) */
+/**
+ * The cookie banner (once a page; empty when it is not needed). Its text is in the code of every page, so search engines must not take it into the
+ * snippet (it used to stand under «Фотогалерея» in the results): data-nosnippet for Google, <!--noindex-->
+ * for Yandex. The look and the work of the banner do not change.
+ */
 function memorial_plugin_consent_banner_html() {
 	static $done = false;
 	if ( $done || ! memorial_plugin_banner_on() ) {
@@ -291,7 +295,7 @@ function memorial_plugin_consent_banner_html() {
 	$notice = memorial_plugin_consent_mode() === 'notice';
 	ob_start();
 	?>
-<div class="consent<?php echo $notice ? ' consent--notice' : ''; ?>" id="consent" role="region" aria-label="Cookie" hidden>
+<!--noindex--><div class="consent<?php echo $notice ? ' consent--notice' : ''; ?>" id="consent" role="region" aria-label="Cookie" data-nosnippet hidden>
 	<p><?php echo memorial_plugin_consent_text(); ?></p>
 	<div class="consent__btns">
 	<?php if ( $notice ) : ?>
@@ -301,7 +305,7 @@ function memorial_plugin_consent_banner_html() {
 	<button class="btn btn--line btn--sm" type="button" data-consent="no"><?php esc_html_e( 'Decline', 'memorial-plugin' ); ?></button>
 	<?php endif; ?>
 	</div>
-</div>
+</div><!--/noindex-->
 	<?php
 	return (string) ob_get_clean();
 }

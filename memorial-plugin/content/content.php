@@ -64,7 +64,15 @@ add_shortcode(
 		if ( $tel ) :
 			?>
 			<a class="btn btn--gold" href="tel:<?php echo esc_attr( $tel ); ?>"><?php echo memorial_plugin_icon( 'phone' ); ?><span class="nowrap"><?php echo esc_html( memorial_plugin_opt( 'phone' ) ); ?></span></a><?php endif; ?>
+		<?php
+		// MAX in «Memorial → Contacts» — “Write in MAX” instead of “Call me back” (as the bottom bar on phones).
+		$max = memorial_plugin_messengers()['max'] ?? '';
+		if ( $max ) :
+			?>
+			<a class="btn btn--ghost" href="<?php echo esc_url( $max ); ?>" target="_blank" rel="noopener"><?php echo memorial_plugin_icon( 'chat' ); ?><?php esc_html_e( 'Write in MAX', 'memorial-plugin' ); ?></a>
+		<?php else : ?>
 		<button class="btn btn--ghost" type="button" data-callback><?php esc_html_e( 'Call me back', 'memorial-plugin' ); ?></button>
+		<?php endif; ?>
 		</div>
 	</aside>
 		<?php
