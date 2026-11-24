@@ -1,5 +1,5 @@
 /**
- * Catalog lists on DataViews: Products, Types and categories, Our works, Kinds of works
+ * Catalog lists on DataViews: Products, Types and categories, Our works, Kinds of works, Pages from the repository
  * (catalog/catalog-manager.php, catalog/catalog-types-admin.php,
  * works/works-manager.php).
  */
@@ -10,6 +10,7 @@ import WorkTypes from './work-types';
 import Types from './types';
 import SearchStats from './search-stats';
 import ProductPages from './product-pages';
+import RepoPages from './repo-pages';
 import './style.scss';
 
 const SCREENS = {
@@ -19,6 +20,7 @@ const SCREENS = {
 	'work-types': WorkTypes,
 	'search-stats': SearchStats,
 	'product-pages': ProductPages,
+	'repo-pages': RepoPages,
 };
 
 const root = document.getElementById( 'memorial-plugin-catalog' );

@@ -382,6 +382,12 @@ msgstr ""
 msgid "A link in the name; many requests"
 msgstr ""
 
+#. translators: %s: address of a page.
+#: pages/repo-pages.php:410
+#, php-format
+msgid "A link leads to %s — there is no such page yet."
+msgstr ""
+
 #: admin/collections.php:89
 msgid "A link or code in the name"
 msgstr ""
@@ -626,7 +632,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: places/places.php:137 src/settings/index.js:327 seo/llms.php:73 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:51 core/settings.php:68
+#: places/places.php:137 src/catalog/repo-pages.js:138 src/settings/index.js:327 seo/llms.php:73 blocks/content/inline-values.php:324 blocks/legacy/legacy.php:51
 msgid "Address"
 msgstr ""
 
@@ -786,6 +792,16 @@ msgstr ""
 msgid "Answer."
 msgstr ""
 
+#: src/catalog/repo-pages.js:324
+msgid "Apply"
+msgstr ""
+
+#. translators: %d: number of pages.
+#: src/catalog/repo-pages.js:321
+#, php-format
+msgid "Apply (%d)"
+msgstr ""
+
 #: catalog/catalog-import.php:1390
 msgid "Archive"
 msgstr ""
@@ -920,6 +936,12 @@ msgstr ""
 
 #: reviews/rewio.php:110 prices/prices.php:117
 msgid "Block title"
+msgstr ""
+
+#. translators: %s: block names.
+#: pages/repo-pages.php:131
+#, php-format
+msgid "Blocks that cannot be imported: %s."
 msgstr ""
 
 #: src/settings/photo-preview.js:819
@@ -1282,6 +1304,10 @@ msgstr ""
 msgid "Check"
 msgstr ""
 
+#: src/catalog/repo-pages.js:310
+msgid "Check (dry run)"
+msgstr ""
+
 #: catalog/catalog-import.php:1616
 msgid "Check an import file"
 msgstr ""
@@ -1458,6 +1484,10 @@ msgstr ""
 msgid "Completed works with photos, plot sizes and prices: gallery, cards or photos only."
 msgstr ""
 
+#: src/catalog/repo-pages.js:17
+msgid "Conflict: edited on the site"
+msgstr ""
+
 #: legal/legal.php:23
 msgid "Consent to personal data processing"
 msgstr ""
@@ -1620,6 +1650,10 @@ msgstr ""
 msgid "Create the missing pages"
 msgstr ""
 
+#: src/catalog/repo-pages.js:28
+msgid "Created"
+msgstr ""
+
 #: admin/abilities.php:454
 msgid "Creates products of a type: one product per photo (or one empty product), at the end of the type, with the type’s default price and specifications."
 msgstr ""
@@ -1753,6 +1787,16 @@ msgstr ""
 msgid "Description of the product (optional: with text the product gets its own page)…"
 msgstr ""
 
+#: src/catalog/repo-pages.js:185 src/catalog/repo-pages.js:223
+msgid "Details"
+msgstr ""
+
+#. translators: %s: page title.
+#: src/catalog/repo-pages.js:360
+#, php-format
+msgid "Difference: %s"
+msgstr ""
+
 #: seo/metrika.php:34
 msgid "Digits only, for example 98765432. Empty — Metrica is off on the site."
 msgstr ""
@@ -1805,6 +1849,12 @@ msgstr ""
 msgid "Done in:"
 msgstr ""
 
+#. translators: %d: number of errors.
+#: src/catalog/repo-pages.js:86
+#, php-format
+msgid "Done, with errors: %d. See the journal."
+msgstr ""
+
 #: src/catalog/search-stats.js:41 src/catalog/works.js:207 src/catalog/products.js:465 src/catalog/products.js:487
 msgid "Done."
 msgstr ""
@@ -1813,6 +1863,10 @@ msgstr ""
 #: src/catalog/import.js:705
 #, php-format
 msgid "Done. New products: %1$d, updated: %2$d, without changes: %3$d, skipped with errors: %4$d."
+msgstr ""
+
+#: src/catalog/repo-pages.js:92
+msgid "Done. What was changed is in the journal."
 msgstr ""
 
 #: reviews/rewio.php:1227
@@ -1905,7 +1959,7 @@ msgstr ""
 msgid "Enter the full number: +7 and 10 digits."
 msgstr ""
 
-#: reviews/rewio.php:1088
+#: src/catalog/repo-pages.js:24 src/catalog/repo-pages.js:33 reviews/rewio.php:1088
 msgid "Error"
 msgstr ""
 
@@ -2062,6 +2116,10 @@ msgstr ""
 
 #: catalog/catalog-import.php:1386
 msgid "File names, one per line or separated by “;”; the first is the main photo. Files are taken from the archive (or the selected files), otherwise from the media library by name. Empty — the files of the folder named as the SKU: foto/M-1024/1.jpg, 2.jpg…"
+msgstr ""
+
+#: src/catalog/repo-pages.js:336
+msgid "Files"
 msgstr ""
 
 #: core/assets.php:334
@@ -2434,6 +2492,10 @@ msgstr ""
 msgid "Home page"
 msgstr ""
 
+#: src/catalog/repo-pages.js:231
+msgid "How"
+msgstr ""
+
 #: seo/metrika.php:23
 msgid "How Yandex Metrica loads"
 msgstr ""
@@ -2596,6 +2658,10 @@ msgstr ""
 msgid "In the article:"
 msgstr ""
 
+#: pages/repo-pages.php:820
+msgid "In the file"
+msgstr ""
+
 #: pages/photo-tools.php:147
 msgid "In the lower right corner. Without an own file — the current logo of the site with its name, the picture is made on this screen. On small copies (catalog cards) it is not put: it would be unreadable."
 msgstr ""
@@ -2632,6 +2698,14 @@ msgstr ""
 
 #: prices/prices.php:190
 msgid "Its price from Memorial → Services."
+msgstr ""
+
+#: src/catalog/repo-pages.js:340
+msgid "Journal"
+msgstr ""
+
+#: src/catalog/repo-pages.js:263 src/catalog/repo-pages.js:385
+msgid "Keep as on the site"
 msgstr ""
 
 #: src/catalog/types.js:479
@@ -2988,6 +3062,16 @@ msgstr ""
 msgid "Memorial: whole pages (for templates)"
 msgstr ""
 
+#: src/catalog/repo-pages.js:31 src/catalog/repo-pages.js:169
+msgid "Menu"
+msgstr ""
+
+#. translators: 1: menu label, 2: address of the parent item.
+#: pages/repo-pages.php:776
+#, php-format
+msgid "Menu item “%1$s” added under %2$s."
+msgstr ""
+
 #: src/catalog/products.js:205
 msgid "Merge"
 msgstr ""
@@ -3217,6 +3301,10 @@ msgstr ""
 msgid "No change"
 msgstr ""
 
+#: pages/repo-pages.php:104
+msgid "No memorial-page header in the first line."
+msgstr ""
+
 #: src/catalog/product-pages.js:53
 msgid "No page"
 msgstr ""
@@ -3410,6 +3498,10 @@ msgstr ""
 msgid "Old codes in square brackets in the titles and descriptions of AIOSEO, Yoast, Rank Math and SEOPress become text (until 3.0.0). New SEO titles use variables like %%mem_phone%% (Memorial → Prices)."
 msgstr ""
 
+#: src/catalog/repo-pages.js:21
+msgid "Old page: choose"
+msgstr ""
+
 #: catalog/catalog-io.php:143
 msgid "Old price"
 msgstr ""
@@ -3448,6 +3540,10 @@ msgstr ""
 
 #: reviews/rewio.php:1122
 msgid "On the site "
+msgstr ""
+
+#: pages/repo-pages.php:819
+msgid "On the site now"
 msgstr ""
 
 #: pages/photo-tools.php:328
@@ -3554,6 +3650,14 @@ msgstr ""
 
 #: pages/photo-tools.php:186
 msgid "Opacity"
+msgstr ""
+
+#: pages/repo-pages.php:903
+msgid "Open"
+msgstr ""
+
+#: src/catalog/repo-pages.js:270
+msgid "Open in the editor"
 msgstr ""
 
 #. translators: %d: photo number.
@@ -3733,7 +3837,7 @@ msgstr ""
 msgid "Packages"
 msgstr ""
 
-#: src/settings/photo-preview.js:22 core/settings.php:309
+#: src/catalog/repo-pages.js:123 src/catalog/repo-pages.js:198 src/settings/photo-preview.js:22 core/settings.php:309
 msgid "Page"
 msgstr ""
 
@@ -3755,6 +3859,24 @@ msgstr ""
 
 #: leads/lead-mail.php:74
 msgid "Page:"
+msgstr ""
+
+#: src/catalog/repo-pages.js:291 pages/repo-pages.php:914 pages/repo-pages.php:915
+msgid "Pages from the repository"
+msgstr ""
+
+#. translators: %d: number of pages.
+#: pages/repo-pages.php:898
+#, php-format
+msgid "Pages from the repository: %d page waits for your decision."
+msgid_plural "Pages from the repository: %d pages wait for your decision."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: folder of the page files.
+#: src/catalog/repo-pages.js:294
+#, php-format
+msgid "Pages written as files in %s come to the site with the update. New and untouched pages are written by themselves when an administrator opens the admin area after the update; pages edited on the site and pages made before the import wait for your decision here. Menu items are only added."
 msgstr ""
 
 #: src/catalog/types.js:432
@@ -4967,6 +5089,10 @@ msgstr ""
 msgid "Show reviews deleted on the review site"
 msgstr ""
 
+#: src/catalog/repo-pages.js:248
+msgid "Show the difference"
+msgstr ""
+
 #: src/settings/index.js:632
 msgid "Show the key"
 msgstr ""
@@ -5056,6 +5182,10 @@ msgstr ""
 
 #: core/settings.php:1272
 msgid "Site settings"
+msgstr ""
+
+#: src/catalog/repo-pages.js:23 src/catalog/repo-pages.js:30
+msgid "Site text kept"
 msgstr ""
 
 #: src/inline-value/index.js:156 src/inline-value/index.js:172
@@ -5201,6 +5331,10 @@ msgstr ""
 
 #: blocks/legacy/legacy.php:21
 msgid "Tagline: years in business"
+msgstr ""
+
+#: src/catalog/repo-pages.js:257 src/catalog/repo-pages.js:398
+msgid "Take from the repository"
 msgstr ""
 
 #: src/bindings/index.js:281
@@ -5393,6 +5527,12 @@ msgstr ""
 msgid "The halls and cemeteries blocks and their settings."
 msgstr ""
 
+#. translators: %s: field name.
+#: pages/repo-pages.php:115
+#, php-format
+msgid "The header has no “%s” field."
+msgstr ""
+
 #: src/editor-meta/faq-sections.js:116
 msgid "The heading and the anchor are those of the heading of the section on this page (Advanced → HTML anchor)."
 msgstr ""
@@ -5433,12 +5573,28 @@ msgstr ""
 msgid "The list of cemeteries is shown by the “Cemeteries” block on any page (for example, “Cemeteries of Belgorod and the district”). "
 msgstr ""
 
+#: pages/repo-pages.php:109
+msgid "The memorial-page header is not JSON."
+msgstr ""
+
 #: catalog/catalog-types-admin.php:169 catalog/catalog-types-admin.php:345 works/works-manager.php:304
 msgid "The name is empty."
 msgstr ""
 
 #: core/settings.php:378
 msgid "The packages themselves, their contents and prices — in “Memorial → Prices”."
+msgstr ""
+
+#: pages/repo-pages.php:312
+msgid "The page was made before the import. Look at the difference and choose."
+msgstr ""
+
+#: pages/repo-pages.php:295
+msgid "The page will be created."
+msgstr ""
+
+#: pages/repo-pages.php:323
+msgid "The page will be updated (a revision is kept)."
 msgstr ""
 
 #: src/settings/photo-preview.js:722
@@ -5515,8 +5671,20 @@ msgstr ""
 msgid "The text is too long: up to %d characters."
 msgstr ""
 
+#: pages/repo-pages.php:371
+msgid "The text of the site is kept."
+msgstr ""
+
+#: pages/repo-pages.php:329
+msgid "The text was edited on the site after the import. Look at the difference and choose."
+msgstr ""
+
 #: seo/llms.php:136
 msgid "The texts and prices of the site may be used by search engines and AI assistants, including for training language models, with a link to the site."
+msgstr ""
+
+#: pages/repo-pages.php:825
+msgid "The texts are the same."
 msgstr ""
 
 #: core/settings.php:365
@@ -5597,6 +5765,12 @@ msgstr ""
 
 #: catalog/catalog-import.php:1216
 msgid "There is no import to roll back."
+msgstr ""
+
+#. translators: %s: address of the parent page.
+#: pages/repo-pages.php:289
+#, php-format
+msgid "There is no parent page /%s/."
 msgstr ""
 
 #. translators: %s: product type from the file.
@@ -5859,6 +6033,18 @@ msgstr ""
 msgid "Up"
 msgstr ""
 
+#: src/catalog/repo-pages.js:14
+msgid "Up to date"
+msgstr ""
+
+#: pages/repo-pages.php:318
+msgid "Up to date."
+msgstr ""
+
+#: pages/repo-pages.php:318
+msgid "Up to date; the text was edited on the site after the import."
+msgstr ""
+
 #: src/catalog/import.js:34
 msgid "Update"
 msgstr ""
@@ -5869,6 +6055,16 @@ msgstr ""
 
 #: reviews/rewio.php:1003
 msgid "Update the list of branches"
+msgstr ""
+
+#: src/catalog/repo-pages.js:29
+msgid "Updated"
+msgstr ""
+
+#. translators: 1: file version, 2: revision ID.
+#: pages/repo-pages.php:492
+#, php-format
+msgid "Updated to version %1$d; the previous text is revision %2$d."
 msgstr ""
 
 #: reviews/rewio.php:1131
@@ -5903,6 +6099,10 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
+#: src/catalog/repo-pages.js:161
+msgid "Version: file / site"
+msgstr ""
+
 #: blocks/content/content-blocks.php:371
 msgid "View"
 msgstr ""
@@ -5925,6 +6125,10 @@ msgstr ""
 
 #: pages/photo-tools.php:126
 msgid "Warmth"
+msgstr ""
+
+#: src/catalog/repo-pages.js:32
+msgid "Warning"
 msgstr ""
 
 #: prices/prices.php:129
@@ -6003,6 +6207,10 @@ msgstr ""
 msgid "What the customers wanted and what was done…"
 msgstr ""
 
+#: src/catalog/repo-pages.js:145
+msgid "What the import does"
+msgstr ""
+
 #: core/settings.php:240 core/settings.php:554 core/settings.php:578
 msgid "What to do when someone dies"
 msgstr ""
@@ -6023,7 +6231,7 @@ msgstr ""
 msgid "What visitors search for"
 msgstr ""
 
-#: works/works.php:253
+#: src/catalog/repo-pages.js:216 works/works.php:253
 msgid "What was done"
 msgstr ""
 
@@ -6039,7 +6247,7 @@ msgstr ""
 msgid "WhatsApp — number"
 msgstr ""
 
-#: admin/collections.php:64
+#: admin/collections.php:64 src/catalog/repo-pages.js:207
 msgid "When"
 msgstr ""
 
@@ -6143,6 +6351,14 @@ msgstr ""
 msgid "Width of the logo"
 msgstr ""
 
+#: src/catalog/repo-pages.js:12
+msgid "Will be created"
+msgstr ""
+
+#: src/catalog/repo-pages.js:13
+msgid "Will be updated"
+msgstr ""
+
 #: core/settings.php:142
 msgid "Window title"
 msgstr ""
@@ -6203,6 +6419,12 @@ msgstr ""
 msgid "Write in MAX"
 msgstr ""
 
+#. translators: %d: file version.
+#: pages/repo-pages.php:494
+#, php-format
+msgid "Written, version %d."
+msgstr ""
+
 #: blocks/block-meta.php:140 blocks/block-meta.php:144
 msgid "Yandex"
 msgstr ""
@@ -6253,6 +6475,10 @@ msgstr ""
 
 #: blocks/legacy/render/parts/contacts-cards.php:52
 msgid "You can send a photo, the text for a wreath ribbon or questions about documents — we will answer during working hours."
+msgstr ""
+
+#: pages/repo-pages.php:309 pages/repo-pages.php:326
+msgid "You chose to keep the text of the site for this version of the file."
 msgstr ""
 
 #: src/editor-meta/faq-sections.js:210
@@ -7253,6 +7479,10 @@ msgstr ""
 msgid "by date"
 msgstr ""
 
+#: src/catalog/repo-pages.js:236
+msgid "by itself after the update"
+msgstr ""
+
 #: reviews/rewio.php:1467
 msgid "by rating"
 msgstr ""
@@ -7517,6 +7747,10 @@ msgstr ""
 msgid "in the library: %d"
 msgstr ""
 
+#: src/catalog/repo-pages.js:175
+msgid "in the menu"
+msgstr ""
+
 #: blocks/block-meta.php:160
 msgid "instalments"
 msgstr ""
@@ -7601,6 +7835,16 @@ msgstr ""
 msgid "no description"
 msgstr ""
 
+#: pages/repo-pages.php:636
+msgid "no main menu"
+msgstr ""
+
+#. translators: %s: address of the parent menu item.
+#: pages/repo-pages.php:645
+#, php-format
+msgid "no menu item %s"
+msgstr ""
+
 #: src/catalog/import.js:560 legal/legal.php:154
 msgid "not chosen"
 msgstr ""
@@ -7637,6 +7881,10 @@ msgstr ""
 
 #: prices/prices.php:61 prices/prices.php:139
 msgid "on the site"
+msgstr ""
+
+#: src/catalog/repo-pages.js:237
+msgid "on this screen"
 msgstr ""
 
 #: legal/legal.php:157
@@ -7822,6 +8070,10 @@ msgstr ""
 msgid "symbol"
 msgstr ""
 
+#: pages/repo-pages.php:148
+msgid "text outside blocks"
+msgstr ""
+
 #: reviews/rewio.php:401
 msgid "the API did not accept the request parameters"
 msgstr ""
@@ -7856,6 +8108,10 @@ msgstr ""
 
 #: core/mail.php:133
 msgid "the reviews one per line: new or deleted, author, rating, review site, date and the beginning of the text"
+msgstr ""
+
+#: pages/repo-pages.php:776
+msgid "the top level"
 msgstr ""
 
 #: core/mail.php:121
@@ -7908,6 +8164,10 @@ msgstr ""
 
 #: blocks/block-meta.php:144
 msgid "widget"
+msgstr ""
+
+#: src/catalog/repo-pages.js:178
+msgid "will be added"
 msgstr ""
 
 #: content/guide.php:183
