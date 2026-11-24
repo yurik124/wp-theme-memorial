@@ -72,7 +72,8 @@ function memorial_plugin_guarantees_items( $set = 'all' ) {
  * @return string
  */
 function memorial_plugin_guarantees_render( $a = array() ) {
-	$set   = in_array( $a['set'] ?? 'all', array( 'funeral', 'monuments', 'all' ), true ) ? $a['set'] : 'all';
+	$set   = (string) ( $a['set'] ?? 'all' );
+	$set   = in_array( $set, array( 'funeral', 'monuments', 'all' ), true ) ? $set : 'all';
 	$items = memorial_plugin_guarantees_items( $set );
 	$count = (int) ( $a['count'] ?? 0 );
 	if ( $count > 0 ) {
@@ -110,7 +111,8 @@ function memorial_plugin_guarantees_render( $a = array() ) {
  * @return string
  */
 function memorial_plugin_benefits_render( $a = array() ) {
-	$show  = in_array( $a['show'] ?? 'both', array( 'both', 'posobie', 'svo' ), true ) ? $a['show'] : 'both';
+	$show  = (string) ( $a['show'] ?? 'both' );
+	$show  = in_array( $show, array( 'both', 'posobie', 'svo' ), true ) ? $show : 'both';
 	$cards = array();
 	$page  = static function ( $path ) {
 		$p = get_page_by_path( $path );

@@ -58,7 +58,8 @@ function memorial_plugin_payment_items( $context = '' ) {
  * @return string
  */
 function memorial_plugin_payment_render( $a = array() ) {
-	$context = in_array( $a['context'] ?? '', array( 'funeral', 'monuments' ), true ) ? $a['context'] : '';
+	$context = (string) ( $a['context'] ?? '' );
+	$context = in_array( $context, array( 'funeral', 'monuments' ), true ) ? $context : '';
 	$items   = memorial_plugin_payment_items( $context );
 	if ( ! $items ) {
 		return '';

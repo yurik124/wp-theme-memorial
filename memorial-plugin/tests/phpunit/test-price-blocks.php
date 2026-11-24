@@ -132,9 +132,12 @@ class Test_Memorial_Plugin_Price_Blocks extends WP_UnitTestCase {
 				),
 			)
 		);
-		$p = get_option( 'mem_prices' );
-		// The same price — the date stays.
+		// A new price gets today; then the date set by hand with the same price stays.
+		$this->assertSame( wp_date( 'd.m.Y' ), get_option( 'mem_prices' )['other']['items'][0]['updated'] );
+		$p                                 = get_option( 'mem_prices' );
+		$p['other']['items'][0]['updated'] = '01.01.2026';
 		update_option( 'mem_prices', $p );
+		$p = get_option( 'mem_prices' );
 		$this->assertSame( '01.01.2026', get_option( 'mem_prices' )['other']['items'][0]['updated'] );
 		// A new price — today.
 		$p['other']['items'][0]['price'] = '350';
