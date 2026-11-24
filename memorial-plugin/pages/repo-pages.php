@@ -228,7 +228,43 @@ function memorial_plugin_repo_content( $body, &$missing = array() ) {
 		unset( $b );
 		return $blocks;
 	};
-	return serialize_blocks( $walk( parse_blocks( $body ) ) );
+	return memorial_plugin_repo_price_tokens( serialize_blocks( $walk( parse_blocks( $body ) ) ) );
+}
+
+/**
+ * {price:код} in the text of a page → a site value (the span the editor makes with “More ∨ → Site value”):
+ * the page shows the current price, the editor shows the value as a value. The marks of the blocks
+ * (<!-- wp:… -->) are left as they are.
+ *
+ * @param string $content Block markup.
+ * @return string
+ */
+function memorial_plugin_repo_price_tokens( $content ) {
+	if ( false === strpos( $content, '{price:' ) || ! function_exists( 'memorial_plugin_inline_value_span' ) ) {
+		return $content;
+	}
+	$packages = array();
+	foreach ( function_exists( 'memorial_plugin_packages' ) ? memorial_plugin_packages() : array() as $p ) {
+		$packages[ mb_strtolower( trim( (string) $p['name'] ) ) ] = (string) $p['name'];
+	}
+	$parts = preg_split( '/(<!--.*?-->)/s', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
+	foreach ( $parts as $i => $part ) {
+		if ( 0 === strpos( $part, '<!--' ) ) {
+			continue;
+		}
+		$parts[ $i ] = preg_replace_callback(
+			'/\{price:([^}<>]+)\}/u',
+			static function ( $m ) use ( $packages ) {
+				$code = trim( $m[1] );
+				$key  = mb_strtolower( $code );
+				$atts = isset( $packages[ $key ] ) ? array( 'paket' => $packages[ $key ] ) : array( 'id' => $code );
+				$now  = function_exists( 'memorial_plugin_price_value' ) ? (string) memorial_plugin_price_value( $atts['id'] ?? '', $atts['paket'] ?? '' ) : '';
+				return memorial_plugin_inline_value_span( 'price', $atts, esc_html( $now ) );
+			},
+			$part
+		);
+	}
+	return implode( '', $parts );
 }
 
 /**

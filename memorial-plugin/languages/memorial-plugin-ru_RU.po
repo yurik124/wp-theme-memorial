@@ -9031,3 +9031,6 @@ msgid_plural "%d seats for the mourners"
 msgstr[0] "%d место для провожающих"
 msgstr[1] "%d места для провожающих"
 msgstr[2] "%d мест для провожающих"
+
+msgid "Two columns “Service — Price”; the prices are site values from Memorial → Prices, never digits. Prices and “₽” do not break, the table stays neat on a phone."
+msgstr "Две колонки «Услуга — Цена»; цены — «Значения сайта» из «Мемориал → Цены», не цифры. Цены и «₽» не переносятся, на телефоне таблица аккуратная."

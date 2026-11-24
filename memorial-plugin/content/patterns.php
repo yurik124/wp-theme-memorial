@@ -27,6 +27,8 @@ add_action(
 		$h    = fn( $t ) => '<!-- wp:heading --><h2 class="wp-block-heading">' . $t . '</h2><!-- /wp:heading -->';
 		$sc   = fn( $c ) => '<!-- wp:shortcode -->' . $c . '<!-- /wp:shortcode -->';
 		$q    = fn( $question, $answer ) => '<!-- wp:details --><details class="wp-block-details"><summary>' . $question . '</summary>' . $p( $answer ) . '</details><!-- /wp:details -->';
+		// A price of «Memorial → Prices → Separate prices» as a site value: the page shows the current price.
+		$val = static fn( $code ) => function_exists( 'memorial_plugin_inline_value_span' ) ? memorial_plugin_inline_value_span( 'price', array( 'id' => $code ), esc_html( function_exists( 'memorial_plugin_price_value' ) ? (string) memorial_plugin_price_value( $code ) : '' ) ) : '';
 		// A paragraph whose text is a field of the settings (blocks/bindings.php): edited on a page, changed everywhere.
 		$bound = static fn( $key, $cls = '' ) => '<!-- wp:paragraph {"metadata":{"bindings":{"content":{"source":"memorial-plugin/settings","args":{"key":"' . $key . '"}}}}' . ( $cls ? ',"className":"' . $cls . '"' : '' ) . '} --><p' . ( $cls ? ' class="' . $cls . '"' : '' ) . '></p><!-- /wp:paragraph -->';
 		$pats  = array(
@@ -70,8 +72,9 @@ add_action(
 			),
 			'price'       => array(
 				__( 'Price table', 'memorial-plugin' ),
-				__( 'Two columns “Service — Price”. Prices and “₽” do not break, the table stays neat on a phone.', 'memorial-plugin' ),
-				'<!-- wp:table {"className":"is-style-price"} --><figure class="wp-block-table is-style-price"><table class="has-fixed-layout"><thead><tr><th>Услуга или товар</th><th>Цена</th></tr></thead><tbody><tr><td>Название</td><td>от 1 000 ₽</td></tr><tr><td>Название</td><td>от 2 000 ₽</td></tr></tbody></table></figure><!-- /wp:table -->',
+				__( 'Two columns “Service — Price”; the prices are site values from Memorial → Prices, never digits. Prices and “₽” do not break, the table stays neat on a phone.', 'memorial-plugin' ),
+				'<!-- wp:table {"className":"is-style-price"} --><figure class="wp-block-table is-style-price"><table class="has-fixed-layout"><thead><tr><th>Услуга или товар</th><th>Цена</th></tr></thead><tbody><tr><td>Надпись на ленту</td><td>' . $val( 'lenta' ) . '</td></tr><tr><td>Доставка венков по Белгороду</td><td>' . $val( 'dostavka' ) . '</td></tr></tbody></table></figure><!-- /wp:table -->'
+					. $p( 'Цены — только «Значением сайта»: щёлкните в ячейке → на панели блока «Ещё ∨» → «Значение сайта» → «Цена из Мемориал → Цены». Цифрами цены не пишите — они разойдутся с прайсом. Итог фиксируется в договоре.', 'is-style-note' ),
 			),
 			'reviews'     => array(
 				__( 'Reviews from the guest book (3 latest)', 'memorial-plugin' ),

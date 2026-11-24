@@ -344,7 +344,7 @@ msgstr ""
 msgid "6. Notifications"
 msgstr ""
 
-#: content/patterns.php:55
+#: content/patterns.php:57
 msgid "A block with the phone. The title and the text are changed in the block settings."
 msgstr ""
 
@@ -382,11 +382,11 @@ msgstr ""
 msgid "A funeral company on the market for more than %d years"
 msgstr ""
 
-#: content/patterns.php:109
+#: content/patterns.php:112
 msgid "A heading and a note: there is no crematorium in Belgorod and the region; cremation in Voronezh or Tula, we take the body ourselves."
 msgstr ""
 
-#: content/patterns.php:35
+#: content/patterns.php:37
 msgid "A heading and three lines from Memorial → Contacts. The lines can be edited right on the page — they change on every page and in the settings."
 msgstr ""
 
@@ -399,7 +399,7 @@ msgid "A link in the name; many requests"
 msgstr ""
 
 #. translators: %s: address of a page.
-#: pages/repo-pages.php:416
+#: pages/repo-pages.php:452
 #, php-format
 msgid "A link leads to %s — there is no such page yet."
 msgstr ""
@@ -436,7 +436,7 @@ msgstr ""
 msgid "A paragraph whose text is kept in Memorial → Contacts: edit it here or there — it changes everywhere."
 msgstr ""
 
-#: content/patterns.php:50
+#: content/patterns.php:52
 msgid "A paragraph with the number of models and the list of sections with prices — everything is counted automatically."
 msgstr ""
 
@@ -444,7 +444,7 @@ msgstr ""
 msgid "A phone number has only digits, spaces, brackets, hyphens and a leading “+”."
 msgstr ""
 
-#: content/patterns.php:60
+#: content/patterns.php:62
 msgid "A photo of the craftsman’s work and a couple of sentences — for wreaths, portraits on monuments, ribbon printing."
 msgstr ""
 
@@ -480,11 +480,11 @@ msgstr ""
 msgid "A text link on the card above the button, for example “More about cremation”; the arrow → is added by itself."
 msgstr ""
 
-#: content/patterns.php:68
+#: content/patterns.php:70
 msgid "A title and three expandable questions. They get onto the “Questions and answers” page automatically."
 msgstr ""
 
-#: content/patterns.php:45
+#: content/patterns.php:47
 msgid "A title, the automatic summary “96 models, from 35,000 ₽” and the catalog."
 msgstr ""
 
@@ -504,7 +504,7 @@ msgstr ""
 msgid "About the hall in short (optional)"
 msgstr ""
 
-#: seo/metrika.php:300
+#: seo/metrika.php:304
 msgid "Accept"
 msgstr ""
 
@@ -600,7 +600,7 @@ msgstr ""
 msgid "Add a service or a branch"
 msgstr ""
 
-#: src/block-controls/index.js:718
+#: src/block-controls/index.js:723
 msgid "Add a source"
 msgstr ""
 
@@ -672,7 +672,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: places/places.php:137 src/catalog/repo-pages.js:147 src/settings/index.js:327 src/block-controls/index.js:692 seo/llms.php:73 blocks/content/inline-values.php:324
+#: places/places.php:137 src/catalog/repo-pages.js:147 src/settings/index.js:327 src/block-controls/index.js:697 seo/llms.php:73 blocks/content/inline-values.php:324
 msgid "Address"
 msgstr ""
 
@@ -766,7 +766,7 @@ msgstr ""
 msgid "All requests:"
 msgstr ""
 
-#: content/patterns.php:79
+#: content/patterns.php:82
 msgid "All reviews →"
 msgstr ""
 
@@ -840,7 +840,7 @@ msgstr ""
 msgid "Another service"
 msgstr ""
 
-#: content/patterns.php:69
+#: content/patterns.php:71
 msgid "Answer."
 msgstr ""
 
@@ -1110,7 +1110,7 @@ msgstr ""
 msgid "Call back: {phone} ({name})"
 msgstr ""
 
-#: content/search.php:70 content/content.php:67 blocks/legacy/render/product-buy.php:15 blocks/legacy/render/mobile-bar.php:19 blocks/legacy/render/parts/contacts-cards.php:43 blocks/legacy/render/header-contacts.php:20
+#: content/search.php:70 content/content.php:74 blocks/legacy/render/product-buy.php:15 blocks/legacy/render/mobile-bar.php:19 blocks/legacy/render/parts/contacts-cards.php:43 blocks/legacy/render/header-contacts.php:20
 msgid "Call me back"
 msgstr ""
 
@@ -1122,7 +1122,7 @@ msgstr ""
 msgid "Call requests"
 msgstr ""
 
-#: content/patterns.php:54 blocks/content/content-blocks.php:318
+#: content/patterns.php:56 blocks/content/content-blocks.php:318
 msgid "Call to action"
 msgstr ""
 
@@ -1146,7 +1146,7 @@ msgstr ""
 msgid "Called back"
 msgstr ""
 
-#: content/patterns.php:39
+#: content/patterns.php:41
 msgid "Calls at night (shared text)"
 msgstr ""
 
@@ -1218,7 +1218,7 @@ msgstr ""
 msgid "Cards with links to the service pages. The photo is optional: when it is not chosen, the featured image of the page is used."
 msgstr ""
 
-#: content/patterns.php:88
+#: content/patterns.php:91
 msgid "Cards “photo, title, size and price” from “Our works” — 6 random ones, different every time. A click leads to the work."
 msgstr ""
 
@@ -1230,7 +1230,7 @@ msgstr ""
 msgid "Cars"
 msgstr ""
 
-#: catalog/catalog.php:33 catalog/catalog.php:35 catalog/catalog-summary.php:174 content/patterns.php:46 seo/seo.php:89 blocks/legacy/legacy.php:193
+#: catalog/catalog.php:33 catalog/catalog.php:35 catalog/catalog-summary.php:174 content/patterns.php:48 seo/seo.php:89 blocks/legacy/legacy.php:193
 msgid "Catalog"
 msgstr ""
 
@@ -1244,7 +1244,7 @@ msgstr ""
 msgid "Catalog exported: %d products."
 msgstr ""
 
-#: content/patterns.php:44
+#: content/patterns.php:46
 msgid "Catalog of the page with a summary"
 msgstr ""
 
@@ -1286,7 +1286,7 @@ msgstr ""
 msgid "Catalog sub-sections list"
 msgstr ""
 
-#: content/patterns.php:49
+#: content/patterns.php:51
 msgid "Catalog summary by section"
 msgstr ""
 
@@ -1598,7 +1598,7 @@ msgstr ""
 msgid "Contacts list"
 msgstr ""
 
-#: content/patterns.php:34
+#: content/patterns.php:36
 msgid "Contacts: phone, address and hours (shared texts)"
 msgstr ""
 
@@ -1792,7 +1792,7 @@ msgstr ""
 msgid "Date of the check"
 msgstr ""
 
-#: seo/metrika.php:301
+#: seo/metrika.php:305
 msgid "Decline"
 msgstr ""
 
@@ -1935,7 +1935,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: src/block-controls/index.js:522 src/block-controls/index.js:1124 src/editor-meta/faq-sections.js:265
+#: src/block-controls/index.js:522 src/block-controls/index.js:1129 src/editor-meta/faq-sections.js:265
 msgid "Done"
 msgstr ""
 
@@ -2125,11 +2125,11 @@ msgstr ""
 msgid "Example: price on request"
 msgstr ""
 
-#: content/patterns.php:84 content/patterns.php:89
+#: content/patterns.php:87 content/patterns.php:92
 msgid "Examples of our works"
 msgstr ""
 
-#: content/patterns.php:87
+#: content/patterns.php:90
 msgid "Examples of works as cards (random)"
 msgstr ""
 
@@ -2254,7 +2254,7 @@ msgstr ""
 msgid "First screen"
 msgstr ""
 
-#: content/content.php:196
+#: content/content.php:204
 msgid "First step"
 msgstr ""
 
@@ -2278,7 +2278,7 @@ msgstr ""
 msgid "Fold all"
 msgstr ""
 
-#: src/block-controls/index.js:1063
+#: src/block-controls/index.js:1068
 msgid "Fold the block (only in the editor)"
 msgstr ""
 
@@ -2391,7 +2391,7 @@ msgid "Found"
 msgstr ""
 
 #. translators: %s: list of sections or a product.
-#: src/block-controls/index.js:998
+#: src/block-controls/index.js:1003
 #, php-format
 msgid "Found on this page: %s."
 msgstr ""
@@ -2404,7 +2404,7 @@ msgstr ""
 msgid "Four more products of the same catalog section. For the product template."
 msgstr ""
 
-#: content/patterns.php:97
+#: content/patterns.php:100
 msgid "Four steps with icons: the call, the protocol and the morgue, the documents for the cemetery, the death certificate; the button “Step by step” and the phone button. The phone is the shared text of Memorial → Contacts."
 msgstr ""
 
@@ -2412,7 +2412,7 @@ msgstr ""
 msgid "Frequent searches:"
 msgstr ""
 
-#: content/patterns.php:67 content/patterns.php:69
+#: content/patterns.php:69 content/patterns.php:71
 msgid "Frequently asked questions"
 msgstr ""
 
@@ -2516,7 +2516,7 @@ msgstr ""
 msgid "Google Maps"
 msgstr ""
 
-#: seo/metrika.php:298
+#: seo/metrika.php:302
 msgid "Got it"
 msgstr ""
 
@@ -2764,7 +2764,7 @@ msgstr ""
 msgid "How to put a price into the text of a page:"
 msgstr ""
 
-#: content/patterns.php:36
+#: content/patterns.php:38
 msgid "How to reach us"
 msgstr ""
 
@@ -2858,7 +2858,7 @@ msgstr ""
 msgid "In the article:"
 msgstr ""
 
-#: pages/repo-pages.php:826
+#: pages/repo-pages.php:862
 msgid "In the file"
 msgstr ""
 
@@ -2896,7 +2896,7 @@ msgstr ""
 msgid "Inside"
 msgstr ""
 
-#: content/patterns.php:108
+#: content/patterns.php:111
 msgid "Is there a crematorium in Belgorod"
 msgstr ""
 
@@ -3278,7 +3278,7 @@ msgstr ""
 msgid "Memorial: header, footer and pop-ups"
 msgstr ""
 
-#: content/patterns.php:24 content/content.php:185
+#: content/patterns.php:24 content/content.php:193
 msgid "Memorial: ready sections"
 msgstr ""
 
@@ -3299,7 +3299,7 @@ msgid "Menu"
 msgstr ""
 
 #. translators: 1: menu label, 2: address of the parent item.
-#: pages/repo-pages.php:782
+#: pages/repo-pages.php:818
 #, php-format
 msgid "Menu item “%1$s” added under %2$s."
 msgstr ""
@@ -3537,7 +3537,7 @@ msgstr ""
 msgid "No access"
 msgstr ""
 
-#: src/block-controls/index.js:782
+#: src/block-controls/index.js:787
 msgid "No addresses in Memorial → Contacts"
 msgstr ""
 
@@ -3806,7 +3806,7 @@ msgstr ""
 msgid "On the site "
 msgstr ""
 
-#: pages/repo-pages.php:825
+#: pages/repo-pages.php:861
 msgid "On the site now"
 msgstr ""
 
@@ -3932,7 +3932,7 @@ msgstr ""
 msgid "Opacity"
 msgstr ""
 
-#: pages/repo-pages.php:909
+#: pages/repo-pages.php:945
 msgid "Open"
 msgstr ""
 
@@ -4064,7 +4064,7 @@ msgstr ""
 msgid "Our works"
 msgstr ""
 
-#: content/patterns.php:82
+#: content/patterns.php:85
 msgid "Our works (3 examples)"
 msgstr ""
 
@@ -4155,12 +4155,12 @@ msgstr ""
 msgid "Page:"
 msgstr ""
 
-#: src/catalog/repo-pages.js:310 pages/repo-pages.php:920 pages/repo-pages.php:921
+#: src/catalog/repo-pages.js:310 pages/repo-pages.php:956 pages/repo-pages.php:957
 msgid "Pages from the repository"
 msgstr ""
 
 #. translators: %d: number of pages.
-#: pages/repo-pages.php:904
+#: pages/repo-pages.php:940
 #, php-format
 msgid "Pages from the repository: %d page waits for your decision."
 msgid_plural "Pages from the repository: %d pages wait for your decision."
@@ -4479,7 +4479,7 @@ msgstr ""
 msgid "Price on request"
 msgstr ""
 
-#: content/patterns.php:72
+#: content/patterns.php:74
 msgid "Price table"
 msgstr ""
 
@@ -4713,7 +4713,7 @@ msgstr ""
 msgid "Question topics"
 msgstr ""
 
-#: content/patterns.php:69
+#: content/patterns.php:71
 msgid "Question?"
 msgstr ""
 
@@ -4943,7 +4943,7 @@ msgstr ""
 msgid "Reviews from the guest book"
 msgstr ""
 
-#: content/patterns.php:77
+#: content/patterns.php:80
 msgid "Reviews from the guest book (3 latest)"
 msgstr ""
 
@@ -4963,7 +4963,7 @@ msgstr ""
 msgid "Reviews loaded from Yandex Maps, 2GIS and other sites through Rewio. A hidden review is not shown on the site; the site keeps its copy, so a review changed or deleted on the review site stays here with a mark."
 msgstr ""
 
-#: content/patterns.php:79
+#: content/patterns.php:82
 msgid "Reviews of our customers"
 msgstr ""
 
@@ -5193,7 +5193,7 @@ msgstr ""
 msgid "Seats for the mourners"
 msgstr ""
 
-#: content/content.php:196
+#: content/content.php:204
 msgid "Second step"
 msgstr ""
 
@@ -5321,7 +5321,7 @@ msgstr ""
 msgid "Set the same price"
 msgstr ""
 
-#: src/block-controls/index.js:1075
+#: src/block-controls/index.js:1080
 msgid "Set up the block: texts and what it shows"
 msgstr ""
 
@@ -5572,7 +5572,7 @@ msgstr ""
 msgid "Smaller first; equal — newer first."
 msgstr ""
 
-#: src/block-controls/index.js:684
+#: src/block-controls/index.js:686
 msgid "Social Fund of Russia"
 msgstr ""
 
@@ -5609,7 +5609,7 @@ msgid "Sorting:"
 msgstr ""
 
 #. translators: %d: source number.
-#: src/block-controls/index.js:676
+#: src/block-controls/index.js:678
 #, php-format
 msgid "Source %d"
 msgstr ""
@@ -5667,11 +5667,11 @@ msgstr ""
 msgid "Steps"
 msgstr ""
 
-#: content/content.php:194
+#: content/content.php:202
 msgid "Steps in order. The icon of a step is set in “Additional CSS class(es)” of the step’s group: ico-phone, ico-doc, ico-car and so on."
 msgstr ""
 
-#: content/content.php:192
+#: content/content.php:200
 msgid "Steps with icons"
 msgstr ""
 
@@ -5737,7 +5737,7 @@ msgstr ""
 msgid "Take the text from the Memorial settings"
 msgstr ""
 
-#: content/patterns.php:63
+#: content/patterns.php:65
 msgid "Tell in 2–3 sentences how and who does it, how long it takes. Choose a photo of the craftsman at work on the left."
 msgstr ""
 
@@ -5875,7 +5875,7 @@ msgstr ""
 msgid "The benefit and the payment"
 msgstr ""
 
-#: src/block-controls/index.js:1140
+#: src/block-controls/index.js:1145
 msgid "The block found nothing to show on this page by itself. Choose what it should show — later the choice is changed with the ⚙ button on the block toolbar or in the block settings on the right (“What to show”)."
 msgstr ""
 
@@ -5997,7 +5997,7 @@ msgstr ""
 msgid "The key of the product. A row with the SKU of a product of the site updates it; a new or empty SKU makes a new product."
 msgstr ""
 
-#: content/patterns.php:40
+#: content/patterns.php:42
 msgid "The line “Calls outside working hours” from Memorial → Contacts. It can be changed right on the page — the change goes to the settings and to every page that shows it."
 msgstr ""
 
@@ -6029,15 +6029,15 @@ msgstr ""
 msgid "The packages themselves, their contents and prices — in “Memorial → Prices”."
 msgstr ""
 
-#: pages/repo-pages.php:312
+#: pages/repo-pages.php:348
 msgid "The page was made before the import. Look at the difference and choose."
 msgstr ""
 
-#: pages/repo-pages.php:295
+#: pages/repo-pages.php:331
 msgid "The page will be created."
 msgstr ""
 
-#: pages/repo-pages.php:323
+#: pages/repo-pages.php:359
 msgid "The page will be updated (a revision is kept)."
 msgstr ""
 
@@ -6119,11 +6119,11 @@ msgstr ""
 msgid "The text is too long: up to %d characters."
 msgstr ""
 
-#: pages/repo-pages.php:377
+#: pages/repo-pages.php:413
 msgid "The text of the site is kept."
 msgstr ""
 
-#: pages/repo-pages.php:329
+#: pages/repo-pages.php:365
 msgid "The text was edited on the site after the import. Look at the difference and choose."
 msgstr ""
 
@@ -6131,7 +6131,7 @@ msgstr ""
 msgid "The texts and prices of the site may be used by search engines and AI assistants, including for training language models, with a link to the site."
 msgstr ""
 
-#: pages/repo-pages.php:831
+#: pages/repo-pages.php:867
 msgid "The texts are the same."
 msgstr ""
 
@@ -6153,7 +6153,7 @@ msgstr ""
 msgid "The type has products — move or delete them first."
 msgstr ""
 
-#: content/patterns.php:114
+#: content/patterns.php:117
 msgid "The urn with the ashes: the options"
 msgstr ""
 
@@ -6232,7 +6232,7 @@ msgid "There is no import to roll back."
 msgstr ""
 
 #. translators: %s: address of the parent page.
-#: pages/repo-pages.php:289
+#: pages/repo-pages.php:325
 #, php-format
 msgid "There is no parent page /%s/."
 msgstr ""
@@ -6265,7 +6265,7 @@ msgstr ""
 msgid "These settings were changed elsewhere while this screen was open (on a page of the site, in another tab or by another person). Reload the screen — your changes here are not saved."
 msgstr ""
 
-#: content/content.php:196
+#: content/content.php:204
 msgid "Third step"
 msgstr ""
 
@@ -6313,15 +6313,15 @@ msgstr ""
 msgid "This value is empty — check the parameter."
 msgstr ""
 
-#: content/patterns.php:115
+#: content/patterns.php:118
 msgid "Three cards: burial in a family grave, keeping with us (paid), handing over; and a note about the columbarium."
 msgstr ""
 
-#: content/patterns.php:78
+#: content/patterns.php:81
 msgid "Three reviews from the guest book with the photo of the page."
 msgstr ""
 
-#: content/patterns.php:83
+#: content/patterns.php:86
 msgid "Three works with photos, year and prices."
 msgstr ""
 
@@ -6425,8 +6425,8 @@ msgstr ""
 msgid "Twice a day"
 msgstr ""
 
-#: content/patterns.php:73
-msgid "Two columns “Service — Price”. Prices and “₽” do not break, the table stays neat on a phone."
+#: content/patterns.php:75
+msgid "Two columns “Service — Price”; the prices are site values from Memorial → Prices, never digits. Prices and “₽” do not break, the table stays neat on a phone."
 msgstr ""
 
 #: catalog/catalog-import.php:1418 catalog/catalog.php:21 catalog/catalog-io.php:138
@@ -6453,7 +6453,7 @@ msgstr ""
 msgid "Under the title of the catalog on the site (optional)."
 msgstr ""
 
-#: src/settings/index.js:520 src/block-controls/index.js:1107
+#: src/settings/index.js:520 src/block-controls/index.js:1112
 msgid "Unfold"
 msgstr ""
 
@@ -6461,7 +6461,7 @@ msgstr ""
 msgid "Unfold all"
 msgstr ""
 
-#: src/block-controls/index.js:1062
+#: src/block-controls/index.js:1067
 msgid "Unfold the block"
 msgstr ""
 
@@ -6513,11 +6513,11 @@ msgstr ""
 msgid "Up to date"
 msgstr ""
 
-#: pages/repo-pages.php:318
+#: pages/repo-pages.php:354
 msgid "Up to date."
 msgstr ""
 
-#: pages/repo-pages.php:318
+#: pages/repo-pages.php:354
 msgid "Up to date; the text was edited on the site after the import."
 msgstr ""
 
@@ -6538,7 +6538,7 @@ msgid "Updated"
 msgstr ""
 
 #. translators: 1: file version, 2: revision ID.
-#: pages/repo-pages.php:498
+#: pages/repo-pages.php:534
 #, php-format
 msgid "Updated to version %1$d; the previous text is revision %2$d."
 msgstr ""
@@ -6627,11 +6627,11 @@ msgstr ""
 msgid "We give the full set of documents for claiming the payments. The payment is claimed by a relative."
 msgstr ""
 
-#: content/patterns.php:62
+#: content/patterns.php:64
 msgid "We make it ourselves"
 msgstr ""
 
-#: content/patterns.php:59
+#: content/patterns.php:61
 msgid "We make it ourselves (photo + text)"
 msgstr ""
 
@@ -6695,7 +6695,7 @@ msgstr ""
 msgid "What the import does"
 msgstr ""
 
-#: content/patterns.php:96
+#: content/patterns.php:99
 msgid "What to do when a person has died"
 msgstr ""
 
@@ -6703,11 +6703,11 @@ msgstr ""
 msgid "What to do when someone dies"
 msgstr ""
 
-#: content/content.php:196
+#: content/content.php:204
 msgid "What to do."
 msgstr ""
 
-#: src/block-controls/index.js:1089 blocks/home/home.php:189
+#: src/block-controls/index.js:1094 blocks/home/home.php:189
 msgid "What to show"
 msgstr ""
 
@@ -6923,12 +6923,12 @@ msgstr ""
 msgid "Write in %s"
 msgstr ""
 
-#: blocks/legacy/render/mobile-bar.php:17
+#: content/content.php:72 blocks/legacy/render/mobile-bar.php:17
 msgid "Write in MAX"
 msgstr ""
 
 #. translators: %d: file version.
-#: pages/repo-pages.php:500
+#: pages/repo-pages.php:536
 #, php-format
 msgid "Written, version %d."
 msgstr ""
@@ -6985,7 +6985,7 @@ msgstr ""
 msgid "You can send a photo, the text for a wreath ribbon or questions about documents — we will answer during working hours."
 msgstr ""
 
-#: pages/repo-pages.php:309 pages/repo-pages.php:326
+#: pages/repo-pages.php:345 pages/repo-pages.php:362
 msgid "You chose to keep the text of the site for this version of the file."
 msgstr ""
 
@@ -8537,12 +8537,12 @@ msgstr ""
 msgid "no description"
 msgstr ""
 
-#: pages/repo-pages.php:642
+#: pages/repo-pages.php:678
 msgid "no main menu"
 msgstr ""
 
 #. translators: %s: address of the parent menu item.
-#: pages/repo-pages.php:651
+#: pages/repo-pages.php:687
 #, php-format
 msgid "no menu item %s"
 msgstr ""
@@ -8864,7 +8864,7 @@ msgstr ""
 msgid "the reviews one per line: new or deleted, author, rating, review site, date and the beginning of the text"
 msgstr ""
 
-#: pages/repo-pages.php:782
+#: pages/repo-pages.php:818
 msgid "the top level"
 msgstr ""
 
