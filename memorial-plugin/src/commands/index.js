@@ -161,10 +161,7 @@ if ( data.can.priceCheck ) {
 		[
 			'prices',
 			__( 'Prices are up to date', 'memorial-plugin' ),
-			__(
-				'Prices are up to date check confirm date',
-				'memorial-plugin'
-			),
+			__( 'Prices are up to date check confirm date', 'memorial-plugin' ),
 			__(
 				'The prices are marked as up to date, the date on the site is today.',
 				'memorial-plugin'
