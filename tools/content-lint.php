@@ -167,7 +167,9 @@ foreach ( $files as $f ) {
 		}
 	}
 
-	// Блоки.
+	// Блоки. Главная (index.html) — исключение для H1: шаблон front-page.html заголовок записи не выводит,
+	// H1 стоит в первом экране текста — ровно один.
+	$h1_blocks = 0;
 	foreach ( $p['blocks'] as $b ) {
 		$name = $b['name'];
 		if ( 0 !== strpos( $name, 'memorial-plugin/' ) && ! in_array( $name, MEM_LINT_ALLOWED, true ) ) {
@@ -176,7 +178,10 @@ foreach ( $files as $f ) {
 		if ( 'core/heading' === $name ) {
 			$level = (int) ( $b['attrs']['level'] ?? 2 );
 			if ( 1 === $level ) {
-				$err( $rel, 'H1 в тексте: заголовок страницы (H1) выводит шаблон из поля title.' );
+				++$h1_blocks;
+				if ( ! $p['is_front'] ) {
+					$err( $rel, 'H1 в тексте: заголовок страницы (H1) выводит шаблон из поля title.' );
+				}
 			} elseif ( ! in_array( $level, array( 2, 3 ), true ) ) {
 				$err( $rel, "Заголовок H{$level}: в текстах только H2 и H3." );
 			}
@@ -227,8 +232,11 @@ foreach ( $files as $f ) {
 	}
 
 	// Текст.
-	if ( preg_match( '/<h1[\s>]/i', $p['html'] ) ) {
+	$h1_tags = preg_match_all( '/<h1[\s>]/i', $p['html'] );
+	if ( ! $p['is_front'] && $h1_tags ) {
 		$err( $rel, 'В тексте есть <h1>: H1 выводит шаблон из поля title.' );
+	} elseif ( $p['is_front'] && ( 1 !== $h1_tags || 1 !== $h1_blocks ) ) {
+		$err( $rel, "Главная: нужен ровно один H1 — блок «Заголовок» уровня 1 в первом экране (шаблон front-page.html заголовок записи не выводит). Сейчас: блоков H1 — {$h1_blocks}, тегов <h1> — {$h1_tags}." );
 	}
 	if ( preg_match_all( '/\d[\d\s\x{00A0}\x{202F}]*(?:[.,]\d+)?\s*(?:₽|руб)/iu', $p['text'], $m ) ) {
 		$err( $rel, 'Цена цифрами: «' . implode( '», «', array_unique( array_map( 'trim', $m[0] ) ) ) . '». Цены — только кодами {price:код}.' );

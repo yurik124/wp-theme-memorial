@@ -19,6 +19,7 @@ foreach ( array(
 	'gruz-200.html: version',
 	'gruz-200.html: SEO-заголовок длиннее нормы',
 	'gruz-200.html: H1 в тексте',
+	'index.html: Главная: нужен ровно один H1',
 	'gruz-200.html: Блок core/buttons не из списка',
 	'gruz-200.html: Блок «Ритуальный транспорт» на странице груза 200',
 	'gruz-200.html: «Ford Transit» на странице груза 200',
@@ -37,7 +38,7 @@ foreach ( array(
 		$fail[] = "нет сообщения: $want";
 	}
 }
-if ( preg_match( '/ОШИБКА [^\n]*(katafalk|perezahoronenie)\.html: (?!H2)/u', $out, $m ) ) {
+if ( preg_match( '/ОШИБКА [^\n]*(katafalk|perezahoronenie)\.html: (?!H2)|ОШИБКА [^\n]*index\.html: H1 в тексте/u', $out, $m ) ) {
 	$fail[] = 'лишняя ошибка: ' . $m[0];
 }
 if ( $fail ) {
