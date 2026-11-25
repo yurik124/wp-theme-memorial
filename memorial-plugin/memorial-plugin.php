@@ -180,6 +180,7 @@ $memorial_plugin_modules = array(
 	'seo/seo-plugins.php',
 	'seo/metrika.php',
 	'seo/llms.php',
+	'seo/external-links.php',
 	'legal/legal.php',
 	'leads/callback.php',
 	'leads/lead-mail.php',
