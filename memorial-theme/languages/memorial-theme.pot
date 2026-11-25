@@ -9,7 +9,7 @@ msgstr ""
 "X-Domain: memorial-theme\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: functions.php:235
+#: functions.php:236
 msgid " — to the home page"
 msgstr ""
 
@@ -182,7 +182,7 @@ msgstr ""
 msgid "Memorial Modern"
 msgstr ""
 
-#: functions.php:245
+#: functions.php:246
 msgid "Memorial: text layouts"
 msgstr ""
 
