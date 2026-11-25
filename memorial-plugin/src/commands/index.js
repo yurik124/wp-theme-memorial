@@ -155,6 +155,57 @@ if ( data.can.leads ) {
 	} );
 }
 
+// Prices and benefit sums are up to date (prices/price-check.php): the date on the site becomes today.
+if ( data.can.priceCheck ) {
+	[
+		[
+			'prices',
+			__( 'Prices are up to date', 'memorial-plugin' ),
+			__(
+				'Prices are up to date check confirm date',
+				'memorial-plugin'
+			),
+			__(
+				'The prices are marked as up to date, the date on the site is today.',
+				'memorial-plugin'
+			),
+		],
+		[
+			'benefits',
+			__( 'Benefit sums are up to date', 'memorial-plugin' ),
+			__(
+				'Benefit sums are up to date burial benefit payment check',
+				'memorial-plugin'
+			),
+			__(
+				'The benefit sums are marked as up to date.',
+				'memorial-plugin'
+			),
+		],
+	].forEach( ( [ what, label, searchLabel, done ] ) =>
+		commands.push( {
+			name: 'memorial-plugin/confirm-' + what,
+			label,
+			searchLabel,
+			icon: tag,
+			callback: async ( { close } ) => {
+				close();
+				try {
+					await runAbility( 'memorial-plugin/confirm-prices', {
+						what,
+					} );
+					notice( 'success', done );
+					document
+						.querySelectorAll( '.mem-price-check' )
+						.forEach( ( n ) => n.remove() );
+				} catch ( e ) {
+					notice( 'error', e.message );
+				}
+			},
+		} )
+	);
+}
+
 commands.forEach( ( c ) => dispatch( commandsStore ).registerCommand( c ) );
 
 // In the post editor: convert the shortcodes of the current post to blocks (when it has them).

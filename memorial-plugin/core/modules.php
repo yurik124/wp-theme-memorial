@@ -58,6 +58,8 @@ function memorial_plugin_modules_schema() {
 		),
 		'mail'      => function_exists( 'memorial_plugin_lead_mail_schema' ) ? memorial_plugin_lead_mail_schema() : array( 'type' => 'hidden' ),
 		'rmail'     => function_exists( 'memorial_plugin_reviews_mail_schema' ) ? memorial_plugin_reviews_mail_schema() : array( 'type' => 'hidden' ),
+		'pmail'     => function_exists( 'memorial_plugin_price_mail_schema' ) ? memorial_plugin_price_mail_schema( 'prices' ) : array( 'type' => 'hidden' ),
+		'bmail'     => function_exists( 'memorial_plugin_price_mail_schema' ) ? memorial_plugin_price_mail_schema( 'benefits' ) : array( 'type' => 'hidden' ),
 		'perms'     => array(
 			'type'  => 'perms',
 			'tab'   => __( 'Permissions', 'memorial-plugin' ),
@@ -79,6 +81,8 @@ function memorial_plugin_modules_page_defaults() {
 		),
 		'mail'  => function_exists( 'memorial_plugin_lead_mail_defaults' ) ? memorial_plugin_lead_mail_defaults() : array(),
 		'rmail' => function_exists( 'memorial_plugin_reviews_mail_defaults' ) ? memorial_plugin_reviews_mail_defaults() : array(),
+		'pmail' => function_exists( 'memorial_plugin_price_mail_defaults' ) ? memorial_plugin_price_mail_defaults( 'prices' ) : array(),
+		'bmail' => function_exists( 'memorial_plugin_price_mail_defaults' ) ? memorial_plugin_price_mail_defaults( 'benefits' ) : array(),
 	);
 }
 

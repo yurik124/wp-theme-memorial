@@ -158,6 +158,7 @@ $memorial_plugin_modules = array(
 	'prices/prices.php',
 	'prices/terms.php',
 	'prices/price-blocks.php',
+	'prices/price-check.php',
 	// каталог: админка.
 	'catalog/catalog-admin.php',
 	'catalog/catalog-types.php',
@@ -277,7 +278,7 @@ add_action(
 register_deactivation_hook(
 	__FILE__,
 	function () {
-		foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron', 'memorial_plugin_card_sizes', 'memorial_plugin_llms', 'memorial_plugin_photos' ) as $h ) {
+		foreach ( array( 'memorial_plugin_rewio_cron', 'memorial_plugin_rewio_cron_once', 'memorial_plugin_logos_cron', 'memorial_plugin_card_sizes', 'memorial_plugin_llms', 'memorial_plugin_photos', 'memorial_plugin_price_check' ) as $h ) {
 			wp_clear_scheduled_hook( $h );
 		}
 	}

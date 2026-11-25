@@ -81,10 +81,11 @@ function memorial_plugin_commands_assets() {
 				'leadsUrl' => admin_url( 'admin.php?page=memorial-plugin-leads' ),
 				'importUrl' => admin_url( 'edit.php?post_type=mem_product&page=mem-products&import=1' ),
 				'can'      => array(
-					'export'  => current_user_can( 'edit_posts' ),
-					'import'  => function_exists( 'memorial_plugin_import_can' ) && memorial_plugin_import_can(),
-					'leads'   => current_user_can( 'memorial_plugin_leads' ),
-					'convert' => current_user_can( 'edit_posts' ),
+					'export'     => current_user_can( 'edit_posts' ),
+					'import'     => function_exists( 'memorial_plugin_import_can' ) && memorial_plugin_import_can(),
+					'leads'      => current_user_can( 'memorial_plugin_leads' ),
+					'convert'    => current_user_can( 'edit_posts' ),
+					'priceCheck' => function_exists( 'memorial_plugin_price_check_can' ) && memorial_plugin_price_check_can(),
 				),
 			)
 		) . ';',

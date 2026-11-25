@@ -105,4 +105,89 @@ class Test_Memorial_Plugin_Ui_2611 extends WP_UnitTestCase {
 		}
 		$this->assertMatchesRegularExpression( '~</p><p class="mbenefit__more"><a href="[^"]+posobie-na-pogrebenie~', $html );
 	}
+
+	/**
+	 * Separate prices with a benefit.
+	 *
+	 * @return array
+	 */
+	private function prices_with_benefit() {
+		return array(
+			'other' => array(
+				'items' => array(
+					array(
+						'name'    => 'Лента',
+						'what'    => 'custom',
+						'price'   => '500',
+						'code'    => 'lenta',
+						'updated' => '01.01.2026',
+					),
+					array(
+						'name'    => 'Пособие на погребение',
+						'what'    => 'custom',
+						'price'   => '10 000',
+						'code'    => 'posobie',
+						'updated' => '01.02.2026',
+					),
+				),
+			),
+		);
+	}
+
+	public function test_benefit_change_does_not_move_the_price_date() {
+		update_option( 'mem_prices', $this->prices_with_benefit() );
+		delete_option( 'mem_prices_changed' );
+		delete_option( 'mem_benefits_checked' );
+		$v = $this->prices_with_benefit();
+		$v['other']['items'][1]['price'] = '11 000';
+		update_option( 'mem_prices', $v );
+		$this->assertFalse( get_option( 'mem_prices_changed' ), 'a benefit is not a price' );
+		$this->assertGreaterThan( 0, (int) get_option( 'mem_benefits_checked' ) );
+		$v['other']['items'][0]['price'] = '600';
+		update_option( 'mem_prices', $v );
+		$this->assertGreaterThan( 0, (int) get_option( 'mem_prices_changed' ) );
+	}
+
+	public function test_due_prices_after_a_month_and_benefits_after_february() {
+		update_option( 'mem_prices', $this->prices_with_benefit() );
+		$tz = wp_timezone();
+		update_option( 'mem_prices_changed', ( new DateTime( '2026-10-20 12:00', $tz ) )->getTimestamp() );
+		update_option( 'mem_benefits_checked', ( new DateTime( '2026-03-01 12:00', $tz ) )->getTimestamp() );
+		$due = memorial_plugin_price_check_due( ( new DateTime( '2026-11-10 12:00', $tz ) )->getTimestamp() );
+		$this->assertFalse( $due['prices'] );
+		$this->assertFalse( $due['benefits'] );
+		$due = memorial_plugin_price_check_due( ( new DateTime( '2026-11-21 12:00', $tz ) )->getTimestamp() );
+		$this->assertTrue( $due['prices'], 'a month passed' );
+		$due = memorial_plugin_price_check_due( ( new DateTime( '2027-02-01 09:00', $tz ) )->getTimestamp() );
+		$this->assertTrue( $due['benefits'], '1 February' );
+	}
+
+	public function test_confirm_prices_dates_the_rows_and_the_site_but_not_the_benefits() {
+		update_option( 'mem_prices', $this->prices_with_benefit() );
+		update_option( 'mem_prices_changed', 1000 );
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		memorial_plugin_price_confirm( 'prices' );
+		$rows = get_option( 'mem_prices' )['other']['items'];
+		$this->assertSame( wp_date( 'd.m.Y' ), $rows[0]['updated'] );
+		$this->assertSame( '01.02.2026', $rows[1]['updated'], 'the benefit row keeps its date' );
+		$this->assertGreaterThan( time() - 60, (int) get_option( 'mem_prices_changed' ) );
+		$this->assertFalse( memorial_plugin_price_check_due()['prices'] );
+
+		memorial_plugin_price_confirm( 'benefits' );
+		$this->assertSame( wp_date( 'd.m.Y' ), get_option( 'mem_prices' )['other']['items'][1]['updated'] );
+		$this->assertGreaterThan( time() - 60, (int) get_option( 'mem_benefits_checked' ) );
+	}
+
+	public function test_reminder_email_goes_once_a_week() {
+		update_option( 'mem_prices', $this->prices_with_benefit() );
+		update_option( 'mem_prices_changed', time() - 40 * DAY_IN_SECONDS );
+		delete_option( 'memorial_plugin_price_check' );
+		reset_phpmailer_instance();
+		memorial_plugin_price_check_run();
+		$mailer = tests_retrieve_phpmailer_instance();
+		$this->assertStringContainsString( wp_date( 'd.m.Y', time() - 40 * DAY_IN_SECONDS ), $mailer->get_sent()->body );
+		reset_phpmailer_instance();
+		memorial_plugin_price_check_run();
+		$this->assertFalse( tests_retrieve_phpmailer_instance()->get_sent(), 'not again the same week' );
+	}
 }
