@@ -193,6 +193,8 @@ class Test_Memorial_Plugin_Ui_2611 extends WP_UnitTestCase {
 		$this->save_prices( $this->prices_with_benefit() );
 		update_option( 'mem_prices_changed', time() - 40 * DAY_IN_SECONDS );
 		delete_option( 'memorial_plugin_price_check' );
+		// The test site sends from wordpress@localhost, which PHPMailer refuses — a sender as on the site.
+		update_option( 'mem_modules_page', array( 'mail' => array( 'from_email' => 'site@example.com' ) ) );
 		$this->assertTrue( memorial_plugin_price_check_due()['prices'] );
 		reset_phpmailer_instance();
 		memorial_plugin_price_check_run();
