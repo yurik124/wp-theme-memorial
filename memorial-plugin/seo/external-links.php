@@ -48,12 +48,12 @@ function memorial_plugin_links_host( $host ) {
 /**
  * Is the host one of the list (the domain itself or its subdomain)?
  *
- * @param string   $host Host without www.
- * @param string[] $list Domains.
+ * @param string   $host    Host without www.
+ * @param string[] $domains Domains.
  * @return bool
  */
-function memorial_plugin_links_host_in( $host, $list ) {
-	foreach ( $list as $d ) {
+function memorial_plugin_links_host_in( $host, $domains ) {
+	foreach ( $domains as $d ) {
 		if ( $host === $d || str_ends_with( $host, '.' . $d ) ) {
 			return true;
 		}
@@ -64,9 +64,9 @@ function memorial_plugin_links_host_in( $host, $list ) {
 /**
  * External links of an HTML piece: target="_blank", rel="noopener nofollow" (nofollow — not for the kept domains).
  *
- * @param string        $html HTML.
- * @param array|null    $set  Settings (memorial_plugin_links_settings()); null — the saved ones.
- * @param string|null   $own  Host of the site; null — home_url().
+ * @param string      $html HTML.
+ * @param array|null  $set  Settings (memorial_plugin_links_settings()); null — the saved ones.
+ * @param string|null $own  Host of the site; null — home_url().
  * @return string
  */
 function memorial_plugin_links_mark( $html, $set = null, $own = null ) {
