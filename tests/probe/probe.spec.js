@@ -3242,3 +3242,115 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 		} );
 	} );
 }
+
+// Задачи 26.11.2026: «Мы в 2ГИС», крупные фото карточек, кнопки одной ширины, «Подробнее о пособии», шрифты,
+// внешние ссылки — главная и «Контакты» на ПК и телефонах; на ПК — окно «Проверьте цены», «Настройки» с вкладками,
+// «Обработка фото», «Обновить список филиалов» Rewio. Даты цен сдвигает PROBE_CLI (tests/probe-2611.php).
+for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] ) {
+	test.describe( 'задачи 2611 ' + width, () => {
+		test.use( { viewport: { width, height } } );
+		test( 'задачи 2611 ' + width, async ( { page } ) => {
+			test.setTimeout( 240_000 );
+			const errs = errorsOf( page );
+			const out = { width };
+			const widths = ( sel ) => page.locator( sel ).evaluateAll( ( els ) => els.map( ( e ) => Math.round( e.getBoundingClientRect().width ) ) );
+			await page.goto( '/' );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+			out.reviewBtns = await page.locator( '.reviews__btns a' ).evaluateAll( ( els ) => els.map( ( e ) => [ e.innerText, Math.round( e.getBoundingClientRect().width ), e.target, e.rel, e.href ] ) );
+			out.mapTabs = await widths( '.maps__tab' );
+			out.msg = await page.locator( '.clist__msg a' ).evaluateAll( ( els ) => els.map( ( e ) => [ e.innerText, Math.round( e.getBoundingClientRect().width ) ] ) );
+			out.benefitMore = await page.locator( '.mbenefit__more' ).evaluate( ( e ) => [ e.innerText, getComputedStyle( e ).textAlign ] ).catch( () => null );
+			out.fonts = await page.evaluate( () => {
+				const f = ( sel, pseudo ) => {
+					const el = document.querySelector( sel );
+					return el ? getComputedStyle( el, pseudo ).fontFamily.split( ',' )[ 0 ] + ' ' + getComputedStyle( el, pseudo ).fontWeight + ' ' + getComputedStyle( el, pseudo ).fontSize : null;
+				};
+				return { h1: f( 'h1' ), h2: f( 'main h2, .content h2, h2' ), step: f( '.mem-step', '::after' ), steps: f( '.is-style-steps > li', '::before' ) };
+			} );
+			out.external = await page.locator( 'a[href^="http"]' ).evaluateAll( ( els ) =>
+				els.filter( ( a ) => a.hostname.replace( /^www\./, '' ) !== location.hostname.replace( /^www\./, '' ) ).map( ( a ) => [ a.hostname, a.target, a.rel ] )
+			);
+			out.newtabText = await page.locator( '#mem-newtab' ).textContent().catch( () => null );
+			const gal = page.locator( 'figure.wp-block-gallery.mem-cardphotos' ).first();
+			out.cardGallery = await gal.count();
+			if ( out.cardGallery ) {
+				out.cardFigs = await gal.locator( 'figure.wp-block-image' ).evaluateAll( ( els ) => els.map( ( e ) => Math.round( e.getBoundingClientRect().width ) ) );
+				out.cardLinks = await gal.locator( 'a[data-lb]' ).count();
+				await gal.scrollIntoViewIfNeeded();
+				await gal.screenshot( { path: `${ DIR }/t2611-gallery-${ width }.png` } ).catch( () => {} );
+				if ( out.cardLinks ) {
+					await gal.locator( 'a[data-lb]' ).first().click();
+					await page.waitForTimeout( 900 );
+					out.lbOpen = await page.evaluate( () => !! document.getElementById( 'lb' )?.open );
+					await shot( page, 't2611-lightbox-' + width );
+					await page.keyboard.press( 'Escape' );
+					await page.waitForTimeout( 400 );
+				}
+			}
+			for ( const id of [ 'about', 'posobie', 'reviews', 'contacts' ] ) {
+				const sec = page.locator( '#' + id ).first();
+				if ( await sec.count() ) {
+					await sec.scrollIntoViewIfNeeded();
+					await sec.screenshot( { path: `${ DIR }/t2611-home-${ id }-${ width }.png` } ).catch( () => {} );
+				}
+			}
+			out.overflow = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
+			await shot( page, 't2611-home-' + width, { fullPage: true } );
+			await page.goto( '/chto-delat-esli-umer-chelovek/' );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+			await shot( page, 't2611-steps-' + width );
+			const steps = page.locator( '.mem-steps, .is-style-steps' ).first();
+			if ( await steps.count() ) {
+				await steps.scrollIntoViewIfNeeded();
+				await steps.screenshot( { path: `${ DIR }/t2611-steps-block-${ width }.png` } ).catch( () => {} );
+			}
+			if ( width === 1440 ) {
+				await page.goto( '/wp-login.php' );
+				await page.fill( '#user_login', 'probe' );
+				await page.fill( '#user_pass', 'probe-pass-123' );
+				await page.click( '#wp-submit' );
+				await page.waitForURL( /wp-admin/ );
+				await page.goto( '/wp-admin/' );
+				out.notices = await page.locator( '.mem-price-check' ).allInnerTexts();
+				await shot( page, 't2611-admin-notices', { fullPage: true } );
+				const ok = page.locator( '.mem-price-check button.button-primary' ).first();
+				if ( await ok.count() ) {
+					await ok.click();
+					await page.waitForLoadState( 'load' );
+					out.afterOk = await page.locator( '.notice-success' ).allInnerTexts();
+					out.noticesAfter = await page.locator( '.mem-price-check' ).count();
+					await shot( page, 't2611-admin-after-ok', { fullPage: true } );
+				}
+				await page.goto( '/wp-admin/admin.php?page=mem-modules' );
+				await page.locator( '.memorial-plugin-settings__card' ).first().waitFor( { timeout: 15_000 } ).catch( () => {} );
+				await page.waitForTimeout( 800 );
+				out.settingsTabs = await page.locator( '.mem-tabs a' ).allInnerTexts();
+				out.menu = await page.locator( '#toplevel_page_mem-contacts .wp-submenu a' ).allInnerTexts();
+				await shot( page, 't2611-settings', { fullPage: true } );
+				await page.getByRole( 'tab', { name: 'Почта' } ).click( { timeout: 10_000 } ).catch( ( e ) => ( out.mailTab = e.message ) );
+				await page.waitForTimeout( 600 );
+				await shot( page, 't2611-settings-mail', { fullPage: true } );
+				await page.goto( '/wp-admin/admin.php?page=mem-photos' );
+				await page.locator( '.memorial-plugin-settings__card' ).first().waitFor( { timeout: 15_000 } ).catch( () => {} );
+				await page.waitForTimeout( 800 );
+				out.photosTabs = await page.locator( '.mem-tabs a' ).allInnerTexts();
+				out.photosCurrent = await page.locator( '#toplevel_page_mem-contacts .wp-submenu li.current a' ).allInnerTexts();
+				await shot( page, 't2611-photos', { fullPage: true } );
+				await page.goto( '/wp-admin/admin.php?page=mem-rewio' );
+				await page.locator( '.memorial-plugin-settings__card' ).first().waitFor( { timeout: 15_000 } ).catch( () => {} );
+				await page.waitForTimeout( 800 );
+				const upd = page.getByRole( 'button', { name: 'Обновить список филиалов' } );
+				out.rewioButton = await upd.count();
+				if ( out.rewioButton ) {
+					await upd.scrollIntoViewIfNeeded();
+					await upd.click();
+					await page.waitForTimeout( 8000 );
+					out.rewioNotice = await page.locator( '.memorial-plugin-settings__rewio .components-notice' ).allInnerTexts();
+				}
+				await shot( page, 't2611-rewio', { fullPage: true } );
+			}
+			out.errors = errs;
+			log( 't2611-' + width, out );
+		} );
+	} );
+}
