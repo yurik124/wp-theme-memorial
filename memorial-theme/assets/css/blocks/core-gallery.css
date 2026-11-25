@@ -18,6 +18,8 @@
 .wp-block-gallery.is-style-cards figure.wp-block-image:has(>a):hover{box-shadow:0 10px 26px -12px rgba(0,0,0,.25);transform:translateY(-2px)}
 @media (max-width:600px){
   .wp-block-gallery.mem-hub.has-nested-images figure.wp-block-image:not(#individual-image){width:100%!important;flex-basis:100%}
+  /* Карточки с фото (pages/media.php): по одному в ряд — на телефоне по два были слишком мелкими (владелец, 26.11.2026) */
+  .wp-block-gallery.mem-cardphotos:not(.mem-portrait,.mem-tall).has-nested-images figure.wp-block-image:not(#individual-image){width:100%;flex-basis:100%}
   .wp-block-gallery.mem-hub.has-nested-images figure.wp-block-image figcaption{font-size:1rem}
   .wp-block-gallery.mem-hub.has-nested-images figure.wp-block-image figcaption strong{font-size:1.3rem}
 }

@@ -316,9 +316,14 @@ function memorial_plugin_photos() {
 add_filter(
 	'memorial_plugin_admin_pages',
 	static function ( $pages ) {
+		// For administrators — a tab of «Настройки», not an item of the menu (owner, 26.11.2026). An editor allowed
+		// to process the photos (and not allowed «Настройки») keeps the menu item.
+		$tab                 = current_user_can( 'manage_options' );
 		$pages['mem_photos'] = array(
 			'slug'    => 'mem-photos',
 			'title'   => __( 'Photo processing', 'memorial-plugin' ),
+			'h1'      => $tab ? __( 'Settings', 'memorial-plugin' ) : __( 'Photo processing', 'memorial-plugin' ),
+			'hidden'  => $tab,
 			'schema'  => 'memorial_plugin_photos_schema',
 			'preview' => 'photos',
 			'master'  => array(
@@ -331,6 +336,44 @@ add_filter(
 			'intro'   => '<p>' . esc_html__( 'One style for the photos of the site. Every change is seen at once in the preview on the right — before saving. After saving the photos are processed in the background, a few a minute; the originals are kept, and everything can be returned.', 'memorial-plugin' ) . '</p>',
 		);
 		return $pages;
+	}
+);
+
+/**
+ * Tabs above «Настройки» and «Обработка фото».
+ *
+ * @return array<string,array{0:string,1:string}>
+ */
+function memorial_plugin_settings_tabs() {
+	return array(
+		'general' => array( __( 'General', 'memorial-plugin' ), admin_url( 'admin.php?page=mem-modules' ) ),
+		'photos'  => array( __( 'Photo processing', 'memorial-plugin' ), admin_url( 'admin.php?page=mem-photos' ) ),
+	);
+}
+add_action(
+	'memorial_plugin_admin_tabs',
+	static function ( $opt ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		if ( 'mem_modules_page' === $opt ) {
+			memorial_plugin_admin_tabs( memorial_plugin_settings_tabs(), 'general' );
+		}
+		if ( 'mem_photos' === $opt ) {
+			memorial_plugin_admin_tabs( memorial_plugin_settings_tabs(), 'photos' );
+		}
+	}
+);
+// «Обработка фото» открыта — в меню подсвечен пункт «Настройки».
+add_filter(
+	'parent_file',
+	static function ( $f ) {
+		if ( 'mem-photos' === sanitize_key( wp_unslash( $_GET['page'] ?? '' ) ) && current_user_can( 'manage_options' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- only which menu item is highlighted.
+			global $submenu_file;
+			$submenu_file = 'mem-modules'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- highlights the menu item, the documented way in wp-admin.
+			return 'mem-contacts';
+		}
+		return $f;
 	}
 );
 

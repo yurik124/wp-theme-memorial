@@ -6,7 +6,8 @@
  *  - «Цены по отдельности» (memorial-plugin/price-list) — таблица «услуга — цена от — подробнее» из кодов;
  *  - дата «Обновлено» у отдельных цен ставится сама, когда цена меняется;
  *  - «Цены обновлены» (значение сайта prices-updated, в файлах страниц — {prices_updated}): месяц и год
- *    последней правки цен — пакетов, кремации, отдельных цен или цены товара каталога;
+ *    последней правки цен — пакетов, кремации, отдельных цен (кроме пособий) или цены товара каталога,
+ *    или подтверждения «Цены актуальны» (prices/price-check.php);
  *  - разовый перенос memorial_plugin_prices_2: код vyplata_svo, коды наборов «Цен по отдельности» (без цен —
  *    их вписывает владелец), вариант «Оплаты» на страницах по разделу сайта.
  *
@@ -150,9 +151,9 @@ function memorial_plugin_benefits_render( $a = array() ) {
 	return '<section class="mbenefit">'
 		. ( ! isset( $a['heading'] ) || ! empty( $a['heading'] ) ? '<h2 class="wp-block-heading mbenefit__title">' . esc_html( $title ) . '</h2>' : '' )
 		. '<div class="mbenefit__grid mbenefit__grid--' . count( $cards ) . '">' . $html . '</div>'
-		. '<p class="mbenefit__note">' . esc_html__( 'We give the full set of documents for claiming the payments. The payment is claimed by a relative.', 'memorial-plugin' )
-		. ( '' !== $more ? ' <a href="' . esc_url( $more ) . '">' . esc_html__( 'More about the benefit', 'memorial-plugin' ) . ' <span aria-hidden="true">→</span></a>' : '' )
-		. '</p></section>';
+		. '<p class="mbenefit__note">' . esc_html__( 'We give the full set of documents for claiming the payments. The payment is claimed by a relative.', 'memorial-plugin' ) . '</p>'
+		. ( '' !== $more ? '<p class="mbenefit__more"><a href="' . esc_url( $more ) . '">' . esc_html__( 'More about the benefit', 'memorial-plugin' ) . ' <span aria-hidden="true">→</span></a></p>' : '' )
+		. '</section>';
 }
 
 /* ---------- Цены по отдельности ---------- */
@@ -344,7 +345,8 @@ function memorial_plugin_prices_fingerprint( $value ) {
 	$value = is_array( $value ) ? $value : array();
 	$other = array();
 	foreach ( (array) ( $value['other']['items'] ?? array() ) as $row ) {
-		if ( is_array( $row ) ) {
+		// Benefit sums are checked on their own (prices/price-check.php) and do not move the date of the prices.
+		if ( is_array( $row ) && ! ( function_exists( 'memorial_plugin_price_row_is_benefit' ) && memorial_plugin_price_row_is_benefit( $row ) ) ) {
 			$other[] = array( (string) ( $row['code'] ?? '' ), (string) ( $row['price'] ?? '' ), (string) ( $row['what'] ?? '' ) );
 		}
 	}

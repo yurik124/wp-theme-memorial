@@ -16,7 +16,8 @@
  *  - memorial-plugin/convert-content      — shortcodes of a post → blocks (revision kept);
  *  - memorial-plugin/rollback-conversion  — back to the text before the conversion;
  *  - memorial-plugin/search-stats         — what visitors search for (readonly);
- *  - memorial-plugin/clear-search-stats   — delete search statistics (destructive).
+ *  - memorial-plugin/clear-search-stats   — delete search statistics (destructive);
+ *  - memorial-plugin/confirm-prices       — the prices or the benefit sums are up to date (prices/price-check.php).
  *
  * @package memorial-plugin
  */

@@ -13,7 +13,7 @@ msgstr ""
 msgid " (draft)"
 msgstr ""
 
-#: reviews/rewio.php:1151
+#: reviews/rewio.php:1187
 msgid " (hidden: "
 msgstr ""
 
@@ -33,15 +33,15 @@ msgstr ""
 msgid " of "
 msgstr ""
 
-#: blocks/legacy/render/parts/reviews.php:45
+#: blocks/legacy/render/parts/reviews.php:49
 msgid " on the map of Belgorod — Yandex Maps"
 msgstr ""
 
-#: reviews/rewio.php:1134
+#: reviews/rewio.php:1170
 msgid " · next check: "
 msgstr ""
 
-#: reviews/rewio.php:1122
+#: reviews/rewio.php:1158
 msgid " — but showing is off (the tick in “1. Connection”)"
 msgstr ""
 
@@ -197,7 +197,7 @@ msgid "%s (copy)"
 msgstr ""
 
 #. translators: %s: site name.
-#: blocks/home/home.php:644
+#: blocks/home/home.php:669
 #, php-format
 msgid "%s on the map — Yandex Maps"
 msgstr ""
@@ -742,7 +742,7 @@ msgstr ""
 msgid "All products"
 msgstr ""
 
-#: admin/abilities.php:501
+#: admin/abilities.php:502
 msgid "All products (or of one type, or the given ones) as an Excel or CSV file in the format of the import: SKU, type, categories, title, prices, description, photos with alt texts, specifications, visibility."
 msgstr ""
 
@@ -862,6 +862,10 @@ msgstr ""
 msgid "Archive with photos (ZIP)"
 msgstr ""
 
+#: prices/price-check.php:414
+msgid "Are the prices on the site up to date?"
+msgstr ""
+
 #: blocks/content/content-blocks.php:469 blocks/home/home.php:107
 msgid "Arrow “→”"
 msgstr ""
@@ -918,7 +922,7 @@ msgstr ""
 msgid "Ask for consent: Metrica and the codes below start after “Accept” (the strict reading of 152-FZ)"
 msgstr ""
 
-#: reviews/rewio.php:1093
+#: reviews/rewio.php:1129
 msgid "At least one site must stay — otherwise untick the branch itself"
 msgstr ""
 
@@ -978,11 +982,19 @@ msgstr ""
 msgid "Benefit and payments"
 msgstr ""
 
-#: prices/price-blocks.php:148
+#: prices/price-blocks.php:149
 msgid "Benefit and payments for a burial"
 msgstr ""
 
-#: prices/price-blocks.php:136
+#: src/commands/index.js:172
+msgid "Benefit sums are up to date"
+msgstr ""
+
+#: src/commands/index.js:173
+msgid "Benefit sums are up to date burial benefit payment check"
+msgstr ""
+
+#: prices/price-blocks.php:137
 msgid "Benefits and payments: fill in the prices with the codes posobie and vyplata_svo in Memorial → Prices → Separate prices."
 msgstr ""
 
@@ -1024,11 +1036,11 @@ msgstr ""
 msgid "Branch"
 msgstr ""
 
-#: reviews/rewio.php:1428
+#: reviews/rewio.php:1464
 msgid "Branch "
 msgstr ""
 
-#: src/settings/rewio-scope.js:116
+#: src/settings/rewio-scope.js:177
 msgid "Branch list from Rewio:"
 msgstr ""
 
@@ -1102,7 +1114,7 @@ msgstr ""
 msgid "Call back requests"
 msgstr ""
 
-#: admin/abilities.php:34
+#: admin/abilities.php:35
 msgid "Call back requests, catalog, works, content conversion and search statistics of the funeral services site."
 msgstr ""
 
@@ -1330,7 +1342,7 @@ msgid_plural "Change %d prices"
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/abilities.php:372
+#: admin/abilities.php:373
 msgid "Change prices"
 msgstr ""
 
@@ -1340,6 +1352,14 @@ msgstr ""
 
 #: src/block-controls/index.js:458
 msgid "Change the choice"
+msgstr ""
+
+#: prices/price-check.php:421
+msgid "Change the sums"
+msgstr ""
+
+#: prices/price-check.php:220 prices/price-check.php:227
+msgid "Change them or confirm that they are up to date:"
 msgstr ""
 
 #. translators: %s: column, e.g. Price.
@@ -1360,11 +1380,11 @@ msgstr ""
 msgid "Changes are kept with the page: press “Save” of the page. A section just added to the page appears here after saving. Empty fields — the gray text."
 msgstr ""
 
-#: admin/abilities.php:373
+#: admin/abilities.php:374
 msgid "Changes the prices of several products: by percent, by roubles or to one price, rounded. Products with the price “on request” stay as they are unless one price is set."
 msgstr ""
 
-#: admin/abilities.php:331
+#: admin/abilities.php:332
 msgid "Changes the title, price, “from”, unit, line under the title or visibility of one product."
 msgstr ""
 
@@ -1388,12 +1408,26 @@ msgstr ""
 msgid "Check mark"
 msgstr ""
 
+#: prices/price-check.php:217
+msgid "Check the benefit sums on {site}"
+msgstr ""
+
+#. translators: %s: date.
+#: prices/price-check.php:406
+#, php-format
+msgid "Check the benefit sums: from 1 February the burial benefit changes. Last checked: %s."
+msgstr ""
+
 #: src/catalog/import.js:617
 msgid "Check the file"
 msgstr ""
 
 #: leads/callback.php:143
 msgid "Check the phone number."
+msgstr ""
+
+#: prices/price-check.php:225
+msgid "Check the prices on {site}"
 msgstr ""
 
 #. translators: %s: date of the check.
@@ -1446,7 +1480,7 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: admin/abilities.php:706
+#: admin/abilities.php:707
 msgid "Clear search statistics"
 msgstr ""
 
@@ -1482,7 +1516,7 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
-#: core/modules.php:36
+#: core/modules.php:56
 msgid "Codes for the emails"
 msgstr ""
 
@@ -1522,8 +1556,16 @@ msgstr ""
 msgid "Columns on a phone"
 msgstr ""
 
+#: prices/price-check.php:180
+msgid "Comes a month after the prices were changed or confirmed, every 7 days until they are confirmed in the admin (“Prices are up to date”)."
+msgstr ""
+
 #: reviews/rewio-mail.php:25
 msgid "Comes after a loading of the Rewio reviews that found new reviews or reviews deleted on the review site — if “Notify about new or deleted reviews by email” is ticked in “Memorial → Reviews → Rewio reviews”."
+msgstr ""
+
+#: prices/price-check.php:179
+msgid "Comes every year from 1 February, every 7 days until the sums are confirmed in the admin (“The sums are up to date”)."
 msgstr ""
 
 #: core/assets.php:331
@@ -1550,7 +1592,7 @@ msgstr ""
 msgid "Company details (personal data operator)"
 msgstr ""
 
-#: reviews/rewio.php:153 reviews/rewio.php:1495 reviews/rewio-archive.php:540
+#: reviews/rewio.php:153 reviews/rewio.php:1531 reviews/rewio-archive.php:540
 msgid "Company’s reply"
 msgstr ""
 
@@ -1564,6 +1606,10 @@ msgstr ""
 
 #: blocks/content/content-blocks.php:364
 msgid "Completed works with photos, plot sizes and prices: gallery, cards or photos only."
+msgstr ""
+
+#: prices/price-check.php:458
+msgid "Confirm the prices are up to date"
 msgstr ""
 
 #: src/catalog/repo-pages.js:18
@@ -1614,15 +1660,15 @@ msgstr ""
 msgid "Contrast"
 msgstr ""
 
-#: admin/abilities.php:555
+#: admin/abilities.php:556
 msgid "Convert old codes to blocks"
 msgstr ""
 
-#: src/commands/index.js:174
+#: src/commands/index.js:225
 msgid "Convert the old codes of this page to blocks"
 msgstr ""
 
-#: src/commands/index.js:203
+#: src/commands/index.js:254
 msgid "Converted. Reloading the editor…"
 msgstr ""
 
@@ -1668,7 +1714,7 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-#: src/commands/index.js:198
+#: src/commands/index.js:249
 msgid "Could not convert."
 msgstr ""
 
@@ -1684,11 +1730,11 @@ msgstr ""
 msgid "Could not get the list of branches:"
 msgstr ""
 
-#: reviews/rewio.php:1037
+#: reviews/rewio.php:1038 reviews/rewio.php:1090
 msgid "Could not get the list of branches: "
 msgstr ""
 
-#: reviews/rewio.php:1121
+#: reviews/rewio.php:1157
 msgid "Could not load the reviews: "
 msgstr ""
 
@@ -1724,7 +1770,7 @@ msgstr ""
 msgid "Create a page for this type"
 msgstr ""
 
-#: admin/abilities.php:453
+#: admin/abilities.php:454
 msgid "Create products from photos"
 msgstr ""
 
@@ -1736,7 +1782,7 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
-#: admin/abilities.php:454
+#: admin/abilities.php:455
 msgid "Creates products of a type: one product per photo (or one empty product), at the end of the type, with the type’s default price and specifications."
 msgstr ""
 
@@ -1764,7 +1810,7 @@ msgstr ""
 msgid "Customer reviews"
 msgstr ""
 
-#: blocks/home/home.php:641 blocks/legacy/render/parts/reviews.php:42
+#: blocks/home/home.php:666 blocks/legacy/render/parts/reviews.php:46
 msgid "Customer reviews on Yandex Maps"
 msgstr ""
 
@@ -1853,7 +1899,7 @@ msgstr ""
 msgid "Deleted:"
 msgstr ""
 
-#: admin/abilities.php:707
+#: admin/abilities.php:708
 msgid "Deletes the given queries from the search statistics, or all statistics when no queries are given."
 msgstr ""
 
@@ -1907,7 +1953,7 @@ msgstr ""
 msgid "Do not fill in"
 msgstr ""
 
-#: pages/photo-tools.php:1535
+#: pages/photo-tools.php:1578
 msgid "Do not process"
 msgstr ""
 
@@ -1933,6 +1979,10 @@ msgstr ""
 
 #: legal/legal.php:168
 msgid "Documents"
+msgstr ""
+
+#: core/modules.php:45
+msgid "Domains without nofollow"
 msgstr ""
 
 #: src/block-controls/index.js:522 src/block-controls/index.js:1129 src/editor-meta/faq-sections.js:265
@@ -1963,7 +2013,7 @@ msgstr ""
 msgid "Done. What was changed is in the journal."
 msgstr ""
 
-#: reviews/rewio.php:1227
+#: reviews/rewio.php:1263
 msgid "Done: loaded "
 msgstr ""
 
@@ -1987,7 +2037,7 @@ msgstr ""
 msgid "Drop the table, photos or a ZIP archive here"
 msgstr ""
 
-#: src/settings/rewio-scope.js:111
+#: src/settings/rewio-scope.js:155
 msgid "Each branch on its own tab"
 msgstr ""
 
@@ -2031,7 +2081,7 @@ msgstr ""
 msgid "Empty — the name of the price."
 msgstr ""
 
-#: reviews/rewio-mail.php:30
+#: reviews/rewio-mail.php:30 prices/price-check.php:185
 msgid "Empty — to the addresses of the request email"
 msgstr ""
 
@@ -2057,7 +2107,7 @@ msgstr ""
 msgid "Enter the full number: +7 and 10 digits."
 msgstr ""
 
-#: src/catalog/repo-pages.js:25 src/catalog/repo-pages.js:34 reviews/rewio.php:1088
+#: src/catalog/repo-pages.js:25 src/catalog/repo-pages.js:34 reviews/rewio.php:1124
 msgid "Error"
 msgstr ""
 
@@ -2141,7 +2191,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: admin/abilities.php:500
+#: admin/abilities.php:501
 msgid "Export the catalog"
 msgstr ""
 
@@ -2196,7 +2246,7 @@ msgstr ""
 msgid "Family grave"
 msgstr ""
 
-#: core/modules.php:27
+#: core/modules.php:27 core/modules.php:34
 msgid "Features"
 msgstr ""
 
@@ -2246,7 +2296,7 @@ msgstr ""
 msgid "First paste the API key into “1. Connection” and click “Save” — your branches will appear here."
 msgstr ""
 
-#: reviews/rewio.php:1029
+#: reviews/rewio.php:1029 reviews/rewio.php:1086
 msgid "First paste the API key into “1. Connection” and save — your branches will appear here."
 msgstr ""
 
@@ -2440,7 +2490,7 @@ msgstr ""
 msgid "Funeral and cremation packages: on the home page and by the “Funeral packages” block on any page — the same everywhere. The cremation table on the cremation page is the “Cremation prices” block."
 msgstr ""
 
-#: prices/price-blocks.php:189 blocks/home/home.php:226
+#: prices/price-blocks.php:190 blocks/home/home.php:226
 msgid "Funeral and goods"
 msgstr ""
 
@@ -2494,6 +2544,10 @@ msgstr ""
 
 #: blocks/content/content-blocks.php:410
 msgid "Gallery: type filter"
+msgstr ""
+
+#: pages/photo-tools.php:349
+msgid "General"
 msgstr ""
 
 #: blocks/legacy/render/parts/contacts-cards.php:87
@@ -2948,6 +3002,10 @@ msgstr ""
 msgid "Large"
 msgstr ""
 
+#: prices/price-check.php:219
+msgid "Last checked: {date}."
+msgstr ""
+
 #. translators: 1: date and time, 2: number of new products, 3: number of updated products.
 #: src/catalog/import.js:474
 #, php-format
@@ -2974,7 +3032,7 @@ msgstr ""
 msgid "Lead text"
 msgstr ""
 
-#: blocks/home/home.php:624 blocks/legacy/render/parts/reviews.php:35
+#: blocks/home/home.php:645 blocks/legacy/render/parts/reviews.php:35
 msgid "Leave a review"
 msgstr ""
 
@@ -3066,11 +3124,19 @@ msgstr ""
 msgid "Links in the text: {cookies:text} — to the Cookie policy, {policy:text} — to the Personal data policy, {consent:text} — to the Consent (the pages are chosen in “Memorial → Documents”). Without the tags a link to the Cookie policy is added at the end automatically."
 msgstr ""
 
+#: core/modules.php:35
+msgid "Links to other sites"
+msgstr ""
+
+#: core/modules.php:40
+msgid "Links to other sites (Yandex Maps, 2GIS, messengers, documents) open in a new tab and get rel=\"nofollow\": search engines do not pass the weight of the site through them. The texts of the pages are not changed — only how the page is shown."
+msgstr ""
+
 #: blocks/content/content-blocks.php:91
 msgid "Links to sub-sections"
 msgstr ""
 
-#: admin/abilities.php:149
+#: admin/abilities.php:150
 msgid "List call back requests"
 msgstr ""
 
@@ -3082,11 +3148,11 @@ msgstr ""
 msgid "List of sub-sections of a catalog section with links and starting prices."
 msgstr ""
 
-#: admin/abilities.php:285
+#: admin/abilities.php:286
 msgid "List products"
 msgstr ""
 
-#: reviews/rewio.php:1146
+#: reviews/rewio.php:1182
 msgid "Load reviews now"
 msgstr ""
 
@@ -3094,7 +3160,7 @@ msgstr ""
 msgid "Loading reviews on schedule, the Rewio reviews block."
 msgstr ""
 
-#: reviews/rewio.php:1087
+#: reviews/rewio.php:1123
 msgid "Loading reviews… usually it takes 10–30 seconds"
 msgstr ""
 
@@ -3218,7 +3284,7 @@ msgstr ""
 msgid "Margin from the edge"
 msgstr ""
 
-#: admin/abilities.php:231
+#: admin/abilities.php:232
 msgid "Mark a request as called back"
 msgstr ""
 
@@ -3226,12 +3292,16 @@ msgstr ""
 msgid "Mark as called back"
 msgstr ""
 
+#: prices/price-check.php:459
+msgid "Marks the prices (or the benefit sums) as checked today: the date “Prices updated” on the site and “Updated” of the separate prices."
+msgstr ""
+
 #: catalog/catalog.php:17
 msgid "Material"
 msgstr ""
 
 #. Author of the plugin
-#: memorial-plugin.php admin/abilities.php:33 core/settings.php:1331 core/icons-api.php:51
+#: memorial-plugin.php admin/abilities.php:34 core/settings.php:1331 core/icons-api.php:51
 msgid "Memorial"
 msgstr ""
 
@@ -3336,7 +3406,7 @@ msgstr ""
 msgid "Month the prices were last changed"
 msgstr ""
 
-#: prices/prices.php:298 prices/price-blocks.php:201 blocks/home/home.php:124 blocks/home/home.php:143 blocks/home/home.php:227
+#: prices/prices.php:298 prices/price-blocks.php:202 blocks/home/home.php:124 blocks/home/home.php:143 blocks/home/home.php:227
 msgid "Monuments and landscaping"
 msgstr ""
 
@@ -3344,7 +3414,7 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: prices/price-blocks.php:154
+#: prices/price-blocks.php:155
 msgid "More about the benefit"
 msgstr ""
 
@@ -3601,7 +3671,7 @@ msgstr ""
 msgid "Northern cemetery"
 msgstr ""
 
-#: reviews/rewio.php:1185 reviews/rewio.php:1217
+#: reviews/rewio.php:1221 reviews/rewio.php:1253
 msgid "Not allowed."
 msgstr ""
 
@@ -3621,7 +3691,7 @@ msgstr ""
 msgid "Not chosen — the block has its own text, only on this page."
 msgstr ""
 
-#: reviews/rewio.php:1120
+#: reviews/rewio.php:1156
 msgid "Not connected — paste the API key below and save."
 msgstr ""
 
@@ -3645,11 +3715,11 @@ msgstr ""
 msgid "Not on copies narrower than, px"
 msgstr ""
 
-#: reviews/rewio.php:1091
+#: reviews/rewio.php:1127
 msgid "Not saved"
 msgstr ""
 
-#: reviews/rewio.php:1092
+#: reviews/rewio.php:1128
 msgid "Not saved — click “Save” at the bottom"
 msgstr ""
 
@@ -3738,7 +3808,7 @@ msgstr ""
 msgid "Off — the photo without a tint"
 msgstr ""
 
-#: pages/photo-tools.php:329
+#: pages/photo-tools.php:334
 msgid "Off: all the functions below are switched off, the site shows the photos as they were uploaded. Turn it on to set them."
 msgstr ""
 
@@ -3806,7 +3876,7 @@ msgstr ""
 msgid "On the site"
 msgstr ""
 
-#: reviews/rewio.php:1122
+#: reviews/rewio.php:1158
 msgid "On the site "
 msgstr ""
 
@@ -3814,7 +3884,7 @@ msgstr ""
 msgid "On the site now"
 msgstr ""
 
-#: pages/photo-tools.php:328
+#: pages/photo-tools.php:333
 msgid "On: the settings below are applied to the photos of the site."
 msgstr ""
 
@@ -3834,6 +3904,10 @@ msgstr ""
 msgid "One column — large photos, one product under another; two — more products on the screen."
 msgstr ""
 
+#: core/modules.php:47
+msgid "One domain per line. Links to them open in a new tab but stay normal (followed) for search engines. Subdomains are included."
+msgstr ""
+
 #: blocks/legacy/legacy.php:19
 msgid "One of the addresses with its opening hours and the night phone line, above the header. The address is chosen in the block settings."
 msgstr ""
@@ -3846,7 +3920,7 @@ msgstr ""
 msgid "One short line after the name, for example “our own, without a bank — for monuments and tiling”. Can stay empty."
 msgstr ""
 
-#: pages/photo-tools.php:331
+#: pages/photo-tools.php:336
 msgid "One style for the photos of the site. Every change is seen at once in the preview on the right — before saving. After saving the photos are processed in the background, a few a minute; the originals are kept, and everything can be returned."
 msgstr ""
 
@@ -3940,6 +4014,10 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
+#: core/modules.php:39
+msgid "Open in a new tab, add nofollow"
+msgstr ""
+
 #: src/catalog/repo-pages.js:289
 msgid "Open in the editor"
 msgstr ""
@@ -3958,6 +4036,10 @@ msgstr ""
 #: places/transport.php:165
 #, php-format
 msgid "Open the photo larger: %s"
+msgstr ""
+
+#: prices/price-check.php:421
+msgid "Open the prices"
 msgstr ""
 
 #: core/settings.php:73
@@ -4056,7 +4138,7 @@ msgstr ""
 msgid "Other counters — start only after consent"
 msgstr ""
 
-#: prices/prices.php:242 prices/prices.php:248 prices/price-blocks.php:92 blocks/home/home.php:132
+#: prices/prices.php:242 prices/prices.php:248 prices/price-blocks.php:93 blocks/home/home.php:132
 msgid "Our guarantees"
 msgstr ""
 
@@ -4131,7 +4213,7 @@ msgstr ""
 msgid "Packages"
 msgstr ""
 
-#: src/catalog/repo-pages.js:124 src/catalog/repo-pages.js:212 src/settings/photo-preview.js:22 prices/price-blocks.php:289 core/settings.php:365
+#: src/catalog/repo-pages.js:124 src/catalog/repo-pages.js:212 src/settings/photo-preview.js:22 prices/price-blocks.php:290 core/settings.php:365
 msgid "Page"
 msgstr ""
 
@@ -4197,7 +4279,7 @@ msgstr ""
 msgid "Payment"
 msgstr ""
 
-#: prices/price-blocks.php:132
+#: prices/price-blocks.php:133
 msgid "Payment for the burial of a participant of the special military operation"
 msgstr ""
 
@@ -4205,7 +4287,7 @@ msgstr ""
 msgid "Percent"
 msgstr ""
 
-#: core/modules.php:43
+#: core/modules.php:65
 msgid "Permissions"
 msgstr ""
 
@@ -4287,7 +4369,7 @@ msgstr ""
 msgid "Photo blocks of products and works — the photos are picked up automatically."
 msgstr ""
 
-#: reviews/rewio.php:1490
+#: reviews/rewio.php:1526
 msgid "Photo for the review"
 msgstr ""
 
@@ -4327,7 +4409,7 @@ msgstr ""
 msgid "Photo on the right (mourning hall — light, daylight)"
 msgstr ""
 
-#: pages/photo-tools.php:321 pages/photo-tools.php:1533
+#: pages/photo-tools.php:324 pages/photo-tools.php:325 pages/photo-tools.php:350 pages/photo-tools.php:1576
 msgid "Photo processing"
 msgstr ""
 
@@ -4419,7 +4501,7 @@ msgstr ""
 msgid "Portrait 3:4 (wreaths, monuments)"
 msgstr ""
 
-#: admin/abilities.php:561
+#: admin/abilities.php:562
 msgid "Post IDs (at most 10 per call)."
 msgstr ""
 
@@ -4459,7 +4541,7 @@ msgstr ""
 msgid "Price list"
 msgstr ""
 
-#: prices/price-blocks.php:289
+#: prices/price-blocks.php:290
 msgid "Price list item"
 msgstr ""
 
@@ -4511,6 +4593,14 @@ msgstr ""
 msgid "Prices are given in roubles and may change; the exact cost is confirmed by phone."
 msgstr ""
 
+#: src/commands/index.js:160 prices/price-check.php:420
+msgid "Prices are up to date"
+msgstr ""
+
+#: src/commands/index.js:161
+msgid "Prices are up to date check confirm date"
+msgstr ""
+
 #: prices/prices.php:442
 msgid "Prices from here are put into the pages automatically — change them only here; catalog prices and the number of models are counted from the products."
 msgstr ""
@@ -4529,7 +4619,7 @@ msgstr ""
 msgid "Prices one by one"
 msgstr ""
 
-#: prices/price-blocks.php:283
+#: prices/price-blocks.php:284
 msgid "Prices one by one: no row has a price yet. Fill in the prices of the codes in Memorial → Prices → Separate prices."
 msgstr ""
 
@@ -4549,7 +4639,7 @@ msgstr ""
 msgid "Process the photos"
 msgstr ""
 
-#: pages/photo-tools.php:327
+#: pages/photo-tools.php:332
 msgid "Process the photos — all the functions below"
 msgstr ""
 
@@ -4567,7 +4657,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: admin/abilities.php:378
+#: admin/abilities.php:379
 msgid "Product IDs."
 msgstr ""
 
@@ -4579,7 +4669,7 @@ msgstr ""
 msgid "Product card: choose the product in the block settings (“What to show”). In the product template the block shows the product that is open."
 msgstr ""
 
-#: admin/abilities.php:419
+#: admin/abilities.php:420
 msgid "Product or work IDs."
 msgstr ""
 
@@ -4599,7 +4689,7 @@ msgstr ""
 msgid "Product title"
 msgstr ""
 
-#: admin/abilities.php:295
+#: admin/abilities.php:296
 msgid "Product type (top catalog category) ID; 0 — all."
 msgstr ""
 
@@ -4657,7 +4747,7 @@ msgstr ""
 msgid "Products of one catalog section."
 msgstr ""
 
-#: admin/abilities.php:286
+#: admin/abilities.php:287
 msgid "Products of the catalog with price and visibility, optionally of one product type."
 msgstr ""
 
@@ -4697,7 +4787,7 @@ msgstr ""
 msgid "Publish at once"
 msgstr ""
 
-#: admin/abilities.php:656
+#: admin/abilities.php:657
 msgid "Queries of the site search (questions and answers, “Good to know”) with counts; queries that found nothing show which answers the site lacks."
 msgstr ""
 
@@ -4746,7 +4836,7 @@ msgid "Rating"
 msgstr ""
 
 #. translators: %s: rating, for example 4,8
-#: reviews/rewio.php:1272
+#: reviews/rewio.php:1308
 #, php-format
 msgid "Rating %s out of 5"
 msgstr ""
@@ -4755,7 +4845,7 @@ msgstr ""
 msgid "Rating (optional)"
 msgstr ""
 
-#: reviews/rewio.php:1485 reviews/bookreviews.php:154 core/assets.php:99
+#: reviews/rewio.php:1521 reviews/bookreviews.php:154 core/assets.php:99
 msgid "Read more"
 msgstr ""
 
@@ -4781,6 +4871,22 @@ msgstr ""
 
 #: memorial-plugin.php:113
 msgid "Ready-made blocks in the editor"
+msgstr ""
+
+#: prices/price-check.php:422
+msgid "Remind in 3 days"
+msgstr ""
+
+#: prices/price-check.php:177
+msgid "Reminder to check the benefits"
+msgstr ""
+
+#: prices/price-check.php:177
+msgid "Reminder to check the prices"
+msgstr ""
+
+#: core/mail.php:140
+msgid "Reminders to check the prices and the benefits"
 msgstr ""
 
 #: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:143 src/block-controls/index.js:211 src/block-controls/index.js:264 src/block-controls/index.js:446
@@ -4839,7 +4945,7 @@ msgstr ""
 msgid "Replace photo"
 msgstr ""
 
-#: admin/abilities.php:556
+#: admin/abilities.php:557
 msgid "Replaces the old codes in square brackets in a post with blocks and site values, and in SEOPress fields with variables. The text before the conversion is saved as a revision."
 msgstr ""
 
@@ -4867,7 +4973,7 @@ msgstr ""
 msgid "Requests"
 msgstr ""
 
-#: admin/abilities.php:150
+#: admin/abilities.php:151
 msgid "Requests from the “Call me back” form: phone, name, page, time and whether someone has called back. Newest first."
 msgstr ""
 
@@ -4875,7 +4981,7 @@ msgstr ""
 msgid "Requests from the “Call me back” window. Each one also comes by email; here they are kept even if the email is lost."
 msgstr ""
 
-#: admin/abilities.php:609
+#: admin/abilities.php:610
 msgid "Restores the text and SEO fields of a post from before its conversion to blocks."
 msgstr ""
 
@@ -4893,6 +4999,10 @@ msgstr ""
 
 #: admin/collections.php:130 reviews/rewio-archive.php:447
 msgid "Review"
+msgstr ""
+
+#: blocks/home/home.php:298
+msgid "Review buttons"
 msgstr ""
 
 #: reviews/rewio.php:165
@@ -4927,7 +5037,7 @@ msgstr ""
 msgid "Reviews block: add the review services in “Memorial → Reviews”."
 msgstr ""
 
-#: reviews/rewio.php:1425 reviews/reviews.php:234
+#: reviews/rewio.php:1461 reviews/reviews.php:234
 msgid "Reviews by branch"
 msgstr ""
 
@@ -5009,7 +5119,7 @@ msgstr ""
 msgid "Rewio does not respond ("
 msgstr ""
 
-#: src/settings/rewio-scope.js:71
+#: src/settings/rewio-scope.js:115
 msgid "Rewio example"
 msgstr ""
 
@@ -5029,11 +5139,11 @@ msgstr ""
 msgid "Rewio reviews were loaded on the site {site} ({time})."
 msgstr ""
 
-#: reviews/rewio.php:1337
+#: reviews/rewio.php:1373
 msgid "Rewio reviews: showing the reviews is off — the tick in “Memorial → Reviews → Rewio reviews → 1. Connection”. Only you see this message."
 msgstr ""
 
-#: reviews/rewio.php:1349
+#: reviews/rewio.php:1385
 msgid "Rewio reviews: the reviews are not loaded yet — “Memorial → Reviews → Rewio reviews” → “Load reviews now”. Only you see this message."
 msgstr ""
 
@@ -5045,7 +5155,7 @@ msgstr ""
 msgid "Right column title (empty — “Cost”)"
 msgstr ""
 
-#: admin/abilities.php:608
+#: admin/abilities.php:609
 msgid "Roll back a conversion"
 msgstr ""
 
@@ -5067,7 +5177,7 @@ msgstr ""
 msgid "Roubles"
 msgstr ""
 
-#: admin/abilities.php:344
+#: admin/abilities.php:345
 msgid "Roubles; 0 — “price on request”."
 msgstr ""
 
@@ -5127,11 +5237,11 @@ msgstr ""
 msgid "Save specifications"
 msgstr ""
 
-#: src/commands/index.js:184
+#: src/commands/index.js:235
 msgid "Save the page first."
 msgstr ""
 
-#: reviews/rewio.php:1090
+#: reviews/rewio.php:1126
 msgid "Saved ✓ The reviews will update within a minute"
 msgstr ""
 
@@ -5147,7 +5257,7 @@ msgstr ""
 msgid "Saving the products…"
 msgstr ""
 
-#: reviews/rewio.php:1089
+#: reviews/rewio.php:1125
 msgid "Saving…"
 msgstr ""
 
@@ -5237,7 +5347,7 @@ msgstr ""
 msgid "Select at least two products."
 msgstr ""
 
-#: reviews/rewio-mail.php:44 leads/lead-mail.php:54
+#: reviews/rewio-mail.php:44 leads/lead-mail.php:54 prices/price-check.php:199
 msgid "Send a test email"
 msgstr ""
 
@@ -5255,6 +5365,10 @@ msgstr ""
 
 #: reviews/rewio-mail.php:46
 msgid "Sends an example with two reviews with these settings (also unsaved) to the addresses above."
+msgstr ""
+
+#: prices/price-check.php:201
+msgid "Sends the email with these settings (also unsaved) to the addresses above."
 msgstr ""
 
 #: admin/collections.php:76
@@ -5333,15 +5447,15 @@ msgstr ""
 msgid "Set up the sections"
 msgstr ""
 
-#: admin/abilities.php:232
+#: admin/abilities.php:233
 msgid "Sets or clears “Called back” of a call back request."
 msgstr ""
 
-#: core/modules.php:66
+#: core/modules.php:94 pages/photo-tools.php:325
 msgid "Settings"
 msgstr ""
 
-#: reviews/rewio-mail.php:31 leads/lead-mail.php:30
+#: reviews/rewio-mail.php:31 leads/lead-mail.php:30 prices/price-check.php:186
 msgid "Several addresses — separated by commas."
 msgstr ""
 
@@ -5413,7 +5527,7 @@ msgstr ""
 msgid "Show in examples"
 msgstr ""
 
-#: reviews/rewio.php:1508
+#: reviews/rewio.php:1544
 msgid "Show more reviews"
 msgstr ""
 
@@ -5421,7 +5535,7 @@ msgstr ""
 msgid "Show on the site"
 msgstr ""
 
-#: reviews/rewio.php:1454
+#: reviews/rewio.php:1490
 msgid "Show only the reviews of: "
 msgstr ""
 
@@ -5429,7 +5543,7 @@ msgstr ""
 msgid "Show or hide a review on the site:"
 msgstr ""
 
-#: admin/abilities.php:409
+#: admin/abilities.php:410
 msgid "Show or hide on the site"
 msgstr ""
 
@@ -5441,7 +5555,7 @@ msgstr ""
 msgid "Show prices"
 msgstr ""
 
-#: reviews/reviews.php:246 reviews/reviews.php:253 blocks/home/home.php:642 blocks/legacy/render/parts/reviews.php:43
+#: reviews/reviews.php:246 reviews/reviews.php:253 blocks/home/home.php:667 blocks/legacy/render/parts/reviews.php:47
 msgid "Show reviews"
 msgstr ""
 
@@ -5461,7 +5575,7 @@ msgstr ""
 msgid "Show the map"
 msgstr ""
 
-#: reviews/rewio.php:1449
+#: reviews/rewio.php:1485
 msgid "Show the reviews of a site"
 msgstr ""
 
@@ -5511,7 +5625,7 @@ msgstr ""
 msgid "Shown on the “Contacts” page and in the footer. Empty fields are not shown."
 msgstr ""
 
-#: admin/abilities.php:410
+#: admin/abilities.php:411
 msgid "Shows (publishes) or hides (makes drafts of) products or works."
 msgstr ""
 
@@ -5580,7 +5694,7 @@ msgstr ""
 msgid "Social Fund of Russia"
 msgstr ""
 
-#: prices/price-blocks.php:126
+#: prices/price-blocks.php:127
 msgid "Social benefit for a burial"
 msgstr ""
 
@@ -5588,11 +5702,11 @@ msgstr ""
 msgid "Soft card"
 msgstr ""
 
-#: reviews/rewio.php:1466 core/assets.php:101
+#: reviews/rewio.php:1502 core/assets.php:101
 msgid "Sort by date"
 msgstr ""
 
-#: reviews/rewio.php:1467 core/assets.php:103
+#: reviews/rewio.php:1503 core/assets.php:103
 msgid "Sort by rating"
 msgstr ""
 
@@ -5600,7 +5714,7 @@ msgstr ""
 msgid "Sort order"
 msgstr ""
 
-#: reviews/rewio.php:1465 blocks/content/content-blocks.php:98 blocks/legacy/render/catalog-archive.php:54
+#: reviews/rewio.php:1501 blocks/content/content-blocks.php:98 blocks/legacy/render/catalog-archive.php:54
 msgid "Sorting"
 msgstr ""
 
@@ -5608,7 +5722,7 @@ msgstr ""
 msgid "Sorting for visitors: by date and by rating (on the right above the reviews)"
 msgstr ""
 
-#: catalog/catalog-front.php:369 reviews/rewio.php:1465 works/works.php:179
+#: catalog/catalog-front.php:369 reviews/rewio.php:1501 works/works.php:179
 msgid "Sorting:"
 msgstr ""
 
@@ -5691,7 +5805,7 @@ msgstr ""
 msgid "Sub-sections, sorting and products of a catalog section: the one that is open (template) or the one chosen in the block settings."
 msgstr ""
 
-#: reviews/rewio-mail.php:35 leads/lead-mail.php:34
+#: reviews/rewio-mail.php:35 leads/lead-mail.php:34 prices/price-check.php:190
 msgid "Subject"
 msgstr ""
 
@@ -5801,7 +5915,7 @@ msgstr ""
 msgid "Text of the button"
 msgstr ""
 
-#: reviews/rewio-mail.php:40 leads/lead-mail.php:39
+#: reviews/rewio-mail.php:40 leads/lead-mail.php:39 prices/price-check.php:195
 msgid "Text of the email"
 msgstr ""
 
@@ -5831,6 +5945,14 @@ msgstr ""
 
 #: leads/callback.php:277
 msgid "Thank you! The request is accepted — we will call you back soon."
+msgstr ""
+
+#: prices/price-check.php:386
+msgid "Thank you: the benefit sums are marked as up to date."
+msgstr ""
+
+#: prices/price-check.php:386
+msgid "Thank you: the prices are marked as up to date, the date on the site is today."
 msgstr ""
 
 #: reviews/rewio.php:361
@@ -5879,12 +6001,20 @@ msgstr ""
 msgid "The benefit and the payment"
 msgstr ""
 
+#: src/commands/index.js:177
+msgid "The benefit sums are marked as up to date."
+msgstr ""
+
 #: src/block-controls/index.js:1145
 msgid "The block found nothing to show on this page by itself. Choose what it should show — later the choice is changed with the ⚙ button on the block toolbar or in the block settings on the right (“What to show”)."
 msgstr ""
 
 #: blocks/home/home.php:177
 msgid "The burial benefit and the payment for participants of the special military operation — the sums from Memorial → Prices → Separate prices (codes posobie and vyplata_svo)."
+msgstr ""
+
+#: prices/price-check.php:218
+msgid "The burial benefit and the payments change every year from 1 February. Check the sums on the site:"
 msgstr ""
 
 #: src/catalog/work-types.js:200
@@ -5935,7 +6065,7 @@ msgstr ""
 msgid "The email was not sent: %s"
 msgstr ""
 
-#: catalog/catalog-import.php:1628 admin/abilities.php:536
+#: catalog/catalog-import.php:1628 admin/abilities.php:537
 msgid "The file, base64."
 msgstr ""
 
@@ -6017,6 +6147,10 @@ msgstr ""
 msgid "The link to the company card of this address. Search engines link the site with the card (structured data for Google and Yandex)."
 msgstr ""
 
+#: src/settings/rewio-scope.js:166
+msgid "The list of branches is updated. Tick the branches and click “Save”."
+msgstr ""
+
 #: places/places.php:188
 msgid "The list of cemeteries is shown by the “Cemeteries” block on any page (for example, “Cemeteries of Belgorod and the district”). "
 msgstr ""
@@ -6061,6 +6195,20 @@ msgstr ""
 msgid "The price or the number of models is counted from its products."
 msgstr ""
 
+#: src/commands/index.js:165
+msgid "The prices are marked as up to date, the date on the site is today."
+msgstr ""
+
+#. translators: %s: date.
+#: prices/price-check.php:413
+#, php-format
+msgid "The prices on the site have not been checked since %s. Are they up to date?"
+msgstr ""
+
+#: prices/price-check.php:226
+msgid "The prices on the site were last changed or checked on {date}. Please check that they are up to date."
+msgstr ""
+
 #: catalog/catalog-import.php:1037
 msgid "The product could not be created."
 msgstr ""
@@ -6071,7 +6219,7 @@ msgstr ""
 msgid "The products become one: “%s” gets the photos of all of them, the missing fields and all categories; the others go to the trash and their addresses lead to it."
 msgstr ""
 
-#: reviews/rewio.php:1123
+#: reviews/rewio.php:1159
 msgid "The reviews are not loaded yet — click “Load reviews now”."
 msgstr ""
 
@@ -6101,12 +6249,16 @@ msgstr ""
 msgid "The shared texts were not saved."
 msgstr ""
 
-#: reviews/rewio.php:1083
+#: reviews/rewio.php:1119
 msgid "The site did not respond"
 msgstr ""
 
 #: reviews/rewio.php:100
 msgid "The site keeps its copy of a review that disappeared from the review site; in “Review list” it is marked “Deleted on the review site”. Off — such reviews are not shown on the site."
+msgstr ""
+
+#: prices/price-check.php:420
+msgid "The sums are up to date"
 msgstr ""
 
 #: catalog/catalog-import.php:132
@@ -6301,7 +6453,7 @@ msgstr ""
 msgid "This page"
 msgstr ""
 
-#: admin/abilities.php:435
+#: admin/abilities.php:436
 msgid "This part of the site is switched off in Memorial → Settings → Features."
 msgstr ""
 
@@ -6341,7 +6493,7 @@ msgstr ""
 msgid "Tick the consent to the data processing."
 msgstr ""
 
-#: core/modules.php:45
+#: core/modules.php:67
 msgid "Tick what a role may open and change. An administrator may do everything. “Settings” (this screen) is only for administrators."
 msgstr ""
 
@@ -6421,7 +6573,7 @@ msgstr ""
 msgid "Try again"
 msgstr ""
 
-#: reviews/rewio.php:1086
+#: reviews/rewio.php:1122
 msgid "Try again in a minute."
 msgstr ""
 
@@ -6489,7 +6641,7 @@ msgstr ""
 msgid "Unknown list."
 msgstr ""
 
-#: catalog/catalog-manager.php:695 admin/abilities.php:481
+#: catalog/catalog-manager.php:695 admin/abilities.php:482
 msgid "Unknown product type."
 msgstr ""
 
@@ -6529,11 +6681,11 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: admin/abilities.php:330
+#: admin/abilities.php:331
 msgid "Update a product"
 msgstr ""
 
-#: reviews/rewio.php:1003
+#: src/settings/rewio-scope.js:46 reviews/rewio.php:1003
 msgid "Update the list of branches"
 msgstr ""
 
@@ -6547,8 +6699,12 @@ msgstr ""
 msgid "Updated to version %1$d; the previous text is revision %2$d."
 msgstr ""
 
-#: reviews/rewio.php:1131
+#: reviews/rewio.php:1167
 msgid "Updated:"
+msgstr ""
+
+#: src/settings/rewio-scope.js:45
+msgid "Updating the list…"
 msgstr ""
 
 #: src/catalog/import.js:360
@@ -6591,7 +6747,7 @@ msgstr ""
 msgid "View on the site"
 msgstr ""
 
-#: reviews/rewio.php:1151
+#: reviews/rewio.php:1187
 msgid "View the loaded reviews and hide unneeded ones"
 msgstr ""
 
@@ -6623,11 +6779,15 @@ msgstr ""
 msgid "Ways of payment and the instalment plan from Memorial → Prices → Payment — the same on every page."
 msgstr ""
 
-#: blocks/home/home.php:625 blocks/legacy/render/parts/reviews.php:36
+#: blocks/home/home.php:649 blocks/legacy/render/parts/reviews.php:39
+msgid "We are on 2GIS"
+msgstr ""
+
+#: blocks/home/home.php:646 blocks/legacy/render/parts/reviews.php:36
 msgid "We are on Yandex Maps"
 msgstr ""
 
-#: prices/price-blocks.php:153
+#: prices/price-blocks.php:154
 msgid "We give the full set of documents for claiming the payments. The payment is claimed by a relative."
 msgstr ""
 
@@ -6663,7 +6823,7 @@ msgstr ""
 msgid "What changes"
 msgstr ""
 
-#: core/modules.php:44
+#: core/modules.php:66
 msgid "What editors and authors may do"
 msgstr ""
 
@@ -6683,7 +6843,7 @@ msgstr ""
 msgid "What is included"
 msgstr ""
 
-#: core/modules.php:68
+#: core/modules.php:96
 msgid "What of the “Memorial” plugin works on the site, and what editors and authors may do."
 msgstr ""
 
@@ -6719,7 +6879,7 @@ msgstr ""
 msgid "What to write"
 msgstr ""
 
-#: admin/abilities.php:655
+#: admin/abilities.php:656
 msgid "What visitors search for"
 msgstr ""
 
@@ -6767,7 +6927,7 @@ msgstr ""
 msgid "Where the price comes from"
 msgstr ""
 
-#: reviews/rewio-mail.php:29
+#: reviews/rewio-mail.php:29 prices/price-check.php:184
 msgid "Where to send"
 msgstr ""
 
@@ -6957,10 +7117,6 @@ msgstr ""
 msgid "Yandex Metrica counter number"
 msgstr ""
 
-#: blocks/home/home.php:298
-msgid "Yandex review buttons"
-msgstr ""
-
 #: blocks/home/home.php:305
 msgid "Yandex reviews widget"
 msgstr ""
@@ -6993,6 +7149,10 @@ msgstr ""
 msgid "You chose to keep the text of the site for this version of the file."
 msgstr ""
 
+#: prices/price-check.php:433
+msgid "You may not change the prices."
+msgstr ""
+
 #: src/editor-meta/faq-sections.js:210
 msgid "Your own section: on this page add a Heading (H2) and right under it “Details” blocks — a question and its answer each. The section is shown among the others, is found by the search and is marked up for search engines (FAQPage). Sections of other pages show the first paragraph of an answer and “Read more”."
 msgstr ""
@@ -7017,7 +7177,7 @@ msgstr ""
 msgid "address of that page"
 msgstr ""
 
-#: core/mail.php:125 core/mail.php:135
+#: core/mail.php:125 core/mail.php:135 core/mail.php:143
 msgid "address of the site"
 msgstr ""
 
@@ -7331,7 +7491,7 @@ msgstr ""
 
 #: blocks/types/review-buttons/block.json
 msgctxt "block description"
-msgid "“Leave a review” and “We are on Yandex Maps” buttons."
+msgid "“Leave a review”, “We are on Yandex Maps” and “We are on 2GIS” buttons."
 msgstr ""
 
 #: blocks/types/not-found/block.json
@@ -8064,6 +8224,11 @@ msgctxt "block title"
 msgid "Product: specifications"
 msgstr ""
 
+#: blocks/types/review-buttons/block.json
+msgctxt "block title"
+msgid "Review buttons"
+msgstr ""
+
 #: blocks/types/reviews/block.json
 msgctxt "block title"
 msgid "Reviews from review sites"
@@ -8104,11 +8269,6 @@ msgctxt "block title"
 msgid "Yandex Maps reviews"
 msgstr ""
 
-#: blocks/types/review-buttons/block.json
-msgctxt "block title"
-msgid "Yandex review buttons"
-msgstr ""
-
 #: blocks/types/review-widget/block.json
 msgctxt "block title"
 msgid "Yandex reviews widget"
@@ -8139,7 +8299,7 @@ msgctxt "button: order a product"
 msgid "Order"
 msgstr ""
 
-#: reviews/rewio.php:1466
+#: reviews/rewio.php:1502
 msgid "by date"
 msgstr ""
 
@@ -8147,7 +8307,7 @@ msgstr ""
 msgid "by itself after the update"
 msgstr ""
 
-#: reviews/rewio.php:1467
+#: reviews/rewio.php:1503
 msgid "by rating"
 msgstr ""
 
@@ -8239,7 +8399,7 @@ msgstr ""
 msgid "contract"
 msgstr ""
 
-#: admin/abilities.php:574
+#: admin/abilities.php:575
 msgid "converted, unchanged, no-revision, not-found or an error message."
 msgstr ""
 
@@ -8291,7 +8451,7 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: reviews/rewio.php:1084
+#: reviews/rewio.php:1120
 msgid "error"
 msgstr ""
 
@@ -8411,7 +8571,7 @@ msgstr ""
 msgid "hidden on the site"
 msgstr ""
 
-#: reviews/rewio.php:1161
+#: reviews/rewio.php:1197
 msgid "hide"
 msgstr ""
 
@@ -8435,7 +8595,7 @@ msgstr ""
 msgid "in SEO"
 msgstr ""
 
-#: prices/price-blocks.php:132
+#: prices/price-blocks.php:133
 msgid "in the Belgorod region, through the military enlistment office"
 msgstr ""
 
@@ -8471,6 +8631,10 @@ msgstr ""
 
 #: core/mail.php:126
 msgid "link to “Call-back requests” in the admin"
+msgstr ""
+
+#: core/mail.php:144
+msgid "link to “Prices” in the admin"
 msgstr ""
 
 #: core/mail.php:136
@@ -8509,11 +8673,11 @@ msgid_plural "models"
 msgstr[0] ""
 msgstr[1] ""
 
-#: prices/price-blocks.php:280
+#: prices/price-blocks.php:281
 msgid "more"
 msgstr ""
 
-#: reviews/rewio.php:1085
+#: reviews/rewio.php:1121
 msgid "most likely, the server ran out of time"
 msgstr ""
 
@@ -8525,7 +8689,7 @@ msgstr ""
 msgid "navigation"
 msgstr ""
 
-#: admin/abilities.php:160
+#: admin/abilities.php:161
 msgid "new — nobody has called back yet."
 msgstr ""
 
@@ -8555,7 +8719,7 @@ msgstr ""
 msgid "no price yet"
 msgstr ""
 
-#: prices/price-blocks.php:167
+#: prices/price-blocks.php:168
 msgid "no unit"
 msgstr ""
 
@@ -8605,6 +8769,10 @@ msgstr ""
 msgid "open"
 msgstr ""
 
+#: seo/external-links.php:123
+msgid "opens in a new tab"
+msgstr ""
+
 #. translators: %d: number of questions.
 #: src/editor-meta/faq-sections.js:71
 #, php-format
@@ -8645,11 +8813,11 @@ msgstr ""
 msgid "pcs"
 msgstr ""
 
-#: prices/price-blocks.php:169
+#: prices/price-blocks.php:170
 msgid "per km"
 msgstr ""
 
-#: prices/price-blocks.php:168
+#: prices/price-blocks.php:169
 msgid "per m²"
 msgstr ""
 
@@ -8657,11 +8825,11 @@ msgstr ""
 msgid "per piece"
 msgstr ""
 
-#: prices/price-blocks.php:171
+#: prices/price-blocks.php:172
 msgid "per running metre"
 msgstr ""
 
-#: prices/price-blocks.php:170
+#: prices/price-blocks.php:171
 msgid "per trip"
 msgstr ""
 
@@ -8682,7 +8850,7 @@ msgstr ""
 msgid "photos"
 msgstr ""
 
-#: reviews/rewio.php:1166
+#: reviews/rewio.php:1202
 msgid "photos:"
 msgstr ""
 
@@ -8745,7 +8913,7 @@ msgctxt "request column"
 msgid "Email"
 msgstr ""
 
-#: reviews/rewio.php:968 reviews/rewio.php:1122 reviews/rewio.php:1227 reviews/rewio.php:1438 reviews/reviews.php:177
+#: reviews/rewio.php:968 reviews/rewio.php:1158 reviews/rewio.php:1263 reviews/rewio.php:1474 reviews/reviews.php:177
 msgid "review"
 msgid_plural "reviews"
 msgstr[0] ""
@@ -8787,7 +8955,7 @@ msgstr ""
 msgid "settings"
 msgstr ""
 
-#: reviews/rewio-mail.php:23 leads/lead-mail.php:22 core/modules.php:35
+#: reviews/rewio-mail.php:23 leads/lead-mail.php:22 prices/price-check.php:176 core/modules.php:55
 msgctxt "settings tab"
 msgid "Mail"
 msgstr ""
@@ -8836,6 +9004,10 @@ msgstr ""
 msgid "the API did not accept the request parameters"
 msgstr ""
 
+#: core/mail.php:142
+msgid "the benefit sums one per line (the email about the benefits)"
+msgstr ""
+
 #: reviews/rewio.php:398
 msgid "the key did not fit"
 msgstr ""
@@ -8872,7 +9044,7 @@ msgstr ""
 msgid "the top level"
 msgstr ""
 
-#: prices/price-blocks.php:126
+#: prices/price-blocks.php:127
 msgid "through the Social Fund of Russia"
 msgstr ""
 
@@ -8934,6 +9106,10 @@ msgstr ""
 
 #: blocks/block-meta.php:165
 msgid "visit"
+msgstr ""
+
+#: core/mail.php:141
+msgid "when the prices (the benefits) were last changed or checked"
 msgstr ""
 
 #: blocks/block-meta.php:144
@@ -9087,7 +9263,7 @@ msgid "“JavaScript event”"
 msgstr ""
 
 #: blocks/home/home.php:299
-msgid "“Leave a review” and “We are on Yandex Maps” buttons."
+msgid "“Leave a review”, “We are on Yandex Maps” and “We are on 2GIS” buttons."
 msgstr ""
 
 #: memorial-plugin.php:113

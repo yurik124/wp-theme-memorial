@@ -51,9 +51,10 @@ img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none}
 a[href^="tel"]{color:inherit;text-decoration:none}
 h1,h2,h3{margin:0 0 .5em;color:var(--ink);text-wrap:balance}
-h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:0}
-h1{font-size:calc(clamp(2.125rem,4.2vw * var(--fs),3.5rem) * var(--fs-h));line-height:1.15}
-h2{font-size:calc(clamp(1.75rem,3vw * var(--fs),2.5rem) * var(--fs-h));line-height:1.2}
+/* Заголовки — Lora 600: у Cormorant тонкие линии плохо видны при слабом зрении (владелец, 26.11.2026). Логотип остаётся Cormorant */
+h1,h2{font-family:var(--lora);font-weight:600;letter-spacing:0}
+h1{font-size:calc(clamp(1.875rem,3.8vw * var(--fs),3.125rem) * var(--fs-h));line-height:1.2}
+h2{font-size:calc(clamp(1.5rem,2.7vw * var(--fs),2.25rem) * var(--fs-h));line-height:1.25}
 h3{font:500 calc(clamp(1.1875rem,1.6vw * var(--fs),1.375rem) * var(--fs-h))/1.3 var(--lora)}
 p{text-wrap:pretty}
 ::selection{background:color-mix(in srgb,var(--gold2) 45%,transparent)}
@@ -271,7 +272,7 @@ select{min-height:44px}
 .nf__code{margin:0 0 1rem;display:flex;justify-content:center}
 .nf__ring{position:relative;display:grid;place-items:center;width:120px;height:120px}
 .nf__ring .lv{position:absolute;inset:0;color:var(--gold2)}
-.nf__ring b{position:relative;font:500 2rem/1 var(--serif);color:var(--gold3);margin-top:.2rem}
+.nf__ring b{position:relative;font:600 2rem/1 var(--lora);color:var(--gold3);margin-top:.2rem}
 .nf h1{font-size:calc(clamp(2rem,5vw * var(--fs),3rem) * var(--fs-h))}
 .nf__lead{color:var(--mute);margin:0 auto 2rem;max-width:520px}
 .nf__cta{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-bottom:2.5rem}

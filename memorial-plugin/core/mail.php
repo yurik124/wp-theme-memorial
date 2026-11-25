@@ -136,5 +136,13 @@ function memorial_plugin_mail_codes_html() {
 			. $row( '{link}', __( 'link to “Review list” in the admin', 'memorial-plugin' ) )
 			. '</ul>';
 	}
+	if ( function_exists( 'memorial_plugin_price_mail_schema' ) ) {
+		$html .= '<p><strong>' . esc_html__( 'Reminders to check the prices and the benefits', 'memorial-plugin' ) . '</strong></p><ul>'
+			. $row( '{date}', __( 'when the prices (the benefits) were last changed or checked', 'memorial-plugin' ) )
+			. $row( '{sums}', __( 'the benefit sums one per line (the email about the benefits)', 'memorial-plugin' ) )
+			. $row( '{site}', __( 'address of the site', 'memorial-plugin' ) )
+			. $row( '{link}', __( 'link to “Prices” in the admin', 'memorial-plugin' ) )
+			. '</ul>';
+	}
 	return $html;
 }

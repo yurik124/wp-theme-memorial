@@ -65,13 +65,24 @@ add_filter(
 		if ( is_admin() ) {
 			return $html;
 		}
+		// Фото без ссылки — делаем ссылку на крупное фото, его откроет просмотрщик.
+		$zoom = static fn( $h ) => preg_replace_callback(
+			'~(<figure[^>]*class="[^"]*wp-block-image[^"]*"[^>]*>)\s*(<img[^>]*wp-image-(\d+)[^>]*>)~',
+			function ( $mm ) {
+				$big = wp_get_attachment_image_url( (int) $mm[3], 'large' );
+				return $big ? $mm[1] . '<a href="' . esc_url( $big ) . '" data-lb>' . $mm[2] . '</a>' : $mm[0];
+			},
+			$h
+		);
 		if ( strpos( $html, 'is-style-cards' ) !== false ) {
 			// «Карточки»: ссылки на страницы (не на файлы фото) — это плитки-разделы; на телефоне их ставим в столбик
 			if ( preg_match_all( '~<a[^>]+href="([^"]+)"~', $html, $l ) && array_filter( $l[1], fn( $u ) => ! preg_match( '~\.(jpe?g|png|webp|gif|avif)(\?|$)~i', $u ) ) ) {
 				$html = preg_replace( '/<figure class="wp-block-gallery/', '<figure class="mem-hub wp-block-gallery', $html, 1 );
-				$html = memorial_plugin_hub_tile_photos( $html );
+				return memorial_plugin_hub_tile_photos( $html );
 			}
-			return $html;
+			// Карточки с фото (владелец, 26.11.2026): фото открываются крупно, на телефоне — по одному в ряд.
+			$html = preg_replace( '/<figure class="wp-block-gallery/', '<figure class="mem-cardphotos wp-block-gallery', $html, 1 );
+			return $zoom( $html );
 		}
 		preg_match_all( '/wp-image-(\d+)/', $html, $m );
 		$ids = array_map( 'intval', array_unique( $m[1] ) );
@@ -83,15 +94,7 @@ add_filter(
 		if ( $r ) {
 			$html = preg_replace( '/<figure class="wp-block-gallery/', '<figure style="--mem-ar:' . memorial_plugin_ratio_css( $r ) . '" class="mem-eq wp-block-gallery', $html, 1 );
 		}
-		// Фото без ссылки — делаем ссылку на крупное фото, его откроет просмотрщик.
-		$html = preg_replace_callback(
-			'~(<figure[^>]*class="[^"]*wp-block-image[^"]*"[^>]*>)\s*(<img[^>]*wp-image-(\d+)[^>]*>)~',
-			function ( $mm ) {
-				$big = wp_get_attachment_image_url( (int) $mm[3], 'large' );
-				return $big ? $mm[1] . '<a href="' . esc_url( $big ) . '" data-lb>' . $mm[2] . '</a>' : $mm[0];
-			},
-			$html
-		);
+		$html = $zoom( $html );
 		return isset( $r ) && $r ? memorial_plugin_fit_odd_photos( $html, $r ) : $html;
 	},
 	10,

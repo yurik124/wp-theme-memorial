@@ -6,7 +6,7 @@
 .ico.ico--fill{fill:currentColor;stroke:none}
 /* Блок-призыв [mem_cta] */
 .mem-cta{position:relative;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.2rem 2rem;background:var(--wp--preset--color--surface,#e6ebdf);color:var(--wp--preset--color--contrast,#2a2c28);border-radius:14px;padding:1.75rem 2rem;margin:2.2rem 0}
-.mem-cta__title{font:500 1.75rem/1.2 var(--wp--preset--font-family--cormorant-garamond,Georgia,serif);margin:0 0 .3rem;color:var(--wp--preset--color--contrast,#2a2c28)}
+.mem-cta__title{font:600 1.5rem/1.25 var(--wp--preset--font-family--lora,Georgia,serif);margin:0 0 .3rem;color:var(--wp--preset--color--contrast,#2a2c28)}
 .mem-cta__sub{margin:0;color:var(--wp--preset--color--contrast-2,#66675e);font-size:1rem}
 .mem-cta__btns{display:flex;flex-wrap:wrap;gap:.6rem}
 @media (max-width:600px){.mem-cta{padding:1.3rem}.mem-cta__btns,.mem-cta__btns .btn{width:100%}}
@@ -55,7 +55,7 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 .mcard__noimg{display:grid;place-items:center;height:100%;font-size:2rem;color:#857e72;background:var(--wp--preset--color--base-2,#f2efe6)}
 .mcard__tag{position:absolute;top:.5rem;left:.5rem;background:var(--wp--preset--color--base,#fbfaf6);border:1px solid var(--wp--preset--color--line,#e2ded2);color:var(--wp--preset--color--contrast-2,#66675e);font-size:1rem;padding:.2rem .55rem;border-radius:999px}
 .mcard__body{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.15rem;padding:.6rem .2rem .75rem;flex:1}
-.mcard__name{font:600 1.15rem/1.2 var(--wp--preset--font-family--cormorant-garamond,Georgia,serif);color:var(--wp--preset--color--secondary,#3f4d36)}
+.mcard__name{font:600 1.0625rem/1.3 var(--wp--preset--font-family--lora,Georgia,serif);color:var(--wp--preset--color--secondary,#3f4d36)}
 .mcard__sub{font-size:1rem;line-height:1.3;color:var(--wp--preset--color--contrast-2,#66675e)}
 .mcard__price{margin-top:auto;padding-top:.2rem}
 .mcard__price .price{font-size:1rem}
@@ -109,7 +109,7 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 .mrev__svc{font:600 1rem/1.3 var(--wp--preset--font-family--system-sans,system-ui,sans-serif);letter-spacing:.12em;text-transform:uppercase;color:var(--wp--preset--color--secondary,#3f4d36)}
 .mrev__branch{font-weight:600}
 .mrev__rating{font-size:1.05rem}
-.mrev__rating b{font:600 1.6rem/1 var(--wp--preset--font-family--cormorant-garamond,Georgia,serif)}
+.mrev__rating b{font:600 1.5rem/1 var(--wp--preset--font-family--lora,Georgia,serif)}
 .mrev__rating span{color:var(--wp--preset--color--accent,#a88a5a)}
 .mrev__rating small{color:var(--wp--preset--color--contrast-2,#66675e)}
 .mrev__btns{display:flex;flex-wrap:wrap;gap:.3rem 1rem;margin-top:auto;padding-top:.5rem;font-size:1rem}
@@ -230,7 +230,7 @@ a.mcard__link:hover{border-color:var(--wp--preset--color--primary,#5e7052);box-s
 .rwo__panel[hidden]{display:none!important}
 .rwo__sum{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 2rem;background:#fff;border:1px solid var(--wp--preset--color--line,#e2ded2);border-radius:14px;padding:1.1rem 1.4rem;margin:0 0 1.2rem}
 .rwo__avg{display:flex;align-items:center;gap:.7rem}
-.rwo__avg b{font:600 2.6rem/1 var(--wp--preset--font-family--cormorant-garamond,Georgia,serif);color:var(--wp--preset--color--contrast,#2a2c28)}
+.rwo__avg b{font:600 2.25rem/1 var(--wp--preset--font-family--lora,Georgia,serif);color:var(--wp--preset--color--contrast,#2a2c28)}
 .rwo__avg span:last-child{color:var(--wp--preset--color--contrast-2,#66675e);font-size:1rem}
 ul.rwo__by{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.4rem .6rem}
 ul.rwo__by li{margin:0;background:var(--wp--preset--color--base,#fbfaf6);border-radius:999px;padding:.3rem .8rem;font-size:1rem}
@@ -317,7 +317,7 @@ button.rwo__pl[aria-pressed=true]{background:#fff;border-color:var(--wp--preset-
 .rwo,.rwo__panel{min-width:0;max-width:100%}
 .mrev__svc{display:inline-flex;align-items:center}
 .mrev__rate{display:inline-flex;align-items:center;flex-wrap:wrap;gap:.2rem .5rem}
-.mrev__rate b{font:600 1.5rem/1 var(--wp--preset--font-family--cormorant-garamond,Georgia,serif)}
+.mrev__rate b{font:600 1.375rem/1 var(--wp--preset--font-family--lora,Georgia,serif)}
 .mrev__rate small{color:var(--wp--preset--color--contrast-2,#66675e);font-size:1rem}
 .mrev__tabs .maps__tab{display:inline-flex;align-items:center}
 .reviews__ph .mrev__phsvc{display:inline-flex;align-items:center;margin:0;color:var(--wp--preset--color--contrast,#2a2c28);font-weight:500}
@@ -332,7 +332,7 @@ a.mem-wcard:hover{box-shadow:0 10px 26px -12px rgba(0,0,0,.25);transform:transla
 .mem-wcard__ph{display:block}
 .mem-wcard__img{display:block;width:100%;height:auto;aspect-ratio:var(--mem-ar,3/4);object-fit:contain;background:var(--wp--preset--color--base-2,#f2efe6);border-radius:6px;margin:0!important}
 .mem-wcard__cap{display:block;margin-top:auto;text-align:center;font-size:1rem;line-height:1.35;padding:.6rem .2rem .75rem;color:var(--wp--preset--color--contrast,#2a2c28)}
-.mem-wcard__cap strong{display:block;font:600 1.15rem/1.2 var(--wp--preset--font-family--cormorant-garamond,Georgia,serif);color:var(--wp--preset--color--secondary,#3f4d36)}
+.mem-wcard__cap strong{display:block;font:600 1.0625rem/1.3 var(--wp--preset--font-family--lora,Georgia,serif);color:var(--wp--preset--color--secondary,#3f4d36)}
 @media (max-width:600px){.mem-wcard{padding:.5rem .5rem 0}.mem-wcard__cap{font-size:1rem}.mem-wcard__cap strong{font-size:1rem}}
 .mem-wcard__cap .nowrap{white-space:nowrap}
 /* «Наши работы»: рамка по форме главного фото (--war), фото целиком; если листают на фото другой формы — поля заполняет его размытая копия */
@@ -602,7 +602,7 @@ a.mcard__link:hover .mcard__img img.is-on{opacity:.93}
 .feat{display:flex;flex-direction:column;gap:.75rem}
 .feat h3,.feat p{margin:0}
 .feat p{color:var(--memorial-plugin-mute);font-size:1.0625rem;line-height:1.55}
-.feat__n{font:500 2rem/1 var(--memorial-plugin-serif);color:var(--memorial-plugin-gold3)}
+.feat__n{font:700 1.75rem/1 var(--memorial-plugin-sans);font-variant-numeric:tabular-nums;color:var(--memorial-plugin-gold3)}
 .feat__ico{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;border:1px solid var(--memorial-plugin-line);background:transparent;color:var(--memorial-plugin-gold)}
 .feat__ico .ico{width:24px;height:24px;stroke-width:1.5}
 .feat--img{background:#fff;border-radius:var(--memorial-plugin-r);overflow:hidden;box-shadow:var(--memorial-plugin-sh);padding:0 1.5rem 1.5rem}
@@ -636,7 +636,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .pkg{position:relative;background:#fff;color:var(--memorial-plugin-ink);border:1px solid var(--memorial-plugin-line);border-radius:var(--memorial-plugin-r);padding:1.9rem 1.75rem 1.75rem;display:flex;flex-direction:column;gap:1.1rem}
 .pkg--feat{border-color:var(--memorial-plugin-gold)}
 .pkg.pkg--feat h3{margin-top:.6rem}.pkg__badge{position:absolute;top:-1.1rem;left:50%;transform:translateX(-50%);background:var(--memorial-plugin-bg);border:1px solid var(--memorial-plugin-gold);color:var(--memorial-plugin-gold3);font:600 1rem/1.4 var(--memorial-plugin-sans);letter-spacing:.06em;text-transform:uppercase;padding:.25rem .9rem;border-radius:999px;white-space:nowrap}
-.pkg h3{margin:0;text-align:center;font:500 calc(1.875rem * var(--memorial-plugin-fs-h))/1.1 var(--memorial-plugin-serif)}
+.pkg h3{margin:0;text-align:center;font:600 calc(1.625rem * var(--memorial-plugin-fs-h))/1.2 var(--memorial-plugin-lora)}
 .pkg__total{margin:-.4rem 0 0;text-align:center;font:600 clamp(1.375rem,2vw * var(--memorial-plugin-fs),1.625rem)/1.2 var(--memorial-plugin-lora);color:var(--memorial-plugin-ink)}
 .pkg__div{display:block;width:120px;height:16px;margin:0 auto;color:var(--memorial-plugin-gold2)}
 .pkg__key{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem;font-size:1rem;line-height:1.45}
@@ -660,7 +660,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .stats__in{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:2rem 1rem;text-align:center}
 .stat{display:flex;flex-direction:column;align-items:center;gap:.6rem}
 .stat__ring{position:relative;display:grid;place-items:center;width:148px;height:148px}
-.stat b{position:relative;display:block;font:500 2.75rem/1 var(--memorial-plugin-serif);color:var(--memorial-plugin-ink);margin-top:.25rem;font-variant-numeric:tabular-nums}
+.stat b{position:relative;display:block;font:600 2.375rem/1 var(--memorial-plugin-lora);color:var(--memorial-plugin-ink);margin-top:.25rem;font-variant-numeric:tabular-nums}
 .stat--long b{font-size:2.125rem}
 .stat__label,.stat span:not(.stat__ring){font-size:1.0625rem;color:var(--memorial-plugin-ink);max-width:14em;line-height:1.4}
 @media (max-width:900px){.stats__in{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -682,8 +682,12 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .clist__note{display:flex;align-items:center;gap:.35rem;color:var(--memorial-plugin-mute);font-size:1rem;margin-top:.15rem}
 .clist__note .ico{width:1em;height:1em;margin:0;color:var(--memorial-plugin-mute)}
 .clist__msg{display:flex;flex-wrap:wrap;gap:.5rem}
+/* Кнопки мессенджеров одной ширины (владелец, 26.11.2026: MAX была узкой) */
+.clist__msg .cb__m{min-width:10rem;justify-content:center}
 .maps{display:flex;flex-direction:column;gap:1rem;min-width:0}
-.maps__tabs{display:flex;flex-wrap:wrap;gap:.5rem}
+/* Вкладки адресов одного размера: равные колонки, на узком экране — друг под другом */
+.maps__tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:.5rem}
+.maps__tabs .maps__tab{text-align:center}
 .maps__tab{min-height:44px;padding:.6rem 1.15rem;border-radius:999px;border:1px solid var(--memorial-plugin-line);background:#fff;font:500 1rem/1.2 var(--memorial-plugin-sans);color:var(--memorial-plugin-ink);cursor:pointer;transition:border-color .2s,background-color .2s,color .2s}
 .maps__tab:hover{border-color:var(--memorial-plugin-gold)}
 .maps__tab[aria-selected=true]{background:var(--memorial-plugin-gold);border-color:var(--memorial-plugin-gold);color:var(--memorial-plugin-on-gold)}
@@ -697,7 +701,8 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .reviews__intro{position:sticky;top:calc(var(--memorial-plugin-top) + var(--memorial-plugin-hh) + 2rem)}
 .reviews__intro h2{margin-bottom:.6rem}
 .reviews__text{color:var(--memorial-plugin-mute);margin:0 0 1.75rem;max-width:460px}
-.reviews__btns{display:flex;flex-wrap:wrap;gap:.75rem}
+/* «Оставить отзыв», «Мы на Яндекс Картах», «Мы в 2ГИС» — одной ширины; на телефоне столбиком на всю ширину */
+.reviews__btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14.5rem),1fr));gap:.75rem;max-width:46rem}
 .reviews__widget{position:relative;height:800px;border-radius:var(--memorial-plugin-r);overflow:hidden;background:#fff;border:1px solid var(--memorial-plugin-line)}
 .reviews__widget iframe{width:100%;height:100%;border:0;display:block}
 .reviews__widget:not(.is-loaded){height:auto;min-height:260px;display:grid}
@@ -788,7 +793,7 @@ a.svc__item:hover .svc__more{text-decoration:underline;text-underline-offset:4px
 .cb__submit{width:100%}
 .cb__submit:disabled{opacity:.45;cursor:wait}
 .cb__done{text-align:center}
-.cb__ok{font:500 1.75rem/1.2 var(--memorial-plugin-serif);margin:0 0 .5rem;padding:1rem;background:var(--memorial-plugin-sage);border-radius:var(--memorial-plugin-rb);color:var(--memorial-plugin-gold3)}
+.cb__ok{font:600 1.5rem/1.25 var(--memorial-plugin-lora);margin:0 0 .5rem;padding:1rem;background:var(--memorial-plugin-sage);border-radius:var(--memorial-plugin-rb);color:var(--memorial-plugin-gold3)}
 .cb__alt{margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--memorial-plugin-line);font-size:1rem;color:var(--memorial-plugin-mute);text-align:center}
 .cb__alt p{margin:0 0 .6rem}
 .cb__alt b{color:var(--memorial-plugin-ink);font-family:var(--memorial-plugin-lora);font-weight:600}
@@ -1130,6 +1135,8 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .mbenefit__sum{margin:0;font-family:var(--memorial-plugin-lora);font-size:1.6rem;line-height:1.2;color:var(--memorial-plugin-gold3)}
 .mbenefit__how{margin:0;color:var(--memorial-plugin-mute)}
 .mbenefit__note{margin:1rem 0 0}
+/* «Подробнее о пособии» — отдельной строкой справа */
+.mbenefit__more{margin:.5rem 0 0;text-align:right}
 @media (max-width:600px){.mbenefit__grid{grid-template-columns:1fr}}
 /* «Цены по отдельности»: таблица как стиль «Прайс», цена и ₽ не переносятся */
 .mprice-list{margin:2rem 0}

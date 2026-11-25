@@ -29,6 +29,26 @@ function memorial_plugin_modules_schema() {
 			'help'   => __( 'Untick a feature and it turns off: its menu items disappear, its blocks on pages show nothing. The data is not deleted. The catalog, prices, contacts, documents and SEO are the base of the site, they always work.', 'memorial-plugin' ),
 			'fields' => $f,
 		),
+		'links'     => array(
+			'type'   => 'group',
+			'tab'    => __( 'Features', 'memorial-plugin' ),
+			'label'  => __( 'Links to other sites', 'memorial-plugin' ),
+			'fields' => array(
+				'on'   => array(
+					'type'  => 'checkbox',
+					'label' => __( 'Open in a new tab, add nofollow', 'memorial-plugin' ),
+					'help'  => __( 'Links to other sites (Yandex Maps, 2GIS, messengers, documents) open in a new tab and get rel="nofollow": search engines do not pass the weight of the site through them. The texts of the pages are not changed — only how the page is shown.', 'memorial-plugin' ),
+				),
+				'keep' => array(
+					'type'        => 'textarea',
+					'rows'        => 3,
+					'label'       => __( 'Domains without nofollow', 'memorial-plugin' ),
+					'placeholder' => 'example.ru',
+					'help'        => __( 'One domain per line. Links to them open in a new tab but stay normal (followed) for search engines. Subdomains are included.', 'memorial-plugin' ),
+					'show_if'     => array( 'on', 1 ),
+				),
+			),
+		),
 		// «Почта»: the codes (a folded hint), the email about a request, the email about reviews.
 		'mailcodes' => array(
 			'type'  => function_exists( 'memorial_plugin_lead_mail_schema' ) || function_exists( 'memorial_plugin_reviews_mail_schema' ) ? 'note' : 'hidden',
@@ -38,6 +58,8 @@ function memorial_plugin_modules_schema() {
 		),
 		'mail'      => function_exists( 'memorial_plugin_lead_mail_schema' ) ? memorial_plugin_lead_mail_schema() : array( 'type' => 'hidden' ),
 		'rmail'     => function_exists( 'memorial_plugin_reviews_mail_schema' ) ? memorial_plugin_reviews_mail_schema() : array( 'type' => 'hidden' ),
+		'pmail'     => function_exists( 'memorial_plugin_price_mail_schema' ) ? memorial_plugin_price_mail_schema( 'prices' ) : array( 'type' => 'hidden' ),
+		'bmail'     => function_exists( 'memorial_plugin_price_mail_schema' ) ? memorial_plugin_price_mail_schema( 'benefits' ) : array( 'type' => 'hidden' ),
 		'perms'     => array(
 			'type'  => 'perms',
 			'tab'   => __( 'Permissions', 'memorial-plugin' ),
@@ -53,8 +75,14 @@ function memorial_plugin_modules_page_defaults() {
 	return array(
 		'on'    => array_fill_keys( array_keys( memorial_plugin_optional() ), 1 ),
 		'perms' => memorial_plugin_perm_defaults(),
+		'links' => array(
+			'on'   => 1,
+			'keep' => '',
+		),
 		'mail'  => function_exists( 'memorial_plugin_lead_mail_defaults' ) ? memorial_plugin_lead_mail_defaults() : array(),
 		'rmail' => function_exists( 'memorial_plugin_reviews_mail_defaults' ) ? memorial_plugin_reviews_mail_defaults() : array(),
+		'pmail' => function_exists( 'memorial_plugin_price_mail_defaults' ) ? memorial_plugin_price_mail_defaults( 'prices' ) : array(),
+		'bmail' => function_exists( 'memorial_plugin_price_mail_defaults' ) ? memorial_plugin_price_mail_defaults( 'benefits' ) : array(),
 	);
 }
 

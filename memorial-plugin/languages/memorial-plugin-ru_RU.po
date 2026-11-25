@@ -9037,3 +9037,146 @@ msgstr[2] "%d мест для провожающих"
 
 msgid "Two columns “Service — Price”; the prices are site values from Memorial → Prices, never digits. Prices and “₽” do not break, the table stays neat on a phone."
 msgstr "Две колонки «Услуга — Цена»; цены — «Значения сайта» из «Мемориал → Цены», не цифры. Цены и «₽» не переносятся, на телефоне таблица аккуратная."
+
+msgid "Are the prices on the site up to date?"
+msgstr "Цены на сайте актуальны?"
+
+msgid "Benefit sums are up to date"
+msgstr "Суммы пособий актуальны"
+
+msgid "Benefit sums are up to date burial benefit payment check"
+msgstr "Суммы пособий актуальны пособие погребение выплата проверка"
+
+msgid "Change the sums"
+msgstr "Изменить суммы"
+
+msgid "Change them or confirm that they are up to date:"
+msgstr "Изменить или подтвердить, что они актуальны:"
+
+msgid "Check the benefit sums on {site}"
+msgstr "Проверьте суммы пособий на сайте {site}"
+
+msgid "Check the benefit sums: from 1 February the burial benefit changes. Last checked: %s."
+msgstr "Проверьте суммы пособий: с 1 февраля пособие на погребение меняется. Последняя проверка: %s."
+
+msgid "Check the prices on {site}"
+msgstr "Проверьте цены на сайте {site}"
+
+msgid "Comes a month after the prices were changed or confirmed, every 7 days until they are confirmed in the admin (“Prices are up to date”)."
+msgstr "Приходит через месяц после правки или подтверждения цен и повторяется раз в 7 дней, пока цены не подтвердят в админке («Цены актуальны»)."
+
+msgid "Comes every year from 1 February, every 7 days until the sums are confirmed in the admin (“The sums are up to date”)."
+msgstr "Приходит каждый год с 1 февраля и повторяется раз в 7 дней, пока суммы не подтвердят в админке («Суммы актуальны»)."
+
+msgid "Confirm the prices are up to date"
+msgstr "Подтвердить, что цены актуальны"
+
+msgid "Domains without nofollow"
+msgstr "Домены без nofollow"
+
+msgid "General"
+msgstr "Общие"
+
+msgid "Last checked: {date}."
+msgstr "Последняя проверка: {date}."
+
+msgid "Links to other sites"
+msgstr "Ссылки на другие сайты"
+
+msgid "Links to other sites (Yandex Maps, 2GIS, messengers, documents) open in a new tab and get rel=\"nofollow\": search engines do not pass the weight of the site through them. The texts of the pages are not changed — only how the page is shown."
+msgstr "Ссылки на другие сайты (Яндекс Карты, 2ГИС, мессенджеры, документы) открываются в новой вкладке и получают rel=\"nofollow\": поисковики не передают по ним вес сайта. Тексты страниц не меняются — только то, как страница показывается."
+
+msgid "Marks the prices (or the benefit sums) as checked today: the date “Prices updated” on the site and “Updated” of the separate prices."
+msgstr "Отмечает цены (или суммы пособий) проверенными сегодня: дата «Цены обновлены» на сайте и «Обновлено» у отдельных цен."
+
+msgid "One domain per line. Links to them open in a new tab but stay normal (followed) for search engines. Subdomains are included."
+msgstr "Один домен на строку. Ссылки на них открываются в новой вкладке, но для поисковиков остаются обычными (без nofollow). Поддомены тоже."
+
+msgid "Open in a new tab, add nofollow"
+msgstr "Открывать в новой вкладке, добавлять nofollow"
+
+msgid "Open the prices"
+msgstr "Открыть цены"
+
+msgid "Prices are up to date"
+msgstr "Цены актуальны"
+
+msgid "Prices are up to date check confirm date"
+msgstr "Цены актуальны проверка подтвердить дата"
+
+msgid "Remind in 3 days"
+msgstr "Напомнить через 3 дня"
+
+msgid "Reminder to check the benefits"
+msgstr "Напоминание проверить пособия"
+
+msgid "Reminder to check the prices"
+msgstr "Напоминание проверить цены"
+
+msgid "Reminders to check the prices and the benefits"
+msgstr "Напоминания проверить цены и пособия"
+
+msgid "Review buttons"
+msgstr "Кнопки отзывов"
+
+msgid "Sends the email with these settings (also unsaved) to the addresses above."
+msgstr "Отправляет письмо с этими настройками (и несохранёнными) на адреса выше."
+
+msgid "Thank you: the benefit sums are marked as up to date."
+msgstr "Спасибо: суммы пособий отмечены актуальными."
+
+msgid "Thank you: the prices are marked as up to date, the date on the site is today."
+msgstr "Спасибо: цены отмечены актуальными, дата на сайте — сегодня."
+
+msgid "The benefit sums are marked as up to date."
+msgstr "Суммы пособий отмечены актуальными."
+
+msgid "The burial benefit and the payments change every year from 1 February. Check the sums on the site:"
+msgstr "Пособие на погребение и выплаты меняются каждый год с 1 февраля. Проверьте суммы на сайте:"
+
+msgid "The list of branches is updated. Tick the branches and click “Save”."
+msgstr "Список филиалов обновлён. Отметьте филиалы и нажмите «Сохранить»."
+
+msgid "The prices are marked as up to date, the date on the site is today."
+msgstr "Цены отмечены актуальными, дата на сайте — сегодня."
+
+msgid "The prices on the site have not been checked since %s. Are they up to date?"
+msgstr "Цены на сайте не проверялись с %s. Они актуальны?"
+
+msgid "The prices on the site were last changed or checked on {date}. Please check that they are up to date."
+msgstr "Цены на сайте последний раз меняли или проверяли {date}. Пожалуйста, проверьте, что они актуальны."
+
+msgid "The sums are up to date"
+msgstr "Суммы актуальны"
+
+msgid "Updating the list…"
+msgstr "Обновляю список…"
+
+msgid "We are on 2GIS"
+msgstr "Мы в 2ГИС"
+
+msgid "You may not change the prices."
+msgstr "Вам нельзя менять цены."
+
+msgid "opens in a new tab"
+msgstr "откроется в новой вкладке"
+
+msgid "“Leave a review”, “We are on Yandex Maps” and “We are on 2GIS” buttons."
+msgstr "Кнопки «Оставить отзыв», «Мы на Яндекс Картах» и «Мы в 2ГИС»."
+
+msgid "when the prices (the benefits) were last changed or checked"
+msgstr "когда цены (пособия) последний раз меняли или проверяли"
+
+msgid "the benefit sums one per line (the email about the benefits)"
+msgstr "суммы пособий, по одной на строку (письмо о пособиях)"
+
+msgid "link to “Prices” in the admin"
+msgstr "ссылка на «Цены» в админке"
+
+msgctxt "block title"
+msgid "Review buttons"
+msgstr "Кнопки отзывов"
+
+msgctxt "block description"
+msgid "“Leave a review”, “We are on Yandex Maps” and “We are on 2GIS” buttons."
+msgstr "Кнопки «Оставить отзыв», «Мы на Яндекс Картах» и «Мы в 2ГИС»."
