@@ -150,9 +150,9 @@ function memorial_plugin_benefits_render( $a = array() ) {
 	return '<section class="mbenefit">'
 		. ( ! isset( $a['heading'] ) || ! empty( $a['heading'] ) ? '<h2 class="wp-block-heading mbenefit__title">' . esc_html( $title ) . '</h2>' : '' )
 		. '<div class="mbenefit__grid mbenefit__grid--' . count( $cards ) . '">' . $html . '</div>'
-		. '<p class="mbenefit__note">' . esc_html__( 'We give the full set of documents for claiming the payments. The payment is claimed by a relative.', 'memorial-plugin' )
-		. ( '' !== $more ? ' <a href="' . esc_url( $more ) . '">' . esc_html__( 'More about the benefit', 'memorial-plugin' ) . ' <span aria-hidden="true">→</span></a>' : '' )
-		. '</p></section>';
+		. '<p class="mbenefit__note">' . esc_html__( 'We give the full set of documents for claiming the payments. The payment is claimed by a relative.', 'memorial-plugin' ) . '</p>'
+		. ( '' !== $more ? '<p class="mbenefit__more"><a href="' . esc_url( $more ) . '">' . esc_html__( 'More about the benefit', 'memorial-plugin' ) . ' <span aria-hidden="true">→</span></a></p>' : '' )
+		. '</section>';
 }
 
 /* ---------- Цены по отдельности ---------- */

@@ -34,6 +34,10 @@ $reviews = 'https://yandex.ru/maps/org/' . $org . '/reviews/';
 		<div class="reviews__btns">
 		<a class="btn btn--gold" href="<?php echo esc_url( $reviews ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Leave a review', 'memorial-plugin' ); ?></a>
 		<a class="btn btn--line" href="<?php echo esc_url( $page ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'We are on Yandex Maps', 'memorial-plugin' ); ?></a>
+		<?php $memorial_plugin_gis = function_exists( 'memorial_plugin_home_2gis' ) ? memorial_plugin_home_2gis() : ''; ?>
+		<?php if ( '' !== $memorial_plugin_gis ) : ?>
+		<a class="btn btn--line" href="<?php echo esc_url( $memorial_plugin_gis ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'We are on 2GIS', 'memorial-plugin' ); ?></a>
+		<?php endif; ?>
 		</div>
 	</div>
 	<div class="reviews__widget" data-reviews="<?php echo esc_url( $src ); ?>">

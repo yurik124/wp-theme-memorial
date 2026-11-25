@@ -1,6 +1,6 @@
 /* Оформление текстов страниц. Подключается и на сайте, и в редакторе (там WordPress сам ограничивает его областью текста). */:where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))){--r:14px}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))),.editor-styles-wrapper{font-size:1.05rem;line-height:1.7;color:var(--ink,#2a2c28)}
-:where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h2{margin:2.6em 0 .7em;font-size:calc(clamp(1.6rem,3.4vw * var(--fs,1),2.2rem) * var(--fs-h,1))}
+:where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h2{margin:2.6em 0 .7em;font-size:calc(clamp(1.5rem,3vw * var(--fs,1),2rem) * var(--fs-h,1))}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h3{margin:1.8em 0 .5em}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) > :first-child{margin-top:0}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) p{margin:0 0 1.1em}
@@ -23,7 +23,7 @@
 .wp-block-table.is-style-price tfoot td:last-child{font:600 1.5rem/1.1 var(--lora,Georgia,serif);color:var(--ink,#2a2c28)}
 /* Шаги */.wp-block-list.is-style-steps{list-style:none;padding:0;margin:1.5rem 0 1.8rem;counter-reset:step}
 .wp-block-list.is-style-steps>li{counter-increment:step;position:relative;padding:0 0 1.2rem 3.4rem;margin:0;min-height:2.4rem}
-.wp-block-list.is-style-steps>li::before{content:counter(step);position:absolute;left:0;top:-.15rem;width:2.3rem;height:2.3rem;border-radius:50%;background:var(--bg,#fbfaf6);border:1px solid var(--gold,#5e7052);color:var(--gold3,#3f4d36);display:grid;place-items:center;font:500 1.25rem/1 var(--serif,Georgia,serif)}
+.wp-block-list.is-style-steps>li::before{content:counter(step);position:absolute;left:0;top:-.15rem;width:2.3rem;height:2.3rem;border-radius:50%;background:var(--bg,#fbfaf6);border:1px solid var(--gold,#5e7052);color:var(--gold3,#3f4d36);display:grid;place-items:center;font:700 1.125rem/1 var(--sans,system-ui,sans-serif);font-variant-numeric:tabular-nums}
 .wp-block-list.is-style-steps>li:not(:last-child)::after{content:"";position:absolute;left:1.13rem;top:2.45rem;bottom:.15rem;width:1px;background:var(--gold2,#a9b796)}
 /* Галочки */.wp-block-list.is-style-checks{list-style:none;padding:0}
 .wp-block-list.is-style-checks>li{position:relative;padding-left:2rem;margin-bottom:.6em}
@@ -68,7 +68,7 @@ html.lb-open:has(.lb[open]){background:#1a1b1c}
 
 /* Встроенная панорама / карта, загрузка по кнопке */.mem-embed{position:relative;aspect-ratio:16/9;margin:1.5rem 0;border-radius:14px;overflow:hidden;background:var(--sage,#e6ebdf);color:var(--ink,#2a2c28);display:grid;place-items:center;text-align:center}
 .mem-embed__ph{display:grid;justify-items:center;gap:.8rem;padding:1.5rem}
-.mem-embed__360{font:500 2.6rem/1 var(--serif,Georgia,serif);color:var(--gold3,#3f4d36);border:1px solid var(--gold,#5e7052);border-radius:50%;width:5.5rem;height:5.5rem;display:grid;place-items:center}
+.mem-embed__360{font:600 2.25rem/1 var(--lora,Georgia,serif);color:var(--gold3,#3f4d36);border:1px solid var(--gold,#5e7052);border-radius:50%;width:5.5rem;height:5.5rem;display:grid;place-items:center}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .mem-embed__ph p{margin:0;color:var(--ink,#2a2c28)}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) .mem-embed__ph a{color:var(--gold3,#3f4d36);font-size:1rem}
 .mem-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0!important;margin:0!important}
@@ -80,7 +80,7 @@ html.lb-open:has(.lb[open]){background:#1a1b1c}
   background:linear-gradient(var(--gold2,#a9b796),var(--gold2,#a9b796)) no-repeat 1.65rem 3.6rem/1px calc(100% - 3.9rem)}
 .mem-step:last-child{background:none;padding-bottom:.2rem}
 .mem-step::before{content:"";position:absolute;left:0;top:0;width:3.4rem;height:3.4rem;border-radius:50%;background:var(--gold,#5e7052) var(--ico) center/1.55rem no-repeat;box-shadow:0 0 0 5px var(--sage,#e6ebdf)}
-.mem-step::after{content:counter(mstep);position:absolute;left:2.45rem;top:-.35rem;min-width:1.75rem;height:1.75rem;border-radius:999px;background:var(--bg,#fbfaf6);border:1px solid var(--gold,#5e7052);color:var(--gold3,#3f4d36);font:600 1rem/1.7rem var(--sans,system-ui,sans-serif);text-align:center;padding:0 .3rem}
+.mem-step::after{content:counter(mstep);position:absolute;left:2.45rem;top:-.35rem;min-width:1.75rem;height:1.75rem;border-radius:999px;background:var(--bg,#fbfaf6);border:1px solid var(--gold,#5e7052);color:var(--gold3,#3f4d36);font:700 1.0625rem/1.7rem var(--sans,system-ui,sans-serif);font-variant-numeric:tabular-nums;text-align:center;padding:0 .3rem}
 /* Отступы внутри шага — общие для текста (:where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h3, p, ul), как было на сайте с классической темой */.mem-step.is-urgent::before{background-color:var(--gold3,#3f4d36)}
 @media (max-width:600px){.mem-step{padding-left:3.9rem;background-position:1.35rem 3rem}.mem-step::before{width:2.8rem;height:2.8rem;background-size:1.3rem}.mem-step::after{left:1.95rem}}
 
@@ -174,7 +174,7 @@ html.lb-open:has(.lb[open]){background:#1a1b1c}
    ========================================================================== */:where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))),.editor-styles-wrapper{font-size:1.0625rem;line-height:1.65}
 @media (min-width:1024px){:where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))){font-size:1.125rem}}
 
-:where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h2{font-family:var(--serif,"Cormorant Garamond",Georgia,serif);font-weight:500}
+:where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h2{font-family:var(--lora,"Lora",Georgia,serif);font-weight:600}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) h3{font:500 calc(clamp(1.1875rem,1.6vw * var(--fs,1),1.375rem) * var(--fs-h,1))/1.3 var(--lora,Georgia,serif)}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) a:where(:not(.btn)){text-decoration-color:var(--gold2,#a9b796)}
 :where(.content,.editor-styles-wrapper .is-root-container:not(:has(.wp-block-template-part))) a:where(:not(.btn)):hover{text-decoration-color:currentColor}

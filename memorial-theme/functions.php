@@ -148,8 +148,9 @@ add_action(
 		$uri  = get_template_directory_uri();
 		$head = wp_get_global_styles( array( 'elements', 'heading', 'typography', 'fontFamily' ) );
 		$head = is_string( $head ) ? $head : '';
-		$file = str_contains( $head, 'font-family--lora' ) ? 'lora-500' : ( ( '' === $head || str_contains( $head, 'cormorant' ) ) ? 'cormorant-garamond-500' : '' );
-		// заголовки Lora — оба начертания первого экрана (500 и 600), иначе второе находится только после разбора стилей.
+		// Заголовки по умолчанию — Lora 600 (main.css, 26.11.2026); шрифт, выбранный в редакторе сайта, — его файл.
+		$file = '' === $head ? 'lora-600' : ( str_contains( $head, 'font-family--lora' ) ? 'lora-500' : ( str_contains( $head, 'cormorant' ) ? 'cormorant-garamond-500' : '' ) );
+		// заголовки Lora из редактора сайта — оба начертания первого экрана (500 и 600), иначе второе находится только после разбора стилей.
 		foreach ( 'lora-500' === $file ? array( 'lora-500', 'lora-600' ) : array_filter( array( $file ) ) as $font ) {
 			echo '<link rel="preload" href="' . esc_url( $uri . '/assets/fonts/' . $font . '.woff2' ) . '" as="font" type="font/woff2" crossorigin>' . "\n";
 		}

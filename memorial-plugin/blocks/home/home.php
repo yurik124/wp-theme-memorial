@@ -295,8 +295,8 @@ function memorial_plugin_home_blocks_list() {
 			'render' => 'memorial_plugin_home_render_maps',
 		),
 		'review-buttons'  => array(
-			'title'  => __( 'Yandex review buttons', 'memorial-plugin' ),
-			'desc'   => __( '“Leave a review” and “We are on Yandex Maps” buttons.', 'memorial-plugin' ),
+			'title'  => __( 'Review buttons', 'memorial-plugin' ),
+			'desc'   => __( '“Leave a review”, “We are on Yandex Maps” and “We are on 2GIS” buttons.', 'memorial-plugin' ),
 			'icon'   => 'external',
 			'attrs'  => array(),
 			'render' => 'memorial_plugin_home_render_review_buttons',
@@ -611,19 +611,44 @@ function memorial_plugin_home_yandex() {
 }
 
 /**
- * “Leave a review” / “We are on Yandex Maps” buttons.
+ * The 2GIS card for the “We are on 2GIS” button (owner, 26.11.2026): the address on Studencheskaya St.
+ * (the main office), else the first address of «Контакты» with a 2GIS link.
+ *
+ * @return string URL or ''.
+ */
+function memorial_plugin_home_2gis() {
+	$found = '';
+	foreach ( memorial_plugin_addrs() as $a ) {
+		$url = trim( (string) ( $a['twogis'] ?? '' ) );
+		if ( '' === $url ) {
+			continue;
+		}
+		$url = function_exists( 'memorial_plugin_schema_2gis_url' ) && memorial_plugin_schema_2gis_url( $url ) ? memorial_plugin_schema_2gis_url( $url ) : $url;
+		if ( false !== mb_stripos( (string) ( $a['addr'] ?? '' ), 'студенческ' ) ) {
+			return $url;
+		}
+		$found = '' !== $found ? $found : $url;
+	}
+	return $found;
+}
+
+/**
+ * “Leave a review” / “We are on Yandex Maps” / “We are on 2GIS” buttons — of the same width.
  *
  * @return string
  */
 function memorial_plugin_home_render_review_buttons() {
-	$y = memorial_plugin_home_yandex();
-	if ( ! $y ) {
-		return '';
+	$y    = memorial_plugin_home_yandex();
+	$gis  = memorial_plugin_home_2gis();
+	$html = '';
+	if ( $y ) {
+		$html .= '<a class="btn btn--gold" href="' . esc_url( $y[2] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Leave a review', 'memorial-plugin' ) . '</a>'
+			. '<a class="btn btn--line" href="' . esc_url( $y[1] ) . '" target="_blank" rel="noopener">' . esc_html__( 'We are on Yandex Maps', 'memorial-plugin' ) . '</a>';
 	}
-	return '<div class="reviews__btns">'
-		. '<a class="btn btn--gold" href="' . esc_url( $y[2] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Leave a review', 'memorial-plugin' ) . '</a>'
-		. '<a class="btn btn--line" href="' . esc_url( $y[1] ) . '" target="_blank" rel="noopener">' . esc_html__( 'We are on Yandex Maps', 'memorial-plugin' ) . '</a>'
-		. '</div>';
+	if ( '' !== $gis ) {
+		$html .= '<a class="btn btn--line" href="' . esc_url( $gis ) . '" target="_blank" rel="noopener">' . esc_html__( 'We are on 2GIS', 'memorial-plugin' ) . '</a>';
+	}
+	return '' !== $html ? '<div class="reviews__btns">' . $html . '</div>' : '';
 }
 
 /**

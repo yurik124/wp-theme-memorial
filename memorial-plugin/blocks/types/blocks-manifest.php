@@ -2609,10 +2609,10 @@ return array (
     '$schema' => 'https://schemas.wp.org/trunk/block.json',
     'apiVersion' => 3,
     'name' => 'memorial-plugin/review-buttons',
-    'title' => 'Yandex review buttons',
+    'title' => 'Review buttons',
     'category' => 'memorial-reviews',
     'icon' => 'external',
-    'description' => '“Leave a review” and “We are on Yandex Maps” buttons.',
+    'description' => '“Leave a review”, “We are on Yandex Maps” and “We are on 2GIS” buttons.',
     'keywords' => 
     array (
       0 => 'reviews',
