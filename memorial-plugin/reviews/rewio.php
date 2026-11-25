@@ -1033,31 +1033,67 @@ add_filter(
 		if ( ! is_array( $cat ) || empty( $cat['time'] ) ) {
 			$cat = memorial_plugin_rewio_catalog_fetch();
 		}
+		$field['refresh'] = true; // the “Update the list of branches” button (POST /memorial-plugin/v1/rewio/catalog).
 		if ( is_wp_error( $cat ) ) {
 			$field['error'] = __( 'Could not get the list of branches: ', 'memorial-plugin' ) . $cat->get_error_message();
 			return $field;
 		}
-		$field['catalog'] = array(
-			'objects' => array_map(
-				fn( $ob ) => array(
-					'id'      => (int) $ob['id'],
-					'name'    => (string) $ob['name'],
-					'count'   => $ob['count'],
-					'demo'    => ! empty( $ob['demo'] ),
-					'sources' => array_map(
-						'intval',
-						(array) $ob['sources']
-					),
-				),
-				(array) $cat['objects']
-			),
-			'sources' => array_map( 'strval', (array) ( $cat['all_sources'] ?? array() ) + (array) ( $cat['sources'] ?? array() ) ),
-			'time'    => memorial_plugin_rewio_when( $cat['time'] ),
-		);
+		$field['catalog'] = memorial_plugin_rewio_catalog_field( $cat );
 		return $field;
 	},
 	10,
 	2
+);
+
+/**
+ * The Rewio branch list as the settings screen needs it (src/settings/rewio-scope.js).
+ *
+ * @param array $cat Saved list (mem_rewio_catalog).
+ * @return array{objects:array,sources:array,time:string}
+ */
+function memorial_plugin_rewio_catalog_field( $cat ) {
+	return array(
+		'objects' => array_map(
+			fn( $ob ) => array(
+				'id'      => (int) $ob['id'],
+				'name'    => (string) $ob['name'],
+				'count'   => $ob['count'],
+				'demo'    => ! empty( $ob['demo'] ),
+				'sources' => array_map(
+					'intval',
+					(array) $ob['sources']
+				),
+			),
+			(array) $cat['objects']
+		),
+		'sources' => array_map( 'strval', (array) ( $cat['all_sources'] ?? array() ) + (array) ( $cat['sources'] ?? array() ) ),
+		'time'    => memorial_plugin_rewio_when( $cat['time'] ),
+	);
+}
+
+/* «Обновить список филиалов» на экране «Отзывы Rewio» (владелец, 26.11.2026): список заново из Rewio. */
+add_action(
+	'rest_api_init',
+	static function () {
+		register_rest_route(
+			'memorial-plugin/v1',
+			'/rewio/catalog',
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'permission_callback' => static fn() => memorial_plugin_can_screen( 'mem_rewio' ),
+				'callback'            => static function () {
+					if ( trim( memorial_plugin_rewio()['api']['key'] ) === '' ) {
+						return new WP_Error( 'no_key', __( 'First paste the API key into “1. Connection” and save — your branches will appear here.', 'memorial-plugin' ), array( 'status' => 400 ) );
+					}
+					$cat = memorial_plugin_rewio_catalog_fetch();
+					if ( is_wp_error( $cat ) ) {
+						return new WP_Error( 'rewio', __( 'Could not get the list of branches: ', 'memorial-plugin' ) . $cat->get_error_message(), array( 'status' => 502 ) );
+					}
+					return rest_ensure_response( memorial_plugin_rewio_catalog_field( $cat ) );
+				},
+			)
+		);
+	}
 );
 
 /**
