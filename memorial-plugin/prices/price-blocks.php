@@ -5,6 +5,8 @@
  *  - «Пособие и выплаты» (memorial-plugin/benefits) — суммы из кодов posobie и vyplata_svo, текст задан жёстко;
  *  - «Цены по отдельности» (memorial-plugin/price-list) — таблица «услуга — цена от — подробнее» из кодов;
  *  - дата «Обновлено» у отдельных цен ставится сама, когда цена меняется;
+ *  - «Цены обновлены» (значение сайта prices-updated, в файлах страниц — {prices_updated}): месяц и год
+ *    последней правки цен — пакетов, кремации, отдельных цен или цены товара каталога;
  *  - разовый перенос memorial_plugin_prices_2: код vyplata_svo, коды наборов «Цен по отдельности» (без цен —
  *    их вписывает владелец), вариант «Оплаты» на страницах по разделу сайта.
  *
@@ -328,6 +330,99 @@ function memorial_plugin_prices_stamp( $value, $old ) {
 	return $value;
 }
 add_filter( 'pre_update_option_mem_prices', 'memorial_plugin_prices_stamp', 10, 2 );
+
+/* ---------- Когда последний раз менялись цены ---------- */
+
+/**
+ * The prices part of mem_prices: packages, cremation, codes with their prices. Texts of payment and
+ * guarantees are not prices — their edits do not move the date.
+ *
+ * @param mixed $value mem_prices.
+ * @return string Hash.
+ */
+function memorial_plugin_prices_fingerprint( $value ) {
+	$value = is_array( $value ) ? $value : array();
+	$other = array();
+	foreach ( (array) ( $value['other']['items'] ?? array() ) as $row ) {
+		if ( is_array( $row ) ) {
+			$other[] = array( (string) ( $row['code'] ?? '' ), (string) ( $row['price'] ?? '' ), (string) ( $row['what'] ?? '' ) );
+		}
+	}
+	return md5(
+		(string) wp_json_encode(
+			array(
+				(array) ( $value['packages']['items'] ?? array() ),
+				(array) ( $value['cremation']['rows'] ?? array() ),
+				$other,
+			)
+		)
+	);
+}
+
+/**
+ * Remember the moment the prices changed.
+ */
+function memorial_plugin_prices_touch() {
+	update_option( 'mem_prices_changed', time(), false );
+}
+
+/**
+ * “Memorial → Prices” saved: the date moves only if a price, a package or the cremation changed.
+ *
+ * @param mixed $old   Old value.
+ * @param mixed $value New value.
+ */
+function memorial_plugin_prices_changed( $old, $value ) {
+	if ( memorial_plugin_prices_fingerprint( $old ) !== memorial_plugin_prices_fingerprint( $value ) ) {
+		memorial_plugin_prices_touch();
+	}
+}
+add_action( 'update_option_mem_prices', 'memorial_plugin_prices_changed', 10, 2 );
+
+/**
+ * The price of a catalog product changed (the “from” prices of the sections are counted from them).
+ *
+ * @param int    $meta_id   Meta ID.
+ * @param int    $object_id Post ID.
+ * @param string $meta_key  Key.
+ */
+function memorial_plugin_prices_product_changed( $meta_id, $object_id, $meta_key ) {
+	if ( '_mem_price' === $meta_key && 'mem_product' === get_post_type( $object_id ) ) {
+		memorial_plugin_prices_touch();
+	}
+}
+add_action( 'updated_post_meta', 'memorial_plugin_prices_product_changed', 10, 3 );
+add_action( 'added_post_meta', 'memorial_plugin_prices_product_changed', 10, 3 );
+
+/**
+ * When the prices were last changed. Before the first change after the update — the latest
+ * “Updated” date of the separate prices.
+ *
+ * @return int Timestamp or 0.
+ */
+function memorial_plugin_prices_updated_at() {
+	$ts = (int) get_option( 'mem_prices_changed', 0 );
+	if ( $ts > 0 ) {
+		return $ts;
+	}
+	foreach ( (array) ( memorial_plugin_prices( 'other' )['items'] ?? array() ) as $row ) {
+		$d = DateTime::createFromFormat( '!d.m.Y', trim( (string) ( $row['updated'] ?? '' ) ), wp_timezone() );
+		if ( $d ) {
+			$ts = max( $ts, $d->getTimestamp() );
+		}
+	}
+	return $ts;
+}
+
+/**
+ * “November 2026” — the month and year the prices were last changed (lower case, as inside a sentence).
+ *
+ * @return string
+ */
+function memorial_plugin_prices_updated_text() {
+	$ts = memorial_plugin_prices_updated_at();
+	return $ts > 0 ? mb_strtolower( wp_date( 'F Y', $ts ) ) : '';
+}
 
 /* ---------- Разовый перенос memorial_plugin_prices_2 ---------- */
 

@@ -93,6 +93,12 @@ function memorial_plugin_inline_values() {
 			'param'       => '',
 			'param_label' => '',
 		),
+		'prices-updated' => array(
+			'callback'    => static fn() => esc_html( function_exists( 'memorial_plugin_prices_updated_text' ) ? memorial_plugin_prices_updated_text() : '' ),
+			'label'       => __( 'Month the prices were last changed', 'memorial-plugin' ),
+			'param'       => '',
+			'param_label' => '',
+		),
 		'doc'        => array(
 			'tag'         => 'mem_doc',
 			'label'       => __( 'Link to a document (privacy policy, consent, cookies)', 'memorial-plugin' ),

@@ -228,6 +228,26 @@ class Test_Memorial_Plugin_Repo_Pages extends WP_UnitTestCase {
 		$this->assertStringContainsString( '200–500', do_blocks( $content ) );
 	}
 
+	public function test_prices_updated_token_becomes_a_site_value_that_follows_price_edits() {
+		$prices = memorial_plugin_settings( 'mem_prices' );
+		update_option( 'mem_prices', $prices );
+		update_option( 'mem_prices_changed', strtotime( '2026-03-10 12:00:00' ) );
+		$this->file( 'ceny-data', array( 'title' => 'Цены' ), "<!-- wp:paragraph -->\n<p>Обновление цен — {prices_updated}.</p>\n<!-- /wp:paragraph -->" );
+		memorial_plugin_repo_apply( array(), 'auto' );
+		$content = get_post_field( 'post_content', memorial_plugin_repo_page_id( 'ceny-data' ) );
+		$this->assertStringNotContainsString( '{prices_updated}', $content );
+		$this->assertStringContainsString( 'data-value="prices-updated"', $content );
+		$this->assertStringContainsString( mb_strtolower( wp_date( 'F Y', strtotime( '2026-03-10 12:00:00' ) ) ), do_blocks( $content ) );
+
+		// A text edit on the prices screen (not a price) does not move the date; a new package price does.
+		$prices['pay']['note'] = 'Другой текст';
+		update_option( 'mem_prices', $prices );
+		$this->assertSame( strtotime( '2026-03-10 12:00:00' ), (int) get_option( 'mem_prices_changed' ) );
+		$prices['packages']['items'][0]['name'] = 'Эконом плюс';
+		update_option( 'mem_prices', $prices );
+		$this->assertGreaterThan( strtotime( '2026-03-10 12:00:00' ), (int) get_option( 'mem_prices_changed' ) );
+	}
+
 	public function test_screen_needs_the_right_to_manage_options() {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'editor' ) ) );
 		$res = rest_do_request( new WP_REST_Request( 'GET', '/memorial-plugin/v1/repo-pages' ) );

@@ -233,16 +233,17 @@ function memorial_plugin_repo_content( $body, &$missing = array() ) {
 
 /**
  * {price:код} in the text of a page → a site value (the span the editor makes with “More ∨ → Site value”):
- * the page shows the current price, the editor shows the value as a value. The marks of the blocks
- * (<!-- wp:… -->) are left as they are.
+ * the page shows the current price, the editor shows the value as a value. {prices_updated} → the month
+ * the prices were last changed. The marks of the blocks (<!-- wp:… -->) are left as they are.
  *
  * @param string $content Block markup.
  * @return string
  */
 function memorial_plugin_repo_price_tokens( $content ) {
-	if ( false === strpos( $content, '{price:' ) || ! function_exists( 'memorial_plugin_inline_value_span' ) ) {
+	if ( ( false === strpos( $content, '{price:' ) && false === strpos( $content, '{prices_updated}' ) ) || ! function_exists( 'memorial_plugin_inline_value_span' ) ) {
 		return $content;
 	}
+	$updated  = memorial_plugin_inline_value_span( 'prices-updated', array(), esc_html( function_exists( 'memorial_plugin_prices_updated_text' ) ? memorial_plugin_prices_updated_text() : '' ) );
 	$packages = array();
 	foreach ( function_exists( 'memorial_plugin_packages' ) ? memorial_plugin_packages() : array() as $p ) {
 		$packages[ mb_strtolower( trim( (string) $p['name'] ) ) ] = (string) $p['name'];
@@ -261,7 +262,7 @@ function memorial_plugin_repo_price_tokens( $content ) {
 				$now  = function_exists( 'memorial_plugin_price_value' ) ? (string) memorial_plugin_price_value( $atts['id'] ?? '', $atts['paket'] ?? '' ) : '';
 				return memorial_plugin_inline_value_span( 'price', $atts, esc_html( $now ) );
 			},
-			$part
+			str_replace( '{prices_updated}', $updated, $part )
 		);
 	}
 	return implode( '', $parts );
