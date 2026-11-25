@@ -107,6 +107,17 @@ class Test_Memorial_Plugin_Ui_2611 extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Save the separate prices as they are: without the automatic “Updated” of new rows (prices/price-blocks.php).
+	 *
+	 * @param array $value mem_prices.
+	 */
+	private function save_prices( $value ) {
+		remove_filter( 'pre_update_option_mem_prices', 'memorial_plugin_prices_stamp', 10 );
+		update_option( 'mem_prices', $value );
+		add_filter( 'pre_update_option_mem_prices', 'memorial_plugin_prices_stamp', 10, 2 );
+	}
+
+	/**
 	 * Separate prices with a benefit.
 	 *
 	 * @return array
@@ -163,7 +174,7 @@ class Test_Memorial_Plugin_Ui_2611 extends WP_UnitTestCase {
 	}
 
 	public function test_confirm_prices_dates_the_rows_and_the_site_but_not_the_benefits() {
-		update_option( 'mem_prices', $this->prices_with_benefit() );
+		$this->save_prices( $this->prices_with_benefit() );
 		update_option( 'mem_prices_changed', 1000 );
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
 		memorial_plugin_price_confirm( 'prices' );
@@ -179,11 +190,15 @@ class Test_Memorial_Plugin_Ui_2611 extends WP_UnitTestCase {
 	}
 
 	public function test_reminder_email_goes_once_a_week() {
-		update_option( 'mem_prices', $this->prices_with_benefit() );
+		$this->save_prices( $this->prices_with_benefit() );
 		update_option( 'mem_prices_changed', time() - 40 * DAY_IN_SECONDS );
 		delete_option( 'memorial_plugin_price_check' );
+		$this->assertTrue( memorial_plugin_price_check_due()['prices'] );
 		reset_phpmailer_instance();
 		memorial_plugin_price_check_run();
+		$state = get_option( 'memorial_plugin_price_check' );
+		$this->assertGreaterThan( 0, (int) ( $state['prices_mail'] ?? 0 ), wp_json_encode( $state ) );
+		$this->assertSame( '', (string) ( $state['prices_error'] ?? '' ), wp_json_encode( $state ) );
 		$mailer = tests_retrieve_phpmailer_instance();
 		$this->assertStringContainsString( wp_date( 'd.m.Y', time() - 40 * DAY_IN_SECONDS ), $mailer->get_sent()->body );
 		reset_phpmailer_instance();
