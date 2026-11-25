@@ -3250,7 +3250,8 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 	test.describe( 'задачи 2611 ' + width, () => {
 		test.use( { viewport: { width, height } } );
 		test( 'задачи 2611 ' + width, async ( { page } ) => {
-			test.setTimeout( 240_000 );
+			test.setTimeout( 300_000 );
+			page.setDefaultTimeout( 8_000 ); // чего нет на копии сайта — не ждём до конца теста
 			const errs = errorsOf( page );
 			const out = { width };
 			const widths = ( sel ) => page.locator( sel ).evaluateAll( ( els ) => els.map( ( e ) => Math.round( e.getBoundingClientRect().width ) ) );
@@ -3259,7 +3260,7 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 			out.reviewBtns = await page.locator( '.reviews__btns a' ).evaluateAll( ( els ) => els.map( ( e ) => [ e.innerText, Math.round( e.getBoundingClientRect().width ), e.target, e.rel, e.href ] ) );
 			out.mapTabs = await widths( '.maps__tab' );
 			out.msg = await page.locator( '.clist__msg a' ).evaluateAll( ( els ) => els.map( ( e ) => [ e.innerText, Math.round( e.getBoundingClientRect().width ) ] ) );
-			out.benefitMore = await page.locator( '.mbenefit__more' ).evaluate( ( e ) => [ e.innerText, getComputedStyle( e ).textAlign ] ).catch( () => null );
+			out.benefitMore = await page.locator( '.mbenefit__more' ).first().evaluate( ( e ) => [ e.innerText, getComputedStyle( e ).textAlign ] ).catch( () => null );
 			out.fonts = await page.evaluate( () => {
 				const f = ( sel, pseudo ) => {
 					const el = document.querySelector( sel );
@@ -3270,7 +3271,7 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 			out.external = await page.locator( 'a[href^="http"]' ).evaluateAll( ( els ) =>
 				els.filter( ( a ) => a.hostname.replace( /^www\./, '' ) !== location.hostname.replace( /^www\./, '' ) ).map( ( a ) => [ a.hostname, a.target, a.rel ] )
 			);
-			out.newtabText = await page.locator( '#mem-newtab' ).textContent().catch( () => null );
+			out.newtabText = await page.locator( '#mem-newtab' ).textContent( { timeout: 2_000 } ).catch( () => null );
 			const gal = page.locator( 'figure.wp-block-gallery.mem-cardphotos' ).first();
 			out.cardGallery = await gal.count();
 			if ( out.cardGallery ) {
@@ -3295,6 +3296,8 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 				}
 			}
 			out.overflow = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
+			out.sections = await page.locator( 'main section[id], .content section[id], section[id]' ).evaluateAll( ( els ) => els.map( ( e ) => e.id ) );
+			log( 't2611-' + width, out );
 			await shot( page, 't2611-home-' + width, { fullPage: true } );
 			await page.goto( '/chto-delat-esli-umer-chelovek/' );
 			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
