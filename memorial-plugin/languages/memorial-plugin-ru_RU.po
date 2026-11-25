@@ -1651,6 +1651,9 @@ msgstr "Найдено"
 msgid "Founding year"
 msgstr "Год основания"
 
+msgid "Month the prices were last changed"
+msgstr "Месяц последнего изменения цен"
+
 #: content/search.php:44
 msgid "Frequent searches:"
 msgstr "Часто ищут:"

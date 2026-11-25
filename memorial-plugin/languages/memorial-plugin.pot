@@ -183,7 +183,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of seats.
-#: places/transport.php:201
+#: places/transport.php:209
 #, php-format
 msgid "%d seat for the mourners"
 msgid_plural "%d seats for the mourners"
@@ -399,7 +399,7 @@ msgid "A link in the name; many requests"
 msgstr ""
 
 #. translators: %s: address of a page.
-#: pages/repo-pages.php:452
+#: pages/repo-pages.php:453
 #, php-format
 msgid "A link leads to %s — there is no such page yet."
 msgstr ""
@@ -672,7 +672,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: places/places.php:137 src/catalog/repo-pages.js:147 src/settings/index.js:327 src/block-controls/index.js:697 seo/llms.php:73 blocks/content/inline-values.php:324
+#: places/places.php:137 src/catalog/repo-pages.js:147 src/settings/index.js:327 src/block-controls/index.js:697 seo/llms.php:73 blocks/content/inline-values.php:330
 msgid "Address"
 msgstr ""
 
@@ -978,11 +978,11 @@ msgstr ""
 msgid "Benefit and payments"
 msgstr ""
 
-#: prices/price-blocks.php:146
+#: prices/price-blocks.php:148
 msgid "Benefit and payments for a burial"
 msgstr ""
 
-#: prices/price-blocks.php:134
+#: prices/price-blocks.php:136
 msgid "Benefits and payments: fill in the prices with the codes posobie and vyplata_svo in Memorial → Prices → Separate prices."
 msgstr ""
 
@@ -1578,7 +1578,7 @@ msgstr ""
 msgid "Consent to the data processing is needed."
 msgstr ""
 
-#: blocks/content/inline-values.php:312
+#: blocks/content/inline-values.php:318
 msgid "Consent to the processing of personal data"
 msgstr ""
 
@@ -1634,7 +1634,7 @@ msgstr ""
 msgid "Cookie notice or consent request (Memorial → Analytics). Without it, Yandex Metrica in the “after consent” mode never loads."
 msgstr ""
 
-#: legal/legal.php:24 seo/metrika.php:182 blocks/content/inline-values.php:313 blocks/legacy/render/footer-legal.php:27
+#: legal/legal.php:24 seo/metrika.php:182 blocks/content/inline-values.php:319 blocks/legacy/render/footer-legal.php:27
 msgid "Cookie policy"
 msgstr ""
 
@@ -1927,7 +1927,7 @@ msgstr ""
 msgid "Document pages"
 msgstr ""
 
-#: blocks/content/inline-values.php:100
+#: blocks/content/inline-values.php:106
 msgid "Document: policy, consent or cookies"
 msgstr ""
 
@@ -2007,7 +2007,7 @@ msgstr ""
 msgid "Edit work"
 msgstr ""
 
-#: blocks/content/inline-values.php:325 core/settings.php:48 core/icons-api.php:26
+#: blocks/content/inline-values.php:331 core/settings.php:48 core/icons-api.php:26
 msgid "Email"
 msgstr ""
 
@@ -2440,7 +2440,7 @@ msgstr ""
 msgid "Funeral and cremation packages: on the home page and by the “Funeral packages” block on any page — the same everywhere. The cremation table on the cremation page is the “Cremation prices” block."
 msgstr ""
 
-#: prices/price-blocks.php:187 blocks/home/home.php:226
+#: prices/price-blocks.php:189 blocks/home/home.php:226
 msgid "Funeral and goods"
 msgstr ""
 
@@ -2476,7 +2476,7 @@ msgstr ""
 msgid "Funeral transport"
 msgstr ""
 
-#: places/transport.php:173
+#: places/transport.php:181
 msgid "Funeral transport: add a car in Memorial → Transport."
 msgstr ""
 
@@ -2858,7 +2858,7 @@ msgstr ""
 msgid "In the article:"
 msgstr ""
 
-#: pages/repo-pages.php:862
+#: pages/repo-pages.php:863
 msgid "In the file"
 msgstr ""
 
@@ -2876,7 +2876,7 @@ msgstr ""
 msgid "In the “Examples of our works” cards on other pages."
 msgstr ""
 
-#: places/transport.php:194
+#: places/transport.php:202
 msgid "Included in the funeral packages; can be ordered separately."
 msgstr ""
 
@@ -3046,7 +3046,7 @@ msgstr ""
 msgid "Link that starts the MAX app (advanced)"
 msgstr ""
 
-#: blocks/content/inline-values.php:98
+#: blocks/content/inline-values.php:104
 msgid "Link to a document (privacy policy, consent, cookies)"
 msgstr ""
 
@@ -3299,7 +3299,7 @@ msgid "Menu"
 msgstr ""
 
 #. translators: 1: menu label, 2: address of the parent item.
-#: pages/repo-pages.php:818
+#: pages/repo-pages.php:819
 #, php-format
 msgid "Menu item “%1$s” added under %2$s."
 msgstr ""
@@ -3332,7 +3332,11 @@ msgstr ""
 msgid "Model"
 msgstr ""
 
-#: prices/prices.php:298 prices/price-blocks.php:199 blocks/home/home.php:124 blocks/home/home.php:143 blocks/home/home.php:227
+#: blocks/content/inline-values.php:98
+msgid "Month the prices were last changed"
+msgstr ""
+
+#: prices/prices.php:298 prices/price-blocks.php:201 blocks/home/home.php:124 blocks/home/home.php:143 blocks/home/home.php:227
 msgid "Monuments and landscaping"
 msgstr ""
 
@@ -3340,7 +3344,7 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: prices/price-blocks.php:152
+#: prices/price-blocks.php:154
 msgid "More about the benefit"
 msgstr ""
 
@@ -3429,7 +3433,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: blocks/content/inline-values.php:323
+#: blocks/content/inline-values.php:329
 msgid "Name and details"
 msgstr ""
 
@@ -3806,7 +3810,7 @@ msgstr ""
 msgid "On the site "
 msgstr ""
 
-#: pages/repo-pages.php:861
+#: pages/repo-pages.php:862
 msgid "On the site now"
 msgstr ""
 
@@ -3932,7 +3936,7 @@ msgstr ""
 msgid "Opacity"
 msgstr ""
 
-#: pages/repo-pages.php:945
+#: pages/repo-pages.php:946
 msgid "Open"
 msgstr ""
 
@@ -3951,7 +3955,7 @@ msgid "Open site"
 msgstr ""
 
 #. translators: %s: what is in the photo.
-#: places/transport.php:157
+#: places/transport.php:165
 #, php-format
 msgid "Open the photo larger: %s"
 msgstr ""
@@ -4052,7 +4056,7 @@ msgstr ""
 msgid "Other counters — start only after consent"
 msgstr ""
 
-#: prices/prices.php:242 prices/prices.php:248 prices/price-blocks.php:90 blocks/home/home.php:132
+#: prices/prices.php:242 prices/prices.php:248 prices/price-blocks.php:92 blocks/home/home.php:132
 msgid "Our guarantees"
 msgstr ""
 
@@ -4127,7 +4131,7 @@ msgstr ""
 msgid "Packages"
 msgstr ""
 
-#: src/catalog/repo-pages.js:124 src/catalog/repo-pages.js:212 src/settings/photo-preview.js:22 prices/price-blocks.php:287 core/settings.php:365
+#: src/catalog/repo-pages.js:124 src/catalog/repo-pages.js:212 src/settings/photo-preview.js:22 prices/price-blocks.php:289 core/settings.php:365
 msgid "Page"
 msgstr ""
 
@@ -4155,12 +4159,12 @@ msgstr ""
 msgid "Page:"
 msgstr ""
 
-#: src/catalog/repo-pages.js:310 pages/repo-pages.php:956 pages/repo-pages.php:957
+#: src/catalog/repo-pages.js:310 pages/repo-pages.php:957 pages/repo-pages.php:958
 msgid "Pages from the repository"
 msgstr ""
 
 #. translators: %d: number of pages.
-#: pages/repo-pages.php:940
+#: pages/repo-pages.php:941
 #, php-format
 msgid "Pages from the repository: %d page waits for your decision."
 msgid_plural "Pages from the repository: %d pages wait for your decision."
@@ -4193,7 +4197,7 @@ msgstr ""
 msgid "Payment"
 msgstr ""
 
-#: prices/price-blocks.php:130
+#: prices/price-blocks.php:132
 msgid "Payment for the burial of a participant of the special military operation"
 msgstr ""
 
@@ -4209,7 +4213,7 @@ msgstr ""
 msgid "Personal data processing policy"
 msgstr ""
 
-#: admin/collections.php:40 leads/callback.php:257 seo/llms.php:68 blocks/content/inline-values.php:326 core/icons-api.php:23 core/icons-fallback.php:23
+#: admin/collections.php:40 leads/callback.php:257 seo/llms.php:68 blocks/content/inline-values.php:332 core/icons-api.php:23 core/icons-fallback.php:23
 msgid "Phone"
 msgstr ""
 
@@ -4455,7 +4459,7 @@ msgstr ""
 msgid "Price list"
 msgstr ""
 
-#: prices/price-blocks.php:287
+#: prices/price-blocks.php:289
 msgid "Price list item"
 msgstr ""
 
@@ -4525,7 +4529,7 @@ msgstr ""
 msgid "Prices one by one"
 msgstr ""
 
-#: prices/price-blocks.php:281
+#: prices/price-blocks.php:283
 msgid "Prices one by one: no row has a price yet. Fill in the prices of the codes in Memorial → Prices → Separate prices."
 msgstr ""
 
@@ -4537,7 +4541,7 @@ msgstr ""
 msgid "Prices written into the text by hand — they do not change by themselves"
 msgstr ""
 
-#: blocks/content/inline-values.php:311
+#: blocks/content/inline-values.php:317
 msgid "Privacy policy"
 msgstr ""
 
@@ -5272,7 +5276,7 @@ msgid "Separate prices"
 msgstr ""
 
 #. translators: %s: price of a trip.
-#: places/transport.php:193
+#: places/transport.php:201
 #, php-format
 msgid "Separately — from %s per trip; in the funeral packages it is included."
 msgstr ""
@@ -5515,7 +5519,7 @@ msgstr ""
 msgid "Similar products"
 msgstr ""
 
-#: reviews/rewio.php:931 reviews/rewio-archive.php:459 blocks/content/inline-values.php:327
+#: reviews/rewio.php:931 reviews/rewio-archive.php:459 blocks/content/inline-values.php:333
 msgid "Site"
 msgstr ""
 
@@ -5576,7 +5580,7 @@ msgstr ""
 msgid "Social Fund of Russia"
 msgstr ""
 
-#: prices/price-blocks.php:124
+#: prices/price-blocks.php:126
 msgid "Social benefit for a burial"
 msgstr ""
 
@@ -5973,7 +5977,7 @@ msgstr ""
 msgid "The heading and the anchor are those of the heading of the section on this page (Advanced → HTML anchor)."
 msgstr ""
 
-#: places/transport.php:113
+#: places/transport.php:121
 msgid "The hearse and the bus: shown by the “Funeral transport” block (hearse page, funeral pages). The prices are in Memorial → Prices → Separate prices: codes katafalk and avtobus."
 msgstr ""
 
@@ -6029,15 +6033,15 @@ msgstr ""
 msgid "The packages themselves, their contents and prices — in “Memorial → Prices”."
 msgstr ""
 
-#: pages/repo-pages.php:348
+#: pages/repo-pages.php:349
 msgid "The page was made before the import. Look at the difference and choose."
 msgstr ""
 
-#: pages/repo-pages.php:331
+#: pages/repo-pages.php:332
 msgid "The page will be created."
 msgstr ""
 
-#: pages/repo-pages.php:359
+#: pages/repo-pages.php:360
 msgid "The page will be updated (a revision is kept)."
 msgstr ""
 
@@ -6077,7 +6081,7 @@ msgstr ""
 msgid "The same SKU is in row %d."
 msgstr ""
 
-#: blocks/content/inline-values.php:289
+#: blocks/content/inline-values.php:295
 msgid "The section of the page where the text is"
 msgstr ""
 
@@ -6119,11 +6123,11 @@ msgstr ""
 msgid "The text is too long: up to %d characters."
 msgstr ""
 
-#: pages/repo-pages.php:413
+#: pages/repo-pages.php:414
 msgid "The text of the site is kept."
 msgstr ""
 
-#: pages/repo-pages.php:365
+#: pages/repo-pages.php:366
 msgid "The text was edited on the site after the import. Look at the difference and choose."
 msgstr ""
 
@@ -6131,7 +6135,7 @@ msgstr ""
 msgid "The texts and prices of the site may be used by search engines and AI assistants, including for training language models, with a link to the site."
 msgstr ""
 
-#: pages/repo-pages.php:867
+#: pages/repo-pages.php:868
 msgid "The texts are the same."
 msgstr ""
 
@@ -6232,7 +6236,7 @@ msgid "There is no import to roll back."
 msgstr ""
 
 #. translators: %s: address of the parent page.
-#: pages/repo-pages.php:325
+#: pages/repo-pages.php:326
 #, php-format
 msgid "There is no parent page /%s/."
 msgstr ""
@@ -6405,7 +6409,7 @@ msgstr ""
 msgid "Total: %s ₽"
 msgstr ""
 
-#: places/transport.php:111
+#: places/transport.php:119
 msgid "Transport"
 msgstr ""
 
@@ -6513,11 +6517,11 @@ msgstr ""
 msgid "Up to date"
 msgstr ""
 
-#: pages/repo-pages.php:354
+#: pages/repo-pages.php:355
 msgid "Up to date."
 msgstr ""
 
-#: pages/repo-pages.php:354
+#: pages/repo-pages.php:355
 msgid "Up to date; the text was edited on the site after the import."
 msgstr ""
 
@@ -6538,7 +6542,7 @@ msgid "Updated"
 msgstr ""
 
 #. translators: 1: file version, 2: revision ID.
-#: pages/repo-pages.php:534
+#: pages/repo-pages.php:535
 #, php-format
 msgid "Updated to version %1$d; the previous text is revision %2$d."
 msgstr ""
@@ -6623,7 +6627,7 @@ msgstr ""
 msgid "We are on Yandex Maps"
 msgstr ""
 
-#: prices/price-blocks.php:151
+#: prices/price-blocks.php:153
 msgid "We give the full set of documents for claiming the payments. The payment is claimed by a relative."
 msgstr ""
 
@@ -6928,7 +6932,7 @@ msgid "Write in MAX"
 msgstr ""
 
 #. translators: %d: file version.
-#: pages/repo-pages.php:536
+#: pages/repo-pages.php:537
 #, php-format
 msgid "Written, version %d."
 msgstr ""
@@ -6985,7 +6989,7 @@ msgstr ""
 msgid "You can send a photo, the text for a wreath ribbon or questions about documents — we will answer during working hours."
 msgstr ""
 
-#: pages/repo-pages.php:345 pages/repo-pages.php:362
+#: pages/repo-pages.php:346 pages/repo-pages.php:363
 msgid "You chose to keep the text of the site for this version of the file."
 msgstr ""
 
@@ -8366,7 +8370,7 @@ msgid "from %s"
 msgstr ""
 
 #. translators: %s: price of a trip of the bus.
-#: places/transport.php:217
+#: places/transport.php:225
 #, php-format
 msgid "from %s per trip"
 msgstr ""
@@ -8431,7 +8435,7 @@ msgstr ""
 msgid "in SEO"
 msgstr ""
 
-#: prices/price-blocks.php:130
+#: prices/price-blocks.php:132
 msgid "in the Belgorod region, through the military enlistment office"
 msgstr ""
 
@@ -8505,7 +8509,7 @@ msgid_plural "models"
 msgstr[0] ""
 msgstr[1] ""
 
-#: prices/price-blocks.php:278
+#: prices/price-blocks.php:280
 msgid "more"
 msgstr ""
 
@@ -8537,12 +8541,12 @@ msgstr ""
 msgid "no description"
 msgstr ""
 
-#: pages/repo-pages.php:678
+#: pages/repo-pages.php:679
 msgid "no main menu"
 msgstr ""
 
 #. translators: %s: address of the parent menu item.
-#: pages/repo-pages.php:687
+#: pages/repo-pages.php:688
 #, php-format
 msgid "no menu item %s"
 msgstr ""
@@ -8551,7 +8555,7 @@ msgstr ""
 msgid "no price yet"
 msgstr ""
 
-#: prices/price-blocks.php:165
+#: prices/price-blocks.php:167
 msgid "no unit"
 msgstr ""
 
@@ -8641,11 +8645,11 @@ msgstr ""
 msgid "pcs"
 msgstr ""
 
-#: prices/price-blocks.php:167
+#: prices/price-blocks.php:169
 msgid "per km"
 msgstr ""
 
-#: prices/price-blocks.php:166
+#: prices/price-blocks.php:168
 msgid "per m²"
 msgstr ""
 
@@ -8653,11 +8657,11 @@ msgstr ""
 msgid "per piece"
 msgstr ""
 
-#: prices/price-blocks.php:169
+#: prices/price-blocks.php:171
 msgid "per running metre"
 msgstr ""
 
-#: prices/price-blocks.php:168
+#: prices/price-blocks.php:170
 msgid "per trip"
 msgstr ""
 
@@ -8864,11 +8868,11 @@ msgstr ""
 msgid "the reviews one per line: new or deleted, author, rating, review site, date and the beginning of the text"
 msgstr ""
 
-#: pages/repo-pages.php:818
+#: pages/repo-pages.php:819
 msgid "the top level"
 msgstr ""
 
-#: prices/price-blocks.php:124
+#: prices/price-blocks.php:126
 msgid "through the Social Fund of Russia"
 msgstr ""
 
