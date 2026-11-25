@@ -3272,6 +3272,10 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 				els.filter( ( a ) => a.hostname.replace( /^www\./, '' ) !== location.hostname.replace( /^www\./, '' ) ).map( ( a ) => [ a.hostname, a.target, a.rel ] )
 			);
 			out.newtabText = await page.locator( '#mem-newtab' ).textContent( { timeout: 2_000 } ).catch( () => null );
+			// Галерея на главной копии пока без фото — проверяем такую же на странице probe-2611 (её создаёт PROBE_CLI).
+			out.homeCardGallery = await page.locator( 'figure.wp-block-gallery.mem-cardphotos' ).count();
+			await page.goto( '/probe-2611/' );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
 			const gal = page.locator( 'figure.wp-block-gallery.mem-cardphotos' ).first();
 			out.cardGallery = await gal.count();
 			if ( out.cardGallery ) {
@@ -3288,6 +3292,8 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 					await page.waitForTimeout( 400 );
 				}
 			}
+			await page.goto( '/' );
+			await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
 			for ( const id of [ 'about', 'posobie', 'reviews', 'contacts' ] ) {
 				const sec = page.locator( '#' + id ).first();
 				if ( await sec.count() ) {
