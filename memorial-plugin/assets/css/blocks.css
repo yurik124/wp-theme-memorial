@@ -1150,6 +1150,7 @@ a.svc__item,a.svc__item:hover{text-decoration:none}
 .mem-anotes{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0 0;padding:0;list-style:none}
 .mem-anotes li{max-width:100%;margin:0;padding:.25rem .7rem;border:1px solid var(--memorial-plugin-line);border-radius:1rem;background:var(--memorial-plugin-bg2);color:var(--memorial-plugin-ink);font-size:1rem;line-height:1.4;overflow-wrap:anywhere}
 .mem-anotes li::before{content:none}
+.kaddr__notes{margin-bottom:.6rem}
 .clist__kind{display:block;margin-top:.2rem;font-size:1rem;font-weight:600;color:var(--memorial-plugin-ink)}
 /* «География работы»: одна-две строки с меткой */
 .marea{display:flex;gap:.75rem;align-items:flex-start;margin:1.5rem 0}
