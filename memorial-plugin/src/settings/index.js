@@ -48,6 +48,10 @@ const SITE = window.memorialPluginSettings?.siteUrl || '/';
 // An explanation longer than this goes behind a round “?” button instead of standing next to the field.
 const HINT_FROM = 70;
 
+// “(optional)” at the end of a label: it goes under the input, so the labels of a row stay on one line
+// and the inputs of a row stand level (owner, 26.11.2026).
+const OPTIONAL = /[ \u00a0]*\((optional|необязательно)\)\s*$/i;
+
 // A short explanation stays under the title; a long one hides behind “?”.
 function Help( { text } ) {
 	if ( ! text ) {
@@ -75,7 +79,9 @@ function Help( { text } ) {
  * @return {{label: *, help: string|undefined, name: string}} What to pass to the control.
  */
 function labelOf( def, always = false ) {
-	const full = String( def.label ?? '' );
+	const raw = String( def.label ?? '' );
+	const optional = OPTIONAL.test( raw );
+	const full = raw.replace( OPTIONAL, '' );
 	let name = full;
 	let tail = '';
 	// Only a long label is cut: a short “Name — variant” stays whole, the variant tells the fields apart.
@@ -104,8 +110,11 @@ function labelOf( def, always = false ) {
 		.map( ( t ) => t.charAt( 0 ).toUpperCase() + t.slice( 1 ) )
 		.join( '. ' )
 		.replace( /\.\. /g, '. ' );
+	const note = optional ? __( 'Optional', 'memorial-plugin' ) : '';
+	const under = hint ? '' : help;
 	return {
 		name,
+		optional,
 		label: hint ? (
 			<span className="memorial-plugin-settings__label-row">
 				{ name }
@@ -114,7 +123,12 @@ function labelOf( def, always = false ) {
 		) : (
 			name
 		),
-		help: hint ? undefined : help || undefined,
+		// Under the input: “Optional”, then a short explanation (a long one is behind “?”).
+		help:
+			[ note, under ]
+				.filter( Boolean )
+				.join( '. ' )
+				.replace( /\.\. /g, '. ' ) || undefined,
 	};
 }
 

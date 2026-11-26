@@ -75,10 +75,10 @@ $route  = fn( $a ) => 'https://yandex.ru/maps/?rtext=~' . rawurlencode( preg_rep
 				<p class="kaddr__kind"><?php echo esc_html( $kind ); ?></p><?php endif; ?>
 		<p class="kaddr__full"><?php echo esc_html( $a['addr'] ); ?></p>
 			<?php
-			$notes = $show_notes && function_exists( 'memorial_plugin_addr_notes' ) ? memorial_plugin_addr_notes( $a ) : array();
-			if ( $notes ) :
-				?>
-				<p class="kaddr__notes"><?php echo esc_html( implode( ' · ', $notes ) ); ?></p><?php endif; ?>
+			if ( $show_notes && function_exists( 'memorial_plugin_addr_notes_html' ) ) {
+				echo memorial_plugin_addr_notes_html( $a, 'kaddr__notes' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function.
+			}
+			?>
 			<?php
 			if ( ! empty( $a['hours'] ) ) :
 				?>

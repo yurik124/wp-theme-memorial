@@ -3363,3 +3363,61 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 		} );
 	} );
 }
+
+// 26.11.2026 (2): округ, остановка, ориентиры плашками под адресами (главная, «Контакты»); в «Контактах»
+// админки строки ввода адреса на одном уровне, «Необязательно» под строкой ввода.
+for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] ) {
+	test.describe( 'адреса 2611 ' + width, () => {
+		test.use( { viewport: { width, height } } );
+		test( 'адреса 2611 ' + width, async ( { page } ) => {
+			test.setTimeout( 240_000 );
+			page.setDefaultTimeout( 8_000 );
+			const errs = errorsOf( page );
+			const out = { width };
+			for ( const [ name, url, sel ] of [ [ 'home', '/', '.clist' ], [ 'kontakty', '/kontakty/', '.kaddr' ] ] ) {
+				await page.goto( url );
+				await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+				out[ name ] = await page.locator( '.mem-anotes' ).evaluateAll( ( els ) => els.map( ( ul ) => [ ...ul.children ].map( ( li ) => [ li.innerText, Math.round( li.getBoundingClientRect().width ), Math.round( li.getBoundingClientRect().height ) ] ) ) );
+				out[ name + 'Kind' ] = await page.locator( '.clist__kind, .kaddr__kind' ).allInnerTexts();
+				out[ name + 'Overflow' ] = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
+				const block = page.locator( sel ).first();
+				if ( await block.count() ) {
+					await block.scrollIntoViewIfNeeded();
+					await page.waitForTimeout( 300 );
+					const box = await page.locator( name === 'home' ? '#contacts' : '.kcards, .kaddr' ).first().boundingBox();
+					await shot( page, 't2611b-' + name + '-' + width );
+					if ( box ) {
+						await page.screenshot( { path: `${ DIR }/t2611b-${ name }-block-${ width }.png`, fullPage: true, clip: { x: 0, y: box.y, width, height: Math.min( box.height, 2400 ) } } ).catch( () => {} );
+					}
+				}
+			}
+			if ( width === 1440 ) {
+				await page.goto( '/wp-login.php' );
+				await page.fill( '#user_login', 'probe' );
+				await page.fill( '#user_pass', 'probe-pass-123' );
+				await page.click( '#wp-submit' );
+				await page.waitForURL( /wp-admin/ );
+				await page.goto( '/wp-admin/admin.php?page=mem-contacts' );
+				await page.locator( '.memorial-plugin-settings__card' ).first().waitFor( { timeout: 20_000 } ).catch( () => {} );
+				await page.waitForTimeout( 1200 );
+				// Строки ввода каждого ряда: подпись и верх поля; в одном ряду — одинаковый верх.
+				out.rows = await page.evaluate( () =>
+					[ ...document.querySelectorAll( '.memorial-plugin-settings__fields .dataforms-layouts__wrapper' ) ].slice( 0, 6 ).map( ( w ) =>
+						[ ...w.querySelectorAll( 'input[type="text"], input[type="email"], input:not([type]), textarea, select' ) ].map( ( i ) => {
+							const field = i.closest( '.components-base-control' );
+							return [ ( field?.querySelector( 'label' )?.innerText || '' ).trim(), Math.round( i.getBoundingClientRect().top ), Math.round( i.getBoundingClientRect().left ), ( field?.querySelector( '.components-base-control__help' )?.innerText || '' ).trim() ];
+						} )
+					)
+				);
+				const addr = page.locator( '.memorial-plugin-settings__row' ).filter( { hasText: 'Студенческая' } ).first();
+				if ( await addr.count() ) {
+					await addr.scrollIntoViewIfNeeded();
+					await addr.screenshot( { path: `${ DIR }/t2611b-admin-addr.png` } ).catch( () => {} );
+				}
+				await shot( page, 't2611b-admin-contacts', { fullPage: true } );
+			}
+			out.errors = errs;
+			log( 't2611b-' + width, out );
+		} );
+	} );
+}

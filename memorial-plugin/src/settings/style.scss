@@ -457,20 +457,27 @@
 	}
 }
 
-// Fields of one row stand on one line: the label takes the room it needs, the field sticks to the bottom.
+// Inputs of one row stand level (owner, 26.11.2026): the fields start at the top, the labels are one line
+// (“(optional)” goes under the input, long explanations behind “?” — RUKOVODSTVO), and what stands under
+// an input (“Optional”) does not move the inputs.
 .memorial-plugin-admin .memorial-plugin-settings .dataforms-layouts__wrapper,
 .memorial-plugin-settings .memorial-plugin-settings__fields > * {
-	align-items: stretch;
+	align-items: start;
 }
 
 .memorial-plugin-admin .memorial-plugin-settings .dataforms-layouts-regular__field {
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
+	justify-content: flex-start;
 
 	> * {
 		width: 100%;
 	}
+}
+
+// The round “?” next to a label does not make its line higher than the labels without it.
+.memorial-plugin-settings__label-row > * {
+	margin-block: -4px;
 }
 
 // A checkbox next to fields of a short row: in the middle of the field's height.

@@ -207,4 +207,27 @@ class Test_Memorial_Plugin_Ui_2611 extends WP_UnitTestCase {
 		memorial_plugin_price_check_run();
 		$this->assertFalse( tests_retrieve_phpmailer_instance()->get_sent(), 'not again the same week' );
 	}
+
+	public function test_home_contacts_list_shows_kind_and_notes_under_each_address() {
+		update_option(
+			'mem_contacts',
+			array(
+				'addrs' => array(
+					array(
+						'addr'      => '308023, г. Белгород, ул. Студенческая, 40, корп. 10',
+						'hours'     => 'Пн–Сб 8:30–17:00',
+						'shop'      => 1,
+						'hall'      => 1,
+						'district'  => 'Восточный округ',
+						'stop'      => 'УТЭП',
+						'landmarks' => 'у БелГУ, рядом с магазином «Гиперстрой»',
+						'parking'   => 1,
+					),
+				),
+			)
+		);
+		$html = memorial_plugin_home_part( 'contacts-list' );
+		$this->assertStringContainsString( 'clist__kind', $html );
+		$this->assertMatchesRegularExpression( '~<ul class="mem-anotes clist__anotes"[^>]*><li>Восточный округ</li><li>ост\. УТЭП</li><li>у БелГУ</li><li>рядом с магазином «Гиперстрой»</li><li>[^<]+</li></ul>~u', $html );
+	}
 }

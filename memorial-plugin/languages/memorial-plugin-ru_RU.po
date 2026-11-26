@@ -9180,3 +9180,9 @@ msgstr "Кнопки отзывов"
 msgctxt "block description"
 msgid "“Leave a review”, “We are on Yandex Maps” and “We are on 2GIS” buttons."
 msgstr "Кнопки «Оставить отзыв», «Мы на Яндекс Картах» и «Мы в 2ГИС»."
+
+msgid "How to find"
+msgstr "Как найти"
+
+msgid "Optional"
+msgstr "Необязательно"
