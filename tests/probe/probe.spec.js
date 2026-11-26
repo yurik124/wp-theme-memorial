@@ -3380,15 +3380,11 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 				out[ name ] = await page.locator( '.mem-anotes' ).evaluateAll( ( els ) => els.map( ( ul ) => [ ...ul.children ].map( ( li ) => [ li.innerText, Math.round( li.getBoundingClientRect().width ), Math.round( li.getBoundingClientRect().height ) ] ) ) );
 				out[ name + 'Kind' ] = await page.locator( '.clist__kind, .kaddr__kind' ).allInnerTexts();
 				out[ name + 'Overflow' ] = await page.evaluate( () => document.documentElement.scrollWidth > window.innerWidth );
-				const block = page.locator( sel ).first();
-				if ( await block.count() ) {
-					await block.scrollIntoViewIfNeeded();
+				const blocks = page.locator( sel );
+				for ( let i = 0; i < Math.min( await blocks.count(), 2 ); i++ ) {
+					await blocks.nth( i ).scrollIntoViewIfNeeded();
 					await page.waitForTimeout( 300 );
-					const box = await page.locator( name === 'home' ? '#contacts' : '.kcards, .kaddr' ).first().boundingBox();
-					await shot( page, 't2611b-' + name + '-' + width );
-					if ( box ) {
-						await page.screenshot( { path: `${ DIR }/t2611b-${ name }-block-${ width }.png`, fullPage: true, clip: { x: 0, y: box.y, width, height: Math.min( box.height, 2400 ) } } ).catch( () => {} );
-					}
+					await blocks.nth( i ).screenshot( { path: `${ DIR }/t2611b-${ name }-block${ i }-${ width }.png` } ).catch( () => {} );
 				}
 			}
 			if ( width === 1440 ) {
@@ -3400,15 +3396,29 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 				await page.goto( '/wp-admin/admin.php?page=mem-contacts' );
 				await page.locator( '.memorial-plugin-settings__card' ).first().waitFor( { timeout: 20_000 } ).catch( () => {} );
 				await page.waitForTimeout( 1200 );
+				for ( const b of await page.getByRole( 'button', { name: 'Развернуть все' } ).all() ) {
+					await b.click().catch( () => {} );
+				}
+				await page.waitForTimeout( 800 );
 				// Строки ввода каждого ряда: подпись и верх поля; в одном ряду — одинаковый верх.
 				out.rows = await page.evaluate( () =>
-					[ ...document.querySelectorAll( '.memorial-plugin-settings__fields .dataforms-layouts__wrapper' ) ].slice( 0, 6 ).map( ( w ) =>
+					[ ...document.querySelectorAll( '.memorial-plugin-settings__fields .dataforms-layouts__wrapper' ) ].slice( 0, 8 ).map( ( w ) =>
 						[ ...w.querySelectorAll( 'input[type="text"], input[type="email"], input:not([type]), textarea, select' ) ].map( ( i ) => {
 							const field = i.closest( '.components-base-control' );
 							return [ ( field?.querySelector( 'label' )?.innerText || '' ).trim(), Math.round( i.getBoundingClientRect().top ), Math.round( i.getBoundingClientRect().left ), ( field?.querySelector( '.components-base-control__help' )?.innerText || '' ).trim() ];
 						} )
 					)
 				);
+				out.domField = await page.evaluate( () => {
+					const i = document.querySelector( '.memorial-plugin-settings__fields input' );
+					const path = [];
+					for ( let e = i; e && ! e.classList.contains( 'memorial-plugin-settings__fields' ); e = e.parentElement ) {
+						path.push( e.tagName + '.' + [ ...e.classList ].join( '.' ) );
+					}
+					return path;
+				} );
+				const phone = page.locator( '.memorial-plugin-settings__row' ).first();
+				await phone.screenshot( { path: `${ DIR }/t2611b-admin-phone.png` } ).catch( () => {} );
 				const addr = page.locator( '.memorial-plugin-settings__row' ).filter( { hasText: 'Студенческая' } ).first();
 				if ( await addr.count() ) {
 					await addr.scrollIntoViewIfNeeded();
