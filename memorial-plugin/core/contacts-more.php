@@ -36,6 +36,26 @@ function memorial_plugin_addr_notes( $a ) {
 }
 
 /**
+ * District, stop, landmarks, parking under an address — small plates that wrap whole, whatever their length
+ * (owner, 26.11.2026: on the home page and on «Контакты» the same).
+ *
+ * @param array  $a     Address of «Memorial → Contacts».
+ * @param string $extra Additional class.
+ * @return string HTML or ''.
+ */
+function memorial_plugin_addr_notes_html( $a, $extra = '' ) {
+	$notes = memorial_plugin_addr_notes( $a );
+	if ( ! $notes ) {
+		return '';
+	}
+	$items = '';
+	foreach ( $notes as $n ) {
+		$items .= '<li>' . esc_html( $n ) . '</li>';
+	}
+	return '<ul class="mem-anotes' . ( '' !== $extra ? ' ' . esc_attr( $extra ) : '' ) . '" aria-label="' . esc_attr__( 'How to find', 'memorial-plugin' ) . '">' . $items . '</ul>';
+}
+
+/**
  * What is at an address, for people: «Магазин и траурный зал».
  *
  * @param array $a Address.

@@ -37,9 +37,18 @@ defined( 'ABSPATH' ) || exit; /* Список контактов: все тел�
 	<li><?php echo memorial_plugin_icon( 'pin' ); ?><span>
 		<?php echo esc_html( memorial_plugin_addr( $a['addr'] ) ); ?>
 		<?php
+		$memorial_kind = function_exists( 'memorial_plugin_addr_kind' ) ? memorial_plugin_addr_kind( $a ) : '';
+		if ( '' !== $memorial_kind ) :
+			?>
+			<small class="clist__kind"><?php echo esc_html( $memorial_kind ); ?></small><?php endif; ?>
+		<?php
 		if ( ! empty( $a['hours'] ) ) :
 			?>
 			<small class="clist__note"><?php echo memorial_plugin_icon( 'clock' ) . esc_html( $a['hours'] ); ?></small><?php endif; ?>
+		<?php
+		// Округ, остановка, ориентиры — плашками под адресом (владелец, 26.11.2026; раньше — абзацем текста главной).
+		echo function_exists( 'memorial_plugin_addr_notes_html' ) ? memorial_plugin_addr_notes_html( $a, 'clist__anotes' ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the function.
+		?>
 	</span></li>
 	<?php endforeach; ?>
 </ul>

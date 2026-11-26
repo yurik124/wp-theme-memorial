@@ -59,7 +59,8 @@ class Test_Memorial_Plugin_Step3 extends WP_UnitTestCase {
 		$this->contacts();
 		memorial_plugin_contacts_upgrade_3();
 		$all = memorial_plugin_contacts_cards_render();
-		$this->assertStringContainsString( 'Восточный округ · рядом с магазином «Гиперстрой» · у БелГУ', $all );
+		// Плашками под адресом (26.11.2026), а не строкой через «·».
+		$this->assertStringContainsString( '<li>Восточный округ</li><li>рядом с магазином «Гиперстрой»</li><li>у БелГУ</li>', $all );
 		$this->assertStringContainsString( 'kaddr__kind', $all );
 		$hall = memorial_plugin_contacts_cards_render( array( 'only' => 'hall' ) );
 		$this->assertStringContainsString( 'Студенческая', $hall );

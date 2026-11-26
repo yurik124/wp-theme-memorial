@@ -520,7 +520,7 @@ msgstr ""
 msgid "Active — new burials"
 msgstr ""
 
-#: src/catalog/works.js:49 src/catalog/products.js:157 src/catalog/types.js:745 src/catalog/types.js:983 src/catalog/work-types.js:227 src/settings/index.js:598
+#: src/catalog/works.js:49 src/catalog/products.js:157 src/catalog/types.js:745 src/catalog/types.js:983 src/catalog/work-types.js:227 src/settings/index.js:612
 msgid "Add"
 msgstr ""
 
@@ -672,7 +672,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: places/places.php:137 src/catalog/repo-pages.js:147 src/settings/index.js:327 src/block-controls/index.js:697 seo/llms.php:73 blocks/content/inline-values.php:330
+#: places/places.php:137 src/catalog/repo-pages.js:147 src/settings/index.js:341 src/block-controls/index.js:697 seo/llms.php:73 blocks/content/inline-values.php:330
 msgid "Address"
 msgstr ""
 
@@ -720,7 +720,7 @@ msgstr ""
 msgid "All addresses"
 msgstr ""
 
-#: src/settings/index.js:1222
+#: src/settings/index.js:1236
 msgid "All changes are saved"
 msgstr ""
 
@@ -832,7 +832,7 @@ msgstr ""
 msgid "Anchor"
 msgstr ""
 
-#: src/settings/index.js:315
+#: src/settings/index.js:329
 msgid "Another address…"
 msgstr ""
 
@@ -986,11 +986,11 @@ msgstr ""
 msgid "Benefit and payments for a burial"
 msgstr ""
 
-#: src/commands/index.js:172
+#: src/commands/index.js:169
 msgid "Benefit sums are up to date"
 msgstr ""
 
-#: src/commands/index.js:173
+#: src/commands/index.js:170
 msgid "Benefit sums are up to date burial benefit payment check"
 msgstr ""
 
@@ -1448,7 +1448,7 @@ msgstr ""
 msgid "Choose by the title"
 msgstr ""
 
-#: src/settings/index.js:133 src/collections/index.js:55
+#: src/settings/index.js:147 src/collections/index.js:55
 msgid "Choose photo"
 msgstr ""
 
@@ -1664,11 +1664,11 @@ msgstr ""
 msgid "Convert old codes to blocks"
 msgstr ""
 
-#: src/commands/index.js:225
+#: src/commands/index.js:222
 msgid "Convert the old codes of this page to blocks"
 msgstr ""
 
-#: src/commands/index.js:254
+#: src/commands/index.js:251
 msgid "Converted. Reloading the editor…"
 msgstr ""
 
@@ -1714,7 +1714,7 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-#: src/commands/index.js:249
+#: src/commands/index.js:246
 msgid "Could not convert."
 msgstr ""
 
@@ -2017,7 +2017,7 @@ msgstr ""
 msgid "Done: loaded "
 msgstr ""
 
-#: src/settings/index.js:191
+#: src/settings/index.js:205
 msgid "Down"
 msgstr ""
 
@@ -2320,11 +2320,11 @@ msgstr ""
 msgid "Flower — wreaths"
 msgstr ""
 
-#: src/settings/index.js:519
+#: src/settings/index.js:533
 msgid "Fold"
 msgstr ""
 
-#: src/settings/index.js:453
+#: src/settings/index.js:467
 msgid "Fold all"
 msgstr ""
 
@@ -2498,7 +2498,7 @@ msgstr ""
 msgid "Funeral company"
 msgstr ""
 
-#: core/contacts-more.php:49
+#: core/contacts-more.php:69
 msgid "Funeral hall"
 msgstr ""
 
@@ -2710,7 +2710,7 @@ msgstr ""
 msgid "Hide reviews with the words (comma-separated)"
 msgstr ""
 
-#: src/settings/index.js:631
+#: src/settings/index.js:645
 msgid "Hide the key"
 msgstr ""
 
@@ -2750,7 +2750,7 @@ msgstr ""
 msgid "How far (optional)"
 msgstr ""
 
-#: src/settings/index.js:54 seo/metrika.php:57
+#: src/settings/index.js:58 seo/metrika.php:57
 msgid "How it works"
 msgstr ""
 
@@ -2802,7 +2802,7 @@ msgstr ""
 msgid "How the products of this type go when a visitor opens the section. A category can have its own order."
 msgstr ""
 
-#: src/settings/index.js:923
+#: src/settings/index.js:937
 msgid "How this screen works"
 msgstr ""
 
@@ -2812,6 +2812,10 @@ msgstr ""
 
 #: catalog/catalog-admin.php:27
 msgid "How to crop the photos in the cards. “Whole” — the photo is not cropped, with white margins at the edges."
+msgstr ""
+
+#: core/contacts-more.php:55
+msgid "How to find"
 msgstr ""
 
 #: prices/prices.php:443
@@ -2892,7 +2896,7 @@ msgstr ""
 msgid "In a text field of “Memorial → …”"
 msgstr ""
 
-#: src/settings/index.js:529
+#: src/settings/index.js:543
 msgid "In a text field or a block write:"
 msgstr ""
 
@@ -3472,13 +3476,13 @@ msgid "Move photo %d later"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:565
+#: src/settings/index.js:579
 #, php-format
 msgid "Move row %d down"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:554
+#: src/settings/index.js:568
 #, php-format
 msgid "Move row %d up"
 msgstr ""
@@ -4028,7 +4032,7 @@ msgstr ""
 msgid "Open photo %d large"
 msgstr ""
 
-#: src/settings/index.js:1048
+#: src/settings/index.js:1062
 msgid "Open site"
 msgstr ""
 
@@ -4072,6 +4076,10 @@ msgstr ""
 
 #: src/catalog/types.js:283
 msgid "Opens the “Call me back” window; the request shows which product was ordered."
+msgstr ""
+
+#: src/settings/index.js:99
+msgid "Optional"
 msgstr ""
 
 #: blocks/home/home.php:91
@@ -4889,7 +4897,7 @@ msgstr ""
 msgid "Reminders to check the prices and the benefits"
 msgstr ""
 
-#: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:143 src/block-controls/index.js:211 src/block-controls/index.js:264 src/block-controls/index.js:446
+#: src/catalog/works.js:50 src/catalog/products.js:158 src/settings/index.js:157 src/block-controls/index.js:211 src/block-controls/index.js:264 src/block-controls/index.js:446
 msgid "Remove"
 msgstr ""
 
@@ -4924,7 +4932,7 @@ msgid "Remove row"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:577
+#: src/settings/index.js:591
 #, php-format
 msgid "Remove row %d"
 msgstr ""
@@ -4941,7 +4949,7 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: src/settings/index.js:132 src/collections/index.js:54
+#: src/settings/index.js:146 src/collections/index.js:54
 msgid "Replace photo"
 msgstr ""
 
@@ -5190,7 +5198,7 @@ msgid "Row"
 msgstr ""
 
 #. translators: %d: row number.
-#: src/settings/index.js:505 src/block-controls/index.js:560
+#: src/settings/index.js:519 src/block-controls/index.js:560
 #, php-format
 msgid "Row %d"
 msgstr ""
@@ -5237,7 +5245,7 @@ msgstr ""
 msgid "Save specifications"
 msgstr ""
 
-#: src/commands/index.js:235
+#: src/commands/index.js:232
 msgid "Save the page first."
 msgstr ""
 
@@ -5249,7 +5257,7 @@ msgstr ""
 msgid "Saved."
 msgstr ""
 
-#: src/settings/index.js:1024
+#: src/settings/index.js:1038
 msgid "Saved. The changes are already on the site."
 msgstr ""
 
@@ -5483,11 +5491,11 @@ msgstr ""
 msgid "Shield with a tick — reliability"
 msgstr ""
 
-#: core/contacts-more.php:51
+#: core/contacts-more.php:71
 msgid "Shop"
 msgstr ""
 
-#: core/contacts-more.php:46
+#: core/contacts-more.php:66
 msgid "Shop and funeral hall"
 msgstr ""
 
@@ -5567,7 +5575,7 @@ msgstr ""
 msgid "Show the difference"
 msgstr ""
 
-#: src/settings/index.js:632
+#: src/settings/index.js:646
 msgid "Show the key"
 msgstr ""
 
@@ -5814,7 +5822,7 @@ msgid "Suburbs and villages"
 msgstr ""
 
 #. translators: %s: suburbs and villages, comma separated.
-#: core/contacts-more.php:100
+#: core/contacts-more.php:120
 #, php-format
 msgid "Suburbs: %s"
 msgstr ""
@@ -6001,7 +6009,7 @@ msgstr ""
 msgid "The benefit and the payment"
 msgstr ""
 
-#: src/commands/index.js:177
+#: src/commands/index.js:174
 msgid "The benefit sums are marked as up to date."
 msgstr ""
 
@@ -6195,7 +6203,7 @@ msgstr ""
 msgid "The price or the number of models is counted from its products."
 msgstr ""
 
-#: src/commands/index.js:165
+#: src/commands/index.js:162
 msgid "The prices are marked as up to date, the date on the site is today."
 msgstr ""
 
@@ -6369,7 +6377,7 @@ msgstr ""
 msgid "There are several files named %s — write the folder too, e.g. foto/M-1/1.jpg."
 msgstr ""
 
-#: src/settings/index.js:1218
+#: src/settings/index.js:1232
 msgid "There are unsaved changes"
 msgstr ""
 
@@ -6545,7 +6553,7 @@ msgstr ""
 msgid "Too many requests. Please call us."
 msgstr ""
 
-#: src/catalog/works.js:143 src/settings/index.js:230 src/settings/index.js:605 prices/prices.php:94 prices/prices.php:588 works/works.php:259
+#: src/catalog/works.js:143 src/settings/index.js:244 src/settings/index.js:619 prices/prices.php:94 prices/prices.php:588 works/works.php:259
 msgid "Total"
 msgstr ""
 
@@ -6609,11 +6617,11 @@ msgstr ""
 msgid "Under the title of the catalog on the site (optional)."
 msgstr ""
 
-#: src/settings/index.js:520 src/block-controls/index.js:1112
+#: src/settings/index.js:534 src/block-controls/index.js:1112
 msgid "Unfold"
 msgstr ""
 
-#: src/settings/index.js:462
+#: src/settings/index.js:476
 msgid "Unfold all"
 msgstr ""
 
@@ -6661,7 +6669,7 @@ msgstr ""
 msgid "Untitled work"
 msgstr ""
 
-#: src/settings/index.js:184
+#: src/settings/index.js:198
 msgid "Up"
 msgstr ""
 
@@ -6815,7 +6823,7 @@ msgstr ""
 msgid "Webvisor — recording how visitors view the site"
 msgstr ""
 
-#: src/settings/index.js:352
+#: src/settings/index.js:366
 msgid "What"
 msgstr ""
 
@@ -9170,7 +9178,7 @@ msgstr ""
 msgid "— drafts with text templates will appear; the company details (sole proprietor, TIN, OGRNIP, address, email) are filled in from “Contacts” automatically."
 msgstr ""
 
-#: src/settings/index.js:310
+#: src/settings/index.js:324
 msgid "— no link —"
 msgstr ""
 
@@ -9182,7 +9190,7 @@ msgstr ""
 msgid "— not chosen —"
 msgstr ""
 
-#: src/settings/index.js:783
+#: src/settings/index.js:797
 msgid "— not selected —"
 msgstr ""
 
