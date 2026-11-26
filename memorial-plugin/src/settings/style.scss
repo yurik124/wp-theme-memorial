@@ -483,9 +483,10 @@
 // Fields side by side (wide screens): every label has room for two lines and stands right above its input —
 // so a label that wraps (“Карточка на Яндекс Картах ?” in a 220 px column) does not push its input down.
 .memorial-plugin-admin .memorial-plugin-settings .dataforms-layouts__wrapper > .dataforms-layouts-regular__field:not(:has(textarea, fieldset, .components-checkbox-control, .memorial-plugin-settings__repeater)) .components-base-control__field > label {
+	display: flex;
+	align-items: flex-end;
+
 	@media (min-width: 783px) {
-		display: flex;
-		align-items: flex-end;
 		min-height: 2lh;
 	}
 }
