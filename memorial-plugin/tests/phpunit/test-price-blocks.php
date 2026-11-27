@@ -68,6 +68,11 @@ class Test_Memorial_Plugin_Price_Blocks extends WP_UnitTestCase {
 		$this->assertSame( 2, substr_count( $html, 'mbenefit__item' ) );
 		$this->assertStringNotContainsString( 'за вас', $html );
 		$this->assertSame( 1, substr_count( memorial_plugin_benefits_render( array( 'show' => 'svo' ) ), 'mbenefit__item' ) );
+		// The SVO payment is a ceiling by the actual expenses (decision No. 344), not a fixed sum and not «by the region».
+		$svo = memorial_plugin_benefits_render( array( 'show' => 'svo' ) );
+		$this->assertMatchesRegularExpression( '~mbenefit__sum[^>]*>(up to|до)\s~u', $svo );
+		$this->assertStringNotContainsString( 'military enlistment', $svo );
+		$this->assertStringNotContainsString( 'военкомат', $svo );
 	}
 
 	public function test_price_list_hides_rows_without_a_price() {

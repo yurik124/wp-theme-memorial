@@ -982,7 +982,7 @@ msgstr ""
 msgid "Benefit and payments"
 msgstr ""
 
-#: prices/price-blocks.php:152
+#: prices/price-blocks.php:155
 msgid "Benefit and payments for a burial"
 msgstr ""
 
@@ -994,7 +994,7 @@ msgstr ""
 msgid "Benefit sums are up to date burial benefit payment check"
 msgstr ""
 
-#: prices/price-blocks.php:140
+#: prices/price-blocks.php:143
 msgid "Benefits and payments: fill in the prices with the codes posobie and vyplata_svo in Memorial → Prices → Separate prices."
 msgstr ""
 
@@ -2490,7 +2490,7 @@ msgstr ""
 msgid "Funeral and cremation packages: on the home page and by the “Funeral packages” block on any page — the same everywhere. The cremation table on the cremation page is the “Cremation prices” block."
 msgstr ""
 
-#: prices/price-blocks.php:193 blocks/home/home.php:226
+#: prices/price-blocks.php:196 blocks/home/home.php:226
 msgid "Funeral and goods"
 msgstr ""
 
@@ -3410,7 +3410,7 @@ msgstr ""
 msgid "Month the prices were last changed"
 msgstr ""
 
-#: prices/prices.php:298 prices/price-blocks.php:205 blocks/home/home.php:124 blocks/home/home.php:143 blocks/home/home.php:227
+#: prices/prices.php:298 prices/price-blocks.php:208 blocks/home/home.php:124 blocks/home/home.php:143 blocks/home/home.php:227
 msgid "Monuments and landscaping"
 msgstr ""
 
@@ -3418,7 +3418,7 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: prices/price-blocks.php:158
+#: prices/price-blocks.php:161
 msgid "More about the benefit"
 msgstr ""
 
@@ -4221,7 +4221,7 @@ msgstr ""
 msgid "Packages"
 msgstr ""
 
-#: src/catalog/repo-pages.js:124 src/catalog/repo-pages.js:212 src/settings/photo-preview.js:22 prices/price-blocks.php:293 core/settings.php:365
+#: src/catalog/repo-pages.js:124 src/catalog/repo-pages.js:212 src/settings/photo-preview.js:22 prices/price-blocks.php:296 core/settings.php:365
 msgid "Page"
 msgstr ""
 
@@ -4287,7 +4287,8 @@ msgstr ""
 msgid "Payment"
 msgstr ""
 
-#: prices/price-blocks.php:136
+#. translators: %s: the maximum sum of the payment, e.g. "150 000 ₽".
+#: prices/price-blocks.php:139
 msgid "Payment for the burial of a participant of the special military operation"
 msgstr ""
 
@@ -4549,7 +4550,7 @@ msgstr ""
 msgid "Price list"
 msgstr ""
 
-#: prices/price-blocks.php:293
+#: prices/price-blocks.php:296
 msgid "Price list item"
 msgstr ""
 
@@ -4627,7 +4628,7 @@ msgstr ""
 msgid "Prices one by one"
 msgstr ""
 
-#: prices/price-blocks.php:287
+#: prices/price-blocks.php:290
 msgid "Prices one by one: no row has a price yet. Fill in the prices of the codes in Memorial → Prices → Separate prices."
 msgstr ""
 
@@ -6795,7 +6796,7 @@ msgstr ""
 msgid "We are on Yandex Maps"
 msgstr ""
 
-#: prices/price-blocks.php:157
+#: prices/price-blocks.php:160
 msgid "We give the full set of documents for claiming the payments. The payment is claimed by a relative."
 msgstr ""
 
@@ -8319,6 +8320,10 @@ msgstr ""
 msgid "by rating"
 msgstr ""
 
+#: prices/price-blocks.php:139
+msgid "by the actual expenses on the funeral and the memorial meal, through the social protection office"
+msgstr ""
+
 #: blocks/block-meta.php:132
 msgid "call"
 msgstr ""
@@ -8677,16 +8682,12 @@ msgid_plural "models"
 msgstr[0] ""
 msgstr[1] ""
 
-#: prices/price-blocks.php:284
+#: prices/price-blocks.php:287
 msgid "more"
 msgstr ""
 
 #: reviews/rewio.php:1121
 msgid "most likely, the server ran out of time"
-msgstr ""
-
-#: prices/price-blocks.php:136
-msgid "municipal, through the social protection office — Belgorod and the Belgorod district"
 msgstr ""
 
 #: core/mail.php:120
@@ -8727,7 +8728,7 @@ msgstr ""
 msgid "no price yet"
 msgstr ""
 
-#: prices/price-blocks.php:171
+#: prices/price-blocks.php:174
 msgid "no unit"
 msgstr ""
 
@@ -8821,11 +8822,11 @@ msgstr ""
 msgid "pcs"
 msgstr ""
 
-#: prices/price-blocks.php:173
+#: prices/price-blocks.php:176
 msgid "per km"
 msgstr ""
 
-#: prices/price-blocks.php:172
+#: prices/price-blocks.php:175
 msgid "per m²"
 msgstr ""
 
@@ -8833,11 +8834,11 @@ msgstr ""
 msgid "per piece"
 msgstr ""
 
-#: prices/price-blocks.php:175
+#: prices/price-blocks.php:178
 msgid "per running metre"
 msgstr ""
 
-#: prices/price-blocks.php:174
+#: prices/price-blocks.php:177
 msgid "per trip"
 msgstr ""
 
@@ -9107,7 +9108,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: price
-#: catalog/catalog-summary.php:125 prices/values.php:240
+#: catalog/catalog-summary.php:125 prices/price-blocks.php:139 prices/values.php:240
 #, php-format
 msgid "up to %s"
 msgstr ""
