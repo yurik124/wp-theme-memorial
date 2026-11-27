@@ -230,4 +230,25 @@ class Test_Memorial_Plugin_Ui_2611 extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'clist__kind', $html );
 		$this->assertMatchesRegularExpression( '~<ul class="mem-anotes clist__anotes"[^>]*><li>Восточный округ</li><li>ост\. УТЭП</li><li>у БелГУ</li><li>рядом с магазином «Гиперстрой»</li><li>[^<]+</li></ul>~u', $html );
 	}
+
+	public function test_svo_card_says_social_protection_not_military_office() {
+		update_option(
+			'mem_prices',
+			array(
+				'other' => array(
+					'items' => array(
+						array(
+							'name'  => 'Выплата на погребение участника СВО',
+							'what'  => 'custom',
+							'price' => '50 000',
+							'code'  => 'vyplata_svo',
+						),
+					),
+				),
+			)
+		);
+		$html = memorial_plugin_benefits_render( array( 'show' => 'svo' ) );
+		$this->assertStringContainsString( 'social protection', $html );
+		$this->assertStringNotContainsString( 'military enlistment', $html );
+	}
 }

@@ -130,7 +130,10 @@ function memorial_plugin_benefits_render( $a = array() ) {
 	if ( 'posobie' !== $show ) {
 		$sum = (string) memorial_plugin_price_value( 'vyplata_svo' );
 		if ( '' !== $sum ) {
-			$cards[] = array( 'shield', __( 'Payment for the burial of a participant of the special military operation', 'memorial-plugin' ), $sum, __( 'in the Belgorod region, through the military enlistment office', 'memorial-plugin' ), $page( 'ritualnye-uslugi/pohorony-uchastnikov-svo' ) );
+			// vyplata_svo — the municipal payment (resolution of the Belgorod municipal district No. 115): through the social
+			// protection office, for those registered in Belgorod or the Belgorod district. Not the Ministry of Defence
+			// compensation through the military enlistment office — that one has no fixed sum (page of the SVO funerals, 27.11.2026).
+			$cards[] = array( 'shield', __( 'Payment for the burial of a participant of the special military operation', 'memorial-plugin' ), $sum, __( 'municipal, through the social protection office — Belgorod and the Belgorod district', 'memorial-plugin' ), $page( 'ritualnye-uslugi/pohorony-uchastnikov-svo' ) );
 		}
 	}
 	if ( ! $cards ) {
