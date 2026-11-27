@@ -3431,3 +3431,28 @@ for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] 
 		} );
 	} );
 }
+
+// 27.11.2026: подпись выплаты СВО в блоке «Пособие и выплаты» — главная и «Цены», ПК и телефоны.
+for ( const [ width, height ] of [ [ 1440, 1000 ], [ 390, 844 ], [ 360, 780 ] ] ) {
+	test.describe( 'пособие 2711 ' + width, () => {
+		test.use( { viewport: { width, height } } );
+		test( 'пособие 2711 ' + width, async ( { page } ) => {
+			test.setTimeout( 120_000 );
+			page.setDefaultTimeout( 8_000 );
+			const errs = errorsOf( page );
+			const out = { width };
+			for ( const [ name, url ] of [ [ 'home', '/' ], [ 'ceny', '/ceny/' ] ] ) {
+				await page.goto( url );
+				await page.addStyleTag( { content: NO_FLOAT } ).catch( () => {} );
+				out[ name ] = await page.locator( '.mbenefit__item' ).allInnerTexts();
+				const b = page.locator( '.mbenefit' ).first();
+				if ( await b.count() ) {
+					await b.scrollIntoViewIfNeeded();
+					await b.screenshot( { path: `${ DIR }/t2711-${ name }-${ width }.png` } ).catch( () => {} );
+				}
+			}
+			out.errors = errs.filter( ( e ) => ! e.includes( '404' ) );
+			log( 't2711-' + width, out );
+		} );
+	} );
+}

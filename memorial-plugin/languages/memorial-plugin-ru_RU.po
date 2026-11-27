@@ -8620,8 +8620,8 @@ msgstr "договор"
 msgid "dd.mm.yyyy"
 msgstr "дд.мм.гггг"
 
-msgid "in the Belgorod region, through the military enlistment office"
-msgstr "по Белгородской области, через военкомат"
+msgid "municipal, through the social protection office — Belgorod and the Belgorod district"
+msgstr "муниципальная, через соцзащиту — Белгород и Белгородский округ"
 
 msgid "more"
 msgstr "подробнее"
